@@ -7,9 +7,9 @@ based on Searchkit ES6 Boilerplate
 [https://git.gesis.org/dsn/dara/wikis/ElasticSearchSetup]
 
 ##
-Config.js holds the elasticSearch URLs for different environments and are automatically injected with DefinePlugin depending on the webpack.config being used.  
+Config.js holds the elasticsearch URLs for different environments and are automatically injected with DefinePlugin depending on the webpack.config (local/dev/prod) being used.  
   
-You also have to adjust the elasticSearch Client in the server specific js file 
+You also have to adjust the elasticsearch Client in the server specific js file 
 @ searchkitRouter = SearchkitExpress.createRouter({ ... })
 
 Adjust URLs accordingly and start with either 
@@ -48,7 +48,7 @@ In order to search for any of these special characters, they will need to be esc
 
 ## Configuration of elasticsearch server
 
-In the code, the urls are being set automatically depending on your specification in config.js and changes to the specific server configuration file. Furthermore, you got to specify the port the elasticSearch client in running and and add it accordingly.
+In the code, the urls are being set automatically depending on your specification in config.js and changes to the specific server configuration file. Furthermore, you got to specify the port the elasticsearch client is running on and and add it accordingly.
 
 ### windows
 `set PORT=8088` 
