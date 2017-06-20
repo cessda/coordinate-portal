@@ -1,0 +1,10 @@
+curl -XPOST 'http://193.175.238.59/elasticsearch/dc/_suggest?pretty' -d '{
+  "subjectsuggest": {
+    "text": "n",
+    "completion": {
+      "field": "dc.subject.cc"
+    }
+  }
+}'
+
+

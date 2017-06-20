@@ -1,0 +1,352 @@
+body {
+  min-width: auto;
+  text-align: left;
+
+  .columns {
+    margin: auto;
+  }
+  
+  .sk-toggle-option.is-active {
+    background-color: $cessda_gold;
+    border-color: $cessda_gold;
+  }
+
+  .sk-layout {
+    background-color: $white;
+
+    a {
+      color: $cessda_gold;
+    }
+
+    .sk-toggle-option {
+      color: $cessda_gold;
+    }
+
+    .sk-toggle-option.is-active {
+      color: $white;
+    }
+  }
+
+  /* Override reactselect*/
+  .sk-hits-grid, .sk-hits-list {
+    margin: 0;
+  }
+
+  .sk-layout__filters, .sk-layout__results {
+    box-shadow: none;
+  }
+
+  .dsn-list-pagination {
+    padding: 10px;
+    border-top: $cessda_dotted;
+  }
+}
+
+.root__search .sk-refinement-list__view-more-action {
+  display: none;
+}
+
+.sk-layout__body {
+  margin: 0;
+  min-width: auto;
+
+  .list_hit {
+    margin-bottom: 25px;
+    padding: 10px;
+    
+    &:hover {
+      background: $hover_hit;
+    }
+  }
+
+  .sk-hits-grid__meta, .sk-hits-grid__desc {
+    font-size: 1rem;
+  }
+
+
+  /* ==========================================================================
+       Search/Searchfields: 
+        > general changes to filter facettes
+        > specification for year filter
+        > Invisibility of specific searchkit features not being used
+   ========================================================================== */
+
+  .sk-layout__filters {
+    position: relative;
+    padding: 20px;
+
+    & .dsn-list-narrow {
+      padding-top: 5px;
+      color: $cessda_gold;
+      font-weight: bold;
+    }
+
+    .sk-reset-filters {
+      float: right;
+
+      width: 60px;
+      height: 40px;
+      border-radius: 40px;
+      background-color: $cessda_gold;
+
+      & .sk-reset-filters__reset {
+        margin-left: 12px;
+        color: $white;
+      }
+    }
+
+    & .Select-menu-outer {
+      top: 0;
+      left: 250px;
+      width: 200%;
+      box-shadow: 3px 1px 6px 5px rgba(85,85,5,.3);
+      border-radius: .4em;
+      float: left;
+      position: absolute;
+      font-size: .9em;
+    }
+    
+    .filter--anydateYear {
+      margin-top: 20px;
+
+      & .sk-range-input__submit {
+          color: $cessda_gold;
+      }
+
+      & .sk-range-input__input {
+        flex: none;
+        width: 70px;
+        color: $cessda_gold; 
+      }
+    }
+
+    .Select-placeholder {
+      color: #c3c3c3;
+      max-width: 90%;
+    }
+
+    .Select-value {
+      width: 100%;
+      margin: 0;
+    } 
+  }
+
+  .sk-layout__filters .sk-panel {
+    width: 90%;
+    & input {
+      padding-left: 10px;
+      color: #c3c3c3;
+    }
+  }
+
+  .Select--multi .Select-value-icon, .Select--multi .Select-value-label {
+    display: initial;
+  }
+
+  .sk-panel__content .Select-aria-only {
+    display: none;
+  }
+
+ .Select-clear-zone {
+    position: absolute;
+    top: -500px;
+    display: none;
+    }
+
+    & .sk-layout__results .sk-hits-grid-hit .readMore svg{
+      margin-right: 5px;
+    }
+}
+
+
+/* ==========================================================================
+       Specific: Detail page
+        > general layout / hit detail
+        > similars
+        > Add to favorites
+        > back button styling
+   ========================================================================== */
+
+.root__detail {
+
+  .sk-hits-grid__meta li {
+    margin: 0;
+  }
+
+
+
+  .sk-layout__body {
+    margin-bottom: 0;
+    margin: auto;
+  }
+
+  .sk-layout__results ul {
+    list-style-type: disc;
+    padding-left: 45px;
+    word-break: break-word;
+  }
+
+  .sk-hits-grid__hith4_detail, .sk-hits-grid__item_detail .sk-hits-grid__desc span, .sk-hits-grid__meta span, .sk-hits-grid__item_detail .sk-hits-grid__detail-label, .dsn-detail-metadataprov, .dsn-detail-dataprov {
+    font-weight: bold;
+    line-height: 1.38;
+  }
+
+  .sk-hits-grid-hit, .dsn-detail-dataprov, .dsn-detail-metadataprov {
+    margin: 10px 0 10px 0;
+  }
+
+  .sk-hits-grid__hith4_detail {
+    color: $cessda_gold;
+    clear: both;
+    padding-top: 20px;
+  }
+  .dsn-detail-time2_span {
+    font-size: 12px;
+    line-height: 1.9;
+    margin-top: 35px;
+  }
+
+  .dsn-detail-descspacer {
+    margin: 10px 0 10px 0;
+  }
+
+  .dsn-detail-time2_span {
+    font-size: 12px;
+    line-height: 1.9;
+    color: #555555;
+    margin-top: 35px;
+  }
+
+  .dsn-detail-sourceLINK {
+    width: 220px;
+    height: 45px;
+    border-radius: 100px;
+    border: solid 2px $greyish-brown;
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & a {
+      color: $greyish-brown;
+    }
+  }
+
+  .theWholeDetailsWithSimilars {
+    position: relative;
+
+    .similars {
+      margin-top: 50px;
+
+      h1 {
+        padding: 0 0 20px 5px;
+        color: $cessda_gold;
+        font-size: 2rem;
+      }
+
+      .simItem {
+        padding: 0 0 10px 20px;
+      }
+    }
+  }
+
+  .sk-hits-stats__info, .sk-toggle {
+    display: none;
+  }
+
+  .dsn-detail-metaact {
+    background-color: rgba(85, 85, 85, 0.05);
+    padding: 10px;
+    opacity: 0.6;
+    cursor: default;
+
+    & img {
+      float: left;
+      margin-right: 25px;
+    }
+  }
+
+  .dsn-detail-backToResults {
+      width: 161px;
+      height: 40px;
+      border-radius: 40px;
+      background-color: $cessda_gold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      & a {
+        color: $white;
+        text-decoration: none;
+      }
+  }
+}
+
+/* ==========================================================================
+       Bottom: Pagination
+   ========================================================================== */
+
+.sk-pagination-navigation.is-numbered {
+  width: auto;
+
+  .sk-toggle {
+    margin-left: 0;
+  }
+}
+
+@media screen and (min-width: 480px){
+  .sk-pagination-navigation.is-numbered {
+      width: 45%;
+  }
+}
+
+@media screen and (max-width: 920px){
+  .sk-range-input {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+       About
+   ========================================================================== */
+
+.dsn-about_root {
+
+  .about__text {
+    padding: 20px;
+    line-height: 1.5;
+  }
+
+  .about__buttons a {
+    border-radius: 25px;
+    text-decoration: none;
+    color: black;
+    border: solid 1px #9b9b9b;
+
+    &:focus {
+      border: solid 1px #9b9b9b;
+      box-shadow: none;
+    }
+  }
+
+  @media screen and (max-width: 768px){
+    .about__buttons {
+      text-align: center;
+    }
+  }
+
+  @media screen and (min-width: 769px){
+    .about__buttons .column:nth-child(2) {
+      margin-left: 25px;
+    }
+  }
+
+  ul {
+    list-style-type: disc;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+  }
+}
