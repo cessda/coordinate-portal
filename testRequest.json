@@ -1,0 +1,366 @@
+{
+	"query": {
+		"query": {
+			"filtered": {
+				"query": {
+					"bool": {
+						"should": [
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://www.da-ra.de/oaip"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "1"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://services.fsd.uta.fi/oai"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "kind:quanti"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://services.fsd.uta.fi/oai"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "kind:quali"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://oai.datacite.org/oai"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "BL.UKDA"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://oai.datacite.org/oai"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "SND.SND"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://oai.datacite.org/oai"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "BIBSYS.NSD"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://www.da-ra.de/oaip"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "19"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "http://oai.ukdataservice.ac.uk/oai/provider"
+											}
+										},
+										{
+											"term": {
+												"setSpec": "DataCollections"
+											}
+										}
+									]
+								}
+							},
+							{
+								"bool": {
+									"must": [
+										{
+											"term": {
+												"setUrl": "https://easy.dans.knaw.nl/oai/"
+											}
+										}
+									]
+								}
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	"aggs": {
+		"anydateYear": {
+			"filter": {
+				"range": {
+					"anydateYear": {
+						"gte": 1950,
+						"lte": 2017
+					}
+				}
+			},
+			"aggs": {
+				"anydateYear": {
+					"histogram": {
+						"field": "anydateYear",
+						"interval": 4,
+						"min_doc_count": 0,
+						"extended_bounds": {
+							"min": 1950,
+							"max": 2017
+						}
+					}
+				}
+			}
+		},
+		"dc.language.nn10": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"inner": {
+					"nested": {
+						"path": "dc.language"
+					},
+					"aggs": {
+						"dc.language.nn": {
+							"terms": {
+								"field": "dc.language.nn",
+								"size": 500,
+								"order": {
+									"_term": "asc"
+								}
+							}
+						},
+						"dc.language.nn_count": {
+							"cardinality": {
+								"field": "dc.language.nn"
+							}
+						}
+					}
+				}
+			}
+		},
+		"dc.subject.all11": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"inner": {
+					"nested": {
+						"path": "dc.subject"
+					},
+					"aggs": {
+						"dc.subject.all": {
+							"terms": {
+								"field": "dc.subject.all",
+								"size": 500
+							}
+						},
+						"dc.subject.all_count": {
+							"cardinality": {
+								"field": "dc.subject.all"
+							}
+						}
+					}
+				}
+			}
+		},
+		"dc.type.all12": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"inner": {
+					"nested": {
+						"path": "dc.type"
+					},
+					"aggs": {
+						"dc.type.all": {
+							"terms": {
+								"field": "dc.type.all",
+								"size": 1000
+							}
+						},
+						"dc.type.all_count": {
+							"cardinality": {
+								"field": "dc.type.all"
+							}
+						}
+					}
+				}
+			}
+		},
+		"dc.creator.all13": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"inner": {
+					"nested": {
+						"path": "dc.creator"
+					},
+					"aggs": {
+						"dc.creator.all": {
+							"terms": {
+								"field": "dc.creator.all",
+								"size": 2000
+							}
+						},
+						"dc.creator.all_count": {
+							"cardinality": {
+								"field": "dc.creator.all"
+							}
+						}
+					}
+				}
+			}
+		},
+		"dc.contributor.all14": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"inner": {
+					"nested": {
+						"path": "dc.contributor"
+					},
+					"aggs": {
+						"dc.contributor.all": {
+							"terms": {
+								"field": "dc.contributor.all",
+								"size": 2000
+							}
+						},
+						"dc.contributor.all_count": {
+							"cardinality": {
+								"field": "dc.contributor.all"
+							}
+						}
+					}
+				}
+			}
+		},
+		"metaDataProvider15": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"metaDataProvider": {
+					"terms": {
+						"field": "metaDataProvider",
+						"size": 1000
+					}
+				},
+				"metaDataProvider_count": {
+					"cardinality": {
+						"field": "metaDataProvider"
+					}
+				}
+			}
+		},
+		"dataProvider16": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"dataProvider": {
+					"terms": {
+						"field": "dataProvider",
+						"size": 1000
+					}
+				},
+				"dataProvider_count": {
+					"cardinality": {
+						"field": "dataProvider"
+					}
+				}
+			}
+		},
+		"setHuman17": {
+			"filter": {
+				
+			},
+			"aggs": {
+				"setHuman": {
+					"terms": {
+						"field": "setHuman",
+						"size": 1000
+					}
+				},
+				"setHuman_count": {
+					"cardinality": {
+						"field": "setHuman"
+					}
+				}
+			}
+		}
+	},
+	"size": 5,
+	"sort": [
+		{
+			"oaiDatestamp": "asc"
+		}
+	]
+}

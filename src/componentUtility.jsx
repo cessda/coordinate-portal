@@ -4,8 +4,8 @@ import {FaExternalLink} from 'react-icons/lib/fa'
 import { PageSizeSelector, RangeFilter, RangeSliderHistogram, ViewSwitcherHits, ViewSwitcherToggle, HierarchicalMenuFilter, SearchkitComponent, SearchkitManager, SearchkitProvider, SearchBox, RefinementListFilter, MenuFilter, HitItemProps, Hits, HitsStats, QueryString, NoHits, Pagination, SortingSelector, SelectedFilters, ResetFilters, ItemHistogramList, Layout, LayoutBody, ItemList, Toggle, CheckboxItemList, InputFilter, LayoutResults, TopBar, DynamicRangeFilter, SideBar, ActionBar, ActionBarRow, FilteredQuery, BoolShould, BoolMust, TermQuery } from "searchkit";
 
 /*
-  Querybuilder for Searchkit Autocompletion
-*/
+ * Querybuilder for Searchkit Autocompletion
+ */
 export const functionCESSDAQueryBuilder = (query, options) => {
   let qob = {};
   qob[ options.fullpath ] = query ;
@@ -29,8 +29,9 @@ export const functionCESSDAQueryBuilder = (query, options) => {
 };
 
 /*
-  CESSDA query only returns specified datasets from datasearch elastic search index
-*/
+ * CESSDA query only returns specified datasets from datasearch elastic search
+ * index
+ */
 export const CESSDAdefaultQuery = {
     "query": {
       "filtered": {
@@ -116,7 +117,18 @@ export const CESSDAdefaultQuery = {
                           {"term": {"setUrl" : "https://easy.dans.knaw.nl/oai/"}}
                         ]
                       }
-                    }
+                    },
+                    {
+                        "bool": {
+                          "must": [
+                            {
+                              "term": {
+                                "setUrl": "http://api.worldbank.org/v2/datacatalog?format=json&per_page=1000"
+                              }
+                            }
+                          ]
+                        }
+                      }
                     ]
                   }
                 }
@@ -128,7 +140,7 @@ export const CESSDAdefaultQuery = {
 
 
 
-/* custom class: override searchkit's component to remove time taken*/
+/* custom class: override searchkit's component to remove time taken */
 export const customHitStats = (props) => {
   const {resultsFoundLabel, bemBlocks, hitsCount, timeTaken} = props
   return (

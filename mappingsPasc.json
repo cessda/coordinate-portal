@@ -1,0 +1,363 @@
+"dc": {
+    "properties": {
+      "esid": {
+        "type": "string"
+      },
+      "start": {
+        "format": "strict_date_optional_time||epoch_millis",
+        "type": "date"
+      },
+      "setSpec": {
+        "type": "string"
+      },
+      "instant": {
+        "format": "strict_date_optional_time||epoch_millis",
+        "type": "date"
+      },
+      "setUrl": {
+        "type": "string"
+      },
+      "intId": {
+        "type": "string"
+      },
+      "anydate": {
+        "format": "strict_date_optional_time||epoch_millis",
+        "type": "date"
+      },
+      "setHuman": {
+        "type": "string"
+      },
+      "end": {
+        "format": "strict_date_optional_time||epoch_millis",
+        "type": "date"
+      },
+      "oaiDatestamp": {
+        "format": "strict_date_optional_time||epoch_millis",
+        "type": "date"
+      },
+      "anydateYear": {
+        "type": "string"
+      },
+      "dataProvider": {
+        "type": "string"
+      },
+      "metaDataProvider": {
+        "type": "string"
+      },
+      "dc": {
+        "properties": {
+          "all": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              }
+            }
+          },
+          "coverage": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "date": {
+            "properties": {
+              "nn": {
+                "type": "string"
+              }
+            }
+          },
+          "identifier": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              }
+            }
+          },
+          "creator": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "subject": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "sv": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              },
+              "nl": {
+                "type": "string"
+              }
+            }
+          },
+          "format": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              }
+            }
+          },
+          "description": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "sv": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "language": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "source": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              }
+            }
+          },
+          "title": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "sv": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "type": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "relation": {
+            "properties": {
+              "nn": {
+                "type": "string"
+              }
+            }
+          },
+          "contributor": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "rights": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          },
+          "publisher": {
+            "properties": {
+              "all": {
+                "type": "string"
+              },
+              "cc": {
+                "type": "string"
+              },
+              "nn": {
+                "type": "string"
+              },
+              "de": {
+                "type": "string"
+              },
+              "ac": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
