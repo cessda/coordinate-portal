@@ -9,7 +9,7 @@ var Globals = {
   'prod': 'http://193.175.238.35:8089',
   'local': 'http://localhost:9200',
   'prodDomain' : "http://datasearch.gesis.org",
-  'cessda': 'http://193.175.238.59:8084'
+  'cessda': 'http://35.195.11.83:9200'
 };
 
 
