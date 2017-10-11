@@ -21,7 +21,7 @@ export class UtilityTopBar extends Component {
                   ]}/>
                 </div>
                 <div className="dsn-list-pss column is-2 is-offset-3">
-                  <PageSizeSelector options={[5,10,50]} listComponent={Toggle} />
+                  <PageSizeSelector options={[10,30,50,150]} listComponent={Toggle} />
                 </div>
           </div>
         </div>
