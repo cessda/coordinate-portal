@@ -1,7 +1,7 @@
 {
-  "name": "webpack-searchkit-es6-boilerplate",
-  "version": "0.1.1",
-  "description": "Example searchkit project using webpack & es6",
+  "name": "cessda-pasc",
+  "version": "0.0.1",
+  "description": "CESSDA Products and Services Catalogue",
   "scripts": {
     "startprod": "node startprod.js",
     "startlocal": "node startlocal.js",
@@ -10,15 +10,11 @@
   },
   "authors": [
     {
-      "name": "Joseph McElroy",
-      "email": "phoey1@gmail.com"
-    },
-    {
-      "name": "Siavash Etemadieh",
-      "email": "ssetem@gmail.com"
+      "name": "Ashley Fox",
+      "email": "contracting@foxonlinesolutions.co.uk"
     }
   ],
-  "license": "ISC",
+  "license": "Apache License, Version 2.0",
   "dependencies": {
     "body-parser": "^1.14.2",
     "classnames": "^2.2.5",
@@ -47,11 +43,11 @@
     "react-icons": "^2.2.1",
     "react-radio-group": "^3.0.1",
     "react-time": "^4.2.0",
-    "searchkit": "^0.10.1",
+    "searchkit": "^2.2.0",
     "searchkit-daterangefilter": "0.0.2",
     "searchkit-express": "^0.2.1",
-    "searchkit-multiselect": "0.0.1",
-    "striptags": "^2.1.1"
+    "striptags": "^2.1.1",
+    "react-select": "^1.0.0-rc.10"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -71,6 +67,6 @@
     "webpack-config": "^7.0.0",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-dev-server": "^1.12.1",
-    "webpack-hot-middleware": "^2.5.0"
+    "webpack-hot-middleware": "^2.20.0"
   }
 }

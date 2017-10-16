@@ -5,7 +5,7 @@ body {
   .columns {
     margin: auto;
   }
-  
+
   .sk-toggle-option.is-active {
     background-color: $cessda_gold;
     border-color: $cessda_gold;
@@ -105,7 +105,7 @@ body {
       position: absolute;
       font-size: .9em;
     }
-    
+
     .filter--anydateYear {
       margin-top: 20px;
 
@@ -116,7 +116,7 @@ body {
       & .sk-range-input__input {
         flex: none;
         width: 70px;
-        color: $cessda_gold; 
+        color: $cessda_gold;
       }
     }
 
@@ -128,7 +128,7 @@ body {
     .Select-value {
       width: 100%;
       margin: 0;
-    } 
+    }
   }
 
   .sk-layout__filters .sk-panel {

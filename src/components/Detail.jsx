@@ -9,8 +9,8 @@ import { ViewSwitcherHits, ViewSwitcherToggle, HierarchicalMenuFilter, HitItem, 
 
 let striptags = require( 'striptags' );
 import { RadioGroup, Radio } from 'react-radio-group'
+import {Similars} from './Similars';
 
-import { Similars } from "./Similars";
 
 const type = "dc";
 let identifierWorldbank = "api_worldbank";
@@ -54,7 +54,7 @@ function makeIdentifiers( identifiers, sclass, id ) {
   let others = [];
   for (var i = 0; i < identifiers.length; i++) {
     var curID = identifiers[ i ].trim().substring( 0, 3 );
-    
+
     if(id.includes(identifierWorldbank)){
       urls.push( React.DOM.li( null, React.DOM.a( {
         href: identifiers[ i ].trim()
@@ -584,7 +584,7 @@ export class Detail extends HitItem {
       }
     }
     let identifiers = makeIdentifiers( result._source.dc.identifier.nn, bemBlocks.item().mix( bemBlocks.container( "meta" ) ), result._id );
-    const source:any = _.extend( {}, result._source, result.highlight )
+    const source = _.extend( {}, result._source, result.highlight )
     let dataProvider = React.DOM.div( {
       /*let indexDates = <span title="date given in OAI record / date of indexing">&nbsp;</span>;*/
       className: bemBlocks.item().mix( bemBlocks.container( "desc" ) )
@@ -678,14 +678,10 @@ export class Detail extends HitItem {
             { sourceLink }
           </div>
         </div>
-        <div id="similars"></div>
         <Similars
           input={_.concat( title[0].split("[").join("").split("]").join("").split(",").join("") ,  subjectTerms) }
           ref="similaires"
           curEsid={ result._source.esid } />
-
-
-
       </div>
     )
   }
