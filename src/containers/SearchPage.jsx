@@ -7,8 +7,9 @@ import {TopBar} from '../components/Topbar.jsx';
 import {Reset} from '../components/Reset';
 import * as utilityComponents from '../utilities/componentUtility';
 import {
-  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination, Panel, RangeFilter, RangeSliderInput,
-  RefinementListFilter, ResetFilters, SearchkitManager, SearchkitProvider, SideBar
+  HierarchicalRefinementFilter, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination, Panel,
+  RangeFilter, RangeSliderInput, RefinementListFilter, ResetFilters, SearchkitManager,
+  SearchkitProvider, SideBar
 } from 'searchkit';
 
 require('../css/theme.css');
@@ -68,17 +69,15 @@ export class SearchPage extends React.Component {
                                                                 title={this.props.children}/>}
                                     size={500} orderKey="_term" orderDirection="asc"/>
 
-              <RefinementListFilter id="dc.subject"
-                                    title="Subject"
-                                    field={'dc.subject.' + myLang}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.subject'}}}
-                                    containerComponent={<Panel title="Contributor"
-                                                               className="contributor"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search subjects"
-                                                                title={this.props.children}/>}
-                                    size={500}/>
+              <Panel title="Topic"
+                     className="subject"
+                     collapsable={true}
+                     defaultCollapsed={true}>
+                {/*<HierarchicalRefinementFilter id="dc.subject"
+                                              title="Topic"
+                                              field="dc.subject"/>*/}
+                <p>This filter will be available in a future release.</p>
+              </Panel>
 
               <RefinementListFilter id="dc.type"
                                     title="Type"
