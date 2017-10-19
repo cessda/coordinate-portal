@@ -124,17 +124,17 @@ export class SearchPage extends React.Component {
                                     size={500}/>
 
               <RefinementListFilter id="dc.coverage"
-                                    title="Coverage"
+                                    title="Country"
                                     field={'dc.coverage.all'}
                                     fieldOptions={{
                                       type: 'nested',
                                       options: {path: 'dc.coverage', min_doc_count: 1}
                                     }}
-                                    containerComponent={<Panel title="Coverage"
+                                    containerComponent={<Panel title="Country"
                                                                className="coverage"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search coverage"
+                                    listComponent={<MultiSelect placeholder="Search countries"
                                                                 title={this.props.children}/>}
                                     size={500}/>
 
