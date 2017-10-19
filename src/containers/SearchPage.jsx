@@ -76,7 +76,7 @@ export class SearchPage extends React.Component {
                 {/*<HierarchicalRefinementFilter id="dc.subject"
                                               title="Topic"
                                               field="dc.subject"/>*/}
-                <p>This filter will be available in a future release.</p>
+                <p>Forthcoming.</p>
               </Panel>
 
               <RefinementListFilter id="dc.type"
