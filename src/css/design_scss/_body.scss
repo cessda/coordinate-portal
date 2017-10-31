@@ -213,7 +213,7 @@ body {
   .sk-layout__filters .sk-panel {
     width: 90%;
     background-color: #f4f4f1;
-    padding: 10px;
+    padding: 15px;
     border-radius: 3px;
 
     & input {
@@ -221,13 +221,60 @@ body {
       color: #c3c3c3;
     }
 
+    .sk-panel__header {
+      margin-bottom: 0;
+    }
+
     .sk-panel__content {
       margin: 10px;
 
-      .Select-control, .sk-range-input__input, button {
+      .Select-control, .Select-menu-outer, .sk-range-input__input, button {
         background-color: #ffffff;
         border: 2px solid #eaeae8;
         border-radius: 3px;
+        box-shadow: none;
+      }
+
+      .Select-control {
+        padding-right: 2px;
+      }
+
+      .Select-value {
+        background-color: rgba(244, 244, 241, 0.5);
+        border-radius: 3px;
+        border: 1px solid #eaeae8;
+        color: #555555;
+        margin: 1px;
+        padding: 4px 6px;
+
+        .Select-value-icon {
+          border-right: 1px solid #eaeae8;
+
+          &:hover {
+            background-color: rgb(234, 234, 232);
+            color: #000000;
+          }
+        }
+
+        .Select-value-label {
+          font-size: 13px;
+        }
+      }
+
+      .Select-arrow-zone {
+        display: none;
+      }
+
+      .Select-menu-outer {
+        max-height: 250px;
+
+        .Select-menu {
+          max-height: 246px;
+
+          .Select-option.is-focused {
+            background-color: #eaeae8;
+          }
+        }
       }
     }
   }
