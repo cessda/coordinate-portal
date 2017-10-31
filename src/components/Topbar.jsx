@@ -1,26 +1,58 @@
 import React from 'react';
-import {ActionBar, ActionBarRow, HitsStats, PageSizeSelector, SortingSelector} from 'searchkit';
+import {ActionBar, ActionBarRow, PageSizeSelector} from 'searchkit';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import Translate from 'react-translate-component';
+import {SortingSelector} from './SortingSelector';
 
-export class TopBar extends React.Component {
+class TopBar extends React.Component {
   render() {
     return (
       <ActionBar>
         <ActionBarRow>
-          <HitsStats translations={{
-            'hitstats.results_found': '{hitCount} results found'
-          }}/>
           <div className="level">
-            <label className="level-left sk-hits-stats__info">Results</label>
-            <PageSizeSelector className="level-right mr-10" options={[10, 30, 50, 150]}/>
-            <label className="level-left sk-hits-stats__info">Sort by</label>
-            <SortingSelector className="level-right" options={[
-              {label: 'Relevance', field: '_score', order: 'desc', defaultOption: true},
-              {label: 'Latest', field: 'oaiDatestamp', order: 'desc'},
-              {label: 'First', field: 'oaiDatestamp', order: 'asc'}
-            ]}/>
+            <div className="level-left">
+              <Translate className="level-item"
+                         component="label"
+                         content="resultsPerPage"/>
+
+              <PageSizeSelector className="level-item" options={[10, 30, 50, 150]}/>
+            </div>
+            <div className="level-right">
+              <Translate className="level-item"
+                         component="label"
+                         content="sortBy"/>
+
+              <SortingSelector className="level-item" options={[{
+                translation: 'sorting.relevance',
+                field: '_score',
+                order: 'desc',
+                defaultOption: true
+              }, {
+                translation: 'sorting.latest',
+                field: 'oaiDatestamp',
+                order: 'desc'
+              }, {
+                translation: 'sorting.first',
+                field: 'oaiDatestamp',
+                order: 'asc'
+              }]}/>
+            </div>
           </div>
         </ActionBarRow>
       </ActionBar>
     );
   }
 }
+
+TopBar.propTypes = {
+  code: PropTypes.string.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    code: state.language.code
+  };
+};
+
+export default connect(mapStateToProps)(TopBar);

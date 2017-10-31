@@ -1,9 +1,8 @@
 import React from 'react';
 import {MultiSelect} from '../components/MultiSelect.jsx';
-import {Result} from '../components/Result.jsx';
+import Result from '../components/Result.jsx';
 import {Footer} from '../components/Footer.jsx';
-import {Header} from '../components/Header.jsx';
-import {TopBar} from '../components/Topbar.jsx';
+import TopBar from '../components/Topbar';
 import {Reset} from '../components/Reset';
 import * as utilityComponents from '../utilities/componentUtility';
 import {
@@ -11,24 +10,23 @@ import {
   RangeFilter, RangeSliderInput, RefinementListFilter, ResetFilters, SearchkitManager,
   SearchkitProvider, SideBar
 } from 'searchkit';
+import moment from 'moment';
 
-require('../css/theme.css');
-require('../css/reactselect.css');
-require('../css/override.sass');
-require('../css/design.scss');
-
-/* CESSDA default query to reduce result set to be CESSDA specific */
-const searchkit = new SearchkitManager('/_search');
-searchkit.addDefaultQuery((query) => {
-  return query.addQuery(
-    utilityComponents.CESSDAdefaultQuery
-  );
-});
+import '../css/theme.css';
+import '../css/reactselect.css';
+import '../css/override.sass';
+import '../css/design.scss';
+import * as counterpart from 'react-translate-component';
+import counterpartString from 'counterpart';
+import Header from '../components/Header';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import Translate from 'react-translate-component';
 
 // got to be set to all!!
 let myLang = 'all';
 
-export class SearchPage extends React.Component {
+class SearchPage extends React.Component {
   render() {
     let dynlang = this.props.location.query.showlang;
     if (dynlang) {
@@ -36,146 +34,114 @@ export class SearchPage extends React.Component {
     }
 
     return (
-      <SearchkitProvider searchkit={searchkit}>
+      <SearchkitProvider searchkit={this.props.searchkit}>
         <Layout size="l" className="root__search">
           <Header/>
           <LayoutBody className="columns">
-            <SideBar className="is-hidden-mobile column is-3 is-offset-2">
-              <h3 className="dsn-list-narrow">Filter results</h3>
-
-              <ResetFilters component={Reset}
-                            options={{query: false, filter: true, pagination: true}}/><br/>
-
-              <RangeFilter min={1950}
-                           max={2017}
-                           field="anydateYear"
-                           id="anydateYear"
-                           title="Date"
-                           rangeComponent={RangeSliderInput}
-                           containerComponent={<Panel title="Date"
-                                                      className="anydateYear"
-                                                      collapsable={true}
-                                                      defaultCollapsed={true}/>}/>
-
-              <RefinementListFilter id="language"
-                                    title="Language"
-                                    field={'dc.language.nn'}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
-                                    containerComponent={<Panel title="Language"
-                                                               className="language"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search languages"
-                                                                title={this.props.children}/>}
-                                    size={500} orderKey="_term" orderDirection="asc"/>
-
-              <Panel title="Topic"
+            <SideBar className="is-hidden-mobile column is-4">
+              <Panel title={counterpart.translate('filters.topic.label')}
                      className="subject"
                      collapsable={true}
                      defaultCollapsed={true}>
                 {/*<HierarchicalRefinementFilter id="dc.subject"
-                                              title="Topic"
-                                              field="dc.subject"/>*/}
-                <p>Forthcoming.</p>
+                 title={counterpart.translate('filters.topic.label')}
+                 field="dc.subject"/>*/}
+                <Translate component="p"
+                           content="forthcoming"/>
               </Panel>
 
-              <RefinementListFilter id="dc.type"
-                                    title="Type"
-                                    field={'dc.type.' + myLang}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.type'}}}
-                                    containerComponent={<Panel title="Type"
-                                                               className="type"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search types"
-                                                                title={this.props.children}/>}
-                                    size={500}/>
+              <RangeFilter min={1950}
+                           max={moment().year()}
+                           field="anydateYear"
+                           id="anydateYear"
+                           title={counterpart.translate('filters.collectionDates.label')}
+                           rangeComponent={RangeSliderInput}
+                           containerComponent={<Panel title={counterpart.translate('filters.collectionDates.label')}
+                                                      className="anydateYear"
+                                                      collapsable={true}
+                                                      defaultCollapsed={true}/>}/>
 
-              <RefinementListFilter id="dc.creator"
-                                    title="Creator"
-                                    translations={{'placeholder': 'Show more coverage terms'}}
-                                    field={'dc.creator.all'}
-                                    fieldOptions={{
-                                      type: 'nested',
-                                      options: {path: 'dc.creator', min_doc_count: 1}
-                                    }}
-                                    containerComponent={<Panel title="Creator"
-                                                               className="creator"
+              {/*<RefinementListFilter id="rights"
+                                    title={counterpart.translate('filters.availability.label')}
+                                    field={'dc.rights.all'}
+                                    fieldOptions={{type: 'nested', options: {path: 'dc.rights'}}}
+                                    containerComponent={<Panel title={counterpart.translate('filters.availability.label')}
+                                                               className="rights"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search creators"
-                                                                title={this.props.children}/>}
-                                    size={500}/>
+                                    size={5} orderKey="_term" orderDirection="asc"/>*/}
 
-              <RefinementListFilter id="dc.contributor"
-                                    title="Contributor"
-                                    field={'dc.contributor.all'}
-                                    fieldOptions={{
-                                      type: 'nested',
-                                      options: {path: 'dc.contributor', min_doc_count: 1}
-                                    }}
-                                    containerComponent={<Panel title="Contributor"
-                                                               className="contributor"
+              <Panel title={counterpart.translate('filters.availability.label')}
+                     className="rights"
+                     collapsable={true}
+                     defaultCollapsed={true}>
+                <div className="sk-item-list-option sk-item-list__item">
+                  <input type="checkbox" className="sk-item-list-option__checkbox is-disabled" disabled/>
+                  <div className="sk-item-list-option__text">Open</div>
+                  <div className="sk-item-list-option__count">0</div>
+                </div>
+                <div className="sk-item-list-option sk-item-list__item">
+                  <input type="checkbox" className="sk-item-list-option__checkbox is-disabled" disabled/>
+                  <div className="sk-item-list-option__text">Restricted</div>
+                  <div className="sk-item-list-option__count">0</div>
+                </div>
+              </Panel>
+
+              <RefinementListFilter id="language"
+                                    title={counterpart.translate('filters.languageOfDataFiles.label')}
+                                    field={'dc.language.nn'}
+                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
+                                    containerComponent={<Panel title={counterpart.translate('filters.languageOfDataFiles.label')}
+                                                               className="language"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search contributors"
+                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.languageOfDataFiles.placeholder')}
                                                                 title={this.props.children}/>}
-                                    size={500}/>
+                                    size={500} orderKey="_term" orderDirection="asc"/>
 
               <RefinementListFilter id="dc.coverage"
-                                    title="Country"
+                                    title={counterpart.translate('filters.country.label')}
                                     field={'dc.coverage.all'}
                                     fieldOptions={{
                                       type: 'nested',
                                       options: {path: 'dc.coverage', min_doc_count: 1}
                                     }}
-                                    containerComponent={<Panel title="Country"
+                                    containerComponent={<Panel title={counterpart.translate('filters.country.label')}
                                                                className="coverage"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search countries"
+                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.country.placeholder')}
                                                                 title={this.props.children}/>}
                                     size={500}/>
 
-              <RefinementListFilter id="metaDataProvider"
-                                    title="Metadata provider"
-                                    field="metaDataProvider"
-                                    operator="OR"
-                                    containerComponent={<Panel title="Metadata provider"
-                                                               className="metaDataProvider"
+              <RefinementListFilter id="dc.publisher"
+                                    title={counterpart.translate('filters.publisher.label')}
+                                    field={'dc.publisher.all10'}
+                                    fieldOptions={{
+                                      type: 'nested',
+                                      options: {path: 'dc.publisher.all10', min_doc_count: 1}
+                                    }}
+                                    containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}
+                                                               className="publisher"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={
-                                      <MultiSelect placeholder="Search metadata providers"
-                                                   title={this.props.children}/>}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}
+                                                                title={this.props.children}/>}
                                     size={500}/>
 
               <RefinementListFilter id="dataProvider"
-                                    title="Data provider"
+                                    title={counterpart.translate('filters.publisher.label')}
                                     field="dataProvider"
                                     operator="OR"
-                                    containerComponent={<Panel title="Data provider"
+                                    containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}
                                                                className="dataProvider"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search data providers"
-                                                                title={this.props.children}/>}
-                                    size={500}/>
-
-              <RefinementListFilter id="setHuman"
-                                    title="Set "
-                                    field="setHuman"
-                                    operator="OR"
-                                    containerComponent={<Panel title="Set"
-                                                               className="setHuman"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder="Search sets"
-                                                                backspaceRemoves={false}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}
                                                                 title={this.props.children}/>}
                                     size={500}/>
             </SideBar>
-            <LayoutResults className="column is-6">
+            <LayoutResults className="column is-8">
               <TopBar/>
 
               <Hits className="column"
@@ -191,8 +157,7 @@ export class SearchPage extends React.Component {
           <div className="dsn-list-pagination">
             <Pagination pageScope={3}
                         showLast={true}
-                        showNumbers={true}
-                        translations={{'pagination.previous': '<', 'pagination.next': '>'}}/>
+                        showNumbers={true}/>
           </div>
           <Footer/>
         </Layout>
@@ -200,3 +165,15 @@ export class SearchPage extends React.Component {
     );
   }
 }
+
+SearchPage.propTypes = {
+  searchkit: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    searchkit: state.searchkit
+  };
+};
+
+export default connect(mapStateToProps)(SearchPage);

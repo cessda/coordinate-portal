@@ -1,8 +1,13 @@
 import React from 'react';
-import {SearchBox} from 'searchkit';
+import {HitsStats, ResetFilters, SearchBox} from 'searchkit';
 import * as utilityComponents from '../utilities/componentUtility';
+import Language from './Language';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import counterpart from 'counterpart';
+import {Reset} from './Reset';
 
-export class Header extends React.Component {
+class Header extends React.Component {
   componentDidMount() {
     $('.nav-toggle').on('click', function () {
       if (!$('.nav .nav-toggle').hasClass('is-active')) {
@@ -17,8 +22,12 @@ export class Header extends React.Component {
 
   render() {
     return (
-      <header className="container is-fluid  is-fullwidth">
-        <div className="cessda_top"/>
+      <header className="container is-fluid is-fullwidth">
+        <div className="cessda_top">
+          <div className="container">
+            <Language/>
+          </div>
+        </div>
         <nav className="nav">
           <span className="nav-toggle">
             <i className="fa fa-search" aria-hidden="true"/>
@@ -28,7 +37,7 @@ export class Header extends React.Component {
             <div className="nav-item">
               <div className="cessda"><a href="/">cessda</a></div>
               <div className="cessda_beta">Products and Services Catalogue</div>
-              <span className="cessda_beta--red">Beta Version</span>
+              <span className="cessda_beta--blue">Beta Version</span>
             </div>
           </div>
 
@@ -37,10 +46,25 @@ export class Header extends React.Component {
               <SearchBox
                 autofocus={true}
                 searchOnChange={true}
-                placeholder="Find Social and Economic Research Data"
                 prefixQueryFields={['_all^1']}
                 queryFields={['_all']}
                 queryBuilder={utilityComponents.functionCESSDAQueryBuilder}/>
+
+              <div className="reset-search">
+                <HitsStats className="hits-count"/>
+
+                <ResetFilters component={Reset}
+                              options={{query: false, filter: true, pagination: true}}
+                              translations={{
+                                'reset.clear_all': counterpart.translate('reset.filters')
+                              }}/>
+                <ResetFilters component={Reset}
+                              options={{query: true, filter: false, pagination: true}}
+                              translations={{
+                                'reset.clear_all': counterpart.translate('reset.query')
+                              }}/>
+              </div>
+
             </div>
           </div>
         </nav>
@@ -48,3 +72,15 @@ export class Header extends React.Component {
     );
   }
 }
+
+Header.propTypes = {
+  code: PropTypes.string.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    code: state.language.code
+  };
+};
+
+export default connect(mapStateToProps)(Header);

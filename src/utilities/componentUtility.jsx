@@ -1,7 +1,10 @@
-import * as React from "react";
+import * as React from 'react';
+import {FaExternalLink} from 'react-icons/lib/fa';
+import {Panel} from 'searchkit';
+import {FaLock, FaUnlock} from 'react-icons/lib/fa/index';
+import counterpart from 'counterpart';
+
 var globals = require('../../config.js');
-import {FaExternalLink} from 'react-icons/lib/fa'
-import { PageSizeSelector, RangeFilter, RangeSliderHistogram, ViewSwitcherHits, ViewSwitcherToggle, HierarchicalMenuFilter, SearchkitComponent, SearchkitManager, SearchkitProvider, SearchBox, RefinementListFilter, MenuFilter, HitItemProps, Hits, HitsStats, QueryString, NoHits, Pagination, SortingSelector, SelectedFilters, ResetFilters, ItemHistogramList, Layout, LayoutBody, ItemList, Toggle, CheckboxItemList, InputFilter, LayoutResults, TopBar, DynamicRangeFilter, SideBar, ActionBar, ActionBarRow, FilteredQuery, BoolShould, BoolMust, TermQuery } from "searchkit";
 
 /*
  * Querybuilder for Searchkit Autocompletion
@@ -258,44 +261,71 @@ export function detailLink(sclass, more, id, intid){
   if(more!==undefined&& more !=""){
     let identifierWorldbank = "api_worldbank";
     if(id.includes(identifierWorldbank)){
-      ds.push( React.DOM.a({className:"readMore is-pulled-right",href:more, target:"_blank"},  React.createElement(FaExternalLink,null),"go to collection"));
+      ds.push( React.DOM.a({className:"go-to-collection",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToCollection')));
     }else {
-      ds.push( React.DOM.a({className:"readMore is-pulled-right",href:more, target:"_blank"},  React.createElement(FaExternalLink,null),"go to study"));
+      ds.push( React.DOM.a({className:"go-to-study",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToStudy')));
     }
   }
-  if(id!==undefined){
-    ds.push(React.DOM.span( {className:"readMore"},React.DOM.a({ href:'detail?q="'+id.trim()+'"&detail=true&sort=identifier_desc'}, "read more")));
-  }
+  // if(id!==undefined){
+  //   ds.push(React.DOM.span( {className:"readMore"},React.DOM.a({ href:'detail?q="'+id.trim()+'"&detail=true&sort=identifier_desc'}, "read more")));
+  // }
 
   return React.DOM.div({ className: sclass },React.DOM.div(null, ds));
 }
 
-export function makeDescription(data, sclass, more, id){
-
+export function makeDescription(data, sclass, more, id, context){
   let ds = [];
   let identifierWorldbank = "api_worldbank";
   let striptags = require('striptags');
+
+  context.description = '';
+  context.readMoreLabel = 'Read more';
+
   for (var i=0; i < data.length; i++) {
-    if(i<1){
-      if(data[0] === "Abstract"){
-        ds.push(<span dangerouslySetInnerHTML={ {__html:(striptags(data[0]))}}></span>, <br />, <span dangerouslySetInnerHTML={ {__html:(striptags(data[1]).substring(0,200) +' ... ')}}></span>)
-      }else{
-        ds.push(<span dangerouslySetInnerHTML={ {__html:(striptags(data[i]).substring(0,200) +' ... ')}}></span>);
-      }
+    if (data[i].toLowerCase() !== 'abstract') {
+      context.description += ' ' + striptags(data[i]);
     }
-    ds.push( React.DOM.div());
+    // if(i<1){
+    //   if(data[0] === "Abstract"){
+    //     context.descriptionLong = striptags(data[1]);
+    //     context.descriptionShort = context.descriptionLong.substring(0, 500);
+    //     ds.push(<span dangerouslySetInnerHTML={ {__html:(striptags(data[0]))}}></span>, <br />, <span dangerouslySetInnerHTML={ {__html:(striptags(data[1]).substring(0,500) + '...')}}></span>)
+    //   }else{
+    //     ds.push(<span dangerouslySetInnerHTML={ {__html:(striptags(data[i]).substring(0,500) + '...')}}></span>);
+    //   }
+    // }
+    // ds.push(React.DOM.div());
   }
+  context.descriptionShort = context.description.substring(0, 500);
+  context.descriptionLong = context.description;
+
+  ds.push(<span dangerouslySetInnerHTML={ {__html:context.description}}></span>);
 
   if(more!==undefined){
     if(id.includes(identifierWorldbank)){
-      ds.push( React.DOM.a({className:"readMore is-pulled-right",href:more, target:"_blank"},  React.createElement(FaExternalLink,null),"go to collection"));
+      ds.push( React.DOM.a({className:"readMore is-pulled-right",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToCollection')));
     }else {
-      ds.push( React.DOM.a({className:"readMore is-pulled-right",href:more, target:"_blank"},  React.createElement(FaExternalLink,null),"go to study"));
+      ds.push( React.DOM.a({className:"readMore is-pulled-right",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToStudy')));
     }
   }
-  if(id!==undefined){
-    ds.push(React.DOM.span( {className:"readMore"},React.DOM.a({ href:'detail?q="'+id.trim()+'"&detail=true&sort=identifier_desc'}, "read more")));
-  }
+  // if(id!==undefined){
+  //   context.readMore = function() {
+  //     if (context.readMoreLabel === 'Read more') {
+  //       console.log('read more');
+  //       context.readMoreLabel = 'Read less';
+  //       context.description = context.descriptionLong;
+  //     } else {
+  //       console.log('read less');
+  //       context.readMoreLabel = 'Read more';
+  //       context.description = context.descriptionShort;
+  //     }
+  //     context.forceUpdate();
+  //   };
+  //
+  //   ds.push(<a onClick={context.readMore}>{context.readMoreLabel}</a>);
+  //
+  //   // ds.push(React.DOM.span( {className:"readMore"},React.DOM.a({ href:'detail?q="'+id.trim()+'"&detail=true&sort=identifier_desc'}, "read more")));
+  // }
 
   return React.DOM.div({ className: sclass }, React.DOM.br, React.DOM.div(null, ds));
 }

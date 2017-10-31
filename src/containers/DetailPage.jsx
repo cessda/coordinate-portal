@@ -5,7 +5,7 @@ import {
   Hits, Layout, LayoutBody, LayoutResults, NoHits, SearchkitManager, SearchkitProvider, SideBar
 } from 'searchkit';
 import * as utilityComponents from '../utilities/componentUtility';
-import {Header} from '../components/Header.jsx';
+import Header from '../components/Header';
 import {Detail} from '../components/Detail';
 import {Footer} from '../components/Footer.jsx';
 
@@ -100,21 +100,13 @@ export class DetailPage extends Component {
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className="root__detail">
           <Header/>
-          <div className="dsn-detail-seperatorDetail-2"></div>
           <LayoutBody className="columns">
-            <SideBar className="is-hidden-mobile column is-3 is-offset-2">
+            <LayoutResults className="column is-12">
               <div className="dsn-detail-backToResults">
                 <a onClick={browserHistory.goBack}>
                   <div> Back to Results</div>
                 </a>
               </div>
-              <br/>
-              <div className="dsn-detail-buttons"></div>
-              <div className="similContainer" ref="similContainer">
-                {this.state.simi}
-              </div>
-            </SideBar>
-            <LayoutResults className="column is-6">
               {this.state.deta}
               <NoHits/>
             </LayoutResults>
