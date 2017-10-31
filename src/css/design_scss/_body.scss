@@ -40,6 +40,99 @@ body {
     padding: 10px;
     border-top: $cessda_dotted;
   }
+
+  .sk-hits-list__rights {
+    margin: 5px 0;
+    padding: 2px 0;
+    border-radius: 3px;
+
+    * {
+     border-radius: 3px;
+    }
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  .sk-hits-list__read-more, .go-to-collection, .go-to-study {
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  .go-to-collection, .go-to-study {
+    margin-right: 10px;
+  }
+
+  .language-picker {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 35px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #455963;
+    color: #ffffff;
+    font-size: 12px;
+
+    .flag-select .selected--flag--option {
+      img {
+        top: 6px;
+      }
+
+      .country-label, .arrow-down {
+        color: #ffffff;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .sk-hits-stats {
+    display: inline-block;
+    margin-right: 20px;
+
+    .sk-hits-stats__info {
+      color: #ffffff;
+      font-size: 13px;
+    }
+  }
+
+  .sk-reset-filters {
+    color: #ffffff !important;
+    display: inline-block;
+    margin: 10px 15px 0;
+    padding: 2px 6px;
+    flex-grow: 0;
+    font-size: 13px;
+    background-color: #59707b;
+
+    &:hover {
+      text-decoration: none;
+      background-color: #6a8592;
+    }
+
+    &.is-disabled {
+      opacity: 0.6;
+    }
+  }
+
+  .sk-action-bar-row {
+    display: block;
+    background-color: #f4f4f1;
+    padding: 10px 15px;
+    border-radius: 3px;
+
+    label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    select {
+      background-color: #ffffff;
+      border: 2px solid #eaeae8;
+    }
+  }
 }
 
 .root__search .sk-refinement-list__view-more-action {
@@ -51,11 +144,12 @@ body {
   min-width: auto;
 
   .list_hit {
-    margin-bottom: 25px;
-    padding: 10px;
-    
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 3px;
+
     &:hover {
-      background: $hover_hit;
+      background-color: $hover_hit;
     }
   }
 
@@ -65,7 +159,7 @@ body {
 
 
   /* ==========================================================================
-       Search/Searchfields: 
+       Search/Searchfields:
         > general changes to filter facettes
         > specification for year filter
         > Invisibility of specific searchkit features not being used
@@ -73,26 +167,11 @@ body {
 
   .sk-layout__filters {
     position: relative;
-    padding: 20px;
 
     & .dsn-list-narrow {
       padding-top: 5px;
       color: $cessda_gold;
       font-weight: bold;
-    }
-
-    .sk-reset-filters {
-      float: right;
-
-      width: 60px;
-      height: 40px;
-      border-radius: 40px;
-      background-color: $cessda_gold;
-
-      & .sk-reset-filters__reset {
-        margin-left: 12px;
-        color: $white;
-      }
     }
 
     & .Select-menu-outer {
@@ -133,9 +212,23 @@ body {
 
   .sk-layout__filters .sk-panel {
     width: 90%;
+    background-color: #f4f4f1;
+    padding: 10px;
+    border-radius: 3px;
+
     & input {
       padding-left: 10px;
       color: #c3c3c3;
+    }
+
+    .sk-panel__content {
+      margin: 10px;
+
+      .Select-control, .sk-range-input__input, button {
+        background-color: #ffffff;
+        border: 2px solid #eaeae8;
+        border-radius: 3px;
+      }
     }
   }
 
