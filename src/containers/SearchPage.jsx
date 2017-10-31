@@ -6,8 +6,8 @@ import TopBar from '../components/Topbar';
 import {Reset} from '../components/Reset';
 import * as utilityComponents from '../utilities/componentUtility';
 import {
-  HierarchicalRefinementFilter, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination, Panel,
-  RangeFilter, RangeSliderInput, RefinementListFilter, ResetFilters, SearchkitManager,
+  HierarchicalRefinementFilter, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination,
+  RangeSliderInput, ResetFilters, SearchkitManager,
   SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
@@ -22,6 +22,9 @@ import Header from '../components/Header';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component';
+import {Panel} from '../components/Panel';
+import {RangeFilter} from '../components/RangeFilter';
+import {RefinementListFilter} from '../components/RefinementListFilter';
 
 // got to be set to all!!
 let myLang = 'all';

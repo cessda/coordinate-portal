@@ -1,14 +1,11 @@
-import {
-  RenderComponentPropType, SearchkitComponent, SortingSelector as SearchkitSortingSelector
-} from 'searchkit';
+import {SortingSelector as SearchkitSortingSelector} from 'searchkit';
 import PropTypes from 'prop-types';
 import counterpart from 'counterpart';
 import * as _ from 'lodash';
-import {defaults} from 'lodash';
 
+// Extend the Searchkit SortingSelector component to support translations.
 export class SortingSelector extends SearchkitSortingSelector {
   render() {
-    // Extend the Searchkit SortingSelector component to support translations.
     _.map(this.accessor.options.options, function (option) {
       option.label = counterpart.translate(option.translation);
       return option;
@@ -17,8 +14,8 @@ export class SortingSelector extends SearchkitSortingSelector {
   }
 }
 
-SortingSelector.propTypes = defaults({
-  listComponent: RenderComponentPropType,
+// Override SortingSelector type checking to avoid errors.
+SortingSelector.propTypes = Object.assign(SearchkitSortingSelector.propTypes, {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       translation: PropTypes.string.isRequired,
@@ -28,4 +25,4 @@ SortingSelector.propTypes = defaults({
       defaultOption: PropTypes.bool
     })
   )
-}, SearchkitComponent.propTypes);
+});

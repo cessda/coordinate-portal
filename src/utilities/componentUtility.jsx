@@ -171,13 +171,13 @@ export function makeSourceURL( identifiers, id ) {
 
 export function makeContributors(data,sclass) {
   let ds = [];
-  ds.push( React.DOM.span(null,  "Contributors: " ));
+  ds.push( React.DOM.span({ key: 0 },  "Contributors: " ));
   for (var i=0; i < data.length; i++) {
     if(i<4){
-      ds.push( React.DOM.span(null,  data[i] +" "));
+      ds.push( React.DOM.span({ key: i + 1 },  data[i] +" "));
     }
     if(i==4){
-      ds.push( React.DOM.span(null,  (data.length-4) + " more" ));
+      ds.push( React.DOM.span({ key: i + 1 },  (data.length-4) + " more" ));
     }
   }
   return React.DOM.div({ className: sclass },ds);
@@ -187,18 +187,18 @@ export function makeCreators(data,sclass) {
 
   let ds = [];
   data = _.uniq( data );
-  ds.push( React.DOM.span(null,  "" ));
+  ds.push( React.DOM.span({ key: 0 },  "" ));
   for (var i=0; i < data.length; i++) {
 
     if(i<3){
       if(i < data.length-1 && i!=2 ){
-        ds.push( React.DOM.span( null, data[ i ].trim() + "; " ) );
+        ds.push( React.DOM.span({ key: i + 1 }, data[ i ].trim() + "; " ) );
       }else{
-        ds.push( React.DOM.span( null, data[ i ].trim() ) );
+        ds.push( React.DOM.span({ key: i + 1 }, data[ i ].trim() ) );
       }
     }
     if(i==3){
-      ds.push( React.DOM.span(null,  " ( "+ (data.length-3) + " more )" ));
+      ds.push( React.DOM.span({ key: i + 1 },  " ( "+ (data.length-3) + " more )" ));
       break;
     }
   }
@@ -214,13 +214,13 @@ export function makeDates(data,sclass){
     return "no date";
   }
   let ds = [];
-  ds.push( React.DOM.span(null,  "Date: " ));
+  ds.push( React.DOM.span({ key: 0 },  "Date: " ));
   for (var i=0; i < data.length; i++) {
     if(i<1){
-      ds.push( React.DOM.span(null,  data[i]+" " ));
+      ds.push( React.DOM.span({ key: i + 1 },  data[i]+" " ));
     }
     if(i==1){
-      ds.push( React.DOM.span(null,  (data.length-4) + " more" ));
+      ds.push( React.DOM.span({ key: i + 1 },  (data.length-4) + " more" ));
     }
   }
 
@@ -261,9 +261,9 @@ export function detailLink(sclass, more, id, intid){
   if(more!==undefined&& more !=""){
     let identifierWorldbank = "api_worldbank";
     if(id.includes(identifierWorldbank)){
-      ds.push( React.DOM.a({className:"go-to-collection",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToCollection')));
+      ds.push( React.DOM.a({ key: 0, className:"go-to-collection",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToCollection')));
     }else {
-      ds.push( React.DOM.a({className:"go-to-study",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToStudy')));
+      ds.push( React.DOM.a({ key: 1, className:"go-to-study",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToStudy')));
     }
   }
   // if(id!==undefined){
