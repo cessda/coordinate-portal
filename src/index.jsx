@@ -1,17 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import {Provider} from 'react-redux';
 import SearchPage from './containers/SearchPage';
 import {DetailPage} from './containers/DetailPage';
-import {App} from './containers/App';
+import App from './containers/App';
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 import {syncHistoryWithStore} from 'react-router-redux';
 import reducers from './reducers';
+import thunk from 'redux-thunk';
+import {composeWithDevTools} from 'redux-devtools-extension';
 
 const store = createStore(
   reducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeWithDevTools(applyMiddleware(thunk))
 );
 
 const history = syncHistoryWithStore(browserHistory, store);

@@ -1,35 +1,28 @@
-import {CHANGE_LANGUAGE} from '../actions/language';
-import * as globals from '../../config';
 import * as counterpart from 'react-translate-component';
-import counterpartDe from 'counterpart/locales/de';
-import en from '../locales/en';
-import de from '../locales/de';
 
-const initialState = {
-  code: globals.initialLanguage,
-  label: counterpart.translate('languagePicker.label'),
-  list: [{
-    id: 'en',
-    label: counterpart.translate('languagePicker.languages.en')
-  }, {
-    id: 'de',
-    label: counterpart.translate('languagePicker.languages.de')
-  }]
-};
+import {CHANGE_LANGUAGE, INIT_TRANSLATIONS} from '../actions/language';
 
-const language = (state = initialState, action) => {
+const language = (state = {}, action) => {
   switch (action.type) {
-    case CHANGE_LANGUAGE:
-      let code = (action.code === 'GB' ? 'EN' : action.code).toLowerCase();
-      counterpart.setLocale(code);
+    case INIT_TRANSLATIONS:
       return Object.assign({}, state, {
-        code: code
+        code: action.code,
+        label: counterpart.translate('languagePicker.label'),
+        list: [{
+          id: 'en',
+          label: counterpart.translate('languagePicker.languages.en')
+        }, {
+          id: 'de',
+          label: counterpart.translate('languagePicker.languages.de')
+        }]
       });
+
+    case CHANGE_LANGUAGE:
+      return Object.assign({}, state, {
+        code: action.code
+      });
+
     default:
-      counterpart.registerTranslations('de', counterpartDe);
-      counterpart.registerTranslations('en', en);
-      counterpart.registerTranslations('de', de);
-      counterpart.setLocale(state.code);
       return state;
   }
 };

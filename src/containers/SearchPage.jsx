@@ -170,14 +170,10 @@ class SearchPage extends React.Component {
   }
 }
 
-SearchPage.propTypes = {
-  searchkit: PropTypes.object.isRequired
-};
+SearchPage.propTypes = {};
 
-const mapStateToProps = (state) => {
-  return {
-    searchkit: state.searchkit
-  };
+const mapStateToProps = () => {
+  return {};
 };
 
 export default connect(mapStateToProps)(SearchPage);

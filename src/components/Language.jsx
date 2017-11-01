@@ -5,6 +5,7 @@ import 'react-flags-select/scss/react-flags-select.scss';
 import {connect} from 'react-redux';
 import {changeLanguage} from '../actions/language';
 import PropTypes from 'prop-types';
+import {bindActionCreators} from 'redux';
 
 class Language extends React.Component {
   render() {
@@ -44,9 +45,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeLanguage: code => {
-      dispatch(changeLanguage(code));
-    }
+    changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };
 };
 
