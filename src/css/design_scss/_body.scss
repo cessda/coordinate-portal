@@ -98,6 +98,10 @@ body {
     }
   }
 
+  .reset-search {
+    text-align: center;
+  }
+
   .sk-reset-filters {
     color: #ffffff !important;
     display: inline-block;
@@ -144,7 +148,7 @@ body {
   min-width: auto;
 
   .list_hit {
-    margin-bottom: 15px;
+    margin-bottom: 0;
     padding: 15px;
     border-radius: 3px;
 
@@ -186,8 +190,6 @@ body {
     }
 
     .filter--anydateYear {
-      margin-top: 20px;
-
       & .sk-range-input__submit {
           color: $cessda_gold;
       }
@@ -211,7 +213,6 @@ body {
   }
 
   .sk-layout__filters .sk-panel {
-    width: 90%;
     background-color: #f4f4f1;
     padding: 15px;
     border-radius: 3px;
@@ -313,17 +314,19 @@ body {
     margin: 0;
   }
 
-
-
   .sk-layout__body {
     margin-bottom: 0;
     margin: auto;
   }
 
-  .sk-layout__results ul {
-    list-style-type: disc;
-    padding-left: 45px;
-    word-break: break-word;
+  .sk-layout__results {
+    margin-left: 0;
+
+    ul {
+      list-style-type: disc;
+      padding-left: 45px;
+      word-break: break-word;
+    }
   }
 
   .sk-hits-grid__hith4_detail, .sk-hits-grid__item_detail .sk-hits-grid__desc span, .sk-hits-grid__meta span, .sk-hits-grid__item_detail .sk-hits-grid__detail-label, .dsn-detail-metadataprov, .dsn-detail-dataprov {
@@ -489,4 +492,36 @@ body {
     -webkit-margin-end: 0px;
     -webkit-padding-start: 40px;
   }
+}
+
+
+.result-actions {
+  opacity: 0;
+  transition: opacity 250ms ease;
+
+  .button {
+    font-size: 13px;
+  }
+}
+
+.list_hit:hover .result-actions {
+  opacity: 1;
+}
+
+.list_hit {
+  transition: background-color 250ms ease;
+  width: 100%;
+}
+
+
+.button:hover {
+  text-decoration: none;
+}
+
+.sk-hits-list__desc {
+  text-align: justify;
+}
+
+.availability {
+  min-width: 140px;
 }

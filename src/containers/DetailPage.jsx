@@ -12,12 +12,6 @@ import searchkit from '../utilities/searchkit';
 
 const type = 'dc';
 
-
-require('../css/theme.css');
-require('../css/reactselect.css');
-require('../css/override.sass');
-require('../css/design.scss');
-
 let myLang = 'all';
 
 function redirect() {

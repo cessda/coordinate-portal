@@ -115,15 +115,36 @@ export function langHandler(container, lang){
 }
 
 export function detailLink(sclass, more, id, intid){
-
-  let ds = [];
+ let ds = [];
   let striptags = require('striptags');
   if(more!==undefined&& more !=""){
     let identifierWorldbank = "api_worldbank";
     if(id.includes(identifierWorldbank)){
-      ds.push( React.DOM.a({ key: 0, className:"go-to-collection",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToCollection')));
+
+      return React.DOM.a({
+          key: 0,
+          className: 'button is-small is-white',
+          href: more,
+          target: '_blank'
+        }, React.createElement('span', {
+          className: 'icon is-small'
+        }, React.createElement(FaExternalLink)),
+        React.createElement('span', null, counterpart.translate('goToCollection')));
+
+      // ds.push( React.DOM.a({ key: 0, className:"go-to-collection",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToCollection')));
     }else {
-      ds.push( React.DOM.a({ key: 1, className:"go-to-study",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToStudy')));
+
+      return React.DOM.a({
+          key: 1,
+          className: 'button is-small is-white',
+          href: more,
+          target: '_blank'
+        }, React.createElement('span', {
+          className: 'icon is-small'
+        }, React.createElement(FaExternalLink)),
+        React.createElement('span', null, counterpart.translate('goToStudy')));
+
+      // ds.push( React.DOM.a({ key: 1, className:"go-to-study",href:more, target:"_blank"},  React.createElement(FaExternalLink,null), counterpart.translate('goToStudy')));
     }
   }
   // if(id!==undefined){

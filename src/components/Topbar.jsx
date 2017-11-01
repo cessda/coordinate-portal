@@ -8,7 +8,7 @@ import {SortingSelector} from './SortingSelector';
 class TopBar extends React.Component {
   render() {
     return (
-      <ActionBar>
+      <ActionBar className="is-hidden-mobile">
         <ActionBarRow>
           <div className="level">
             <div className="level-left">

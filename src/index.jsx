@@ -8,6 +8,10 @@ import App from './containers/App';
 import {browserHistory, IndexRoute, Route, Router} from 'react-router';
 import {syncHistoryWithStore} from 'react-router-redux';
 import reducers from './reducers';
+import 'rc-slider/assets/index.css';
+import './css/theme.css';
+import './css/reactselect.css';
+import './css/design.scss';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
 

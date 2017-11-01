@@ -51,6 +51,7 @@ module.exports = {
   sortBy: 'Sort by',
   readMore: 'Read more',
   readLess: 'Read less',
+  viewJson: 'View JSON',
   goToCollection: 'Go to collection',
   goToStudy: 'Go to study',
   forthcoming: 'Forthcoming'

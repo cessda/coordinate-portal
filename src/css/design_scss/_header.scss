@@ -1,20 +1,60 @@
-@import "design_scss/_variables.scss";
-
   /* ==========================================================================
        Navigation bar
    ========================================================================== */
 
 header {
+  background-color: $cessda_blueish;
+
+  .logo {
+    text-align: center;
+    width: 250px;
+
+    .cessda a {
+      font-family: 'cessda' !important;
+      font-size: 3.5rem;
+      line-height: 60px;
+      color: $white !important;
+      text-decoration: none;
+    }
+    .cessda_beta {
+      color: $white;
+      font-family: 'Kanit', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+    }
+
+    .cessda_beta--blue {
+      font-family: 'Kanit', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: #81bae1;
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 768px){
+      margin: auto;
+    }
+  }
+
   .cessda_top {
-    background-color: $cessda_blueish;
-    background-image: url("../img/largebar.png");
-    background-position: 47% 0;
+    background: $cessda_blueish url("../img/largebar.png") 45% 0;
     height: 35px;
   }
 
-  .nav {
-    align-items: center;
-    background-color: $cessda_blueish;
+  .navbar {
+    margin: 0 auto;
+    max-width: 1280px;
+    background: none;
+  }
+
+  .navbar-start .nav-item {
+    text-align: center;
+    padding: 4px 0 8px 40px;
+  }
+
+  .navbar-end .nav-item {
+    text-align: center;
+    padding: 4px 0 8px 0;
   }
 
   .nav-item {
@@ -58,7 +98,7 @@ header {
       }
     }
 
-    & .nav-left {
+    & .nav-start {
       justify-content: center;
       overflow-x: hidden;
 
@@ -72,7 +112,7 @@ header {
       }
     }
 
-    & .nav-right {
+    & .nav-end {
       padding: 10px;
       justify-content: center;
 
@@ -91,27 +131,32 @@ header {
     border-radius: 25px;
     color: $light_grey;
     height: 45px;
-    width: 500px;
-    margin-top: 15px;
+    max-width: 500px;
+    margin: 25px auto 0;
 
     &.is-focused {
       background-color: $white;
     }
+
+    @media screen and (max-width: 768px){
+      margin: 0 auto 0;
+    }
   }
 
-  @media screen and (min-width: 769px) and (max-width: 999px){
+  /*@media screen and (min-width: 769px) and (max-width: 999px){
     .sk-search-box {
       width: 400px;
     }
-  }
+  }*/
 }
 
+/*
 @media screen and (min-width: 769px){
   .nav-toggle {
       display: none !important;
   }
 
-  .nav
+  .navbar
   {
     & .nav-menu {
       position: relative;
@@ -135,3 +180,4 @@ header {
   }
 }
 
+*/

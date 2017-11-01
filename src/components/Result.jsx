@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import {trim} from 'lodash';
 import * as utilityComponents from '../utilities/componentUtility';
 import * as striptags from 'striptags';
-import {FaAngleDown, FaAngleUp} from 'react-icons/lib/fa/index';
+import {FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLock} from 'react-icons/lib/fa/index';
 import {Rights} from './Rights';
 import {truncate} from 'lodash';
 import Translate from 'react-translate-component';
@@ -27,7 +27,7 @@ class Result extends React.Component {
       description: descriptionShort,
       descriptionShort:  descriptionShort,
       descriptionLong: description,
-      readMoreLabel: (<span><FaAngleDown/><Translate component="span" content="readMore"/></span>),
+      readMoreLabel: (<span><span className="icon is-small"><FaAngleDown/></span><span><Translate component="span" content="readMore"/></span></span>),
       readMoreExpanded: false
     };
 
@@ -55,13 +55,15 @@ class Result extends React.Component {
     if (!this.state.readMoreExpanded) {
       this.setState({
         description: this.state.descriptionLong,
-        readMoreLabel: (<span><FaAngleUp/><Translate component="span" content="readLess"/></span>),
+        readMoreLabel: (<span><span className="icon is-small"><FaAngleUp/></span><span><Translate component="span" content="readLess"/></span></span>),
+        // readMoreLabel: (<span><FaAngleUp/><Translate component="span" content="readLess"/></span>),
         readMoreExpanded: true
       });
     } else {
       this.setState({
         description: this.state.descriptionShort,
-        readMoreLabel: (<span><FaAngleDown/><Translate component="span" content="readMore"/></span>),
+        readMoreLabel: (<span><span className="icon is-small"><FaAngleDown/></span><span><Translate component="span" content="readMore"/></span></span>),
+        // readMoreLabel: (<span><FaAngleDown/><Translate component="span" content="readMore"/></span>),
         readMoreExpanded: false
       });
     }
@@ -191,24 +193,55 @@ class Result extends React.Component {
     // console.log(rights);
     return (
       <div className="list_hit" data-qa="hit">
-        <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>
-          <a href={addressTitle}><span dangerouslySetInnerHTML={{__html: title[0]}}/></a>
-          <a href={ur2} className={bemBlocks.item().mix(bemBlocks.container('marginals json'))}
-             target="_blank">&nbsp;[JSON]</a>
+        <h4 className={bemBlocks.item().mix([bemBlocks.container('hith4'), 'mb-10'])}>
+          <a className="mt-5" href={addressTitle}><span dangerouslySetInnerHTML={{__html: title[0]}}/></a>
+
+          <div className="tags has-addons ml-a availability">
+            <Translate className="tag"
+                       component="span"
+                       content="filters.availability.label"/>
+            <span className="tag is-success">
+              <FaLock/><span className="ml-5">Open</span>
+            </span>
+          </div>
+
         </h4>
         {creators}
-        <Rights bemBlocks={bemBlocks} rights={rights}/>
+        {/*<Rights bemBlocks={bemBlocks} rights={rights}/>*/}
         <span className={bemBlocks.item().mix(bemBlocks.container('desc'))}>{this.state.description}</span>
-        <span className="level">
+
+        <span className="level mt-10 result-actions">
           <span className="level-left">
-            {this.state.description.length > 0 &&
-             <a className={bemBlocks.item().mix(bemBlocks.container('read-more'))} onClick={this.readMore}>
-               {this.state.readMoreLabel}
-             </a>
-            }
+
+            <div className="field is-grouped">
+              <p className="control">
+
+                {this.state.descriptionLong.length > 500 &&
+                 <a className={bemBlocks.item().mix('button is-small is-white')} onClick={this.readMore}>
+                   {this.state.readMoreLabel}
+                 </a>
+                }
+
+              </p>
+            </div>
+
           </span>
           <span className="level-right">
-            {detailLink}
+
+            <div className="field is-grouped">
+              <p className="control">
+                <a className="button is-small is-white" href={ur2} target="_blank">
+                  <span className="icon is-small">
+                    <FaCode/>
+                  </span>
+                  <Translate component="span" content="viewJson"/>
+                </a>
+              </p>
+              <p className="control">
+                {detailLink}
+              </p>
+            </div>
+
           </span>
         </span>
       </div>

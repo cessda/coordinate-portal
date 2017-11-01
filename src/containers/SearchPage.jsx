@@ -11,11 +11,6 @@ import {
   SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
-
-import '../css/theme.css';
-import '../css/reactselect.css';
-import '../css/override.sass';
-import '../css/design.scss';
 import * as counterpart from 'react-translate-component';
 import counterpartString from 'counterpart';
 import Header from '../components/Header';
@@ -148,8 +143,7 @@ class SearchPage extends React.Component {
             <LayoutResults className="column is-8">
               <TopBar/>
 
-              <Hits className="column"
-                    scrollTo={true}
+              <Hits scrollTo={true}
                     mod="sk-hits-list"
                     hitsPerPage={30}
                     itemComponent={Result}
