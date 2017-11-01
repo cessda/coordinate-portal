@@ -8,16 +8,10 @@ import * as utilityComponents from '../utilities/componentUtility';
 import Header from '../components/Header';
 import {Detail} from '../components/Detail';
 import {Footer} from '../components/Footer.jsx';
+import searchkit from '../utilities/searchkit';
 
 const type = 'dc';
 
-/* CESSDA default query to reduce result set to be CESSDA specific */
-const searchkit = new SearchkitManager('/_search');
-searchkit.addDefaultQuery((query) => {
-  return query.addQuery(
-    utilityComponents.CESSDAdefaultQuery
-  );
-});
 
 require('../css/theme.css');
 require('../css/reactselect.css');

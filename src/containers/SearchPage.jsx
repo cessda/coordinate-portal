@@ -25,6 +25,7 @@ import Translate from 'react-translate-component';
 import {Panel} from '../components/Panel';
 import {RangeFilter} from '../components/RangeFilter';
 import {RefinementListFilter} from '../components/RefinementListFilter';
+import searchkit from '../utilities/searchkit';
 
 // got to be set to all!!
 let myLang = 'all';
@@ -37,7 +38,7 @@ class SearchPage extends React.Component {
     }
 
     return (
-      <SearchkitProvider searchkit={this.props.searchkit}>
+      <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className="root__search">
           <Header/>
           <LayoutBody className="columns">
