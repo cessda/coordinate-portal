@@ -22,10 +22,6 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       esURL: JSON.stringify(globals.esURL)
-    }),
-    new ExtractTextPlugin({
-      filename: 'app.css',
-      allChunks: true
     })
   ],
   resolve: {

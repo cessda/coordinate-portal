@@ -525,3 +525,33 @@ body {
 .availability {
   min-width: 140px;
 }
+
+.sk-filter-groups {
+  background-color: #f4f4f1;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  padding: 15px 15px 10px;
+}
+
+.sk-filter-group-items__title {
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.sk-filter-group-items__value {
+  padding: 2px 6px;
+  background-color: #ffffff;
+  border-radius: 3px;
+  margin: 0 5px 5px 0;
+  font-size: 14px;
+  border: 2px solid #eaeae8;
+}
+
+.sk-filter-group__remove-action {
+  display: none;
+}
+
+.sk-panel__header {
+  color: #555555;
+}

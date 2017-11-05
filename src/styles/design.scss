@@ -1,10 +1,13 @@
-@import "~bulma";
-@import "design_scss/_variables.scss";
-@import "design_scss/_layout.scss";
-@import "design_scss/_header.scss";
-@import "design_scss/_body.scss";
-@import "design_scss/_footer.scss";
-@import "design_scss/_utility.scss";
+@import '~bulma/bulma.sass';
+@import '~searchkit/theming/theme.scss';
+@import '~react-select/scss/default.scss';
+
+@import 'modules/_variables.scss';
+@import 'modules/_layout.scss';
+@import 'modules/_header.scss';
+@import 'modules/_body.scss';
+@import 'modules/_footer.scss';
+@import 'modules/_utility.scss';
 
 /* Font faces for CESSDA */
 @font-face {
