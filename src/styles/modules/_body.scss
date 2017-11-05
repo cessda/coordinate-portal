@@ -1,4 +1,23 @@
 body {
+  font-size: 1rem;
+}
+
+body {
+  #root {
+    color: $greyish-brown;
+  }
+
+  a {
+    color: $cessda_gold;
+  }
+}
+
+.is-fullwidth {
+  margin:0 !important;
+  padding:0 !important;
+}
+
+body {
   min-width: auto;
   text-align: left;
 
