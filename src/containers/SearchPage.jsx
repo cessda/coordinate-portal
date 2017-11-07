@@ -21,17 +21,31 @@ import {Panel} from '../components/Panel';
 import {RangeFilter} from '../components/RangeFilter';
 import {RefinementListFilter} from '../components/RefinementListFilter';
 import searchkit from '../utilities/searchkit';
-
-// got to be set to all!!
-let myLang = 'all';
+import * as _ from 'lodash';
+import * as $ from 'jquery';
 
 class SearchPage extends React.Component {
-  render() {
-    let dynlang = this.props.location.query.showlang;
-    if (dynlang) {
-      myLang = dynlang;
+  componentDidUpdate() {
+    // Auto expand the 'Collection dates' filter if it contains selected values.
+    let anyDateYearFilter = $('.filter--anydateYear > .is-collapsed');
+    if (!anyDateYearFilter.data('expanded') && !_.isEmpty(this.props.filters['anydateYear'])) {
+      anyDateYearFilter.data('expanded', true).click();
     }
 
+    // Auto expand the 'Language of data files' filter if it contains selected values.
+    let languageOfDataFilesFilter = $('.filter--language > .is-collapsed');
+    if (!languageOfDataFilesFilter.data('expanded') && !_.isEmpty(this.props.filters['language'])) {
+      languageOfDataFilesFilter.data('expanded', true).click();
+    }
+
+    // Auto expand the 'Country' filter if it contains selected values.
+    let countryFilter = $('.filter--dc\\.coverage > .is-collapsed');
+    if (!countryFilter.data('expanded') && !_.isEmpty(this.props.filters['dc.coverage'])) {
+      countryFilter.data('expanded', true).click();
+    }
+  }
+
+  render() {
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className="root__search">
