@@ -124,6 +124,7 @@ header {
   .header__searchbox {
     position: relative;
   }
+
   .sk-search-box {
     background-color: $white;
     border: 1px solid $dark_grey;
@@ -135,6 +136,10 @@ header {
 
     &.is-focused {
       background-color: $white;
+    }
+
+    .sk-search-box__text {
+      color: $greyish-brown;
     }
 
     ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
