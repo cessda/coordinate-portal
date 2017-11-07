@@ -10,6 +10,7 @@ import {syncHistoryWithStore} from 'react-router-redux';
 import reducers from './reducers';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import 'string.prototype.includes';
 import './styles/design.scss';
 
 const store = createStore(

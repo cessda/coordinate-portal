@@ -39,5 +39,20 @@ Icon
 .idea/
 *.iws
 
+### Eclipse
+.project
+.metadata
+tmp/
+*.tmp
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+.externalToolBuilders/
+*.launch
+.recommenders/
+
 ### Node
 /node_modules/
