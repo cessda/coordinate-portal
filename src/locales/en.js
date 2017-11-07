@@ -40,6 +40,8 @@ module.exports = {
   },
   sorting: {
     relevance: 'Relevance',
+    titleAscending: 'Title (A-Z)',
+    titleDescending: 'Title (Z-A)',
     latest: 'Latest',
     first: 'First'
   },
@@ -49,6 +51,8 @@ module.exports = {
   },
   resultsPerPage: 'Results per page',
   sortBy: 'Sort by',
+  showFilterSummary: 'Show filter summary',
+  hideFilterSummary: 'Hide filter summary',
   readMore: 'Read more',
   readLess: 'Read less',
   viewJson: 'View JSON',
