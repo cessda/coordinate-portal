@@ -1,6 +1,6 @@
-  /* ==========================================================================
-       Navigation bar
-   ========================================================================== */
+/* ==========================================================================
+     Navigation bar
+ ========================================================================== */
 
 header {
   background-color: $cessda_blueish;
@@ -31,7 +31,7 @@ header {
       font-weight: bold;
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 768px) {
       margin: auto;
     }
   }
@@ -61,7 +61,7 @@ header {
     display: block;
     white-space: initial;
 
-    & .cessda a{
+    & .cessda a {
       font-family: cessda !important;
       font-size: 3.5rem;
       color: $white;
@@ -84,48 +84,47 @@ header {
     }
   }
 
-    & .nav-toggle {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-      color: $white;
+  & .nav-toggle {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    color: $white;
 
-      &:hover {
-        background-color: $cessda_blueish;
-      }
-      &:focus {
-        background-color: $cessda_blueish;
+    &:hover {
+      background-color: $cessda_blueish;
+    }
+    &:focus {
+      background-color: $cessda_blueish;
+    }
+  }
+
+  & .nav-start {
+    justify-content: center;
+    overflow-x: hidden;
+
+    & a {
+      width: 50%;
+      height: auto;
+
+      & img {
+        max-height: 3rem;
       }
     }
+  }
 
-    & .nav-start {
-      justify-content: center;
-      overflow-x: hidden;
+  & .nav-end {
+    padding: 10px;
+    justify-content: center;
 
-      & a {
-        width: 50%;
-        height: auto;
-
-        & img {
-          max-height: 3rem;
-        }
-      }
+    & .nav-item {
+      position: relative;
     }
-
-    & .nav-end {
-      padding: 10px;
-      justify-content: center;
-
-      & .nav-item {
-        position: relative;
-      }
-    }
-
+  }
 
   .header__searchbox {
     position: relative;
   }
-  .sk-search-box  {
+  .sk-search-box {
     background-color: $white;
     border: 1px solid $dark_grey;
     border-radius: 25px;
@@ -138,46 +137,30 @@ header {
       background-color: $white;
     }
 
-    @media screen and (max-width: 768px){
+    ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+      color: $greyish-brown !important;
+    }
+
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      color: $greyish-brown !important;
+      opacity: 1;
+    }
+
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      color: $greyish-brown !important;
+      opacity: 1;
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: $greyish-brown !important;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      color: $greyish-brown !important;
+    }
+
+    @media screen and (max-width: 768px) {
       margin: 0 auto 0;
     }
   }
-
-  /*@media screen and (min-width: 769px) and (max-width: 999px){
-    .sk-search-box {
-      width: 400px;
-    }
-  }*/
 }
-
-/*
-@media screen and (min-width: 769px){
-  .nav-toggle {
-      display: none !important;
-  }
-
-  .navbar
-  {
-    & .nav-menu {
-      position: relative;
-    }
-  }
-}
-
-@media screen and (max-width: 768px){
-  header .cessda_top {
-    background-position: 50% 0;
-  }
-
-  header .sk-search-box {
-    width: auto;
-  }
-}
-
-@media screen and (max-width: 600px){
-  header .cessda_top {
-    background-position: 53% 0;
-  }
-}
-
-*/
