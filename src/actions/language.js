@@ -8,7 +8,7 @@ import searchkit from '../utilities/searchkit';
 export const INIT_TRANSLATIONS = 'INIT_TRANSLATIONS';
 
 export const initTranslations = () => {
-  return (dispatch, getState) => {
+  return dispatch => {
     let code = (globals.initialLanguage === 'GB' ? 'EN' : globals.initialLanguage).toLowerCase();
 
     counterpart.registerTranslations('de', counterpartDe);

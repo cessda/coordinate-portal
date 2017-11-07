@@ -58,7 +58,7 @@ export function makeCreators(data,sclass) {
       }
     }
     if(i==3){
-      ds.push( React.DOM.span({ key: i + 1 },  " ( "+ (data.length-3) + " more )" ));
+      ds.push( React.DOM.span({ key: i + 1 },  " ("+ (data.length-3) + " more)" ));
       break;
     }
   }

@@ -1,8 +1,12 @@
+import * as globals from '../../config';
 import * as counterpart from 'react-translate-component';
-
 import {CHANGE_LANGUAGE, INIT_TRANSLATIONS} from '../actions/language';
 
-const language = (state = {}, action) => {
+const initialState = {
+  code: globals.initialLanguage
+};
+
+const language = (state = initialState, action) => {
   switch (action.type) {
     case INIT_TRANSLATIONS:
       return Object.assign({}, state, {

@@ -1,11 +1,11 @@
 import React from 'react';
 import * as _ from 'lodash';
-import {trim} from 'lodash';
 import * as utilityComponents from '../utilities/componentUtility';
 import * as striptags from 'striptags';
-import {FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLock} from 'react-icons/lib/fa/index';
+import {
+  FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLock, FaUnlock
+} from 'react-icons/lib/fa/index';
 import {Rights} from './Rights';
-import {truncate} from 'lodash';
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -17,7 +17,7 @@ class Result extends React.Component {
     // console.log(props);
 
     let description = this.getDescription(),
-        descriptionShort = truncate(description, {
+        descriptionShort = _.truncate(description, {
           length: 500
         });
 
@@ -48,7 +48,7 @@ class Result extends React.Component {
         description += ' ' + striptags(descriptionArray[i]);
       }
     }
-    return trim(description);
+    return _.trim(description);
   };
 
   readMore() {
@@ -193,15 +193,15 @@ class Result extends React.Component {
     // console.log(rights);
     return (
       <div className="list_hit" data-qa="hit">
-        <h4 className={bemBlocks.item().mix([bemBlocks.container('hith4'), 'mb-10'])}>
-          <a className="mt-5" href={addressTitle}><span dangerouslySetInnerHTML={{__html: title[0]}}/></a>
+        <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>
+          <a href={addressTitle}><span dangerouslySetInnerHTML={{__html: title[0]}}/></a>
 
           <div className="tags has-addons ml-a availability">
             <Translate className="tag"
                        component="span"
                        content="filters.availability.label"/>
             <span className="tag is-success">
-              <FaLock/><span className="ml-5">Open</span>
+              <FaUnlock/><span className="ml-5">Open</span>
             </span>
           </div>
 

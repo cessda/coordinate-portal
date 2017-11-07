@@ -18,91 +18,39 @@ class Header extends React.Component {
         </div>
 
         <div className="container">
-        <div className="columns">
-          <div className="column">
-            <div className="logo">
-              <div className="cessda"><a href="/">cessda</a></div>
-              <div className="cessda_beta">Products and Services Catalogue</div>
-              <span className="cessda_beta--blue">Beta Version</span>
+          <div className="columns">
+            <div className="column">
+              <div className="logo">
+                <div className="cessda"><a href="/">cessda</a></div>
+                <div className="cessda_beta">Products and Services Catalogue</div>
+                <span className="cessda_beta--blue">Beta Version</span>
+              </div>
+            </div>
+            <div className="column">
+              <SearchBox
+                autofocus={true}
+                searchOnChange={true}
+                prefixQueryFields={['_all^1']}
+                queryFields={['_all']}
+                queryBuilder={queryBuilder}/>
+
+              <div className="reset-search">
+                <HitsStats className="hits-count"/>
+
+                <ResetFilters component={Reset}
+                              options={{query: false, filter: true, pagination: true}}
+                              translations={{
+                                'reset.clear_all': counterpart.translate('reset.filters')
+                              }}/>
+                <ResetFilters component={Reset}
+                              options={{query: true, filter: false, pagination: true}}
+                              translations={{
+                                'reset.clear_all': counterpart.translate('reset.query')
+                              }}/>
+              </div>
             </div>
           </div>
-          <div className="column">
-            <SearchBox
-              autofocus={true}
-              searchOnChange={true}
-              prefixQueryFields={['_all^1']}
-              queryFields={['_all']}
-              queryBuilder={queryBuilder}/>
-
-            <div className="reset-search">
-              <HitsStats className="hits-count"/>
-
-              <ResetFilters component={Reset}
-                            options={{query: false, filter: true, pagination: true}}
-                            translations={{
-                              'reset.clear_all': counterpart.translate('reset.filters')
-                            }}/>
-              <ResetFilters component={Reset}
-                            options={{query: true, filter: false, pagination: true}}
-                            translations={{
-                              'reset.clear_all': counterpart.translate('reset.query')
-                            }}/>
-            </div>
-          </div>
-      </div>
-      </div>
-
-
-        {/*<nav className="navbar">*/}
-          {/*<div className="container">*/}
-          {/*<div className="navbar-menu">*/}
-            {/*<div className="navbar-start">*/}
-
-              {/*<div className="nav-item">*/}
-                {/*<div className="cessda"><a href="/">cessda</a></div>*/}
-                {/*<div className="cessda_beta">Products and Services Catalogue</div>*/}
-                {/*<span className="cessda_beta--blue">Beta Version</span>*/}
-              {/*</div>*/}
-
-            {/*</div>*/}
-
-            {/*<div className="navbar-end">*/}
-
-              {/*<div className="nav-item">*/}
-                {/*<SearchBox*/}
-                  {/*autofocus={true}*/}
-                  {/*searchOnChange={true}*/}
-                  {/*prefixQueryFields={['_all^1']}*/}
-                  {/*queryFields={['_all']}*/}
-                  {/*queryBuilder={queryBuilder}/>*/}
-
-                {/*<div className="reset-search">*/}
-                  {/*<HitsStats className="hits-count"/>*/}
-
-                  {/*<ResetFilters component={Reset}*/}
-                                {/*options={{query: false, filter: true, pagination: true}}*/}
-                                {/*translations={{*/}
-                                  {/*'reset.clear_all': counterpart.translate('reset.filters')*/}
-                                {/*}}/>*/}
-                  {/*<ResetFilters component={Reset}*/}
-                                {/*options={{query: true, filter: false, pagination: true}}*/}
-                                {/*translations={{*/}
-                                  {/*'reset.clear_all': counterpart.translate('reset.query')*/}
-                                {/*}}/>*/}
-                {/*</div>*/}
-
-              {/*</div>*/}
-
-            {/*</div>*/}
-          {/*</div>*/}
-          {/*</div>*/}
-        {/*</nav>*/}
-
-
-
-
-
-
+        </div>
       </header>
     );
   }

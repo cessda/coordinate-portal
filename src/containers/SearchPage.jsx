@@ -65,46 +65,55 @@ class SearchPage extends React.Component {
                            id="anydateYear"
                            title={counterpart.translate('filters.collectionDates.label')}
                            rangeComponent={RangeSliderInput}
-                           containerComponent={<Panel title={counterpart.translate('filters.collectionDates.label')}
+                           containerComponent={<Panel title={counterpart.translate(
+                             'filters.collectionDates.label')}
                                                       className="anydateYear"
                                                       collapsable={true}
                                                       defaultCollapsed={true}/>}/>
 
               {/*<RefinementListFilter id="rights"
-                                    title={counterpart.translate('filters.availability.label')}
-                                    field={'dc.rights.all'}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.rights'}}}
-                                    containerComponent={<Panel title={counterpart.translate('filters.availability.label')}
-                                                               className="rights"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    size={5} orderKey="_term" orderDirection="asc"/>*/}
+               title={counterpart.translate('filters.availability.label')}
+               field={'dc.rights.all'}
+               fieldOptions={{type: 'nested', options: {path: 'dc.rights'}}}
+               containerComponent={<Panel title={counterpart.translate('filters.availability.label')}
+               className="rights"
+               collapsable={true}
+               defaultCollapsed={true}/>}
+               size={5} orderKey="_term" orderDirection="asc"/>*/}
 
               <Panel title={counterpart.translate('filters.availability.label')}
                      className="rights"
                      collapsable={true}
                      defaultCollapsed={true}>
                 <div className="sk-item-list-option sk-item-list__item">
-                  <input type="checkbox" className="sk-item-list-option__checkbox is-disabled" disabled/>
+                  <input type="checkbox"
+                         className="sk-item-list-option__checkbox is-disabled"
+                         disabled/>
                   <div className="sk-item-list-option__text">Open</div>
                   <div className="sk-item-list-option__count">0</div>
                 </div>
                 <div className="sk-item-list-option sk-item-list__item">
-                  <input type="checkbox" className="sk-item-list-option__checkbox is-disabled" disabled/>
+                  <input type="checkbox"
+                         className="sk-item-list-option__checkbox is-disabled"
+                         disabled/>
                   <div className="sk-item-list-option__text">Restricted</div>
                   <div className="sk-item-list-option__count">0</div>
                 </div>
               </Panel>
 
               <RefinementListFilter id="language"
-                                    title={counterpart.translate('filters.languageOfDataFiles.label')}
+                                    title={counterpart.translate(
+                                      'filters.languageOfDataFiles.label')}
                                     field={'dc.language.nn'}
                                     fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
-                                    containerComponent={<Panel title={counterpart.translate('filters.languageOfDataFiles.label')}
+                                    operator="OR"
+                                    containerComponent={<Panel title={counterpart.translate(
+                                      'filters.languageOfDataFiles.label')}
                                                                className="language"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.languageOfDataFiles.placeholder')}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate(
+                                      'filters.languageOfDataFiles.placeholder')}
                                                                 title={this.props.children}/>}
                                     size={500} orderKey="_term" orderDirection="asc"/>
 
@@ -115,40 +124,46 @@ class SearchPage extends React.Component {
                                       type: 'nested',
                                       options: {path: 'dc.coverage', min_doc_count: 1}
                                     }}
-                                    containerComponent={<Panel title={counterpart.translate('filters.country.label')}
+                                    operator="OR"
+                                    containerComponent={<Panel title={counterpart.translate(
+                                      'filters.country.label')}
                                                                className="coverage"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.country.placeholder')}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate(
+                                      'filters.country.placeholder')}
                                                                 title={this.props.children}/>}
                                     size={500}/>
 
               <RefinementListFilter id="dc.publisher"
                                     title={counterpart.translate('filters.publisher.label')}
-                                    field={'dc.publisher.all10'}
+                                    field={'dc.publisher.all'}
                                     fieldOptions={{
                                       type: 'nested',
-                                      options: {path: 'dc.publisher.all10', min_doc_count: 1}
+                                      options: {path: 'dc.publisher.all', min_doc_count: 1}
                                     }}
-                                    containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}
+                                    operator="OR"
+                                    containerComponent={<Panel title={counterpart.translate(
+                                      'filters.publisher.label')}
                                                                className="publisher"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate(
+                                      'filters.publisher.placeholder')}
                                                                 title={this.props.children}/>}
                                     size={500}/>
 
-              <RefinementListFilter id="dataProvider"
-                                    title={counterpart.translate('filters.publisher.label')}
-                                    field="dataProvider"
-                                    operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}
-                                                               className="dataProvider"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}
-                                                                title={this.props.children}/>}
-                                    size={500}/>
+              {/*<RefinementListFilter id="dataProvider"*/}
+              {/*title={counterpart.translate('filters.publisher.label')}*/}
+              {/*field="dataProvider"*/}
+              {/*operator="OR"*/}
+              {/*containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}*/}
+              {/*className="dataProvider"*/}
+              {/*collapsable={true}*/}
+              {/*defaultCollapsed={true}/>}*/}
+              {/*listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}*/}
+              {/*title={this.props.children}/>}*/}
+              {/*size={500}/>*/}
             </SideBar>
             <LayoutResults className="column is-8">
               {this.props.showSummary &&
