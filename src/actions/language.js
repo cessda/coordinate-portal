@@ -19,8 +19,6 @@ export const initTranslations = () => {
 
     searchkit.translateFunction = (key) => {
       let translations = {
-        'pagination.previous': '<',
-        'pagination.next': '>',
         'searchbox.placeholder': counterpart.translate('search'),
         'hitstats.results_found': counterpart.translate('numberOfResults', {
           count: searchkit.getHitsCount()

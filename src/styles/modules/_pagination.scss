@@ -1,0 +1,22 @@
+.pagination-link {
+  background-color: #f4f4f1;
+  border-radius: 3px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pagination-link.is-current {
+  background-color: #ffffff;
+  color: #555555;
+}
+
+.pagination-ellipsis {
+  background-color: #ffffff;
+}
+
+.pagination-previous, .pagination-next {
+  background-color: #f4f4f1;
+  border: 0;
+  font-size: 14px;
+}

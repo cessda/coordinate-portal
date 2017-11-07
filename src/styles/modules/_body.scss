@@ -57,7 +57,6 @@ body {
 
   .dsn-list-pagination {
     padding: 10px;
-    border-top: $cessda_dotted;
   }
 
   .sk-hits-list__rights {
@@ -453,12 +452,6 @@ body {
 
   .sk-toggle {
     margin-left: 0;
-  }
-}
-
-@media screen and (min-width: 480px){
-  .sk-pagination-navigation.is-numbered {
-      width: 45%;
   }
 }
 

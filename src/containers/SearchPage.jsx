@@ -3,6 +3,7 @@ import {MultiSelect} from '../components/MultiSelect.jsx';
 import Result from '../components/Result.jsx';
 import {Footer} from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
+import {Pagination as PaginationComponent} from '../components/Pagination';
 import {
   GroupedSelectedFilters, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination,
   RangeSliderInput, SearchkitProvider, SideBar
@@ -181,13 +182,13 @@ class SearchPage extends React.Component {
                     key={'hitList'}/>
 
               <NoHits/>
+
+              <Pagination pageScope={3}
+                          showLast={true}
+                          showNumbers={true}
+                          listComponent={<PaginationComponent/>}/>
             </LayoutResults>
           </LayoutBody>
-          <div className="dsn-list-pagination">
-            <Pagination pageScope={3}
-                        showLast={true}
-                        showNumbers={true}/>
-          </div>
           <Footer/>
         </Layout>
       </SearchkitProvider>
