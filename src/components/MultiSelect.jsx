@@ -11,6 +11,10 @@ export class MultiSelect extends React.Component {
     this.props.setItems(selectedOptions.map(el => el.value));
   }
 
+  renderValue(v) {
+    return v.label.replace('undefined', '0');
+  }
+
   render() {
     const {
       placeholder,
@@ -36,7 +40,7 @@ export class MultiSelect extends React.Component {
               value={selectedItems}
               placeholder={placeholder}
               options={options}
-              valueRenderer={(v) => v.value}
+              valueRenderer={this.renderValue}
               clearable={clearable}
               onChange={this.handleChange}/>
     );
