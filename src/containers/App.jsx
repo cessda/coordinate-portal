@@ -1,12 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {initSearchkit} from '../actions/search';
 import {initTranslations} from '../actions/language';
 import PropTypes from 'prop-types';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    props.initSearchkit();
     props.initTranslations();
   }
 
@@ -16,6 +18,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+  initSearchkit: PropTypes.func.isRequired,
   initTranslations: PropTypes.func.isRequired
 };
 
@@ -25,6 +28,7 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    initSearchkit: bindActionCreators(initSearchkit, dispatch),
     initTranslations: bindActionCreators(initTranslations, dispatch)
   };
 };
