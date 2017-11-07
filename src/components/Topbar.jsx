@@ -25,17 +25,32 @@ class TopBar extends React.Component {
 
               <SortingSelector className="level-item" options={[{
                 translation: 'sorting.relevance',
+                key: 'relevance',
                 field: '_score',
                 order: 'desc',
                 defaultOption: true
               }, {
-                translation: 'sorting.latest',
-                field: 'oaiDatestamp',
-                order: 'desc'
+                translation: 'sorting.titleAscending',
+                key: 'title-ascending',
+                fields: [{
+                  field: 'dc.title.all',
+                  options: {
+                    nested_path: 'dc.title',
+                    mode: 'min',
+                    order: 'asc'
+                  }
+                }]
               }, {
-                translation: 'sorting.first',
-                field: 'oaiDatestamp',
-                order: 'asc'
+                translation: 'sorting.titleDescending',
+                key: 'title-descending',
+                fields: [{
+                  field: 'dc.title.all',
+                  options: {
+                    nested_path: 'dc.title',
+                    mode: 'min',
+                    order: 'desc'
+                  }
+                }]
               }]}/>
             </div>
           </div>
