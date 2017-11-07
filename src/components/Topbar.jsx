@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Translate from 'react-translate-component';
 import {SortingSelector} from './SortingSelector';
+import {bindActionCreators} from 'redux';
+import {toggleSummary} from '../actions/search';
 
 class TopBar extends React.Component {
   render() {
@@ -18,6 +20,18 @@ class TopBar extends React.Component {
 
               <PageSizeSelector className="level-item" options={[10, 30, 50, 150]}/>
             </div>
+
+            {this.props.filters &&
+             <div className="level-item is-hidden-touch">
+               <button type="button"
+                       className="button is-small is-white"
+                       onClick={this.props.toggleSummary}>
+                 {this.props.showSummary && <Translate content="hideFilterSummary"/>}
+                 {!this.props.showSummary && <Translate content="showFilterSummary"/>}
+               </button>
+             </div>
+            }
+
             <div className="level-right">
               <Translate className="level-item"
                          component="label"
@@ -61,13 +75,24 @@ class TopBar extends React.Component {
 }
 
 TopBar.propTypes = {
-  code: PropTypes.string.isRequired
+  code: PropTypes.string.isRequired,
+  showSummary: PropTypes.bool.isRequired,
+  filters: PropTypes.object,
+  toggleSummary: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
-    code: state.language.code
+    code: state.language.code,
+    showSummary: state.search.showSummary,
+    filters: state.search.query.post_filter
   };
 };
 
-export default connect(mapStateToProps)(TopBar);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleSummary: bindActionCreators(toggleSummary, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar);

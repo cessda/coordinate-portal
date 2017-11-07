@@ -3,20 +3,16 @@ import {MultiSelect} from '../components/MultiSelect.jsx';
 import Result from '../components/Result.jsx';
 import {Footer} from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
-import {Reset} from '../components/Reset';
-import * as utilityComponents from '../utilities/componentUtility';
 import {
-  HierarchicalRefinementFilter, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination,
-  RangeSliderInput, ResetFilters, SearchkitManager,
-  SearchkitProvider, SideBar
+  GroupedSelectedFilters, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination,
+  RangeSliderInput, SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
 import * as counterpart from 'react-translate-component';
-import counterpartString from 'counterpart';
+import Translate from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import Translate from 'react-translate-component';
 import {Panel} from '../components/Panel';
 import {RangeFilter} from '../components/RangeFilter';
 import {RefinementListFilter} from '../components/RefinementListFilter';
@@ -155,6 +151,12 @@ class SearchPage extends React.Component {
                                     size={500}/>
             </SideBar>
             <LayoutResults className="column is-8">
+              {this.props.showSummary &&
+               <div className="is-hidden-touch">
+                 <GroupedSelectedFilters/>
+               </div>
+              }
+
               <TopBar/>
 
               <Hits scrollTo={true}
@@ -178,10 +180,15 @@ class SearchPage extends React.Component {
   }
 }
 
-SearchPage.propTypes = {};
+SearchPage.propTypes = {
+  showSummary: PropTypes.bool.isRequired
+};
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    showSummary: state.search.showSummary,
+    filters: state.search.state
+  };
 };
 
 export default connect(mapStateToProps)(SearchPage);
