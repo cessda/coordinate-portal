@@ -10,11 +10,7 @@ export const queryBuilder = (query, options) => {
           'query': query,
           'type': 'cross_fields',
           'fields': [
-            'dc.title.all',
-            'dc.description.all',
-            'dc.contributor.all',
-            'dc.subject.all',
-            'dc.coverage.all'
+            '_all'
           ]
         }
       }
