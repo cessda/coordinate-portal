@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: SERVICENAME
+  namespace: NAMESPACE
+spec:
+  type: LoadBalancer
+  ports:
+  - name: searchkit-gui
+    port: 8088
+    targetPort: searchkit-cport
+    protocol: TCP
+  selector:
+    app: SERVICENAME

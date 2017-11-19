@@ -8,7 +8,7 @@ const Globals = {
   'prod': 'http://193.175.238.35:8089',
   'local': 'http://localhost:9200',
   'prodDomain': 'http://datasearch.gesis.org',
-  'cessda': 'http://35.195.11.83:9200',
+  'cessda': 'http://CESSDAES:9200',
   'initialLanguage': 'en'
 };
 
