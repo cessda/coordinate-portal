@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * Created by terhorsn on 15.02.2017.
  * Use to define environment specific urls for elasticSearch
