@@ -1,0 +1,21 @@
+.panel {
+  margin: 0 0 15px 0 !important;
+  padding: 15px;
+  border: 0;
+  border-radius: 3px;
+  background-color: #f4f4f1;
+}
+
+.sk-panel {
+  &.section-header {
+    .sk-panel__header {
+      padding: 15px 15px 0 15px;
+      margin: 15px 0 0 0;
+      border-top: 1px solid #f4f4f1;
+
+      &:after {
+        top: 27px;
+      }
+    }
+  }
+}
