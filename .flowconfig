@@ -1,0 +1,21 @@
+[ignore]
+<PROJECT_ROOT>/server/.*
+<PROJECT_ROOT>/startcessdadev.js
+<PROJECT_ROOT>/startlocal.js
+<PROJECT_ROOT>/startprod.js
+<PROJECT_ROOT>/webpack.cessda_dev.config.js
+<PROJECT_ROOT>/webpack.cessda_prod.config.js
+<PROJECT_ROOT>/webpack.es_local.config.js
+
+[include]
+./src
+
+[libs]
+./flow-typed
+
+[lints]
+
+[options]
+module.name_mapper='^.*\.scss$' -> 'css-module-flow'
+
+[strict]

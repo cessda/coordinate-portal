@@ -57,13 +57,14 @@ module.exports = {
             presets: [
               ['es2015', { modules: false }],
               'react',
+              'flow'
             ],
           }
       }, {
         test: /\.css$/,
         use: [ 'style-loader', 'css-loader' ]
         },
-        { 
+        {
         test: /\.(scss|sass)$/,
             use: [{
                 loader: "style-loader"

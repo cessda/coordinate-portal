@@ -40,7 +40,11 @@ module.exports = {
           babelrc: false,
           presets: [
             ['es2015', {modules: false}],
-            'react'
+            'react',
+            'flow'
+          ],
+          plugins: [
+            'flow-react-proptypes'
           ]
         }
       },
@@ -59,10 +63,6 @@ module.exports = {
         }]
       },
       {
-        test: /\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader'
-      }, {
         test: /\.(jpe?g|png|gif|svg)$/i,
         loaders: ['file-loader?context=src/images&name=images/[path][name].[ext]', {
           loader: 'image-webpack-loader',
