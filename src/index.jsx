@@ -13,8 +13,13 @@ import reducers from './reducers';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import 'string.prototype.includes';
+import * as ReactGA from 'react-ga';
 import './styles/design.scss';
 import type {Store} from './types';
+
+ReactGA.initialize('UA-109854552-1', {
+  debug: true
+});
 
 const store: Store = createStore(
   reducers,
@@ -22,6 +27,11 @@ const store: Store = createStore(
 );
 
 const history: Object = syncHistoryWithStore(browserHistory, store);
+
+history.listen((location: Object): void => {
+  // console.log(location);
+  ReactGA.pageview(location.pathname + location.search);
+});
 
 let root: ?HTMLElement = document.getElementById('root');
 

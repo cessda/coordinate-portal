@@ -9032,6 +9032,14 @@
         "prop-types": "15.6.0"
       }
     },
+    "react-ga": {
+      "version": "2.3.5",
+      "resolved": "https://registry.npmjs.org/react-ga/-/react-ga-2.3.5.tgz",
+      "integrity": "sha512-tK+Ukzv8xnQB0n47zzPLrIzYKLX0g2941ZylgD45w/akOKe2MMP3JteeOMra9F2wWj0hd2r+v3ol/sCM8MKqmw==",
+      "requires": {
+        "object-assign": "4.1.1"
+      }
+    },
     "react-global-configuration": {
       "version": "1.2.0",
       "resolved": "https://registry.npmjs.org/react-global-configuration/-/react-global-configuration-1.2.0.tgz",
