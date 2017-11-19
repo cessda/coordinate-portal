@@ -1,36 +1,36 @@
-import React from 'react';
-import {connect} from 'react-redux';
+// @flow
+
+import type {ChildrenArray, Node} from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import {initSearchkit} from '../actions/search';
 import {initTranslations} from '../actions/language';
-import PropTypes from 'prop-types';
+import type {Dispatch} from '../types';
 
-class App extends React.Component {
-  constructor(props) {
+type Props = {
+  initSearchkit: () => void,
+  initTranslations: () => void,
+  children: ChildrenArray<Node>
+};
+
+class App extends Component<Props> {
+  constructor(props: Props): void {
     super(props);
     props.initSearchkit();
     props.initTranslations();
   }
 
-  render() {
+  render(): Node {
     return this.props.children;
   }
 }
 
-App.propTypes = {
-  initSearchkit: PropTypes.func.isRequired,
-  initTranslations: PropTypes.func.isRequired
-};
-
-const mapStateToProps = () => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     initSearchkit: bindActionCreators(initSearchkit, dispatch),
     initTranslations: bindActionCreators(initTranslations, dispatch)
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

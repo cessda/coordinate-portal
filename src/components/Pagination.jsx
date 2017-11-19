@@ -1,12 +1,27 @@
+// @flow
+
+import type {Node} from 'react';
 import React from 'react';
 import {FaChevronLeft, FaChevronRight} from 'react-icons/lib/fa/index';
+import {connect} from 'react-redux';
+import {AbstractItemList} from 'searchkit';
 
-export class Pagination extends React.Component {
-  render() {
+type Props = {
+  items: {
+    key: string | number,
+    label: string,
+    page: number
+  }[],
+  selectedItems: number[],
+  setItems: (number[]) => void
+};
+
+class Pagination extends AbstractItemList<Props> {
+  render(): Node {
     const {items, selectedItems, setItems} = this.props;
     let links = [];
 
-    for (let i = 0; i < items.length; i++) {
+    for (let i: number = 0; i < items.length; i++) {
       if (i === 0 || i === items.length - 1) {
         continue;
       }
@@ -38,3 +53,5 @@ export class Pagination extends React.Component {
     );
   }
 }
+
+export default connect()(Pagination);

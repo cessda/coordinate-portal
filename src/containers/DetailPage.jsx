@@ -1,101 +1,112 @@
+// @flow
+
+import type {Node} from 'react';
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {browserHistory} from 'react-router';
 import {
-  Hits, Layout, LayoutBody, LayoutResults, NoHits, SearchkitManager, SearchkitProvider, SideBar
+  Hits, Layout, LayoutBody, LayoutResults, NoHits, SearchkitProvider, SideBar
 } from 'searchkit';
-import * as utilityComponents from '../utilities/componentUtility';
 import Header from '../components/Header';
-import {Detail} from '../components/Detail';
-import {Footer} from '../components/Footer.jsx';
+import Detail from '../components/Detail';
+import Footer from '../components/Footer.jsx';
 import searchkit from '../utilities/searchkit';
+import Panel from '../components/Panel';
+import {connect} from 'react-redux';
+import {FaAngleLeft, FaCode, FaExternalLink} from 'react-icons/lib/fa/index';
+import {bindActionCreators} from 'redux';
+import {changeDataLanguage} from '../actions/language';
+import Translate from 'react-translate-component';
+import Select from 'react-select';
+import Similars from '../components/Similars';
+import {goBack, push} from 'react-router-redux';
+import * as _ from 'lodash';
+import type {Dispatch, State} from '../types';
 
-const type = 'dc';
+type Props = {
+  item?: Object,
+  dataCode: string,
+  query: Object,
+  push: (path: string) => void,
+  goBack: () => void,
+  changeDataLanguage: (code: string) => void
+};
 
-let myLang = 'all';
+class DetailPage extends Component<Props> {
+  shouldComponentUpdate(props: Props): boolean {
+    const {query, item, push} = props;
 
-function redirect() {
-  var query = document.getElementById('searchbox_input').value;
-  if (query != null && query != '') {
-    browserHistory.push('/search?q=' + query);
-  } else {
-    console.log('Clicked without input');
+    if (item !== undefined && (query.q === undefined || _.trim(query.q, '"') !== item.id)) {
+      push('/');
+      return false;
+    }
+
+    return true;
   }
-}
 
-export class DetailPage extends Component {
-  constructor(props) {
+  render(): Node {
+    const {item, dataCode, goBack, changeDataLanguage} = this.props;
 
-    super(props);
-    this.state = {
-      myLang: 'nn',
-      deta: this.getDetail('init getdetail'),
-      simi: [],
-      url: []
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.getDetail = this.getDetail.bind(this);
-  };
-
-  handleChange(props) {
-    this.state.myLang = props;
-    this.state.deta = this.getDetail();
-    myLang = this.state.myLang;
-    this.forceUpdate();
-  };
-
-  componentDidMount() {
-    var mthis = ReactDOM.findDOMNode(this);
-
-    document.getElementsByTagName('input')[0].setAttribute('id', 'searchbox_input');
-
-    var searchbox_redirect = document.getElementById('searchbox_input');
-    searchbox_redirect.onkeydown = function (e) {
-      if (e.keyCode == 13) {
-        redirect();
+    let languages = [];
+    if (item) {
+      for (let i: number = 0; i < item.languages.length; i++) {
+        languages.push({
+          label: item.languages[i],
+          value: item.languages[i].toLowerCase()
+        });
       }
-    };
-  }
-
-  componentWillMount() {
-
-    setTimeout(function () {
-      this.state.simi = this.refs['detai'];
-    }.bind(this), 1000);
-  }
-
-  componentDidUpdate() {
-    this.state.index = this.state.index + 1;
-  }
-
-  getDetail(x) {
-    let hits = undefined;
-    hits = <Hits
-      mod="sk-hits-grid"
-      hitsPerPage={1}
-      itemComponent={< Detail ref="detai"/>} ref="hitsComp"/>;
-    setTimeout(function () {
-      this.state.simi = this.refs['detai'];
-    }.bind(this), 0);
-    return hits;
-  }
-
-  render() {
-    this.state.deta = this.getDetail();
-    this.state.simi = this.refs['detai'];
+    }
 
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l" className="root__detail">
+        <Layout size="l">
           <Header/>
           <LayoutBody className="columns">
-            <LayoutResults className="column is-12">
-              <div className="dsn-detail-backToResults">
-                <a onClick={browserHistory.goBack}>
-                  <div> Back to Results</div>
-                </a>
-              </div>
-              {this.state.deta}
+            <SideBar className="is-hidden-mobile column is-4">
+              <Panel title="Language"
+                     collapsable={true}
+                     defaultCollapsed={false}>
+                <Select value={dataCode} options={languages} onChange={(o) => {
+                  changeDataLanguage(o.value);
+                }}/>
+              </Panel>
+              <Panel title="Similar results"
+                     collapsable={true}
+                     defaultCollapsed={false}>
+                {item &&
+                 <Similars/>
+                }
+              </Panel>
+            </SideBar>
+            <LayoutResults className="column is-8">
+              {item &&
+               <div className="panel">
+                 <a className="button is-small is-white is-pulled-left"
+                    onClick={goBack}><FaAngleLeft/><span className="ml-5">Back</span></a>
+
+                 <a className="button is-small is-white is-pulled-right"
+                    href={item.sourceUrl}
+                    target="_blank">
+                   <span className="icon is-small"><FaExternalLink/></span>
+                   {item.sourceIsCollection &&
+                    <Translate component="span" content="goToCollection"/>
+                   }
+                   {!item.sourceIsCollection &&
+                    <Translate component="span" content="goToStudy"/>
+                   }
+                 </a>
+
+                 <a className="button is-small is-white is-pulled-right mr-15"
+                    href={item.jsonUrl}
+                    target="_blank">
+                  <span className="icon is-small">
+                    <FaCode/>
+                  </span>
+                   <Translate component="span" content="viewJson"/>
+                 </a>
+
+                 <div className="is-clearfix"/>
+               </div>
+              }
+              <Hits mod="sk-hits-grid" hitsPerPage={1} itemComponent={<Detail/>}/>
               <NoHits/>
             </LayoutResults>
           </LayoutBody>
@@ -105,3 +116,21 @@ export class DetailPage extends Component {
     );
   }
 }
+
+const mapStateToProps = (state: State): Object => {
+  return {
+    item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
+    dataCode: state.language.dataCode,
+    query: state.routing.locationBeforeTransitions.query
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
+  return {
+    push: bindActionCreators(push, dispatch),
+    goBack: bindActionCreators(goBack, dispatch),
+    changeDataLanguage: bindActionCreators(changeDataLanguage, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailPage);

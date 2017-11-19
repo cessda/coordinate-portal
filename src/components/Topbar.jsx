@@ -1,14 +1,24 @@
-import React from 'react';
+// @flow
+
+import type {Node} from 'react';
+import React, {Component} from 'react';
 import {ActionBar, ActionBarRow, PageSizeSelector} from 'searchkit';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import Translate from 'react-translate-component';
-import {SortingSelector} from './SortingSelector';
+import SortingSelector from './SortingSelector';
 import {bindActionCreators} from 'redux';
 import {toggleSummary} from '../actions/search';
+import type {Dispatch, State} from '../types';
 
-class TopBar extends React.Component {
-  render() {
+type Props = {
+  uiCode: string,
+  showSummary: boolean,
+  filters?: Object,
+  toggleSummary: () => void
+};
+
+class TopBar extends Component<Props> {
+  render(): Node {
     return (
       <ActionBar className="is-hidden-mobile">
         <ActionBarRow>
@@ -74,22 +84,15 @@ class TopBar extends React.Component {
   }
 }
 
-TopBar.propTypes = {
-  code: PropTypes.string.isRequired,
-  showSummary: PropTypes.bool.isRequired,
-  filters: PropTypes.object,
-  toggleSummary: PropTypes.func.isRequired
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State): Object => {
   return {
-    code: state.language.code,
+    uiCode: state.language.uiCode,
     showSummary: state.search.showSummary,
     filters: state.search.query.post_filter
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     toggleSummary: bindActionCreators(toggleSummary, dispatch)
   };

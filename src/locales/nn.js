@@ -4,7 +4,7 @@ module.exports = {
     languages: {
       en: 'Englisch',
       de: 'Deutsch',
-      nn: 'Norwegisch'
+      nn: 'Nynorsk'
     },
     notAvailable: 'In der ausgewählten Sprache nicht verfügbar'
   },

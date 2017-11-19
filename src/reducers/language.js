@@ -1,29 +1,47 @@
+// @flow
+
 import * as globals from '../../config';
 import * as counterpart from 'react-translate-component';
-import {CHANGE_LANGUAGE, INIT_TRANSLATIONS} from '../actions/language';
+import type {Action} from '../actions';
 
-const initialState = {
-  code: globals.initialLanguage
+type State = {
+  uiCode: string,
+  dataCode: string,
+  list?: {
+    id: string,
+    label: string
+  }[]
 };
 
-const language = (state = initialState, action) => {
+const initialState: State = {
+  uiCode: globals.initialLanguage,
+  dataCode: 'all'
+};
+
+const language = (state: State = initialState, action: Action): State => {
   switch (action.type) {
-    case INIT_TRANSLATIONS:
+    case 'INIT_TRANSLATIONS':
       return Object.assign({}, state, {
-        code: action.code,
-        label: counterpart.translate('languagePicker.label'),
         list: [{
           id: 'en',
-          label: counterpart.translate('languagePicker.languages.en')
+          label: counterpart.translate('language.languages.en')
         }, {
           id: 'de',
-          label: counterpart.translate('languagePicker.languages.de')
+          label: counterpart.translate('language.languages.de')
+        }, {
+          id: 'nn',
+          label: counterpart.translate('language.languages.nn')
         }]
       });
 
-    case CHANGE_LANGUAGE:
+    case 'CHANGE_UI_LANGUAGE':
       return Object.assign({}, state, {
-        code: action.code
+        uiCode: action.code
+      });
+
+    case 'CHANGE_DATA_LANGUAGE':
+      return Object.assign({}, state, {
+        dataCode: action.code
       });
 
     default:

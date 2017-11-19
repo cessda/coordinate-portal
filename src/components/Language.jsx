@@ -1,51 +1,52 @@
-import React from 'react';
+// @flow
+
+import type {Node} from 'react';
+import React, {Component} from 'react';
 import * as counterpart from 'react-translate-component';
+import Translate from 'react-translate-component';
 import ReactFlagsSelect from 'react-flags-select';
 import 'react-flags-select/scss/react-flags-select.scss';
 import {connect} from 'react-redux';
-import {changeLanguage} from '../actions/language';
-import PropTypes from 'prop-types';
+import {changeUiLanguage} from '../actions/language';
 import {bindActionCreators} from 'redux';
+import type {Dispatch, State} from '../types';
 
-class Language extends React.Component {
-  render() {
+type Props = {
+  uiCode: any,
+  list: any,
+  changeUiLanguage: any
+};
+
+class Language extends Component<Props> {
+  render(): Node {
     return (
       <div className="language-picker">
-        <label>{this.props.label}:</label>
-        <ReactFlagsSelect countries={['GB', 'DE']}
+        <Translate component="label"
+                   content="language.label"/>
+        <ReactFlagsSelect countries={['GB', 'DE', 'NO']}
                           customLabels={{
-                            'GB': counterpart.translate('languagePicker.languages.en'),
-                            'DE': counterpart.translate('languagePicker.languages.de')
+                            'GB': counterpart.translate('language.languages.en'),
+                            'DE': counterpart.translate('language.languages.de'),
+                            'NO': counterpart.translate('language.languages.nn')
                           }}
-                          defaultCountry={this.props.code === 'en' ? 'GB' :
-                                          this.props.code.toUpperCase()}
-                          onSelect={this.props.changeLanguage}/>
+                          defaultCountry={this.props.uiCode === 'en' ? 'GB' :
+                                          this.props.uiCode.toUpperCase()}
+                          onSelect={this.props.changeUiLanguage}/>
       </div>
     );
   }
 }
 
-Language.propTypes = {
-  code: PropTypes.string.isRequired,
-  label: PropTypes.object.isRequired,
-  list: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.object.isRequired
-  })),
-  changeLanguage: PropTypes.func.isRequired
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State): Object => {
   return {
-    code: state.language.code,
-    label: state.language.label,
+    uiCode: state.language.uiCode,
     list: state.language.list
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    changeLanguage: bindActionCreators(changeLanguage, dispatch)
+    changeUiLanguage: bindActionCreators(changeUiLanguage, dispatch)
   };
 };
 

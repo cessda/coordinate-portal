@@ -1,28 +1,37 @@
-import React from 'react';
-import {MultiSelect} from '../components/MultiSelect.jsx';
+// @flow
+
+import type {Node} from 'react';
+import React, {Component} from 'react';
+import MultiSelect from '../components/MultiSelect.jsx';
 import Result from '../components/Result.jsx';
-import {Footer} from '../components/Footer.jsx';
+import Footer from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
-import {Pagination as PaginationComponent} from '../components/Pagination';
+import Pagination from '../components/Pagination';
 import {
-  GroupedSelectedFilters, Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination,
-  RangeSliderInput, SearchkitProvider, SideBar
+  GroupedSelectedFilters, Hits, Layout, LayoutBody, LayoutResults, NoHits,
+  Pagination as SearchkitPagination, RangeSliderInput, SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
 import * as counterpart from 'react-translate-component';
 import Translate from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import {Panel} from '../components/Panel';
-import {RangeFilter} from '../components/RangeFilter';
-import {RefinementListFilter} from '../components/RefinementListFilter';
+import Panel from '../components/Panel';
+import RangeFilter from '../components/RangeFilter';
+import RefinementListFilter from '../components/RefinementListFilter';
 import searchkit from '../utilities/searchkit';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
+import type {State} from '../types';
 
-class SearchPage extends React.Component {
-  componentDidUpdate() {
+type Props = {
+  showSummary: boolean,
+  filters: Function | Object,
+  results: number
+};
+
+class SearchPage extends Component<Props> {
+  componentDidUpdate(): void {
     // Auto expand the 'Collection dates' filter if it contains selected values.
     let anyDateYearFilter = $('.filter--anydateYear > .is-collapsed');
     if (!anyDateYearFilter.data('expanded') && !_.isEmpty(this.props.filters['anydateYear'])) {
@@ -42,12 +51,13 @@ class SearchPage extends React.Component {
     }
   }
 
-  render() {
+  render(): Node {
+    const {results} = this.props;
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l" className="root__search">
+        <Layout size="l">
           <Header/>
-          <LayoutBody className="columns">
+          <LayoutBody className={'columns' + (results === 0 ? ' no-results' : '')}>
             <SideBar className="is-hidden-mobile column is-4">
               <Panel title={counterpart.translate('filters.topic.label')}
                      className="subject"
@@ -114,8 +124,7 @@ class SearchPage extends React.Component {
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.languageOfDataFiles.placeholder')}
-                                                                title={this.props.children}/>}
+                                      'filters.languageOfDataFiles.placeholder')}/>}
                                     size={500} orderKey="_term" orderDirection="asc"/>
 
               <RefinementListFilter id="dc.coverage"
@@ -132,8 +141,7 @@ class SearchPage extends React.Component {
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.country.placeholder')}
-                                                                title={this.props.children}/>}
+                                      'filters.country.placeholder')}/>}
                                     size={500}/>
 
               <RefinementListFilter id="dc.publisher"
@@ -150,8 +158,7 @@ class SearchPage extends React.Component {
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.publisher.placeholder')}
-                                                                title={this.props.children}/>}
+                                      'filters.publisher.placeholder')}/>}
                                     size={500}/>
 
               {/*<RefinementListFilter id="dataProvider"*/}
@@ -179,14 +186,15 @@ class SearchPage extends React.Component {
                     mod="sk-hits-list"
                     hitsPerPage={30}
                     itemComponent={Result}
+                    highlightFields={['dc.title.all', 'dc.description.all']}
                     key={'hitList'}/>
 
-              <NoHits/>
+              <NoHits mod="is-size-6 sk-no-hits"/>
 
-              <Pagination pageScope={3}
-                          showLast={true}
-                          showNumbers={true}
-                          listComponent={<PaginationComponent/>}/>
+              <SearchkitPagination pageScope={3}
+                                   showLast={true}
+                                   showNumbers={true}
+                                   listComponent={<Pagination/>}/>
             </LayoutResults>
           </LayoutBody>
           <Footer/>
@@ -196,14 +204,11 @@ class SearchPage extends React.Component {
   }
 }
 
-SearchPage.propTypes = {
-  showSummary: PropTypes.bool.isRequired
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State): Object => {
   return {
     showSummary: state.search.showSummary,
-    filters: state.search.state
+    filters: state.search.state,
+    results: state.search.displayed.length
   };
 };
 

@@ -1,12 +1,18 @@
+// @flow
+
 import {SortingSelector as SearchkitSortingSelector} from 'searchkit';
 import PropTypes from 'prop-types';
 import counterpart from 'counterpart';
 import * as _ from 'lodash';
+import type {Node} from 'react';
+import {connect} from 'react-redux';
+
+type Props = {};
 
 // Extend the Searchkit SortingSelector component to support translations.
-export class SortingSelector extends SearchkitSortingSelector {
-  render() {
-    _.map(this.accessor.options.options, function (option) {
+class SortingSelector extends SearchkitSortingSelector<Props> {
+  render(): Node {
+    _.map(this.accessor.options.options, (option: Object): Object => {
       option.label = counterpart.translate(option.translation);
       return option;
     });
@@ -26,3 +32,5 @@ SortingSelector.propTypes = Object.assign(SearchkitSortingSelector.propTypes, {
     })
   )
 });
+
+export default connect()(SortingSelector);

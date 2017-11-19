@@ -1,21 +1,36 @@
+// @flow
+
+import type {Node} from 'react';
 import React from 'react';
 import Select from 'react-select';
+import {connect} from 'react-redux';
+import {AbstractItemList} from 'searchkit';
 
-export class MultiSelect extends React.Component {
-  constructor(props) {
+type Props = {
+  placeholder: any,
+  clearable: boolean,
+  items: any,
+  selectedItems: any,
+  disabled: any,
+  showCount: any,
+  setItems: any
+};
+
+class MultiSelect extends AbstractItemList<Props> {
+  constructor(props: Props): void {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
+    (this: any).handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(selectedOptions = []) {
+  handleChange(selectedOptions: Object[] = []): void {
     this.props.setItems(selectedOptions.map(el => el.value));
   }
 
-  renderValue(v) {
-    return v.label.replace('undefined', '0');
+  renderValue(value: Object): string {
+    return value.label.replace('undefined', '0');
   }
 
-  render() {
+  render(): Node {
     const {
       placeholder,
       clearable = true,
@@ -26,7 +41,7 @@ export class MultiSelect extends React.Component {
       setItems
     } = this.props;
 
-    const options = items.map((option) => {
+    let options: Object[] = items.map((option: Object): Object => {
       let label = option.title || option.label || option.key;
       if (showCount) {
         label += ` (${option.doc_count}) `;
@@ -46,3 +61,5 @@ export class MultiSelect extends React.Component {
     );
   }
 }
+
+export default connect()(MultiSelect);

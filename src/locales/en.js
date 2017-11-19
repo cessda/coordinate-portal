@@ -1,10 +1,12 @@
 module.exports = {
-  languagePicker: {
+  language: {
     label: 'Language',
     languages: {
       en: 'English',
-      de: 'German'
-    }
+      de: 'German',
+      nn: 'Norwegian'
+    },
+    notAvailable: 'Not available in selected language'
   },
   search: 'Find Social and Economic Research Data',
   filters: {
@@ -40,8 +42,8 @@ module.exports = {
   },
   sorting: {
     relevance: 'Relevance',
-    titleAscending: 'Title (A-Z)',
-    titleDescending: 'Title (Z-A)',
+    titleAscending: 'Title (ascending)',
+    titleDescending: 'Title (descending)',
     latest: 'Latest',
     first: 'First'
   },

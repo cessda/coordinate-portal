@@ -1,14 +1,29 @@
-import React from 'react';
-import {HitsStats, ResetFilters, SearchBox} from 'searchkit';
+// @flow
+
+import type {Node} from 'react';
+import React, {Component} from 'react';
+import {HitsStats, ResetFilters} from 'searchkit';
 import Language from './Language';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import counterpart from 'counterpart';
-import {Reset} from './Reset';
+import Reset from './Reset';
 import {queryBuilder} from '../utilities/searchkit';
+import SearchBox from './SearchBox';
+import type {State} from '../types';
+import {bindActionCreators} from 'redux';
+import {resetSearch} from '../actions/search';
+import {push} from 'react-router-redux';
 
-class Header extends React.Component {
-  render() {
+type Props = {
+  pathname: string,
+  uiCode: string,
+  push: (path: string) => void,
+  resetSearch: () => void
+};
+
+class Header extends Component<Props> {
+  render(): Node {
+    const {pathname, push, resetSearch} = this.props;
     return (
       <header>
         <div className="cessda_top">
@@ -21,7 +36,10 @@ class Header extends React.Component {
           <div className="columns">
             <div className="column">
               <div className="logo">
-                <div className="cessda"><a href="/">cessda</a></div>
+                <div className="cessda"><a onClick={() => {
+                  push('/');
+                  resetSearch();
+                }}>cessda</a></div>
                 <div className="cessda_beta">Products and Services Catalogue</div>
                 <span className="cessda_beta--blue">Beta Version</span>
               </div>
@@ -34,20 +52,22 @@ class Header extends React.Component {
                 queryFields={['_all']}
                 queryBuilder={queryBuilder}/>
 
-              <div className="reset-search">
-                <HitsStats className="hits-count"/>
+              {pathname === '/' &&
+               <div className="reset-search">
+                 <HitsStats className="hits-count"/>
 
-                <ResetFilters component={Reset}
-                              options={{query: false, filter: true, pagination: true}}
-                              translations={{
-                                'reset.clear_all': counterpart.translate('reset.filters')
-                              }}/>
-                <ResetFilters component={Reset}
-                              options={{query: true, filter: false, pagination: true}}
-                              translations={{
-                                'reset.clear_all': counterpart.translate('reset.query')
-                              }}/>
-              </div>
+                 <ResetFilters component={Reset}
+                               options={{query: false, filter: true, pagination: true}}
+                               translations={{
+                                 'reset.clear_all': counterpart.translate('reset.filters')
+                               }}/>
+                 <ResetFilters component={Reset}
+                               options={{query: true, filter: false, pagination: true}}
+                               translations={{
+                                 'reset.clear_all': counterpart.translate('reset.query')
+                               }}/>
+               </div>
+              }
             </div>
           </div>
         </div>
@@ -56,14 +76,18 @@ class Header extends React.Component {
   }
 }
 
-Header.propTypes = {
-  code: PropTypes.string.isRequired
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State): Object => {
   return {
-    code: state.language.code
+    pathname: state.routing.locationBeforeTransitions.pathname,
+    uiCode: state.language.uiCode
   };
 };
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
+  return {
+    push: bindActionCreators(push, dispatch),
+    resetSearch: bindActionCreators(resetSearch, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

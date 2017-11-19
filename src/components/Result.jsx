@@ -1,236 +1,111 @@
-import React from 'react';
-import * as _ from 'lodash';
-import * as utilityComponents from '../utilities/componentUtility';
-import * as striptags from 'striptags';
+// @flow
+
+import type {Node} from 'react';
+import React, {Component} from 'react';
 import {
   FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLock, FaUnlock
 } from 'react-icons/lib/fa/index';
-import {Rights} from './Rights';
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import {bindActionCreators} from 'redux';
+import {toggleLongDescription} from '../actions/search';
+import {Link} from 'react-router';
+import type {Dispatch, State} from '../types';
 
-class Result extends React.Component {
-  constructor(props) {
-    super(props);
-    // console.log('props');
-    // console.log(props);
+type Props = {
+  bemBlocks: any,
+  index: any,
+  item: any,
+  toggleLongDescription: any
+};
 
-    let description = this.getDescription(),
-        descriptionShort = _.truncate(description, {
-          length: 500
-        });
+class Result extends Component<Props> {
+  render(): Node {
+    const {bemBlocks, index, item, toggleLongDescription} = this.props;
 
-    this.state = {
-      elastic: esURL,
-      language: 'all',
-      description: descriptionShort,
-      descriptionShort:  descriptionShort,
-      descriptionLong: description,
-      readMoreLabel: (<span><span className="icon is-small"><FaAngleDown/></span><span><Translate component="span" content="readMore"/></span></span>),
-      readMoreExpanded: false
-    };
-
-    this.readMore = this.readMore.bind(this);
-  };
-
-  getDescription() {
-    let descriptionArray = utilityComponents.langHandler(this.props.result._source.dc.description, 'en');
-    if (descriptionArray === undefined) {
-      descriptionArray = utilityComponents.langHandler(this.props.result._source.dc.description, 'all');
-    }
-    if (descriptionArray === undefined) {
-      return '';
-    }
-    let description = '';
-    for (let i = 0; i < descriptionArray.length; i++) {
-      if (descriptionArray[i].toLowerCase() !== 'abstract') {
-        description += ' ' + striptags(descriptionArray[i]);
-      }
-    }
-    return _.trim(description);
-  };
-
-  readMore() {
-    if (!this.state.readMoreExpanded) {
-      this.setState({
-        description: this.state.descriptionLong,
-        readMoreLabel: (<span><span className="icon is-small"><FaAngleUp/></span><span><Translate component="span" content="readLess"/></span></span>),
-        // readMoreLabel: (<span><FaAngleUp/><Translate component="span" content="readLess"/></span>),
-        readMoreExpanded: true
-      });
-    } else {
-      this.setState({
-        description: this.state.descriptionShort,
-        readMoreLabel: (<span><span className="icon is-small"><FaAngleDown/></span><span><Translate component="span" content="readMore"/></span></span>),
-        // readMoreLabel: (<span><FaAngleDown/><Translate component="span" content="readMore"/></span>),
-        readMoreExpanded: false
-      });
-    }
-  };
-
-  render() {
-    const {bemBlocks, result} = this.props;
-    let url = '';
-    if (result._source.dc.identifier && result._source.dc.identifier.nn !== undefined) {
-      url = utilityComponents.makeSourceURL(result._source.dc.identifier.nn, result._source.intId);
+    if (item === undefined) {
+      return null;
     }
 
-    let ur2 = this.state.elastic + '/dc/_all/' + result._source.esid;
-
-    let urddi = this.state.elastic.split('/dc/').join('/ddi-dara/') + '_all/' +
-                result._id.split('/').join('%2F');
-
-    let title = undefined;
-
-    title = utilityComponents.langHandler(result._source.dc.title, 'en');
-    if (title === undefined || title.length == 0) {
-      title = utilityComponents.langHandler(result._source.dc.title, this.state.language);
-    }
-
-    let dates = utilityComponents.langHandler(result._source.dc.date, this.state.language);
-    if (dates) {
-      dates = utilityComponents.makeDates(dates, bemBlocks.item().mix(bemBlocks.container('meta')));
-    }
-
-    let creators = utilityComponents.langHandler(result._source.dc.creator, this.state.language);
-    if (creators) {
-      creators =
-        utilityComponents.makeCreators(creators, bemBlocks.item().mix(bemBlocks.container('meta')));
-    }
-
-    let contributors = utilityComponents.langHandler(result._source.dc.contributor, this.state.language);
-    if (contributors) {
-      contributors = utilityComponents.makeContributors(contributors, bemBlocks.item().mix(
-        bemBlocks.container('meta')));
-    }
-
-    /*let description = undefined;
-
-    description = utilityComponents.langHandler(result._source.dc.description, 'en');
-    if (description === undefined) {
-      description = utilityComponents.langHandler(result._source.dc.description, this.state.language);
-    }
-
-    if (description && result._source.dc.identifier &&
-        result._source.dc.identifier.nn !== undefined) {
-      if (result._source.setSpec[0].trim() == 20) {
-        description = utilityComponents.makeDescription(description, bemBlocks.item().mix(
-          bemBlocks.container('desc')), result._source.dc.identifier.nn[0].trim(), result._id,
-          this);
-      } else {
-        description = utilityComponents.makeDescription(description, bemBlocks.item().mix(
-          bemBlocks.container('desc')), url, result._id, this);
-      }
-    } else {
-      if (result._source.setSpec[0].trim() == 20) {
-        if (result._source.dc.identifier && result._source.dc.identifier.nn !== undefined &&
-            result._source.dc.identifier.nn[0] !== '') {
-          description =
-            utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')),
-              result._source.dc.identifier.nn[0].trim(), result._id,
-              result._source.intId);
-        } else {
-          description =
-            utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')),
-              result._source.dc.identifier.nn[0].trim(), undefined,
-              result._source.intId);
-        }
-      }
-      else {
-        if (result._source.dc.identifier && result._source.dc.identifier.nn !== undefined &&
-            result._source.dc.identifier.nn[0] !== '') {
-          description =
-            utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')), url,
-              result._id, result._source.intId);
-        } else {
-          description =
-            utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')), url,
-              undefined, result._source.intId);
-        }
-      }
-    }*/
-
-    let detailLink;
-    if (result._source.setSpec[0].trim() == 20) {
-      if (result._source.dc.identifier && result._source.dc.identifier.nn !== undefined &&
-          result._source.dc.identifier.nn[0] !== '') {
-        detailLink =
-          utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')),
-            result._source.dc.identifier.nn[0].trim(), result._id,
-            result._source.intId);
-      } else {
-        detailLink =
-          utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')),
-            result._source.dc.identifier.nn[0].trim(), undefined,
-            result._source.intId);
-      }
-    }
-    else {
-      if (result._source.dc.identifier && result._source.dc.identifier.nn !== undefined &&
-          result._source.dc.identifier.nn[0] !== '') {
-        detailLink =
-          utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')), url,
-            result._id, result._source.intId);
-      } else {
-        detailLink =
-          utilityComponents.detailLink(bemBlocks.item().mix(bemBlocks.container('desc')), url,
-            undefined, result._source.intId);
+    let creators: Node[] = [];
+    for (let i: number = 0; i < item.creator.length; i++) {
+      creators.push(<span key={i}>
+        {item.creator[i]}{i < item.creator.length - 1 ? '; ' : ''}
+        </span>);
+      if (i === 2) {
+        creators.push(<span key={3}>({item.creator.length - 3} more)</span>);
+        break;
       }
     }
 
-    let addressTitle = 'detail?q="' + result._id.trim() + '"&detail=true&sort=identifier_desc"';
-
-    const source = _.extend({}, result._source, result.highlight);
-    if (title === undefined) {title = ['no title'];}
-
-    let rights = undefined;
-
-    rights = utilityComponents.langHandler(result._source.dc.rights, 'en');
-    if (rights === undefined) {
-      rights = utilityComponents.langHandler(result._source.dc.rights, this.state.language);
+    let description: Node[] = [],
+      length: number = 0;
+    if (item.description) {
+      for (let i: number = 0; i < item.description.length; i++) {
+        description.push(<p key={i}>{item.description[i]}</p>);
+        length += item.description[i].length;
+      }
     }
-    // console.log(rights);
+
     return (
       <div className="list_hit" data-qa="hit">
         <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>
-          <a href={addressTitle}><span dangerouslySetInnerHTML={{__html: title[0]}}/></a>
-
+          <Link to={{
+            pathname: 'detail',
+            search: '?q="' + item.id + '"'
+          }}>{item.title}</Link>
           <div className="tags has-addons ml-a availability">
             <Translate className="tag"
                        component="span"
                        content="filters.availability.label"/>
-            <span className="tag is-success">
-              <FaUnlock/><span className="ml-5">Open</span>
-            </span>
+            {item.restricted &&
+             <span className="tag is-danger">
+               <FaLock/><span className="ml-5">Restricted</span>
+             </span>
+            }
+            {!item.restricted &&
+             <span className="tag is-success">
+               <FaUnlock/><span className="ml-5">Open</span>
+             </span>
+            }
           </div>
-
         </h4>
-        {creators}
-        {/*<Rights bemBlocks={bemBlocks} rights={rights}/>*/}
-        <span className={bemBlocks.item().mix(bemBlocks.container('desc'))}>{this.state.description}</span>
-
+        <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
+          {creators}
+        </div>
+        <div className={bemBlocks.item().mix(bemBlocks.container('desc'))}>
+          {item.descriptionExpanded && description}
+          {!item.descriptionExpanded && item.descriptionShort}
+        </div>
         <span className="level mt-10 result-actions">
           <span className="level-left">
-
             <div className="field is-grouped">
               <p className="control">
-
-                {this.state.descriptionLong.length > 500 &&
-                 <a className={bemBlocks.item().mix('button is-small is-white')} onClick={this.readMore}>
-                   {this.state.readMoreLabel}
+                {length > 500 &&
+                 <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
+                   toggleLongDescription(index);
+                 }}>
+                   {item.descriptionExpanded &&
+                    <span>
+                      <span className="icon is-small"><FaAngleUp/></span>
+                      <Translate component="span" content="readLess"/>
+                    </span>
+                   }
+                   {!item.descriptionExpanded &&
+                    <span>
+                      <span className="icon is-small"><FaAngleDown/></span>
+                      <Translate component="span" content="readMore"/>
+                    </span>
+                   }
                  </a>
                 }
-
               </p>
             </div>
-
           </span>
           <span className="level-right">
-
             <div className="field is-grouped">
               <p className="control">
-                <a className="button is-small is-white" href={ur2} target="_blank">
+                <a className="button is-small is-white" href={item.jsonUrl} target="_blank">
                   <span className="icon is-small">
                     <FaCode/>
                   </span>
@@ -238,10 +113,17 @@ class Result extends React.Component {
                 </a>
               </p>
               <p className="control">
-                {detailLink}
+                <a className="button is-small is-white" href={item.sourceUrl} target="_blank">
+                  <span className="icon is-small"><FaExternalLink/></span>
+                  {item.sourceIsCollection &&
+                   <Translate component="span" content="goToCollection"/>
+                  }
+                  {!item.sourceIsCollection &&
+                   <Translate component="span" content="goToStudy"/>
+                  }
+                </a>
               </p>
             </div>
-
           </span>
         </span>
       </div>
@@ -249,14 +131,16 @@ class Result extends React.Component {
   }
 }
 
-Result.propTypes = {
-  code: PropTypes.string.isRequired
-};
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State, props: Props): Object => {
   return {
-    code: state.language.code
+    item: state.search.displayed[props.index]
   };
 };
 
-export default connect(mapStateToProps)(Result);
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
+  return {
+    toggleLongDescription: bindActionCreators(toggleLongDescription, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Result);
