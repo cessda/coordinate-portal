@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 8088
-CMD [ "npm", "run", "startprod" ]
+CMD [ "npm", "run", "startdev" ]
