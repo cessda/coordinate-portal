@@ -11,6 +11,7 @@ import {bindActionCreators} from 'redux';
 import {toggleLongDescription} from '../actions/search';
 import {Link} from 'react-router';
 import type {Dispatch, State} from '../types';
+import {OutboundLink} from 'react-ga';
 
 type Props = {
   bemBlocks: any,
@@ -83,7 +84,7 @@ class Result extends Component<Props> {
               <p className="control">
                 {length > 500 &&
                  <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
-                   toggleLongDescription(index);
+                   toggleLongDescription(item.title, index);
                  }}>
                    {item.descriptionExpanded &&
                     <span>
@@ -105,15 +106,21 @@ class Result extends Component<Props> {
           <span className="level-right">
             <div className="field is-grouped">
               <p className="control">
-                <a className="button is-small is-white" href={item.jsonUrl} target="_blank">
+                <OutboundLink className="button is-small is-white"
+                              eventLabel="View JSON"
+                              to={item.jsonUrl}
+                              target="_blank">
                   <span className="icon is-small">
                     <FaCode/>
                   </span>
                   <Translate component="span" content="viewJson"/>
-                </a>
+                </OutboundLink>
               </p>
               <p className="control">
-                <a className="button is-small is-white" href={item.sourceUrl} target="_blank">
+                <OutboundLink className="button is-small is-white"
+                              eventLabel="Go to Collection/Study"
+                              to={item.sourceUrl}
+                              target="_blank">
                   <span className="icon is-small"><FaExternalLink/></span>
                   {item.sourceIsCollection &&
                    <Translate component="span" content="goToCollection"/>
@@ -121,7 +128,7 @@ class Result extends Component<Props> {
                   {!item.sourceIsCollection &&
                    <Translate component="span" content="goToStudy"/>
                   }
-                </a>
+                </OutboundLink>
               </p>
             </div>
           </span>

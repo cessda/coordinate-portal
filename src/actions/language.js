@@ -8,6 +8,7 @@ import de from '../locales/de';
 import nn from '../locales/nn';
 import searchkit from '../utilities/searchkit';
 import type {Dispatch, Thunk} from '../types';
+import * as ReactGA from 'react-ga';
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 
@@ -58,6 +59,12 @@ export const changeUiLanguage = (code: string): Thunk => {
     code = code === 'no' ? 'nn' : code;
 
     counterpart.setLocale(code);
+
+    ReactGA.event({
+      category: 'Language',
+      action: 'Change Language',
+      label: code.toUpperCase()
+    });
 
     dispatch({
       type: 'CHANGE_UI_LANGUAGE',

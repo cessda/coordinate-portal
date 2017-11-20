@@ -5,6 +5,7 @@ import * as elasticsearch from 'elasticsearch';
 import * as Globals from '../../config';
 import * as _ from 'lodash';
 import type {Dispatch, GetState, Thunk} from '../types';
+import * as ReactGA from 'react-ga';
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 
@@ -14,14 +15,27 @@ export type InitSearchkitAction = {
 
 export const initSearchkit = (): Thunk => {
   return (dispatch: Dispatch): void => {
-    searchkit.addResultsListener((results: Object): void => {
-      dispatch(updateDisplayed(results.hits.hits));
-    });
+    let timer: number;
 
     searchkit.setQueryProcessor((query: Object): Object => {
+      let init: boolean = timer === undefined;
+
+      clearTimeout(timer);
+
+      timer = setTimeout((): void => {
+        if (!init) {
+          ReactGA.pageview('/' + searchkit.history.location.search);
+        }
+      }, 3000);
+
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
+
       return query;
+    });
+
+    searchkit.addResultsListener((results: Object): void => {
+      dispatch(updateDisplayed(results.hits.hits));
     });
 
     dispatch({
@@ -49,10 +63,18 @@ export type ToggleLongDescriptionAction = {
   index: number
 }
 
-export const toggleLongDescription = (index: number): ToggleLongDescriptionAction => {
-  return {
-    type: 'TOGGLE_LONG_DESCRIPTION',
-    index
+export const toggleLongDescription = (title: string, index: number): Thunk => {
+  return (dispatch: Dispatch): void => {
+    ReactGA.event({
+      category: 'Search',
+      action: 'Read more',
+      label: title
+    });
+
+    dispatch({
+      type: 'TOGGLE_LONG_DESCRIPTION',
+      index
+    });
   };
 };
 

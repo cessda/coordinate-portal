@@ -18,7 +18,7 @@ import './styles/design.scss';
 import type {Store} from './types';
 
 ReactGA.initialize('UA-109854552-1', {
-  debug: true
+  debug: false
 });
 
 const store: Store = createStore(
@@ -29,7 +29,6 @@ const store: Store = createStore(
 const history: Object = syncHistoryWithStore(browserHistory, store);
 
 history.listen((location: Object): void => {
-  // console.log(location);
   ReactGA.pageview(location.pathname + location.search);
 });
 

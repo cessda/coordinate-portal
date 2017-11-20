@@ -20,6 +20,7 @@ import Similars from '../components/Similars';
 import {goBack, push} from 'react-router-redux';
 import * as _ from 'lodash';
 import type {Dispatch, State} from '../types';
+import {OutboundLink} from 'react-ga';
 
 type Props = {
   item?: Object,
@@ -82,9 +83,10 @@ class DetailPage extends Component<Props> {
                  <a className="button is-small is-white is-pulled-left"
                     onClick={goBack}><FaAngleLeft/><span className="ml-5">Back</span></a>
 
-                 <a className="button is-small is-white is-pulled-right"
-                    href={item.sourceUrl}
-                    target="_blank">
+                 <OutboundLink className="button is-small is-white is-pulled-right"
+                               eventLabel="Go to Collection/Study"
+                               to={item.sourceUrl}
+                               target="_blank">
                    <span className="icon is-small"><FaExternalLink/></span>
                    {item.sourceIsCollection &&
                     <Translate component="span" content="goToCollection"/>
@@ -92,16 +94,17 @@ class DetailPage extends Component<Props> {
                    {!item.sourceIsCollection &&
                     <Translate component="span" content="goToStudy"/>
                    }
-                 </a>
+                 </OutboundLink>
 
-                 <a className="button is-small is-white is-pulled-right mr-15"
-                    href={item.jsonUrl}
-                    target="_blank">
+                 <OutboundLink className="button is-small is-white is-pulled-right mr-15"
+                               eventLabel="View JSON"
+                               to={item.jsonUrl}
+                               target="_blank">
                   <span className="icon is-small">
                     <FaCode/>
                   </span>
                    <Translate component="span" content="viewJson"/>
-                 </a>
+                 </OutboundLink>
 
                  <div className="is-clearfix"/>
                </div>
