@@ -16,8 +16,9 @@ import 'string.prototype.includes';
 import * as ReactGA from 'react-ga';
 import './styles/design.scss';
 import type {Store} from './types';
+import * as Globals from '../config';
 
-ReactGA.initialize('UA-109854552-1', {
+ReactGA.initialize(Globals.googleAnalyticsId, {
   debug: false
 });
 
