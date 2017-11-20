@@ -20,6 +20,15 @@ export const queryBuilder = (query: string, options: any): Object => {
   };
 };
 
+export const highlight = (): Object => {
+  return {
+    fields: {
+      'dc.title.all': {},
+      'dc.description.all': {}
+    }
+  };
+};
+
 export const similarQuery = (title: string): Object => {
   return {
     index: 'dc',

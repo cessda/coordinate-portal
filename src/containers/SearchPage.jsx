@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 import Panel from '../components/Panel';
 import RangeFilter from '../components/RangeFilter';
 import RefinementListFilter from '../components/RefinementListFilter';
-import searchkit from '../utilities/searchkit';
+import searchkit, {highlight} from '../utilities/searchkit';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import type {State} from '../types';
@@ -186,7 +186,7 @@ class SearchPage extends Component<Props> {
                     mod="sk-hits-list"
                     hitsPerPage={30}
                     itemComponent={Result}
-                    highlightFields={['dc.title.all', 'dc.description.all']}
+                    customHighlight={highlight()}
                     key={'hitList'}/>
 
               <NoHits mod="is-size-6 sk-no-hits"/>
