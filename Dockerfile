@@ -9,10 +9,11 @@ COPY package.json .
 #COPY package-lock.json .
 
 # NodeJS Install
+RUN npm cache clear --force
 RUN npm install
 
 # Bundle app source
 COPY . .
 
 EXPOSE 8088
-CMD [ "npm", "run", "startprod" ]
+CMD [ "npm", "run", "startdev" ]
