@@ -9,6 +9,7 @@ COPY package.json .
 #COPY package-lock.json .
 
 # NodeJS Install
+RUN npm cache clear --force
 RUN npm install
 
 # Bundle app source
