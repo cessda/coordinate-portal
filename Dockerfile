@@ -10,7 +10,7 @@ COPY package.json .
 
 # NodeJS Install
 RUN npm cache clear --force
-RUN npm install
+RUN npm install --unsafe-perm
 
 # Bundle app source
 COPY . .
