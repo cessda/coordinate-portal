@@ -49,7 +49,7 @@ module.exports = {
       host accordingly
     */
     var searchkitRouter = SearchkitExpress.createRouter({
-      host:globals.prod || "http://localhost:9200",
+      host:globals.cessda || "http://localhost:9200",
       index:'dc',
       maxSockets:500, // defaults to 1000
       queryProcessor:function(query, req, res){
