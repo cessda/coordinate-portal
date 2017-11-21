@@ -4,7 +4,6 @@ metadata:
   name: SERVICENAME
   namespace: NAMESPACE
 spec:
-  type: LoadBalancer
   ports:
   - name: searchkit-gui
     port: 8088
