@@ -11,7 +11,6 @@ const Globals = {
   'local': 'http://localhost:9200',
   'prodDomain': 'http://datasearch.gesis.org',
   'cessda': 'http://CESSDAES:9200',
-  'initialLanguage': 'en',
   'googleAnalyticsId': 'UA-109854552-1'
 };
 

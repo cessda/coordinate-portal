@@ -16,7 +16,7 @@ import {push} from 'react-router-redux';
 
 type Props = {
   pathname: string,
-  uiCode: string,
+  code: string,
   push: (path: string) => void,
   resetSearch: () => void
 };
@@ -79,7 +79,7 @@ class Header extends Component<Props> {
 const mapStateToProps = (state: State): Object => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
-    uiCode: state.language.uiCode
+    code: state.language.code
   };
 };
 

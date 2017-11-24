@@ -87,6 +87,7 @@ body {
     top: 0;
     right: 0;
     height: 35px;
+    padding-top: 4px;
     padding-left: 15px;
     padding-right: 15px;
     background-color: #455963;
@@ -95,6 +96,10 @@ body {
 
     label:after {
       content: ':';
+    }
+
+    span.country-flag img {
+      display: none;
     }
 
     .flag-select .selected--flag--option {
@@ -356,6 +361,7 @@ body {
 .sk-hits-list__desc {
   text-align: justify;
   flex-wrap: wrap;
+  word-break: break-word;
 
   p {
     margin-bottom: 10px;

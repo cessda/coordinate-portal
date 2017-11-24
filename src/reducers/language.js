@@ -1,47 +1,32 @@
 // @flow
 
-import * as globals from '../../config';
-import * as counterpart from 'react-translate-component';
 import type {Action} from '../actions';
 
 type State = {
-  uiCode: string,
-  dataCode: string,
+  code: string,
   list?: {
     id: string,
     label: string
-  }[]
+  }[],
+  missing: boolean
 };
 
 const initialState: State = {
-  uiCode: globals.initialLanguage,
-  dataCode: 'all'
+  code: 'en',
+  missing: false
 };
 
 const language = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case 'INIT_TRANSLATIONS':
       return Object.assign({}, state, {
-        list: [{
-          id: 'en',
-          label: counterpart.translate('language.languages.en')
-        }, {
-          id: 'de',
-          label: counterpart.translate('language.languages.de')
-        }, {
-          id: 'nn',
-          label: counterpart.translate('language.languages.nn')
-        }]
+        list: action.list
       });
 
-    case 'CHANGE_UI_LANGUAGE':
+    case 'CHANGE_LANGUAGE':
       return Object.assign({}, state, {
-        uiCode: action.code
-      });
-
-    case 'CHANGE_DATA_LANGUAGE':
-      return Object.assign({}, state, {
-        dataCode: action.code
+        code: action.code,
+        missing: action.missing
       });
 
     default:
