@@ -38,6 +38,7 @@ Icon
 ### JetBrains
 .idea/
 *.iws
+*.iml
 
 ### Eclipse
 .project
