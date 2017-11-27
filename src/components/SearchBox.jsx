@@ -15,6 +15,9 @@ type Props = {
 // Extend the Searchkit SearchBox component to redirect on change.
 class SearchBox extends SearchkitSearchBox<Props> {
   onChange(event: any): void {
+    if (event.target.value.length > 250) {
+      return;
+    }
     const {pathname, push} = this.props;
     if (pathname !== '/') {
       push('/');
