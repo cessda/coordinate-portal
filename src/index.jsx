@@ -16,11 +16,12 @@ import 'string.prototype.includes';
 import * as ReactGA from 'react-ga';
 import './styles/design.scss';
 import type {Store} from './types';
-import * as Globals from '../config';
 
-ReactGA.initialize(Globals.googleAnalyticsId, {
-  debug: false
-});
+if (process.env.PASC_ANALYTICS_ID !== null) {
+  ReactGA.initialize(process.env.PASC_ANALYTICS_ID, {
+    debug: false
+  });
+}
 
 const store: Store = createStore(
   reducers,

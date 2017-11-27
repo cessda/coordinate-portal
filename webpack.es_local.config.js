@@ -2,12 +2,6 @@ var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-/*
-  Define URLs (Elasticsearch) in config.js and change the variable for
-  the stringified input for DefinePlugin
-*/
-var globals = require('./config.js');
-
 module.exports = {
 	devtool : "eval",
 	context : path.join(__dirname),
@@ -17,11 +11,9 @@ module.exports = {
 		filename : 'bundle.js',
 		publicPath : '/static/',
 	},
-	plugins : [ 
-		new webpack.HotModuleReplacementPlugin(),
-	  new webpack.DefinePlugin({
-    esURL: JSON.stringify(globals.local)
-	})],
+	plugins : [
+		new webpack.HotModuleReplacementPlugin()
+  ],
 	resolve : {
 		alias : {
 			react : path.resolve('./node_modules/react')

@@ -3,12 +3,6 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-/*
-  Define URLs (Elasticsearch) in config.js and change the variable for
-  the stringified input for DefinePlugin
-*/
-var globals = require('./config.js');
-
 module.exports = {
   context:path.join(__dirname),
   entry: [
@@ -36,7 +30,6 @@ module.exports = {
       }
     }),
     new webpack.DefinePlugin({
-      esURL: JSON.stringify(globals.prod),
       'process.env.NODE_ENV': JSON.stringify('production')
     })
   ],
@@ -93,8 +86,8 @@ module.exports = {
               speed: 3,
             },
           },
-        }],
-					exclude: /node_modules/,
+        }]
+					// exclude: /node_modules/,
 				}
       ]
     }

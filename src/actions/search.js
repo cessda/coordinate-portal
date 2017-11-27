@@ -2,7 +2,6 @@
 
 import searchkit, {similarQuery} from '../utilities/searchkit';
 import * as elasticsearch from 'elasticsearch';
-import * as Globals from '../../config';
 import * as _ from 'lodash';
 import type {Dispatch, GetState, Thunk} from '../types';
 import * as ReactGA from 'react-ga';
@@ -136,7 +135,7 @@ export type UpdateSimilarsAction = {
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch): void => {
     let client: Object = new elasticsearch.Client({
-      host: Globals.esURL
+      host: process.env.PASC_ELASTICSEARCH_URL
     });
 
     client.search(similarQuery(item.title)).then((response: Object): void => {
