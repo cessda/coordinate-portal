@@ -13,7 +13,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin({
-      PASC_ELASTICSEARCH_URL: "http://CESSDAES:9200",
+      PASC_ELASTICSEARCH_URL: "http://cessda-pasc-es-dev:9200",
       PASC_ANALYTICS_ID: null
     })
   ],
