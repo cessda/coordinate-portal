@@ -3,6 +3,10 @@ FROM node:9.0
 # Create app directory
 WORKDIR /usr/src/app
 
+
+# Environment
+ENV PASC_ELASTICSEARCH_URL="http://cessda-pasc-es-dev:9200"
+
 # Install app dependencies
 COPY package.json .
 # For npm@5 or later, copy package-lock.json as well
