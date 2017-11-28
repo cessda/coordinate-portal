@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'eval',
   context: path.join(__dirname),
-  entry: ['webpack-hot-middleware/client?reload=true', './src/index.jsx'],
+  entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', './src/index.jsx'],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -13,6 +13,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin({
+      PASC_PORT: 8088,
       PASC_ELASTICSEARCH_URL: null,
       PASC_ANALYTICS_ID: null
     })

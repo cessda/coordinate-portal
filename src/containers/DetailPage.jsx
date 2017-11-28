@@ -15,8 +15,7 @@ import {FaAngleLeft, FaCode, FaExternalLink, FaLanguage} from 'react-icons/lib/f
 import {bindActionCreators} from 'redux';
 import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
-import {goBack, push} from 'react-router-redux';
-import * as _ from 'lodash';
+import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
 import {changeLanguage} from '../actions/language';
@@ -26,23 +25,11 @@ type Props = {
   code: string,
   missing: boolean,
   query: Object,
-  push: (path: string) => void,
   goBack: () => void,
   changeLanguage: (code: string) => void
 };
 
 class DetailPage extends Component<Props> {
-  shouldComponentUpdate(props: Props): boolean {
-    const {query, item, push} = props;
-
-    if (item !== undefined && (query.q === undefined || _.trim(query.q, '"') !== item.id)) {
-      push('/');
-      return false;
-    }
-
-    return true;
-  }
-
   render(): Node {
     const {item, code, missing, goBack, changeLanguage} = this.props;
 
@@ -131,7 +118,6 @@ const mapStateToProps = (state: State): Object => {
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    push: bindActionCreators(push, dispatch),
     goBack: bindActionCreators(goBack, dispatch),
     changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };

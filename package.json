@@ -20,6 +20,7 @@
     "flow": "flow"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.18.2",
     "bulma": "^0.6.1",
     "classnames": "^2.2.5",
