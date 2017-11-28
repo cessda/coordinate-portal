@@ -29,12 +29,12 @@ You will need an existing local or remote Elasticsearch instance setup and runni
 
 The application can be configured using the following environment variables.
 
-| Variable                 | Required | Default Value | Description                                                                                                      |
-| ------------------------ | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `PASC_DEBUG_MODE`        | No       | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
-| `PASC_PORT`              | No       | `8088`        | The port number which will be used to access this web application.                                               |
-| `PASC_ELASTICSEARCH_URL` | Yes      | -             | The web address of the Elasticsearch instance which powers all searches.                                         |
-| `PASC_ANALYTICS_ID`      | No       | -             | The Google Analytics ID (`UA-xxxxxxxxx-x`) used for tracking events. Tracking is disabled if not provided.       |
+| Variable                 | Required | Type      | Default Value | Description                                                                                                      |
+| ------------------------ | -------- | --------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `PASC_DEBUG_MODE`        | No       | `boolean` | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
+| `PASC_PORT`              | No       | `integer` | `8088`        | The port number which will be used to access this web application.                                               |
+| `PASC_ELASTICSEARCH_URL` | Yes      | `string`  | -             | The web address of the Elasticsearch instance which powers all searches.                                         |
+| `PASC_ANALYTICS_ID`      | No       | `string`  | -             | The Google Analytics ID (`UA-xxxxxxxxx-x`) used for tracking events. Tracking is disabled if not provided.       |
 
 Set environment variables using the following syntax.
 

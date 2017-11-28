@@ -23,7 +23,7 @@ if (process.env.PASC_DEBUG_MODE) {
 
 if (process.env.PASC_ANALYTICS_ID !== null) {
   ReactGA.initialize(process.env.PASC_ANALYTICS_ID, {
-    debug: false
+    debug: process.env.PASC_DEBUG_MODE
   });
 }
 
