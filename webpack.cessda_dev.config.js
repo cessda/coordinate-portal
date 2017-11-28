@@ -13,6 +13,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin({
+      PASC_DEBUG_MODE: false,
       PASC_PORT: 8088,
       PASC_ELASTICSEARCH_URL: null,
       PASC_ANALYTICS_ID: null

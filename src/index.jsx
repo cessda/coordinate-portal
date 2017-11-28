@@ -17,6 +17,10 @@ import * as ReactGA from 'react-ga';
 import './styles/design.scss';
 import type {Store} from './types';
 
+if (process.env.PASC_DEBUG_MODE) {
+  console.warn('PaSC debug mode is enabled. Disable for production use.');
+}
+
 if (process.env.PASC_ANALYTICS_ID !== null) {
   ReactGA.initialize(process.env.PASC_ANALYTICS_ID, {
     debug: false

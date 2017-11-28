@@ -24,6 +24,10 @@ module.exports = {
                   process.env.PASC_ANALYTICS_ID + '.');
     }
 
+    if (process.env.PASC_DEBUG_MODE !== undefined) {
+      console.log('NOTICE : Debug mode is enabled. Disable for production use.');
+    }
+
     var cors = require('cors');
     var express = require('express');
     var app = express();

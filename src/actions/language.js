@@ -45,12 +45,15 @@ export const initTranslations = (): Thunk => {
     counterpart.setLocale(getState().language.code);
 
     searchkit.translateFunction = (key: string): string => {
-      let translations: Object = {
-        'searchbox.placeholder': counterpart.translate('search'),
-        'hitstats.results_found': counterpart.translate('numberOfResults', {
-          count: searchkit.getHitsCount()
-        })
-      };
+      let numberOfResults: string = process.env.PASC_DEBUG_MODE ? 'numberOfResultsWithTime' :
+                                    'numberOfResults',
+        translations: Object = {
+          'searchbox.placeholder': counterpart.translate('search'),
+          'hitstats.results_found': counterpart.translate(numberOfResults, {
+            count: searchkit.getHitsCount(),
+            time: searchkit.getTime()
+          })
+        };
       return translations[key];
     };
 
