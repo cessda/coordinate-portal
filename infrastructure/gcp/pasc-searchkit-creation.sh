@@ -14,7 +14,7 @@
 source ./gcp.config > /dev/null 2>&1
 
 ### Kubernetes configuration generation ###
-sed "s/DEPLOYMENTNAME/$PRODUCT-$MODULE-$ENVIRONMENT/g; s/NAMESPACE/$PRODUCT-$ENVIRONMENT/g; s/PVCNAME/$PRODUCT-$ENVIRONMENT-pvc/g" ../k8s/template-pasc-$MODULE-deployment.yaml > ../k8s/$PRODUCT-$MODULE-$ENVIRONMENT-deployment.yaml
+sed "s/DEPLOYMENTNAME/$PRODUCT-$MODULE-$ENVIRONMENT/g; s/NAMESPACE/$PRODUCT-$ENVIRONMENT/g; s/PVCNAME/$PRODUCT-$ENVIRONMENT-pvc/g; s/ESURL/$PRODUCT-es-$ENVIRONMENT/g" ../k8s/template-pasc-$MODULE-deployment.yaml > ../k8s/$PRODUCT-$MODULE-$ENVIRONMENT-deployment.yaml
 sed "s/SERVICENAME/$PRODUCT-$MODULE-$ENVIRONMENT/g; s/NAMESPACE/$PRODUCT-$ENVIRONMENT/g" ../k8s/template-pasc-$MODULE-service.yaml > ../k8s/$PRODUCT-$MODULE-$ENVIRONMENT-service.yaml
 
 # Kubctl credentials setup

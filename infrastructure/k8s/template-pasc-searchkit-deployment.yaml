@@ -18,5 +18,8 @@ spec:
         ports:
         - containerPort: 8088
           name: searchkit-cport
+        env:
+          - name: PASC_ELASTICSEARCH_URL
+            value: ESURL
       nodeSelector:
         app: global 
