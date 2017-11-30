@@ -20,7 +20,6 @@ gcloud container clusters get-credentials $PRODUCT-$ENVIRONMENT-cc --zone=$ZONE 
 if kubectl get rc $PRODUCT-es-$ENVIRONMENT -n $PRODUCT-$ENVIRONMENT > /dev/null 2>&1;
   then
     echo "ElasticSearch component available, deployment will be processed"
-    sed -i "s/CESSDAES/$PRODUCT-es-$ENVIRONMENT/g" ../../config.js
   else
     echo "ElasticSearch component not available, deployment's aborted"
     exit 1

@@ -7,8 +7,8 @@ import search from './search';
 
 const reducers = {
   routing: routerReducer,
-  language,
-  search
+  language: language,
+  search: search
 };
 
 export type Reducers = typeof reducers;

@@ -1,77 +1,96 @@
-# gesis datasearch / da|ra SearchNet Frontend 
-### Meant to be an update regarding dependencies and responsiveness of the service
+# CESSDA.PASC.SEARCHKIT
 
-based on Searchkit ES6 Boilerplate
+This repository contains all source code for the CESSDA ERIC Product and Services Catalogue web application.
 
-## Elasticsearch server hints
-[https://git.gesis.org/dsn/dara/wikis/ElasticSearchSetup]
+Separate repositories are provided for backend architecture; harvester, indexer and Elasticsearch instance.
 
-##
-Config.js holds the elasticsearch URLs for different environments and are automatically injected with DefinePlugin depending on the webpack.config (local/dev/prod) being used.  
-  
-You also have to adjust the elasticsearch Client in the server specific js file 
-@ searchkitRouter = SearchkitExpress.createRouter({ ... })
+## Prerequisites
 
-Adjust URLs accordingly and start with either 
-* npm run startdev
-* npm run startprod 
-* npm run startlocal
+[Node.js](https://nodejs.org/) is required to install and run this application.
 
-## Query Syntax
+You will need an existing local or remote Elasticsearch instance setup and running.
 
-1. The facets have a binary effect: records not matching any of the selected filters are not included in the set.
-1. It's different with the Search Box. Here, terms are combined [https://www.elastic.co/guide/en/elasticsearch/guide/2.x/bool-query.html] into an elasticsearch 'should' clause.  
-1. General syntax: 
+## Quick Start
 
+1. Check prerequisites and install any required software.
+2. Clone the repository to your local workspace.
+3. Open a Command Prompt/Terminal window and navigate to the project root directory.
+4. Enter `npm install` to install the application and all required dependencies.
+5. Set the required environment variables (see *Configuration* below).
+6. Run the application using one of the following commands.
+    * Development: `npm run startdev`
+    * ~~Production:~~ `npm run startprod` (This script is currently undergoing refactoring)
+    * ~~Local:~~ `npm run startlocal` (This script is deprecated. Use the development build)
+
+> **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again.
+> This will ensure all locally installed dependencies match their development environment counterparts.
+
+## Configuration
+
+The application can be configured using the following environment variables.
+
+| Variable                 | Required | Type      | Default Value | Description                                                                                                      |
+| ------------------------ | -------- | --------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `PASC_DEBUG_MODE`        | No       | `boolean` | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
+| `PASC_PORT`              | No       | `integer` | `8088`        | The port number which will be used to access this web application.                                               |
+| `PASC_ELASTICSEARCH_URL` | Yes      | `string`  | -             | The web address of the Elasticsearch instance which powers all searches.                                         |
+| `PASC_ANALYTICS_ID`      | No       | `string`  | -             | The Google Analytics ID (`UA-xxxxxxxxx-x`) used for tracking events. Tracking is disabled if not provided.       |
+
+Set environment variables using the following syntax.
+
+* Windows: `set PASC_PORT=80`
+* macOS/Linux: `export PASC_PORT=80`
+* Dockerfile: `ENV PASC_PORT=80`
+
+If running in a development environment using JetBrains WebStorm (see *Tooling* below), variables can be set within the IDE [using this documentation](https://www.jetbrains.com/help/webstorm/run-debug-configuration-node-js.html).
+
+## Project Structure
+
+```bash
+<ROOT>
+├── flow-typed          # Flow library definitions for type checking.
+├── infrastructure      # Scripts and configuration for deployment.
+├── node_modules        # Third party packages and node dependencies.
+├── server              # Markup and scripts for the server instance.
+└── src                 # Contains all source code and assets for the application.
+    ├── actions         # Redux actions and action creators for state container.
+    ├── components      # React user interface components.
+    ├── containers      # React page container components.
+    ├── img             # Image assets.
+    ├── locales         # Language translations.
+    ├── reducers        # Redux reducers for state container.
+    ├── styles          # SASS files for styling.
+    └── utilities       # Miscellaneous scripts and helpers.
 ```
-The simple_query_string supports the following special characters:
-+ signifies AND operation
-| signifies OR operation
-- negates a single token
-" wraps a number of tokens to signify a phrase for searching
-* at the end of a term signifies a prefix query
-( and ) signify precedence
-~N after a word signifies edit distance (fuzziness)
-~N after a phrase signifies slop amount
-In order to search for any of these special characters, they will need to be escaped with \.
-```
 
+## Technology Stack
 
-* [Feldname]:[Feldwert] 
- * http://10.6.13.128:3000/search?q=setUrl%3A%22http%3A%2F%2Fwww.da-ra.de%2Foaip%2Foai%22
- * http://10.6.13.128:3000/search?q=type.nn%3A%22Dataset%22
- * http://localhost:3000/search?q=%2Btype.nn%3A%22Dataset%22%20%2BsetUrl%3A%22http%3A%2F%2Fwww.da-ra.de%2Foaip%2Foai%22%20%2BsetSpec%3A39&setSpec[0]=39
- * Feldnamen im DC index: http://10.6.13.128:9200/dc/_mapping
-* technical documentation: http://docs.searchkit.co/stable/docs/components/basics/search-box.html
+Several frameworks and languages are used in this application.
 
+| Framework/Technology                                 | Description                                              |
+| ---------------------------------------------------- | -------------------------------------------------------- |
+| JavaScript/[JSX](https://facebook.github.io/jsx/)    | ECMAScript with XML-like syntax extensions.              |
+| [React](https://reactjs.org/)                        | JavaScript library for building user interfaces.         |
+| [Redux](https://redux.js.org/)                       | Predictable state container for JavaScript applications. |
+| [Searchkit](http://www.searchkit.co/)                | React component library for Elasticsearch.               |
+| [Babel](https://babeljs.io/)                         | JavaScript compiler for ECMAScript 6.                    |
+| [Flow](https://flow.org/)                            | Static type checker for JavaScript.                      |
+| [Flow-Typed](https://github.com/flowtype/flow-typed) | Central repository for Flow library definitions.         |
+| [Webpack](https://webpack.js.org/)                   | JavaScript module bundler.                               |
+| [Sass](http://sass-lang.com/)                        | CSS extension language.                                  |
+| [Bulma](https://bulma.io/)                           | CSS framework based on Flexbox.                          |
 
+See `package.json` in the root directory for a full list of third party libraries used.
 
-## Configuration of elasticsearch server
+## Tooling
 
-In the code, the urls are being set automatically depending on your specification in config.js and changes to the specific server configuration file. Furthermore, you got to specify the port the elasticsearch client is running on and and add it accordingly.
+For development, the following software tools are recommended and have full support for the technologies/languages used in this project.
 
-### windows
-`set PORT=8088` 
- to unset : 
-`set PORT=`
-
-check with `echo %PORT%`
-
-
-### linux
-`export PORT=8088`
- or in /etc/bash.bash.rc / ~/.bashrc : 
-`export PORT=8088`
-
-check with `echo $PORT`
+* [JetBrains WebStorm](https://www.jetbrains.com/webstorm/) or
+* [Atom](https://atom.io/) with [Nuclide](https://nuclide.io/) package
  
-## Install node.js on ubuntu
 
-```
-sudo apt-get remove nodejs
-```
-Install nodeJS v5.3.0:
-```
-curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
+## Resources
+
+* [Issue Tracker](https://bitbucket.org/cessda/cessda.pasc.version1/issues)
+* [Trello Development Board](https://trello.com/b/P7nF2RG2)

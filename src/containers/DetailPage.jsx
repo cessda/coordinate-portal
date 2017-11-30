@@ -11,40 +11,27 @@ import Footer from '../components/Footer.jsx';
 import searchkit from '../utilities/searchkit';
 import Panel from '../components/Panel';
 import {connect} from 'react-redux';
-import {FaAngleLeft, FaCode, FaExternalLink} from 'react-icons/lib/fa/index';
+import {FaAngleLeft, FaCode, FaExternalLink, FaLanguage} from 'react-icons/lib/fa/index';
 import {bindActionCreators} from 'redux';
-import {changeDataLanguage} from '../actions/language';
 import Translate from 'react-translate-component';
-import Select from 'react-select';
 import Similars from '../components/Similars';
-import {goBack, push} from 'react-router-redux';
-import * as _ from 'lodash';
+import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
+import {changeLanguage} from '../actions/language';
 
 type Props = {
   item?: Object,
-  dataCode: string,
+  code: string,
+  missing: boolean,
   query: Object,
-  push: (path: string) => void,
   goBack: () => void,
-  changeDataLanguage: (code: string) => void
+  changeLanguage: (code: string) => void
 };
 
 class DetailPage extends Component<Props> {
-  shouldComponentUpdate(props: Props): boolean {
-    const {query, item, push} = props;
-
-    if (item !== undefined && (query.q === undefined || _.trim(query.q, '"') !== item.id)) {
-      push('/');
-      return false;
-    }
-
-    return true;
-  }
-
   render(): Node {
-    const {item, dataCode, goBack, changeDataLanguage} = this.props;
+    const {item, code, missing, goBack, changeLanguage} = this.props;
 
     let languages = [];
     if (item) {
@@ -62,13 +49,13 @@ class DetailPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
-              <Panel title="Language"
-                     collapsable={true}
-                     defaultCollapsed={false}>
-                <Select value={dataCode} options={languages} onChange={(o) => {
-                  changeDataLanguage(o.value);
-                }}/>
-              </Panel>
+              {missing &&
+               <Panel title="Language"
+                      collapsable={true}
+                      defaultCollapsed={false}>
+                 <span className="fs-14">A user interface translation is not available in your selected language. Displaying text in <strong>English</strong>.</span>
+               </Panel>
+              }
               <Panel title="Similar results"
                      collapsable={true}
                      defaultCollapsed={false}>
@@ -123,16 +110,16 @@ class DetailPage extends Component<Props> {
 const mapStateToProps = (state: State): Object => {
   return {
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
-    dataCode: state.language.dataCode,
+    code: state.language.code,
+    missing: state.language.missing,
     query: state.routing.locationBeforeTransitions.query
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    push: bindActionCreators(push, dispatch),
     goBack: bindActionCreators(goBack, dispatch),
-    changeDataLanguage: bindActionCreators(changeDataLanguage, dispatch)
+    changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };
 };
 

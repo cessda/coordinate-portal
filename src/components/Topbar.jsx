@@ -11,7 +11,7 @@ import {toggleSummary} from '../actions/search';
 import type {Dispatch, State} from '../types';
 
 type Props = {
-  uiCode: string,
+  code: string,
   showSummary: boolean,
   filters?: Object,
   toggleSummary: () => void
@@ -86,7 +86,7 @@ class TopBar extends Component<Props> {
 
 const mapStateToProps = (state: State): Object => {
   return {
-    uiCode: state.language.uiCode,
+    code: state.language.code,
     showSummary: state.search.showSummary,
     filters: state.search.query.post_filter
   };

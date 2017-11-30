@@ -3,7 +3,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {
-  FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLock, FaUnlock
+  FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLanguage, FaLock, FaUnlock
 } from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
@@ -12,20 +12,37 @@ import {toggleLongDescription} from '../actions/search';
 import {Link} from 'react-router';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
+import {changeLanguage} from '../actions/language';
+import {push} from 'react-router-redux';
 
 type Props = {
   bemBlocks: any,
   index: any,
   item: any,
+  push: any,
+  changeLanguage: any,
   toggleLongDescription: any
 };
 
 class Result extends Component<Props> {
   render(): Node {
-    const {bemBlocks, index, item, toggleLongDescription} = this.props;
+    const {bemBlocks, index, item, push, changeLanguage, toggleLongDescription} = this.props;
 
     if (item === undefined) {
       return null;
+    }
+
+    let languages = [];
+    if (item) {
+      for (let i: number = 0; i < item.languages.length; i++) {
+        languages.push(<a key={i} className="button is-small is-white" onClick={() => {
+          changeLanguage(item.languages[i]);
+          push({
+            pathname: 'detail',
+            search: '?q="' + item.id + '"'
+          });
+        }}>{item.languages[i]}</a>);
+      }
     }
 
     let creators: Node[] = [];
@@ -79,9 +96,9 @@ class Result extends Component<Props> {
           {!item.descriptionExpanded && item.descriptionShort}
         </div>
         <span className="level mt-10 result-actions">
-          <span className="level-left">
+          <span className="level-left is-hidden-touch">
             <div className="field is-grouped">
-              <p className="control">
+              <div className="control">
                 {length > 500 &&
                  <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
                    toggleLongDescription(item.title, index);
@@ -100,12 +117,23 @@ class Result extends Component<Props> {
                    }
                  </a>
                 }
-              </p>
+              </div>
             </div>
           </span>
           <span className="level-right">
-            <div className="field is-grouped">
-              <p className="control">
+            <div className="field is-grouped is-grouped-multiline">
+              <div className="control">
+                <div className="buttons has-addons">
+                  <span className="button is-small is-white bg-w pe-none">
+                    <span className="icon is-small">
+                      <FaLanguage/>
+                    </span>
+                    <span>Language:</span>
+                  </span>
+                  {languages}
+                </div>
+              </div>
+              <div className="control">
                 <OutboundLink className="button is-small is-white"
                               eventLabel="View JSON"
                               to={item.jsonUrl}
@@ -115,8 +143,8 @@ class Result extends Component<Props> {
                   </span>
                   <Translate component="span" content="viewJson"/>
                 </OutboundLink>
-              </p>
-              <p className="control">
+              </div>
+              <div className="control">
                 <OutboundLink className="button is-small is-white"
                               eventLabel="Go to Collection/Study"
                               to={item.sourceUrl}
@@ -129,7 +157,7 @@ class Result extends Component<Props> {
                    <Translate component="span" content="goToStudy"/>
                   }
                 </OutboundLink>
-              </p>
+              </div>
             </div>
           </span>
         </span>
@@ -146,6 +174,8 @@ const mapStateToProps = (state: State, props: Props): Object => {
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
+    push: bindActionCreators(push, dispatch),
+    changeLanguage: bindActionCreators(changeLanguage, dispatch),
     toggleLongDescription: bindActionCreators(toggleLongDescription, dispatch)
   };
 };

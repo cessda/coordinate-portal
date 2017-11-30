@@ -40,6 +40,11 @@ module.exports = {
     one: '%(count)s Ergebnis gefunden',
     other: '%(count)s Ergebnisse gefunden'
   },
+  numberOfResultsWithTime: {
+    zero: '%(count)s Ergebnisse in %(time)sms gefunden',
+    one: '%(count)s Ergebnis in %(time)sms gefunden',
+    other: '%(count)s Ergebnisse in %(time)sms gefunden'
+  },
   sorting: {
     relevance: 'Relevanz',
     titleAscending: 'Titel (aufsteigend)',

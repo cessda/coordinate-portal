@@ -55,7 +55,7 @@ class Detail extends HitItem<Props> {
         <strong className="data-label mt-5">Title</strong>
         <p>{item.title || 'Not available'}</p>
 
-        <strong className="data-label">Author(s)</strong>
+        <strong className="data-label">Creator(s)</strong>
         <p>{creators}</p>
 
         <strong className="data-label">Study persistent identifier</strong>
@@ -83,8 +83,6 @@ class Detail extends HitItem<Props> {
 
           <strong className="data-label">Sampling procedure</strong>
           <p>{item.samplingProcedures || 'Not available'}</p>
-
-          <strong className="data-label">Sampling description</strong>
           <p>{item.samplingDescription || 'Not available'}</p>
 
           <strong className="data-label">Data collection method</strong>
@@ -112,7 +110,7 @@ class Detail extends HitItem<Props> {
           <strong className="data-label">Availability</strong>
           <p>{item.rights || 'Not available'}</p>
 
-          <strong className="data-label">Terms of access</strong>
+          <strong className="data-label">Terms of data access</strong>
           <p>{item.rights || 'Not available'}</p>
 
           <strong className="data-label">Archival study number</strong>

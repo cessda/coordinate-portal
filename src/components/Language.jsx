@@ -7,14 +7,14 @@ import Translate from 'react-translate-component';
 import ReactFlagsSelect from 'react-flags-select';
 import 'react-flags-select/scss/react-flags-select.scss';
 import {connect} from 'react-redux';
-import {changeUiLanguage} from '../actions/language';
+import {changeLanguage} from '../actions/language';
 import {bindActionCreators} from 'redux';
 import type {Dispatch, State} from '../types';
 
 type Props = {
-  uiCode: any,
+  code: any,
   list: any,
-  changeUiLanguage: any
+  changeLanguage: any
 };
 
 class Language extends Component<Props> {
@@ -23,15 +23,14 @@ class Language extends Component<Props> {
       <div className="language-picker">
         <Translate component="label"
                    content="language.label"/>
-        <ReactFlagsSelect countries={['GB', 'DE', 'NO']}
+        <ReactFlagsSelect countries={['GB', 'DE']}
                           customLabels={{
                             'GB': counterpart.translate('language.languages.en'),
-                            'DE': counterpart.translate('language.languages.de'),
-                            'NO': counterpart.translate('language.languages.nn')
+                            'DE': counterpart.translate('language.languages.de')
                           }}
-                          defaultCountry={this.props.uiCode === 'en' ? 'GB' :
-                                          this.props.uiCode.toUpperCase()}
-                          onSelect={this.props.changeUiLanguage}/>
+                          defaultCountry={this.props.code === 'en' ? 'GB' :
+                                          this.props.code.toUpperCase()}
+                          onSelect={this.props.changeLanguage}/>
       </div>
     );
   }
@@ -39,14 +38,14 @@ class Language extends Component<Props> {
 
 const mapStateToProps = (state: State): Object => {
   return {
-    uiCode: state.language.uiCode,
+    code: state.language.code,
     list: state.language.list
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    changeUiLanguage: bindActionCreators(changeUiLanguage, dispatch)
+    changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };
 };
 

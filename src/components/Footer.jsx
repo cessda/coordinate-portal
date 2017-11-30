@@ -16,7 +16,7 @@ class Footer extends Component<Props> {
               <div className="columns">
                 <div className="column is-2 is-offset-1">
                   <ul>
-                    <li><strong>CESSDA AS</strong></li>
+                    <li><strong>CESSDA ERIC</strong></li>
                     <li>Parkveien 20</li>
                     <li>5007 Bergen</li>
                     <li>Norway</li>
@@ -25,17 +25,17 @@ class Footer extends Component<Props> {
                 <div className="column is-3 is-offset-1">
                   <ul>
                     <li>(+47) 55 58 36 48</li>
-                    <li><a href="mailto:cessda@cessda.net">cessda@cessda.net</a></li>
-                    <li><a href="https://twitter.com/CESSDA_Data/">Twitter - CESSDA</a></li>
-                    <li><a href="https://twitter.com/Eleanor_RES/lists/cessda">Twitter - Relevantorganisations feed</a></li>
+                    <li><a href="mailto:cessda@cessda.eu">cessda@cessda.eu</a></li>
+                    <li><a href="https://twitter.com/CESSDA_Data/">Twitter - CESSDA ERIC</a></li>
+                    <li><a href="https://twitter.com/Eleanor_RES/lists/cessda">Twitter - Organisations Feed</a></li>
                   </ul>
                 </div>
                 <div className="column is-3 is-offset-1">
                   <ul>
-                    <li><a href="https://cessda.net/eng/CESSDA-Services/Resources/Data-Catalogue">DataCatalogue</a></li>
-                    <li><a href="https://cessda.net/eng/National-Data-Services">NationalDataServices</a></li>
-                    <li><a href="https://cessda.net/eng/CESSDA-Training">CESSDA Training</a></li>
-                    <li><a href="https://cessda.net/eng/CESSDA-Services">CESSDA Services</a></li>
+                    <li><a href="https://cessda.net/eng/CESSDA-Services/Resources/Data-Catalogue">Data Catalogue</a></li>
+                    <li><a href="https://cessda.net/eng/National-Data-Services">National Data Services</a></li>
+                    <li><a href="https://cessda.net/eng/CESSDA-Training">CESSDA ERIC Training</a></li>
+                    <li><a href="https://cessda.net/eng/CESSDA-Services">CESSDA ERIC Services</a></li>
                   </ul>
                 </div>
               </div>

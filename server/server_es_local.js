@@ -5,7 +5,6 @@ var methodOverride = require("method-override")
 var compression = require("compression")
 var _ = require("lodash")
 var SearchkitExpress = require("searchkit-express")
-var globals = require('../config.js');
 
 module.exports = {
   start: function(prodMode) {
@@ -21,7 +20,7 @@ module.exports = {
     app.use(methodOverride())
 
     // Define port to listen on as an environment variable on the server
-    var port = Number(process.env.PORT || 3000);
+    var port = Number(process.env.PASC_PORT || 3000);
 	  var webpack = require("webpack");
       var webpackMiddleware = require("webpack-dev-middleware");
       var webpackHotMiddleware = require('webpack-hot-middleware');
@@ -43,20 +42,15 @@ module.exports = {
 
       app.use(webpackHotMiddleware(compiler));
 
-
-    /*
-      Searchkit Express - set specific Elasticsearch URL in ../config.js and change
-      host accordingly
-    */
     var searchkitRouter = SearchkitExpress.createRouter({
-    host:config.elastic || "http://localhost:9200",
+    host: process.env.PASC_ELASTICSEARCH_URL,
     index:'dc',
     maxSockets:500, // defaults to 1000
     queryProcessor:function(query, req, res){
       return query
       }
     })
-    
+
     app.use("/_search", searchkitRouter)
     app.use("/static", express.static(__dirname + '/dist'));
 
