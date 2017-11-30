@@ -20,6 +20,6 @@ spec:
           name: searchkit-cport
         env:
           - name: PASC_ELASTICSEARCH_URL
-            value: ESURL
+            value: http://ESURL:9200
       nodeSelector:
         app: global 
