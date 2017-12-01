@@ -6,16 +6,14 @@ export const queryBuilder = (query: string, options: any): Object => {
   let qob = {};
   qob[options.fullpath] = query;
   return {
-    function_score: {
-      query: {
-        multi_match: {
-          query: query,
-          type: 'cross_fields',
-          fields: [
-            '_all'
-          ]
-        }
-      }
+    simple_query_string: {
+      query: query,
+      fields: [
+        'dc.title.all^8',
+        'dc.description.all^5',
+        'dc.subject.all^3',
+        '_all'
+      ]
     }
   };
 };
