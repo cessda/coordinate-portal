@@ -20,9 +20,9 @@ type Props = {
 class TopBar extends Component<Props> {
   render(): Node {
     return (
-      <ActionBar className="is-hidden-mobile">
+      <ActionBar>
         <ActionBarRow>
-          <div className="level">
+          <div className="level is-mobile">
             <div className="level-left">
               <Translate className="level-item"
                          component="label"

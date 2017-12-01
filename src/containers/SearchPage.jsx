@@ -25,6 +25,7 @@ import * as $ from 'jquery';
 import type {State} from '../types';
 
 type Props = {
+  showMobileFilters: boolean,
   showSummary: boolean,
   filters: Function | Object,
   results: number
@@ -52,13 +53,13 @@ class SearchPage extends Component<Props> {
   }
 
   render(): Node {
-    const {results} = this.props;
+    const {showMobileFilters, results} = this.props;
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l">
+        <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
           <Header/>
           <LayoutBody className={'columns' + (results === 0 ? ' no-results' : '')}>
-            <SideBar className="is-hidden-mobile column is-4">
+            <SideBar className="column is-4">
               <Panel title={counterpart.translate('filters.topic.label')}
                      className="subject"
                      collapsable={true}
@@ -206,6 +207,7 @@ class SearchPage extends Component<Props> {
 
 const mapStateToProps = (state: State): Object => {
   return {
+    showMobileFilters: state.search.showMobileFilters,
     showSummary: state.search.showSummary,
     filters: state.search.state,
     results: state.search.displayed.length

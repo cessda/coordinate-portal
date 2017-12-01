@@ -11,19 +11,22 @@ import {queryBuilder} from '../utilities/searchkit';
 import SearchBox from './SearchBox';
 import type {State} from '../types';
 import {bindActionCreators} from 'redux';
-import {resetSearch} from '../actions/search';
+import {resetSearch, toggleMobileFilters} from '../actions/search';
 import {push} from 'react-router-redux';
+import Translate from 'react-translate-component';
 
 type Props = {
   pathname: string,
   code: string,
+  showMobileFilters: boolean,
   push: (path: string) => void,
-  resetSearch: () => void
+  resetSearch: () => void,
+  toggleMobileFilters: () => void
 };
 
 class Header extends Component<Props> {
   render(): Node {
-    const {pathname, push, resetSearch} = this.props;
+    const {pathname, push, resetSearch, showMobileFilters, toggleMobileFilters} = this.props;
     return (
       <header>
         <div className="cessda_top">
@@ -56,6 +59,12 @@ class Header extends Component<Props> {
                <div className="reset-search">
                  <HitsStats className="hits-count"/>
 
+                 <a className="sk-reset-filters link mobile-filters-toggle"
+                    onClick={toggleMobileFilters}>
+                   {showMobileFilters && <Translate content="hideFilters"/>}
+                   {!showMobileFilters && <Translate content="showFilters"/>}
+                 </a>
+                 
                  <ResetFilters component={Reset}
                                options={{query: false, filter: true, pagination: true}}
                                translations={{
@@ -79,14 +88,16 @@ class Header extends Component<Props> {
 const mapStateToProps = (state: State): Object => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
-    code: state.language.code
+    code: state.language.code,
+    showMobileFilters: state.search.showMobileFilters
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     push: bindActionCreators(push, dispatch),
-    resetSearch: bindActionCreators(resetSearch, dispatch)
+    resetSearch: bindActionCreators(resetSearch, dispatch),
+    toggleMobileFilters: bindActionCreators(toggleMobileFilters, dispatch)
   };
 };
 

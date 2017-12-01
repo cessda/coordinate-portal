@@ -58,6 +58,8 @@ module.exports = {
   },
   resultsPerPage: 'Ergebnisse pro Seite',
   sortBy: 'Sortiere nach',
+  showFilters: 'Filter anzeigen',
+  hideFilters: 'Filter ausblenden',
   showFilterSummary: 'Filterübersicht anzeigen',
   hideFilterSummary: 'Filterübersicht ausblenden',
   readMore: 'Weiterlesen',
