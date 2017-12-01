@@ -48,8 +48,8 @@ class Header extends Component<Props> {
               <SearchBox
                 autofocus={true}
                 searchOnChange={true}
-                prefixQueryFields={['_all^1']}
-                queryFields={['_all']}
+                prefixQueryFields={['_all']}
+                prefixQueryOptions={{type: 'cross_fields'}}
                 queryBuilder={queryBuilder}/>
 
               {pathname === '/' &&
