@@ -9,8 +9,8 @@ type Props = {};
 class Footer extends Component<Props> {
   render(): Node {
     return (
-      <footer className="dsn-list-footerWHOLE">
-        <section className="hero is-light">
+      <footer>
+        <section className="hero">
           <div className="hero-body">
             <div className="container">
               <div className="columns">

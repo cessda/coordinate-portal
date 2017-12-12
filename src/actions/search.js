@@ -62,6 +62,18 @@ export const initSearchkit = (): Thunk => {
   };
 };
 
+//////////// Redux Action Creator : TOGGLE_MOBILE_FILTERS
+
+export type ToggleMobileFiltersAction = {
+  type: 'TOGGLE_MOBILE_FILTERS'
+}
+
+export const toggleMobileFilters = (): ToggleMobileFiltersAction => {
+  return {
+    type: 'TOGGLE_MOBILE_FILTERS'
+  };
+};
+
 //////////// Redux Action Creator : TOGGLE_SUMMARY
 
 export type ToggleSummaryAction = {
@@ -191,6 +203,7 @@ export const resetSearch = (): Thunk => {
 
 export type SearchAction =
   | InitSearchkitAction
+  | ToggleMobileFiltersAction
   | ToggleSummaryAction
   | ToggleLongDescriptionAction
   | UpdateDisplayedAction

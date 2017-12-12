@@ -1,0 +1,119 @@
+.mobile-filters-toggle {
+  display: none !important;
+}
+
+@media screen and (max-width: 768px) {
+  .logo {
+    margin-bottom: -15px !important;
+
+    .cessda a {
+      font-size: 25px !important;
+      line-height: 20px !important;
+    }
+
+    .cessda-beta {
+      margin-top: 5px !important;
+    }
+
+    .cessda_beta--blue {
+      display: none;
+    }
+  }
+
+  .sk-search-box {
+    ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+      font-size: 13px;
+    }
+
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      font-size: 13px;
+    }
+
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+      font-size: 13px;
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      font-size: 13px;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      font-size: 13px;
+    }
+  }
+
+  .sk-hits-stats {
+    margin-top: 5px;
+    width: 100%;
+  }
+
+  .mobile-filters-toggle {
+    display: inline-block !important;
+  }
+
+  .sk-layout__filters {
+    display: none;
+  }
+
+  .show-mobile-filters {
+    .sk-layout__body {
+      position: relative;
+    }
+
+    .sk-layout__filters {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999999;
+    }
+
+    .sk-results-list, footer {
+      display: none !important;
+    }
+  }
+
+  .sk-layout__body .sk-layout__filters .Select-menu-outer {
+    top: 38px;
+    left: 0;
+    width: 100%;
+  }
+
+  .sk-layout__body .list_hit {
+    margin-bottom: 15px;
+    background-color: $hover_hit;
+  }
+
+  .availability.tags {
+    min-width: 100px;
+
+    &.has-addons {
+      .tag {
+        &:not(:last-child) {
+          display: none;
+        }
+
+        &:not(:first-child) {
+          border-bottom-left-radius: 3px;
+          border-top-left-radius: 3px;
+        }
+      }
+    }
+  }
+
+  .result-actions {
+    display: block;
+    opacity: 1;
+  }
+
+  .sk-action-bar {
+    .level-left > .level-item, .level > .level-item {
+      display: none;
+    }
+
+    .level-right {
+      margin: auto;
+    }
+  }
+}

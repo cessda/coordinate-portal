@@ -6,10 +6,6 @@ body {
   #root {
     color: $greyish-brown;
   }
-
-  a {
-    color: $cessda_gold;
-  }
 }
 
 .is-fullwidth {
@@ -90,9 +86,10 @@ body {
     padding-top: 4px;
     padding-left: 15px;
     padding-right: 15px;
-    background-color: #455963;
+    //background-color: #455963;
     color: #ffffff;
     font-size: 12px;
+    z-index: 2;
 
     label:after {
       content: ':';
@@ -435,7 +432,6 @@ body {
 .data-label {
   font-weight: 700;
   font-size: 14px;
-  color: #905a32;
   margin-top: 15px;
   display: block;
 }
