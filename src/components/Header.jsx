@@ -29,22 +29,23 @@ class Header extends Component<Props> {
     const {pathname, push, resetSearch, showMobileFilters, toggleMobileFilters} = this.props;
     return (
       <header>
-        <div className="cessda_top">
-          <div className="container">
-            <Language/>
-          </div>
+        <div className="background"/>
+
+        <span className="beta">Beta</span>
+
+        <div className="container">
+          <Language/>
         </div>
 
         <div className="container">
           <div className="columns">
             <div className="column">
               <div className="logo">
-                <div className="cessda"><a onClick={() => {
+                <a className="cessda-eric" onClick={() => {
                   push('/');
                   resetSearch();
-                }}>cessda</a></div>
-                <div className="cessda_beta">Products and Services Catalogue</div>
-                <span className="cessda_beta--blue">Beta Version</span>
+                }}/>
+                <span className="cessda-pasc">Products and Services Catalogue</span>
               </div>
             </div>
             <div className="column">
@@ -64,7 +65,7 @@ class Header extends Component<Props> {
                    {showMobileFilters && <Translate content="hideFilters"/>}
                    {!showMobileFilters && <Translate content="showFilters"/>}
                  </a>
-                 
+
                  <ResetFilters component={Reset}
                                options={{query: false, filter: true, pagination: true}}
                                translations={{
