@@ -190,6 +190,11 @@ class SearchPage extends Component<Props> {
 
               <TopBar/>
 
+              <SearchkitPagination pageScope={3}
+                                   showLast={true}
+                                   showNumbers={true}
+                                   listComponent={<Pagination/>}/>
+
               <Hits scrollTo={true}
                     mod="sk-hits-list"
                     hitsPerPage={30}
