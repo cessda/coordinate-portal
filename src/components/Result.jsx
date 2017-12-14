@@ -135,17 +135,6 @@ class Result extends Component<Props> {
               </div>
               <div className="control">
                 <OutboundLink className="button is-small is-white"
-                              eventLabel="View JSON"
-                              to={item.jsonUrl}
-                              target="_blank">
-                  <span className="icon is-small">
-                    <FaCode/>
-                  </span>
-                  <Translate component="span" content="viewJson"/>
-                </OutboundLink>
-              </div>
-              <div className="control">
-                <OutboundLink className="button is-small is-white"
                               eventLabel="Go to Collection/Study"
                               to={item.sourceUrl}
                               target="_blank">
