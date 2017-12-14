@@ -3,6 +3,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {FaTwitter} from 'react-icons/lib/fa/index';
 
 type Props = {};
 
@@ -26,16 +27,15 @@ class Footer extends Component<Props> {
                   <ul>
                     <li>(+47) 55 58 36 48</li>
                     <li><a href="mailto:cessda@cessda.eu">cessda@cessda.eu</a></li>
-                    <li><a href="https://twitter.com/CESSDA_Data/">Twitter - CESSDA ERIC</a></li>
-                    <li><a href="https://twitter.com/Eleanor_RES/lists/cessda">Twitter - Organisations Feed</a></li>
+                    <li><a href="https://twitter.com/CESSDA_Data/"><FaTwitter/> CESSDA ERIC</a></li>
+                    <li><a href="https://twitter.com/Eleanor_RES/lists/cessda"><FaTwitter/> Organisations Feed</a></li>
                   </ul>
                 </div>
                 <div className="column is-3 is-offset-1">
                   <ul>
-                    <li><a href="https://cessda.net/eng/CESSDA-Services/Resources/Data-Catalogue">Data Catalogue</a></li>
-                    <li><a href="https://cessda.net/eng/National-Data-Services">National Data Services</a></li>
-                    <li><a href="https://cessda.net/eng/CESSDA-Training">CESSDA ERIC Training</a></li>
-                    <li><a href="https://cessda.net/eng/CESSDA-Services">CESSDA ERIC Services</a></li>
+                    <li><a href="https://www.cessda.eu/About">About</a></li>
+                    <li><a href="https://www.cessda.eu/Consortium">Consortium</a></li>
+                    <li><a href="https://www.cessda.eu/Research-Infrastructure/Training">Training</a></li>
                   </ul>
                 </div>
               </div>
