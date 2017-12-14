@@ -121,9 +121,7 @@ export const updateDisplayed = (displayed: Object[]): Thunk => {
     dispatch({
       type: 'UPDATE_DISPLAYED',
       displayed,
-      language: 'all'
-      // TODO : Enable different metadata languages when data mapping is improved.
-      // language: getState().language.code
+      language: getState().language.code
     });
   };
 };
