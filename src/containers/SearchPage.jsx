@@ -101,7 +101,14 @@ class SearchPage extends Component<Props> {
                   <input type="checkbox"
                          className="sk-item-list-option__checkbox is-disabled"
                          disabled/>
-                  <div className="sk-item-list-option__text">Open</div>
+                  <div className="sk-item-list-option__text">Unrestricted</div>
+                  <div className="sk-item-list-option__count">0</div>
+                </div>
+                <div className="sk-item-list-option sk-item-list__item">
+                  <input type="checkbox"
+                         className="sk-item-list-option__checkbox is-disabled"
+                         disabled/>
+                  <div className="sk-item-list-option__text">Authentication/registration required</div>
                   <div className="sk-item-list-option__count">0</div>
                 </div>
                 <div className="sk-item-list-option sk-item-list__item">
