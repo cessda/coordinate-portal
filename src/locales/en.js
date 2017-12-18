@@ -62,6 +62,7 @@ module.exports = {
   hideFilters: 'Hide filters',
   showFilterSummary: 'Show filter summary',
   hideFilterSummary: 'Hide filter summary',
+  advancedSearch: 'Advanced search',
   readMore: 'Read more',
   readLess: 'Read less',
   viewJson: 'View JSON',

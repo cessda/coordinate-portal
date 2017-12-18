@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 
 type State = {
   showMobileFilters: boolean,
+  showAdvancedSearch: boolean,
   showSummary: boolean,
   displayed: Object[],
   similars?: {
@@ -18,6 +19,7 @@ type State = {
 
 const initialState: State = {
   showMobileFilters: false,
+  showAdvancedSearch: false,
   showSummary: false,
   displayed: [],
   query: Object,
@@ -32,6 +34,11 @@ const search = (state: State = initialState, action: Action): State => {
     case 'TOGGLE_MOBILE_FILTERS':
       return Object.assign({}, state, {
         showMobileFilters: !state.showMobileFilters
+      });
+
+    case 'TOGGLE_ADVANCED_SEARCH':
+      return Object.assign({}, state, {
+        showAdvancedSearch: !state.showAdvancedSearch
       });
 
     case 'TOGGLE_SUMMARY':

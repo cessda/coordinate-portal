@@ -74,6 +74,18 @@ export const toggleMobileFilters = (): ToggleMobileFiltersAction => {
   };
 };
 
+//////////// Redux Action Creator : TOGGLE_ADVANCED_SEARCH
+
+export type ToggleAdvancedSearchAction = {
+  type: 'TOGGLE_ADVANCED_SEARCH'
+}
+
+export const toggleAdvancedSearch = (): ToggleAdvancedSearchAction => {
+  return {
+    type: 'TOGGLE_ADVANCED_SEARCH'
+  };
+};
+
 //////////// Redux Action Creator : TOGGLE_SUMMARY
 
 export type ToggleSummaryAction = {
@@ -202,6 +214,7 @@ export const resetSearch = (): Thunk => {
 export type SearchAction =
   | InitSearchkitAction
   | ToggleMobileFiltersAction
+  | ToggleAdvancedSearchAction
   | ToggleSummaryAction
   | ToggleLongDescriptionAction
   | UpdateDisplayedAction
