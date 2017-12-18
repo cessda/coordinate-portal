@@ -120,21 +120,6 @@ class SearchPage extends Component<Props> {
                 </div>
               </Panel>
 
-              <RefinementListFilter id="language"
-                                    title={counterpart.translate(
-                                      'filters.languageOfDataFiles.label')}
-                                    field={'dc.language.nn'}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
-                                    operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate(
-                                      'filters.languageOfDataFiles.label')}
-                                                               className="language"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.languageOfDataFiles.placeholder')}/>}
-                                    size={500} orderKey="_term" orderDirection="asc"/>
-
               <RefinementListFilter id="dc.coverage"
                                     title={counterpart.translate('filters.country.label')}
                                     field={'dc.coverage.all'}
@@ -169,17 +154,20 @@ class SearchPage extends Component<Props> {
                                       'filters.publisher.placeholder')}/>}
                                     size={500}/>
 
-              {/*<RefinementListFilter id="dataProvider"*/}
-              {/*title={counterpart.translate('filters.publisher.label')}*/}
-              {/*field="dataProvider"*/}
-              {/*operator="OR"*/}
-              {/*containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}*/}
-              {/*className="dataProvider"*/}
-              {/*collapsable={true}*/}
-              {/*defaultCollapsed={true}/>}*/}
-              {/*listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}*/}
-              {/*title={this.props.children}/>}*/}
-              {/*size={500}/>*/}
+              <RefinementListFilter id="language"
+                                    title={counterpart.translate(
+                                      'filters.languageOfDataFiles.label')}
+                                    field={'dc.language.nn'}
+                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
+                                    operator="OR"
+                                    containerComponent={<Panel title={counterpart.translate(
+                                      'filters.languageOfDataFiles.label')}
+                                                               className="language"
+                                                               collapsable={true}
+                                                               defaultCollapsed={true}/>}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate(
+                                      'filters.languageOfDataFiles.placeholder')}/>}
+                                    size={500} orderKey="_term" orderDirection="asc"/>
             </SideBar>
             <LayoutResults className="column is-8">
               {this.props.showSummary &&
