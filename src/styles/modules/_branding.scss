@@ -232,9 +232,13 @@ body .sk-layout {
     }
 
     .modal-card-foot {
-      background-color: $dark_grey;
+      background-color: $light_grey;
       border-top: 0;
       clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 100%);
+
+      button {
+        font-size: 14px;
+      }
     }
   }
 

@@ -116,10 +116,10 @@ class Header extends Component<Props> {
               <p className="pt-15"><strong>Escaping</strong></p>
               <p>The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span className="tag is-light has-text-weight-semibold">\</span>.</p>
               <p className="pt-15"><strong>Default operator</strong></p>
-              <p>The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em className="tag is-light">Social Science</em>, this will be interpreted as <em className="tag is-light">Social</em> <strong>OR</strong> <em className="tag is-light">Science</em>.</p>
+              <p>The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em className="has-text-weight-semibold">Social Science</em>, this will be interpreted as <em className="has-text-weight-semibold">Social</em> <strong>OR</strong> <em className="has-text-weight-semibold">Science</em>.</p>
             </section>
             <div className="modal-card-foot">
-              <button className="button is-dark is-small" onClick={toggleAdvancedSearch}>Close</button>
+              <button className="button is-light" onClick={toggleAdvancedSearch}>Close</button>
             </div>
           </div>
         </div>
