@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>CESSDA Product and Services Catalogue</title>
+	<title>CESSDA ERIC Product and Services Catalogue</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 	<div id='root'></div>
-	<script src="/static/bundle.js"></script>
+  <%if (process.env.NODE_ENV !== 'production') { %>
+    <script src="/static/bundle.js"></script>
+  <% } %>
 </body>
 </html>

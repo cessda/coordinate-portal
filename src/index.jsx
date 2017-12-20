@@ -12,7 +12,6 @@ import {routerMiddleware, syncHistoryWithStore} from 'react-router-redux';
 import reducers from './reducers';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
-import 'string.prototype.includes';
 import * as ReactGA from 'react-ga';
 import './styles/design.scss';
 import type {Store} from './types';

@@ -1,11 +1,9 @@
 [ignore]
 <PROJECT_ROOT>/server/.*
-<PROJECT_ROOT>/startcessdadev.js
-<PROJECT_ROOT>/startlocal.js
+<PROJECT_ROOT>/startdev.js
 <PROJECT_ROOT>/startprod.js
-<PROJECT_ROOT>/webpack.cessda_dev.config.js
-<PROJECT_ROOT>/webpack.cessda_prod.config.js
-<PROJECT_ROOT>/webpack.es_local.config.js
+<PROJECT_ROOT>/webpack.dev.config.js
+<PROJECT_ROOT>/webpack.prod.config.js
 
 [include]
 ./src
