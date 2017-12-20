@@ -32,7 +32,7 @@ type Props = {
 
 class SearchPage extends Component<Props> {
   componentDidUpdate(): void {
-    // Auto expand the 'Collection dates' filter if it contains selected values.
+    // Auto expand the 'Collection years' filter if it contains selected values.
     let anyDateYearFilter = $('.filter--anydateYear > .is-collapsed');
     if (!anyDateYearFilter.data('expanded') && !_.isEmpty(this.props.filters['anydateYear'])) {
       anyDateYearFilter.data('expanded', true).click();

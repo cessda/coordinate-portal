@@ -15,8 +15,8 @@ module.exports = {
       placeholder: 'Search topics'
     },
     collectionDates: {
-      label: 'Collection dates',
-      placeholder: 'Search dates'
+      label: 'Collection years',
+      placeholder: 'Search years'
     },
     availability: {
       label: 'Availability',

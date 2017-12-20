@@ -15,7 +15,7 @@ module.exports = {
       placeholder: 'Suchthemen'
     },
     collectionDates: {
-      label: 'Erfassungsdatum',
+      label: 'Sammlungsjahre',
       placeholder: 'Suchdaten'
     },
     availability: {
