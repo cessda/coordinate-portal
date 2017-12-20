@@ -8,8 +8,8 @@ import Footer from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
-  GroupedSelectedFilters, Hits, Layout, LayoutBody, LayoutResults, NoHits,
-  Pagination as SearchkitPagination, RangeSliderInput, SearchkitProvider, SideBar
+  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination,
+  RangeSliderInput, SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
 import * as counterpart from 'react-translate-component';
@@ -26,7 +26,6 @@ import type {State} from '../types';
 
 type Props = {
   showMobileFilters: boolean,
-  showSummary: boolean,
   filters: Function | Object,
   results: number
 };
@@ -64,9 +63,6 @@ class SearchPage extends Component<Props> {
                      className="subject"
                      collapsable={true}
                      defaultCollapsed={true}>
-                {/*<HierarchicalRefinementFilter id="dc.subject"
-                 title={counterpart.translate('filters.topic.label')}
-                 field="dc.subject"/>*/}
                 <Translate component="p"
                            content="forthcoming"/>
               </Panel>
@@ -82,16 +78,6 @@ class SearchPage extends Component<Props> {
                                                       className="anydateYear"
                                                       collapsable={true}
                                                       defaultCollapsed={true}/>}/>
-
-              {/*<RefinementListFilter id="rights"
-               title={counterpart.translate('filters.availability.label')}
-               field={'dc.rights.all'}
-               fieldOptions={{type: 'nested', options: {path: 'dc.rights'}}}
-               containerComponent={<Panel title={counterpart.translate('filters.availability.label')}
-               className="rights"
-               collapsable={true}
-               defaultCollapsed={true}/>}
-               size={5} orderKey="_term" orderDirection="asc"/>*/}
 
               <Panel title={counterpart.translate('filters.availability.label')}
                      className="rights"
@@ -170,12 +156,6 @@ class SearchPage extends Component<Props> {
                                     size={500} orderKey="_term" orderDirection="asc"/>
             </SideBar>
             <LayoutResults className="column is-8">
-              {this.props.showSummary &&
-               <div className="is-hidden-touch">
-                 <GroupedSelectedFilters/>
-               </div>
-              }
-
               <TopBar/>
 
               <SearchkitPagination pageScope={3}
@@ -208,7 +188,6 @@ class SearchPage extends Component<Props> {
 const mapStateToProps = (state: State): Object => {
   return {
     showMobileFilters: state.search.showMobileFilters,
-    showSummary: state.search.showSummary,
     filters: state.search.state,
     results: state.search.displayed.length
   };

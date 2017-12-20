@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 type State = {
   showMobileFilters: boolean,
   showAdvancedSearch: boolean,
-  showSummary: boolean,
+  showFilterSummary: boolean,
   displayed: Object[],
   similars?: {
     id: string,
@@ -20,7 +20,7 @@ type State = {
 const initialState: State = {
   showMobileFilters: false,
   showAdvancedSearch: false,
-  showSummary: false,
+  showFilterSummary: false,
   displayed: [],
   query: Object,
   state: Object
@@ -43,7 +43,7 @@ const search = (state: State = initialState, action: Action): State => {
 
     case 'TOGGLE_SUMMARY':
       return Object.assign({}, state, {
-        showSummary: !state.showSummary
+        showFilterSummary: !state.showFilterSummary
       });
 
     case 'TOGGLE_LONG_DESCRIPTION':
