@@ -1,6 +1,6 @@
 // @flow
 
-import searchkit, {similarQuery} from '../utilities/searchkit';
+import searchkit, {detailQuery, similarQuery} from '../utilities/searchkit';
 import * as elasticsearch from 'elasticsearch';
 import * as _ from 'lodash';
 import type {Dispatch, GetState, State, Thunk} from '../types';
@@ -33,11 +33,7 @@ export const initSearchkit = (): Thunk => {
       if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
           state.routing.locationBeforeTransitions.query.q !== undefined) {
         delete query.highlight;
-        query.query = {
-          match: {
-            _id: _.trim(state.routing.locationBeforeTransitions.query.q, '"')
-          }
-        };
+        query.query = detailQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
       }
 
       // Redirect from 'detail' page to 'search results' page if users change search query text.
