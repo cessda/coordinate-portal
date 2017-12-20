@@ -1,7 +1,8 @@
-const SearchkitExpress = require('searchkit-express');
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
+const SearchkitExpress = require('searchkit-express');
+const proxy = require('express-http-proxy');
 const helper = {};
 
 helper.checkBuildDirectory = function () {
@@ -56,6 +57,14 @@ helper.getSearchkitRouter = function () {
     maxSockets: 500,
     queryProcessor: function (query) {
       return query;
+    }
+  });
+};
+
+helper.getJsonProxy = function () {
+  return proxy(process.env.PASC_ELASTICSEARCH_URL, {
+    proxyReqPathResolver(req) {
+      return '/es/dc/_all' + req.url;
     }
   });
 };

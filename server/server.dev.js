@@ -43,6 +43,8 @@ module.exports = {
 
     app.use('/_search', helper.getSearchkitRouter());
 
+    app.use('/json', helper.getJsonProxy());
+
     app.get('*', function (req, res) {
       res.setHeader('Cache-Control', 'max-age=0, private, must-revalidate');
       res.setHeader('Access-Control-Allow-Headers',

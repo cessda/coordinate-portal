@@ -63,37 +63,35 @@ const search = (state: State = initialState, action: Action): State => {
           break;
         }
 
-        let esUrl: string = (process.env.PASC_ELASTICSEARCH_URL: any),
-          item: Object = {
-            id: action.displayed[i]._id,
-            identifier: action.displayed[i]._source.dc.identifier.nn[0],
-            title: getDataInLanguage(action.displayed[i]._source.dc.title, action.language),
-            creator: getDataInLanguage(action.displayed[i]._source.dc.creator, action.language, [],
-              true),
-            coverage: getDataInLanguage(action.displayed[i]._source.dc.coverage, action.language),
-            timeDimension: getDataInLanguage(action.displayed[i]._source.dc.timeDimension,
-              action.language),
-            analysisUnit: getDataInLanguage(action.displayed[i]._source.dc.analysisUnit,
-              action.language),
-            dataSourceType: getDataInLanguage(action.displayed[i]._source.dc.dataSourceType,
-              action.language),
-            samplingProcedures: getDataInLanguage(action.displayed[i]._source.dc.samplingProcedures,
-              action.language),
-            samplingDescription: getDataInLanguage(
-              action.displayed[i]._source.dc.samplingDescription,
-              action.language),
-            dataCollectionMethod: getDataInLanguage(
-              action.displayed[i]._source.dc.dataCollectionMethod, action.language),
-            languageOfDataFiles: getDataInLanguage(action.displayed[i]._source.dc.language,
-              action.language),
-            publisher: getDataInLanguage(action.displayed[i]._source.dc.publisher, action.language),
-            date: getDataInLanguage(action.displayed[i]._source.dc.date, action.language),
-            rights: getDataInLanguage(action.displayed[i]._source.dc.rights, action.language),
-            subject: getDataInLanguage(action.displayed[i]._source.dc.subject, action.language, [],
-              true),
-            jsonUrl: esUrl + '/dc/_all/' + action.displayed[i]._source.esid,
-            restricted: false
-          };
+        let item: Object = {
+          id: action.displayed[i]._id,
+          identifier: action.displayed[i]._source.dc.identifier.nn[0],
+          title: getDataInLanguage(action.displayed[i]._source.dc.title, action.language),
+          creator: getDataInLanguage(action.displayed[i]._source.dc.creator, action.language, [],
+            true),
+          coverage: getDataInLanguage(action.displayed[i]._source.dc.coverage, action.language),
+          timeDimension: getDataInLanguage(action.displayed[i]._source.dc.timeDimension,
+            action.language),
+          analysisUnit: getDataInLanguage(action.displayed[i]._source.dc.analysisUnit,
+            action.language),
+          dataSourceType: getDataInLanguage(action.displayed[i]._source.dc.dataSourceType,
+            action.language),
+          samplingProcedures: getDataInLanguage(action.displayed[i]._source.dc.samplingProcedures,
+            action.language),
+          samplingDescription: getDataInLanguage(
+            action.displayed[i]._source.dc.samplingDescription,
+            action.language),
+          dataCollectionMethod: getDataInLanguage(
+            action.displayed[i]._source.dc.dataCollectionMethod, action.language),
+          languageOfDataFiles: getDataInLanguage(action.displayed[i]._source.dc.language,
+            action.language),
+          publisher: getDataInLanguage(action.displayed[i]._source.dc.publisher, action.language),
+          date: getDataInLanguage(action.displayed[i]._source.dc.date, action.language),
+          rights: getDataInLanguage(action.displayed[i]._source.dc.rights, action.language),
+          subject: getDataInLanguage(action.displayed[i]._source.dc.subject, action.language, [],
+            true),
+          restricted: false
+        };
 
         getLanguages(item, action.displayed[i]);
 

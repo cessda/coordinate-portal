@@ -20,6 +20,9 @@ module.exports = {
     app.use(methodOverride());
 
     app.use('/_search', helper.getSearchkitRouter());
+
+    app.use('/json', helper.getJsonProxy());
+
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 
     app.get('*', function (req, res) {
