@@ -50,7 +50,7 @@ class Header extends Component<Props> {
 
         <div className="container">
           <div className="columns">
-            <div className="column">
+            <div className="column is-narrow">
               <div className="logo">
                 <a className="cessda-eric" onClick={() => {
                   push('/');

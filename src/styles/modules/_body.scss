@@ -122,7 +122,13 @@ body {
   }
 
   .reset-search {
-    text-align: center;
+    position: relative;
+    text-align: right;
+    z-index: 1;
+
+    @media screen and (max-width: 768px) {
+      text-align: center;
+    }
   }
 
   .sk-reset-filters {
