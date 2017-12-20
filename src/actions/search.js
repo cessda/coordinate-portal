@@ -29,6 +29,16 @@ export const initSearchkit = (): Thunk => {
         }
       }, 3000);
 
+      // If viewing detail page, override query to retrieve single record using its ID.
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
+          state.routing.locationBeforeTransitions.query.q !== undefined) {
+        query.query = {
+          match: {
+            _id: _.trim(state.routing.locationBeforeTransitions.query.q, '"')
+          }
+        };
+      }
+
       // Redirect from 'detail' page to 'search results' page if users change search query text.
       if (state.routing.locationBeforeTransitions.pathname !== '/' &&
           state.search.query.size === 1) {
@@ -46,7 +56,7 @@ export const initSearchkit = (): Thunk => {
 
       // Redirect from 'detail' page to 'search results' page if item does not exist or the
       // item ID does not match the requested ID in the URL.
-      if (state.routing.locationBeforeTransitions.pathname === '/detail' &&
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
           (results.hits.hits.length === 0 ||
            _.trim(state.routing.locationBeforeTransitions.query.q, '"') !==
            results.hits.hits[0]._id)) {
