@@ -39,7 +39,7 @@ class Detail extends HitItem<Props> {
       }
     }
     if (description.length === 0) {
-      description.push(<p className="has-text-justified">Not available</p>);
+      description.push(<p key="0" className="has-text-justified">Not available</p>);
     }
 
     let subjects = [];
