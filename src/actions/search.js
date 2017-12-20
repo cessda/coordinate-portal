@@ -32,6 +32,7 @@ export const initSearchkit = (): Thunk => {
       // If viewing detail page, override query to retrieve single record using its ID.
       if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
           state.routing.locationBeforeTransitions.query.q !== undefined) {
+        delete query.highlight;
         query.query = {
           match: {
             _id: _.trim(state.routing.locationBeforeTransitions.query.q, '"')
