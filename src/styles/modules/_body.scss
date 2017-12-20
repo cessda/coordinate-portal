@@ -397,11 +397,10 @@ body {
 
 .sk-filter-group-items__value {
   padding: 2px 6px;
-  background-color: #ffffff;
   border-radius: 3px;
   margin: 0 5px 5px 0;
   font-size: 14px;
-  border: 2px solid #eaeae8;
+  border: 0;
 
   &:after {
     content: none;

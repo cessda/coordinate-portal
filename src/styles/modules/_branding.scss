@@ -209,6 +209,11 @@ body .sk-layout {
     }
   }
 
+  .sk-filter-group-items__value {
+    background-color: $light_grey;
+    color: $dark_grey;
+  }
+
   .modal {
     .modal-card-head {
       background-color: $dark_blue;
