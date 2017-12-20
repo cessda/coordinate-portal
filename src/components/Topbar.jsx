@@ -75,6 +75,18 @@ class TopBar extends Component<Props> {
                     order: 'desc'
                   }
                 }]
+              }, {
+                disabled: true,
+                translation: 'sorting.dateAscending',
+                key: 'date-ascending',
+                field: '_score',
+                order: 'asc'
+              }, {
+                disabled: true,
+                translation: 'sorting.dateDescending',
+                key: 'date-descending',
+                field: '_score',
+                order: 'desc'
               }]}/>
             </div>
           </div>
