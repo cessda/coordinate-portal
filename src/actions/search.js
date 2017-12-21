@@ -182,6 +182,7 @@ export type UpdateSimilarsAction = {
 
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch): void => {
+    console.log(window.location);
     let client: Object = new elasticsearch.Client({
       host: {
         protocol: _.trim(window.location.protocol, ':'),
