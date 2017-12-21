@@ -186,7 +186,8 @@ export const updateSimilars = (item: Object): Thunk => {
       host: {
         protocol: _.trim(window.location.protocol, ':'),
         host: window.location.hostname,
-        port: window.location.port || 80,
+        port: window.location.port ||
+              (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
         path: '/api/es'
       }
     });
