@@ -19,8 +19,10 @@ You will need an existing local or remote Elasticsearch instance setup and runni
 5. Set the required environment variables (see *Configuration* below).
 6. Run the application using one of the following commands.
     * Development: `npm run startdev`
-    * ~~Production:~~ `npm run startprod` (This script is currently undergoing refactoring)
-    * ~~Local:~~ `npm run startlocal` (This script is deprecated. Use the development build)
+    * Production: `npm run startprod` (Requires the application to be built. See *Building* below.)
+
+> **Building:** In order to run the application in production, it must first be built using the `npm run build` command.
+> This will compile assets into the `/dist` directory.
 
 > **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again.
 > This will ensure all locally installed dependencies match their development environment counterparts.
@@ -48,6 +50,7 @@ If running in a development environment using JetBrains WebStorm (see *Tooling* 
 
 ```bash
 <ROOT>
+├── dist                # The output directory for compilation using the build command.
 ├── flow-typed          # Flow library definitions for type checking.
 ├── infrastructure      # Scripts and configuration for deployment.
 ├── node_modules        # Third party packages and node dependencies.

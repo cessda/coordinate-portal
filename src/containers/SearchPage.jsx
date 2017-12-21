@@ -8,8 +8,8 @@ import Footer from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
-  GroupedSelectedFilters, Hits, Layout, LayoutBody, LayoutResults, NoHits,
-  Pagination as SearchkitPagination, RangeSliderInput, SearchkitProvider, SideBar
+  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination,
+  RangeSliderInput, SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
 import * as counterpart from 'react-translate-component';
@@ -26,14 +26,13 @@ import type {State} from '../types';
 
 type Props = {
   showMobileFilters: boolean,
-  showSummary: boolean,
   filters: Function | Object,
   results: number
 };
 
 class SearchPage extends Component<Props> {
   componentDidUpdate(): void {
-    // Auto expand the 'Collection dates' filter if it contains selected values.
+    // Auto expand the 'Collection years' filter if it contains selected values.
     let anyDateYearFilter = $('.filter--anydateYear > .is-collapsed');
     if (!anyDateYearFilter.data('expanded') && !_.isEmpty(this.props.filters['anydateYear'])) {
       anyDateYearFilter.data('expanded', true).click();
@@ -53,20 +52,18 @@ class SearchPage extends Component<Props> {
   }
 
   render(): Node {
-    const {showMobileFilters, results} = this.props;
+    const {showMobileFilters, filters, results} = this.props;
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
           <Header/>
-          <LayoutBody className={'columns' + (results === 0 ? ' no-results' : '')}>
+          <LayoutBody className={'columns' +
+                                 (!filters.q || results === 0 ? ' force-filters-visible' : '')}>
             <SideBar className="column is-4">
               <Panel title={counterpart.translate('filters.topic.label')}
                      className="subject"
                      collapsable={true}
                      defaultCollapsed={true}>
-                {/*<HierarchicalRefinementFilter id="dc.subject"
-                 title={counterpart.translate('filters.topic.label')}
-                 field="dc.subject"/>*/}
                 <Translate component="p"
                            content="forthcoming"/>
               </Panel>
@@ -83,16 +80,6 @@ class SearchPage extends Component<Props> {
                                                       collapsable={true}
                                                       defaultCollapsed={true}/>}/>
 
-              {/*<RefinementListFilter id="rights"
-               title={counterpart.translate('filters.availability.label')}
-               field={'dc.rights.all'}
-               fieldOptions={{type: 'nested', options: {path: 'dc.rights'}}}
-               containerComponent={<Panel title={counterpart.translate('filters.availability.label')}
-               className="rights"
-               collapsable={true}
-               defaultCollapsed={true}/>}
-               size={5} orderKey="_term" orderDirection="asc"/>*/}
-
               <Panel title={counterpart.translate('filters.availability.label')}
                      className="rights"
                      collapsable={true}
@@ -101,7 +88,14 @@ class SearchPage extends Component<Props> {
                   <input type="checkbox"
                          className="sk-item-list-option__checkbox is-disabled"
                          disabled/>
-                  <div className="sk-item-list-option__text">Open</div>
+                  <div className="sk-item-list-option__text">Unrestricted</div>
+                  <div className="sk-item-list-option__count">0</div>
+                </div>
+                <div className="sk-item-list-option sk-item-list__item">
+                  <input type="checkbox"
+                         className="sk-item-list-option__checkbox is-disabled"
+                         disabled/>
+                  <div className="sk-item-list-option__text">Authentication/registration required</div>
                   <div className="sk-item-list-option__count">0</div>
                 </div>
                 <div className="sk-item-list-option sk-item-list__item">
@@ -112,21 +106,6 @@ class SearchPage extends Component<Props> {
                   <div className="sk-item-list-option__count">0</div>
                 </div>
               </Panel>
-
-              <RefinementListFilter id="language"
-                                    title={counterpart.translate(
-                                      'filters.languageOfDataFiles.label')}
-                                    field={'dc.language.nn'}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
-                                    operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate(
-                                      'filters.languageOfDataFiles.label')}
-                                                               className="language"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.languageOfDataFiles.placeholder')}/>}
-                                    size={500} orderKey="_term" orderDirection="asc"/>
 
               <RefinementListFilter id="dc.coverage"
                                     title={counterpart.translate('filters.country.label')}
@@ -162,26 +141,28 @@ class SearchPage extends Component<Props> {
                                       'filters.publisher.placeholder')}/>}
                                     size={500}/>
 
-              {/*<RefinementListFilter id="dataProvider"*/}
-              {/*title={counterpart.translate('filters.publisher.label')}*/}
-              {/*field="dataProvider"*/}
-              {/*operator="OR"*/}
-              {/*containerComponent={<Panel title={counterpart.translate('filters.publisher.label')}*/}
-              {/*className="dataProvider"*/}
-              {/*collapsable={true}*/}
-              {/*defaultCollapsed={true}/>}*/}
-              {/*listComponent={<MultiSelect placeholder={counterpart.translate('filters.publisher.placeholder')}*/}
-              {/*title={this.props.children}/>}*/}
-              {/*size={500}/>*/}
+              <RefinementListFilter id="language"
+                                    title={counterpart.translate(
+                                      'filters.languageOfDataFiles.label')}
+                                    field={'dc.language.nn'}
+                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
+                                    operator="OR"
+                                    containerComponent={<Panel title={counterpart.translate(
+                                      'filters.languageOfDataFiles.label')}
+                                                               className="language"
+                                                               collapsable={true}
+                                                               defaultCollapsed={true}/>}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate(
+                                      'filters.languageOfDataFiles.placeholder')}/>}
+                                    size={500} orderKey="_term" orderDirection="asc"/>
             </SideBar>
             <LayoutResults className="column is-8">
-              {this.props.showSummary &&
-               <div className="is-hidden-touch">
-                 <GroupedSelectedFilters/>
-               </div>
-              }
-
               <TopBar/>
+
+              <SearchkitPagination pageScope={3}
+                                   showLast={true}
+                                   showNumbers={true}
+                                   listComponent={<Pagination/>}/>
 
               <Hits scrollTo={true}
                     mod="sk-hits-list"
@@ -208,7 +189,6 @@ class SearchPage extends Component<Props> {
 const mapStateToProps = (state: State): Object => {
   return {
     showMobileFilters: state.search.showMobileFilters,
-    showSummary: state.search.showSummary,
     filters: state.search.state,
     results: state.search.displayed.length
   };

@@ -209,6 +209,44 @@ body .sk-layout {
     }
   }
 
+  .sk-filter-group-items__value {
+    background-color: $light_grey;
+    color: $dark_grey;
+  }
+
+  .modal {
+    .modal-card-head {
+      background-color: $dark_blue;
+      border-bottom: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+
+      .modal-card-title {
+        color: #ffffff;
+        font-size: 20px;
+      }
+    }
+
+    .modal-card-body {
+      margin: -15px 0;
+      padding: 30px 20px;
+      font-size: 14px;
+
+      p {
+        padding-bottom: 5px;
+      }
+    }
+
+    .modal-card-foot {
+      background-color: $light_grey;
+      border-top: 0;
+      clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 100%);
+
+      button {
+        font-size: 14px;
+      }
+    }
+  }
+
   footer {
     position: relative;
     background-color: $dark_grey;

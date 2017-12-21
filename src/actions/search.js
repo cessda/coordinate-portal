@@ -1,6 +1,6 @@
 // @flow
 
-import searchkit, {similarQuery} from '../utilities/searchkit';
+import searchkit, {detailQuery, similarQuery} from '../utilities/searchkit';
 import * as elasticsearch from 'elasticsearch';
 import * as _ from 'lodash';
 import type {Dispatch, GetState, State, Thunk} from '../types';
@@ -29,6 +29,13 @@ export const initSearchkit = (): Thunk => {
         }
       }, 3000);
 
+      // If viewing detail page, override query to retrieve single record using its ID.
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
+          state.routing.locationBeforeTransitions.query.q !== undefined) {
+        delete query.highlight;
+        query.query = detailQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
+      }
+
       // Redirect from 'detail' page to 'search results' page if users change search query text.
       if (state.routing.locationBeforeTransitions.pathname !== '/' &&
           state.search.query.size === 1) {
@@ -46,7 +53,7 @@ export const initSearchkit = (): Thunk => {
 
       // Redirect from 'detail' page to 'search results' page if item does not exist or the
       // item ID does not match the requested ID in the URL.
-      if (state.routing.locationBeforeTransitions.pathname === '/detail' &&
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
           (results.hits.hits.length === 0 ||
            _.trim(state.routing.locationBeforeTransitions.query.q, '"') !==
            results.hits.hits[0]._id)) {
@@ -71,6 +78,18 @@ export type ToggleMobileFiltersAction = {
 export const toggleMobileFilters = (): ToggleMobileFiltersAction => {
   return {
     type: 'TOGGLE_MOBILE_FILTERS'
+  };
+};
+
+//////////// Redux Action Creator : TOGGLE_ADVANCED_SEARCH
+
+export type ToggleAdvancedSearchAction = {
+  type: 'TOGGLE_ADVANCED_SEARCH'
+}
+
+export const toggleAdvancedSearch = (): ToggleAdvancedSearchAction => {
+  return {
+    type: 'TOGGLE_ADVANCED_SEARCH'
   };
 };
 
@@ -121,9 +140,7 @@ export const updateDisplayed = (displayed: Object[]): Thunk => {
     dispatch({
       type: 'UPDATE_DISPLAYED',
       displayed,
-      language: 'all'
-      // TODO : Enable different metadata languages when data mapping is improved.
-      // language: getState().language.code
+      language: getState().language.code
     });
   };
 };
@@ -166,7 +183,12 @@ export type UpdateSimilarsAction = {
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch): void => {
     let client: Object = new elasticsearch.Client({
-      host: process.env.PASC_ELASTICSEARCH_URL
+      host: {
+        protocol: _.trim(window.location.protocol, ':'),
+        host: window.location.hostname,
+        port: window.location.port,
+        path: '/api/es'
+      }
     });
 
     client.search(similarQuery(item.title)).then((response: Object): void => {
@@ -204,6 +226,7 @@ export const resetSearch = (): Thunk => {
 export type SearchAction =
   | InitSearchkitAction
   | ToggleMobileFiltersAction
+  | ToggleAdvancedSearchAction
   | ToggleSummaryAction
   | ToggleLongDescriptionAction
   | UpdateDisplayedAction

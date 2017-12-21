@@ -1,10 +1,13 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   devtool: 'eval',
   context: path.join(__dirname),
-  entry: ['webpack-hot-middleware/client?reload=true', 'babel-polyfill', './src/index.jsx'],
+  entry: [
+    'babel-polyfill',
+    'webpack-hot-middleware/client?reload=true',
+    './src/index.jsx'],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',

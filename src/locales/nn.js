@@ -15,7 +15,7 @@ module.exports = {
       placeholder: 'Suchthemen'
     },
     collectionDates: {
-      label: 'Erfassungsdatum',
+      label: 'Sammlungsjahre',
       placeholder: 'Suchdaten'
     },
     availability: {
@@ -49,8 +49,8 @@ module.exports = {
     relevance: 'Relevanz',
     titleAscending: 'Titel (aufsteigend)',
     titleDescending: 'Titel (absteigend)',
-    latest: 'Neueste',
-    first: 'Zuerst'
+    dateAscending: 'Sammlungsdatum (aufsteigend)',
+    dateDescending: 'Sammlungsdatum (absteigend)'
   },
   reset: {
     query: 'Saubere Suche',
@@ -60,8 +60,8 @@ module.exports = {
   sortBy: 'Sortiere nach',
   showFilters: 'Filter anzeigen',
   hideFilters: 'Filter ausblenden',
-  showFilterSummary: 'Filterübersicht anzeigen',
-  hideFilterSummary: 'Filterübersicht ausblenden',
+  filterSummary: 'Zusammenfassung filtern',
+  advancedSearch: 'Erweiterte Suche',
   readMore: 'Weiterlesen',
   readLess: 'Lese weniger',
   viewJson: 'JSON anzeigen',

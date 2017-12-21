@@ -15,8 +15,8 @@ module.exports = {
       placeholder: 'Search topics'
     },
     collectionDates: {
-      label: 'Collection dates',
-      placeholder: 'Search dates'
+      label: 'Collection years',
+      placeholder: 'Search years'
     },
     availability: {
       label: 'Availability',
@@ -49,8 +49,8 @@ module.exports = {
     relevance: 'Relevance',
     titleAscending: 'Title (ascending)',
     titleDescending: 'Title (descending)',
-    latest: 'Latest',
-    first: 'First'
+    dateAscending: 'Date of collection (ascending)',
+    dateDescending: 'Date of collection (descending)'
   },
   reset: {
     query: 'Clear search',
@@ -60,8 +60,8 @@ module.exports = {
   sortBy: 'Sort by',
   showFilters: 'Show filters',
   hideFilters: 'Hide filters',
-  showFilterSummary: 'Show filter summary',
-  hideFilterSummary: 'Hide filter summary',
+  filterSummary: 'Filter summary',
+  advancedSearch: 'Advanced search',
   readMore: 'Read more',
   readLess: 'Read less',
   viewJson: 'View JSON',

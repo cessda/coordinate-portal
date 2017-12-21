@@ -6,15 +6,10 @@ import {ActionBar, ActionBarRow, PageSizeSelector} from 'searchkit';
 import {connect} from 'react-redux';
 import Translate from 'react-translate-component';
 import SortingSelector from './SortingSelector';
-import {bindActionCreators} from 'redux';
-import {toggleSummary} from '../actions/search';
-import type {Dispatch, State} from '../types';
+import type {State} from '../types';
 
 type Props = {
-  code: string,
-  showSummary: boolean,
-  filters?: Object,
-  toggleSummary: () => void
+  code: string
 };
 
 class TopBar extends Component<Props> {
@@ -30,17 +25,6 @@ class TopBar extends Component<Props> {
 
               <PageSizeSelector className="level-item" options={[10, 30, 50, 150]}/>
             </div>
-
-            {this.props.filters &&
-             <div className="level-item is-hidden-touch">
-               <button type="button"
-                       className="button is-small is-white"
-                       onClick={this.props.toggleSummary}>
-                 {this.props.showSummary && <Translate content="hideFilterSummary"/>}
-                 {!this.props.showSummary && <Translate content="showFilterSummary"/>}
-               </button>
-             </div>
-            }
 
             <div className="level-right">
               <Translate className="level-item"
@@ -75,6 +59,18 @@ class TopBar extends Component<Props> {
                     order: 'desc'
                   }
                 }]
+              }, {
+                disabled: true,
+                translation: 'sorting.dateAscending',
+                key: 'date-ascending',
+                field: '_score',
+                order: 'asc'
+              }, {
+                disabled: true,
+                translation: 'sorting.dateDescending',
+                key: 'date-descending',
+                field: '_score',
+                order: 'desc'
               }]}/>
             </div>
           </div>
@@ -86,16 +82,8 @@ class TopBar extends Component<Props> {
 
 const mapStateToProps = (state: State): Object => {
   return {
-    code: state.language.code,
-    showSummary: state.search.showSummary,
-    filters: state.search.query.post_filter
+    code: state.language.code
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
-  return {
-    toggleSummary: bindActionCreators(toggleSummary, dispatch)
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopBar);
+export default connect(mapStateToProps, null)(TopBar);

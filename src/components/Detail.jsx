@@ -39,7 +39,7 @@ class Detail extends HitItem<Props> {
       }
     }
     if (description.length === 0) {
-      description.push(<p className="has-text-justified">Not available</p>);
+      description.push(<p key="0" className="has-text-justified">Not available</p>);
     }
 
     let subjects = [];
@@ -88,7 +88,7 @@ class Detail extends HitItem<Props> {
           <strong className="data-label">Data collection method</strong>
           <p>{item.dataCollectionMethod || 'Not available'}</p>
 
-          <strong className="data-label">Collection dates</strong>
+          <strong className="data-label">Collection years</strong>
           <p>{item.coverage || 'Not available'}</p>
 
           <strong className="data-label">Language of data file(s)</strong>

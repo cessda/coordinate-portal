@@ -3,7 +3,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {
-  FaAngleDown, FaAngleUp, FaCode, FaExternalLink, FaLanguage, FaLock, FaUnlock
+  FaAngleDown, FaAngleUp, FaExternalLink, FaLanguage, FaLock, FaUnlock
 } from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
@@ -122,28 +122,19 @@ class Result extends Component<Props> {
           </span>
           <span className="level-right">
             <div className="field is-grouped is-grouped-multiline">
-              <div className="control">
-                <div className="buttons has-addons">
+              {languages.length > 0 &&
+               <div className="control">
+                 <div className="buttons has-addons">
                   <span className="button is-small is-white bg-w pe-none">
                     <span className="icon is-small">
                       <FaLanguage/>
                     </span>
                     <span>Language:</span>
                   </span>
-                  {languages}
-                </div>
-              </div>
-              <div className="control">
-                <OutboundLink className="button is-small is-white"
-                              eventLabel="View JSON"
-                              to={item.jsonUrl}
-                              target="_blank">
-                  <span className="icon is-small">
-                    <FaCode/>
-                  </span>
-                  <Translate component="span" content="viewJson"/>
-                </OutboundLink>
-              </div>
+                   {languages}
+                 </div>
+               </div>
+              }
               <div className="control">
                 <OutboundLink className="button is-small is-white"
                               eventLabel="Go to Collection/Study"

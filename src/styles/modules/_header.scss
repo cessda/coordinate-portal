@@ -5,43 +5,11 @@
 header {
   background-color: $cessda_blueish;
 
-  .logo {
-    //text-align: center;
-    //width: 250px;
-
-    //.cessda a {
-    //  font-family: 'cessda' !important;
-    //  font-size: 3.5rem;
-    //  line-height: 60px;
-    //  color: $white !important;
-    //  text-decoration: none;
-    //}
-    //.cessda_beta {
-    //  color: $white;
-    //  font-family: 'Kanit', sans-serif;
-    //  font-size: 0.75rem;
-    //  letter-spacing: 2px;
-    //}
-
-    //.cessda_beta--blue {
-    //  font-family: 'Kanit', sans-serif;
-    //  font-size: 0.75rem;
-    //  letter-spacing: 2px;
-    //  color: #81bae1;
-    //  font-weight: bold;
-    //}
-    //
-    //@media screen and (max-width: 768px) {
-    //  margin: auto;
-    //}
+  @media screen and (min-width: 769px) {
+    & > .container > .columns > .column {
+      min-height: 137px;
+    }
   }
-
-  //.logo .cessda {
-  //  background-image: url("../img/logo.svg");
-  //  background-repeat: no-repeat;
-  //  background-size: 200px 50px;
-  //  height: 35px;
-  //}
 
   .navbar {
     margin: 0 auto;
@@ -133,8 +101,9 @@ header {
     border-radius: 25px;
     color: $light_grey;
     height: 45px;
-    max-width: 500px;
-    margin: 35px auto 0;
+    max-width: 600px;
+    margin: 35px 0 0 auto;
+    z-index: 1;
 
     &.is-focused {
       background-color: $white;
@@ -167,7 +136,7 @@ header {
     }
 
     @media screen and (max-width: 768px) {
-      margin: 0 auto 0;
+      margin: 0 auto 0 auto;
     }
   }
 }
