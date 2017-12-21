@@ -78,7 +78,7 @@ helper.getJsonProxy = function () {
     },
     userResDecorator: function (proxyRes, proxyResData) {
       let json = JSON.parse(proxyResData.toString('utf8'));
-      return JSON.stringify(!_.isEmpty(json._source) ? json._source.dc : {
+      return JSON.stringify(!_.isEmpty(json._source) ? json._source : {
         error: 'Requested record was not found.'
       });
     },
