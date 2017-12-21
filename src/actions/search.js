@@ -182,12 +182,11 @@ export type UpdateSimilarsAction = {
 
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch): void => {
-    console.log(window.location);
     let client: Object = new elasticsearch.Client({
       host: {
         protocol: _.trim(window.location.protocol, ':'),
         host: window.location.hostname,
-        port: window.location.port,
+        port: window.location.port || 80,
         path: '/api/es'
       }
     });
