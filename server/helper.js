@@ -75,6 +75,15 @@ helper.getJsonProxy = function () {
     proxyReqPathResolver(req) {
       return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + '/dc/_all' +
              req.url;
+    },
+    userResDecorator: function (proxyRes, proxyResData) {
+      let json = JSON.parse(proxyResData.toString('utf8'));
+      return JSON.stringify(!_.isEmpty(json._source) ? json._source.dc : {
+        error: 'Requested record was not found.'
+      });
+    },
+    filter: function (req) {
+      return !(req.method !== 'GET' || req.url.match(/[\/?]/gi).length > 1);
     }
   });
 };
