@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 const _ = require('lodash');
 const SearchkitExpress = require('searchkit-express');
 const proxy = require('express-http-proxy');
@@ -64,7 +65,7 @@ helper.getSearchkitRouter = function () {
 helper.getElasticsearchProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {
-      return '/es' + req.url;
+      return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + req.url;
     }
   });
 };
@@ -72,7 +73,8 @@ helper.getElasticsearchProxy = function () {
 helper.getJsonProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {
-      return '/es/dc/_all' + req.url;
+      return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + '/dc/_all' +
+             req.url;
     }
   });
 };
