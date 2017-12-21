@@ -52,12 +52,13 @@ class SearchPage extends Component<Props> {
   }
 
   render(): Node {
-    const {showMobileFilters, results} = this.props;
+    const {showMobileFilters, filters, results} = this.props;
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
           <Header/>
-          <LayoutBody className={'columns' + (results === 0 ? ' no-results' : '')}>
+          <LayoutBody className={'columns' +
+                                 (!filters.q || results === 0 ? ' force-filters-visible' : '')}>
             <SideBar className="column is-4">
               <Panel title={counterpart.translate('filters.topic.label')}
                      className="subject"
