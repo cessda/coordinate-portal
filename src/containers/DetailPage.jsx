@@ -19,6 +19,7 @@ import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
 import {changeLanguage} from '../actions/language';
+import Select from 'react-select';
 
 type Props = {
   item?: Object,
@@ -36,10 +37,11 @@ class DetailPage extends Component<Props> {
     let languages = [];
     if (item) {
       for (let i: number = 0; i < item.languages.length; i++) {
-        languages.push({
-          label: item.languages[i],
-          value: item.languages[i].toLowerCase()
-        });
+        // languages.push({
+        //   label: item.languages[i],
+        //   value: item.languages[i].toLowerCase()
+        // });
+        languages.push(<option key={i}>{item.languages[i]}</option>);
       }
     }
 
@@ -49,13 +51,31 @@ class DetailPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
-              {missing &&
-               <Panel title="Language"
-                      collapsable={true}
-                      defaultCollapsed={false}>
-                 <span className="fs-14">A user interface translation is not available in your selected language. Displaying text in <strong>English</strong>.</span>
-               </Panel>
-              }
+              {/*{missing &&*/}
+               {/*<Panel title="Language"*/}
+                      {/*collapsable={true}*/}
+                      {/*defaultCollapsed={false}>*/}
+                 {/*<span className="fs-14">A user interface translation is not available in your selected language. Displaying text in <strong>English</strong>.</span>*/}
+               {/*</Panel>*/}
+              {/*}*/}
+              <Panel title="Languages"
+                     collapsable={true}
+                     defaultCollapsed={false}>
+                <div className="fs-14 mb-10">This data is available in the following languages.</div>
+                {/*<Select options={languages} value={code}/>*/}
+
+                <div className="field">
+                  <div className="control is-expanded has-icons-left">
+                    <div className="select is-small is-fullwidth">
+                      <select>{languages}</select>
+                    </div>
+                    <div className="icon is-small is-left">
+                      <FaLanguage/>
+                    </div>
+                  </div>
+                </div>
+
+              </Panel>
               <Panel title="Similar results"
                      collapsable={true}
                      defaultCollapsed={false}>
