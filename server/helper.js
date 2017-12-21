@@ -61,6 +61,14 @@ helper.getSearchkitRouter = function () {
   });
 };
 
+helper.getElasticsearchProxy = function () {
+  return proxy(process.env.PASC_ELASTICSEARCH_URL, {
+    proxyReqPathResolver(req) {
+      return '/es' + req.url;
+    }
+  });
+};
+
 helper.getJsonProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {

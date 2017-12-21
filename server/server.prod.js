@@ -19,9 +19,11 @@ module.exports = {
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    app.use('/_search', helper.getSearchkitRouter());
+    app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/json', helper.getJsonProxy());
+    app.use('/api/es', helper.getElasticsearchProxy());
+
+    app.use('/api/json', helper.getJsonProxy());
 
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 

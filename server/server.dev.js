@@ -41,9 +41,11 @@ module.exports = {
 
     app.use(webpackHotMiddleware(compiler));
 
-    app.use('/_search', helper.getSearchkitRouter());
+    app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/json', helper.getJsonProxy());
+    app.use('/api/es', helper.getElasticsearchProxy());
+
+    app.use('/api/json', helper.getJsonProxy());
 
     app.get('*', function (req, res) {
       res.setHeader('Cache-Control', 'max-age=0, private, must-revalidate');

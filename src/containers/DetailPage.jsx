@@ -85,7 +85,7 @@ class DetailPage extends Component<Props> {
 
                  <OutboundLink className="button is-small is-white is-pulled-right mr-15"
                                eventLabel="View JSON"
-                               to={'/json/' + item.id}
+                               to={'/api/json/' + item.id}
                                target="_blank">
                   <span className="icon is-small">
                     <FaCode/>

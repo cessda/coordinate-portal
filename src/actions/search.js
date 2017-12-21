@@ -183,7 +183,12 @@ export type UpdateSimilarsAction = {
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch): void => {
     let client: Object = new elasticsearch.Client({
-      host: process.env.PASC_ELASTICSEARCH_URL
+      host: {
+        protocol: _.trim(window.location.protocol, ':'),
+        host: window.location.hostname,
+        port: window.location.port,
+        path: '/api/es'
+      }
     });
 
     client.search(similarQuery(item.title)).then((response: Object): void => {

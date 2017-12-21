@@ -64,7 +64,7 @@ export const similarQuery = (title: string): Object => {
   };
 };
 
-const searchkit: SearchkitManager = new SearchkitManager('/_search');
+const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
 
 // Customise searchkit query here.
 // searchkit.addDefaultQuery((query) => {
