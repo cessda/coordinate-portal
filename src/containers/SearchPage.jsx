@@ -61,6 +61,7 @@ class SearchPage extends Component<Props> {
                                  (!filters.q || results === 0 ? ' force-filters-visible' : '')}>
             <SideBar className="column is-4">
               <Panel title={counterpart.translate('filters.topic.label')}
+                     tooltip={counterpart.translate('filters.topic.tooltip')}
                      className="subject"
                      collapsable={true}
                      defaultCollapsed={true}>
@@ -76,11 +77,14 @@ class SearchPage extends Component<Props> {
                            rangeComponent={RangeSliderInput}
                            containerComponent={<Panel title={counterpart.translate(
                              'filters.collectionDates.label')}
+                                                      tooltip={counterpart.translate(
+                                                        'filters.collectionDates.tooltip')}
                                                       className="anydateYear"
                                                       collapsable={true}
                                                       defaultCollapsed={true}/>}/>
 
               <Panel title={counterpart.translate('filters.availability.label')}
+                     tooltip={counterpart.translate('filters.availability.tooltip')}
                      className="rights"
                      collapsable={true}
                      defaultCollapsed={true}>
@@ -117,6 +121,8 @@ class SearchPage extends Component<Props> {
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.country.label')}
+                                                               tooltip={counterpart.translate(
+                                                                 'filters.country.tooltip')}
                                                                className="coverage"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
@@ -134,6 +140,8 @@ class SearchPage extends Component<Props> {
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.publisher.label')}
+                                                               tooltip={counterpart.translate(
+                                                                 'filters.publisher.tooltip')}
                                                                className="publisher"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
@@ -149,6 +157,8 @@ class SearchPage extends Component<Props> {
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.languageOfDataFiles.label')}
+                                                               tooltip={counterpart.translate(
+                                                                 'filters.languageOfDataFiles.tooltip')}
                                                                className="language"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}

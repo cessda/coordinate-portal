@@ -3,8 +3,7 @@ module.exports = {
     label: 'Language',
     languages: {
       en: 'English',
-      de: 'German',
-      nn: 'Norwegian'
+      de: 'German'
     },
     notAvailable: 'Not available in selected language'
   },
@@ -12,27 +11,33 @@ module.exports = {
   filters: {
     topic: {
       label: 'Topic',
-      placeholder: 'Search topics'
+      placeholder: 'Search topics',
+      tooltip: 'CESSDA Topic Classification serves to identify the general topics, subjects or themes of a study.'
     },
     collectionDates: {
       label: 'Collection years',
-      placeholder: 'Search years'
+      placeholder: 'Search years',
+      tooltip: 'The period, in years, when the data were collected.'
     },
     availability: {
       label: 'Availability',
-      placeholder: 'Search availability'
+      placeholder: 'Search availability',
+      tooltip: 'Access levels control the availability of the research data.'
     },
     languageOfDataFiles: {
       label: 'Language of data files',
-      placeholder: 'Search languages'
+      placeholder: 'Search languages',
+      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc. The metadata about the dataset may be in different language from the data files.'
     },
     country: {
       label: 'Country',
-      placeholder: 'Search countries'
+      placeholder: 'Search countries',
+      tooltip: 'Country in which the study took place.'
     },
     publisher: {
       label: 'Publisher',
-      placeholder: 'Search publishers'
+      placeholder: 'Search publishers',
+      tooltip: 'Name of the institution publishing the research data. Will usually be the CESSDA Service Provider providing the metadata information.'
     }
   },
   numberOfResults: {

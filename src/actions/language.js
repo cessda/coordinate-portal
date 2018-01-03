@@ -4,7 +4,6 @@ import counterpart from 'counterpart';
 import counterpartDe from 'counterpart/locales/de';
 import en from '../locales/en';
 import de from '../locales/de';
-import nn from '../locales/nn';
 import searchkit from '../utilities/searchkit';
 import type {Dispatch, GetState, Thunk} from '../types';
 import * as ReactGA from 'react-ga';
@@ -25,7 +24,6 @@ export const initTranslations = (): Thunk => {
     counterpart.registerTranslations('de', counterpartDe);
     counterpart.registerTranslations('en', en);
     counterpart.registerTranslations('de', de);
-    // counterpart.registerTranslations('nn', nn);
 
     let locales: string[] = counterpart.getAvailableLocales(),
         list: {
@@ -75,7 +73,6 @@ export type ChangeLanguageAction = {
 export const changeLanguage = (code: string): Thunk => {
   return (dispatch: Dispatch): void => {
     code = (code === 'GB' ? 'EN' : code).toLowerCase();
-    code = code === 'no' ? 'nn' : code;
 
     let missing: boolean = !_.includes(counterpart.getAvailableLocales(), code);
     if (missing) {
