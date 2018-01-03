@@ -27,15 +27,15 @@ class Footer extends Component<Props> {
                   <ul>
                     <li>(+47) 55 58 36 48</li>
                     <li><a href="mailto:cessda@cessda.eu">cessda@cessda.eu</a></li>
-                    <li><a href="https://twitter.com/CESSDA_Data/"><FaTwitter/> CESSDA ERIC</a></li>
-                    <li><a href="https://twitter.com/Eleanor_RES/lists/cessda"><FaTwitter/> Organisations Feed</a></li>
+                    <li><a href="https://twitter.com/CESSDA_Data/" target="_blank"><FaTwitter/> CESSDA ERIC</a></li>
+                    <li><a href="https://twitter.com/Eleanor_RES/lists/cessda" target="_blank"><FaTwitter/> Organisations Feed</a></li>
                   </ul>
                 </div>
                 <div className="column is-3 is-offset-1">
                   <ul>
-                    <li><a href="https://www.cessda.eu/About">About</a></li>
-                    <li><a href="https://www.cessda.eu/Consortium">Consortium</a></li>
-                    <li><a href="https://www.cessda.eu/Research-Infrastructure/Training">Training</a></li>
+                    <li><a href="https://www.cessda.eu/About" target="_blank">About</a></li>
+                    <li><a href="https://www.cessda.eu/Consortium" target="_blank">Consortium</a></li>
+                    <li><a href="https://www.cessda.eu/Research-Infrastructure/Training" target="_blank">Training</a></li>
                   </ul>
                 </div>
               </div>
