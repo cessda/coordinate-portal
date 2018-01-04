@@ -204,6 +204,18 @@ body .sk-layout {
       background-color: $light_grey;
     }
 
+    .sk-panel__container {
+      & > .dropdown .dropdown-trigger button {
+        color: #ffffff;
+      }
+
+      &.sk-panel__collapsed {
+        & > .dropdown .dropdown-trigger button {
+          color: $dark_grey;
+        }
+      }
+    }
+
     .data-label {
       color: $dark_blue;
     }
