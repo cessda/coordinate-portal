@@ -27,7 +27,7 @@ module.exports = {
     languageOfDataFiles: {
       label: 'Language of data files',
       placeholder: 'Search languages',
-      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc. The metadata about the dataset may be in different language from the data files.'
+      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc.'
     },
     country: {
       label: 'Country',
