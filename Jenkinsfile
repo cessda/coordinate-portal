@@ -60,6 +60,13 @@ pipeline {
         }
       }
     }
+    stage('Check Requirements and Deployments') {
+       steps {
+         dir('./infrastructure/selenium/') {
+           sh("pytest pasc.py")
+         }
+       }
+     }
     stage('Clean Workspace') {
       steps {
         cleanWs()
