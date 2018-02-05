@@ -97,3 +97,13 @@ export function getSource(item: Object, data: Object): void {
 
   item.sourceIsCollection = _.includes(data._id, 'api_worldbank');
 }
+
+export function generateJsonLd(item: Object): Object {
+  return {
+    '@context': 'http://schema.org/',
+    '@type': 'Dataset',
+    'name': item.title,
+    'description': item.descriptionShort,
+    'url': item.sourceUrl
+  };
+}

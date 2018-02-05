@@ -23,6 +23,7 @@ import Select from 'react-select';
 
 type Props = {
   item?: Object,
+  jsonLd?: Object,
   code: string,
   missing: boolean,
   query: Object,
@@ -32,7 +33,7 @@ type Props = {
 
 class DetailPage extends Component<Props> {
   render(): Node {
-    const {item, code, missing, goBack, changeLanguage} = this.props;
+    const {item, jsonLd, code, missing, goBack, changeLanguage} = this.props;
 
     let languages = [];
     if (item) {
@@ -121,6 +122,9 @@ class DetailPage extends Component<Props> {
             </LayoutResults>
           </LayoutBody>
           <Footer/>
+          <script type="application/ld+json">
+            {JSON.stringify(jsonLd)}
+          </script>
         </Layout>
       </SearchkitProvider>
     );
@@ -130,6 +134,7 @@ class DetailPage extends Component<Props> {
 const mapStateToProps = (state: State): Object => {
   return {
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
+    jsonLd: state.search.jsonLd,
     code: state.language.code,
     missing: state.language.missing,
     query: state.routing.locationBeforeTransitions.query

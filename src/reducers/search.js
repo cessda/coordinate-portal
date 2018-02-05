@@ -1,6 +1,8 @@
 // @flow
 
-import {getDataInLanguage, getDescription, getLanguages, getSource} from '../utilities/metadata';
+import {
+  generateJsonLd, getDataInLanguage, getDescription, getLanguages, getSource
+} from '../utilities/metadata';
 import type {Action} from '../actions';
 import * as _ from 'lodash';
 
@@ -9,6 +11,7 @@ type State = {
   showAdvancedSearch: boolean,
   showFilterSummary: boolean,
   displayed: Object[],
+  jsonLd?: ?Object,
   similars?: {
     id: string,
     title: string
@@ -103,7 +106,8 @@ const search = (state: State = initialState, action: Action): State => {
       }
 
       return Object.assign({}, state, {
-        displayed: displayed
+        displayed: displayed,
+        jsonLd: displayed.length === 1 ? generateJsonLd(displayed[0]) : undefined
       });
 
     case 'UPDATE_QUERY':
