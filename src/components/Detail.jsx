@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import Panel from './Panel';
 import * as _ from 'lodash';
 import type {State} from '../types';
+import {OutboundLink} from 'react-ga';
 
 type Props = {
   bemBlocks: Object,
@@ -59,7 +60,11 @@ class Detail extends HitItem<Props> {
         <p>{creators}</p>
 
         <strong className="data-label">Study persistent identifier</strong>
-        <p>{item.identifier || 'Not available'}</p>
+        <OutboundLink eventLabel="Go to Collection/Study"
+                      to={item.sourceUrl}
+                      target="_blank">
+          {item.identifier}
+        </OutboundLink>
 
         <strong className="data-label">Abstract</strong>
         {description}
