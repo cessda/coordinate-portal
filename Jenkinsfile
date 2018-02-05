@@ -60,6 +60,13 @@ pipeline {
         }
       }
     }
+    stage('Selenium tests') {
+      steps {
+        dir('./infrastructure/selenium/') {
+          sh("pytest pasc.py")
+        }
+      }
+    }
     stage('Clean Workspace') {
       steps {
         cleanWs()
