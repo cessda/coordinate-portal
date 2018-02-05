@@ -42,7 +42,7 @@ let root: ?HTMLElement = document.getElementById('root');
 if (root instanceof HTMLElement) {
   ReactDOM.render(
     <Provider store={store}>
-      <Router history={history}>
+      <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage}/>
           <Route path="detail" component={DetailPage}/>
