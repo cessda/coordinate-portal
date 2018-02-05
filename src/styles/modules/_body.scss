@@ -224,13 +224,29 @@ body {
 
     .filter--anydateYear {
       & .sk-range-input__submit {
-          color: $cessda_gold;
+          color: #0075b5;
       }
 
       & .sk-range-input__input {
         flex: none;
         width: 70px;
-        color: $cessda_gold;
+        color: #0075b5;
+      }
+
+      .rc-slider-rail {
+        background-color: #ffffff;
+      }
+
+      .sk-range-slider .rc-slider-track {
+        background-color: #0075b5;
+      }
+
+      .sk-range-slider .rc-slider-handle {
+        border-color: #555652;
+      }
+
+      .sk-range-slider .rc-slider-mark-text {
+        color: #555652;
       }
     }
 
