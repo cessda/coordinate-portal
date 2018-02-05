@@ -94,7 +94,7 @@ class Detail extends HitItem<Props> {
           <p>{item.dataCollectionMethod || 'Not available'}</p>
 
           <strong className="data-label">Collection years</strong>
-          <p>{item.coverage || 'Not available'}</p>
+          <p>{item.collectionYears || 'Not available'}</p>
 
           <strong className="data-label">Language of data file(s)</strong>
           <p>{item.languageOfDataFiles || 'Not available'}</p>
