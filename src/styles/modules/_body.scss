@@ -477,20 +477,6 @@ body {
   }
 }
 
-.force-filters-visible {
-  .sk-select {
-    &.is-disabled {
-      display: block;
-    }
-  }
-
-  .sk-panel {
-    &.is-disabled {
-      display: block;
-    }
-  }
-}
-
 .no-language {
   background-color: #f5f5f5;
   padding: 3px 8px;

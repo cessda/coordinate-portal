@@ -2,10 +2,11 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {ActionBar, ActionBarRow, PageSizeSelector} from 'searchkit';
+import {ActionBar, ActionBarRow} from 'searchkit';
 import {connect} from 'react-redux';
 import Translate from 'react-translate-component';
 import SortingSelector from './SortingSelector';
+import PageSizeSelector from './PageSizeSelector';
 import type {State} from '../types';
 
 type Props = {

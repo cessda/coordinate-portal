@@ -57,8 +57,7 @@ class SearchPage extends Component<Props> {
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
           <Header/>
-          <LayoutBody className={'columns' +
-                                 (!filters.q || results === 0 ? ' force-filters-visible' : '')}>
+          <LayoutBody className="columns">
             <SideBar className="column is-4">
               <Panel title={counterpart.translate('filters.topic.label')}
                      tooltip={counterpart.translate('filters.topic.tooltip')}
