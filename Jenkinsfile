@@ -4,7 +4,7 @@ pipeline {
     client = "cessda"
     project = "pasc"
     module = "searchkit"
-    environment = "${env.BRANCH_NAME}"
+    environment = "$BRANCH_NAME"
     docker_registry = "eu.gcr.io"
     build = "build-${env.BUILD_NUMBER}"
   }
