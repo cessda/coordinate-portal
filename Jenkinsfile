@@ -39,7 +39,7 @@ pipeline {
     }
     stage('Build Docker image') {
       steps {
-        sh("docker build -t ${image_tag} .")
+        sh("docker build -t ${docker_registry}/${platform}/${project}-${module}:${build} .")
       }
     }
     stage('Push Docker image') {
