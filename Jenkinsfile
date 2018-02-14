@@ -1,22 +1,17 @@
 pipeline {
   environment {
-    project_name = "cessda-development"
-    app_name = "pasc-searchkit"
-    feSvc_name = "${app_name}-service"
-    namespace = "cessda-pasc"
-    image_tag = "eu.gcr.io/${project_name}/${app_name}:v${env.BUILD_NUMBER}"
+    platform = "cessda-development"
+    client = "cessda"
+    project = "pasc"
+    module = "searchkit"
+    environment = "${env.BRANCH_NAME}"
+    docker_registry = "eu.gcr.io"
+    build = "build-${env.BUILD_NUMBER}"
   }
 
   agent any
 
   stages {
-    stage('Prepare Application for registration with ElasticSearch Instance') {
-      steps {
-        dir('./infrastructure/gcp/') {
-          sh("bash pasc-searchkit-registration.sh")
-        }
-      }
-    }
     stage('Build Project and start Sonar scan') {
 		  steps {
         withSonarQubeEnv('cessda-sonar') {
@@ -49,11 +44,11 @@ pipeline {
     }
     stage('Push Docker image') {
       steps {
-        sh("gcloud docker -- push ${image_tag}")
-        sh("gcloud container images add-tag ${image_tag} eu.gcr.io/${project_name}/${app_name}:latest")
+        sh("gcloud docker -- push ${docker_registry}/${platform}/${app_name}:${build}")
+        sh("gcloud container images add-tag ${docker_registry}/${platform}/${app_name}:${build} ${docker_registry}/${platform}/${app_name}:${environment}")
       }
     }
-   stage('Check Requirements and Deployments') {
+    stage('Check Requirements and Deployments') {
       steps {
         dir('./infrastructure/gcp/') {
           sh("bash pasc-searchkit-creation.sh")
@@ -65,11 +60,6 @@ pipeline {
         dir('./infrastructure/selenium/') {
           sh("pytest pasc.py")
         }
-      }
-    }
-    stage('Clean Workspace') {
-      steps {
-        cleanWs()
       }
     }
   }

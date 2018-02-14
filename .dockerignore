@@ -7,4 +7,11 @@ infrastructure
 
 # Remove Dockerfile/Jenkinsfile
 Dockerfile
+.dockerignor
 Jenkinsfile
+
+# Git
+.git*
+
+# README
+README.md
