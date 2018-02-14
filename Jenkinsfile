@@ -44,8 +44,8 @@ pipeline {
     }
     stage('Push Docker image') {
       steps {
-        sh("gcloud docker -- push ${docker_registry}/${platform}/${app_name}:${build}")
-        sh("gcloud container images add-tag ${docker_registry}/${platform}/${app_name}:${build} ${docker_registry}/${platform}/${app_name}:${environment}")
+        sh("gcloud docker -- push ${docker_registry}/${platform}/${project}-${module}:${build}")
+        sh("gcloud container images add-tag ${docker_registry}/${platform}/${project}-${module}:${build} ${docker_registry}/${platform}/${project}-${module}:${environment}")
       }
     }
     stage('Check Requirements and Deployments') {
