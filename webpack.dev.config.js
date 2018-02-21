@@ -6,6 +6,7 @@ module.exports = {
   context: path.join(__dirname),
   entry: [
     'babel-polyfill',
+    'event-source-polyfill',
     'webpack-hot-middleware/client?reload=true',
     './src/index.jsx'],
   output: {

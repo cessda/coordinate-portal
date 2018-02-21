@@ -12,6 +12,7 @@ import {routerMiddleware, syncHistoryWithStore} from 'react-router-redux';
 import reducers from './reducers';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import {detect} from 'detect-browser';
 import * as ReactGA from 'react-ga';
 import './styles/design.scss';
 import type {Store} from './types';
@@ -40,6 +41,9 @@ history.listen((location: Object): void => {
 let root: ?HTMLElement = document.getElementById('root');
 
 if (root instanceof HTMLElement) {
+  if (document.documentElement instanceof HTMLElement && detect().name === 'ie') {
+    document.documentElement.classList.add('legacy-browser');
+  }
   ReactDOM.render(
     <Provider store={store}>
       <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
