@@ -8,6 +8,7 @@ import Panel from './Panel';
 import * as _ from 'lodash';
 import type {State} from '../types';
 import {OutboundLink} from 'react-ga';
+import * as counterpart from 'react-translate-component';
 
 type Props = {
   bemBlocks: Object,
@@ -70,7 +71,7 @@ class Detail extends HitItem<Props> {
         {description}
 
         <Panel className="section-header"
-               title="Methodology"
+               title={counterpart.translate('metadata.methodology')}
                collapsable={true}
                defaultCollapsed={true}>
 
@@ -102,7 +103,7 @@ class Detail extends HitItem<Props> {
         </Panel>
 
         <Panel className="section-header"
-               title="Access"
+               title={counterpart.translate('metadata.access')}
                collapsable={true}
                defaultCollapsed={true}>
 
@@ -124,7 +125,7 @@ class Detail extends HitItem<Props> {
         </Panel>
 
         <Panel className="section-header"
-               title="Topics"
+               title={counterpart.translate('metadata.topics')}
                collapsable={true}
                defaultCollapsed={true}>
 
@@ -134,7 +135,7 @@ class Detail extends HitItem<Props> {
         </Panel>
 
         <Panel className="section-header"
-               title="Keywords"
+               title={counterpart.translate('metadata.keywords')}
                collapsable={true}
                defaultCollapsed={true}>
 

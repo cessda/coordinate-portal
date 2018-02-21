@@ -19,6 +19,7 @@ import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
 import {changeLanguage} from '../actions/language';
+import * as counterpart from 'react-translate-component';
 import Select from 'react-select';
 
 type Props = {
@@ -59,10 +60,10 @@ class DetailPage extends Component<Props> {
                  {/*<span className="fs-14">A user interface translation is not available in your selected language. Displaying text in <strong>English</strong>.</span>*/}
                {/*</Panel>*/}
               {/*}*/}
-              <Panel title="Languages"
+              <Panel title={counterpart.translate('language.label')}
                      collapsable={true}
                      defaultCollapsed={false}>
-                <div className="fs-14 mb-10">This data is available in the following languages.</div>
+                <div className="fs-14 mb-10"><Translate content="language.availability"/></div>
                 {/*<Select options={languages} value={code}/>*/}
 
                 <div className="field">
@@ -77,7 +78,7 @@ class DetailPage extends Component<Props> {
                 </div>
 
               </Panel>
-              <Panel title="Similar results"
+              <Panel title={counterpart.translate('similarResults')}
                      collapsable={true}
                      defaultCollapsed={false}>
                 {item &&
@@ -89,7 +90,9 @@ class DetailPage extends Component<Props> {
               {item &&
                <div className="panel">
                  <a className="button is-small is-white is-pulled-left"
-                    onClick={goBack}><FaAngleLeft/><span className="ml-5">Back</span></a>
+                    onClick={goBack}>
+                   <FaAngleLeft/><span className="ml-5"><Translate content="back"/></span>
+                 </a>
 
                  <OutboundLink className="button is-small is-white is-pulled-right"
                                eventLabel="Go to Collection/Study"

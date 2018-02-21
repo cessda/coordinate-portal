@@ -129,7 +129,7 @@ class Result extends Component<Props> {
                     <span className="icon is-small">
                       <FaLanguage/>
                     </span>
-                    <span>Language:</span>
+                    <span><Translate content="language.label"/>:</span>
                   </span>
                    {languages}
                  </div>
