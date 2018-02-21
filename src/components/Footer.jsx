@@ -4,7 +4,6 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {FaTwitter} from 'react-icons/lib/fa/index';
-import {Link} from 'react-router';
 
 type Props = {};
 
@@ -37,7 +36,7 @@ class Footer extends Component<Props> {
                     <li><a href="https://www.cessda.eu/About" target="_blank">About</a></li>
                     <li><a href="https://www.cessda.eu/Consortium" target="_blank">Consortium</a></li>
                     <li><a href="https://www.cessda.eu/Research-Infrastructure/Training" target="_blank">Training</a></li>
-                    <li><Link to="terms">Terms of use</Link></li>
+                    <li><a href="https://www.cessda.eu/Privacy-policy" target="_blank">Privacy Policy</a></li>
                   </ul>
                 </div>
               </div>

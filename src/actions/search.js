@@ -38,7 +38,6 @@ export const initSearchkit = (): Thunk => {
 
       // Redirect from 'detail' page to 'search results' page if users change search query text.
       if (state.routing.locationBeforeTransitions.pathname !== '/' &&
-          state.routing.locationBeforeTransitions.pathname !== 'terms' &&
           state.search.query.size === 1) {
         dispatch(push('/'));
       }

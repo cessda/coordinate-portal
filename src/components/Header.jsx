@@ -16,7 +16,6 @@ import {
 } from '../actions/search';
 import {push} from 'react-router-redux';
 import Translate from 'react-translate-component';
-import * as _ from "lodash";
 
 type Props = {
   pathname: string,
@@ -68,49 +67,47 @@ class Header extends Component<Props> {
                 <span className="cessda-pasc">Products and Services Catalogue</span>
               </div>
             </div>
-            {!(_.trim(pathname, '/') === 'terms') &&
-              <div className="column">
-                <SearchBox
-                  autofocus={true}
-                  searchOnChange={true}
-                  prefixQueryFields={['_all']}
-                  prefixQueryOptions={{type: 'cross_fields'}}
-                  queryBuilder={queryBuilder}/>
+            <div className="column">
+              <SearchBox
+                autofocus={true}
+                searchOnChange={true}
+                prefixQueryFields={['_all']}
+                prefixQueryOptions={{type: 'cross_fields'}}
+                queryBuilder={queryBuilder}/>
 
-                {pathname === '/' &&
-                 <div className="reset-search">
-                   <HitsStats className="hits-count"/>
+              {pathname === '/' &&
+               <div className="reset-search">
+                 <HitsStats className="hits-count"/>
 
-                   <a className="sk-reset-filters link mobile-filters-toggle"
-                      onClick={toggleMobileFilters}>
-                     {showMobileFilters && <Translate content="hideFilters"/>}
-                     {!showMobileFilters && <Translate content="showFilters"/>}
-                   </a>
+                 <a className="sk-reset-filters link mobile-filters-toggle"
+                    onClick={toggleMobileFilters}>
+                   {showMobileFilters && <Translate content="hideFilters"/>}
+                   {!showMobileFilters && <Translate content="showFilters"/>}
+                 </a>
 
-                   <a className="sk-reset-filters link" onClick={toggleAdvancedSearch}>
-                     <Translate content="advancedSearch"/>
-                   </a>
+                 <a className="sk-reset-filters link" onClick={toggleAdvancedSearch}>
+                   <Translate content="advancedSearch"/>
+                 </a>
 
-                   {filters &&
-                    <a className="sk-reset-filters link" onClick={toggleSummary}>
-                      <Translate content="filterSummary"/>
-                    </a>
-                   }
+                 {filters &&
+                  <a className="sk-reset-filters link" onClick={toggleSummary}>
+                    <Translate content="filterSummary"/>
+                  </a>
+                 }
 
-                   <ResetFilters component={Reset}
-                                 options={{query: false, filter: true, pagination: true}}
-                                 translations={{
-                                   'reset.clear_all': counterpart.translate('reset.filters')
-                                 }}/>
-                   <ResetFilters component={Reset}
-                                 options={{query: true, filter: false, pagination: true}}
-                                 translations={{
-                                   'reset.clear_all': counterpart.translate('reset.query')
-                                 }}/>
-                 </div>
-                }
-              </div>
-            }
+                 <ResetFilters component={Reset}
+                               options={{query: false, filter: true, pagination: true}}
+                               translations={{
+                                 'reset.clear_all': counterpart.translate('reset.filters')
+                               }}/>
+                 <ResetFilters component={Reset}
+                               options={{query: true, filter: false, pagination: true}}
+                               translations={{
+                                 'reset.clear_all': counterpart.translate('reset.query')
+                               }}/>
+               </div>
+              }
+            </div>
           </div>
         </div>
 

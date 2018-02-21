@@ -6,7 +6,6 @@ import {applyMiddleware, createStore} from 'redux';
 import {Provider} from 'react-redux';
 import SearchPage from './containers/SearchPage';
 import DetailPage from './containers/DetailPage';
-import TermsPage from './containers/TermsPage';
 import App from './containers/App';
 import {browserHistory, IndexRoute, Redirect, Route, Router} from 'react-router';
 import {routerMiddleware, syncHistoryWithStore} from 'react-router-redux';
@@ -47,7 +46,6 @@ if (root instanceof HTMLElement) {
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage}/>
           <Route path="detail" component={DetailPage}/>
-          <Route path="terms" component={TermsPage}/>
           <Redirect from='*' to='/'/>
         </Route>
       </Router>
