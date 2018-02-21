@@ -112,8 +112,8 @@ class Detail extends HitItem<Props> {
           <strong className="data-label">Year of publication</strong>
           <p>{item.date || 'Not available'}</p>
 
-          <strong className="data-label">Availability</strong>
-          <p>{item.rights || 'Not available'}</p>
+          {/*<strong className="data-label">Availability</strong>*/}
+          {/*<p>{item.rights || 'Not available'}</p>*/}
 
           <strong className="data-label">Terms of data access</strong>
           <p>{item.rights || 'Not available'}</p>

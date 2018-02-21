@@ -72,21 +72,21 @@ class Result extends Component<Props> {
             pathname: 'detail',
             search: '?q="' + item.id + '"'
           }}>{item.title}</Link>
-          <div className="tags has-addons ml-a availability">
-            <Translate className="tag"
-                       component="span"
-                       content="filters.availability.label"/>
-            {item.restricted &&
-             <span className="tag is-danger">
-               <FaLock/><span className="ml-5">Restricted</span>
-             </span>
-            }
-            {!item.restricted &&
-             <span className="tag is-success">
-               <FaUnlock/><span className="ml-5">Open</span>
-             </span>
-            }
-          </div>
+          {/*<div className="tags has-addons ml-a availability">*/}
+            {/*<Translate className="tag"*/}
+                       {/*component="span"*/}
+                       {/*content="filters.availability.label"/>*/}
+            {/*{item.restricted &&*/}
+             {/*<span className="tag is-danger">*/}
+               {/*<FaLock/><span className="ml-5">Restricted</span>*/}
+             {/*</span>*/}
+            {/*}*/}
+            {/*{!item.restricted &&*/}
+             {/*<span className="tag is-success">*/}
+               {/*<FaUnlock/><span className="ml-5">Open</span>*/}
+             {/*</span>*/}
+            {/*}*/}
+          {/*</div>*/}
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
           {creators}
