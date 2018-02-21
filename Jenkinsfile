@@ -52,6 +52,7 @@ pipeline {
       steps {
         dir('./infrastructure/gcp/') {
           sh("bash pasc-searchkit-creation.sh")
+          sleep 10
         }
       }
     }
