@@ -2,9 +2,7 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {
-  Hits, Layout, LayoutBody, LayoutResults, NoHits, SearchkitProvider, SideBar
-} from 'searchkit';
+import {Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar} from 'searchkit';
 import Header from '../components/Header';
 import Detail from '../components/Detail';
 import Footer from '../components/Footer.jsx';
@@ -13,14 +11,13 @@ import Panel from '../components/Panel';
 import {connect} from 'react-redux';
 import {FaAngleLeft, FaCode, FaExternalLink, FaLanguage} from 'react-icons/lib/fa/index';
 import {bindActionCreators} from 'redux';
-import Translate from 'react-translate-component';
+import Translate, * as counterpart from 'react-translate-component';
 import Similars from '../components/Similars';
+import NoHits from '../components/NoHits';
 import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
 import {changeLanguage} from '../actions/language';
-import * as counterpart from 'react-translate-component';
-import Select from 'react-select';
 
 type Props = {
   item?: Object,

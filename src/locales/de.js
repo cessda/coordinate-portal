@@ -10,6 +10,12 @@ module.exports = {
     notAvailable: 'In der ausgewählten Sprache nicht verfügbar'
   },
   search: 'Finde soziale und ökonomische Forschungsdaten',
+  noHits: {
+    noResultsFound: 'Keine Ergebnisse gefunden für %(query)s.',
+    searchWithoutFilters: 'Suche nach %(query)s ohne Filter',
+    error: 'Beim Abrufen Ihrer Ergebnisse ist ein Fehler aufgetreten. Bitte versuche es erneut.',
+    resetSearch: 'Suche zurücksetzen'
+  },
   filters: {
     topic: {
       label: 'Thema',

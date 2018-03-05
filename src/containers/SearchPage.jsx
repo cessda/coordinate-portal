@@ -8,8 +8,8 @@ import Footer from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
-  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination,
-  RangeSliderInput, SearchkitProvider, SideBar
+  Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
+  SearchkitProvider, SideBar
 } from 'searchkit';
 import moment from 'moment';
 import * as counterpart from 'react-translate-component';
@@ -19,6 +19,7 @@ import {connect} from 'react-redux';
 import Panel from '../components/Panel';
 import RangeFilter from '../components/RangeFilter';
 import RefinementListFilter from '../components/RefinementListFilter';
+import NoHits from '../components/NoHits';
 import searchkit, {highlight} from '../utilities/searchkit';
 import * as _ from 'lodash';
 import * as $ from 'jquery';

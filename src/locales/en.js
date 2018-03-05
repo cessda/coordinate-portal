@@ -10,6 +10,12 @@ module.exports = {
     notAvailable: 'Not available in selected language'
   },
   search: 'Find Social and Economic Research Data',
+  noHits: {
+    noResultsFound: 'No results found for %(query)s.',
+    searchWithoutFilters: 'Search for %(query)s without filters',
+    error: 'We\'re sorry, an issue occurred when fetching your results. Please try again.',
+    resetSearch: 'Reset Search'
+  },
   filters: {
     topic: {
       label: 'Topic',

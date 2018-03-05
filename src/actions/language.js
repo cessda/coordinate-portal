@@ -50,7 +50,15 @@ export const initTranslations = (): Thunk => {
           'hitstats.results_found': counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
             time: searchkit.getTime()
-          })
+          }),
+          'NoHits.NoResultsFound': counterpart.translate('noHits.noResultsFound', {
+            query: searchkit.getQueryAccessor().state.value
+          }),
+          'NoHits.SearchWithoutFilters': counterpart.translate('noHits.searchWithoutFilters', {
+            query: searchkit.getQueryAccessor().state.value
+          }),
+          'NoHits.Error': counterpart.translate('noHits.error'),
+          'NoHits.ResetSearch': counterpart.translate('noHits.resetSearch')
         };
       return translations[key];
     };
