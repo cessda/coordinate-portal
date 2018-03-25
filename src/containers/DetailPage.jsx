@@ -9,7 +9,7 @@ import Footer from '../components/Footer.jsx';
 import searchkit from '../utilities/searchkit';
 import Panel from '../components/Panel';
 import {connect} from 'react-redux';
-import {FaAngleLeft, FaCode, FaExternalLink, FaLanguage} from 'react-icons/lib/fa/index';
+import {FaAngleLeft, FaCode, FaExternalLink} from 'react-icons/lib/fa/index';
 import {bindActionCreators} from 'redux';
 import Translate, * as counterpart from 'react-translate-component';
 import Similars from '../components/Similars';
@@ -17,32 +17,27 @@ import NoHits from '../components/NoHits';
 import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
-import {changeLanguage} from '../actions/language';
+import * as _ from 'lodash';
 
 type Props = {
   item?: Object,
   jsonLd?: Object,
   code: string,
-  missing: boolean,
+  list: {
+    code: string,
+    label: string,
+    index: string
+  }[],
   query: Object,
-  goBack: () => void,
-  changeLanguage: (code: string) => void
+  goBack: () => void
 };
 
 class DetailPage extends Component<Props> {
   render(): Node {
-    const {item, jsonLd, code, missing, goBack, changeLanguage} = this.props;
+    const {item, jsonLd, code, list, goBack} = this.props;
 
-    let languages = [];
-    if (item) {
-      for (let i: number = 0; i < item.languages.length; i++) {
-        // languages.push({
-        //   label: item.languages[i],
-        //   value: item.languages[i].toLowerCase()
-        // });
-        languages.push(<option key={i}>{item.languages[i]}</option>);
-      }
-    }
+    // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
+    let index: string = (_.find(list, {'code': code}) || {}).index;
 
     return (
       <SearchkitProvider searchkit={searchkit}>
@@ -50,31 +45,6 @@ class DetailPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
-              {/*{missing &&*/}
-               {/*<Panel title="Language"*/}
-                      {/*collapsable={true}*/}
-                      {/*defaultCollapsed={false}>*/}
-                 {/*<span className="fs-14">A user interface translation is not available in your selected language. Displaying text in <strong>English</strong>.</span>*/}
-               {/*</Panel>*/}
-              {/*}*/}
-              <Panel title={counterpart.translate('language.label')}
-                     collapsable={true}
-                     defaultCollapsed={false}>
-                <div className="fs-14 mb-10"><Translate content="language.availability"/></div>
-                {/*<Select options={languages} value={code}/>*/}
-
-                <div className="field">
-                  <div className="control is-expanded has-icons-left">
-                    <div className="select is-small is-fullwidth">
-                      <select>{languages}</select>
-                    </div>
-                    <div className="icon is-small is-left">
-                      <FaLanguage/>
-                    </div>
-                  </div>
-                </div>
-
-              </Panel>
               <Panel title={counterpart.translate('similarResults')}
                      collapsable={true}
                      defaultCollapsed={false}>
@@ -91,22 +61,19 @@ class DetailPage extends Component<Props> {
                    <FaAngleLeft/><span className="ml-5"><Translate content="back"/></span>
                  </a>
 
-                 <OutboundLink className="button is-small is-white is-pulled-right"
-                               eventLabel="Go to Collection/Study"
-                               to={item.sourceUrl}
-                               target="_blank">
-                   <span className="icon is-small"><FaExternalLink/></span>
-                   {item.sourceIsCollection &&
-                    <Translate component="span" content="goToCollection"/>
-                   }
-                   {!item.sourceIsCollection &&
+                 {item.studyUrl &&
+                  <OutboundLink className="button is-small is-white is-pulled-right"
+                                eventLabel="Go to study"
+                                to={item.studyUrl}
+                                target="_blank">
+                    <span className="icon is-small"><FaExternalLink/></span>
                     <Translate component="span" content="goToStudy"/>
-                   }
-                 </OutboundLink>
+                  </OutboundLink>
+                 }
 
                  <OutboundLink className="button is-small is-white is-pulled-right mr-15"
                                eventLabel="View JSON"
-                               to={'/api/json/' + item.id}
+                               to={'/api/json/' + index + '/' + item.id}
                                target="_blank">
                   <span className="icon is-small">
                     <FaCode/>
@@ -121,10 +88,10 @@ class DetailPage extends Component<Props> {
               <NoHits/>
             </LayoutResults>
           </LayoutBody>
-          <Footer/>
           <script type="application/ld+json">
             {JSON.stringify(jsonLd)}
           </script>
+          <Footer/>
         </Layout>
       </SearchkitProvider>
     );
@@ -136,15 +103,14 @@ const mapStateToProps = (state: State): Object => {
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
     jsonLd: state.search.jsonLd,
     code: state.language.code,
-    missing: state.language.missing,
+    list: state.language.list,
     query: state.routing.locationBeforeTransitions.query
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    goBack: bindActionCreators(goBack, dispatch),
-    changeLanguage: bindActionCreators(changeLanguage, dispatch)
+    goBack: bindActionCreators(goBack, dispatch)
   };
 };
 
