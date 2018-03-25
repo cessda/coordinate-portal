@@ -8,7 +8,7 @@ import {
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {toggleLongDescription} from '../actions/search';
+import {toggleLongAbstract} from '../actions/search';
 import {Link} from 'react-router';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
@@ -21,12 +21,12 @@ type Props = {
   item: any,
   push: any,
   changeLanguage: any,
-  toggleLongDescription: any
+  toggleLongAbstract: any
 };
 
 class Result extends Component<Props> {
   render(): Node {
-    const {bemBlocks, index, item, push, changeLanguage, toggleLongDescription} = this.props;
+    const {bemBlocks, index, item, push, changeLanguage, toggleLongAbstract} = this.props;
 
     if (item === undefined) {
       return null;
@@ -46,22 +46,13 @@ class Result extends Component<Props> {
     }
 
     let creators: Node[] = [];
-    for (let i: number = 0; i < item.creator.length; i++) {
+    for (let i: number = 0; i < item.creators.length; i++) {
       creators.push(<span key={i}>
-        {item.creator[i]}{i < item.creator.length - 1 ? '; ' : ''}
+        {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
         </span>);
-      if (i === 2) {
-        creators.push(<span key={3}>({item.creator.length - 3} more)</span>);
+      if (i === 2 && item.creators.length > 3) {
+        creators.push(<span key={3}>({item.creators.length - 3} more)</span>);
         break;
-      }
-    }
-
-    let description: Node[] = [],
-      length: number = 0;
-    if (item.description) {
-      for (let i: number = 0; i < item.description.length; i++) {
-        description.push(<p key={i}>{item.description[i]}</p>);
-        length += item.description[i].length;
       }
     }
 
@@ -71,45 +62,36 @@ class Result extends Component<Props> {
           <Link to={{
             pathname: 'detail',
             search: '?q="' + item.id + '"'
-          }}>{item.title}</Link>
-          <div className="tags has-addons ml-a availability">
-            <Translate className="tag"
-                       component="span"
-                       content="filters.availability.label"/>
-            {item.restricted &&
-             <span className="tag is-danger">
-               <FaLock/><span className="ml-5">Restricted</span>
-             </span>
-            }
-            {!item.restricted &&
-             <span className="tag is-success">
-               <FaUnlock/><span className="ml-5">Open</span>
-             </span>
-            }
-          </div>
+          }}>{item.titleStudy}</Link>
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
           {creators}
         </div>
         <div className={bemBlocks.item().mix(bemBlocks.container('desc'))}>
-          {item.descriptionExpanded && description}
-          {!item.descriptionExpanded && item.descriptionShort}
+          {item.abstractExpanded &&
+           item.abstract.split('\n').map(function(item, key) {
+             return (
+               <span key={key}>{item}<br/></span>
+             )
+           })
+          }
+          {!item.abstractExpanded && item.abstractShort}
         </div>
         <span className="level mt-10 result-actions">
           <span className="level-left is-hidden-touch">
             <div className="field is-grouped">
               <div className="control">
-                {length > 500 &&
+                {item.abstract.length > 500 &&
                  <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
-                   toggleLongDescription(item.title, index);
+                   toggleLongAbstract(item.titleStudy, index);
                  }}>
-                   {item.descriptionExpanded &&
+                   {item.abstractExpanded &&
                     <span>
                       <span className="icon is-small"><FaAngleUp/></span>
                       <Translate component="span" content="readLess"/>
                     </span>
                    }
-                   {!item.descriptionExpanded &&
+                   {!item.abstractExpanded &&
                     <span>
                       <span className="icon is-small"><FaAngleDown/></span>
                       <Translate component="span" content="readMore"/>
@@ -129,25 +111,22 @@ class Result extends Component<Props> {
                     <span className="icon is-small">
                       <FaLanguage/>
                     </span>
-                    <span>Language:</span>
+                    <span><Translate content="language.label"/>:</span>
                   </span>
                    {languages}
                  </div>
                </div>
               }
               <div className="control">
-                <OutboundLink className="button is-small is-white"
-                              eventLabel="Go to Collection/Study"
-                              to={item.sourceUrl}
-                              target="_blank">
-                  <span className="icon is-small"><FaExternalLink/></span>
-                  {item.sourceIsCollection &&
-                   <Translate component="span" content="goToCollection"/>
-                  }
-                  {!item.sourceIsCollection &&
+                {item.studyUrl &&
+                 <OutboundLink className="button is-small is-white"
+                               eventLabel="Go to study"
+                               to={item.studyUrl}
+                               target="_blank">
+                   <span className="icon is-small"><FaExternalLink/></span>
                    <Translate component="span" content="goToStudy"/>
-                  }
-                </OutboundLink>
+                 </OutboundLink>
+                }
               </div>
             </div>
           </span>
@@ -167,7 +146,7 @@ const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     push: bindActionCreators(push, dispatch),
     changeLanguage: bindActionCreators(changeLanguage, dispatch),
-    toggleLongDescription: bindActionCreators(toggleLongDescription, dispatch)
+    toggleLongAbstract: bindActionCreators(toggleLongAbstract, dispatch)
   };
 };
 

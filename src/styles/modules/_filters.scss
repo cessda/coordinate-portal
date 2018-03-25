@@ -1,0 +1,19 @@
+.sk-layout__filters {
+  .sk-select {
+    &.is-disabled {
+      display: block;
+    }
+  }
+
+  .sk-panel {
+    &.is-disabled {
+      display: block;
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      * {
+        pointer-events: none;
+      }
+    }
+  }
+}

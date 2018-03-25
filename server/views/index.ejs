@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>CESSDA ERIC Product and Services Catalogue</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CESSDA ERIC Data Catalogue</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <noscript>
+    <style>
+      noscript {
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        max-width: 400px;
+        margin-left: -200px;
+        text-align: center;
+        font-family: sans-serif;
+        font-size: 14px;
+        border-radius: 3px;
+        background-color: #e7e4e2;
+      }
+      p {
+        margin: 0;
+        padding: 15px;
+      }
+      p:last-child {
+        padding-top: 0;
+      }
+    </style>
+  </noscript>
 </head>
 <body>
-	<div id='root'></div>
-  <%if (process.env.NODE_ENV !== 'production') { %>
+  <noscript>
+    <p><strong>This application requires JavaScript to be enabled.</strong></p>
+    <p>To enable JavaScript in your browser please follow the instructions
+      <a href="http://www.enable-javascript.com/" target="_blank">available here</a>.</p>
+  </noscript>
+  <div class="legacy-browser-notice" style="display: none;">
+    You are currently using a legacy web browser which may affect performance.
+    For the best experience we recommend upgrading to a
+    <a href="https://whatbrowser.org/" target="_blank">modern browser</a>.
+  </div>
+  <div id='root'></div>
+  <% if (process.env.NODE_ENV !== 'production') { %>
     <script src="/static/bundle.js"></script>
   <% } %>
 </body>

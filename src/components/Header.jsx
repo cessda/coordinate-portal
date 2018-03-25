@@ -64,15 +64,13 @@ class Header extends Component<Props> {
                   push('/');
                   resetSearch();
                 }}/>
-                <span className="cessda-pasc">Products and Services Catalogue</span>
+                <span className="cessda-pasc"><Translate content="application"/></span>
               </div>
             </div>
             <div className="column">
               <SearchBox
                 autofocus={true}
                 searchOnChange={true}
-                prefixQueryFields={['_all']}
-                prefixQueryOptions={{type: 'cross_fields'}}
                 queryBuilder={queryBuilder}/>
 
               {pathname === '/' &&
@@ -86,12 +84,12 @@ class Header extends Component<Props> {
                  </a>
 
                  <a className="sk-reset-filters link" onClick={toggleAdvancedSearch}>
-                   <Translate content="advancedSearch"/>
+                   <Translate content="advancedSearch.label"/>
                  </a>
 
                  {filters &&
                   <a className="sk-reset-filters link" onClick={toggleSummary}>
-                    <Translate content="filterSummary"/>
+                    <Translate content="filters.summary.label"/>
                   </a>
                  }
 
@@ -115,26 +113,26 @@ class Header extends Component<Props> {
           <div className="modal-background"/>
           <div className="modal-card">
             <div className="modal-card-head">
-              <p className="modal-card-title">Filter summary</p>
+              <p className="modal-card-title"><Translate content="filters.summary.label"/></p>
               <button className="delete" aria-label="close" onClick={toggleSummary}/>
             </div>
             <section className="modal-card-body">
               {filters &&
                <div>
-                 <p className="pb-10">The following filters have been applied to your search.</p>
+                 <p className="pb-10"><Translate content="filters.summary.introduction"/></p>
                  <GroupedSelectedFilters/>
-                 <p>Select a filter to remove it from this search.</p>
+                 <p><Translate content="filters.summary.remove"/></p>
                </div>
               }
               {!filters &&
                <div>
-               <p className="pb-10">No additional filters have been applied to your search.</p>
-               <p>Select <strong>Close</strong> to dismiss this window.</p>
+               <p className="pb-10"><Translate content="filters.summary.noFilters"/></p>
+               <p><Translate content="filters.summary.close" unsafe/></p>
                </div>
               }
             </section>
             <div className="modal-card-foot">
-              <button className="button is-light" onClick={toggleSummary}>Close</button>
+              <button className="button is-light" onClick={toggleSummary}><Translate content="close"/></button>
             </div>
           </div>
         </div>
@@ -143,26 +141,26 @@ class Header extends Component<Props> {
           <div className="modal-background"/>
           <div className="modal-card">
             <div className="modal-card-head">
-              <p className="modal-card-title">Advanced search</p>
+              <p className="modal-card-title"><Translate content="advancedSearch.label"/></p>
               <button className="delete" aria-label="close" onClick={toggleAdvancedSearch}/>
             </div>
             <section className="modal-card-body">
-              <p className="pb-10">The following special characters can be used to perform advanced search queries:</p>
-              <p><span className="tag is-light has-text-weight-semibold">+</span> signifies <strong>AND</strong> operation.</p>
-              <p><span className="tag is-light has-text-weight-semibold">|</span> signifies <strong>OR</strong> operation.</p>
-              <p><span className="tag is-light has-text-weight-semibold">-</span> <strong>negates</strong> a single token.</p>
-              <p><span className="tag is-light has-text-weight-semibold">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.</p>
-              <p><span className="tag is-light has-text-weight-semibold">*</span> at the end of a term signifies a <strong>prefix</strong> query.</p>
-              <p><span className="tag is-light has-text-weight-semibold">(</span> and <span className="tag is-light has-text-weight-semibold">)</span> signify <strong>precedence</strong>.</p>
-              <p><span className="tag is-light has-text-weight-semibold">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).</p>
-              <p><span className="tag is-light has-text-weight-semibold">~N</span> after a phrase signifies <strong>slop</strong> amount.</p>
-              <p className="pt-15"><strong>Escaping</strong></p>
-              <p>The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span className="tag is-light has-text-weight-semibold">\</span>.</p>
-              <p className="pt-15"><strong>Default operator</strong></p>
-              <p>The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em className="has-text-weight-semibold">Social Science</em>, this will be interpreted as <em className="has-text-weight-semibold">Social</em> <strong>OR</strong> <em className="has-text-weight-semibold">Science</em>.</p>
+              <p className="pb-10"><Translate content="advancedSearch.introduction"/></p>
+              <p><Translate content="advancedSearch.and" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.or" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.negates" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.phrase" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.prefix" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.precedence" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.distance" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.slop" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p className="pt-15"><strong><Translate content="advancedSearch.escaping.heading" unsafe/></strong></p>
+              <p><Translate content="advancedSearch.escaping.content" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
+              <p className="pt-15"><strong><Translate content="advancedSearch.defaultOperator.heading" unsafe/></strong></p>
+              <p><Translate content="advancedSearch.defaultOperator.content" with={{ className: "has-text-weight-semibold" }} unsafe/></p>
             </section>
             <div className="modal-card-foot">
-              <button className="button is-light" onClick={toggleAdvancedSearch}>Close</button>
+              <button className="button is-light" onClick={toggleAdvancedSearch}><Translate content="close"/></button>
             </div>
           </div>
         </div>

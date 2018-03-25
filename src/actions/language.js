@@ -1,44 +1,34 @@
 // @flow
 
 import counterpart from 'counterpart';
-import counterpartDe from 'counterpart/locales/de';
-import en from '../locales/en';
-import de from '../locales/de';
 import searchkit from '../utilities/searchkit';
 import type {Dispatch, GetState, Thunk} from '../types';
 import * as ReactGA from 'react-ga';
 import * as _ from 'lodash';
+import {getLanguages} from '../utilities/language';
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 
 export type InitTranslationsAction = {
   type: 'INIT_TRANSLATIONS',
   list: {
-    id: string,
-    label: string
+    code: string,
+    label: string,
+    index: string
   }[]
 }
 
 export const initTranslations = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
-    counterpart.registerTranslations('de', counterpartDe);
-    counterpart.registerTranslations('en', en);
-    counterpart.registerTranslations('de', de);
-
-    let locales: string[] = counterpart.getAvailableLocales(),
-        list: {
-          id: string,
-          label: string
-        }[] = [];
-
-    for (let i: number = 0; i < locales.length; i++) {
-      list.push({
-        id: locales[i],
-        label: counterpart.translate('language.languages.' + locales[i], {
-          locale: locales[i]
-        })
-      });
-    }
+    // Register translations provided from the "/locales" directory.
+    let list: {
+      code: string,
+      label: string,
+      index: string,
+    }[] = _.map(getLanguages(), function (language) {
+      counterpart.registerTranslations(language.code, language.locale);
+      return _.pick(language, ['code', 'label', 'index']);
+    });
 
     counterpart.setLocale(getState().language.code);
 
@@ -50,7 +40,15 @@ export const initTranslations = (): Thunk => {
           'hitstats.results_found': counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
             time: searchkit.getTime()
-          })
+          }),
+          'NoHits.NoResultsFound': counterpart.translate('noHits.noResultsFound', {
+            query: searchkit.getQueryAccessor().state.value || '""'
+          }),
+          'NoHits.SearchWithoutFilters': counterpart.translate('noHits.searchWithoutFilters', {
+            query: searchkit.getQueryAccessor().state.value || '""'
+          }),
+          'NoHits.Error': counterpart.translate('noHits.error'),
+          'NoHits.ResetSearch': counterpart.translate('noHits.resetSearch')
         };
       return translations[key];
     };
@@ -66,16 +64,14 @@ export const initTranslations = (): Thunk => {
 
 export type ChangeLanguageAction = {
   type: 'CHANGE_LANGUAGE',
-  code: string,
-  missing: boolean
+  code: string
 }
 
 export const changeLanguage = (code: string): Thunk => {
   return (dispatch: Dispatch): void => {
-    code = (code === 'GB' ? 'EN' : code).toLowerCase();
+    code = code.toLowerCase();
 
-    let missing: boolean = !_.includes(counterpart.getAvailableLocales(), code);
-    if (missing) {
+    if (!_.includes(counterpart.getAvailableLocales(), code)) {
       code = 'en';
     } else {
       ReactGA.event({
@@ -89,9 +85,10 @@ export const changeLanguage = (code: string): Thunk => {
 
     dispatch({
       type: 'CHANGE_LANGUAGE',
-      code,
-      missing
+      code
     });
+
+    searchkit.reloadSearch();
   };
 };
 

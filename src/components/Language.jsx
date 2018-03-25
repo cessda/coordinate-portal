@@ -2,35 +2,52 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import * as counterpart from 'react-translate-component';
 import Translate from 'react-translate-component';
-import ReactFlagsSelect from 'react-flags-select';
-import 'react-flags-select/scss/react-flags-select.scss';
 import {connect} from 'react-redux';
 import {changeLanguage} from '../actions/language';
 import {bindActionCreators} from 'redux';
 import type {Dispatch, State} from '../types';
+import Select from 'react-select';
 
 type Props = {
-  code: any,
-  list: any,
+  code: string,
+  list: {
+    code: string,
+    label: string,
+    index: string
+  }[],
   changeLanguage: any
 };
 
 class Language extends Component<Props> {
   render(): Node {
+    const {
+      code,
+      list,
+      changeLanguage
+    } = this.props;
+
+    let countries: {
+      label: string,
+      value: string
+    }[] = [];
+    for (let i: number = 0; i < list.length; i++) {
+      countries.push({
+        label: list[i].label,
+        value: list[i].code
+      });
+    }
+
     return (
       <div className="language-picker">
         <Translate component="label"
                    content="language.label"/>
-        <ReactFlagsSelect countries={['GB', 'DE']}
-                          customLabels={{
-                            'GB': counterpart.translate('language.languages.en'),
-                            'DE': counterpart.translate('language.languages.de')
-                          }}
-                          defaultCountry={this.props.code === 'en' ? 'GB' :
-                                          this.props.code.toUpperCase()}
-                          onSelect={this.props.changeLanguage}/>
+        <Select value={code}
+                options={countries}
+                searchable={false}
+                clearable={false}
+                autosize={true}
+                onChange={(option) => changeLanguage(option.value)}/>
       </div>
     );
   }

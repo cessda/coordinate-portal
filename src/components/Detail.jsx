@@ -7,6 +7,8 @@ import {connect} from 'react-redux';
 import Panel from './Panel';
 import * as _ from 'lodash';
 import type {State} from '../types';
+import {OutboundLink} from 'react-ga';
+import * as counterpart from 'react-translate-component';
 
 type Props = {
   bemBlocks: Object,
@@ -22,30 +24,40 @@ class Detail extends HitItem<Props> {
       return null;
     }
 
-    let creators = [];
-    for (let i: number = 0; i < item.creator.length; i++) {
-      creators.push(<span key={i}>
-        {item.creator[i]}{i < item.creator.length - 1 ? '; ' : ''}
-        </span>);
+    let creators: Node[] = [];
+    for (let i: number = 0; i < item.creators.length; i++) {
+      creators.push(<div key={i}>
+        {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
+        </div>);
     }
     if (creators.length === 0) {
-      creators.push(<span key="0">Not available</span>);
+      creators.push(<div key="0">Not available</div>);
     }
 
-    let description = [];
-    if (item.description) {
-      for (let i: number = 0; i < item.description.length; i++) {
-        description.push(<p key={i} className="has-text-justified mb-10">{item.description[i]}</p>);
+    let pidStudies: Node[] = [];
+    for (let i: number = 0; i < item.pidStudies.length; i++) {
+      pidStudies.push(<div key={i}>
+        {item.pidStudies[i].pid} ({item.pidStudies[i].agency})
+        </div>);
+    }
+    if (pidStudies.length === 0) {
+      pidStudies.push(<div key="0">Not available</div>);
+    }
+
+    let studyAreaCountries: Node[] = [];
+    if (item.studyAreaCountries) {
+      for (let i: number = 0; i < item.studyAreaCountries.length; i++) {
+        studyAreaCountries.push(<span key={i}>{item.studyAreaCountries[i].country}</span>);
       }
     }
-    if (description.length === 0) {
-      description.push(<p key="0" className="has-text-justified">Not available</p>);
+    if (!item.studyAreaCountries || studyAreaCountries.length === 0) {
+      studyAreaCountries.push(<span key="0">Not available</span>);
     }
 
     let subjects = [];
-    for (let i: number = 0; i < item.subject.length; i++) {
-      subjects.push(<span key={i}>{_.startCase(item.subject[i])}</span>);
-    }
+    // for (let i: number = 0; i < item.subject.length; i++) {
+    //   subjects.push(<span key={i}>{_.startCase(item.subject[i])}</span>);
+    // }
     if (subjects.length === 0) {
       subjects.push(<span key="0">Not available</span>);
     }
@@ -53,24 +65,28 @@ class Detail extends HitItem<Props> {
     return (
       <div className="w-100">
         <strong className="data-label mt-5">Title</strong>
-        <p>{item.title || 'Not available'}</p>
+        <p>{item.titleStudy || 'Not available'}</p>
 
         <strong className="data-label">Creator(s)</strong>
         <p>{creators}</p>
 
-        <strong className="data-label">Study persistent identifier</strong>
-        <p>{item.identifier || 'Not available'}</p>
+        <strong className="data-label">Study persistent identifier(s)</strong>
+        <p>{pidStudies}</p>
 
         <strong className="data-label">Abstract</strong>
-        {description}
+        {item.abstract.split('\n').map(function(item, key) {
+          return (
+            <span key={key}>{item}<br/></span>
+          )
+        })}
 
         <Panel className="section-header"
-               title="Methodology"
+               title={counterpart.translate('metadata.methodology')}
                collapsable={true}
                defaultCollapsed={true}>
 
           <strong className="data-label">Country</strong>
-          <p>{item.coverage || 'Not available'}</p>
+          <p>{studyAreaCountries}</p>
 
           <strong className="data-label">Time dimension</strong>
           <p>{item.timeDimension || 'Not available'}</p>
@@ -89,7 +105,7 @@ class Detail extends HitItem<Props> {
           <p>{item.dataCollectionMethod || 'Not available'}</p>
 
           <strong className="data-label">Collection years</strong>
-          <p>{item.coverage || 'Not available'}</p>
+          <p>{item.collectionYears || 'Not available'}</p>
 
           <strong className="data-label">Language of data file(s)</strong>
           <p>{item.languageOfDataFiles || 'Not available'}</p>
@@ -97,7 +113,7 @@ class Detail extends HitItem<Props> {
         </Panel>
 
         <Panel className="section-header"
-               title="Access"
+               title={counterpart.translate('metadata.access')}
                collapsable={true}
                defaultCollapsed={true}>
 
@@ -106,9 +122,6 @@ class Detail extends HitItem<Props> {
 
           <strong className="data-label">Year of publication</strong>
           <p>{item.date || 'Not available'}</p>
-
-          <strong className="data-label">Availability</strong>
-          <p>{item.rights || 'Not available'}</p>
 
           <strong className="data-label">Terms of data access</strong>
           <p>{item.rights || 'Not available'}</p>
@@ -119,7 +132,7 @@ class Detail extends HitItem<Props> {
         </Panel>
 
         <Panel className="section-header"
-               title="Topics"
+               title={counterpart.translate('metadata.topics')}
                collapsable={true}
                defaultCollapsed={true}>
 
@@ -129,12 +142,11 @@ class Detail extends HitItem<Props> {
         </Panel>
 
         <Panel className="section-header"
-               title="Keywords"
+               title={counterpart.translate('metadata.keywords')}
                collapsable={true}
                defaultCollapsed={true}>
 
           <strong className="data-label"/>
-          {/* TODO : Change to separate field when search providers supply it. */}
           <p className="keywords">{subjects}</p>
 
         </Panel>

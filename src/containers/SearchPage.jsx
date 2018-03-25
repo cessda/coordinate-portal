@@ -8,18 +8,17 @@ import Footer from '../components/Footer.jsx';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
-  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination,
-  RangeSliderInput, SearchkitProvider, SideBar
+  Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
+  SearchkitProvider, SideBar
 } from 'searchkit';
-import moment from 'moment';
 import * as counterpart from 'react-translate-component';
-import Translate from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import Panel from '../components/Panel';
 import RangeFilter from '../components/RangeFilter';
 import RefinementListFilter from '../components/RefinementListFilter';
-import searchkit, {highlight} from '../utilities/searchkit';
+import NoHits from '../components/NoHits';
+import searchkit from '../utilities/searchkit';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import type {State} from '../types';
@@ -32,22 +31,39 @@ type Props = {
 
 class SearchPage extends Component<Props> {
   componentDidUpdate(): void {
-    // Auto expand the 'Collection years' filter if it contains selected values.
-    let anyDateYearFilter = $('.filter--anydateYear > .is-collapsed');
-    if (!anyDateYearFilter.data('expanded') && !_.isEmpty(this.props.filters['anydateYear'])) {
-      anyDateYearFilter.data('expanded', true).click();
+    // Auto expand the 'Topics' filter if it contains selected values.
+    let topicsFilter = $('.filter--keywords\\.term > .is-collapsed');
+    if (!topicsFilter.data('expanded') &&
+        !_.isEmpty(this.props.filters['keywords.term'])) {
+      topicsFilter.data('expanded', true).click();
     }
 
-    // Auto expand the 'Language of data files' filter if it contains selected values.
-    let languageOfDataFilesFilter = $('.filter--language > .is-collapsed');
-    if (!languageOfDataFilesFilter.data('expanded') && !_.isEmpty(this.props.filters['language'])) {
-      languageOfDataFilesFilter.data('expanded', true).click();
+    // Auto expand the 'Collection years' filter if it contains selected values.
+    let dataCollectionPeriodStartdateFilter = $('.filter--dataCollectionPeriodStartdate > .is-collapsed');
+    if (!dataCollectionPeriodStartdateFilter.data('expanded') &&
+        !_.isEmpty(this.props.filters['dataCollectionPeriodStartdate'])) {
+      dataCollectionPeriodStartdateFilter.data('expanded', true).click();
     }
 
     // Auto expand the 'Country' filter if it contains selected values.
-    let countryFilter = $('.filter--dc\\.coverage > .is-collapsed');
-    if (!countryFilter.data('expanded') && !_.isEmpty(this.props.filters['dc.coverage'])) {
+    let countryFilter = $('.filter--studyAreaCountries\\.country > .is-collapsed');
+    if (!countryFilter.data('expanded') &&
+        !_.isEmpty(this.props.filters['studyAreaCountries.country'])) {
       countryFilter.data('expanded', true).click();
+    }
+
+    // Auto expand the 'Publisher' filter if it contains selected values.
+    let publisherFilter = $('.filter--publisher\\.publisher > .is-collapsed');
+    if (!publisherFilter.data('expanded') &&
+        !_.isEmpty(this.props.filters['publisher.publisher'])) {
+      publisherFilter.data('expanded', true).click();
+    }
+
+    // Auto expand the 'Language of data files' filter if it contains selected values.
+    let languageOfDataFilesFilter = $('.filter--fileLanguages > .is-collapsed');
+    if (!languageOfDataFilesFilter.data('expanded') &&
+        !_.isEmpty(this.props.filters['fileLanguages'])) {
+      languageOfDataFilesFilter.data('expanded', true).click();
     }
   }
 
@@ -57,85 +73,64 @@ class SearchPage extends Component<Props> {
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
           <Header/>
-          <LayoutBody className={'columns' +
-                                 (!filters.q || results === 0 ? ' force-filters-visible' : '')}>
+          <LayoutBody className="columns">
             <SideBar className="column is-4">
-              <Panel title={counterpart.translate('filters.topic.label')}
-                     tooltip={counterpart.translate('filters.topic.tooltip')}
-                     className="subject"
-                     collapsable={true}
-                     defaultCollapsed={true}>
-                <Translate component="p"
-                           content="forthcoming"/>
-              </Panel>
+              <RefinementListFilter id="keywords.term"
+                                    title={counterpart.translate('filters.topic.label')}
+                                    field={'keywords.term'}
+                                    fieldOptions={{
+                                      type: 'nested',
+                                      options: {path: 'keywords', min_doc_count: 1}
+                                    }}
+                                    operator="OR"
+                                    containerComponent={<Panel title={counterpart.translate(
+                                      'filters.topic.label')}
+                                                               tooltip={counterpart.translate(
+                                                                 'filters.topic.tooltip')}
+                                                               className="keywords"
+                                                               collapsable={true}
+                                                               defaultCollapsed={true}/>}
+                                    listComponent={<MultiSelect placeholder={counterpart.translate(
+                                      'filters.topic.placeholder')}/>}
+                                    size={500}/>
 
-              <RangeFilter min={1950}
-                           max={moment().year()}
-                           field="anydateYear"
-                           id="anydateYear"
+              {/*<RangeFilter field="dataCollectionPeriodStartdate"
+                           id="dataCollectionPeriodStartdate"
                            title={counterpart.translate('filters.collectionDates.label')}
                            rangeComponent={RangeSliderInput}
                            containerComponent={<Panel title={counterpart.translate(
                              'filters.collectionDates.label')}
                                                       tooltip={counterpart.translate(
                                                         'filters.collectionDates.tooltip')}
-                                                      className="anydateYear"
+                                                      className="dataCollectionPeriodStartdate"
                                                       collapsable={true}
-                                                      defaultCollapsed={true}/>}/>
+                                                      defaultCollapsed={true}/>}/>*/}
 
-              <Panel title={counterpart.translate('filters.availability.label')}
-                     tooltip={counterpart.translate('filters.availability.tooltip')}
-                     className="rights"
-                     collapsable={true}
-                     defaultCollapsed={true}>
-                <div className="sk-item-list-option sk-item-list__item">
-                  <input type="checkbox"
-                         className="sk-item-list-option__checkbox is-disabled"
-                         disabled/>
-                  <div className="sk-item-list-option__text">Unrestricted</div>
-                  <div className="sk-item-list-option__count">0</div>
-                </div>
-                <div className="sk-item-list-option sk-item-list__item">
-                  <input type="checkbox"
-                         className="sk-item-list-option__checkbox is-disabled"
-                         disabled/>
-                  <div className="sk-item-list-option__text">Authentication/registration required</div>
-                  <div className="sk-item-list-option__count">0</div>
-                </div>
-                <div className="sk-item-list-option sk-item-list__item">
-                  <input type="checkbox"
-                         className="sk-item-list-option__checkbox is-disabled"
-                         disabled/>
-                  <div className="sk-item-list-option__text">Restricted</div>
-                  <div className="sk-item-list-option__count">0</div>
-                </div>
-              </Panel>
-
-              <RefinementListFilter id="dc.coverage"
+              <RefinementListFilter id="studyAreaCountries.country"
                                     title={counterpart.translate('filters.country.label')}
-                                    field={'dc.coverage.all'}
+                                    field={'studyAreaCountries.country'}
                                     fieldOptions={{
                                       type: 'nested',
-                                      options: {path: 'dc.coverage', min_doc_count: 1}
+                                      options: {path: 'studyAreaCountries', min_doc_count: 1}
                                     }}
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.country.label')}
                                                                tooltip={counterpart.translate(
                                                                  'filters.country.tooltip')}
-                                                               className="coverage"
+                                                               className="studyAreaCountries"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
                                       'filters.country.placeholder')}/>}
                                     size={500}/>
 
-              <RefinementListFilter id="dc.publisher"
+              <RefinementListFilter id="publisher.publisher"
                                     title={counterpart.translate('filters.publisher.label')}
-                                    field={'dc.publisher.all'}
+                                    field={'publisher.publisher'}
                                     fieldOptions={{
                                       type: 'nested',
-                                      options: {path: 'dc.publisher.all', min_doc_count: 1}
+                                      options: {path: 'publisher', min_doc_count: 1}
                                     }}
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
@@ -149,11 +144,10 @@ class SearchPage extends Component<Props> {
                                       'filters.publisher.placeholder')}/>}
                                     size={500}/>
 
-              <RefinementListFilter id="language"
+              <RefinementListFilter id="fileLanguages"
                                     title={counterpart.translate(
                                       'filters.languageOfDataFiles.label')}
-                                    field={'dc.language.nn'}
-                                    fieldOptions={{type: 'nested', options: {path: 'dc.language'}}}
+                                    field={'fileLanguages'}
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.languageOfDataFiles.label')}
@@ -164,7 +158,7 @@ class SearchPage extends Component<Props> {
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
                                       'filters.languageOfDataFiles.placeholder')}/>}
-                                    size={500} orderKey="_term" orderDirection="asc"/>
+                                    size={500}/>
             </SideBar>
             <LayoutResults className="column is-8">
               <TopBar/>
@@ -178,7 +172,6 @@ class SearchPage extends Component<Props> {
                     mod="sk-hits-list"
                     hitsPerPage={30}
                     itemComponent={Result}
-                    customHighlight={highlight()}
                     key={'hitList'}/>
 
               <NoHits mod="is-size-6 sk-no-hits"/>

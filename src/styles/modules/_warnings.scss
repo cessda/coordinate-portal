@@ -1,0 +1,25 @@
+.legacy-browser-notice {
+  display: none;
+  margin: 0;
+  padding: 15px;
+  width: 100%;
+  text-align: center;
+  background-color: #555652;
+  color: #ffffff;
+  font-size: 14px;
+  z-index: 999999;
+
+  a {
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .legacy-browser & {
+    display: block !important;
+  }
+}

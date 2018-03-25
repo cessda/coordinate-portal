@@ -11,6 +11,11 @@ type Props = {};
 
 // Extend the Searchkit SortingSelector component to support translations.
 class SortingSelector extends SearchkitSortingSelector<Props> {
+  hasHits(): boolean {
+    // Override behaviour to always return true so that the control is never disabled and hidden.
+    return true;
+  }
+
   render(): Node {
     _.map(this.accessor.options.options, (option: Object): Object => {
       option.label = counterpart.translate(option.translation);

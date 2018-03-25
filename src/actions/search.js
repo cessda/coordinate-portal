@@ -19,7 +19,7 @@ export const initSearchkit = (): Thunk => {
 
     searchkit.setQueryProcessor((query: Object): Object => {
       let state: State = getState(),
-          init: boolean = timer === undefined;
+        init: boolean = timer === undefined;
 
       clearTimeout(timer);
 
@@ -32,15 +32,11 @@ export const initSearchkit = (): Thunk => {
       // If viewing detail page, override query to retrieve single record using its ID.
       if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
           state.routing.locationBeforeTransitions.query.q !== undefined) {
-        delete query.highlight;
         query.query = detailQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
       }
 
-      // Redirect from 'detail' page to 'search results' page if users change search query text.
-      if (state.routing.locationBeforeTransitions.pathname !== '/' &&
-          state.search.query.size === 1) {
-        dispatch(push('/'));
-      }
+      // Add the current language index to the query for Elasticsearch.
+      query.index = _.find(state.language.list, {'code': state.language.code}).index;
 
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
@@ -51,13 +47,18 @@ export const initSearchkit = (): Thunk => {
     searchkit.addResultsListener((results: Object): void => {
       let state: State = getState();
 
-      // Redirect from 'detail' page to 'search results' page if item does not exist or the
-      // item ID does not match the requested ID in the URL.
-      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
-          (results.hits.hits.length === 0 ||
-           _.trim(state.routing.locationBeforeTransitions.query.q, '"') !==
-           results.hits.hits[0]._id)) {
-        dispatch(push('/'));
+      // Check if viewing detail page.
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail') {
+        // Redirect from 'detail' page to 'search results' page if item does not exist or the
+        // item ID does not match the requested ID in the URL.
+        if (results.hits.hits.length === 0 ||
+            _.trim(state.routing.locationBeforeTransitions.query.q, '"') !==
+            results.hits.hits[0]._id) {
+          dispatch(push('/'));
+        } else if (results.hits.hits[0]._source) {
+          // Load similar results.
+          dispatch(updateSimilars(results.hits.hits[0]._source));
+        }
       }
 
       dispatch(updateDisplayed(results.hits.hits));
@@ -107,12 +108,12 @@ export const toggleSummary = (): ToggleSummaryAction => {
 
 //////////// Redux Action Creator : TOGGLE_LONG_DESCRIPTION
 
-export type ToggleLongDescriptionAction = {
+export type ToggleLongAbstractAction = {
   type: 'TOGGLE_LONG_DESCRIPTION',
   index: number
 }
 
-export const toggleLongDescription = (title: string, index: number): Thunk => {
+export const toggleLongAbstract = (title: string, index: number): Thunk => {
   return (dispatch: Dispatch): void => {
     ReactGA.event({
       category: 'Search',
@@ -181,7 +182,10 @@ export type UpdateSimilarsAction = {
 }
 
 export const updateSimilars = (item: Object): Thunk => {
-  return (dispatch: Dispatch): void => {
+  return (dispatch: Dispatch, getState: GetState): void => {
+    let state: State = getState(),
+      index: string = _.find(state.language.list, {'code': state.language.code}).index;
+
     let client: Object = new elasticsearch.Client({
       host: {
         protocol: _.trim(window.location.protocol, ':'),
@@ -192,13 +196,20 @@ export const updateSimilars = (item: Object): Thunk => {
       }
     });
 
-    client.search(similarQuery(item.title)).then((response: Object): void => {
+    client.search({
+      index: index,
+      size: 10,
+      body: {
+        query: similarQuery(item.titleStudy)
+      }
+    }).then((response: Object): void => {
       dispatch({
         type: 'UPDATE_SIMILARS',
         similars: _.uniqBy(_.filter(response.hits.hits, (hit: Object): boolean => {
-          return hit._id !== item.id && hit.fields['dc.title.all'][0] !== item.title;
+          return hit._source && hit._source.id !== item.id && hit._source.titleStudy !==
+                 item.titleStudy;
         }), (hit: Object): string => {
-          return hit.fields['dc.title.all'][0];
+          return hit._source.titleStudy;
         })
       });
     });
@@ -229,7 +240,7 @@ export type SearchAction =
   | ToggleMobileFiltersAction
   | ToggleAdvancedSearchAction
   | ToggleSummaryAction
-  | ToggleLongDescriptionAction
+  | ToggleLongAbstractAction
   | UpdateDisplayedAction
   | UpdateQueryAction
   | UpdateStateAction

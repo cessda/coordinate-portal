@@ -2,10 +2,11 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {ActionBar, ActionBarRow, PageSizeSelector} from 'searchkit';
+import {ActionBar, ActionBarRow} from 'searchkit';
 import {connect} from 'react-redux';
 import Translate from 'react-translate-component';
 import SortingSelector from './SortingSelector';
+import PageSizeSelector from './PageSizeSelector';
 import type {State} from '../types';
 
 type Props = {
@@ -40,36 +41,22 @@ class TopBar extends Component<Props> {
               }, {
                 translation: 'sorting.titleAscending',
                 key: 'title-ascending',
-                fields: [{
-                  field: 'dc.title.all',
-                  options: {
-                    nested_path: 'dc.title',
-                    mode: 'min',
-                    order: 'asc'
-                  }
-                }]
+                field: 'titleStudy',
+                order: 'asc'
               }, {
                 translation: 'sorting.titleDescending',
                 key: 'title-descending',
-                fields: [{
-                  field: 'dc.title.all',
-                  options: {
-                    nested_path: 'dc.title',
-                    mode: 'min',
-                    order: 'desc'
-                  }
-                }]
+                field: 'titleStudy',
+                order: 'desc'
               }, {
-                disabled: true,
                 translation: 'sorting.dateAscending',
                 key: 'date-ascending',
-                field: '_score',
+                field: 'dataCollectionPeriodStartdate',
                 order: 'asc'
               }, {
-                disabled: true,
                 translation: 'sorting.dateDescending',
                 key: 'date-descending',
-                field: '_score',
+                field: 'dataCollectionPeriodStartdate',
                 order: 'desc'
               }]}/>
             </div>
