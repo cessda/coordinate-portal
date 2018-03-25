@@ -85,23 +85,6 @@
     background-color: $hover_hit;
   }
 
-  .availability.tags {
-    min-width: 100px;
-
-    &.has-addons {
-      .tag {
-        &:not(:last-child) {
-          display: none;
-        }
-
-        &:not(:first-child) {
-          border-bottom-left-radius: 3px;
-          border-top-left-radius: 3px;
-        }
-      }
-    }
-  }
-
   .result-actions {
     display: block;
     opacity: 1;
