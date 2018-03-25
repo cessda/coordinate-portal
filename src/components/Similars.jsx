@@ -4,8 +4,9 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateSimilars} from '../actions/search';
 import type {Dispatch, State} from '../types';
+import searchkit from '../utilities/searchkit';
+import {push} from 'react-router-redux';
 
 type Props = {
   item: mixed,
@@ -13,17 +14,12 @@ type Props = {
     id: string,
     title: string
   }[],
-  updateSimilars: (item: mixed) => mixed
+  push: (state: Object) => void
 };
 
 class Similars extends Component<Props> {
-  componentDidMount(): void {
-    const {item, updateSimilars} = this.props;
-    updateSimilars(item);
-  }
-
   render(): Node {
-    const {item, similars} = this.props;
+    const {item, similars, push} = this.props;
 
     if (item === undefined || similars === undefined) {
       return null;
@@ -31,7 +27,14 @@ class Similars extends Component<Props> {
 
     let links: Node[] = [];
     for (let i: number = 0; i < similars.length; i++) {
-      links.push(<a key={i} href={'/detail?q="' + similars[i].id + '"'}>{similars[i].title}</a>);
+      links.push(<a key={i} onClick={() => {
+        push({
+          pathname: 'detail',
+          search: '?q="' + similars[i].id + '"'
+        });
+        searchkit.reloadSearch();
+
+      }}>{similars[i].title}</a>);
     }
 
     return (
@@ -54,7 +57,7 @@ const mapStateToProps = (state: State): Object => {
 
 const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    updateSimilars: bindActionCreators(updateSimilars, dispatch)
+    push: bindActionCreators(push, dispatch)
   };
 };
 

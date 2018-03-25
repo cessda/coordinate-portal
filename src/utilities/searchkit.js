@@ -1,28 +1,19 @@
 // @flow
 
-import {SearchkitManager} from 'searchkit';
+import {BoolShould, FilteredQuery, SearchkitManager, TermQuery} from 'searchkit';
 
+// Query builder used to create the query going to Elasticsearch (for search page).
 export const queryBuilder = (query: string, options: any): Object => {
   let qob = {};
   qob[options.fullpath] = query;
   return {
     simple_query_string: {
-      query: query,
-      fields: [
-        'dc.title.all^8',
-        'dc.description.all^5',
-        'dc.subject.all^3',
-        '_all'
-      ]
-    }
-  };
-};
-
-export const highlight = (): Object => {
-  return {
-    fields: {
-      'dc.title.all': {},
-      'dc.description.all': {}
+      query: query
+      // Can limit to searching specific fields if required. Weightings can also be added.
+      // fields: [
+      //   'titleStudy',
+      //   'abstract',
+      // ]
     }
   };
 };
@@ -33,7 +24,7 @@ export const detailQuery = (id: string): Object => {
     bool: {
       must: {
         match: {
-          _id: id
+          id: id
         }
       }
     }
@@ -43,32 +34,27 @@ export const detailQuery = (id: string): Object => {
 // Query used to retrieve similar records for a specific title (for detail page).
 export const similarQuery = (title: string): Object => {
   return {
-    index: 'dc',
-    size: 10,
-    fields: [
-      'dc.title.all',
-      'dc.description.all',
-      'dc.subject.all'
-    ],
-    body: {
-      query: {
-        filtered: {
-          query: {
-            match: {
-              _all: title
-            }
-          }
+    bool: {
+      must: {
+        match: {
+          titleStudy: title
         }
       }
     }
   };
 };
 
+// Define a single searchkit manager instance to power the application.
 const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
 
-// Customise searchkit query here.
-// searchkit.addDefaultQuery((query) => {
-//   return query.addQuery({});
-// });
+// Customise default Elasticsearch query here.
+searchkit.addDefaultQuery((query) => {
+  // Filter results to only return active study records.
+  return query.addQuery(FilteredQuery({
+    filter: BoolShould([
+      TermQuery('isActive', true)
+    ])
+  }));
+});
 
 export default searchkit;

@@ -4,6 +4,9 @@ const url = require('url');
 const _ = require('lodash');
 const SearchkitExpress = require('searchkit-express');
 const proxy = require('express-http-proxy');
+const express = require('express');
+const debug = require('debug')('SearchkitExpress');
+const request = require('request');
 const helper = {};
 
 helper.checkBuildDirectory = function () {
@@ -52,14 +55,44 @@ helper.checkEnvironmentVariables = function (production) {
 };
 
 helper.getSearchkitRouter = function () {
-  return SearchkitExpress.createRouter({
-    host: process.env.PASC_ELASTICSEARCH_URL,
-    index: 'dc',
-    maxSockets: 500,
-    queryProcessor: function (query) {
-      return query;
+  let router = express.Router(),
+    config = {
+      host: _.trimEnd(process.env.PASC_ELASTICSEARCH_URL, '/'),
+      queryProcessor: function (query) {
+        return query;
+      }
+    },
+    requestClient = request.defaults({
+      pool: {
+        maxSockets: 500
+      }
+    });
+
+  let elasticRequest = function (url, body) {
+    let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + '/cmmstudy' + url;
+    debug('Start Elastic Request', fullUrl);
+    if (_.isObject(body)) {
+      debug('Request body', body);
     }
+    delete body.index;
+    return requestClient.post({
+      url: fullUrl,
+      body: body,
+      json: _.isObject(body),
+      forever: true
+    }).on('response', function (response) {
+      debug('Finished Elastic Request', fullUrl, response.statusCode);
+    }).on('error', function (response) {
+      debug('Error Elastic Request', fullUrl, response.statusCode);
+    });
+  };
+
+  router.post('/_search', function (req, res) {
+    let queryBody = config.queryProcessor(req.body || {}, req, res);
+    elasticRequest('/_search', queryBody).pipe(res);
   });
+
+  return router;
 };
 
 helper.getElasticsearchProxy = function () {
@@ -73,8 +106,11 @@ helper.getElasticsearchProxy = function () {
 helper.getJsonProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {
-      return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + '/dc/_all' +
-             req.url;
+      let arr = _.trim(req.url, '/').split('/'),
+        index = arr[0],
+        id = arr[1];
+      return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + '/' + index +
+             '/cmmstudy/' + id;
     },
     userResDecorator: function (proxyRes, proxyResData) {
       let json = JSON.parse(proxyResData.toString('utf8'));
@@ -83,7 +119,7 @@ helper.getJsonProxy = function () {
       });
     },
     filter: function (req) {
-      return !(req.method !== 'GET' || req.url.match(/[\/?]/gi).length > 1);
+      return !(req.method !== 'GET' || req.url.match(/[\/?]/gi).length !== 2);
     }
   });
 };
