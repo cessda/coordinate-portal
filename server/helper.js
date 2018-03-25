@@ -57,7 +57,7 @@ helper.checkEnvironmentVariables = function (production) {
 helper.getSearchkitRouter = function () {
   let router = express.Router(),
     config = {
-      host: process.env.PASC_ELASTICSEARCH_URL,
+      host: _.trimEnd(process.env.PASC_ELASTICSEARCH_URL, '/'),
       queryProcessor: function (query) {
         return query;
       }
@@ -69,7 +69,7 @@ helper.getSearchkitRouter = function () {
     });
 
   let elasticRequest = function (url, body) {
-    let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + url;
+    let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + '/cmmstudy' + url;
     debug('Start Elastic Request', fullUrl);
     if (_.isObject(body)) {
       debug('Request body', body);
@@ -103,11 +103,14 @@ helper.getElasticsearchProxy = function () {
   });
 };
 
-helper.getJsonProxy = function (index) {
+helper.getJsonProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {
+      let arr = _.trim(req.url, '/').split('/'),
+        index = arr[0],
+        id = arr[1];
       return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + '/' + index +
-             '/cmmstudy' + req.url;
+             '/cmmstudy/' + id;
     },
     userResDecorator: function (proxyRes, proxyResData) {
       let json = JSON.parse(proxyResData.toString('utf8'));
@@ -116,7 +119,7 @@ helper.getJsonProxy = function (index) {
       });
     },
     filter: function (req) {
-      return !(req.method !== 'GET' || req.url.match(/[\/?]/gi).length > 1);
+      return !(req.method !== 'GET' || req.url.match(/[\/?]/gi).length !== 2);
     }
   });
 };
