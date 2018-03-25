@@ -72,7 +72,9 @@ This project follows a best practice structure for React+Redux applications. See
 
 ## Technology Stack
 
-Several frameworks and languages are used in this application.
+Several frameworks are used in this application.
+
+The primary programming language is Flow and JSX in ECMAScript 6. See *Tooling* (below) for compatible IDEs.
 
 | Framework/Technology                                 | Description                                              |
 | ---------------------------------------------------- | -------------------------------------------------------- |
