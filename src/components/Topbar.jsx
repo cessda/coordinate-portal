@@ -41,36 +41,22 @@ class TopBar extends Component<Props> {
               }, {
                 translation: 'sorting.titleAscending',
                 key: 'title-ascending',
-                fields: [{
-                  field: 'dc.title.all',
-                  options: {
-                    nested_path: 'dc.title',
-                    mode: 'min',
-                    order: 'asc'
-                  }
-                }]
+                field: 'titleStudy',
+                order: 'asc'
               }, {
                 translation: 'sorting.titleDescending',
                 key: 'title-descending',
-                fields: [{
-                  field: 'dc.title.all',
-                  options: {
-                    nested_path: 'dc.title',
-                    mode: 'min',
-                    order: 'desc'
-                  }
-                }]
+                field: 'titleStudy',
+                order: 'desc'
               }, {
-                disabled: true,
                 translation: 'sorting.dateAscending',
                 key: 'date-ascending',
-                field: '_score',
+                field: 'dataCollectionPeriodStartdate',
                 order: 'asc'
               }, {
-                disabled: true,
                 translation: 'sorting.dateDescending',
                 key: 'date-descending',
-                field: '_score',
+                field: 'dataCollectionPeriodStartdate',
                 order: 'desc'
               }]}/>
             </div>
