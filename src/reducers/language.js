@@ -5,15 +5,14 @@ import type {Action} from '../actions';
 type State = {
   code: string,
   list?: {
-    id: string,
-    label: string
-  }[],
-  missing: boolean
+    code: string,
+    label: string,
+    index: string
+  }[]
 };
 
 const initialState: State = {
-  code: 'en',
-  missing: false
+  code: 'en'
 };
 
 const language = (state: State = initialState, action: Action): State => {
@@ -25,8 +24,7 @@ const language = (state: State = initialState, action: Action): State => {
 
     case 'CHANGE_LANGUAGE':
       return Object.assign({}, state, {
-        code: action.code,
-        missing: action.missing
+        code: action.code
       });
 
     default:

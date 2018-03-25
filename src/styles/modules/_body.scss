@@ -83,10 +83,9 @@ body {
     top: 0;
     right: 0;
     height: 35px;
-    padding-top: 4px;
+    padding-top: 0;
     padding-left: 15px;
     padding-right: 15px;
-    //background-color: #455963;
     color: #ffffff;
     font-size: 12px;
     z-index: 2;
@@ -95,18 +94,32 @@ body {
       content: ':';
     }
 
-    span.country-flag img {
-      display: none;
-    }
+    .Select {
+      display: inline-block;
+      width: 90px;
+      vertical-align: middle;
 
-    .flag-select .selected--flag--option {
-      img {
-        top: 6px;
+      .Select-control {
+        background: none;
+        border: 0;
+
+        &:hover {
+          box-shadow: none;
+        }
+
+        .Select-value-label {
+          color: #ffffff !important;
+        }
+
+        .Select-arrow {
+          top: 0 !important;
+          border-color: #ffffff transparent transparent !important;
+          border-width: 5px 5px 2.5px !important;
+        }
       }
 
-      .country-label, .arrow-down {
-        color: #ffffff;
-        font-size: 12px;
+      .Select-menu-outer {
+        border-radius: 3px;
       }
     }
   }
@@ -222,7 +235,7 @@ body {
       font-size: .9em;
     }
 
-    .filter--anydateYear {
+    .filter--dataCollectionPeriodStartdate {
       & .sk-range-input__submit {
           color: #0075b5;
       }
@@ -393,12 +406,6 @@ body {
       margin-bottom: 0;
     }
   }
-}
-
-.availability {
-  min-width: 170px;
-  justify-content: flex-end;
-  align-items: flex-start;
 }
 
 .sk-filter-group {
