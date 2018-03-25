@@ -1,11 +1,40 @@
 module.exports = {
-  application: 'Products and Services Catalogue',
+  counterpart: {
+    names: {
+      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      abbreviated_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      abbreviated_months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      am: 'AM',
+      pm: 'PM'
+    },
+    pluralize: (entry, count) => entry[
+      (count === 0 && 'zero' in entry)
+        ? 'zero' : (count === 1) ? 'one' : 'other'
+      ],
+    formats: {
+      date: {
+        'default': '%a, %e %b %Y',
+        long: '%A, %B %o, %Y',
+        short: '%b %e'
+      },
+
+      time: {
+        'default': '%H:%M',
+        long: '%H:%M:%S %z',
+        short: '%H:%M'
+      },
+
+      datetime: {
+        'default': '%a, %e %b %Y %H:%M',
+        long: '%A, %B %o, %Y %H:%M:%S %z',
+        short: '%e %b %H:%M'
+      }
+    }
+  },
+  application: 'Data Catalogue',
   language: {
     label: 'Language',
-    languages: {
-      en: 'English',
-      de: 'German'
-    },
     availability: 'This data is available in the following languages.',
     notAvailable: 'Not available in selected language'
   },
@@ -26,11 +55,6 @@ module.exports = {
       label: 'Collection years',
       placeholder: 'Search years',
       tooltip: 'The period, in years, when the data were collected.'
-    },
-    availability: {
-      label: 'Availability',
-      placeholder: 'Search availability',
-      tooltip: 'Access levels control the availability of the research data.'
     },
     languageOfDataFiles: {
       label: 'Language of data files',
@@ -104,7 +128,6 @@ module.exports = {
   readMore: 'Read more',
   readLess: 'Read less',
   viewJson: 'View JSON',
-  goToCollection: 'Go to collection',
   goToStudy: 'Go to study',
   forthcoming: 'Forthcoming',
   back: 'Back',

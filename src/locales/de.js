@@ -1,11 +1,40 @@
 module.exports = {
-  application: 'Katalog für Produkte und Dienstleistungen',
+  counterpart: {
+    names: {
+      days: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+      abbreviated_days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+      months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+      abbreviated_months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+      am: 'vormittags',
+      pm: 'nachmittags'
+    },
+    pluralize: (entry, count) => entry[
+      (count === 0 && 'zero' in entry)
+        ? 'zero' : (count === 1) ? 'one' : 'other'
+      ],
+    formats: {
+      date: {
+        'default': '%a, %e. %b %Y',
+        long: '%A, %e. %B %Y',
+        short: '%d.%m.%y'
+      },
+
+      time: {
+        'default': '%H:%M Uhr',
+        long: '%H:%M:%S %z',
+        short: '%H:%M'
+      },
+
+      datetime: {
+        'default': '%a, %e. %b %Y, %H:%M Uhr',
+        long: '%A, %e. %B %Y, %H:%M:%S %z',
+        short: '%d.%m.%y %H:%M'
+      }
+    }
+  },
+  application: 'Datenkatalog',
   language: {
     label: 'Sprache',
-    languages: {
-      en: 'Englisch',
-      de: 'Deutsch'
-    },
     availability: 'Diese Daten sind in den folgenden Sprachen verfügbar.',
     notAvailable: 'In der ausgewählten Sprache nicht verfügbar'
   },
@@ -26,11 +55,6 @@ module.exports = {
       label: 'Sammlungsjahre',
       placeholder: 'Suchdaten',
       tooltip: 'Der Zeitraum in Jahren, in dem die Daten erhoben wurden.'
-    },
-    availability: {
-      label: 'Verfügbarkeit',
-      placeholder: 'Verfügbarkeit suchen',
-      tooltip: 'Zugriffsstufen kontrollieren die Verfügbarkeit der Forschungsdaten.'
     },
     languageOfDataFiles: {
       label: 'Sprache der Dateien',
@@ -104,7 +128,6 @@ module.exports = {
   readMore: 'Weiterlesen',
   readLess: 'Lese weniger',
   viewJson: 'JSON anzeigen',
-  goToCollection: 'Zur Sammlung gehen',
   goToStudy: 'Zum Studium gehen',
   forthcoming: 'Bevorstehend',
   back: 'Zurück',
