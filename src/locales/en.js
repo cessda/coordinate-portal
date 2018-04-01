@@ -32,7 +32,7 @@ module.exports = {
       }
     }
   },
-  application: 'Data Catalogue',
+  cessda: 'Consortium of European Social Science Data Archives',
   language: {
     label: 'Language',
     availability: 'This data is available in the following languages.',
@@ -139,10 +139,14 @@ module.exports = {
     keywords: 'Keywords'
   },
   footer: {
-    organisationsFeed: 'Organisations Feed',
+    followUsOn: 'Follow us on',
+    contactUs: 'Contact Us',
+    menu: 'Menu',
     about: 'About',
     consortium: 'Consortium',
-    training: 'Training',
+    projects: 'Projects',
+    researchInfrastructure: 'Research Infrastructure',
+    contact: 'Contact',
     privacy: 'Privacy Policy'
   }
 };

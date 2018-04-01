@@ -39,10 +39,10 @@ class SearchPage extends Component<Props> {
     }
 
     // Auto expand the 'Collection years' filter if it contains selected values.
-    let dataCollectionPeriodStartdateFilter = $('.filter--dataCollectionPeriodStartdate > .is-collapsed');
-    if (!dataCollectionPeriodStartdateFilter.data('expanded') &&
+    let collectionYearsFilter = $('.filter--dataCollectionPeriodStartdate > .is-collapsed');
+    if (!collectionYearsFilter.data('expanded') &&
         !_.isEmpty(this.props.filters['dataCollectionPeriodStartdate'])) {
-      dataCollectionPeriodStartdateFilter.data('expanded', true).click();
+      collectionYearsFilter.data('expanded', true).click();
     }
 
     // Auto expand the 'Country' filter if it contains selected values.

@@ -1,7 +1,7 @@
 {
   "name": "cessda-pasc",
   "version": "0.0.1",
-  "description": "CESSDA ERIC Data Catalogue",
+  "description": "CESSDA Data Catalogue",
   "license": "Apache-2.0",
   "repository": "bitbucket:cessda/cessda.pasc.searchkit",
   "private": true,

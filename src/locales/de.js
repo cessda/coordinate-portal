@@ -32,7 +32,7 @@ module.exports = {
       }
     }
   },
-  application: 'Datenkatalog',
+  cessda: 'Konsortium der Europäischen Sozialwissenschaftlichen Datenarchive',
   language: {
     label: 'Sprache',
     availability: 'Diese Daten sind in den folgenden Sprachen verfügbar.',
@@ -139,10 +139,14 @@ module.exports = {
     keywords: 'Schlüsselwörter'
   },
   footer: {
-    organisationsFeed: 'Feeds für Organisationen',
+    followUsOn: 'Folge uns auf',
+    contactUs: 'Kontaktiere uns',
+    menu: 'Speisekarte',
     about: 'Über',
     consortium: 'Konsortium',
-    training: 'Ausbildung',
+    projects: 'Projekte',
+    researchInfrastructure: 'Forschungsinfrastruktur',
+    contact: 'Kontakt',
     privacy: 'Datenschutz-Bestimmungen'
   }
 };

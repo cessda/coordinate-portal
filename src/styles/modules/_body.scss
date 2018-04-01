@@ -80,14 +80,15 @@ body {
 
   .language-picker {
     position: absolute;
-    top: 0;
+    top: 6px;
     right: 0;
     height: 35px;
     padding-top: 0;
     padding-left: 15px;
     padding-right: 15px;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
     z-index: 2;
 
     label:after {
@@ -125,12 +126,15 @@ body {
   }
 
   .sk-hits-stats {
-    display: inline-block;
-    margin-right: 20px;
+    position: relative;
+    margin-top: 25px;
+    padding-left: 10px;
+    z-index: 1;
 
     .sk-hits-stats__info {
       color: #ffffff;
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
     }
   }
 
@@ -147,10 +151,10 @@ body {
   .sk-reset-filters {
     color: #ffffff !important;
     display: inline-block;
-    margin: 10px 6px 0;
-    padding: 2px 6px;
+    margin: 30px 5px 0;
+    padding: 6px 10px;
     flex-grow: 0;
-    font-size: 13px;
+    font-size: 14px;
     background-color: #59707b;
 
     &:hover {
@@ -237,13 +241,13 @@ body {
 
     .filter--dataCollectionPeriodStartdate {
       & .sk-range-input__submit {
-          color: #0075b5;
+          color: #85c4ec;
       }
 
       & .sk-range-input__input {
         flex: none;
         width: 70px;
-        color: #0075b5;
+        color: #85c4ec;
       }
 
       .rc-slider-rail {
@@ -251,15 +255,15 @@ body {
       }
 
       .sk-range-slider .rc-slider-track {
-        background-color: #0075b5;
+        background-color: #85c4ec;
       }
 
       .sk-range-slider .rc-slider-handle {
-        border-color: #555652;
+        border-color: #444444;
       }
 
       .sk-range-slider .rc-slider-mark-text {
-        color: #555652;
+        color: #444444;
       }
     }
 

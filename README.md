@@ -1,6 +1,6 @@
 # CESSDA.PASC.SEARCHKIT
 
-This repository contains all source code for the CESSDA ERIC Data Catalogue web application.
+This repository contains all source code for the CESSDA Data Catalogue web application.
 
 Separate repositories are provided for backend architecture; harvester, indexer and Elasticsearch instance.
 
@@ -154,7 +154,7 @@ As of *2nd April 2018*...
 * German and Finnish language translations in the `/src/locales` directory have been created using Google Translate. They should be checked as they are **incomplete** and will contain grammatical/spelling errors.
 * Sorting by **Title** produces strange results. This may need fixing in the backend Elasticsearch instance. See `/src/components/Topbar.jsx` lines `35-61` for where the sorting is defined in the frontend.
 * The **Publisher** filter splits the institution name by word. For example, instead of an option called "UK Data Archive", it lists 3 options: "UK", "Data" and "Archive". Unsure as to whether this is a frontend or backend configuration issue. See `/src/containers/SearchPage.jsx` lines `128-145`.
-* The **Collection years** filter has been disabled/hidden. It is not compatible with how dates are returned in the new CMMStudy schema. Enabling it currently results in JavaScript errors. See `/src/containers/SearchPage.jsx` lines `97-107`.
+* The **Collection years** filter has been disabled/hidden. It is not compatible with how dates are returned in the new CMMStudy schema. Enabling it currently results in JavaScript errors. See `/src/containers/SearchPage.jsx` lines `97-107`. The filter is expecting integers representing years however Elasticsearch currently returns full date strings. A potential fix could be to provide a new field in Elasticsearch which has the 4-digit year only. The full year fields should still remain in order to be displayed on the detail page.
 
 ## Resources
 

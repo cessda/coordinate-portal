@@ -2,22 +2,64 @@
   display: none !important;
 }
 
-@media screen and (max-width: 768px) {
-  .logo {
-    margin-bottom: -15px !important;
+@media screen and (max-width: 1023px) {
+  header {
+    background: #ffffff !important;
 
-    .cessda a {
-      font-size: 25px !important;
-      line-height: 20px !important;
-    }
-
-    .cessda-beta {
-      margin-top: 5px !important;
-    }
-
-    .cessda_beta--blue {
+    &:after {
       display: none;
     }
+
+    .columns {
+      display: block !important;
+
+      .column {
+        padding-bottom: 0 !important;
+        min-height: auto !important;
+      }
+    }
+
+    .cessda-organisation {
+      padding-left: 60px !important;
+    }
+
+    .logo {
+      margin: 50px auto 0 !important;
+    }
+
+    .sk-hits-stats {
+      margin: 0;
+      text-align: center;
+
+      .sk-hits-stats__info {
+        color: #333333;
+      }
+    }
+
+    .sk-search-box {
+      margin: 0 auto;
+    }
+
+    .reset-search {
+      background-color: #444444;
+      margin: 10px -0.75rem;
+      padding: 5px;
+      text-align: center;
+
+      .sk-reset-filters {
+        margin: 5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    background-size: 100% !important;
+  }
+
+  .cessda-organisation {
+    display: none;
   }
 
   .sk-search-box {
@@ -43,8 +85,8 @@
   }
 
   .sk-hits-stats {
-    margin-top: 5px;
-    width: 100%;
+    //margin-top: 5px;
+    //width: 100%;
   }
 
   .mobile-filters-toggle {
@@ -97,6 +139,17 @@
 
     .level-right {
       margin: auto;
+    }
+  }
+
+  footer {
+    .footer-social {
+      position: static !important;
+    }
+
+    .is-3 {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
     }
   }
 }

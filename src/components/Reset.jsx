@@ -3,8 +3,10 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import type {State} from '../types';
 
 type Props = {
+  pathname: string,
   bemBlock: Function,
   hasFilters: boolean,
   translate: (string) => string,
@@ -13,12 +15,25 @@ type Props = {
 
 class Reset extends Component<Props> {
   render(): Node {
-    const {bemBlock, hasFilters, translate, resetFilters} = this.props;
+    const {
+      pathname,
+      bemBlock,
+      hasFilters,
+      translate,
+      resetFilters
+    } = this.props;
+
     return (
-      <a className={bemBlock().mix('link').state({disabled: !hasFilters})}
+      <a className={bemBlock().mix('link').state({disabled: pathname !== '/' || !hasFilters})}
          onClick={resetFilters}>{translate('reset.clear_all')}</a>
     );
   }
 }
 
-export default connect()(Reset);
+const mapStateToProps = (state: State): Object => {
+  return {
+    pathname: state.routing.locationBeforeTransitions.pathname
+  };
+};
+
+export default connect(mapStateToProps, null)(Reset);
