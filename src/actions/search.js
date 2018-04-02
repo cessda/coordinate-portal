@@ -5,7 +5,6 @@ import * as elasticsearch from 'elasticsearch';
 import * as _ from 'lodash';
 import type {Dispatch, GetState, State, Thunk} from '../types';
 import * as ReactGA from 'react-ga';
-import {push} from 'react-router-redux';
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 
@@ -18,6 +17,8 @@ export const initSearchkit = (): Thunk => {
     let timer: number;
 
     searchkit.setQueryProcessor((query: Object): Object => {
+      dispatch(toggleLoading(true));
+
       let state: State = getState(),
         init: boolean = timer === undefined;
 
@@ -47,26 +48,34 @@ export const initSearchkit = (): Thunk => {
     searchkit.addResultsListener((results: Object): void => {
       let state: State = getState();
 
-      // Check if viewing detail page.
-      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail') {
-        // Redirect from 'detail' page to 'search results' page if item does not exist or the
-        // item ID does not match the requested ID in the URL.
-        if (results.hits.hits.length === 0 ||
-            _.trim(state.routing.locationBeforeTransitions.query.q, '"') !==
-            results.hits.hits[0]._id) {
-          dispatch(push('/'));
-        } else if (results.hits.hits[0]._source) {
-          // Load similar results.
-          dispatch(updateSimilars(results.hits.hits[0]._source));
-        }
+      // Load similar results if viewing detail page and data exists.
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
+          results.hits.hits.length > 0 &&
+          results.hits.hits[0]._source) {
+        dispatch(updateSimilars(results.hits.hits[0]._source));
       }
 
       dispatch(updateDisplayed(results.hits.hits));
+      dispatch(toggleLoading(false));
     });
 
     dispatch({
       type: 'INIT_SEARCHKIT'
     });
+  };
+};
+
+//////////// Redux Action Creator : TOGGLE_LOADING
+
+export type ToggleLoadingAction = {
+  type: 'TOGGLE_LOADING',
+  loading: boolean
+}
+
+export const toggleLoading = (loading: boolean): ToggleLoadingAction => {
+  return {
+    type: 'TOGGLE_LOADING',
+    loading
   };
 };
 
@@ -237,6 +246,7 @@ export const resetSearch = (): Thunk => {
 
 export type SearchAction =
   | InitSearchkitAction
+  | ToggleLoadingAction
   | ToggleMobileFiltersAction
   | ToggleAdvancedSearchAction
   | ToggleSummaryAction

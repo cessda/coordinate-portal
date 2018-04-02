@@ -1,47 +1,23 @@
 module.exports = {
   counterpart: {
-    names: {
-      days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      abbreviated_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      abbreviated_months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      am: 'AM',
-      pm: 'PM'
-    },
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
         ? 'zero' : (count === 1) ? 'one' : 'other'
-      ],
-    formats: {
-      date: {
-        'default': '%a, %e %b %Y',
-        long: '%A, %B %o, %Y',
-        short: '%b %e'
-      },
-
-      time: {
-        'default': '%H:%M',
-        long: '%H:%M:%S %z',
-        short: '%H:%M'
-      },
-
-      datetime: {
-        'default': '%a, %e %b %Y %H:%M',
-        long: '%A, %B %o, %Y %H:%M:%S %z',
-        short: '%e %b %H:%M'
-      }
-    }
+      ]
   },
   cessda: 'Consortium of European Social Science Data Archives',
   language: {
     label: 'Language',
-    availability: 'This data is available in the following languages.',
-    notAvailable: 'Not available in selected language'
+    notAvailable: {
+      field: 'Not available',
+      heading: 'The requested data was not found.',
+      content: 'It may not exist or is not available in the selected language. Choose an alternative language or start a new search.'
+    }
   },
   search: 'Find Social and Economic Research Data',
   noHits: {
-    noResultsFound: 'No results found for %(query)s.',
-    searchWithoutFilters: 'Search for %(query)s without filters',
+    noResultsFound: 'No results found for "%(query)s" in the selected language.',
+    searchWithoutFilters: 'Search for "%(query)s" without filters',
     error: 'We\'re sorry, an issue occurred when fetching your results. Please try again.',
     resetSearch: 'Reset Search'
   },
@@ -120,7 +96,10 @@ module.exports = {
     query: 'Clear search',
     filters: 'Reset filters'
   },
-  similarResults: 'Similar results',
+  similarResults: {
+    heading: 'Similar results',
+    notAvailable: 'No similar results found.'
+  },
   resultsPerPage: 'Results per page',
   sortBy: 'Sort by',
   showFilters: 'Show filters',
@@ -133,8 +112,23 @@ module.exports = {
   back: 'Back',
   close: 'Close',
   metadata: {
+    studyTitle: 'Study title',
+    creator: 'Creator',
+    studyPersistentIdentifier: 'Study Persistent Identifier',
+    abstract: 'Abstract',
     methodology: 'Methodology',
+    country: 'Country',
+    timeDimension: 'Time dimension',
+    analysisUnit: 'Analysis unit',
+    samplingProcedure: 'Sampling procedure',
+    dataCollectionMethod: 'Data collection method',
+    dataCollectionPeriod: 'Data collection period',
+    languageOfDataFiles: 'Language of data files',
     access: 'Access',
+    publisher: 'Publisher',
+    yearOfPublication: 'Year of publication',
+    termsOfDataAccess: 'Terms of data access',
+    studyNumber: 'Study number',
     topics: 'Topics',
     keywords: 'Keywords'
   },

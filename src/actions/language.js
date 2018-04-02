@@ -2,9 +2,10 @@
 
 import counterpart from 'counterpart';
 import searchkit from '../utilities/searchkit';
-import type {Dispatch, GetState, Thunk} from '../types';
+import type {Dispatch, GetState, State, Thunk} from '../types';
 import * as ReactGA from 'react-ga';
 import * as _ from 'lodash';
+import moment from 'moment';
 import {getLanguages} from '../utilities/language';
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
@@ -21,16 +22,19 @@ export type InitTranslationsAction = {
 export const initTranslations = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     // Register translations provided from the "/locales" directory.
-    let list: {
-      code: string,
-      label: string,
-      index: string,
-    }[] = _.map(getLanguages(), function (language) {
-      counterpart.registerTranslations(language.code, language.locale);
-      return _.pick(language, ['code', 'label', 'index']);
-    });
+    let state: State = getState(),
+      list: {
+        code: string,
+        label: string,
+        index: string,
+      }[] = _.map(getLanguages(), function (language) {
+        counterpart.registerTranslations(language.code, language.locale);
+        return _.pick(language, ['code', 'label', 'index']);
+      });
 
-    counterpart.setLocale(getState().language.code);
+    counterpart.setLocale(state.language.code);
+
+    moment.locale(state.language.code);
 
     searchkit.translateFunction = (key: string): string => {
       let numberOfResults: string = process.env.PASC_DEBUG_MODE ? 'numberOfResultsWithTime' :
@@ -42,10 +46,10 @@ export const initTranslations = (): Thunk => {
             time: searchkit.getTime()
           }),
           'NoHits.NoResultsFound': counterpart.translate('noHits.noResultsFound', {
-            query: searchkit.getQueryAccessor().state.value || '""'
+            query: searchkit.getQueryAccessor().state.value || ''
           }),
           'NoHits.SearchWithoutFilters': counterpart.translate('noHits.searchWithoutFilters', {
-            query: searchkit.getQueryAccessor().state.value || '""'
+            query: searchkit.getQueryAccessor().state.value || ''
           }),
           'NoHits.Error': counterpart.translate('noHits.error'),
           'NoHits.ResetSearch': counterpart.translate('noHits.resetSearch')
@@ -82,6 +86,8 @@ export const changeLanguage = (code: string): Thunk => {
     }
 
     counterpart.setLocale(code);
+
+    moment.locale(code);
 
     dispatch({
       type: 'CHANGE_LANGUAGE',

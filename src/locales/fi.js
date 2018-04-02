@@ -1,47 +1,23 @@
 module.exports = {
   counterpart: {
-    names: {
-      days: ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'],
-      abbreviated_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      months: ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Saattaa', 'Kesäkuu', 'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'],
-      abbreviated_months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      am: 'AM',
-      pm: 'PM'
-    },
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
         ? 'zero' : (count === 1) ? 'one' : 'other'
-      ],
-    formats: {
-      date: {
-        'default': '%a, %e %b %Y',
-        long: '%A, %B %o, %Y',
-        short: '%b %e'
-      },
-
-      time: {
-        'default': '%H:%M',
-        long: '%H:%M:%S %z',
-        short: '%H:%M'
-      },
-
-      datetime: {
-        'default': '%a, %e %b %Y %H:%M',
-        long: '%A, %B %o, %Y %H:%M:%S %z',
-        short: '%e %b %H:%M'
-      }
-    }
+      ]
   },
   cessda: 'Euroopan sosiaalitieteiden tietoryhmän konsortio',
   language: {
     label: 'Kieli',
-    availability: 'Nämä tiedot ovat saatavilla seuraavilla kielillä.',
-    notAvailable: 'Ei käytettävissä valitulla kielellä'
+    notAvailable: {
+      field: 'Ei saatavilla',
+      heading: 'Pyydettyjä tietoja ei löytynyt.',
+      content: 'Se ei välttämättä ole tai ei ole valitulla kielellä. Valitse vaihtoehtoinen kieli tai aloita uusi haku.'
+    }
   },
   search: 'Etsi sosiaalista ja taloudellista tutkimustietoa',
   noHits: {
-    noResultsFound: '%(query)s ei löytynyt.',
-    searchWithoutFilters: 'Ets %(query)s ilman suodattimia',
+    noResultsFound: 'Tuloksia ei löytynyt "%(query)s" valitulla kielellä.',
+    searchWithoutFilters: 'Ets "%(query)s" ilman suodattimia',
     error: 'Pahoittelemme, että tulosi haettiin. Yritä uudelleen',
     resetSearch: 'Palauta haku'
   },
@@ -120,7 +96,10 @@ module.exports = {
     query: 'Tyhjennä haku',
     filters: 'Poista suodattimet'
   },
-  similarResults: 'Samankaltaiset tulokset',
+  similarResults: {
+    heading: 'Samankaltaiset tulokset',
+    notAvailable: 'Ei vastaavia tuloksia.'
+  },
   resultsPerPage: 'Tulos per sivu',
   sortBy: 'Lajittele',
   showFilters: 'Näytä suodattimet',
@@ -133,9 +112,24 @@ module.exports = {
   back: 'Takaisin',
   close: 'Sulje',
   metadata: {
+    studyTitle: 'Opinnot',
+    creator: 'Luoja',
+    studyPersistentIdentifier: 'Tutkimuksen tunniste',
+    abstract: 'Abstrakti',
     methodology: 'Metodologia',
-    access: 'Access',
-    topics: 'Aiheet',
+    country: 'Maa',
+    timeDimension: 'Ajanmitta',
+    analysisUnit: 'Analyysiyksikkö',
+    samplingProcedure: 'Näytteenottomenettely',
+    dataCollectionMethod: 'Tiedonkeruumenetelmä',
+    dataCollectionPeriod: 'Tiedonkeruujakso',
+    languageOfDataFiles: 'Tiedostojen kieli',
+    access: 'Pääsy',
+    publisher: 'Kustantaja',
+    yearOfPublication: 'Julkaisuvuosi',
+    termsOfDataAccess: 'Tietojen käyttöoikeudet',
+    studyNumber: 'Tutkimuksen numero',
+    topics: 'Aiheista',
     keywords: 'Avainsanat'
   },
   footer: {

@@ -25,7 +25,11 @@ class Reset extends Component<Props> {
 
     return (
       <a className={bemBlock().mix('link').state({disabled: pathname !== '/' || !hasFilters})}
-         onClick={resetFilters}>{translate('reset.clear_all')}</a>
+         onClick={() => {
+           if (pathname === '/' && hasFilters) {
+             resetFilters();
+           }
+         }}>{translate('reset.clear_all')}</a>
     );
   }
 }

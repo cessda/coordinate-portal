@@ -94,6 +94,7 @@ class SearchPage extends Component<Props> {
                                       'filters.topic.placeholder')}/>}
                                     size={500}/>
 
+              {/* TODO : Fix 'Collection Years' filter. Requires Elasticsearch to provide 4-digit integers representing years. */}
               {/*<RangeFilter field="dataCollectionPeriodStartdate"
                            id="dataCollectionPeriodStartdate"
                            title={counterpart.translate('filters.collectionDates.label')}

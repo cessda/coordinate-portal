@@ -5,10 +5,11 @@ import React from 'react';
 import {HitItem} from 'searchkit';
 import {connect} from 'react-redux';
 import Panel from './Panel';
-import * as _ from 'lodash';
+import Translate, * as counterpart from 'react-translate-component';
 import type {State} from '../types';
 import {OutboundLink} from 'react-ga';
-import * as counterpart from 'react-translate-component';
+import * as _ from 'lodash';
+import moment from 'moment';
 
 type Props = {
   bemBlocks: Object,
@@ -17,67 +18,81 @@ type Props = {
 };
 
 class Detail extends HitItem<Props> {
+  generateElements(field: any[], property?: ?string, element: 'p' | 'tag',
+                   callback?: Function): Node[] {
+    let elements: Node[] = [];
+
+    for (let i: number = 0; i < field.length; i++) {
+      let value: string = property ?
+                          (callback ? callback(field[i][property]) : field[i][property]) :
+                          (callback ? callback(field[i]) : field[i]);
+      if (element === 'tag') {
+        elements.push(<span className="tag" key={i}>{value}</span>);
+      } else {
+        elements.push(<p key={i}>{value}</p>);
+      }
+    }
+
+    if (field.length === 0) {
+      elements.push(<Translate key="0" content="language.notAvailable.field"/>);
+    }
+
+    return elements;
+  }
+
+  formatDate(format: string, date1: string, date2?: string, dateFallback?: string): Node {
+    if (!date1 && !date2 && !dateFallback) {
+      return <Translate content="language.notAvailable.field"/>;
+    }
+    if (!date1 && !date2) {
+      return <p>{dateFallback}</p>;
+    }
+    let momentDate1 = moment(date1);
+    if (!date2) {
+      return <p>{momentDate1.isValid() ? momentDate1.format(format) : date1}</p>;
+    }
+    let momentDate2 = moment(date2);
+    return <p>{momentDate1.isValid() ? momentDate1.format(format) :
+               date1} - {momentDate2.isValid() ? momentDate2.format(format) : date2}</p>;
+  }
+
   render(): Node {
-    const {bemBlocks, item} = this.props;
+    const {item} = this.props;
 
     if (item === undefined) {
       return null;
     }
 
-    let creators: Node[] = [];
-    for (let i: number = 0; i < item.creators.length; i++) {
-      creators.push(<div key={i}>
-        {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
-        </div>);
-    }
-    if (creators.length === 0) {
-      creators.push(<div key="0">Not available</div>);
-    }
-
     let pidStudies: Node[] = [];
     for (let i: number = 0; i < item.pidStudies.length; i++) {
-      pidStudies.push(<div key={i}>
-        {item.pidStudies[i].pid} ({item.pidStudies[i].agency})
-        </div>);
+      pidStudies.push(<p key={i}>{item.pidStudies[i].pid} ({item.pidStudies[i].agency})</p>);
     }
     if (pidStudies.length === 0) {
-      pidStudies.push(<div key="0">Not available</div>);
-    }
-
-    let studyAreaCountries: Node[] = [];
-    if (item.studyAreaCountries) {
-      for (let i: number = 0; i < item.studyAreaCountries.length; i++) {
-        studyAreaCountries.push(<span key={i}>{item.studyAreaCountries[i].country}</span>);
-      }
-    }
-    if (!item.studyAreaCountries || studyAreaCountries.length === 0) {
-      studyAreaCountries.push(<span key="0">Not available</span>);
-    }
-
-    let subjects = [];
-    // for (let i: number = 0; i < item.subject.length; i++) {
-    //   subjects.push(<span key={i}>{_.startCase(item.subject[i])}</span>);
-    // }
-    if (subjects.length === 0) {
-      subjects.push(<span key="0">Not available</span>);
+      pidStudies.push(<Translate key="0" content="language.notAvailable.field"/>);
     }
 
     return (
       <div className="w-100">
-        <strong className="data-label mt-5">Title</strong>
-        <p>{item.titleStudy || 'Not available'}</p>
+        <Translate className="data-label mt-5"
+                   component="strong"
+                   content="metadata.studyTitle"/>
+        <p>{item.titleStudy || <Translate content="language.notAvailable.field"/>}</p>
 
-        <strong className="data-label">Creator(s)</strong>
-        <p>{creators}</p>
+        <Translate className="data-label"
+                   component="strong"
+                   content="metadata.creator"/>
+        {this.generateElements(item.creators, null, 'p')}
 
-        <strong className="data-label">Study persistent identifier(s)</strong>
-        <p>{pidStudies}</p>
+        <Translate className="data-label"
+                   component="strong"
+                   content="metadata.studyPersistentIdentifier"/>
+        {pidStudies}
 
-        <strong className="data-label">Abstract</strong>
-        {item.abstract.split('\n').map(function(item, key) {
+        <Translate className="data-label" component="strong" content="metadata.abstract"/>
+        {item.abstract.split('\n').map(function (item, key) {
           return (
-            <span key={key}>{item}<br/></span>
-          )
+            <div key={key}>{item}<br/></div>
+          );
         })}
 
         <Panel className="section-header"
@@ -85,30 +100,45 @@ class Detail extends HitItem<Props> {
                collapsable={true}
                defaultCollapsed={true}>
 
-          <strong className="data-label">Country</strong>
-          <p>{studyAreaCountries}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.country"/>
+          {this.generateElements(item.studyAreaCountries, 'country', 'p')}
 
-          <strong className="data-label">Time dimension</strong>
-          <p>{item.timeDimension || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.timeDimension"/>
+          {this.generateElements(item.typeOfTimeMethods, 'term', 'p')}
 
-          <strong className="data-label">Analysis unit</strong>
-          <p>{item.analysisUnit || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.analysisUnit"/>
+          {this.generateElements(item.unitTypes, 'term', 'p')}
 
-          <strong className="data-label">Data source type</strong>
-          <p>{item.dataSourceType || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.samplingProcedure"/>
+          {this.generateElements(item.samplingProcedureFreeTexts, null, 'p')}
 
-          <strong className="data-label">Sampling procedure</strong>
-          <p>{item.samplingProcedures || 'Not available'}</p>
-          <p>{item.samplingDescription || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.dataCollectionMethod"/>
+          {this.generateElements(item.typeOfModeOfCollections, 'term', 'p')}
 
-          <strong className="data-label">Data collection method</strong>
-          <p>{item.dataCollectionMethod || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.dataCollectionPeriod"/>
+          {this.formatDate('Do MMMM YYYY', item.dataCollectionPeriodStartdate,
+            item.dataCollectionPeriodEnddate, item.dataCollectionFreeTexts)}
 
-          <strong className="data-label">Collection years</strong>
-          <p>{item.collectionYears || 'Not available'}</p>
-
-          <strong className="data-label">Language of data file(s)</strong>
-          <p>{item.languageOfDataFiles || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.languageOfDataFiles"/>
+          <div className="tags mt-10">
+            {this.generateElements(item.fileLanguages, null, 'tag', (term) => {
+              return _.upperCase(term);
+            })}
+          </div>
 
         </Panel>
 
@@ -117,17 +147,25 @@ class Detail extends HitItem<Props> {
                collapsable={true}
                defaultCollapsed={true}>
 
-          <strong className="data-label">Publisher</strong>
-          <p>{item.publisher || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.publisher"/>
+          <p>{item.publisher || <Translate content="language.notAvailable.field"/>}</p>
 
-          <strong className="data-label">Year of publication</strong>
-          <p>{item.date || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.yearOfPublication"/>
+          {this.formatDate('YYYY', item.publicationYear)}
 
-          <strong className="data-label">Terms of data access</strong>
-          <p>{item.rights || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.termsOfDataAccess"/>
+          {this.generateElements(item.dataAccessFreeTexts, null, 'p')}
 
-          <strong className="data-label">Archival study number</strong>
-          <p>{item.identifier || 'Not available'}</p>
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.studyNumber"/>
+          <p>{item.studyNumber || <Translate content="language.notAvailable.field"/>}</p>
 
         </Panel>
 
@@ -137,7 +175,11 @@ class Detail extends HitItem<Props> {
                defaultCollapsed={true}>
 
           <strong className="data-label"/>
-          <p className="topics">{subjects}</p>
+          <div className="tags">
+            {this.generateElements(item.classifications, 'term', 'tag', (term) => {
+              return _.startCase(term);
+            })}
+          </div>
 
         </Panel>
 
@@ -147,7 +189,11 @@ class Detail extends HitItem<Props> {
                defaultCollapsed={true}>
 
           <strong className="data-label"/>
-          <p className="keywords">{subjects}</p>
+          <div className="tags">
+            {this.generateElements(item.keywords, 'term', 'tag', (term) => {
+              return _.startCase(term);
+            })}
+          </div>
 
         </Panel>
       </div>
