@@ -4,6 +4,7 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar} from 'searchkit';
 import Header from '../components/Header';
+import Language from '../components/Language';
 import Detail from '../components/Detail';
 import Footer from '../components/Footer.jsx';
 import searchkit from '../utilities/searchkit';
@@ -13,13 +14,13 @@ import {FaAngleLeft, FaCode, FaExternalLink} from 'react-icons/lib/fa/index';
 import {bindActionCreators} from 'redux';
 import Translate, * as counterpart from 'react-translate-component';
 import Similars from '../components/Similars';
-import NoHits from '../components/NoHits';
 import {goBack} from 'react-router-redux';
 import type {Dispatch, State} from '../types';
 import {OutboundLink} from 'react-ga';
 import * as _ from 'lodash';
 
 type Props = {
+  loading: boolean,
   item?: Object,
   jsonLd?: Object,
   code: string,
@@ -34,7 +35,14 @@ type Props = {
 
 class DetailPage extends Component<Props> {
   render(): Node {
-    const {item, jsonLd, code, list, goBack} = this.props;
+    const {
+      loading,
+      item,
+      jsonLd,
+      code,
+      list,
+      goBack
+    } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
     let index: string = (_.find(list, {'code': code}) || {}).index;
@@ -45,12 +53,10 @@ class DetailPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
-              <Panel title={counterpart.translate('similarResults')}
+              <Panel title={counterpart.translate('similarResults.heading')}
                      collapsable={true}
                      defaultCollapsed={false}>
-                {item &&
-                 <Similars/>
-                }
+                <Similars/>
               </Panel>
             </SideBar>
             <LayoutResults className="column is-8">
@@ -85,7 +91,14 @@ class DetailPage extends Component<Props> {
                </div>
               }
               <Hits mod="sk-hits-grid" hitsPerPage={1} itemComponent={<Detail/>}/>
-              <NoHits/>
+              {!loading && !item &&
+               <div className="panel pt-15">
+                 <p className="fs-14 mb-15"><Translate component="strong"
+                                                       content="language.notAvailable.heading"/></p>
+                 <p className="fs-14 mb-15"><Translate content="language.notAvailable.content"/></p>
+                 <Language/>
+               </div>
+              }
             </LayoutResults>
           </LayoutBody>
           <script type="application/ld+json">
@@ -100,6 +113,7 @@ class DetailPage extends Component<Props> {
 
 const mapStateToProps = (state: State): Object => {
   return {
+    loading: state.search.loading,
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
     jsonLd: state.search.jsonLd,
     code: state.language.code,

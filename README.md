@@ -1,6 +1,6 @@
 # CESSDA.PASC.SEARCHKIT
 
-This repository contains all source code for the CESSDA ERIC Data Catalogue web application.
+This repository contains all source code for the CESSDA Data Catalogue web application.
 
 Separate repositories are provided for backend architecture; harvester, indexer and Elasticsearch instance.
 
@@ -127,7 +127,7 @@ For development, the following software tools are recommended and have full supp
 
 #### Modify search filters
 
-1. All search filters are located in `/src/containers/SearchPage.jsx` lines `78-161`. The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields. Add additional markup for new filters as necessary.
+1. All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`. The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields. Add additional markup for new filters as necessary.
 
 > The Searchkit UI framework provides several filter controls and documentation can be found [here](http://docs.searchkit.co/stable).
 
@@ -141,7 +141,7 @@ For development, the following software tools are recommended and have full supp
 
 #### Modify Schema.org JSON-LD (used by Google indexer)
 
-1. General organisation information and social media links are generated for every page. JSON-LD can be modified in `/src/components/Footer.jsx` on lines `48-61`.
+1. General organisation information and social media links are generated for every page. JSON-LD can be modified in `/src/components/Footer.jsx` on lines `70-83`.
 2. Dataset metadata is generated on the detail page for a single study record. JSON-LD can be modified in `/src/utilities/metadata.js` using method `getJsonLd()`. This method takes a study returned from `getStudyModel()` as its input.
 
 > Google documentation on supported dataset JSON-LD properties can be found [here](https://developers.google.com/search/docs/data-types/dataset).
@@ -150,11 +150,11 @@ For development, the following software tools are recommended and have full supp
 
 As of *2nd April 2018*...
 
-* Elasticsearch CMMStudy JSON does not contain a list of languages for which other metadata is available. This is required for the language buttons displayed for each result on the search page. Therefore only the current language appears in that list. (See `/src/reducers/search.js` line `72`)
+* Elasticsearch CMMStudy JSON does not contain a list of languages for which other metadata is available. This is required for the language buttons displayed for each result on the search page. Therefore only the current language appears in that list. (See `/src/reducers/search.js` line `79`)
 * German and Finnish language translations in the `/src/locales` directory have been created using Google Translate. They should be checked as they are **incomplete** and will contain grammatical/spelling errors.
 * Sorting by **Title** produces strange results. This may need fixing in the backend Elasticsearch instance. See `/src/components/Topbar.jsx` lines `35-61` for where the sorting is defined in the frontend.
-* The **Publisher** filter splits the institution name by word. For example, instead of an option called "UK Data Archive", it lists 3 options: "UK", "Data" and "Archive". Unsure as to whether this is a frontend or backend configuration issue. See `/src/containers/SearchPage.jsx` lines `128-145`.
-* The **Collection years** filter has been disabled/hidden. It is not compatible with how dates are returned in the new CMMStudy schema. Enabling it currently results in JavaScript errors. See `/src/containers/SearchPage.jsx` lines `97-107`.
+* The **Publisher** filter splits the institution name by word. For example, instead of an option called "UK Data Archive", it lists 3 options: "UK", "Data" and "Archive". Unsure as to whether this is a frontend or backend configuration issue. See `/src/containers/SearchPage.jsx` lines `129-146`.
+* The **Collection years** filter has been disabled/hidden. It is not compatible with how dates are returned in the new CMMStudy schema. Enabling it currently results in JavaScript errors. See `/src/containers/SearchPage.jsx` lines `97-108`. The filter is expecting 4-digit integers representing years however Elasticsearch currently returns full date strings. A potential fix could be to provide a **separate** new field in Elasticsearch which has the 4-digit year only. The full year fields should still **remain** in order to be displayed on the detail page.
 
 ## Resources
 

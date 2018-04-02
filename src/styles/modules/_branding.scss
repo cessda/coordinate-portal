@@ -1,60 +1,35 @@
-$dark_blue: #0075b5;
-$light_grey: #e7e4e2;
-$dark_grey: #555652;
+$white: #ffffff;
+$light_blue: #85c4ec;
+$light_grey: #eeeeee;
+$dark_grey: #444444;
+$black: #222222;
 
 body .sk-layout {
   a {
-    color: $dark_blue;
+    color: darken($light_blue, 15);
   }
 
   header {
     position: relative;
-    padding-bottom: 40px;
-    background-color: $dark_blue;
-    overflow: hidden;
+    padding-bottom: 0;
+    min-height: 192px;
+    background: url("../img/line-background.png") no-repeat right center;
+    background-size: 50%;
 
-    .background {
-      position: absolute;
-      top: -100%;
-      left: -12%;
-      width: 400px;
-      height: 400px;
-      transform: rotate(-75deg);
-      z-index: 1;
-
-      &:before, &:after {
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 50%;
-        top: 0;
-      }
-
-      &:before {
-        left: 0;
-        background-color: lighten($dark_blue, 5);
-      }
-
-      &:after {
-        right: 0;
-        background-color: lighten($dark_blue, 10);
-      }
-
-      @media screen and (max-width: 768px) {
-        display: none;
-      }
+    .column {
+      padding-bottom: 9px;
     }
 
     .beta {
       font-family: 'Kanit', sans-serif;
       font-size: 0.75rem;
       letter-spacing: 2px;
-      color: #0474b5;
+      color: $dark_grey;
       position: absolute;
       top: 12px;
       left: -25px;
       transform: rotate(-45deg);
-      background-color: #ffffff;
+      background-color: $white;
       width: 100px;
       height: 20px;
       text-align: center;
@@ -66,11 +41,9 @@ body .sk-layout {
       position: absolute;
       top: 0;
       left: 0;
-      height: 45px;
+      height: 50px;
       width: 100%;
-      border-top: 45px solid $dark_grey;
-      border-left: 100vw solid transparent;
-      z-index: 2;
+      border-top: 50px solid $light_blue;
     }
 
     &:after {
@@ -78,36 +51,34 @@ body .sk-layout {
       position: absolute;
       bottom: 0;
       left: 0;
-      height: 30px;
+      height: 50px;
       width: 100%;
-      border-bottom: 30px solid #ffffff;
-      border-left: 100vw solid transparent;
-      z-index: 2;
+      border-bottom: 50px solid $dark_grey;
+    }
+
+    .cessda-organisation {
+      position: absolute;
+      top: 12px;
+      left: 0;
+      padding: 0 15px 0 25px;
+      color: $white;
+      font-weight: 500;
+      font-size: 14px;
     }
 
     .logo {
       position: relative;
       text-align: center;
-      width: 250px;
-      margin-top: 30px;
-      z-index: 2;
+      width: 275px;
+      margin-top: 50px;
+      z-index: 1;
 
       .cessda-eric {
         display: block;
-        background: url("../img/logo.svg") no-repeat;
-        background-size: 248px 44px;
-        height: 44px;
-        width: 248px;
-      }
-
-      .cessda-pasc {
-        font-family: 'Kanit', sans-serif;
-        font-size: 0.75rem;
-        letter-spacing: 2px;
-        color: #ffffff;
-        width: 250px;
-        margin: 10px 0 0 4px;
-        display: block;
+        background: url("../img/cessda_logo_dc.png") no-repeat;
+        background-size: 275px 69px;
+        height: 69px;
+        width: 275px;
       }
 
       @media screen and (max-width: 768px) {
@@ -116,7 +87,7 @@ body .sk-layout {
     }
 
     .sk-search-box {
-      border: 0;
+      border: 2px solid $light_grey;
       border-radius: 3px;
 
       .sk-search-box__icon {
@@ -129,10 +100,10 @@ body .sk-layout {
     }
 
     .sk-reset-filters {
-      background-color: lighten($dark_blue, 5);
+      background-color: lighten($dark_grey, 5);
 
       &:hover {
-        background-color: lighten($dark_blue, 10);
+        background-color: lighten($dark_grey, 10);
       }
     }
   }
@@ -146,26 +117,21 @@ body .sk-layout {
 
         .sk-panel__header {
           margin-bottom: 0;
-          padding: 15px 15px 23px 30px;
+          padding: 15px 15px 15px 30px;
           border-radius: 3px 3px 0 0;
-          color: #ffffff;
-          background-color: $dark_blue;
-          clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-          transition: color 250ms ease, border-top-color 250ms ease, border-left-color 250ms ease, background-color 250ms ease;
+          color: $dark_grey;
+          background-color: $light_grey;
 
           &:after {
-            top: 46%;
             left: 12px;
-            border-top: 5px solid #ffffff;
+            border-top: 5px solid $dark_grey;
             border-left: 5px solid transparent;
           }
 
           &.is-collapsed {
             padding: 15px 15px 15px 30px;
             color: $dark_grey;
-            background-color: $light_grey;
             border-radius: 3px;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 
             &:after {
               top: 50%;
@@ -177,8 +143,8 @@ body .sk-layout {
         }
 
         .sk-panel__content {
-          margin: -15px 0 0 0;
-          padding: 30px 15px 15px 15px;
+          margin: 0;
+          padding: 5px 15px 15px 15px;
           background-color: $light_grey;
           border-bottom-left-radius: 3px;
           border-bottom-right-radius: 3px;
@@ -206,18 +172,12 @@ body .sk-layout {
 
     .sk-panel__container {
       & > .dropdown .dropdown-trigger button {
-        color: #ffffff;
-      }
-
-      &.sk-panel__collapsed {
-        & > .dropdown .dropdown-trigger button {
-          color: $dark_grey;
-        }
+        color: $dark_grey;
       }
     }
 
     .data-label {
-      color: $dark_blue;
+      color: darken($light_blue, 15);
     }
   }
 
@@ -228,9 +188,8 @@ body .sk-layout {
 
   .modal {
     .modal-card-head {
-      background-color: $dark_blue;
+      background-color: $light_blue;
       border-bottom: 0;
-      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 
       .modal-card-title {
         color: #ffffff;
@@ -249,9 +208,10 @@ body .sk-layout {
     }
 
     .modal-card-foot {
-      background-color: $light_grey;
+      padding: 15px 20px;
       border-top: 0;
-      clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 100%);
+      background-color: $light_grey;
+      justify-content: flex-end;
 
       button {
         font-size: 14px;
@@ -261,33 +221,98 @@ body .sk-layout {
 
   footer {
     position: relative;
-    background-color: $dark_grey;
-    color: $light_grey;
+    background-color: $light_grey;
+    color: $dark_grey;
 
-    &:before {
+    &:after {
       content: '';
       position: absolute;
-      top: 0;
+      bottom: -50px;
       left: 0;
+      height: 50px;
       width: 100%;
-      height: 30px;
-      border-top: 30px solid #ffffff;
-      border-left: 100vw solid transparent;
+      border-bottom: 50px solid $black;
     }
 
     .hero {
       background-color: transparent;
 
-      a {
-        color: $light_grey;
+      .hero-body {
+        padding: 20px 1.5rem 50px;
 
-        &:hover {
-          text-decoration: underline;
+        .footer-line {
+          position: absolute;
+          top: 62px;
+          left: 285px;
+          right: 0;
+          height: 0;
+          border-top: 1px solid $dark_grey;
         }
-      }
 
-      strong {
-        color: $light_grey;
+        .logo-footer {
+          background: url("../img/logo-footer.png") no-repeat;
+          background-size: 315px 82px;
+          height: 82px;
+          width: 315px;
+        }
+
+        .footer-social {
+          position: absolute;
+          top: 28px;
+          right: 0;
+          list-style: none;
+
+          li {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: $dark_grey;
+
+            &:first-child {
+              margin-right: 10px;
+            }
+
+            a {
+              font-size: 22px;
+              font-weight: normal;
+              color: lighten($dark_grey, 15);
+
+              &:hover, &:hover svg {
+                color: darken($light_blue, 15);
+              }
+            }
+          }
+        }
+
+        .is-4, .is-3 {
+          li, a {
+            color: lighten($dark_grey, 15);
+            font-weight: 500;
+          }
+        }
+
+        .is-3 li, .is-3 a, strong {
+          text-transform: uppercase;
+        }
+
+        a {
+          color: $dark_grey;
+          transition: color 500ms ease;
+
+          &:hover {
+            color: darken($light_blue, 15);
+          }
+        }
+
+        strong {
+          color: $dark_grey;
+        }
+
+        svg {
+          transition: color 500ms ease;
+          color: lighten($dark_grey, 15);
+        }
       }
     }
   }

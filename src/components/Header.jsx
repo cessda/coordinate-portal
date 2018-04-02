@@ -48,11 +48,10 @@ class Header extends Component<Props> {
 
     return (
       <header>
-        <div className="background"/>
-
         <span className="beta">Beta</span>
 
         <div className="container">
+          <div className="cessda-organisation"><Translate content="cessda"/></div>
           <Language/>
         </div>
 
@@ -64,8 +63,10 @@ class Header extends Component<Props> {
                   push('/');
                   resetSearch();
                 }}/>
-                <span className="cessda-pasc"><Translate content="application"/></span>
               </div>
+              {pathname === '/' &&
+               <HitsStats className="hits-count"/>
+              }
             </div>
             <div className="column">
               <SearchBox
@@ -73,38 +74,36 @@ class Header extends Component<Props> {
                 searchOnChange={true}
                 queryBuilder={queryBuilder}/>
 
-              {pathname === '/' &&
-               <div className="reset-search">
-                 <HitsStats className="hits-count"/>
-
+              <div className="reset-search">
+                {pathname === '/' &&
                  <a className="sk-reset-filters link mobile-filters-toggle"
                     onClick={toggleMobileFilters}>
                    {showMobileFilters && <Translate content="hideFilters"/>}
                    {!showMobileFilters && <Translate content="showFilters"/>}
                  </a>
+                }
 
-                 <a className="sk-reset-filters link" onClick={toggleAdvancedSearch}>
-                   <Translate content="advancedSearch.label"/>
+                {filters &&
+                 <a className="sk-reset-filters link" onClick={toggleSummary}>
+                   <Translate content="filters.summary.label"/>
                  </a>
+                }
 
-                 {filters &&
-                  <a className="sk-reset-filters link" onClick={toggleSummary}>
-                    <Translate content="filters.summary.label"/>
-                  </a>
-                 }
+                <a className="sk-reset-filters link" onClick={toggleAdvancedSearch}>
+                  <Translate content="advancedSearch.label"/>
+                </a>
 
-                 <ResetFilters component={Reset}
-                               options={{query: false, filter: true, pagination: true}}
-                               translations={{
-                                 'reset.clear_all': counterpart.translate('reset.filters')
-                               }}/>
-                 <ResetFilters component={Reset}
-                               options={{query: true, filter: false, pagination: true}}
-                               translations={{
-                                 'reset.clear_all': counterpart.translate('reset.query')
-                               }}/>
-               </div>
-              }
+                <ResetFilters component={Reset}
+                              options={{query: false, filter: true, pagination: true}}
+                              translations={{
+                                'reset.clear_all': counterpart.translate('reset.filters')
+                              }}/>
+                <ResetFilters component={Reset}
+                              options={{query: true, filter: false, pagination: true}}
+                              translations={{
+                                'reset.clear_all': counterpart.translate('reset.query')
+                              }}/>
+              </div>
             </div>
           </div>
         </div>
@@ -126,13 +125,14 @@ class Header extends Component<Props> {
               }
               {!filters &&
                <div>
-               <p className="pb-10"><Translate content="filters.summary.noFilters"/></p>
-               <p><Translate content="filters.summary.close" unsafe/></p>
+                 <p className="pb-10"><Translate content="filters.summary.noFilters"/></p>
+                 <p><Translate content="filters.summary.close" unsafe/></p>
                </div>
               }
             </section>
             <div className="modal-card-foot">
-              <button className="button is-light" onClick={toggleSummary}><Translate content="close"/></button>
+              <button className="button is-light" onClick={toggleSummary}>
+                <Translate content="close"/></button>
             </div>
           </div>
         </div>
@@ -146,21 +146,45 @@ class Header extends Component<Props> {
             </div>
             <section className="modal-card-body">
               <p className="pb-10"><Translate content="advancedSearch.introduction"/></p>
-              <p><Translate content="advancedSearch.and" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.or" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.negates" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.phrase" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.prefix" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.precedence" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.distance" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p><Translate content="advancedSearch.slop" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p className="pt-15"><strong><Translate content="advancedSearch.escaping.heading" unsafe/></strong></p>
-              <p><Translate content="advancedSearch.escaping.content" with={{ className: "tag is-light has-text-weight-semibold" }} unsafe/></p>
-              <p className="pt-15"><strong><Translate content="advancedSearch.defaultOperator.heading" unsafe/></strong></p>
-              <p><Translate content="advancedSearch.defaultOperator.content" with={{ className: "has-text-weight-semibold" }} unsafe/></p>
+              <p><Translate content="advancedSearch.and"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.or"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.negates"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.phrase"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.prefix"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.precedence"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.distance"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p><Translate content="advancedSearch.slop"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p className="pt-15"><strong><Translate content="advancedSearch.escaping.heading"
+                                                      unsafe/></strong></p>
+              <p><Translate content="advancedSearch.escaping.content"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/></p>
+              <p className="pt-15">
+                <strong><Translate content="advancedSearch.defaultOperator.heading"
+                                   unsafe/></strong></p>
+              <p><Translate content="advancedSearch.defaultOperator.content"
+                            with={{className: 'has-text-weight-semibold'}}
+                            unsafe/></p>
             </section>
             <div className="modal-card-foot">
-              <button className="button is-light" onClick={toggleAdvancedSearch}><Translate content="close"/></button>
+              <button className="button is-light" onClick={toggleAdvancedSearch}>
+                <Translate content="close"/></button>
             </div>
           </div>
         </div>

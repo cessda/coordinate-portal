@@ -4,39 +4,63 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import * as striptags from 'striptags';
 
+// Creates a model to store/display study metadata in the user interface.
+// The comments indicate the label displayed in the UI for each property (it is not always obvious).
 export function getStudyModel(data: Object): Object {
   return {
+    // [Not visible in user interface]
     id: data._source.id || '',
-    studyNumber: data._source.studyNumber || '',
+    // "Study title"
     titleStudy: data._source.titleStudy || '',
+    // "Creator"
+    creators: data._source.creators || [],
+    // "Study Persistent Identifier"
+    pidStudies: data._source.pidStudies || [],
+    // "Abstract"
     abstract: _.trim(
       striptags(_.replace(_.replace(data._source.abstract || '', '</p>', '\n\n'), '<p>', ''))),
     abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
       length: 500
     }),
     abstractExpanded: false,
-    classifications: data._source.classifications || [],
-    keywords: data._source.keywords || [],
+    // "Country"
     studyAreaCountries: data._source.studyAreaCountries || [],
-    unitTypes: data._source.unitTypes || [],
-    pidStudies: data._source.pidStudies || [],
-    fileLanguages: data._source.fileLanguages || [],
-    creators: data._source.creators || [],
+    // "Time dimension"
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
-    typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
+    // "Analysis unit"
+    unitTypes: data._source.unitTypes || [],
+    // "Sampling procedure"
     samplingProcedureFreeTexts: data._source.samplingProcedureFreeTexts || [],
-    dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
-    dataAccessFreeTexts: data._source.dataAccessFreeTexts || [],
-    publicationYear: data._source.publicationYear || '',
+    // "Data collection method"
+    typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
+    // "Data collection period"
     dataCollectionPeriodStartdate: data._source.dataCollectionPeriodStartdate || '',
     dataCollectionPeriodEnddate: data._source.dataCollectionPeriodEnddate || '',
-    lastModified: data._source.lastModified || '',
+    dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
+    // "Language of data files"
+    fileLanguages: data._source.fileLanguages || [],
+    // "Publisher"
     publisher: data._source.publisher ? data._source.publisher.publisher : '',
+    // "Year of publication"
+    publicationYear: data._source.publicationYear || '',
+    // "Terms of data access"
+    dataAccessFreeTexts: data._source.dataAccessFreeTexts || [],
+    // "Study number"
+    studyNumber: data._source.studyNumber || '',
+    // "Topic"
+    classifications: data._source.classifications || [],
+    // "Keyword"
+    keywords: data._source.keywords || [],
+    // [Not visible in user interface]
+    lastModified: data._source.lastModified || '',
+    // [Not visible in user interface]
     studyUrl: data._source.studyUrl,
+    // [Not visible in user interface]
     isActive: data._source.isActive
   };
 }
 
+// Generates study JSON-LD for Google indexing.
 export function getJsonLd(data: Object): Object {
   if (!data) {
     return {};

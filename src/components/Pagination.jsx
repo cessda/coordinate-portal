@@ -2,7 +2,7 @@
 
 import type {Node} from 'react';
 import React from 'react';
-import {FaChevronLeft, FaChevronRight} from 'react-icons/lib/fa/index';
+import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/lib/fa/index';
 import {connect} from 'react-redux';
 import {AbstractItemList} from 'searchkit';
 
@@ -27,7 +27,7 @@ class Pagination extends AbstractItemList<Props> {
       }
       if (items[i].label === '...') {
         links.push(<li key={items[i].key}>
-          <span className="pagination-ellipsis">&hellip;</span>
+          <span className="pagination-ellipsis"><FaEllipsisH/></span>
         </li>);
       } else {
         let current = items[i].page === selectedItems[0] ? ' is-current' : '';

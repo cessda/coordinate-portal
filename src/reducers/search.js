@@ -5,6 +5,7 @@ import type {Action} from '../actions';
 import * as _ from 'lodash';
 
 type State = {
+  loading: boolean,
   showMobileFilters: boolean,
   showAdvancedSearch: boolean,
   showFilterSummary: boolean,
@@ -19,6 +20,7 @@ type State = {
 };
 
 const initialState: State = {
+  loading: true,
   showMobileFilters: false,
   showAdvancedSearch: false,
   showFilterSummary: false,
@@ -31,6 +33,11 @@ const search = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case 'INIT_SEARCHKIT':
       return state;
+
+    case 'TOGGLE_LOADING':
+      return Object.assign({}, state, {
+        loading: action.loading
+      });
 
     case 'TOGGLE_MOBILE_FILTERS':
       return Object.assign({}, state, {

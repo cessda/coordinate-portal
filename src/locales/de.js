@@ -1,47 +1,23 @@
 module.exports = {
   counterpart: {
-    names: {
-      days: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-      abbreviated_days: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-      months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-      abbreviated_months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-      am: 'vormittags',
-      pm: 'nachmittags'
-    },
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
         ? 'zero' : (count === 1) ? 'one' : 'other'
-      ],
-    formats: {
-      date: {
-        'default': '%a, %e. %b %Y',
-        long: '%A, %e. %B %Y',
-        short: '%d.%m.%y'
-      },
-
-      time: {
-        'default': '%H:%M Uhr',
-        long: '%H:%M:%S %z',
-        short: '%H:%M'
-      },
-
-      datetime: {
-        'default': '%a, %e. %b %Y, %H:%M Uhr',
-        long: '%A, %e. %B %Y, %H:%M:%S %z',
-        short: '%d.%m.%y %H:%M'
-      }
-    }
+      ]
   },
-  application: 'Datenkatalog',
+  cessda: 'Konsortium der Europäischen Sozialwissenschaftlichen Datenarchive',
   language: {
     label: 'Sprache',
-    availability: 'Diese Daten sind in den folgenden Sprachen verfügbar.',
-    notAvailable: 'In der ausgewählten Sprache nicht verfügbar'
+    notAvailable: {
+      field: 'Nicht verfügbar',
+      heading: 'Die angeforderten Daten wurden nicht gefunden.',
+      content: 'Es existiert möglicherweise nicht oder ist nicht in der ausgewählten Sprache verfügbar. Wählen Sie eine alternative Sprache oder starten Sie eine neue Suche.'
+    }
   },
   search: 'Finde soziale und ökonomische Forschungsdaten',
   noHits: {
-    noResultsFound: 'Keine Ergebnisse gefunden für %(query)s.',
-    searchWithoutFilters: 'Suche nach %(query)s ohne Filter',
+    noResultsFound: 'Keine Ergebnisse für "%(query)s" in der ausgewählten Sprache gefunden.',
+    searchWithoutFilters: 'Suche nach "%(query)s" ohne Filter',
     error: 'Beim Abrufen Ihrer Ergebnisse ist ein Fehler aufgetreten. Bitte versuche es erneut.',
     resetSearch: 'Suche zurücksetzen'
   },
@@ -120,7 +96,10 @@ module.exports = {
     query: 'Saubere Suche',
     filters: 'Filter zurücksetzen'
   },
-  similarResults: 'Ähnliche Ergebnisse',
+  similarResults: {
+    heading: 'Ähnliche Ergebnisse',
+    notAvailable: 'Keine ähnlichen Ergebnisse gefunden.'
+  },
   resultsPerPage: 'Ergebnisse pro Seite',
   sortBy: 'Sortiere nach',
   showFilters: 'Filter anzeigen',
@@ -133,16 +112,35 @@ module.exports = {
   back: 'Zurück',
   close: 'Schließen',
   metadata: {
+    studyTitle: 'Titel der Studie',
+    creator: 'Schöpfer',
+    studyPersistentIdentifier: 'Studienbezeichner',
+    abstract: 'Abstrakt',
     methodology: 'Methodik',
+    country: 'Land',
+    timeDimension: 'Zeit Dimension',
+    analysisUnit: 'Analyseeinheit',
+    samplingProcedure: 'Stichprobenverfahren',
+    dataCollectionMethod: 'Datensammelmethode',
+    dataCollectionPeriod: 'Datensammlungszeitraum',
+    languageOfDataFiles: 'Sprache der Datendateien',
     access: 'Zugriff',
+    publisher: 'Herausgeber',
+    yearOfPublication: 'Veröffentlichungsjahr',
+    termsOfDataAccess: 'Bedingungen des Datenzugriffs',
+    studyNumber: 'Studiennummer',
     topics: 'Themen',
     keywords: 'Schlüsselwörter'
   },
   footer: {
-    organisationsFeed: 'Feeds für Organisationen',
+    followUsOn: 'Folge uns auf',
+    contactUs: 'Kontaktiere uns',
+    menu: 'Speisekarte',
     about: 'Über',
     consortium: 'Konsortium',
-    training: 'Ausbildung',
+    projects: 'Projekte',
+    researchInfrastructure: 'Forschungsinfrastruktur',
+    contact: 'Kontakt',
     privacy: 'Datenschutz-Bestimmungen'
   }
 };

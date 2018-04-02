@@ -1,47 +1,23 @@
 module.exports = {
   counterpart: {
-    names: {
-      days: ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai'],
-      abbreviated_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      months: ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Saattaa', 'Kesäkuu', 'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'],
-      abbreviated_months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      am: 'AM',
-      pm: 'PM'
-    },
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
         ? 'zero' : (count === 1) ? 'one' : 'other'
-      ],
-    formats: {
-      date: {
-        'default': '%a, %e %b %Y',
-        long: '%A, %B %o, %Y',
-        short: '%b %e'
-      },
-
-      time: {
-        'default': '%H:%M',
-        long: '%H:%M:%S %z',
-        short: '%H:%M'
-      },
-
-      datetime: {
-        'default': '%a, %e %b %Y %H:%M',
-        long: '%A, %B %o, %Y %H:%M:%S %z',
-        short: '%e %b %H:%M'
-      }
-    }
+      ]
   },
-  application: 'Data Catalog',
+  cessda: 'Euroopan sosiaalitieteiden tietoryhmän konsortio',
   language: {
     label: 'Kieli',
-    availability: 'Nämä tiedot ovat saatavilla seuraavilla kielillä.',
-    notAvailable: 'Ei käytettävissä valitulla kielellä'
+    notAvailable: {
+      field: 'Ei saatavilla',
+      heading: 'Pyydettyjä tietoja ei löytynyt.',
+      content: 'Se ei välttämättä ole tai ei ole valitulla kielellä. Valitse vaihtoehtoinen kieli tai aloita uusi haku.'
+    }
   },
   search: 'Etsi sosiaalista ja taloudellista tutkimustietoa',
   noHits: {
-    noResultsFound: '%(query)s ei löytynyt.',
-    searchWithoutFilters: 'Ets %(query)s ilman suodattimia',
+    noResultsFound: 'Tuloksia ei löytynyt "%(query)s" valitulla kielellä.',
+    searchWithoutFilters: 'Ets "%(query)s" ilman suodattimia',
     error: 'Pahoittelemme, että tulosi haettiin. Yritä uudelleen',
     resetSearch: 'Palauta haku'
   },
@@ -99,28 +75,31 @@ module.exports = {
   advancedSearch: {
     label: 'Tarkennettu haku',
     introduction: 'Seuraavien erikoismerkkien avulla voidaan suorittaa kehittyneitä hakuhakemuksia:',
-    and: '<span class="%(className)s">+</span> bedeutet <strong>UND</strong> arbeitsweise.',
-    or: '<span class="%(className)s">|</span> bedeutet <strong>ODER</strong> arbeitsweise.',
-    negates: '<span class="%(className)s">-</span> <strong>negiert</strong> ein einzelnes Token.',
-    phrase: '<span class="%(className)s">"</span> hüllt eine Anzahl von Tokens ein, um eine <strong>Phrase</strong> zum Suchen zu bezeichnen.',
-    prefix: '<span class="%(className)s">*</span> am Ende eines Terms steht eine <strong>Präfixabfrage</strong>.',
-    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> <strong>Präzedenz</strong> angeben.',
-    distance: '<span class="%(className)s">~N</span> nach einem Wort bedeutet <strong>Bearbeitungsabstand</strong> (Unschärfe).',
-    slop: '<span class="%(className)s">~N</span> nach einer Phrase bedeutet <strong>Slop</strong> Menge.',
+    and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
+    or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
+    negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
+    phrase: '<span class="%(className)s">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.',
+    prefix: '<span class="%(className)s">*</span> at the end of a term signifies a <strong>prefix</strong> query.',
+    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signify <strong>precedence</strong>.',
+    distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
+    slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
     escaping: {
-      heading: 'Flucht',
-      content: 'Die obigen Zeichen sind reserviert. Um nach einem dieser Sonderzeichen zu suchen, müssen Sie mit <span class="%(className)s">\\</span> escaped sein.'
+      heading: 'Karkaaminen',
+      content: 'Edellä olevat merkit on varattu. Jotta näitä erikoismerkkejä voidaan etsiä, ne on pakko välttää <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
-      heading: 'Standardoperator',
-      content: 'Der Standardoperator, wenn in einem gegebenen Suchbegriff keine Sonderzeichen enthalten sind, ist <strong>ODER</strong>. Zum Beispiel, wenn Sie nach <em class="%(className)s">Social Science</em> suchen, wird dies als <em class="%(className)s">Social</em> <strong>ODER</strong> <em class="%(className)s">Science</em> interpretiert.'
+      heading: 'Oletusoperaattori',
+      content: 'The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class="%(className)s">Social Science</em>, this will be interpreted as <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
     }
   },
   reset: {
     query: 'Tyhjennä haku',
     filters: 'Poista suodattimet'
   },
-  similarResults: 'Samankaltaiset tulokset',
+  similarResults: {
+    heading: 'Samankaltaiset tulokset',
+    notAvailable: 'Ei vastaavia tuloksia.'
+  },
   resultsPerPage: 'Tulos per sivu',
   sortBy: 'Lajittele',
   showFilters: 'Näytä suodattimet',
@@ -129,20 +108,39 @@ module.exports = {
   readLess: 'Lue vähemmän',
   viewJson: 'Näytä JSON',
   goToStudy: 'Mene opiskeluun',
-  forthcoming: 'Forthcoming',
-  back: 'Back',
+  forthcoming: 'Tuleva',
+  back: 'Takaisin',
   close: 'Sulje',
   metadata: {
+    studyTitle: 'Opinnot',
+    creator: 'Luoja',
+    studyPersistentIdentifier: 'Tutkimuksen tunniste',
+    abstract: 'Abstrakti',
     methodology: 'Metodologia',
-    access: 'Access',
-    topics: 'Aiheet',
+    country: 'Maa',
+    timeDimension: 'Ajanmitta',
+    analysisUnit: 'Analyysiyksikkö',
+    samplingProcedure: 'Näytteenottomenettely',
+    dataCollectionMethod: 'Tiedonkeruumenetelmä',
+    dataCollectionPeriod: 'Tiedonkeruujakso',
+    languageOfDataFiles: 'Tiedostojen kieli',
+    access: 'Pääsy',
+    publisher: 'Kustantaja',
+    yearOfPublication: 'Julkaisuvuosi',
+    termsOfDataAccess: 'Tietojen käyttöoikeudet',
+    studyNumber: 'Tutkimuksen numero',
+    topics: 'Aiheista',
     keywords: 'Avainsanat'
   },
   footer: {
-    organisationsFeed: 'Organisations Feed',
+    followUsOn: 'Seuraa meitä',
+    contactUs: 'Ota meihin yhteyttä',
+    menu: 'Valikko',
     about: 'Tietoja',
     consortium: 'Konsortio',
-    training: 'Koulutus',
+    projects: 'Projektit',
+    researchInfrastructure: 'Tutkimusinfrastruktuuri',
+    contact: 'Ottaa yhteyttä',
     privacy: 'Tietosuojakäytäntö'
   }
 };

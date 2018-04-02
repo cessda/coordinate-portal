@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 import type {Dispatch, State} from '../types';
 import searchkit from '../utilities/searchkit';
 import {push} from 'react-router-redux';
+import Translate from 'react-translate-component';
 
 type Props = {
   item: mixed,
@@ -21,27 +22,26 @@ class Similars extends Component<Props> {
   render(): Node {
     const {item, similars, push} = this.props;
 
-    if (item === undefined || similars === undefined) {
-      return null;
-    }
-
     let links: Node[] = [];
-    for (let i: number = 0; i < similars.length; i++) {
-      links.push(<a key={i} onClick={() => {
-        push({
-          pathname: 'detail',
-          search: '?q="' + similars[i].id + '"'
-        });
-        searchkit.reloadSearch();
 
-      }}>{similars[i].title}</a>);
+    if (item !== undefined && similars !== undefined) {
+      for (let i: number = 0; i < similars.length; i++) {
+        links.push(<a key={i} onClick={() => {
+          push({
+            pathname: 'detail',
+            search: '?q="' + similars[i].id + '"'
+          });
+          searchkit.reloadSearch();
+
+        }}>{similars[i].title}</a>);
+      }
     }
 
     return (
       <div className="similars">
         {links}
         {links.length === 0 &&
-         <p>No similar results found.</p>
+         <Translate component="p" content="similarResults.notAvailable"/>
         }
       </div>
     );
