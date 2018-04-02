@@ -32,9 +32,9 @@ type Props = {
 class SearchPage extends Component<Props> {
   componentDidUpdate(): void {
     // Auto expand the 'Topics' filter if it contains selected values.
-    let topicsFilter = $('.filter--keywords\\.term > .is-collapsed');
+    let topicsFilter = $('.filter--classifications\\.term > .is-collapsed');
     if (!topicsFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['keywords.term'])) {
+        !_.isEmpty(this.props.filters['classifications.term'])) {
       topicsFilter.data('expanded', true).click();
     }
 
@@ -75,19 +75,19 @@ class SearchPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="column is-4">
-              <RefinementListFilter id="keywords.term"
+              <RefinementListFilter id="classifications.term"
                                     title={counterpart.translate('filters.topic.label')}
-                                    field={'keywords.term'}
+                                    field={'classifications.term'}
                                     fieldOptions={{
                                       type: 'nested',
-                                      options: {path: 'keywords', min_doc_count: 1}
+                                      options: {path: 'classifications', min_doc_count: 1}
                                     }}
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.topic.label')}
                                                                tooltip={counterpart.translate(
                                                                  'filters.topic.tooltip')}
-                                                               className="keywords"
+                                                               className="classifications"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
