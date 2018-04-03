@@ -23,6 +23,6 @@ spec:
           - name: PASC_ELASTICSEARCH_URL
             value: http://ESURL:9200
           - name: PASC_DEBUG_MODE
-            value: TRUE
+            value: "TRUE"
       nodeSelector:
         app: global
