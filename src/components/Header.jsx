@@ -48,7 +48,7 @@ class Header extends Component<Props> {
 
     return (
       <header>
-        <span className="beta">Beta</span>
+        /*<span className="beta">Beta</span>*/
 
         <div className="container">
           <div className="cessda-organisation"><Translate content="cessda"/></div>
