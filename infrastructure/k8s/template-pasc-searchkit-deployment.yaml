@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: DEPLOYMENTNAME
-        image: eu.gcr.io/cessda-development/pasc-searchkit:dev
+        image: eu.gcr.io/cessda-development/pasc-searchkit:staging
         imagePullPolicy: Always
         ports:
         - containerPort: 8088
