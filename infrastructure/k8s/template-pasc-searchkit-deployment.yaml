@@ -22,4 +22,4 @@ spec:
           - name: PASC_ELASTICSEARCH_URL
             value: http://ESURL:9200
       nodeSelector:
-        app: global 
+        app: global
