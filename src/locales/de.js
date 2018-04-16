@@ -35,7 +35,7 @@ module.exports = {
     languageOfDataFiles: {
       label: 'Sprache der Dateien',
       placeholder: 'Suchsprachen',
-      tooltip: 'Sprache des Forschungsdatensatzes, d. H. Die Sprache der Variablennamen / -bezeichnungen oder Interviewtranskriptionen usw.'
+      tooltip: 'Sprache des Forschungsdatensatzes, d. h. Die Sprache der Variablennamen / -bezeichnungen oder Interviewtranskriptionen usw.'
     },
     country: {
       label: 'Land',
