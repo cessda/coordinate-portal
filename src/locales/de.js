@@ -93,7 +93,7 @@ module.exports = {
     }
   },
   reset: {
-    query: 'Saubere Suche',
+    query: 'Suche zurücksetzen',
     filters: 'Filter zurücksetzen'
   },
   similarResults: {
