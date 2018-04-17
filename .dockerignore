@@ -1,17 +1,2 @@
-# NPM Files
 node_modules
 npm-debug.log
-
-# Remove Infrastructure folder/subfodler
-infrastructure
-
-# Remove Dockerfile/Jenkinsfile
-Dockerfile
-.dockerignor
-Jenkinsfile
-
-# Git
-.git*
-
-# README
-README.md

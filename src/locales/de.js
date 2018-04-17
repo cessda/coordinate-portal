@@ -35,7 +35,7 @@ module.exports = {
     languageOfDataFiles: {
       label: 'Sprache der Dateien',
       placeholder: 'Suchsprachen',
-      tooltip: 'Sprache des Forschungsdatensatzes, d. H. Die Sprache der Variablennamen / -bezeichnungen oder Interviewtranskriptionen usw.'
+      tooltip: 'Sprache des Forschungsdatensatzes, d. h. Die Sprache der Variablennamen / -bezeichnungen oder Interviewtranskriptionen usw.'
     },
     country: {
       label: 'Land',
@@ -84,7 +84,7 @@ module.exports = {
     distance: '<span class="%(className)s">~N</span> nach einem Wort bedeutet <strong>Bearbeitungsabstand</strong> (Unschärfe).',
     slop: '<span class="%(className)s">~N</span> nach einer Phrase bedeutet <strong>Slop</strong> Menge.',
     escaping: {
-      heading: 'Flucht',
+      heading: 'Sonderzeichen',
       content: 'Die obigen Zeichen sind reserviert. Um nach einem dieser Sonderzeichen zu suchen, müssen Sie mit <span class="%(className)s">\\</span> escaped sein.'
     },
     defaultOperator: {
@@ -104,10 +104,10 @@ module.exports = {
   sortBy: 'Sortiere nach',
   showFilters: 'Filter anzeigen',
   hideFilters: 'Filter ausblenden',
-  readMore: 'Weiterlesen',
-  readLess: 'Lese weniger',
+  readMore: 'Mehr anzeigen',
+  readLess: 'Weniger anzeigen',
   viewJson: 'JSON anzeigen',
-  goToStudy: 'Zum Studium gehen',
+  goToStudy: 'Zur Studie wechseln',
   forthcoming: 'Bevorstehend',
   back: 'Zurück',
   close: 'Schließen',
@@ -135,7 +135,7 @@ module.exports = {
   footer: {
     followUsOn: 'Folge uns auf',
     contactUs: 'Kontaktiere uns',
-    menu: 'Speisekarte',
+    menu: 'Menü oder Seitenstruktur',
     about: 'Über',
     consortium: 'Konsortium',
     projects: 'Projekte',
