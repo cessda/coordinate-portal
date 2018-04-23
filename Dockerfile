@@ -1,4 +1,4 @@
-FROM node:9.5.0
+FROM node:9.11.1
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -10,12 +10,13 @@ ENV PASC_DEBUG_MODE="true"
 
 # Install app dependencies
 COPY package.json .
-
+# For npm@5 or later, copy package-lock.json as well
+#COPY package-lock.json .
 # Copy npm-shrinkwrap.json as well, which ensures dependencies are locked.
 COPY npm-shrinkwrap.json .
 
 # NodeJS Install
-RUN npm cache verify
+RUN npm cache clear --force
 RUN npm install
 
 # Bundle app source

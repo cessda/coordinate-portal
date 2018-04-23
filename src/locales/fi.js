@@ -5,91 +5,91 @@ module.exports = {
         ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
-  cessda: 'Euroopan sosiaalitieteiden tietoryhmän konsortio',
+  cessda: 'Consortium of European Social Science Data Archives',
   language: {
     label: 'Kieli',
     notAvailable: {
       field: 'Ei saatavilla',
-      heading: 'Pyydettyjä tietoja ei löytynyt.',
-      content: 'Se ei välttämättä ole tai ei ole valitulla kielellä. Valitse vaihtoehtoinen kieli tai aloita uusi haku.'
+      heading: 'Hakemaasi aineistoa ei löytynyt.',
+      content: 'Aineistoa ei ole tai se ei ole saatavilla valitsemallasi kielellä. Valitse toinen kieli tai tee uusi haku.'
     }
   },
-  search: 'Etsi sosiaalista ja taloudellista tutkimustietoa',
+  search: 'Hae yhteiskunta- ja taloustieteiden tutkimusaineistoja',
   noHits: {
-    noResultsFound: 'Tuloksia ei löytynyt "%(query)s" valitulla kielellä.',
-    searchWithoutFilters: 'Ets "%(query)s" ilman suodattimia',
-    error: 'Pahoittelemme, että tulosi haettiin. Yritä uudelleen',
-    resetSearch: 'Palauta haku'
+    noResultsFound: 'Haku "%(query)s" ei tuottanut tuloksia valitulla kielellä.',
+    searchWithoutFilters: 'Etsi "%(query)s" ilman suodattimia',
+    error: 'Tuloksia haettaessa tapahtui virhe. Yritä uudelleen.',
+    resetSearch: 'Nollaa haku'
   },
   filters: {
     topic: {
-      label: 'Aihe',
-      placeholder: 'Hae aiheita',
-      tooltip: 'CESSDA-aiheluokitus palvelee tutkimuksen yleisiä aiheita, aiheita tai teemoja.'
+      label: 'Aihepiiri',
+      placeholder: 'Hae aihepiirejä',
+      tooltip: 'CESSDAn aihepiiriluokituksen avulla voit hakea aineistoja aiheittain tai teemoittain.'
     },
     collectionDates: {
-      label: 'Keräilyvuodet',
-      placeholder: 'Hae vuotta',
-      tooltip: 'Kausi, vuosina, jolloin tiedot kerättiin.'
+      label: 'Aineistonkeruun ajankohta',
+      placeholder: 'Hae aineistonkeruun ajankohtaa',
+      tooltip: 'Vuodet, jolloin aineisto on kerätty.'
     },
     languageOfDataFiles: {
       label: 'Tiedostojen kieli',
-      placeholder: 'Hae kieliä',
-      tooltip: 'Tutkimustietosanan kieli, eli muuttujan nimet / tarrat tai haastattelujen lähteet jne.'
+      placeholder: 'Hae tiedostojen kieliä',
+      tooltip: 'Tutkimusaineiston kieli, eli muuttujien nimien/selitteiden tai litteroitujen haastattelujen yms. kieli'
     },
     country: {
-      label: 'Maa',
-      placeholder: 'Etsi maat',
-      tooltip: 'Maa, jossa tutkimus toteutettiin.'
+      label: 'Aineiston keruumaa',
+      placeholder: 'Hae aineistojen keruumaita',
+      tooltip: 'Maa, jossa tutkimus on toteutettu.'
     },
     publisher: {
       label: 'Julkaisija',
-      placeholder: 'Etsi julkaisijat',
-      tooltip: 'Tutkimusdatan julkaisevan laitoksen nimi. Tavallisesti CESSDA-palveluntarjoaja toimittaa metatiedot.'
+      placeholder: 'Hae julkaisijoita',
+      tooltip: 'Tutkimusaineiston julkaisseen laitoksen nimi. Julkaisija on tavallisesti CESSDA-palveluntarjoaja, joka toimittaa aineiston metatiedot.'
     },
     summary: {
-      label: 'Suodattimen yhteenveto',
-      introduction: 'Seuraavia suodattimia on käytetty hakuusi.',
-      remove: 'Valitse suodatin poistaaksesi tämän haun.',
-      noFilters: 'Hakemukseen ei ole lisätty suodattimia.',
+      label: 'Yhteenveto hakusuodattimista',
+      introduction: 'Haussasi käytetään seuraavia suodattimia.',
+      remove: 'Valitse suodatin poistaaksesi sen tästä hausta.',
+      noFilters: 'Hakuun ei ole lisätty suodattimia.',
       close: 'Poista tämä ikkuna valitsemalla <strong>Sulje</strong>.'
     }
   },
   numberOfResults: {
-    zero: '%(count)s löytyi',
-    one: '%(count)s löytynyt tulos',
-    other: '%(count)s löytyi'
+    zero: '%(count)s tulosta',
+    one: '%(count)s tulos',
+    other: '%(count)s tulosta'
   },
   numberOfResultsWithTime: {
-    zero: '%(count)s tulokset löydettiin %(time)sms',
-    one: '%(count)s löytyi %(time)sms',
-    other: '%(count)s tulokset löydettiin %(time)sms'
+    zero: '%(count)s tulosta ajassa %(time)sms',
+    one: '%(count)s tulos ajassa %(time)sms',
+    other: '%(count)s tulosta ajassa %(time)sms'
   },
   sorting: {
     relevance: 'Relevanssi',
     titleAscending: 'Otsikko (nouseva)',
     titleDescending: 'Otsikko (laskeva)',
-    dateAscending: 'Keräyspäivä (nouseva)',
-    dateDescending: 'Keräyspäivä (laskeva)'
+    dateAscending: 'Keruuajankohta (nouseva)',
+    dateDescending: 'Keruuajankohta (laskeva)'
   },
   advancedSearch: {
     label: 'Tarkennettu haku',
-    introduction: 'Seuraavien erikoismerkkien avulla voidaan suorittaa kehittyneitä hakuhakemuksia:',
-    and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
-    or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
-    negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
-    phrase: '<span class="%(className)s">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.',
-    prefix: '<span class="%(className)s">*</span> at the end of a term signifies a <strong>prefix</strong> query.',
-    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signify <strong>precedence</strong>.',
-    distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
-    slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
+    introduction: 'Seuraavien erikoismerkkien avulla voidaan luoda tarkennettuja hakulausekkeita:',
+    and: '<span class="%(className)s">+</span> suorittaa <strong>AND</strong>-operaation eli tuottaa tuloksia, joissa esiintyy kaikki käytetyt hakusanat.',
+    or: '<span class="%(className)s">|</span> suorittaa <strong>OR</strong>-operaation eli tuottaa tuloksia, joissa esiintyy vähintään yksi käytetyistä hakusanoista.',
+    negates: '<span class="%(className)s">-</span> <strong>rajaa pois</strong> hakusanan sisältävät tulokset.',
+    phrase: '<span class="%(className)s">"</span> hakee lainausmerkkien sisällä olevat hakusanat <strong>fraasina</strong>.',
+    prefix: '<span class="%(className)s">*</span> <strong>katkaisee</strong> hakusanan sen lopusta.',
+    precedence: '<span class="%(className)s">(</span> ja <span class="%(className)s">)</span> asettaa niiden sisällä olevat hakusanat ja operaattorit <strong>etusijalle</strong> hakulausekkeen suoritusjärjestyksessä.',
+    distance: '<span class="%(className)s">~N</span> sanan jälkeen hakee annetun sanan <strong>kaltaisia</strong> tuloksia (sumea haku). N määrittää, kuinka monen merkin verran sanat saavat poiketa toisistaan.',
+    slop: '<span class="%(className)s">~N</span> fraasin jälkeen määrittää, kuinka monen sanan <strong>päässä toisistaan</strong> hakusanat saavat esiintyä.',
     escaping: {
-      heading: 'Karkaaminen',
-      content: 'Edellä olevat merkit on varattu. Jotta näitä erikoismerkkejä voidaan etsiä, ne on pakko välttää <span class="%(className)s">\\</span>.'
+      heading: 'Erikoismerkit',
+      content: 'Edellä olevat erikoismerkit on varattu hakulausekkeiden muodostamiseen. Jos erikoismerkki halutaan sisällyttää hakuun, sen eteen on lisättävä koodinvaihtomerkki <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
       heading: 'Oletusoperaattori',
-      content: 'The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class="%(className)s">Social Science</em>, this will be interpreted as <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
+      content: 'Kun hakulauseke ei sisällä erikoismerkkejä, oletusoperaattori on <strong>OR</strong>. Esimerkiksi kun haetaan sanoilla <em class="%(className)s">poliittiset ideologiat</em>, tämä hakulauseke tulkitaan: <em class="%(className)s">poliittiset</em> <strong>OR</strong> <em class="%(className)s">ideologiat</em>.'
     }
   },
   reset: {
@@ -98,49 +98,49 @@ module.exports = {
   },
   similarResults: {
     heading: 'Samankaltaiset tulokset',
-    notAvailable: 'Ei vastaavia tuloksia.'
+    notAvailable: 'Ei samankaltaisia tuloksia.'
   },
-  resultsPerPage: 'Tulos per sivu',
+  resultsPerPage: 'Tuloksia per sivu',
   sortBy: 'Lajittele',
   showFilters: 'Näytä suodattimet',
   hideFilters: 'Piilota suodattimet',
-  readMore: 'Lue lisää',
-  readLess: 'Lue vähemmän',
+  readMore: 'Näytä lisää',
+  readLess: 'Näytä vähemmän',
   viewJson: 'Näytä JSON',
-  goToStudy: 'Mene opiskeluun',
-  forthcoming: 'Tuleva',
+  goToStudy: 'Siirry aineistoon',
+  forthcoming: 'Tulossa',
   back: 'Takaisin',
   close: 'Sulje',
   metadata: {
-    studyTitle: 'Opinnot',
-    creator: 'Luoja',
-    studyPersistentIdentifier: 'Tutkimuksen tunniste',
-    abstract: 'Abstrakti',
-    methodology: 'Metodologia',
+    studyTitle: 'Aineiston nimi',
+    creator: 'Tekijä',
+    studyPersistentIdentifier: 'Aineiston pysyvä tunniste',
+    abstract: 'Sisällön kuvaus',
+    methodology: 'Otanta- ja keruutiedot',
     country: 'Maa',
-    timeDimension: 'Ajanmitta',
-    analysisUnit: 'Analyysiyksikkö',
-    samplingProcedure: 'Näytteenottomenettely',
-    dataCollectionMethod: 'Tiedonkeruumenetelmä',
-    dataCollectionPeriod: 'Tiedonkeruujakso',
+    timeDimension: 'Tutkimuksen aikaulottuvuus',
+    analysisUnit: 'Havaintoyksikkötyyppi',
+    samplingProcedure: 'Otantamenetelmä',
+    dataCollectionMethod: 'Keruumenetelmä',
+    dataCollectionPeriod: 'Aineistonkeruun ajankohta',
     languageOfDataFiles: 'Tiedostojen kieli',
-    access: 'Pääsy',
-    publisher: 'Kustantaja',
+    access: 'Aineiston saatavuus',
+    publisher: 'Julkaisija',
     yearOfPublication: 'Julkaisuvuosi',
-    termsOfDataAccess: 'Tietojen käyttöoikeudet',
-    studyNumber: 'Tutkimuksen numero',
-    topics: 'Aiheista',
-    keywords: 'Avainsanat'
+    termsOfDataAccess: 'Käyttöoikeudet',
+    studyNumber: 'Aineistonumero',
+    topics: 'Tieteenalat',
+    keywords: 'Asiasanat'
   },
   footer: {
-    followUsOn: 'Seuraa meitä',
-    contactUs: 'Ota meihin yhteyttä',
+    followUsOn: 'Seuraa meitä:',
+    contactUs: 'Ota yhteyttä',
     menu: 'Valikko',
     about: 'Tietoja',
     consortium: 'Konsortio',
-    projects: 'Projektit',
+    projects: 'Hankkeet',
     researchInfrastructure: 'Tutkimusinfrastruktuuri',
-    contact: 'Ottaa yhteyttä',
+    contact: 'Yhteystiedot',
     privacy: 'Tietosuojakäytäntö'
   }
 };

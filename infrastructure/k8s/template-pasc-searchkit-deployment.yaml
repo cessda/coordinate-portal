@@ -14,15 +14,17 @@ spec:
     spec:
       containers:
       - name: DEPLOYMENTNAME
+<<<<<<< HEAD
         image: eu.gcr.io/cessda-development/pasc-searchkit:staging
         imagePullPolicy: Always
+=======
+        image: eu.gcr.io/cessda-development/pasc-searchkit:latest
+>>>>>>> dev
         ports:
         - containerPort: 8088
           name: searchkit-cport
         env:
           - name: PASC_ELASTICSEARCH_URL
             value: http://ESURL:9200
-          - name: PASC_DEBUG_MODE
-            value: "TRUE"
       nodeSelector:
         app: global
