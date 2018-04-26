@@ -27,10 +27,7 @@ class Footer extends Component<Props> {
                   <ul className="footer-social">
                     <li><Translate content="footer.followUsOn"/>:</li>
                     <li><a href="https://twitter.com/CESSDA_Data" target="_blank"><FaTwitterSquare/></a></li>
-                    <li><a href="https://www.facebook.com/Cessda-463858013634628" target="_blank"><FaFacebookSquare/></a></li>
-                    <li><a href="https://www.instagram.com/cessda_data" target="_blank"><FaInstagram/></a></li>
                     <li><a href="https://www.linkedin.com/company/9392869" target="_blank"><FaLinkedinSquare/></a></li>
-                    <li><a href="https://plus.google.com/112779581489694492154" target="_blank"><FaGooglePlusSquare/></a></li>
                     <li><a href="https://www.youtube.com/channel/UCqbZKb1Enh-WcFpg6t86wsA" target="_blank"><FaYoutubeSquare/></a></li>
                   </ul>
                 </div>
