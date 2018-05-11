@@ -26,26 +26,33 @@ class Detail extends HitItem<Props> {
       let value: string = property ?
                           (callback ? callback(field[i][property]) : field[i][property]) :
                           (callback ? callback(field[i]) : field[i]);
-      if (element === 'tag') {
-        elements.push(<span className="tag" key={i}>{value}</span>);
-      } else {
-        elements.push(<p key={i}>{value}</p>);
+      if (value.length > 0) {
+        if (element === 'tag') {
+          elements.push(<span className="tag" key={i}>{value}</span>);
+        } else {
+          elements.push(<p key={i}>{value}</p>);
+        }
       }
     }
 
-    if (field.length === 0) {
+    if (field.length === 0 || elements.length === 0) {
       elements.push(<Translate key="0" content="language.notAvailable.field"/>);
     }
 
     return elements;
   }
 
-  formatDate(format: string, date1: string, date2?: string, dateFallback?: string): Node {
+  formatDate(format: string, date1: string, date2?: string, dateFallback?: string,
+             dateFallbackProperty?: ?string): Node {
     if (!date1 && !date2 && !dateFallback) {
       return <Translate content="language.notAvailable.field"/>;
     }
     if (!date1 && !date2) {
-      return <p>{dateFallback}</p>;
+      if (_.isArray(dateFallback)) {
+        return this.generateElements(dateFallback, dateFallbackProperty, 'p');
+      } else {
+        return <p>{dateFallback}</p>;
+      }
     }
     let momentDate1 = moment(date1);
     if (!date2) {
@@ -129,7 +136,8 @@ class Detail extends HitItem<Props> {
                      component="strong"
                      content="metadata.dataCollectionPeriod"/>
           {this.formatDate('Do MMMM YYYY', item.dataCollectionPeriodStartdate,
-            item.dataCollectionPeriodEnddate, item.dataCollectionFreeTexts)}
+            item.dataCollectionPeriodEnddate, item.dataCollectionFreeTexts,
+            'dataCollectionFreeText')}
 
           <Translate className="data-label"
                      component="strong"
