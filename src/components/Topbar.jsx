@@ -41,12 +41,12 @@ class TopBar extends Component<Props> {
               }, {
                 translation: 'sorting.titleAscending',
                 key: 'title-ascending',
-                field: 'titleStudy',
+                field: 'titleStudy.raw',
                 order: 'asc'
               }, {
                 translation: 'sorting.titleDescending',
                 key: 'title-descending',
-                field: 'titleStudy',
+                field: 'titleStudy.raw',
                 order: 'desc'
               }, {
                 translation: 'sorting.dateAscending',

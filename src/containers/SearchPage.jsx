@@ -22,6 +22,7 @@ import searchkit from '../utilities/searchkit';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 import type {State} from '../types';
+import moment from 'moment';
 
 type Props = {
   showMobileFilters: boolean,
@@ -39,9 +40,9 @@ class SearchPage extends Component<Props> {
     }
 
     // Auto expand the 'Collection years' filter if it contains selected values.
-    let collectionYearsFilter = $('.filter--dataCollectionPeriodStartdate > .is-collapsed');
+    let collectionYearsFilter = $('.filter--dataCollectionYear > .is-collapsed');
     if (!collectionYearsFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['dataCollectionPeriodStartdate'])) {
+        !_.isEmpty(this.props.filters['dataCollectionYear'])) {
       collectionYearsFilter.data('expanded', true).click();
     }
 
@@ -94,18 +95,19 @@ class SearchPage extends Component<Props> {
                                       'filters.topic.placeholder')}/>}
                                     size={500}/>
 
-              {/* TODO : Fix 'Collection Years' filter. Requires Elasticsearch to provide 4-digit integers representing years. */}
-              {/*<RangeFilter field="dataCollectionPeriodStartdate"
-                           id="dataCollectionPeriodStartdate"
+              <RangeFilter min={1900}
+                           max={moment().year()}
+                           field="dataCollectionYear"
+                           id="dataCollectionYear"
                            title={counterpart.translate('filters.collectionDates.label')}
                            rangeComponent={RangeSliderInput}
                            containerComponent={<Panel title={counterpart.translate(
                              'filters.collectionDates.label')}
                                                       tooltip={counterpart.translate(
                                                         'filters.collectionDates.tooltip')}
-                                                      className="dataCollectionPeriodStartdate"
+                                                      className="dataCollectionYear"
                                                       collapsable={true}
-                                                      defaultCollapsed={true}/>}/>*/}
+                                                      defaultCollapsed={true}/>}/>
 
               <RefinementListFilter id="studyAreaCountries.country"
                                     title={counterpart.translate('filters.country.label')}

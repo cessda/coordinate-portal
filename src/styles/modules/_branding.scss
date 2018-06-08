@@ -151,6 +151,10 @@ body .sk-layout {
 
           .sk-range-slider {
             margin: 15px;
+
+            .rc-slider-track {
+              background-color: $light_blue;
+            }
           }
         }
       }
@@ -242,7 +246,7 @@ body .sk-layout {
 
         .footer-line {
           position: absolute;
-          top: 62px;
+          top: 72px;
           left: 340px;
           right: 0;
           height: 0;
@@ -258,7 +262,7 @@ body .sk-layout {
 
         .footer-social {
           position: absolute;
-          top: 28px;
+          top: 38px;
           right: 0;
           list-style: none;
 
