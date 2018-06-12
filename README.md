@@ -117,6 +117,42 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
+N.B. list of CESSDA languages (as at June 2018):
+
+cs (Czech)
+
+da (Danish)
+
+de (German)
+
+en (English)
+
+es (Spanish)
+
+fi (Finnish)
+
+fr (French)
+
+el (Greek)
+
+hu (Hungarian)
+
+lt (Lithuanian)
+
+nl (Dutch)
+
+no (Norwegian)
+
+pt (Portuguese)
+
+ro (Romanian)
+
+se (Swedish)
+
+sk (Slovak)
+
+sl (Slovenian)
+
 #### Add a new field
 
 1. Each study retrieved from Elasticsearch is first routed through the `getStudyModel()` method located in `/src/utilities/metadata.js`. This cleans the data ready to be used throughout the application. Add the new field to the object returned from this method. Like other fields, it should be provided from Elasticsearch as a child property of the `data._source` object.
