@@ -1,291 +1,146 @@
 module.exports = {
-
   counterpart: {
-
     pluralize: (entry, count) => entry[
-
       (count === 0 && 'zero' in entry)
-
-        ? 'zero' : (count === 1) ? 'one' : 'other'
-
+      ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
-
   },
-
   cessda: 'Consortium of European Social Science Data Archives',
-
   language: {
-
-    label: 'Språk',
-
+    label: 'SprÃ¥k',
     notAvailable: {
-
-      field: 'Ej tillgängligt',
-
-      heading: 'Den begärda informationen hittades ej.',
-
-      content: 'Den finns ej, eller är ej tillgänglig i det valda språket. Välj ett alternativt språk eller gör en ny sökning.'
-
+      field: 'Ej tillgÃ¤ngligt',
+      heading: 'Den begÃ¤rda informationen hittades ej.',
+      content: 'Den finns ej, eller Ã¤r ej tillgÃ¤nglig i det valda sprÃ¥ket. VÃ¤lj ett alternativt sprÃ¥k eller gÃ¶r en ny sÃ¶kning.'
     }
-
   },
-
-  search: 'Hitta Samhällsvetenskaplig och ekonomisk forskningsdata',
-
+  search: 'Hitta SamhÃ¤llsvetenskaplig och ekonomisk forskningsdata',
   noHits: {
-
-    noResultsFound: 'Inga resultat hittades för "%(query)s" för det valda språket.',
-
-    searchWithoutFilters: 'Sök efter "%(query)s" utan filter',
-
-    error: 'Vi ber om ursäkt. Ett fel uppstod när vi hämtade dina resultat. Var god försök igen.',
-
-    resetSearch: 'Nollställ sökning'
-
+    noResultsFound: 'Inga resultat hittades fÃ¶r "%(query)s" fÃ¶r det valda sprÃ¥ket.',
+    searchWithoutFilters: 'SÃ¶k efter "%(query)s" utan filter',
+    error: 'Vi ber om ursÃ¤kt. Ett fel uppstod nÃ¤r vi hÃ¤mtade dina resultat. Var god fÃ¶rsÃ¶k igen.',
+    resetSearch: 'NollstÃ¤ll sÃ¶kning'
   },
-
   filters: {
-
     topic: {
-
-      label: 'Ämnesområde',
-
-      placeholder: 'Sök ämnesområden',
-
-      tooltip: 'CESSDA Topic Classification används för att identifiera en studies generella ämnesområden eller teman.'
-
+      label: 'Ã„mnesomrÃ¥de',
+      placeholder: 'SÃ¶k Ã¤mnesomrÃ¥den',
+      tooltip: 'CESSDA Topic Classification anvÃ¤nds fÃ¶r att identifiera en studies generella Ã¤mnesomrÃ¥den eller teman.'
     },
-
     collectionDates: {
-
-      label: 'Insamlingsår',
-
-      placeholder: 'Sök årtal',
-
-      tooltip: 'Perioden, i år, när data samlades in.'
-
+      label: 'InsamlingsÃ¥r',
+      placeholder: 'SÃ¶k Ã¥rtal',
+      tooltip: 'Perioden, i Ã¥r, nÃ¤r data samlades in.'
     },
-
     languageOfDataFiles: {
-
-      label: 'Språk för datafiler',
-
-      placeholder: 'Sök språk',
-
-      tooltip: 'Språk för forskningsdatasetet, med andra ord språket för till exempel variabelnamn, variabeletiketter eller intervjutranskriptioner.'
-
+      label: 'SprÃ¥k fÃ¶r datafiler',
+      placeholder: 'SÃ¶k sprÃ¥k',
+      tooltip: 'SprÃ¥k fÃ¶r forskningsdatasetet, med andra ord sprÃ¥ket fÃ¶r till exempel variabelnamn, variabeletiketter eller intervjutranskriptioner.'
     },
-
     country: {
-
       label: 'Land',
-
-      placeholder: 'Sök länder',
-
-      tooltip: 'Landet där studien genomfördes.'
-
+      placeholder: 'SÃ¶k lÃ¤nder',
+      tooltip: 'Landet dÃ¤r studien genomfÃ¶rdes.'
     },
-
     publisher: {
-
       label: 'Utgivare',
-
-      placeholder: 'Sök utgivare',
-
-      tooltip: 'Namnet på den organisation som ansvarar för att tillgängliggöra forskningsdatan. Detta kommer, normalt sett, vara den CESSDA Service Provider som tillgängliggör metadatainformationen.'
-
+      placeholder: 'SÃ¶k utgivare',
+      tooltip: 'Namnet pÃ¥ den organisation som ansvarar fÃ¶r att tillgÃ¤ngliggÃ¶ra forskningsdatan. Detta kommer, normalt sett, vara den CESSDA Service Provider som tillgÃ¤ngliggÃ¶r metadatainformationen.'
     },
-
     summary: {
-
       label: 'Sammanfattning av filter',
-
-      introduction: 'Följande filter har applicerats på din sökning.',
-
-      remove: 'Välj ett filter för att ta bort det från din sökning.',
-
-      noFilters: 'Inga ytterligare filter har applicerats på din sökning.',
-
-      close: 'Välj <strong>Stäng</strong> för att stänga detta fönster.'
-
+      introduction: 'FÃ¶ljande filter har applicerats pÃ¥ din sÃ¶kning.',
+      remove: 'VÃ¤lj ett filter fÃ¶r att ta bort det frÃ¥n din sÃ¶kning.',
+      noFilters: 'Inga ytterligare filter har applicerats pÃ¥ din sÃ¶kning.',
+      close: 'VÃ¤lj <strong>StÃ¤ng</strong> fÃ¶r att stÃ¤nga detta fÃ¶nster.'
     }
-
   },
-
   numberOfResults: {
-
-    zero: '%(count)s sökresultat hittade',
-
-    one: '%(count)s sökresultat hittade',
-
-    other: '%(count)s sökresultat hittade'
-
+    zero: '%(count)s sÃ¶kresultat hittade',
+    one: '%(count)s sÃ¶kresultat hittade',
+    other: '%(count)s sÃ¶kresultat hittade'
   },
-
   numberOfResultsWithTime: {
-
-    zero: '%(count)s resultat hittade på %(time)sms',
-
-    one: '%(count)s resultat hittade på %(time)sms',
-
-    other: '%(count)s resultat hittade på %(time)sms'
-
+    zero: '%(count)s resultat hittade pÃ¥ %(time)sms',
+    one: '%(count)s resultat hittade pÃ¥ %(time)sms',
+    other: '%(count)s resultat hittade pÃ¥ %(time)sms'
   },
-
   sorting: {
-
     relevance: 'Relevans',
-
     titleAscending: 'Titel (stigande)',
-
     titleDescending: 'Titel (fallande)',
-
-    dateAscending: 'Datum för insamlande (stigande)',
-
-    dateDescending: 'Datum för insamlande (fallande)'
-
+    dateAscending: 'Datum fÃ¶r insamlande (stigande)',
+    dateDescending: 'Datum fÃ¶r insamlande (fallande)'
   },
-
   advancedSearch: {
-
-    label: 'Advancerad sökning',
-
-    introduction: 'Följande specialtecken kan användas för att utföra avancerade sökfrågor:',
-
+    label: 'Advancerad sÃ¶kning',
+    introduction: 'FÃ¶ljande specialtecken kan anvÃ¤ndas fÃ¶r att utfÃ¶ra avancerade sÃ¶kfrÃ¥gor:',
     and: '<span class="%(className)s">+</span> uttrycker <strong>AND</strong>-operation.',
-
     or: '<span class="%(className)s">|</span> uttrycker <strong>OR</strong>-operation.',
-
     negates: '<span class="%(className)s">-</span> <strong>negerar</strong> en enskild term.',
-
-    phrase: '<span class="%(className)s">"</span> omsluter ett flertal termer för att indikera en <strong>fras</strong> att söka efter.',
-
-    prefix: '<span class="%(className)s">*</span> i slutet av en term indikerar en <strong>prefix</strong>-sökning.',
-
-    precedence: '<span class="%(className)s">(</span> och <span class="%(className)s">)</span> indikerar <strong>företräde</strong>.',
-
-    distance: '<span class="%(className)s">~N</span> efter ett ord indikerar sökning efter <strong>liknande</strong> ord (fuzziness).',
-
-    slop: '<span class="%(className)s">~N</span> indikerar mängden <strong>mellanliggande ord</strong> för att fortfarande vara betraktat som en sökträff.',
-
+    phrase: '<span class="%(className)s">"</span> omsluter ett flertal termer fÃ¶r att indikera en <strong>fras</strong> att sÃ¶ka efter.',
+    prefix: '<span class="%(className)s">*</span> i slutet av en term indikerar en <strong>prefix</strong>-sÃ¶kning.',
+    precedence: '<span class="%(className)s">(</span> och <span class="%(className)s">)</span> indikerar <strong>fÃ¶retrÃ¤de</strong>.',
+    distance: '<span class="%(className)s">~N</span> efter ett ord indikerar sÃ¶kning efter <strong>liknande</strong> ord (fuzziness).',
+    slop: '<span class="%(className)s">~N</span> indikerar mÃ¤ngden <strong>mellanliggande ord</strong> fÃ¶r att fortfarande vara betraktat som en sÃ¶ktrÃ¤ff.',
     escaping: {
-
       heading: 'Escaping',
-
-      content: 'Ovanstående tecken är reserverade av systemet. För att söka efter ett av dessa speciella tecken behövs så kallad Escaping göras med <span class="%(className)s">\\</span> före tecknet.'
-
+      content: 'OvanstÃ¥ende tecken Ã¤r reserverade av systemet. FÃ¶r att sÃ¶ka efter ett av dessa speciella tecken behÃ¶vs sÃ¥ kallad Escaping gÃ¶ras med <span class="%(className)s">\\</span> fÃ¶re tecknet.'
     },
-
     defaultOperator: {
-
       heading: 'Standardoperator',
-
-      content: 'Standardoperatorn som används när inga specialtecken har angivits i en sökfråga är <strong>OR</strong>. Till exempel kommer en sökning efter <em class="%(className)s">Socialt arbete</em> att tolkas som <em class="%(className)s">Socialt</em> <strong>OR</strong> <em class="%(className)s">arbete</em>.'
-
+      content: 'Standardoperatorn som anvÃ¤nds nÃ¤r inga specialtecken har angivits i en sÃ¶kfrÃ¥ga Ã¤r <strong>OR</strong>. Till exempel kommer en sÃ¶kning efter <em class="%(className)s">Socialt arbete</em> att tolkas som <em class="%(className)s">Socialt</em> <strong>OR</strong> <em class="%(className)s">arbete</em>.'
     }
-
   },
-
   reset: {
-
-    query: 'Rensa sökning',
-
-    filters: 'Återställ filter'
-
+    query: 'Rensa sÃ¶kning',
+    filters: 'Ã…terstÃ¤ll filter'
   },
-
   similarResults: {
-
-    heading: 'Liknande sökresultat',
-
-    notAvailable: 'Inga liknande sökresultat funna.'
-
+    heading: 'Liknande sÃ¶kresultat',
+    notAvailable: 'Inga liknande sÃ¶kresultat funna.'
   },
-
   resultsPerPage: 'Resultat per sida',
-
   sortBy: 'Sortera efter',
-
   showFilters: 'Visa filter',
-
-  hideFilters: 'Dölj filter',
-
+  hideFilters: 'DÃ¶lj filter',
   readMore: 'Visa mer',
-
   readLess: 'Visa mindre',
-
   viewJson: 'Visa JSON',
-
-  goToStudy: 'Gå till studie',
-
+  goToStudy: 'GÃ¥ till studie',
   forthcoming: 'Kommande',
-
   back: 'Tillbaka',
-
-  close: 'Stäng',
-
+  close: 'StÃ¤ng',
   metadata: {
-
     studyTitle: 'Titel',
-
-    creator: 'Skapare/Primärforskare',
-
+    creator: 'Skapare/PrimÃ¤rforskare',
     studyPersistentIdentifier: 'Persistent identifierare',
-
     abstract: 'Beskrivning',
-
     methodology: 'Metodologi',
-
     country: 'Land',
-
     timeDimension: 'Tidsdimension',
-
     analysisUnit: 'Analysenhet',
-
     samplingProcedure: 'Urvalsmetod',
-
     dataCollectionMethod: 'Insamlingsmetod',
-
     dataCollectionPeriod: 'Insamlingsperiod',
-
-    languageOfDataFiles: 'Språk för datafiler',
-
-    access: 'Tillgänglighet',
-
+    languageOfDataFiles: 'SprÃ¥k fÃ¶r datafiler',
+    access: 'TillgÃ¤nglighet',
     publisher: 'Utgivare',
-
-    yearOfPublication: 'Publikationsår',
-
-    termsOfDataAccess: 'Tillgänglighetskrav',
-
+    yearOfPublication: 'PublikationsÃ¥r',
+    termsOfDataAccess: 'TillgÃ¤nglighetskrav',
     studyNumber: 'Studienumemr',
-
-    topics: 'Ämnesområden',
-
+    topics: 'Ã„mnesomrÃ¥den',
     keywords: 'Nyckelord'
-
   },
-
   footer: {
-
-   followUsOn: 'Följ oss på',
-
+    followUsOn: 'FÃ¶lj oss pÃ¥',
     contactUs: 'Kontakta oss',
-
     menu: 'Meny',
-
     about: 'Om',
-
     consortium: 'Konsortium',
-
     projects: 'Projekt',
-
     researchInfrastructure: 'Forskningsinfrastruktur',
-
     contact: 'Kontakt',
-
     privacy: 'Integritetspolicy'
-
   }
-
 };
