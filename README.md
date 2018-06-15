@@ -188,12 +188,7 @@ sl (Slovenian)
 
 As of *15th June 2018*...
 
-* FIXED ~~Elasticsearch CMMStudy JSON does not contain a list of languages for which other metadata is available. This is required for the language buttons displayed for each result on the search page. Therefore only the current language appears in that list. (See `/src/reducers/search.js` line `79`)~~
-* FIXED ~~German and Finnish language translations in the `/src/locales` directory have been created using Google Translate. They should be checked as they are **incomplete** and will contain grammatical/spelling errors.~~
-* FIXED ~~Sorting by **Title** produces strange results. This may need fixing in the backend Elasticsearch instance. See `/src/components/Topbar.jsx` lines `35-61` for where the sorting is defined in the frontend.~~
-* FIXED ~~The **Publisher** filter splits the institution name by word. For example, instead of an option called "UK Data Archive", it lists 3 options: "UK", "Data" and "Archive". Unsure as to whether this is a frontend or backend configuration issue. See `/src/containers/SearchPage.jsx` lines `129-146`.~~
-* FIXED ~~The **Collection years** filter has been disabled/hidden. It is not compatible with how dates are returned in the new CMMStudy schema. Enabling it currently results in JavaScript errors. See `/src/containers/SearchPage.jsx` lines `97-108`. The filter is expecting 4-digit integers representing years however Elasticsearch currently returns full date strings. A potential fix could be to provide a **separate** new field in Elasticsearch which has the 4-digit year only. The full year fields should still **remain** in order to be displayed on the detail page.~~
-* WONT FIX ~~The **Availability** filter has been disabled/hidden.~~ This was intentionally removed based on user feedback. There is also no mention of this field in the new CMM Study model.
+* Elasticsearch contains no index for SE and SK languages however they have translations in the user interface. Therefore these languages currently use the English "cmmstudy_en" index. See `/src/utilities/language.js` lines `36` abd `41`. If metadata is available in those languages, new indices should be created in Elasticsearch (i.e. "cmmstudy_se" and "cmmstudy_sk")
 
 ## Resources
 

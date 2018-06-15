@@ -5,7 +5,7 @@ module.exports = {
         ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
-  cessda: 'Konsortium der Europäischen Sozialwissenschaftlichen Datenarchive',
+  cessda: 'Consortium of European Social Science Data Archives',
   language: {
     label: 'Sprache',
     notAvailable: {

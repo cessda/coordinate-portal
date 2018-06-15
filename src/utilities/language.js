@@ -3,6 +3,8 @@
 import en from '../locales/en';
 import de from '../locales/de';
 import fi from '../locales/fi';
+import se from '../locales/se';
+import sk from '../locales/sk';
 
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
@@ -28,5 +30,15 @@ export function getLanguages(): Object[] {
     label: 'Suomi',
     index: 'cmmstudy_fi',
     locale: fi
+  }, {
+    code: 'se',
+    label: 'Svenska',
+    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_se' when Elasticsearch index is ready.
+    locale: se
+  }, {
+    code: 'sk',
+    label: 'Slovenský',
+    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sk' when Elasticsearch index is ready.
+    locale: sk
   }];
 }
