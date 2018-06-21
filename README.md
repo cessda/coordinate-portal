@@ -117,7 +117,7 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (as at June 2018):
+N.B. list of CESSDA languages (as at 21 June 2018):
 
 cs (Czech)
 
@@ -125,19 +125,19 @@ da (Danish)
 
 de (German)
 
+el (Greek)
+
 en (English)
 
-es (Spanish)
+et (Estonian)
 
 fi (Finnish)
 
 fr (French)
 
-el (Greek)
-
 hu (Hungarian)
 
-lt (Lithuanian)
+it (Italian)
 
 nl (Dutch)
 
@@ -145,15 +145,11 @@ no (Norwegian)
 
 pt (Portuguese)
 
-ro (Romanian)
-
 se (Swedish)
 
 sk (Slovak)
 
 sl (Slovenian)
-
-
 
 #### Add a new field
 
