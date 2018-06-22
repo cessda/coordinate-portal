@@ -70,15 +70,7 @@ const search = (state: State = initialState, action: Action): State => {
         if (action.displayed[i]._source === undefined) {
           continue;
         }
-        let study = getStudyModel(action.displayed[i]);
-
-        // TODO : Elasticsearch CMMStudy JSON does not contain a list of languages for which other
-        //        metadata is available. This is required for the language buttons displayed for
-        //        each result on the search page. Therefore just add the current language as a
-        //        temporary fix.
-        study.languages = [action.language.toUpperCase()];
-
-        displayed.push(study);
+        displayed.push(getStudyModel(action.displayed[i]));
       }
 
       return Object.assign({}, state, {

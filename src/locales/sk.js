@@ -2,10 +2,10 @@ module.exports = {
   counterpart: {
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
-        ? 'zero' : (count === 1) ? 'one' : 'other'
+      ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
-  cessda: 'Konzorcium EurĂłpskych spoloÄŤenskovednĂ˝ch dĂˇtovĂ˝ch archĂ­vov',
+  cessda: 'Consortium of European Social Science Data Archives',
   language: {
     label: 'Jazyk',
     notAvailable: {
