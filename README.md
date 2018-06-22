@@ -117,7 +117,7 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (as at 21 June 2018):
+N.B. list of CESSDA languages (as at June 2018):
 
 cs (Czech)
 
@@ -125,19 +125,19 @@ da (Danish)
 
 de (German)
 
-el (Greek)
-
 en (English)
 
-et (Estonian)
+es (Spanish)
 
 fi (Finnish)
 
 fr (French)
 
+el (Greek)
+
 hu (Hungarian)
 
-it (Italian)
+lt (Lithuanian)
 
 nl (Dutch)
 
@@ -145,11 +145,15 @@ no (Norwegian)
 
 pt (Portuguese)
 
+ro (Romanian)
+
 se (Swedish)
 
 sk (Slovak)
 
 sl (Slovenian)
+
+
 
 #### Add a new field
 
@@ -190,4 +194,3 @@ As of *15th June 2018*...
 
 * [Issue Tracker](https://bitbucket.org/cessda/cessda.pasc.version2/issues)
 * [Trello Development Board](https://trello.com/b/c9ibP7KR)
-

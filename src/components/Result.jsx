@@ -32,16 +32,16 @@ class Result extends Component<Props> {
       return null;
     }
 
-    let languages = [];
+    let languages: Node[] = [];
     if (item) {
-      for (let i: number = 0; i < item.languages.length; i++) {
+      for (let i: number = 0; i < item.langAvailableIn.length; i++) {
         languages.push(<a key={i} className="button is-small is-white" onClick={() => {
-          changeLanguage(item.languages[i]);
+          changeLanguage(item.langAvailableIn[i]);
           push({
             pathname: 'detail',
             search: '?q="' + item.id + '"'
           });
-        }}>{item.languages[i]}</a>);
+        }}>{item.langAvailableIn[i]}</a>);
       }
     }
 
