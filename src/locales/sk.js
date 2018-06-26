@@ -2,79 +2,79 @@ module.exports = {
   counterpart: {
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
-      ? 'zero' : (count === 1) ? 'one' : 'other'
+        ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
-  cessda: 'Consortium of European Social Science Data Archives',
+  cessda: 'Konzorcium Európskych spoločenskovedných dátových archívov',
   language: {
     label: 'Jazyk',
     notAvailable: {
-      field: 'Nie je k dispozĂ­cii',
-      heading: 'PoĹľadovanĂ© dĂˇta neboli nĂˇjdenĂ©.',
-      content: 'DĂˇta neexistujĂş alebo nie sĂş k dispozĂ­cii v zvolenom jazyku. ZvoÄľte inĂ˝ jazyk, alebo zaÄŤnite novĂ© vyhÄľadĂˇvanie.'
+      field: 'Nie je k dispozícii',
+      heading: 'Požadované dáta neboli nájdené.',
+      content: 'Dáta neexistujú alebo nie sú k dispozícii v zvolenom jazyku. Zvoľte iný jazyk, alebo začnite nové vyhľadávanie.'
     }
   },
-  search: 'NĂˇjdi dĂˇta zo sociĂˇlnych a ekonomickĂ˝ch vĂ˝skumov',
+  search: 'Nájdi dáta zo sociálnych a ekonomických výskumov',
   noHits: {
-    noResultsFound: 'Pre hÄľadanie "%(query)s" neboli nĂˇjdenĂ© Ĺľadne vĂ˝sledky vo zvolenom jazyku.',
-    searchWithoutFilters: 'HÄľadaj "%(query)s" bez pouĹľitia filtrov',
-    error: 'Ä˝utujeme, ale vyskytol sa problĂ©m pri preberanĂ­ vĂ˝sledkov. SkĂşste znovu, prosĂ­m.',
-    resetSearch: 'VynulovaĹĄ hÄľadanie'
+    noResultsFound: 'Pre hľadanie "%(query)s" neboli nájdené žadne výsledky vo zvolenom jazyku.',
+    searchWithoutFilters: 'Hľadaj "%(query)s" bez použitia filtrov',
+    error: 'Ľutujeme, ale vyskytol sa problém pri preberaní výsledkov. Skúste znovu, prosím.',
+    resetSearch: 'Vynulovať hľadanie'
   },
   filters: {
     topic: {
-      label: 'TĂ©ma',
-      placeholder: 'TĂ©my na vyhÄľadĂˇvanie',
-      tooltip: 'KlasifikĂˇcia tĂ©m CESSDA slĂşĹľi na identifikovanie zĂˇkladnĂ˝ch tĂ©m a predmetov vĂ˝skumu.'
+      label: 'Téma',
+      placeholder: 'Témy na vyhľadávanie',
+      tooltip: 'Klasifikácia tém CESSDA slúži na identifikovanie základných tém a predmetov výskumu.'
     },
     collectionDates: {
-      label: 'Roky zberu dĂˇt',
-      placeholder: 'HÄľadanie (roky)',
-      tooltip: 'Obdobie, v rokoch, kedy boli dĂˇta zozbieranĂ©.'
+      label: 'Roky zberu dát',
+      placeholder: 'Hľadanie (roky)',
+      tooltip: 'Obdobie, v rokoch, kedy boli dáta zozbierané.'
     },
     languageOfDataFiles: {
-      label: 'Jazyk dĂˇtovĂ˝ch sĂşborov',
-      placeholder: 'Jazyk, v ktorom prebieha vyhÄľadĂˇvanie',
-      tooltip: 'Jazyk vĂ˝skumnĂ©ho sĂşboru. Ide o jazyk, v ktorom sĂş uvĂˇdzanĂ© premennĂ©, ich popisky, prepisi rozhovorov a pod.'
+      label: 'Jazyk dátových súborov',
+      placeholder: 'Jazyk, v ktorom prebieha vyhľadávanie',
+      tooltip: 'Jazyk výskumného súboru. Ide o jazyk, v ktorom sú uvádzané premenné, ich popisky, prepisi rozhovorov a pod.'
     },
     country: {
-      label: 'Ĺ tĂˇt',
-      placeholder: 'Krajina vyhÄľadĂˇvania',
-      tooltip: 'Krajina, v ktorej sa realizoval zber dĂˇt.'
+      label: 'Štát',
+      placeholder: 'Krajina vyhľadávania',
+      tooltip: 'Krajina, v ktorej sa realizoval zber dát.'
     },
     publisher: {
-      label: 'VydavateÄľ',
-      placeholder: 'HÄľadaj vo vydavateÄľoch',
-      tooltip: 'NĂˇzov inĹˇtitĂşcie publikujĂşce vĂ˝skumnĂ© dĂˇta. Vo vĂ¤ÄŤĹˇine prĂ­padov pĂ´jde o poskytovateÄľa sluĹľby CESSDA, ktorĂ˝ poskytuje metadĂˇta k vĂ˝skumom.'
+      label: 'Vydavateľ',
+      placeholder: 'Hľadaj vo vydavateľoch',
+      tooltip: 'Názov inštitúcie publikujúce výskumné dáta. Vo väčšine prípadov pôjde o poskytovateľa služby CESSDA, ktorý poskytuje metadáta k výskumom.'
     },
     summary: {
-      label: 'PrehÄľad filtrov',
-      introduction: 'Vo vaĹˇom vyhÄľadĂˇvanĂ­ boli pouĹľitĂ© nasledujĂşce filtre.',
-      remove: 'ZvoÄľte filte, ktorĂ˝ cchete odstrĂˇnuiĹĄ z tohoto vyhÄľadĂˇvania.',
-      noFilters: 'Vo vaĹˇom vyhÄľadĂˇvanĂ­ neboli pouĹľitĂ© Ĺľiadne ÄŹalĹˇie filtrovacie podmienky.',
+      label: 'Prehľad filtrov',
+      introduction: 'Vo vašom vyhľadávaní boli použité nasledujúce filtre.',
+      remove: 'Zvoľte filte, ktorý cchete odstránuiť z tohoto vyhľadávania.',
+      noFilters: 'Vo vašom vyhľadávaní neboli použité žiadne ďalšie filtrovacie podmienky.',
       close: 'Vyberte <strong>Zavri</strong> na zatvorenie tohoto okna.'
     }
   },
   numberOfResults: {
-    zero: '%(count)s Ĺľiaden nĂˇjdenĂ˝ vĂ˝sledok',
-    one: '%(count)s jeden nĂˇjdenĂ˝ vĂ˝sledok',
-    other: '%(count)s nĂˇjdenĂ© vĂ˝sledky'
+    zero: '%(count)s žiaden nájdený výsledok',
+    one: '%(count)s jeden nájdený výsledok',
+    other: '%(count)s nájdené výsledky'
   },
   numberOfResultsWithTime: {
-    zero: '%(count)s Ĺľiaden nĂˇjdenĂ˝ vĂ˝sledok v %(time)sms',
-    one: '%(count)s jeden nĂˇjdenĂ˝ vĂ˝sledok v %(time)sms',
-    other: '%(count)s nĂˇjdenĂ© vĂ˝sledky v %(time)sms'
+    zero: '%(count)s žiaden nájdený výsledok v %(time)sms',
+    one: '%(count)s jeden nájdený výsledok v %(time)sms',
+    other: '%(count)s nájdené výsledky v %(time)sms'
   },
   sorting: {
-    relevance: 'RelevantnosĹĄ',
-    titleAscending: 'ÄŚas (vzostupne)',
-    titleDescending: 'NĂˇzov (zostupne)',
-    dateAscending: 'DĂˇtum zberu dĂˇt (vzostupne)',
-    dateDescending: 'DĂˇtum zberu dĂˇt (zostupne)'
+    relevance: 'Relevantnosť',
+    titleAscending: 'Čas (vzostupne)',
+    titleDescending: 'Názov (zostupne)',
+    dateAscending: 'Dátum zberu dát (vzostupne)',
+    dateDescending: 'Dátum zberu dát (zostupne)'
   },
   advancedSearch: {
-    label: 'RozĹˇĂ­renĂ© vyhÄľadĂˇvanie',
-    introduction: 'V rozĹˇĂ­renom vyhÄľadĂˇvanĂ­ mĂ´Ĺľete pouĹľiĹĄ nasledovnĂ© ĹˇpeciĂˇlne znaky:',
+    label: 'Rozšírené vyhľadávanie',
+    introduction: 'V rozšírenom vyhľadávaní môžete použiť nasledovné špeciálne znaky:',
     and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
     or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
     negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
@@ -84,63 +84,63 @@ module.exports = {
     distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
     slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
     escaping: {
-      heading: 'Ĺ peciĂˇlne znaky',
-      content: 'VyĹˇĹˇie uvedenĂ© znaky sĂş vyhradenĂ©. Ak ich cete vyhÄľadĂˇvaĹĄ, treba pred ne vloĹľiĹĄ znak <span class="%(className)s">\\</span>.'
+      heading: 'Špeciálne znaky',
+      content: 'Vyššie uvedené znaky sú vyhradené. Ak ich cete vyhľadávať, treba pred ne vložiť znak <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
-      heading: 'PredvolenĂ˝ operĂˇtor',
-      content: 'PredvolenĂ˝ operĂˇtor, ktorĂ˝ sa pouĹľije ak neboli pouĹľitĂ© Ĺľiadne ĹˇpeciĂˇlne znaky vo vyhÄľadĂˇvanĂ­ je <strong>OR</strong>. NaprĂ­klad pri hÄľadanĂ­ <em class="%(className)s">spoloÄŤenskĂ© vedy</em>, hÄľadanie bude interpretovanĂ© ako <em class="%(className)s">spoloÄŤenskĂ©</em> <strong>OR</strong> <em class="%(className)s">vedy</em>.'
+      heading: 'Predvolený operátor',
+      content: 'Predvolený operátor, ktorý sa použije ak neboli použité žiadne špeciálne znaky vo vyhľadávaní je <strong>OR</strong>. Napríklad pri hľadaní <em class="%(className)s">spoločenské vedy</em>, hľadanie bude interpretované ako <em class="%(className)s">spoločenské</em> <strong>OR</strong> <em class="%(className)s">vedy</em>.'
     }
   },
   reset: {
-    query: 'VymazaĹĄ hÄľadanie',
-    filters: 'VymazaĹĄ nastavenĂ© filtre'
+    query: 'Vymazať hľadanie',
+    filters: 'Vymazať nastavené filtre'
   },
   similarResults: {
-    heading: 'PodobnĂ© vĂ˝sledky',
-    notAvailable: 'Neboli nĂˇjdenĂ© podobnĂ© vĂ˝sledky.'
+    heading: 'Podobné výsledky',
+    notAvailable: 'Neboli nájdené podobné výsledky.'
   },
-  resultsPerPage: 'PoÄŤet vĂ˝sledkov na stranu',
-  sortBy: 'ZoradenĂ© podÄľa',
+  resultsPerPage: 'Počet výsledkov na stranu',
+  sortBy: 'Zoradené podľa',
   showFilters: 'Zobraz filtre',
-  hideFilters: 'SkryĹĄ filtre',
-  readMore: 'ÄŚĂ­taj viac',
-  readLess: 'ÄŚĂ­taj menej',
+  hideFilters: 'Skryť filtre',
+  readMore: 'Čítaj viac',
+  readLess: 'Čítaj menej',
   viewJson: 'Zobraz JSON',
-  goToStudy: 'ChoÄŹ na ĹˇtĂşdiu',
-  forthcoming: 'VychĂˇdza (v tlaÄŤi)',
-  back: 'SpĂ¤ĹĄ',
-  close: 'ZatvoriĹĄ',
+  goToStudy: 'Choď na štúdiu',
+  forthcoming: 'Vychádza (v tlači)',
+  back: 'Späť',
+  close: 'Zatvoriť',
   metadata: {
-    studyTitle: 'NĂˇzov ĹˇtĂşdie',
+    studyTitle: 'Názov štúdie',
     creator: 'Tvorca',
-    studyPersistentIdentifier: 'TrvalĂ˝ identifikĂˇtor ĹˇtĂşdie',
+    studyPersistentIdentifier: 'Trvalý identifikátor štúdie',
     abstract: 'Abstrakt',
-    methodology: 'MethodolĂłgia',
+    methodology: 'Methodológia',
     country: 'Krajina',
-    timeDimension: 'ÄŚasovĂ© rozmedzie',
-    analysisUnit: 'AnalyzovanĂ© jednotky',
-    samplingProcedure: 'VĂ˝ber vĂ˝skumnej vzorky',
-    dataCollectionMethod: 'MetĂłda zberu dĂˇt',
-    dataCollectionPeriod: 'Obdobie zberu dĂˇt',
-    languageOfDataFiles: 'Jazyk dĂˇtovĂ©ho sĂşboru',
-    access: 'PrĂ­stup',
-    publisher: 'VydavateÄľ',
+    timeDimension: 'Časové rozmedzie',
+    analysisUnit: 'Analyzované jednotky',
+    samplingProcedure: 'Výber výskumnej vzorky',
+    dataCollectionMethod: 'Metóda zberu dát',
+    dataCollectionPeriod: 'Obdobie zberu dát',
+    languageOfDataFiles: 'Jazyk dátového súboru',
+    access: 'Prístup',
+    publisher: 'Vydavateľ',
     yearOfPublication: 'Rok vydania',
-    termsOfDataAccess: 'Podmienky prĂ­stupu',
-    studyNumber: 'ÄŤĂ­slo ĹˇtĂşdie',
+    termsOfDataAccess: 'Podmienky prístupu',
+    studyNumber: 'číslo štúdie',
     topics: 'Predmety',
-    keywords: 'KÄľĂşÄŤovĂ© slovĂˇ'
+    keywords: 'Kľúčové slová'
   },
   footer: {
-    followUsOn: 'Sledujte nĂˇs na',
-    contactUs: 'Kontaktujte nĂˇs',
+    followUsOn: 'Sledujte nás na',
+    contactUs: 'Kontaktujte nás',
     menu: 'Menu',
-    about: 'O nĂˇs',
+    about: 'O nás',
     consortium: 'Konzorcium',
     projects: 'Projekty',
-    researchInfrastructure: 'VĂ˝skumnĂˇ infraĹˇtruktĂşra',
+    researchInfrastructure: 'Výskumná infraštruktúra',
     contact: 'Kontakt',
-    privacy: 'UchovĂˇvanie osobnĂ˝ch dĂˇt'
+    privacy: 'Uchovávanie osobných dát'
   }
 };
