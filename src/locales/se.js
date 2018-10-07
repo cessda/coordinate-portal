@@ -1,4 +1,4 @@
-module.exports = {
+odule.exports = {
 
   counterpart: {
 
@@ -20,17 +20,17 @@ module.exports = {
 
     notAvailable: {
 
-      field: 'Ej tillgängligt',
+      field: 'Inte tillgängligt',
 
-      heading: 'Den begärda informationen hittades ej.',
+      heading: 'Den begärda informationen hittades inte.',
 
-      content: 'Den finns ej, eller är ej tillgänglig i det valda språket. Välj ett alternativt språk eller gör en ny sökning.'
+      content: 'Den finns inte eller är inte tillgänglig på det valda språket. Välj ett alternativt språk eller gör en ny sökning.'
 
     }
 
   },
 
-  search: 'Hitta Samhällsvetenskaplig och ekonomisk forskningsdata',
+  search: 'Hitta samhällsvetenskapliga och ekonomiska forskningsdata',
 
   noHits: {
 
@@ -38,7 +38,7 @@ module.exports = {
 
     searchWithoutFilters: 'Sök efter "%(query)s" utan filter',
 
-    error: 'Vi ber om ursäkt. Ett fel uppstod när vi hämtade dina resultat. Var god försök igen.',
+    error: 'Det uppstod ett fel när vi hämtade dina resultat. Gör ett nytt försök.',
 
     resetSearch: 'Nollställ sökning'
 
@@ -50,7 +50,7 @@ module.exports = {
 
       label: 'Ämnesområde',
 
-      placeholder: 'Sök ämnesområden',
+      placeholder: 'Sök efter ämnesområden',
 
       tooltip: 'CESSDA Topic Classification används för att identifiera en studies generella ämnesområden eller teman.'
 
@@ -60,9 +60,9 @@ module.exports = {
 
       label: 'Insamlingsår',
 
-      placeholder: 'Sök årtal',
+      placeholder: 'Sök efter årtal',
 
-      tooltip: 'Perioden, i år, när data samlades in.'
+      tooltip: 'Perioden, i antal år, när data samlades in.'
 
     },
 
@@ -70,7 +70,7 @@ module.exports = {
 
       label: 'Språk för datafiler',
 
-      placeholder: 'Sök språk',
+      placeholder: 'Sök efter språk',
 
       tooltip: 'Språk för forskningsdatasetet, med andra ord språket för till exempel variabelnamn, variabeletiketter eller intervjutranskriptioner.'
 
@@ -80,7 +80,7 @@ module.exports = {
 
       label: 'Land',
 
-      placeholder: 'Sök länder',
+      placeholder: 'Sök efter länder',
 
       tooltip: 'Landet där studien genomfördes.'
 
@@ -90,9 +90,9 @@ module.exports = {
 
       label: 'Utgivare',
 
-      placeholder: 'Sök utgivare',
+      placeholder: 'Sök efter utgivare',
 
-      tooltip: 'Namnet på den organisation som ansvarar för att tillgängliggöra forskningsdatan. Detta kommer, normalt sett, vara den CESSDA Service Provider som tillgängliggör metadatainformationen.'
+      tooltip: 'Namnet på den organisation som ansvarar för att tillgängliggöra forskningsdata. Detta kommer, normalt sett, vara den CESSDA Service Provider som tillgängliggör metadatainformationen.'
 
     },
 
@@ -102,11 +102,11 @@ module.exports = {
 
       introduction: 'Följande filter har applicerats på din sökning.',
 
-      remove: 'Välj ett filter för att ta bort det från din sökning.',
+      remove: 'Markera ett filter för att ta bort det från din sökning.',
 
       noFilters: 'Inga ytterligare filter har applicerats på din sökning.',
 
-      close: 'Välj <strong>Stäng</strong> för att stänga detta fönster.'
+      close: 'Välj <strong>Stäng</strong> för att stänga fönstret.'
 
     }
 
@@ -114,21 +114,21 @@ module.exports = {
 
   numberOfResults: {
 
-    zero: '%(count)s sökresultat hittade',
+    zero: 'Hittade %(count)s sökresultat',
 
-    one: '%(count)s sökresultat hittade',
+    one: 'Hittade %(count)s sökresultat',
 
-    other: '%(count)s sökresultat hittade'
+    other: 'Hittade %(count)s sökresultat'
 
   },
 
   numberOfResultsWithTime: {
 
-    zero: '%(count)s resultat hittade på %(time)sms',
+    zero: 'Hittade %(count)s resultat på %(time)sms',
 
-    one: '%(count)s resultat hittade på %(time)sms',
+    one: 'Hittade %(count)s resultat på %(time)sms',
 
-    other: '%(count)s resultat hittade på %(time)sms'
+    other: 'Hittade %(count)s resultat på %(time)sms'
 
   },
 
@@ -140,39 +140,39 @@ module.exports = {
 
     titleDescending: 'Titel (fallande)',
 
-    dateAscending: 'Datum för insamlande (stigande)',
+    dateAscending: 'Insamlingsdatum (stigande)',
 
-    dateDescending: 'Datum för insamlande (fallande)'
+    dateDescending: ' Insamlingsdatum (fallande)'
 
   },
 
   advancedSearch: {
 
-    label: 'Advancerad sökning',
+    label: 'Avancerad sökning',
 
     introduction: 'Följande specialtecken kan användas för att utföra avancerade sökfrågor:',
 
-    and: '<span class="%(className)s">+</span> uttrycker <strong>AND</strong>-operation.',
+    and: '<span class="%(className)s">+</span> uttrycker sökning med <strong>AND</strong>.',
 
-    or: '<span class="%(className)s">|</span> uttrycker <strong>OR</strong>-operation.',
+    or: '<span class="%(className)s">|</span> uttrycker sökning med <strong>OR</strong>.',
 
     negates: '<span class="%(className)s">-</span> <strong>negerar</strong> en enskild term.',
 
-    phrase: '<span class="%(className)s">"</span> omsluter ett flertal termer för att indikera en <strong>fras</strong> att söka efter.',
+    phrase: '<span class="%(className)s">"</span> ringar in flera termer för att ange en <strong>fras</strong> att söka efter.',
 
-    prefix: '<span class="%(className)s">*</span> i slutet av en term indikerar en <strong>prefix</strong>-sökning.',
+    prefix: '<span class="%(className)s">*</span> i slutet av en term anger en sökning efter <strong>prefix</strong>.',
 
-    precedence: '<span class="%(className)s">(</span> och <span class="%(className)s">)</span> indikerar <strong>företräde</strong>.',
+    precedence: '<span class="%(className)s">(</span> och <span class="%(className)s">)</span> anger <strong>företräde</strong>.',
 
-    distance: '<span class="%(className)s">~N</span> efter ett ord indikerar sökning efter <strong>liknande</strong> ord (fuzziness).',
+    distance: '<span class="%(className)s">~N</span> efter ett ord anger en sökning efter <strong>liknande</strong> ord (fuzziness).',
 
-    slop: '<span class="%(className)s">~N</span> indikerar mängden <strong>mellanliggande ord</strong> för att fortfarande vara betraktat som en sökträff.',
+    slop: '<span class="%(className)s">~N</span> anger antalet <strong>mellanliggande ord</strong> för att det fortfarande ska betraktas som en sökträff.',
 
     escaping: {
 
       heading: 'Escaping',
 
-      content: 'Ovanstående tecken är reserverade av systemet. För att söka efter ett av dessa speciella tecken behövs så kallad Escaping göras med <span class="%(className)s">\\</span> före tecknet.'
+      content: 'Ovanstående tecken är reserverade av systemet. För att söka efter ett av dessa specialtecken behöver så kallad Escaping göras med <span class="%(className)s">[file://%3c/span]\\</span> före tecknet.'
 
     },
 
@@ -198,7 +198,7 @@ module.exports = {
 
     heading: 'Liknande sökresultat',
 
-    notAvailable: 'Inga liknande sökresultat funna.'
+    notAvailable: 'Inga liknande sökresultat hittades.'
 
   },
 
@@ -246,7 +246,7 @@ module.exports = {
 
     dataCollectionMethod: 'Insamlingsmetod',
 
-    dataCollectionPeriod: 'Insamlingsperiod',
+    dataCollectionPeriod: 'Tidsperiod(er) för insamling',
 
     languageOfDataFiles: 'Språk för datafiler',
 
@@ -258,7 +258,7 @@ module.exports = {
 
     termsOfDataAccess: 'Tillgänglighetskrav',
 
-    studyNumber: 'Studienumemr',
+    studyNumber: 'Studienummer',
 
     topics: 'Ämnesområden',
 
@@ -282,7 +282,7 @@ module.exports = {
 
     researchInfrastructure: 'Forskningsinfrastruktur',
 
-    contact: 'Kontakt',
+    contact: 'Kontaktperson',
 
     privacy: 'Integritetspolicy'
 
