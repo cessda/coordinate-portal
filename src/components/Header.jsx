@@ -48,7 +48,7 @@ class Header extends Component<Props> {
 
     return (
       <header>
-      
+
         <div className="container">
           <div className="cessda-organisation"><a href="https://www.cessda.eu/"><Translate content="cessda"/></a></div>
           <Language/>
