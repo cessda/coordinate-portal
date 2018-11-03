@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 
 # Environment
-ENV PASC_ELASTICSEARCH_URL="http://es.datacatalogue-staging.cessda.eu:9200"
+ENV PASC_ELASTICSEARCH_URL="http://es.datacatalogue-dev.cessda.eu:9200"
 ENV PASC_DEBUG_MODE="true"
 
 # Install app dependencies
