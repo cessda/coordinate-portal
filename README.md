@@ -6,7 +6,7 @@ Separate repositories are provided for backend architecture; harvester, indexer 
 
 ## Prerequisites
 
-[Node.js](https://nodejs.org/) is required to install and run this application.
+[Node.js](https://nodejs.org/) version 9.11 is required to install and run this application.
 
 You will need an existing local or remote Elasticsearch instance setup and running.
 
