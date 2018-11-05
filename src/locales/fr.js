@@ -5,142 +5,142 @@ module.exports = {
         ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
-  cessda: 'Consortium of European Social Science Data Archives',
+  cessda: 'Consortium des Centres de Données Européens en Sciences Sociales',
   language: {
-    label: 'Language',
+    label: 'Langue',
     notAvailable: {
-      field: 'Not available',
-      heading: 'The requested data was not found.',
-      content: 'It may not exist or is not available in the selected language. Choose an alternative language or start a new search.'
+      field: 'Non disponible',
+      heading: 'Les données demandées n\'ont pas été trouvées.',
+      content: 'Les données n\'existent pas ou ne sont pas disponibles dans la langue sélectionnées. Veuillez choisir une autre langue ou démarrer une nouvelle recherche.'
     }
   },
-  search: 'Find Social and Economic Research Data',
+  search: 'Rechercher des données de recherche en Sciences Sociales ou en Economie',
   noHits: {
-    noResultsFound: 'No results found for "%(query)s" in the selected language.',
-    searchWithoutFilters: 'Search for "%(query)s" without filters',
-    error: 'We\'re sorry, an issue occurred when fetching your results. Please try again.',
-    resetSearch: 'Reset Search'
+    noResultsFound: 'Aucun résultat pour la recherche "%(query)s" dans la langue sélectionnée.',
+    searchWithoutFilters: 'Rechercher "%(query)s" sans filtres',
+    error: 'Désolé, un problème est intervenu lors de la récupération de vos résultats. Merci de réessayer.',
+    resetSearch: 'Réinitialiser la recherche'
   },
   filters: {
     topic: {
-      label: 'Topic',
-      placeholder: 'Search topics',
-      tooltip: 'CESSDA Topic Classification serves to identify the general topics, subjects or themes of a study.'
+      label: 'Thème',
+      placeholder: 'Rehercher par thème',
+      tooltip: 'La classification par thèmes CESSDA est utilisée pour identifier les rubriques, sujets ou thèmes des données.'
     },
     collectionDates: {
-      label: 'Collection years',
-      placeholder: 'Search years',
-      tooltip: 'The period, in years, when the data were collected.'
+      label: 'Année de collecte',
+      placeholder: 'Rechercher par année',
+      tooltip: 'La période, en année, pendant laquelle les données ont été collectées.'
     },
     languageOfDataFiles: {
-      label: 'Language of data files',
-      placeholder: 'Search languages',
-      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc.'
+      label: 'Langue des fichers de données',
+      placeholder: 'Rechercher par langue',
+      tooltip: 'Langue de recherche du jeu de données, c\'est à dire la langue des noms et labels de variables or transcriptions d\'entretiens etc.'
     },
     country: {
-      label: 'Country',
-      placeholder: 'Search countries',
-      tooltip: 'Country in which the study took place.'
+      label: 'pays',
+      placeholder: 'Recherche par pays',
+      tooltip: 'Le pays dans lequel l\'étude a eu lieu.'
     },
     publisher: {
-      label: 'Publisher',
-      placeholder: 'Search publishers',
-      tooltip: 'Name of the institution publishing the research data. Will usually be the CESSDA Service Provider providing the metadata information.'
+      label: 'Diffuseur',
+      placeholder: 'Recherche par diffuseur',
+      tooltip: 'Nom de l\'institution qui publie les données de recherche. C\'est généralement le CESSDA Service Provider.'
     },
     summary: {
-      label: 'Filter summary',
-      introduction: 'The following filters have been applied to your search.',
-      remove: 'Select a filter to remove it from this search.',
-      noFilters: 'No additional filters have been applied to your search.',
-      close: 'Select <strong>Close</strong> to dismiss this window.'
+      label: 'résumé des filtres',
+      introduction: 'Les filtres suivants s\'appliquent à votre recherche.',
+      remove: 'Sélectionnez un filtre pour le supprimer de cette recherche.',
+      noFilters: 'Aucun filtre ne s\'applique à la recherche.',
+      close: 'Sélectionnez <strong>Fermer</strong> pour fermer cette fenêtre.'
     }
   },
   numberOfResults: {
-    zero: '%(count)s results found',
-    one: '%(count)s result found',
-    other: '%(count)s results found'
+    zero: '%(count)s résultats trouvés',
+    one: '%(count)s résultat trouvé',
+    other: '%(count)s résultats trouvés'
   },
   numberOfResultsWithTime: {
-    zero: '%(count)s results found in %(time)sms',
-    one: '%(count)s result found in %(time)sms',
-    other: '%(count)s results found in %(time)sms'
+    zero: '%(count)s résultats trouvés en %(time)sms',
+    one: '%(count)s résultat trouvé en %(time)sms',
+    other: '%(count)s résultats trouvés en  %(time)sms'
   },
   sorting: {
-    relevance: 'Relevance',
-    titleAscending: 'Title (ascending)',
-    titleDescending: 'Title (descending)',
-    dateAscending: 'Date of collection (ascending)',
-    dateDescending: 'Date of collection (descending)'
+    relevance: 'Pertinence',
+    titleAscending: 'Titre (croissant)',
+    titleDescending: 'Titre (décroissant)',
+    dateAscending: 'date de collecte (croissante)',
+    dateDescending: 'date de collecte (décroissante)'
   },
   advancedSearch: {
-    label: 'Advanced search',
-    introduction: 'The following special characters can be used to perform advanced search queries:',
-    and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
-    or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
-    negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
-    phrase: '<span class="%(className)s">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.',
-    prefix: '<span class="%(className)s">*</span> at the end of a term signifies a <strong>prefix</strong> query.',
-    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signify <strong>precedence</strong>.',
-    distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
-    slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
+    label: 'Recherche avancée',
+    introduction: 'Les caractères spéciaux suivants peuvent être utilisés pour une recherche avancée :',
+    and: '<span class="%(className)s">+</span> signifie l\'opérateur <strong>ET</strong>.',
+    or: '<span class="%(className)s">|</span> signifie l\'opérateur <strong>OU</strong>.',
+    negates: '<span class="%(className)s">-</span> <strong> élimine </strong> une chaîne simple.',
+    phrase: '<span class="%(className)s">"</span> entoure plusieurs éléments pour indiquer la recherche d\'une <strong>phrase</strong>.',
+    prefix: '<span class="%(className)s">*</span> à la fin d\'une chaîne signifie une recherche avec un <strong>joker</strong>.',
+    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signifie <strong>une priorité</strong>.',
+    distance: '<span class="%(className)s">~N</span> après un mot signifie modifer la <strong>distance</strong> (flou).',
+    slop: '<span class="%(className)s">~N</span> après une phrase signifie <strong>la valeur de la tolérance</strong>.',
     escaping: {
-      heading: 'Escaping',
-      content: 'The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class="%(className)s">\\</span>.'
+      heading: 'Protéger',
+      content: 'Les caractères ci-dessus sont réservés. Pour les utiliser dans une recherche, il faudra les protéger avec le caractère <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
-      heading: 'Default operator',
-      content: 'The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class="%(className)s">Social Science</em>, this will be interpreted as <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
+      heading: 'Opérateur par défaut',
+      content: 'L\'opérateur par défaut dans une suite de chaînes de caratères est le : <strong>OU</strong>. Par exemple si vous saisissez les termes <em class="%(className)s">Sciences Sociales</em>, la recherche portera sur <em class="%(className)s">Sciences</em> <strong>OU</strong> <em class="%(className)s">Sociales</em>.'
     }
   },
   reset: {
-    query: 'Clear search',
-    filters: 'Reset filters'
+    query: 'Effacer les crières de recherche',
+    filters: 'Réinitialiser les filtres'
   },
   similarResults: {
-    heading: 'Similar results',
-    notAvailable: 'No similar results found.'
+    heading: 'Résultats similaires',
+    notAvailable: 'Aucun résultat similaire n\'a été trouvé.'
   },
-  resultsPerPage: 'Results per page',
-  sortBy: 'Sort by',
+  resultsPerPage: 'résultats par page',
+  sortBy: 'Trier par',
   showFilters: 'Show filters',
   hideFilters: 'Hide filters',
-  readMore: 'Read more',
-  readLess: 'Read less',
-  viewJson: 'View JSON',
-  goToStudy: 'Go to study',
-  forthcoming: 'Forthcoming',
-  back: 'Back',
-  close: 'Close',
+  readMore: 'Lire plus',
+  readLess: 'Lire moins',
+  viewJson: 'Visualiser le JSON',
+  goToStudy: 'Vers les données',
+  forthcoming: 'Avancer',
+  back: 'Revenir en arrière',
+  close: 'Fermer',
   metadata: {
-    studyTitle: 'Study title',
-    creator: 'Creator',
-    studyPersistentIdentifier: 'Study Persistent Identifier',
-    abstract: 'Abstract',
-    methodology: 'Methodology',
-    country: 'Country',
-    timeDimension: 'Time dimension',
-    analysisUnit: 'Analysis unit',
-    samplingProcedure: 'Sampling procedure',
-    dataCollectionMethod: 'Data collection method',
-    dataCollectionPeriod: 'Data collection period',
-    languageOfDataFiles: 'Language of data files',
-    access: 'Access',
-    publisher: 'Publisher',
-    yearOfPublication: 'Year of publication',
-    termsOfDataAccess: 'Terms of data access',
-    studyNumber: 'Study number',
-    topics: 'Topics',
-    keywords: 'Keywords'
+    studyTitle: 'Titre',
+    creator: 'Créateur',
+    studyPersistentIdentifier: 'Identifiant persistant des données',
+    abstract: 'Résumé',
+    methodology: 'Méthodologie',
+    country: 'Pays',
+    timeDimension: 'Dimension temporelle',
+    analysisUnit: 'Unité d\'analyse',
+    samplingProcedure: 'Procédure d\'échantillonnage',
+    dataCollectionMethod: 'Méthode de collecte',
+    dataCollectionPeriod: 'Période de collecte',
+    languageOfDataFiles: 'Langue des fichiers de données',
+    access: 'Accès',
+    publisher: 'Diffuseur',
+    yearOfPublication: 'Date de publication',
+    termsOfDataAccess: 'Conditions d\'accès aux données',
+    studyNumber: 'Identifiant des données',
+    topics: 'Thèmes',
+    keywords: 'Mots-clé'
   },
   footer: {
-    followUsOn: 'Follow us on',
-    contactUs: 'Contact Us',
+    followUsOn: 'Suivez-nous sur',
+    contactUs: 'Prendre contact',
     menu: 'Menu',
-    about: 'About',
+    about: 'A propos',
     consortium: 'Consortium',
-    projects: 'Projects',
-    researchInfrastructure: 'Research Infrastructure',
+    projects: 'Projets',
+    researchInfrastructure: 'Infrastructure de Recherche',
     contact: 'Contact',
-    privacy: 'Privacy Policy'
+    privacy: 'Politique de confidentialité'
   }
 };
