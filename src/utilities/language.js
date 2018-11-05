@@ -40,11 +40,11 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_fr', 
     locale: fr
   }, {
-    code: 'nl',
-    label: 'Nederlands',
-    index: 'cmmstudy_nl',
-    locale: nl
-  }, {
+//    code: 'nl',
+//    label: 'Nederlands',
+//    index: 'cmmstudy_nl',
+//    locale: nl
+//  }, {
     code: 'se',
     label: 'Svenska',
     index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_se' when Elasticsearch index is ready.
@@ -54,10 +54,10 @@ export function getLanguages(): Object[] {
     label: 'Slovencina',
     index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sk' when Elasticsearch index is ready.
     locale: sk
-  }, {
-    code: 'sl',
-    label: 'Slovenski',
-    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sl' when Elasticsearch index is ready.
-    locale: sl
+//  }, {
+//    code: 'sl',
+//    label: 'Slovenski',
+//    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sl' when Elasticsearch index is ready.
+//    locale: sl
   }];
 }
