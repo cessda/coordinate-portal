@@ -1,13 +1,14 @@
 // @flow
 
-import en from '../locales/de';
-import de from '../locales/en';
+// translations not available for all languages
+import de from '../locales/de';
+import en from '../locales/en';
 import fi from '../locales/fi';
-import fi from '../locales/fr';
+import fr from '../locales/fr';
 //import fi from '../locales/nl';
 import se from '../locales/se';
 import sk from '../locales/sk';
-//import fi from '../locales/sl';
+//import sl from '../locales/sl';
 
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
@@ -40,7 +41,7 @@ export function getLanguages(): Object[] {
     locale: fr
   }, {
     code: 'nl',
-    label: 'Dutch',
+    label: 'Nederlands',
     index: 'cmmstudy_nl',
     locale: nl
   }, {
@@ -50,12 +51,12 @@ export function getLanguages(): Object[] {
     locale: se
   }, {
     code: 'sk',
-    label: 'Slovenský',
+    label: 'Slovencina',
     index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sk' when Elasticsearch index is ready.
     locale: sk
   }, {
     code: 'sl',
-    label: 'Francais',
+    label: 'Slovenski',
     index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sl' when Elasticsearch index is ready.
     locale: sl
   }];
