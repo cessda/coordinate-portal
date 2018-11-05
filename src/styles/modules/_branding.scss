@@ -57,6 +57,7 @@ body .sk-layout {
     }
 
     .cessda-organisation {
+      height: 21px;
       position: absolute;
       top: 12px;
       left: 0;
@@ -64,6 +65,11 @@ body .sk-layout {
       color: $white;
       font-weight: 500;
       font-size: 14px;
+      a {
+        display: block;
+        height: 21px;
+        color: #fff;
+      }
     }
 
     .logo {
