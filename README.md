@@ -10,6 +10,10 @@ Separate repositories are provided for backend architecture; harvester, indexer 
 
 You will need an existing local or remote Elasticsearch instance setup and running.
 
+
+# When deploying on Ubuntu, you must allow an unauthenticated installation of libpng12-0 library for ubunu versions 16 above. Use the code bolow. 
+echo "deb http://mirrors.kernel.org/ubuntu/ xenial main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt install -y --allow-unauthenticated libpng12-0
+
 ## Quick Start
 
 Please be aware of *Known Issues* (see bottom) before running.
