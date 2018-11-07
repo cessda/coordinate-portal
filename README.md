@@ -6,9 +6,13 @@ Separate repositories are provided for backend architecture; harvester, indexer 
 
 ## Prerequisites
 
-[Node.js](https://nodejs.org/) is required to install and run this application.
+[Node.js](https://nodejs.org/) version 9.11 is required to install and run this application.
+
+When using the Ubuntu version 16 and above for deployment, you can use and allow libpng12-0 library to the Kernel repo. 
+echo "deb http://mirrors.kernel.org/ubuntu/ xenial main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt install -y --allow-unauthenticated libpng12-0
 
 You will need an existing local or remote Elasticsearch instance setup and running.
+
 
 ## Quick Start
 
