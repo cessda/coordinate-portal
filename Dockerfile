@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 # Environment
 ENV PASC_ELASTICSEARCH_URL="http://cessda-pasc-es-live:9200"
-ENV PASC_DEBUG_MODE="true"
+ENV PASC_DEBUG_MODE="false"
 
 # Install app dependencies
 COPY package.json .
