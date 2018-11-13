@@ -55,7 +55,9 @@ body .sk-layout {
       width: 100%;
       border-bottom: 50px solid $dark_grey;
     }
-
+header .container:first-of-type {
+z-index: 10;
+}
     .cessda-organisation {
       height: 21px;
       position: absolute;
