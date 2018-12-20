@@ -2,6 +2,7 @@
 
 // translations not available for all languages
 import de from '../locales/de';
+import el from '../locales/el';
 import en from '../locales/en';
 import fi from '../locales/fi';
 import fr from '../locales/fr';
@@ -25,10 +26,15 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_de',
     locale: de
   }, {
-    code: 'en',
-    label: 'English',
-    index: 'cmmstudy_en',
-    locale: en
+    code: 'el',
+    label: 'Νέα Ελληνικά',
+    index: 'cmmstudy_el',
+    locale: el
+    }, {
+      code: 'en',
+      label: 'English',
+      index: 'cmmstudy_en',
+      locale: en
   }, {
     code: 'fi',
     label: 'Suomi',
@@ -37,7 +43,7 @@ export function getLanguages(): Object[] {
   }, {
     code: 'fr',
     label: 'Francais',
-    index: 'cmmstudy_fr', 
+    index: 'cmmstudy_fr',
     locale: fr
   }, {
 //    code: 'nl',
