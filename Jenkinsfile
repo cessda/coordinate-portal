@@ -18,6 +18,7 @@ pipeline {
       }
     }
     stage('Build Project and start Sonar scan') {
+      when { branch 'dev' }
 		  steps {
         withSonarQubeEnv('cessda-sonar') {
           sh 'sonar-scanner -Dsonar.projectName=$JOB_NAME -Dsonar.projectKey=$BRANCH_NAME -Dsonar.projectBaseDir=$PWD -Dsonar.sources=src -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}'
@@ -26,6 +27,7 @@ pipeline {
       }
     }
     stage('Get Quality Gate Status') {
+      when { branch 'dev' }
       steps {
         withSonarQubeEnv('cessda-sonar') {
           sh 'curl -su ${SONAR_AUTH_TOKEN}: ${SONAR_HOST_URL}api/qualitygates/project_status?analysisId="$(curl -su ${SONAR_AUTH_TOKEN}: ${SONAR_HOST_URL}api/ce/task?id="$(cat target/sonar/report-task.txt | awk -F "=" \'/ceTaskId=/{print $2}\')" | jq -r \'.task.analysisId\')" | jq -r \'.projectStatus.status\' > status'
@@ -43,11 +45,13 @@ pipeline {
       }
     }
     stage('Build Docker image') {
+      when { branch 'dev' }
       steps {
         sh("docker build -t ${image_tag} .")
       }
     }
     stage('Push Docker image') {
+      when { branch 'dev' }
       steps {
         sh("gcloud docker -- push ${image_tag}")
         sh("gcloud container images add-tag ${image_tag} eu.gcr.io/${project_name}/${app_name}:latest")
