@@ -26,11 +26,11 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_de',
     locale: de
   }, {
-    code: 'el',
-    label: 'Νέα Ελληνικά',
-    index: 'cmmstudy_el',
-    locale: el
-    }, {
+//    code: 'el',
+//    label: 'Νέα Ελληνικά',
+//    index: 'cmmstudy_el',
+//    locale: el
+//    }, {
       code: 'en',
       label: 'English',
       index: 'cmmstudy_en',
@@ -53,8 +53,8 @@ export function getLanguages(): Object[] {
 //  }, {
     code: 'se',
     label: 'Svenska',
-    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_se' when Elasticsearch index is ready.
-    locale: se
+    index: 'cmmstudy_sv', 
+    locale: sv
   }, {
     code: 'sk',
     label: 'Slovencina',
