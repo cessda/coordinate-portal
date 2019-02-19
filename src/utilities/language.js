@@ -7,7 +7,7 @@ import en from '../locales/en';
 import fi from '../locales/fi';
 import fr from '../locales/fr';
 //import fi from '../locales/nl';
-import se from '../locales/se';
+import se from '../locales/sv';
 import sk from '../locales/sk';
 //import sl from '../locales/sl';
 
@@ -53,7 +53,7 @@ export function getLanguages(): Object[] {
 //  }, {
     code: 'se',
     label: 'Svenska',
-    index: 'cmmstudy_sv', 
+    index: 'cmmstudy_sv',
     locale: sv
   }, {
     code: 'sk',
