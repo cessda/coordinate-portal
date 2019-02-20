@@ -6,8 +6,8 @@ import el from '../locales/el';
 import en from '../locales/en';
 import fi from '../locales/fi';
 import fr from '../locales/fr';
-import fi from '../locales/nl';
-import fi from '../locales/no';
+import nl from '../locales/nl';
+import no from '../locales/no';
 import sv from '../locales/sv';
 import sk from '../locales/sk';
 import sl from '../locales/sl';
@@ -69,7 +69,7 @@ export function getLanguages(): Object[] {
   }, {
     code: 'sl',
     label: 'Slovenski',
-    index: 'cmmstudy_sl', 
+    index: 'cmmstudy_sl',
     locale: sl
   }];
 }
