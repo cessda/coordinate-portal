@@ -6,10 +6,11 @@ import el from '../locales/el';
 import en from '../locales/en';
 import fi from '../locales/fi';
 import fr from '../locales/fr';
-//import fi from '../locales/nl';
+import fi from '../locales/nl';
+import fi from '../locales/no';
 import sv from '../locales/sv';
 import sk from '../locales/sk';
-//import sl from '../locales/sl';
+import sl from '../locales/sl';
 
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
@@ -26,15 +27,15 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_de',
     locale: de
   }, {
-//    code: 'el',
-//    label: 'Νέα Ελληνικά',
-//    index: 'cmmstudy_el',
-//    locale: el
-//    }, {
-      code: 'en',
-      label: 'English',
-      index: 'cmmstudy_en',
-      locale: en
+    code: 'el',
+    label: 'Νέα Ελληνικά',
+    index: 'cmmstudy_el',
+    locale: el
+  }, {
+    code: 'en',
+    label: 'English',
+    index: 'cmmstudy_en',
+    locale: en
   }, {
     code: 'fi',
     label: 'Suomi',
@@ -46,24 +47,29 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_fr',
     locale: fr
   }, {
-//    code: 'nl',
-//    label: 'Nederlands',
-//    index: 'cmmstudy_nl',
-//    locale: nl
-//  }, {
-    code: 'se',
+    code: 'nl',
+    label: 'Nederlands',
+    index: 'cmmstudy_nl',
+    locale: nl
+  }, {
+    code: 'no',
+    label: 'Nynorsk',
+    index: 'cmmstudy_no',
+    locale: no
+  }, {
+    code: 'sv',
     label: 'Svenska',
     index: 'cmmstudy_sv',
     locale: sv
   }, {
     code: 'sk',
     label: 'Slovencina',
-    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sk' when Elasticsearch index is ready.
+    index: 'cmmstudy_sk',
     locale: sk
-//  }, {
-//    code: 'sl',
-//    label: 'Slovenski',
-//    index: 'cmmstudy_en', // TODO : Change to 'cmmstudy_sl' when Elasticsearch index is ready.
-//    locale: sl
+  }, {
+    code: 'sl',
+    label: 'Slovenski',
+    index: 'cmmstudy_sl', 
+    locale: sl
   }];
 }
