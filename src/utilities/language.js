@@ -7,7 +7,7 @@ import en from '../locales/en';
 import fi from '../locales/fi';
 import fr from '../locales/fr';
 //import fi from '../locales/nl';
-import se from '../locales/sv';
+import sv from '../locales/sv';
 import sk from '../locales/sk';
 //import sl from '../locales/sl';
 
