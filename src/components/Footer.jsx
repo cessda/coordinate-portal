@@ -39,7 +39,7 @@ class Footer extends Component<Props> {
                   <ul>
                     <li><strong><Translate content="footer.contactUs"/></strong></li>
                     <li><FaMapMarker/><span className="ml-10">Parkveien 20, Bergen, Norway</span></li>
-                    <li><FaPhoneSquare/><span className="ml-10">(+47) 55 58 36 48</span></li>
+                    <li><FaPhoneSquare/><span className="ml-10">(+47) 401 00 964</span></li>
                     <li><FaEnvelope/><a href="mailto:cessda@cessda.eu" className="ml-10">cessda@cessda.eu</a></li>
                   </ul>
                 </div>
