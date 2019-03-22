@@ -23,7 +23,7 @@ module.exports = {
   },
   filters: {
     topic: {
-      label: 'Vsebinsko področjo',
+      label: 'Vsebinsko področje',
       placeholder: 'Išči po vsebinskih področjih',
       tooltip: 'Vsebinska področja CESSDA se uporabljajo za prepoznavanje splošnih vsebinskih področij, podpodročij in tem raziskav.'
     },
@@ -58,12 +58,12 @@ module.exports = {
   numberOfResults: {
     zero: 'Najdenih je bilo %(count)s rezultatov',
     one: 'Najden je bil %(count)s rezultat',
-    other: 'Najdeno je bilo %(count)s rezultatov'
+    other: 'Najdenih je bilo %(count)s rezultatov'
   },
   numberOfResultsWithTime: {
     zero: 'Najdenih je bilo %(count)s rezultatov v %(time)sms',
     one: 'Najden je bil %(count)s rezultat v %(time)sms',
-    other: 'Najdeno je bilo %(count)s rezultatov v %(time)sms'
+    other: 'Najdenih je bilo %(count)s rezultatov v %(time)sms'
   },
   sorting: {
     relevance: 'Ustreznost',
@@ -85,7 +85,7 @@ module.exports = {
     slop: '<span class="%(className)s">~N</span> za frazo označuje <strong>bližino</strong>.',
     escaping: {
       heading: 'Rezervirani znaki',
-      content: 'Zgornji znaki so rezervirani. Kadar jih uporabljamo v drugačnem pomenu, jih moramo posebej označiti, da omogočimo razlikovanje glede na privzeti pomen, in sicer <span class="%(className)s">\\</span>.'
+      content: 'Zgornji znaki so rezervirani. Kadar jih uporabljamo v drugačnem pomenu, jih moramo posebej označiti, da omogočimo razlikovanje glede na privzeti pomen, in sicer z <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
       heading: 'Privzeti operator',
@@ -118,7 +118,7 @@ module.exports = {
     abstract: 'Raziskovalno izhodišče',
     methodology: 'Metodologija',
     country: 'Država',
-    timeDimension: 'Časovna opredelitev podatkov',
+    timeDimension: 'Časovna metoda',
     analysisUnit: 'Enota za analizo',
     samplingProcedure: 'Tip vzorca',
     dataCollectionMethod: 'Metoda zbiranja podatkov',
