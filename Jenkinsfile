@@ -18,7 +18,6 @@ pipeline {
       }
     }
     stage('Build Project and start Sonar scan') {
-      when { branch 'dev' }
 		  steps {
         withSonarQubeEnv('cessda-sonar') {
           sh 'sonar-scanner -Dsonar.projectName=$JOB_NAME -Dsonar.projectKey=$BRANCH_NAME -Dsonar.projectBaseDir=$PWD -Dsonar.sources=src -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}'
@@ -45,13 +44,11 @@ pipeline {
       }
     }
     stage('Build Docker image') {
-      when { branch 'dev' }
       steps {
         sh("docker build -t ${image_tag} .")
       }
     }
     stage('Push Docker image') {
-      when { branch 'dev' }
       steps {
         sh("gcloud docker -- push ${image_tag}")
         sh("gcloud container images add-tag ${image_tag} eu.gcr.io/${project_name}/${app_name}:latest")
