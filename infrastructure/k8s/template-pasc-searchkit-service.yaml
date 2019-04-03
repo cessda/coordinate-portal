@@ -1,3 +1,4 @@
+---
 kind: Service
 apiVersion: v1
 metadata:
@@ -5,9 +6,9 @@ metadata:
   namespace: NAMESPACE
 spec:
   ports:
-  - name: searchkit-gui
-    port: 8088
-    targetPort: searchkit-cport
-    protocol: TCP
+    - name: searchkit-gui
+      port: 8088
+      targetPort: searchkit-cport
+      protocol: TCP
   selector:
     app: SERVICENAME
