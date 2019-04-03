@@ -1,69 +1,53 @@
 pipeline {
   environment {
-    project_name = "cessda-development"
-    app_name = "pasc-searchkit"
-    feSvc_name = "${app_name}-service"
-    namespace = "cessda-pasc"
-    image_tag = "eu.gcr.io/${project_name}/${app_name}:v${env.BUILD_NUMBER}"
+    project_name = "cessda-dev"
+    module_name = "cdc-searchkit"
+    image_tag = "eu.gcr.io/${project_name}/${module_name}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+    scannerHome = tool 'sonar-scanner'
   }
 
   agent any
 
   stages {
-    stage('Prepare Application for registration with ElasticSearch Instance') {
+    stage('Check environment') {
       steps {
-        dir('./infrastructure/gcp/') {
-          sh("bash pasc-searchkit-registration.sh")
-        }
+	      echo "Check environment"
+        echo "project_name = ${project_name}"
+        echo "module_name = ${module_name}"
+        echo "image_tag = ${image_tag}"
       }
     }
-    stage('Build Project and start Sonar scan') {
+    stage('Build Project and Run Sonar Scan') {
 		  steps {
         withSonarQubeEnv('cessda-sonar') {
-          sh 'sonar-scanner -Dsonar.projectName=$JOB_NAME -Dsonar.projectKey=$BRANCH_NAME -Dsonar.projectBaseDir=$PWD -Dsonar.sources=src -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_AUTH_TOKEN}'
-          sleep 5
+          sh "${scannerHome}/bin/sonar-scanner"
         }
       }
     }
     stage('Get Quality Gate Status') {
-      when { branch 'dev' }
       steps {
-        withSonarQubeEnv('cessda-sonar') {
-          sh 'curl -su ${SONAR_AUTH_TOKEN}: ${SONAR_HOST_URL}api/qualitygates/project_status?analysisId="$(curl -su ${SONAR_AUTH_TOKEN}: ${SONAR_HOST_URL}api/ce/task?id="$(cat target/sonar/report-task.txt | awk -F "=" \'/ceTaskId=/{print $2}\')" | jq -r \'.task.analysisId\')" | jq -r \'.projectStatus.status\' > status'
-        }
-        script {
-          STATUS = readFile('status')
-          if ( STATUS.trim() == "ERROR") {
-            error("Quality Gate not reached, please review the Sonar Report")
-          } else if ( STATUS.trim() == "WARN") {
-            error("Quality Gate not reached, please review the Sonar Report")
-          } else {
-            echo "Quality Gate reached, deployment will be processed, please wait"
-          }
+        timeout(time: 1, unit: 'HOURS') {
+          waitForQualityGate abortPipeline: true
         }
       }
     }
-    stage('Build Docker image') {
-      steps {
+	  stage('Build Docker image') {
+   		steps {
         sh("docker build -t ${image_tag} .")
       }
     }
     stage('Push Docker image') {
       steps {
-        sh("gcloud docker -- push ${image_tag}")
-        sh("gcloud container images add-tag ${image_tag} eu.gcr.io/${project_name}/${app_name}:latest")
+        sh("gcloud auth configure-docker")
+        sh("docker push ${image_tag}")
+        sh("gcloud container images add-tag ${image_tag} eu.gcr.io/${project_name}/${module_name}:${env.BRANCH_NAME}-latest")
       }
     }
-   stage('Check Requirements and Deployments') {
+    stage('Check Requirements and Deployments') {
       steps {
         dir('./infrastructure/gcp/') {
-          sh("bash pasc-searchkit-creation.sh")
+          sh("./pasc-searchkit-creation.sh")
         }
-      }
-    }
-    stage('Clean Workspace') {
-      steps {
-        cleanWs()
       }
     }
   }
