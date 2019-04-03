@@ -20,7 +20,7 @@ spec:
           name: searchkit-cport
         env:
           - name: PASC_ELASTICSEARCH_URL
-            value: http://ESURL:9200
+            value: http://cdc-es:9200
         resources:
           requests:
             memory: 300Mi
@@ -28,4 +28,3 @@ spec:
             memory: 600Mi
       nodeSelector:
         cloud.google.com/gke-nodepool: default-pool
-
