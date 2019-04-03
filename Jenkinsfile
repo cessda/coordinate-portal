@@ -19,9 +19,11 @@ pipeline {
     }
     stage('Build Project and Run Sonar Scan') {
 		  steps {
-        withSonarQubeEnv('cessda-sonar') {
-          sh "${scannerHome}/bin/sonar-scanner"
-        }
+        nodejs('node') {
+            withSonarQubeEnv('cessda-sonar') {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
+        }  
       }
     }
     stage('Get Quality Gate Status') {
