@@ -1,8 +1,8 @@
 pipeline {
   environment {
-    project_name = "cessda-dev"
-    module_name = "cdc-searchkit"
-    image_tag = "eu.gcr.io/${project_name}/${module_name}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+    product_name = "cdc"
+    module_name = "searchkit"
+    image_tag = "${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
     scannerHome = tool 'sonar-scanner'
   }
 
@@ -42,13 +42,13 @@ pipeline {
       steps {
         sh("gcloud auth configure-docker")
         sh("docker push ${image_tag}")
-        sh("gcloud container images add-tag ${image_tag} eu.gcr.io/${project_name}/${module_name}:${env.BRANCH_NAME}-latest")
+        sh("gcloud container images add-tag ${image_tag} ${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME}-latest")
       }
     }
     stage('Check Requirements and Deployments') {
       steps {
         dir('./infrastructure/gcp/') {
-          sh("./pasc-searchkit-creation.sh")
+          build job: 'cessda.cdc.deploy/master', parameters: [string(name: 'searchkit_image_tag', value: "${image_tag}"), string(name: 'module', value: 'searchkit')], wait: false
         }
       }
     }
