@@ -5,142 +5,142 @@ module.exports = {
         ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
-  cessda: 'Consortium of European Social Science Data Archives',
+  cessda: 'Konzorcij evropskih družboslovnih arhivov',
   language: {
-    label: 'Language',
+    label: 'Jezik',
     notAvailable: {
-      field: 'Not available',
-      heading: 'The requested data was not found.',
-      content: 'It may not exist or is not available in the selected language. Choose an alternative language or start a new search.'
+      field: 'Ni na voljo',
+      heading: 'Zahtevanih podatkov ni bilo mogoče najti.',
+      content: 'Morda ne obstaja ali ni na voljo v izbranem jeziku. Izberite drug jezik ali začnite novo iskanje.'
     }
   },
-  search: 'Find Social and Economic Research Data',
+  search: 'Poiščite podatke družbenih in ekonomskih raziskav',
   noHits: {
-    noResultsFound: 'No results found for "%(query)s" in the selected language.',
-    searchWithoutFilters: 'Search for "%(query)s" without filters',
-    error: 'We\'re sorry, an issue occurred when fetching your results. Please try again.',
-    resetSearch: 'Reset Search'
+    noResultsFound: 'Nismo našli rezultatov za "%(query)s" v izbranem jeziku.',
+    searchWithoutFilters: 'Poišči "%(query)s" brez filtrov',
+    error: 'Žal je prišlo do težav pri pridobivanju vaših rezultatov. Prosim poskusite ponovno.',
+    resetSearch: 'Ponastavi iskanje'
   },
   filters: {
     topic: {
-      label: 'Topic',
-      placeholder: 'Search topics',
-      tooltip: 'CESSDA Topic Classification serves to identify the general topics, subjects or themes of a study.'
+      label: 'Vsebinsko področje',
+      placeholder: 'Išči po vsebinskih področjih',
+      tooltip: 'Vsebinska področja CESSDA se uporabljajo za prepoznavanje splošnih vsebinskih področij, podpodročij in tem raziskav.'
     },
     collectionDates: {
-      label: 'Collection years',
-      placeholder: 'Search years',
-      tooltip: 'The period, in years, when the data were collected.'
+      label: 'Leto zbiranja podatkov',
+      placeholder: 'Išči po letu zbiranja',
+      tooltip: 'Obdobje (v letih) ko je potekalo zbiranje podatkov.'
     },
     languageOfDataFiles: {
-      label: 'Language of data files',
-      placeholder: 'Search languages',
-      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc.'
+      label: 'Jezik podatkovnih datotek',
+      placeholder: 'Išči po jezikih',
+      tooltip: 'Jezik podatkovne datoteke, to je jezik imena spremenljivk/label ali transkriptov intervjujev itd.'
     },
     country: {
-      label: 'Country',
-      placeholder: 'Search countries',
-      tooltip: 'Country in which the study took place.'
+      label: 'Država',
+      placeholder: 'Išči po državah',
+      tooltip: 'Država, v kateri je potekala raziskava.'
     },
     publisher: {
-      label: 'Publisher',
-      placeholder: 'Search publishers',
-      tooltip: 'Name of the institution publishing the research data. Will usually be the CESSDA Service Provider providing the metadata information.'
+      label: 'Distribucija',
+      placeholder: 'Išči po distributerjih',
+      tooltip: 'Ime institucije, ki objavlja raziskovalne podatke. Običajno je to ponudnik storitev CESSDA, ki je posredoval podatke o metapodatkih.'
     },
     summary: {
-      label: 'Filter summary',
-      introduction: 'The following filters have been applied to your search.',
-      remove: 'Select a filter to remove it from this search.',
-      noFilters: 'No additional filters have been applied to your search.',
-      close: 'Select <strong>Close</strong> to dismiss this window.'
+      label: 'Povzetek filtra',
+      introduction: 'Naslednji filtri so bili uporabljeni za vaše iskanje.',
+      remove: 'Izberite filter, ki ga želite odstraniti iz tega iskanja.',
+      noFilters: 'V vašem iskanju ni bilo uporabljenih dodatnih filtrov.',
+      close: 'Izberite <strong>Zapri</strong>, da zaprete to okno.'
     }
   },
   numberOfResults: {
-    zero: '%(count)s results found',
-    one: '%(count)s result found',
-    other: '%(count)s results found'
+    zero: 'Najdenih je bilo %(count)s rezultatov',
+    one: 'Najden je bil %(count)s rezultat',
+    other: 'Najdenih je bilo %(count)s rezultatov'
   },
   numberOfResultsWithTime: {
-    zero: '%(count)s results found in %(time)sms',
-    one: '%(count)s result found in %(time)sms',
-    other: '%(count)s results found in %(time)sms'
+    zero: 'Najdenih je bilo %(count)s rezultatov v %(time)sms',
+    one: 'Najden je bil %(count)s rezultat v %(time)sms',
+    other: 'Najdenih je bilo %(count)s rezultatov v %(time)sms'
   },
   sorting: {
-    relevance: 'Relevance',
-    titleAscending: 'Title (ascending)',
-    titleDescending: 'Title (descending)',
-    dateAscending: 'Date of collection (ascending)',
-    dateDescending: 'Date of collection (descending)'
+    relevance: 'Ustreznost',
+    titleAscending: 'Naslov (naraščajoče)',
+    titleDescending: 'Naslov (padajoče)',
+    dateAscending: 'Datum zbiranja (naraščajoče)',
+    dateDescending: 'Datum zbiranja (padajoče)'
   },
   advancedSearch: {
-    label: 'Advanced search',
-    introduction: 'The following special characters can be used to perform advanced search queries:',
-    and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
-    or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
-    negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
-    phrase: '<span class="%(className)s">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.',
-    prefix: '<span class="%(className)s">*</span> at the end of a term signifies a <strong>prefix</strong> query.',
-    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signify <strong>precedence</strong>.',
-    distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
-    slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
+    label: 'Napredno iskanje',
+    introduction: 'Za napredno iskanje lahko uporabite naslednje posebne znake:',
+    and: 'operator <span class="%(className)s">+</span> določa odnos <strong>IN</strong> med iskalnima podatkoma.',
+    or: 'operator <span class="%(className)s">|</span> določa odnos <strong>ALI</strong> med iskalnima podatkoma.',
+    negates: 'nadomestni znak <span class="%(className)s">-</span> <strong>nadomesti</strong> natanko en znak v podatku.',
+    phrase: 'nadomestni znak <span class="%(className)s">"</span> uporabimo v <strong>fraznem iskanju</strong>; fraze omogočajo oblikovanje najbolj določenih podatkov za iskanje, pri čemer je pomemben vrstni red besed.',
+    prefix: 'nadomestni znak <span class="%(className)s">*</span> na koncu izraza <strong>nadomešča</strong> nobenega, en, dva ali več znakov predponi (uporabljamo za krajšanje).',
+    precedence: 'operatorja <span class="%(className)s">(</span> in <span class="%(className)s">)</span> označujeta <strong>vrstni red izvajanja operatorjev</strong>.',
+    distance: 'operator <span class="%(className)s">~N</span> za besedo pomeni <strong>bližino</strong> (med podatkoma je lahko največ n besed, njun vrstni red je poljuben).',
+    slop: '<span class="%(className)s">~N</span> za frazo označuje <strong>bližino</strong>.',
     escaping: {
-      heading: 'Escaping',
-      content: 'The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class="%(className)s">\\</span>.'
+      heading: 'Rezervirani znaki',
+      content: 'Zgornji znaki so rezervirani. Kadar jih uporabljamo v drugačnem pomenu, jih moramo posebej označiti, da omogočimo razlikovanje glede na privzeti pomen, in sicer z <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
-      heading: 'Default operator',
-      content: 'The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class="%(className)s">Social Science</em>, this will be interpreted as <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
+      heading: 'Privzeti operator',
+      content: 'Privzeti operator, ko v določenem iskalnem izrazu ni posebnih znakov, je <strong>OR</strong>. Na primer, ko iščete <em class="%(className)s">družbene vede</em>, se to interpretira kot <em class="%(className)s">družbene</em> <strong>OR</strong> <em class="%(className)s">vede</em>.'
     }
   },
   reset: {
-    query: 'Clear search',
-    filters: 'Reset filters'
+    query: 'Počisti iskanje',
+    filters: 'Resetiraj filtre'
   },
   similarResults: {
-    heading: 'Similar results',
-    notAvailable: 'No similar results found.'
+    heading: 'Podobni rezultati',
+    notAvailable: 'Nismo našli podobnih rezultatov.'
   },
-  resultsPerPage: 'Results per page',
-  sortBy: 'Sort by',
-  showFilters: 'Show filters',
-  hideFilters: 'Hide filters',
-  readMore: 'Read more',
-  readLess: 'Read less',
-  viewJson: 'View JSON',
-  goToStudy: 'Go to study',
-  forthcoming: 'Forthcoming',
-  back: 'Back',
-  close: 'Close',
+  resultsPerPage: 'Rezultati na stran',
+  sortBy: 'Razvrsti po',
+  showFilters: 'Pokaži filtre',
+  hideFilters: 'Skrij filtre',
+  readMore: 'Več',
+  readLess: 'Manj',
+  viewJson: 'Oglejte si JSON',
+  goToStudy: 'Pojdi na raziskavo',
+  forthcoming: 'Prihajajoče',
+  back: 'Nazaj',
+  close: 'Zapri',
   metadata: {
-    studyTitle: 'Study title',
-    creator: 'Creator',
-    studyPersistentIdentifier: 'Study Persistent Identifier',
-    abstract: 'Abstract',
-    methodology: 'Methodology',
-    country: 'Country',
-    timeDimension: 'Time dimension',
-    analysisUnit: 'Analysis unit',
-    samplingProcedure: 'Sampling procedure',
-    dataCollectionMethod: 'Data collection method',
-    dataCollectionPeriod: 'Data collection period',
-    languageOfDataFiles: 'Language of data files',
-    access: 'Access',
-    publisher: 'Publisher',
-    yearOfPublication: 'Year of publication',
-    termsOfDataAccess: 'Terms of data access',
-    studyNumber: 'Study number',
-    topics: 'Topics',
-    keywords: 'Keywords'
+    studyTitle: 'Naslov raziskave',
+    creator: 'Avtor',
+    studyPersistentIdentifier: 'Stalni enoznačni identifikator raziskave',
+    abstract: 'Raziskovalno izhodišče',
+    methodology: 'Metodologija',
+    country: 'Država',
+    timeDimension: 'Časovna metoda',
+    analysisUnit: 'Enota za analizo',
+    samplingProcedure: 'Tip vzorca',
+    dataCollectionMethod: 'Metoda zbiranja podatkov',
+    dataCollectionPeriod: 'Časovno pokritje',
+    languageOfDataFiles: 'Jezik podatkovne datoteke',
+    access: 'Dostop',
+    publisher: 'Distribucija',
+    yearOfPublication: 'Leto objave',
+    termsOfDataAccess: 'Pogoji dostopa',
+    studyNumber: 'ID raziskave',
+    topics: 'Vsebinska področja',
+    keywords: 'Ključne besede'
   },
   footer: {
-    followUsOn: 'Follow us on',
-    contactUs: 'Contact Us',
-    menu: 'Menu',
-    about: 'About',
-    consortium: 'Consortium',
-    projects: 'Projects',
-    researchInfrastructure: 'Research Infrastructure',
-    contact: 'Contact',
-    privacy: 'Privacy Policy'
+    followUsOn: 'Sledite nam',
+    contactUs: 'Kontaktiraj nas',
+    menu: 'Meni',
+    about: 'O',
+    consortium: 'Konzorcij',
+    projects: 'Projekti',
+    researchInfrastructure: 'Raziskovalna infrastruktura',
+    contact: 'Kontakt',
+    privacy: 'Politika zasebnosti'
   }
 };
