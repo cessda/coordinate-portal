@@ -2,145 +2,146 @@ module.exports = {
   counterpart: {
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
-        ? 'zero' : (count === 1) ? 'one' : 'other'
+        ? 'ingen' : (count === 1) ? 'ett' : 'andre'
       ]
   },
   cessda: 'Consortium of European Social Science Data Archives',
   language: {
-    label: 'Language',
+    label: 'Språk',
     notAvailable: {
-      field: 'Not available',
-      heading: 'The requested data was not found.',
-      content: 'It may not exist or is not available in the selected language. Choose an alternative language or start a new search.'
+      field: 'Ikke tilgjengelig',
+      heading: 'Forespurte data ikke funnet.',
+      content: 'Data eksisterer ikke, eller er ikke tilgjengelig på valgt språk. Velg et alternativt språk eller start et nytt søk.'
     }
   },
-  search: 'Find Social and Economic Research Data',
+  search: 'Søk etter sosio-økonomiske data',
   noHits: {
-    noResultsFound: 'No results found for "%(query)s" in the selected language.',
-    searchWithoutFilters: 'Search for "%(query)s" without filters',
-    error: 'We\'re sorry, an issue occurred when fetching your results. Please try again.',
-    resetSearch: 'Reset Search'
+    noResultsFound: 'Ingen treff for søket "%(query)s" på valgt språk.',
+    searchWithoutFilters: 'Søk etter "%(query)s" uten filtre',
+    error: 'Vi beklager, det har oppstått en feil. Vennligst prøv igjen.',
+    resetSearch: 'Blank ut søket'
   },
   filters: {
     topic: {
-      label: 'Topic',
-      placeholder: 'Search topics',
-      tooltip: 'CESSDA Topic Classification serves to identify the general topics, subjects or themes of a study.'
+      label: 'Emne',
+      placeholder: 'Søk etter emne',
+      tooltip: 'CESSDA emneklassifikasjon angir emner og tema for en studie.'
     },
     collectionDates: {
-      label: 'Collection years',
-      placeholder: 'Search years',
-      tooltip: 'The period, in years, when the data were collected.'
+      label: 'Innsamlingsår',
+      placeholder: 'Søk etter år',
+      tooltip: 'Innsamlingsperiode for data (i år).'
     },
     languageOfDataFiles: {
-      label: 'Language of data files',
-      placeholder: 'Search languages',
-      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc.'
+      label: 'Språk i datafiler',
+      placeholder: 'Søk etter språk',
+      tooltip: 'Språket i forskingsdatasettet, dvs språket brukt i variabelnavn og -labler, intervjutranskripsjoner, etc.'
     },
     country: {
-      label: 'Country',
-      placeholder: 'Search countries',
-      tooltip: 'Country in which the study took place.'
+      label: 'Land',
+      placeholder: 'Søk etter land',
+      tooltip: 'Landet studien fant sted.'
     },
     publisher: {
-      label: 'Publisher',
-      placeholder: 'Search publishers',
-      tooltip: 'Name of the institution publishing the research data. Will usually be the CESSDA Service Provider providing the metadata information.'
+      label: 'Datadistributør',
+      placeholder: 'Søk etter datadistributør',
+      tooltip: 'Navnet på institusjonen som publiserer/distribuerer forskningsdataene. Vil vanligvis være -tjenesteleverandøren som tilbyr metadataene.'
     },
     summary: {
-      label: 'Filter summary',
-      introduction: 'The following filters have been applied to your search.',
-      remove: 'Select a filter to remove it from this search.',
-      noFilters: 'No additional filters have been applied to your search.',
-      close: 'Select <strong>Close</strong> to dismiss this window.'
+      label: 'Aktive filter',
+      introduction: 'Følgende filter er aktive.',
+      remove: 'Velg et filter for å fjerne filteret fra dette søket.',
+      noFilters: 'Ingen ekstra filtre er aktive.',
+      close: 'Velg <strong>Lukk</strong> for å lukke dette vinduet.'
     }
   },
   numberOfResults: {
-    zero: '%(count)s results found',
-    one: '%(count)s result found',
-    other: '%(count)s results found'
+    zero: '%(count)s resultater funnet',
+    one: '%(count)s resultat funnet',
+    other: '%(count)s resultater funnet'
   },
   numberOfResultsWithTime: {
-    zero: '%(count)s results found in %(time)sms',
-    one: '%(count)s result found in %(time)sms',
-    other: '%(count)s results found in %(time)sms'
+    zero: '%(count)s resultater funnet på %(time)sms',
+    one: '%(count)s resultat funnet på %(time)sms',
+    other: '%(count)s resultater funnet på %(time)sms'
   },
   sorting: {
-    relevance: 'Relevance',
-    titleAscending: 'Title (ascending)',
-    titleDescending: 'Title (descending)',
-    dateAscending: 'Date of collection (ascending)',
-    dateDescending: 'Date of collection (descending)'
+    relevance: 'Relevans',
+    titleAscending: 'Tittel (stigende)',
+    titleDescending: 'Tittel (synkende)',
+    dateAscending: 'Innsamlingsdato (stigende)',
+    dateDescending: 'Innsamlingsdato (synkende)'
   },
   advancedSearch: {
-    label: 'Advanced search',
-    introduction: 'The following special characters can be used to perform advanced search queries:',
-    and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
-    or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
-    negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
-    phrase: '<span class="%(className)s">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.',
-    prefix: '<span class="%(className)s">*</span> at the end of a term signifies a <strong>prefix</strong> query.',
-    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signify <strong>precedence</strong>.',
-    distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
-    slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
+    label: 'Avansert søk',
+    introduction: 'Følgende spesialtegn kan brukes i avanserte søk:',
+    and: '<span class="%(className)s">+</span> brukes til å uttrykke <strong>OG</strong>.',
+    or: '<span class="%(className)s">|</span> brukes til å uttrykke <strong>ELLER</strong> operation.',
+    negates: '<span class="%(className)s">-</span> gjør det mulig å gjøre søk etter datasett som <strong>ikke inneholder</strong> et spesifikt begrep.',
+    phrase: '<span class="%(className)s">"</span> brukes til å uttrykke <strong>søkefraser</strong>.',
+    prefix: '<span class="%(className)s">*</span> på slutten av et søkeord gjør det mulig å søke etter <strong>begynnelsen</strong> av begreper.',
+    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> uttrykker <strong>presedens</strong>.',
+    distance: '<span class="%(className)s">~N</span> etter et ord gjør det mulig å uttrykke <strong>avstand</strong> (upresisjon/fuzziness).',
+    slop: '<span class="%(className)s">~N</span> etter en frase angir toleranse for andre ord mellom søkeordene, såkalt <strong>slop</strong> amount.',
     escaping: {
       heading: 'Escaping',
-      content: 'The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class="%(className)s">\\</span>.'
+      content: 'Tegnene ovenfor er reserverte tegn. For å søke på slike spesialtegn, må de escapes med <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
-      heading: 'Default operator',
-      content: 'The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class="%(className)s">Social Science</em>, this will be interpreted as <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
+      heading: 'Default-operator',
+      content: 'Default-operator når et søk ikke inneholder noen spesialtegn, er <strong>OR</strong>. For eksempel vil søk etter <em class="%(className)s">Social Science</em>, bli tolket som søk etter <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
     }
   },
   reset: {
-    query: 'Clear search',
-    filters: 'Reset filters'
+    query: 'Blank ut søk',
+    filters: 'Still tilbake filter'
   },
   similarResults: {
-    heading: 'Similar results',
-    notAvailable: 'No similar results found.'
+    heading: 'Lignende resultater',
+    notAvailable: 'Ingen lignende resultater funnet.'
   },
-  resultsPerPage: 'Results per page',
-  sortBy: 'Sort by',
-  showFilters: 'Show filters',
-  hideFilters: 'Hide filters',
-  readMore: 'Read more',
-  readLess: 'Read less',
-  viewJson: 'View JSON',
-  goToStudy: 'Go to study',
-  forthcoming: 'Forthcoming',
-  back: 'Back',
-  close: 'Close',
+  resultsPerPage: 'Resultater per side',
+  sortBy: 'Sorter etter',
+  showFilters: 'Vis filter',
+  hideFilters: 'Skjul filter',
+  readMore: 'Les mer',
+  readLess: 'Les mindre',
+  viewJson: 'Se JSON',
+  goToStudy: 'Gå til studie',
+  forthcoming: 'Kommende'
+  back: 'Tilbake',
+  close: 'Lukk',
   metadata: {
-    studyTitle: 'Study title',
-    creator: 'Creator',
-    studyPersistentIdentifier: 'Study Persistent Identifier',
-    abstract: 'Abstract',
-    methodology: 'Methodology',
-    country: 'Country',
-    timeDimension: 'Time dimension',
-    analysisUnit: 'Analysis unit',
-    samplingProcedure: 'Sampling procedure',
-    dataCollectionMethod: 'Data collection method',
-    dataCollectionPeriod: 'Data collection period',
-    languageOfDataFiles: 'Language of data files',
-    access: 'Access',
-    publisher: 'Publisher',
-    yearOfPublication: 'Year of publication',
-    termsOfDataAccess: 'Terms of data access',
-    studyNumber: 'Study number',
-    topics: 'Topics',
-    keywords: 'Keywords'
+    studyTitle: 'Studietittel',
+    creator: 'Produsent',
+    studyPersistentIdentifier: 'Persistent identifikator for studien',
+    abstract: 'Sammendrag',
+    methodology: 'Metodologi',
+    country: 'Land',
+    timeDimension: 'Tidsdimensjon',
+    analysisUnit: 'Analyseenhet',
+    samplingProcedure: 'Utvalgsprosedyre',
+    dataCollectionMethod: 'Datainnsamlingsmetode',
+    dataCollectionPeriod: 'Datainnsamlingsperiode',
+    languageOfDataFiles: 'Språk i datafilene',
+    access: 'Tilgang',
+    publisher: 'Distributør',
+    yearOfPublication: 'Publiseringsår',
+    termsOfDataAccess: 'Tilgangsbetingelser',
+    studyNumber: 'Studienummer',
+    topics: 'Emner',
+    keywords: 'Nøkkelord'
   },
   footer: {
-    followUsOn: 'Follow us on',
-    contactUs: 'Contact Us',
-    menu: 'Menu',
-    about: 'About',
-    consortium: 'Consortium',
-    projects: 'Projects',
-    researchInfrastructure: 'Research Infrastructure',
-    contact: 'Contact',
-    privacy: 'Privacy Policy'
+    followUsOn: 'Følg oss på',
+    contactUs: 'Kontakt oss',
+    menu: 'Meny',
+    about: 'Om',
+    consortium: 'Konsortium',
+    projects: 'Prosjekter',
+    researchInfrastructure: 'Forskningsinfrastruktur',
+    contact: 'Kontakt',
+    privacy: 'Personvernpolicy'
   }
 };
+
