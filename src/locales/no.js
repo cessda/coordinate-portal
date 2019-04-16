@@ -108,7 +108,7 @@ module.exports = {
   readLess: 'Les mindre',
   viewJson: 'Se JSON',
   goToStudy: 'Gå til studie',
-  forthcoming: 'Kommende'
+  forthcoming: 'Kommende',
   back: 'Tilbake',
   close: 'Lukk',
   metadata: {
