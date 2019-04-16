@@ -7,66 +7,66 @@ module.exports = {
   },
   cessda: 'Consortium of European Social Science Data Archives',
   language: {
-    label: 'Language',
+    label: 'Γλώσσα',
     notAvailable: {
-      field: 'Not available',
-      heading: 'The requested data was not found.',
-      content: 'It may not exist or is not available in the selected language. Choose an alternative language or start a new search.'
+      field: 'Το πεδίο δεν είναι διαθέσιμο',
+      heading: 'Τα δεδομένα δεν είναι βρέθηκαν',
+      content: 'Τα δεδομένα δεν υπάρχουν ή να μην είναι διαθέσιμα στην επιλεγμένη γλώσσα. Επιλέξτε μια άλλη γλώσσα ή ξεκινήστε μια νέα αναζήτηση.'
     }
   },
-  search: 'Find Social and Economic Research Data',
+  search: 'Εύρεση δεδομένων Κοινωνικής και Οικονομικής έρευνας',
   noHits: {
-    noResultsFound: 'No results found for "%(query)s" in the selected language.',
-    searchWithoutFilters: 'Search for "%(query)s" without filters',
-    error: 'We\'re sorry, an issue occurred when fetching your results. Please try again.',
-    resetSearch: 'Reset Search'
+    noResultsFound: 'Δεν βρέθηκαν αποτελέσματα για "%(query)s" στην επιλεγμένη γλώσσα.',
+    searchWithoutFilters: 'Αναζήτηση για "%(query)s" χωρίς φίλτρα',
+    error: 'Συγνώμη, παρουσιάστηκε πρόβλημα κατά την λήψη των δεδομένων. Παρακαλώ προσπαθήστε ξανά.',
+    resetSearch: 'Επαναπροσδιορισμός αναζήτησης'
   },
   filters: {
     topic: {
-      label: 'Topic',
-      placeholder: 'Search topics',
-      tooltip: 'CESSDA Topic Classification serves to identify the general topics, subjects or themes of a study.'
+      label: 'Θεματική',
+      placeholder: 'Αναζήτηση θεματικής',
+      tooltip: 'Η ταξινόμηση, CESSDA Topic Classification, εξυπηρετεί στη ταυτοποίηση των γενικών θεματικών μιας έρευνας.'
     },
     collectionDates: {
-      label: 'Collection years',
-      placeholder: 'Search years',
-      tooltip: 'The period, in years, when the data were collected.'
+      label: 'Χρονική περίοδος',
+      placeholder: 'Αναζήτηση ετών',
+      tooltip: 'Η χρονική περίοδος, σε έτη, κατά την οποία συλλέχθηκαν τα δεδομένα.'
     },
     languageOfDataFiles: {
-      label: 'Language of data files',
-      placeholder: 'Search languages',
-      tooltip: 'Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc.'
+      label: 'Γλώσσα των αρχείων δεδομένων',
+      placeholder: 'Αναζήτηση γλωσσών',
+      tooltip: 'Η γλώσσα του συνόλου δεδομένων μιας έρευνας, π.χ. η γλώσσας των ονομάτων/ετικετών των μεταβλητών ή η γλώσσα μεταγραφής συνεντεύξεων κ.ά.'
     },
     country: {
-      label: 'Country',
-      placeholder: 'Search countries',
-      tooltip: 'Country in which the study took place.'
+      label: 'Χώρα',
+      placeholder: 'Αναζήτηση χωρών',
+      tooltip: 'Χώρα στην οποία διεξήχθη η έρευνα.'
     },
     publisher: {
-      label: 'Publisher',
-      placeholder: 'Search publishers',
-      tooltip: 'Name of the institution publishing the research data. Will usually be the CESSDA Service Provider providing the metadata information.'
+      label: 'Εκδότης',
+      placeholder: 'Αναζήτηση εκδοτών',
+      tooltip: 'Ονομασία του οργανισμού/ινστιτούτου που δημοσίευσε τα δεδομένα της έρευνας. Συνήθως, ο Πάροχος Υπηρεσιών (Service Provider) της CESSDA παρέχει πληροφορίες για τα μεταδεδομένα.'
     },
     summary: {
-      label: 'Filter summary',
-      introduction: 'The following filters have been applied to your search.',
-      remove: 'Select a filter to remove it from this search.',
-      noFilters: 'No additional filters have been applied to your search.',
-      close: 'Select <strong>Close</strong> to dismiss this window.'
+      label: 'Περίληψη φίλτρου',
+      introduction: 'Τα παρακάτω φίλτρα έχουν εφαρμοστεί στην αναζήτησή σας.',
+      remove: 'Επιλέξτε ένα φίλτρο προς κατάργηση από αυτή την αναζήτηση.',
+      noFilters: 'Δεν έχουν εφαρμοστεί επιπλέον φίλτρα στην αναζήτησή σας.',
+      close: 'Επιλέξτε <strong>Κλείσιμο</strong> για να φύγετε από αυτό το παράθυρο.'
     }
   },
   numberOfResults: {
-    zero: '%(count)s results found',
-    one: '%(count)s result found',
-    other: '%(count)s results found'
+    zero: '%(count)s αποτελέσματα βρέθηκαν',
+    one: '%(count)s αποτέλεσμα βρέθηκε',
+    other: '%(count)s αποτελέσματα βρέθηκαν'
   },
   numberOfResultsWithTime: {
-    zero: '%(count)s results found in %(time)sms',
-    one: '%(count)s result found in %(time)sms',
-    other: '%(count)s results found in %(time)sms'
+    zero: '%(count)s αποτελέσμα βρέθηκε στις %(time)sms',
+    one: '%(count)s αποτελέσμα βρέθηκε στις %(time)sms',
+    other: '%(count)s αποτελέσματα βρέθηκαν στις %(time)sms'
   },
   sorting: {
-    relevance: 'Relevance',
+    relevance: 'Συνάφεια',
     titleAscending: 'Title (ascending)',
     titleDescending: 'Title (descending)',
     dateAscending: 'Date of collection (ascending)',
@@ -88,59 +88,59 @@ module.exports = {
       content: 'The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
-      heading: 'Default operator',
-      content: 'The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class="%(className)s">Social Science</em>, this will be interpreted as <em class="%(className)s">Social</em> <strong>OR</strong> <em class="%(className)s">Science</em>.'
+      heading: 'Προεπιλεγμένος λογικός τελεστής',
+      content: 'Ο προεπιλεγμένος λογικός τελεστής όταν δεν υπάρχουν ειδικοί χαρακτήρες σε μια αναζήτηση είναι το <strong>Η (OR)</strong>. Για παράδειγμα κατά την αναζήτηση της φράσης <em class="%(className)s">Κοινωνικές Επιστήμες </em>, η αναζήτηση θα φέρει αποτελέσματα για το <em class="%(className)s">Κοινωνικές</em> <strong>Η(OR)</strong> <em class="%(className)s"> το Επιστήμες</em>.'
     }
   },
   reset: {
-    query: 'Clear search',
-    filters: 'Reset filters'
+    query: 'Καθαρισμός αναζήτησης',
+    filters: 'Επαναπροσδιορισμός φίλτρων'
   },
   similarResults: {
-    heading: 'Similar results',
-    notAvailable: 'No similar results found.'
+    heading: 'Παρόμοια αποτελέσματα',
+    notAvailable: 'Δεν βρέθηκαν παρόμοια αποτελέσματα.'
   },
-  resultsPerPage: 'Results per page',
-  sortBy: 'Sort by',
-  showFilters: 'Show filters',
-  hideFilters: 'Hide filters',
-  readMore: 'Read more',
-  readLess: 'Read less',
-  viewJson: 'View JSON',
-  goToStudy: 'Go to study',
-  forthcoming: 'Forthcoming',
-  back: 'Back',
-  close: 'Close',
+  resultsPerPage: 'Αποτελέσματα ανά σελίδα',
+  sortBy: 'Ταξινόμηση κατά',
+  showFilters: 'Εμφάνιση φίλτρων',
+  hideFilters: 'Απόκρυψη φίλτρων',
+  readMore: 'Διαβάστε περισσότερα',
+  readLess: 'Διαβάστε λιγότερα',
+  viewJson: 'Εμφάνιση JSON',
+  goToStudy: 'Μετάβαση στην έρευνα',
+  forthcoming: 'Προσεχώς',
+  back: 'Πίσω',
+  close: 'Κλείσιμο',
   metadata: {
-    studyTitle: 'Study title',
-    creator: 'Creator',
-    studyPersistentIdentifier: 'Study Persistent Identifier',
-    abstract: 'Abstract',
-    methodology: 'Methodology',
-    country: 'Country',
-    timeDimension: 'Time dimension',
-    analysisUnit: 'Analysis unit',
-    samplingProcedure: 'Sampling procedure',
-    dataCollectionMethod: 'Data collection method',
-    dataCollectionPeriod: 'Data collection period',
-    languageOfDataFiles: 'Language of data files',
-    access: 'Access',
-    publisher: 'Publisher',
-    yearOfPublication: 'Year of publication',
-    termsOfDataAccess: 'Terms of data access',
-    studyNumber: 'Study number',
-    topics: 'Topics',
-    keywords: 'Keywords'
+    studyTitle: 'Τίτλος έρευνας',
+    creator: 'Δημιουργός',
+    studyPersistentIdentifier: 'Μόνιμος ταυτοποιητής έρευνας (PID)',
+    abstract: 'Περίληψη',
+    methodology: 'Μεθοδολογία',
+    country: 'Χώρα',
+    timeDimension: 'Χρονική διάσταση',
+    analysisUnit: 'Μονάδα ανάλυσης',
+    samplingProcedure: 'Διαδικασία δειγματοληψίας',
+    dataCollectionMethod: 'Μέθοδος συλλογής δεδομένων',
+    dataCollectionPeriod: 'Περίοδος συλλογής δεδομένων',
+    languageOfDataFiles: 'Γλώσσα των αρχείων δεδομένων',
+    access: 'Πρόσβαση',
+    publisher: 'Εκδότης',
+    yearOfPublication: 'Έτος δημοσίευσης',
+    termsOfDataAccess: 'Όροι πρόσβασης στα δεδομένα',
+    studyNumber: 'Κωδικός έρευνας',
+    topics: 'Θεματικές',
+    keywords: 'Λέξεις κλειδιά'
   },
   footer: {
-    followUsOn: 'Follow us on',
-    contactUs: 'Contact Us',
-    menu: 'Menu',
-    about: 'About',
-    consortium: 'Consortium',
-    projects: 'Projects',
-    researchInfrastructure: 'Research Infrastructure',
-    contact: 'Contact',
-    privacy: 'Privacy Policy'
+    followUsOn: 'Ακολουθήστε μας στο',
+    contactUs: 'Επικοινωνία',
+    menu: 'Μενού',
+    about: 'Σχετικά',
+    consortium: 'Κοινοπραξία',
+    projects: 'Έργα',
+    researchInfrastructure: 'Ερευνητική υποδομή',
+    contact: 'Επικοινωνία',
+    privacy: 'Πολιτική Απορρήτου'
   }
 };
