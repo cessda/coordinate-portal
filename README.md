@@ -8,7 +8,7 @@ Separate repositories are provided for backend architecture; harvester, indexer 
 
 [Node.js](https://nodejs.org/) version 9.11 is required to install and run this application.
 
-When using the Ubuntu version 16 and above for deployment, you can use and allow libpng12-0 library to the Kernel repo.
+When using the Ubuntu version 16 and above for deployment, you can use and allow libpng12-0 library to the Kernel repo. 
 echo "deb http://mirrors.kernel.org/ubuntu/ xenial main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt install -y --allow-unauthenticated libpng12-0
 
 You will need an existing local or remote Elasticsearch instance setup and running.
@@ -119,7 +119,7 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (as at April 2019):
+N.B. list of CESSDA languages (as at June 2018):
 
 cs (Czech)
 
@@ -127,17 +127,15 @@ da (Danish)
 
 de (German)
 
-el (Greek)
-
 en (English)
 
 es (Spanish)
 
-et (Estonian)
-
 fi (Finnish)
 
 fr (French)
+
+el (Greek)
 
 hu (Hungarian)
 
@@ -151,13 +149,12 @@ pt (Portuguese)
 
 ro (Romanian)
 
+se (Swedish)
+
 sk (Slovak)
 
 sl (Slovenian)
 
-sr (Serbian)
-
-sv (Swedish)
 
 
 #### Add a new field
