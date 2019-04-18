@@ -89,10 +89,6 @@
     }
   }
 
-  .Select-placeholder {
-    padding-left: 20px;
-  }
-
   & .dsn-list-narrow {
     padding-top: 5px;
     font-weight: bold;
@@ -136,6 +132,7 @@
   }
 
   .Select-placeholder {
+    padding-left: 20px;
     color: #c3c3c3;
     max-width: 90%;
   }
