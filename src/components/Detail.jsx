@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import Panel from './Panel';
 import Translate, * as counterpart from 'react-translate-component';
 import type {State} from '../types';
-import {OutboundLink} from 'react-ga';
 import * as _ from 'lodash';
 import moment from 'moment';
 
