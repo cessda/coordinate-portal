@@ -32,39 +32,19 @@ type Props = {
 
 class SearchPage extends Component<Props> {
   componentDidUpdate(): void {
-    // Auto expand the 'Topics' filter if it contains selected values.
-    let topicsFilter = $('.filter--classifications\\.term > .is-collapsed');
-    if (!topicsFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['classifications.term'])) {
-      topicsFilter.data('expanded', true).click();
-    }
+    // Auto expand filters if they contain selected values.
+    this.autoExpandFilter('classifications.term');
+    this.autoExpandFilter('dataCollectionYear');
+    this.autoExpandFilter('studyAreaCountries.country');
+    this.autoExpandFilter('publisher.publisher');
+    this.autoExpandFilter('fileLanguages');
+  }
 
-    // Auto expand the 'Collection years' filter if it contains selected values.
-    let collectionYearsFilter = $('.filter--dataCollectionYear > .is-collapsed');
-    if (!collectionYearsFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['dataCollectionYear'])) {
-      collectionYearsFilter.data('expanded', true).click();
-    }
-
-    // Auto expand the 'Country' filter if it contains selected values.
-    let countryFilter = $('.filter--studyAreaCountries\\.country > .is-collapsed');
-    if (!countryFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['studyAreaCountries.country'])) {
-      countryFilter.data('expanded', true).click();
-    }
-
-    // Auto expand the 'Publisher' filter if it contains selected values.
-    let publisherFilter = $('.filter--publisher\\.publisher > .is-collapsed');
-    if (!publisherFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['publisher.publisher'])) {
-      publisherFilter.data('expanded', true).click();
-    }
-
-    // Auto expand the 'Language of data files' filter if it contains selected values.
-    let languageOfDataFilesFilter = $('.filter--fileLanguages > .is-collapsed');
-    if (!languageOfDataFilesFilter.data('expanded') &&
-        !_.isEmpty(this.props.filters['fileLanguages'])) {
-      languageOfDataFilesFilter.data('expanded', true).click();
+  autoExpandFilter(filterName: string): void {
+    let filter = $(`.filter--${filterName.replace('.', '\\.')} > .is-collapsed`);
+    if (!filter.data('expanded') &&
+        !_.isEmpty(this.props.filters[filterName])) {
+      filter.data('expanded', true).click();
     }
   }
 
