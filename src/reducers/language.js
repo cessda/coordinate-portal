@@ -15,7 +15,11 @@ const initialState: State = {
   code: 'en'
 };
 
-const language = (state: State = initialState, action: Action): State => {
+const language = (state: State, action: Action): State => {
+  if (typeof state === 'undefined') {
+    return initialState;
+  }
+
   switch (action.type) {
     case 'INIT_TRANSLATIONS':
       return Object.assign({}, state, {

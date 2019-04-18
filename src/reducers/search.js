@@ -29,7 +29,11 @@ const initialState: State = {
   state: Object
 };
 
-const search = (state: State = initialState, action: Action): State => {
+const search = (state: State, action: Action): State => {
+  if (typeof state === 'undefined') {
+    return initialState;
+  }
+
   switch (action.type) {
     case 'INIT_SEARCHKIT':
       return state;
