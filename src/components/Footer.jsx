@@ -5,9 +5,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
   FaEnvelope,
-  FaFacebookSquare, FaGooglePlusSquare, FaInstagram, FaLinkedinSquare, FaMapMarker, FaPhoneSquare,
-  FaTwitter,
-  FaTwitterSquare, FaYoutubeSquare
+  FaLinkedinSquare,
+  FaMapMarker,
+  FaPhoneSquare,
+  FaTwitterSquare,
+  FaYoutubeSquare
 } from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
 
