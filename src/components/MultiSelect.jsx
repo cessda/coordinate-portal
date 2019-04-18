@@ -38,7 +38,6 @@ class MultiSelect extends AbstractItemList<Props> {
       selectedItems = [],
       disabled,
       showCount,
-      setItems
     } = this.props;
 
     let options: Object[] = items.map((option: Object): Object => {
