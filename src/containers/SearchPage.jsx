@@ -83,6 +83,8 @@ class SearchPage extends Component<Props> {
                                       type: 'nested',
                                       options: {path: 'classifications', min_doc_count: 1}
                                     }}
+                                    orderKey="_term"
+                                    orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.topic.label')}
@@ -116,6 +118,8 @@ class SearchPage extends Component<Props> {
                                       type: 'nested',
                                       options: {path: 'studyAreaCountries', min_doc_count: 1}
                                     }}
+                                    orderKey="_term"
+                                    orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.country.label')}
@@ -135,6 +139,8 @@ class SearchPage extends Component<Props> {
                                       type: 'nested',
                                       options: {path: 'publisher', min_doc_count: 1}
                                     }}
+                                    orderKey="_term"
+                                    orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.publisher.label')}
@@ -151,6 +157,8 @@ class SearchPage extends Component<Props> {
                                     title={counterpart.translate(
                                       'filters.languageOfDataFiles.label')}
                                     field={'fileLanguages'}
+                                    orderKey="_term"
+                                    orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={counterpart.translate(
                                       'filters.languageOfDataFiles.label')}
