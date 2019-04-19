@@ -2,9 +2,7 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {
-  FaAngleDown, FaAngleUp, FaExternalLink, FaLanguage, FaLock, FaUnlock
-} from 'react-icons/lib/fa/index';
+import { FaAngleDown, FaAngleUp, FaExternalLink, FaLanguage } from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';

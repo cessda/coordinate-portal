@@ -1,13 +1,3 @@
-body {
-  font-size: 1rem;
-}
-
-body {
-  #root {
-    color: $greyish-brown;
-  }
-}
-
 .is-fullwidth {
   margin:0 !important;
   padding:0 !important;
@@ -16,6 +6,11 @@ body {
 body {
   min-width: auto;
   text-align: left;
+  font-size: 1rem;
+
+  #root {
+    color: $greyish-brown;
+  }
 
   .columns {
     margin: auto;

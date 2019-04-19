@@ -69,7 +69,7 @@ class SearchPage extends Component<Props> {
   }
 
   render(): Node {
-    const {showMobileFilters, filters, results} = this.props;
+    const {showMobileFilters} = this.props;
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
