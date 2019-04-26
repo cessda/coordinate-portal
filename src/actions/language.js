@@ -3,7 +3,6 @@
 import counterpart from 'counterpart';
 import searchkit from '../utilities/searchkit';
 import type {Dispatch, GetState, State, Thunk} from '../types';
-import * as ReactGA from 'react-ga';
 import * as _ from 'lodash';
 import moment from 'moment';
 import {getLanguages} from '../utilities/language';
@@ -78,11 +77,12 @@ export const changeLanguage = (code: string): Thunk => {
     if (!_.includes(counterpart.getAvailableLocales(), code)) {
       code = 'en';
     } else {
-      ReactGA.event({
-        category: 'Language',
-        action: 'Change Language',
-        label: code.toUpperCase()
-      });
+      if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+        // Notify Matomo Analytics of language change.
+        // $FlowFixMe
+        let _paq = _paq || [];
+        _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
+      }
     }
 
     counterpart.setLocale(code);

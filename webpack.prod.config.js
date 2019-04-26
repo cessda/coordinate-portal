@@ -45,7 +45,7 @@ module.exports = {
       PASC_DEBUG_MODE: false,
       PASC_PORT: 8088,
       PASC_ELASTICSEARCH_URL: null,
-      PASC_ANALYTICS_ID: null
+      PASC_ENABLE_ANALYTICS: false
     })
   ],
   resolve: {

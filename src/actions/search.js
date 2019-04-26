@@ -1,10 +1,9 @@
 // @flow
 
-import searchkit, {detailQuery, similarQuery} from '../utilities/searchkit';
+import searchkit, { detailQuery, similarQuery } from '../utilities/searchkit';
 import * as elasticsearch from 'elasticsearch';
 import * as _ from 'lodash';
-import type {Dispatch, GetState, State, Thunk} from '../types';
-import * as ReactGA from 'react-ga';
+import type { Dispatch, GetState, State, Thunk } from '../types';
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 
@@ -26,7 +25,26 @@ export const initSearchkit = (): Thunk => {
 
       timer = setTimeout((): void => {
         if (!init) {
-          ReactGA.pageview('/' + searchkit.history.location.search);
+          if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+            // Notify Matomo Analytics of new search query.
+            // $FlowFixMe
+            let _paq = _paq || [];
+            _paq.push(['setReferrerUrl', '/' + searchkit.history.location.search]);
+            _paq.push(['setCustomUrl', '/' + searchkit.history.location.search]);
+            _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);
+
+            // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+            _paq.push(['deleteCustomVariables', 'page']);
+            _paq.push(['setGenerationTimeMs', 0]);
+            _paq.push(['trackPageView']);
+
+            // Make Matomo aware of newly added content
+            let content = document.getElementById('root');
+            _paq.push(['MediaAnalytics::scanForMedia', content]);
+            _paq.push(['FormAnalytics::scanForForms', content]);
+            _paq.push(['trackContentImpressionsWithinNode', content]);
+            _paq.push(['enableLinkTracking']);
+          }
         }
       }, 3000);
 
@@ -37,7 +55,7 @@ export const initSearchkit = (): Thunk => {
       }
 
       // Add the current language index to the query for Elasticsearch.
-      query.index = _.find(state.language.list, {'code': state.language.code}).index;
+      query.index = _.find(state.language.list, { 'code': state.language.code }).index;
 
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
@@ -124,11 +142,12 @@ export type ToggleLongAbstractAction = {
 
 export const toggleLongAbstract = (title: string, index: number): Thunk => {
   return (dispatch: Dispatch): void => {
-    ReactGA.event({
-      category: 'Search',
-      action: 'Read more',
-      label: title
-    });
+    if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+      // Notify Matomo Analytics of toggling "Read more" for a study.
+      // $FlowFixMe
+      let _paq = _paq || [];
+      _paq.push(['trackEvent', 'Search', 'Read more', title]);
+    }
 
     dispatch({
       type: 'TOGGLE_LONG_DESCRIPTION',
@@ -193,7 +212,7 @@ export type UpdateSimilarsAction = {
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     let state: State = getState(),
-      index: string = _.find(state.language.list, {'code': state.language.code}).index;
+      index: string = _.find(state.language.list, { 'code': state.language.code }).index;
 
     let client: Object = new elasticsearch.Client({
       host: {

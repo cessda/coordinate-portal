@@ -31,12 +31,10 @@ helper.checkEnvironmentVariables = function (production) {
                 process.env.PASC_ELASTICSEARCH_URL + '.');
   }
 
-  if (!helper.exists(process.env.PASC_ANALYTICS_ID)) {
-    console.log('NOTICE : Missing environmental variable PASC_ANALYTICS_ID.');
-    console.log('         Google Analytics tracking will be disabled.');
+  if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+    console.log('NOTICE : Matomo Analytics tracking is enabled.');
   } else {
-    console.log('NOTICE : Google Analytics tracking enabled for ' +
-                process.env.PASC_ANALYTICS_ID + '.');
+    console.log('NOTICE : Matomo Analytics tracking is disabled.');
   }
 
   if (production) {

@@ -1,22 +1,21 @@
 // @flow
 
-import type {Node} from 'react';
-import React, {Component} from 'react';
-import {Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar} from 'searchkit';
+import type { Node } from 'react';
+import React, { Component } from 'react';
+import { Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } from 'searchkit';
 import Header from '../components/Header';
 import Language from '../components/Language';
 import Detail from '../components/Detail';
 import Footer from '../components/Footer.jsx';
 import searchkit from '../utilities/searchkit';
 import Panel from '../components/Panel';
-import {connect} from 'react-redux';
-import {FaAngleLeft, FaCode, FaExternalLink} from 'react-icons/lib/fa/index';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { FaAngleLeft, FaCode, FaExternalLink } from 'react-icons/lib/fa/index';
+import { bindActionCreators } from 'redux';
 import Translate, * as counterpart from 'react-translate-component';
 import Similars from '../components/Similars';
-import {goBack} from 'react-router-redux';
-import type {Dispatch, State} from '../types';
-import {OutboundLink} from 'react-ga';
+import { goBack } from 'react-router-redux';
+import type { Dispatch, State } from '../types';
 import * as _ from 'lodash';
 
 type Props = {
@@ -45,7 +44,7 @@ class DetailPage extends Component<Props> {
     } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
-    let index: string = (_.find(list, {'code': code}) || {}).index;
+    let index: string = (_.find(list, { 'code': code }) || {}).index;
 
     return (
       <SearchkitProvider searchkit={searchkit}>
@@ -68,24 +67,22 @@ class DetailPage extends Component<Props> {
                  </a>
 
                  {item.studyUrl &&
-                  <OutboundLink className="button is-small is-white is-pulled-right"
-                                eventLabel="Go to study"
-                                to={item.studyUrl}
-                                target="_blank">
+                  <a className="button is-small is-white is-pulled-right"
+                     href={item.studyUrl}
+                     target="_blank">
                     <span className="icon is-small"><FaExternalLink/></span>
                     <Translate component="span" content="goToStudy"/>
-                  </OutboundLink>
+                  </a>
                  }
 
-                 <OutboundLink className="button is-small is-white is-pulled-right mr-15"
-                               eventLabel="View JSON"
-                               to={'/api/json/' + index + '/' + encodeURIComponent(item.id)}
-                               target="_blank">
+                 <a className="button is-small is-white is-pulled-right mr-15"
+                    href={'/api/json/' + index + '/' + encodeURIComponent(item.id)}
+                    target="_blank">
                   <span className="icon is-small">
                     <FaCode/>
                   </span>
                    <Translate component="span" content="viewJson"/>
-                 </OutboundLink>
+                 </a>
 
                  <div className="is-clearfix"/>
                </div>
