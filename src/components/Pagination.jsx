@@ -33,17 +33,22 @@ class Pagination extends AbstractItemList<Props> {
         let current = items[i].page === selectedItems[0] ? ' is-current' : '';
         links.push(<li key={items[i].key}>
           <a className={'pagination-link' + current}
-             onClick={() => setItems([items[i].page])}>{items[i].label}</a>
+             href={'/?p=' + items[i].page}
+             onClick={(e) => {e.preventDefault(); setItems([items[i].page]);}}>{items[i].label}</a>
         </li>);
       }
     }
 
     return (
       <nav className="pagination is-centered is-small" role="navigation" aria-label="pagination">
-        <a className="pagination-previous" onClick={() => setItems([items[0].page])}>
+        <a className="pagination-previous"
+           href={'/?p=' + items[0].page}
+           onClick={(e) => {e.preventDefault(); setItems([items[0].page]);}}>
           <FaChevronLeft/>
         </a>
-        <a className="pagination-next" onClick={() => setItems([items[items.length - 1].page])}>
+        <a className="pagination-next"
+           href={'/?p=' + items[items.length - 1].page}
+           onClick={(e) => {e.preventDefault(); setItems([items[items.length - 1].page]);}}>
           <FaChevronRight/>
         </a>
         <ul className="pagination-list">
