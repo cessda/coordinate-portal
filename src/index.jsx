@@ -2,29 +2,44 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {applyMiddleware, createStore} from 'redux';
-import {Provider} from 'react-redux';
+import { applyMiddleware, createStore } from 'redux';
+import { Provider } from 'react-redux';
 import SearchPage from './containers/SearchPage';
 import DetailPage from './containers/DetailPage';
 import App from './containers/App';
-import {browserHistory, IndexRoute, Redirect, Route, Router} from 'react-router';
-import {routerMiddleware, syncHistoryWithStore} from 'react-router-redux';
+import { browserHistory, IndexRoute, Redirect, Route, Router } from 'react-router';
+import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 import reducers from './reducers';
 import thunk from 'redux-thunk';
-import {composeWithDevTools} from 'redux-devtools-extension';
-import {detect} from 'detect-browser';
-import * as ReactGA from 'react-ga';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { detect } from 'detect-browser';
 import './styles/design.scss';
-import type {Store} from './types';
+import type { Store } from './types';
 
 if (process.env.PASC_DEBUG_MODE) {
   console.warn('PaSC debug mode is enabled. Disable for production use.');
 }
 
-if (process.env.PASC_ANALYTICS_ID !== null) {
-  ReactGA.initialize(process.env.PASC_ANALYTICS_ID, {
-    debug: process.env.PASC_DEBUG_MODE === 'true'
-  });
+if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+  // Initialise Matomo Analytics.
+  // $FlowFixMe
+  let _paq = _paq || [];
+  let url = '//analytics.cessda.eu/';
+
+  _paq.push(['setTrackerUrl', url + 'piwik.php']);
+  _paq.push(['setSiteId', '2']);
+
+  let element = document.createElement('script'),
+    script = document.getElementsByTagName('script')[0];
+
+  element.type = 'text/javascript';
+  element.async = true;
+  element.defer = true;
+  element.src = url + 'piwik.js';
+
+  if (script.parentNode) {
+    script.parentNode.insertBefore(element, script);
+  }
 }
 
 const store: Store = createStore(
@@ -35,7 +50,26 @@ const store: Store = createStore(
 const history: Object = syncHistoryWithStore(browserHistory, store);
 
 history.listen((location: Object): void => {
-  ReactGA.pageview(location.pathname + location.search);
+  if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+    // Notify Matomo Analytics of page change.
+    // $FlowFixMe
+    let _paq = _paq || [];
+    _paq.push(['setReferrerUrl', location.pathname + location.search]);
+    _paq.push(['setCustomUrl', location.pathname + location.search]);
+    _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);
+
+    // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+    _paq.push(['deleteCustomVariables', 'page']);
+    _paq.push(['setGenerationTimeMs', 0]);
+    _paq.push(['trackPageView']);
+
+    // Make Matomo aware of newly added content
+    let content = document.getElementById('root');
+    _paq.push(['MediaAnalytics::scanForMedia', content]);
+    _paq.push(['FormAnalytics::scanForForms', content]);
+    _paq.push(['trackContentImpressionsWithinNode', content]);
+    _paq.push(['enableLinkTracking']);
+  }
 });
 
 let root: ?HTMLElement = document.getElementById('root');
@@ -50,7 +84,7 @@ if (root instanceof HTMLElement) {
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage}/>
           <Route path="detail" component={DetailPage}/>
-          <Redirect from='*' to='/'/>
+          <Redirect from="*" to="/"/>
         </Route>
       </Router>
     </Provider>,

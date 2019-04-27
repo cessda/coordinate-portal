@@ -40,7 +40,7 @@ The application can be configured using the following environment variables.
 | `PASC_DEBUG_MODE`        | No       | `boolean` | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
 | `PASC_PORT`              | No       | `integer` | `8088`        | The port number which will be used to access this web application.                                               |
 | `PASC_ELASTICSEARCH_URL` | Yes      | `string`  | -             | The web address of the Elasticsearch instance which powers all searches.                                         |
-| `PASC_ANALYTICS_ID`      | No       | `string`  | -             | The Google Analytics ID (`UA-xxxxxxxxx-x`) used for tracking events. Tracking is disabled if not provided.       |
+| `PASC_ENABLE_ANALYTICS`  | No       | `boolean` | `false`       | Enables collecting user metrics which are sent to Matomo Analytics.                                              |
 
 Set environment variables using the following syntax.
 

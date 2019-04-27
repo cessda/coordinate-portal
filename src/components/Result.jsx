@@ -1,17 +1,16 @@
 // @flow
 
-import type {Node} from 'react';
-import React, {Component} from 'react';
+import type { Node } from 'react';
+import React, { Component } from 'react';
 import { FaAngleDown, FaAngleUp, FaExternalLink, FaLanguage } from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {toggleLongAbstract} from '../actions/search';
-import {Link} from 'react-router';
-import type {Dispatch, State} from '../types';
-import {OutboundLink} from 'react-ga';
-import {changeLanguage} from '../actions/language';
-import {push} from 'react-router-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toggleLongAbstract } from '../actions/search';
+import { Link } from 'react-router';
+import type { Dispatch, State } from '../types';
+import { changeLanguage } from '../actions/language';
+import { push } from 'react-router-redux';
 
 type Props = {
   bemBlocks: any,
@@ -24,7 +23,7 @@ type Props = {
 
 class Result extends Component<Props> {
   render(): Node {
-    const {bemBlocks, index, item, push, changeLanguage, toggleLongAbstract} = this.props;
+    const { bemBlocks, index, item, push, changeLanguage, toggleLongAbstract } = this.props;
 
     if (item === undefined) {
       return null;
@@ -70,7 +69,7 @@ class Result extends Component<Props> {
            item.abstract.split('\n').map(function(item, key) {
              return (
                <span key={key}>{item}<br/></span>
-             )
+             );
            })
           }
           {!item.abstractExpanded && item.abstractShort}
@@ -117,13 +116,12 @@ class Result extends Component<Props> {
               }
               <div className="control">
                 {item.studyUrl &&
-                 <OutboundLink className="button is-small is-white"
-                               eventLabel="Go to study"
-                               to={item.studyUrl}
-                               target="_blank">
+                 <a className="button is-small is-white"
+                    href={item.studyUrl}
+                    target="_blank">
                    <span className="icon is-small"><FaExternalLink/></span>
                    <Translate component="span" content="goToStudy"/>
-                 </OutboundLink>
+                 </a>
                 }
               </div>
             </div>
