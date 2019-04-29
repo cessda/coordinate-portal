@@ -60,3 +60,6 @@ local.properties
 
 ### Build
 /dist/
+
+### Test Coverage
+/coverage/
