@@ -13,6 +13,10 @@ describe('Language actions', () => {
   const languages = getLanguages();
 
   beforeEach(() => {
+    // Reset environment variables.
+    process.env.PASC_DEBUG_MODE = 'false';
+    process.env.PASC_ENABLE_ANALYTICS = 'false';
+
     // Register a few translations required for tests.
     counterpart.registerTranslations(languages[0].code, languages[0].locale);
     counterpart.registerTranslations(languages[1].code, languages[1].locale);
@@ -37,18 +41,22 @@ describe('Language actions', () => {
       expect(counterpart.getAvailableLocales().length).toBe(languages.length);
 
       // Translations should not include debug information.
-      expect(searchkit.translateFunction('hitstats.results_found')).toBe(counterpart.translate('numberOfResults', {
-        count: 0,
-        time: 0
-      }));
+      expect(searchkit.translateFunction('hitstats.results_found')).toBe(
+        counterpart.translate('numberOfResults', {
+          count: 0,
+          time: 0
+        })
+      );
 
       // State should list all available languages.
-      expect(store.getActions()).toEqual([{
-        type: 'INIT_TRANSLATIONS',
-        list: _.map(languages, function(language) {
-          return _.pick(language, ['code', 'label', 'index']);
-        })
-      }]);
+      expect(store.getActions()).toEqual([
+        {
+          type: 'INIT_TRANSLATIONS',
+          list: _.map(languages, function(language) {
+            return _.pick(language, ['code', 'label', 'index']);
+          })
+        }
+      ]);
     });
 
     it('includes debug output when debug mode is enabled', () => {
@@ -66,10 +74,12 @@ describe('Language actions', () => {
       store.dispatch(initTranslations());
 
       // Translations should include debug information.
-      expect(searchkit.translateFunction('hitstats.results_found')).toBe(counterpart.translate('numberOfResultsWithTime', {
-        count: 0,
-        time: 0
-      }));
+      expect(searchkit.translateFunction('hitstats.results_found')).toBe(
+        counterpart.translate('numberOfResultsWithTime', {
+          count: 0,
+          time: 0
+        })
+      );
     });
   });
 
@@ -86,10 +96,12 @@ describe('Language actions', () => {
       store.dispatch(changeLanguage(languages[1].code));
 
       // Locale registered so should use selected language.
-      expect(store.getActions()).toEqual([{
-        type: 'CHANGE_LANGUAGE',
-        code: languages[1].code
-      }]);
+      expect(store.getActions()).toEqual([
+        {
+          type: 'CHANGE_LANGUAGE',
+          code: languages[1].code
+        }
+      ]);
     });
 
     it('is created when selecting a language without a registered locale', () => {
@@ -104,10 +116,12 @@ describe('Language actions', () => {
       store.dispatch(changeLanguage('xyz'));
 
       // Locale not registered so should default to English (en).
-      expect(store.getActions()).toEqual([{
-        type: 'CHANGE_LANGUAGE',
-        code: 'en'
-      }]);
+      expect(store.getActions()).toEqual([
+        {
+          type: 'CHANGE_LANGUAGE',
+          code: 'en'
+        }
+      ]);
     });
 
     it('logs user metrics when analytics is enabled', () => {
@@ -118,17 +132,19 @@ describe('Language actions', () => {
         }
       });
 
-      // Enable analytics for test.
+      // Enable analytics for test (Matomo script not loaded so no metrics sent)
       process.env.PASC_ENABLE_ANALYTICS = 'true';
 
       // Dispatch action with registered locale.
       store.dispatch(changeLanguage(languages[1].code));
 
       // Locale registered so should use selected language.
-      expect(store.getActions()).toEqual([{
-        type: 'CHANGE_LANGUAGE',
-        code: languages[1].code
-      }]);
+      expect(store.getActions()).toEqual([
+        {
+          type: 'CHANGE_LANGUAGE',
+          code: languages[1].code
+        }
+      ]);
     });
   });
 });

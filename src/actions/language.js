@@ -36,7 +36,7 @@ export const initTranslations = (): Thunk => {
     moment.locale(state.language.code);
 
     searchkit.translateFunction = (key: string): string => {
-      let numberOfResults: string = process.env.PASC_DEBUG_MODE ? 'numberOfResultsWithTime' :
+      let numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' :
                                     'numberOfResults',
         translations: Object = {
           'searchbox.placeholder': counterpart.translate('search'),

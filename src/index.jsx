@@ -16,8 +16,8 @@ import { detect } from 'detect-browser';
 import './styles/design.scss';
 import type { Store } from './types';
 
-if (process.env.PASC_DEBUG_MODE) {
-  console.warn('PaSC debug mode is enabled. Disable for production use.');
+if (process.env.PASC_DEBUG_MODE === 'true') {
+  console.warn('Data Catalogue debug mode is enabled. Disable for production use.');
 }
 
 if (process.env.PASC_ENABLE_ANALYTICS === 'true') {

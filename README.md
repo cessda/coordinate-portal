@@ -6,7 +6,7 @@ Separate repositories are provided for backend architecture; harvester, indexer 
 
 ## Prerequisites
 
-[Node.js](https://nodejs.org/) version 9.11 is required to install and run this application.
+[Node.js](https://nodejs.org/) version 10.15 (LTS) is required to install and run this application.
 
 When using the Ubuntu version 16 and above for deployment, you can use and allow libpng12-0 library to the Kernel repo.
 echo "deb http://mirrors.kernel.org/ubuntu/ xenial main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt install -y --allow-unauthenticated libpng12-0
@@ -28,19 +28,22 @@ Please be aware of *Known Issues* (see bottom) before running.
 
 > **Building:** In order to run the application in production, it must first be built using the `npm run build` command.
 > This will compile assets into the `/dist` directory.
+
 > **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again.
 > This will ensure all locally installed dependencies match their development environment counterparts.
+
+> **Testing:** Tests can be run using `npm run test`. Code coverage will be reported in the `/coverage` directory.
 
 ## Configuration
 
 The application can be configured using the following environment variables.
 
-| Variable                 | Required | Type      | Default Value | Description                                                                                                      |
-| ------------------------ | -------- | --------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `PASC_DEBUG_MODE`        | No       | `boolean` | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
-| `PASC_PORT`              | No       | `integer` | `8088`        | The port number which will be used to access this web application.                                               |
-| `PASC_ELASTICSEARCH_URL` | Yes      | `string`  | -             | The web address of the Elasticsearch instance which powers all searches.                                         |
-| `PASC_ENABLE_ANALYTICS`  | No       | `boolean` | `false`       | Enables collecting user metrics which are sent to Matomo Analytics.                                              |
+| Variable                 | Required | Default Value | Description                                                                                                      |
+| ------------------------ | -------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `PASC_DEBUG_MODE`        | No       | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
+| `PASC_PORT`              | No       | `8088`        | The port number which will be used to access this web application.                                               |
+| `PASC_ELASTICSEARCH_URL` | Yes      | -             | The web address of the Elasticsearch instance which powers all searches.                                         |
+| `PASC_ENABLE_ANALYTICS`  | No       | `false`       | Enables collecting user metrics which are sent to Matomo Analytics.                                              |
 
 Set environment variables using the following syntax.
 
@@ -56,6 +59,7 @@ This project follows a best practice structure for React+Redux applications. See
 
 ```bash
 <ROOT>
+├── coverage            # The output directory for the code coverage report using the test command.
 ├── dist                # The output directory for compilation using the build command.
 ├── flow-typed          # Flow library definitions for type checking.
 ├── infrastructure      # Scripts and configuration for deployment.
@@ -70,6 +74,7 @@ This project follows a best practice structure for React+Redux applications. See
     ├── reducers        # Redux reducers for state container.
     ├── styles          # SASS files for styling.
     └── utilities       # Miscellaneous scripts and helpers.
+└── tests               # Jest unit tests.
 ```
 
 ## Technology Stack
@@ -90,6 +95,8 @@ The primary programming language is Flow and JSX in ECMAScript 6. See *Tooling* 
 | [Webpack](https://webpack.js.org/)                   | JavaScript module bundler.                               |
 | [Sass](http://sass-lang.com/)                        | CSS extension language.                                  |
 | [Bulma](https://bulma.io/)                           | CSS framework based on Flexbox.                          |
+| [Jest](https://jestjs.io/)                           | JavaScript testing framework.                            |
+| [Enzyme](https://airbnb.io/enzyme/)                  | JavaScript testing utility for React Components.         |
 
 See `package.json` in the root directory for a full list of third party libraries used.
 
@@ -98,7 +105,7 @@ See `package.json` in the root directory for a full list of third party librarie
 For development, the following software tools are recommended and have full support for the technologies/languages used in this project.
 
 * [JetBrains WebStorm](https://www.jetbrains.com/webstorm/) or
-* [Atom](https://atom.io/) with [Nuclide](https://nuclide.io/) package
+* [Atom](https://atom.io/) with [Nuclide](https://nuclide.io/) (EOL Announced) package
 
 ## How To
 
@@ -119,46 +126,27 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (as at April 2019):
+N.B. list of CESSDA languages (*as of April 2019*):
 
-cs (Czech)
-
-da (Danish)
-
-de (German)
-
-el (Greek)
-
-en (English)
-
-es (Spanish)
-
-et (Estonian)
-
-fi (Finnish)
-
-fr (French)
-
-hu (Hungarian)
-
-lt (Lithuanian)
-
-nl (Dutch)
-
-no (Norwegian)
-
-pt (Portuguese)
-
-ro (Romanian)
-
-sk (Slovak)
-
-sl (Slovenian)
-
-sr (Serbian)
-
-sv (Swedish)
-
+* cs (Czech)
+* da (Danish)
+* de (German)
+* el (Greek)
+* en (English)
+* es (Spanish)
+* et (Estonian)
+* fi (Finnish)
+* fr (French)
+* hu (Hungarian)
+* lt (Lithuanian)
+* nl (Dutch)
+* no (Norwegian)
+* pt (Portuguese)
+* ro (Romanian)
+* sk (Slovak)
+* sl (Slovenian)
+* sr (Serbian)
+* sv (Swedish)
 
 #### Add a new field
 
