@@ -17,7 +17,15 @@ pipeline {
         echo "image_tag = ${image_tag}"
       }
     }
-    stage('Build Project and Run Sonar Scan') {
+    stage('Run Unit Tests') {
+      steps {
+        nodejs('node') {
+          sh "npm install"
+          sh "npm run test"
+        }
+      }
+    }
+    stage('Run Sonar Scan') {
 		  steps {
         nodejs('node') {
             withSonarQubeEnv('cessda-sonar') {
