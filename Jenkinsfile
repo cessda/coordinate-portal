@@ -31,13 +31,13 @@ pipeline {
             withSonarQubeEnv('cessda-sonar') {
             sh "${scannerHome}/bin/sonar-scanner"
           }
-        }  
+        }
       }
     }
     stage('Get Quality Gate Status') {
       steps {
         timeout(time: 1, unit: 'HOURS') {
-          waitForQualityGate abortPipeline: true
+          waitForQualityGate abortPipeline: false
         }
       }
     }
