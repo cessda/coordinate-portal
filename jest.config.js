@@ -1,4 +1,5 @@
 module.exports = {
-  collectCoverage: true,
-  coverageDirectory: './coverage'
+  testMatch: ['**/tests/**/*.js'],
+  coverageDirectory: './coverage',
+  collectCoverage: true
 };

@@ -11,7 +11,7 @@ const helper = {};
 
 helper.checkBuildDirectory = function () {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
-    console.error('ERROR : Unable to start PaSC application.');
+    console.error('ERROR : Unable to start Data Catalogue application.');
     console.error('        Missing \'/dist\' directory as application has not been built.');
     console.error('        Run command \'npm run build\' and try again.');
     console.log();
@@ -20,8 +20,8 @@ helper.checkBuildDirectory = function () {
 };
 
 helper.checkEnvironmentVariables = function (production) {
-  if (!helper.exists(process.env.PASC_ELASTICSEARCH_URL)) {
-    console.error('ERROR : Unable to start PaSC application.');
+  if (_.isEmpty(process.env.PASC_ELASTICSEARCH_URL)) {
+    console.error('ERROR : Unable to start Data Catalogue application.');
     console.error('        Missing environmental variable PASC_ELASTICSEARCH_URL.');
     console.log();
     process.exit();
@@ -38,7 +38,7 @@ helper.checkEnvironmentVariables = function (production) {
   }
 
   if (production) {
-    if (helper.exists(process.env.PASC_DEBUG_MODE)) {
+    if (process.env.PASC_DEBUG_MODE === 'true') {
       console.warn('WARNING : Debug mode is enabled. Disable for production use.');
     }
 
@@ -46,7 +46,7 @@ helper.checkEnvironmentVariables = function (production) {
       console.warn('WARNING : Node environment is not set to production.');
     }
   } else {
-    if (helper.exists(process.env.PASC_DEBUG_MODE)) {
+    if (process.env.PASC_DEBUG_MODE === 'true') {
       console.log('NOTICE : Debug mode is enabled.');
     }
   }
@@ -126,13 +126,9 @@ helper.startListening = function (app) {
   let port = Number(process.env.PASC_PORT || 8088);
   app.listen(port, function () {
     console.log();
-    console.log('SUCCESS : PaSC application is running at http://localhost:' + port + '.');
+    console.log('SUCCESS : Data Catalogue application is running at http://localhost:' + port + '.');
     console.log();
   });
-};
-
-helper.exists = function (data) {
-  return !(_.isNil(data) || _.isEmpty(data));
 };
 
 module.exports = helper;
