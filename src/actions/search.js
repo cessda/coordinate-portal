@@ -222,7 +222,7 @@ export const updateSimilars = (item: Object): Thunk => {
       }
     });
 
-    client.search({
+    return client.search({
       index: index,
       size: 10,
       body: {

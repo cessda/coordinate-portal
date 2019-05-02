@@ -17,17 +17,26 @@ describe('Language actions', () => {
     process.env.PASC_DEBUG_MODE = 'false';
     process.env.PASC_ENABLE_ANALYTICS = 'false';
 
-    // Register a few translations required for tests.
-    counterpart.registerTranslations(languages[0].code, languages[0].locale);
-    counterpart.registerTranslations(languages[1].code, languages[1].locale);
+    // Manually initialise searchkit history.
+    searchkit.history = {
+      location: {
+        search: '?q=search%20text'
+      },
+      push: () => {
+        // Mocked method stub.
+      }
+    };
 
-    // Not running in browser so need to manually initialise history.
-    searchkit.history = [];
+    // Mock Matomo Analytics library (no metrics will actually be sent).
+    global['_paq'] = [];
+
+    // Register a translation required for tests.
+    counterpart.registerTranslations(languages[0].code, languages[0].locale);
   });
 
   describe('INIT_TRANSLATIONS action', () => {
     it('is created when initialising language support', () => {
-      // Mock Redux state.
+      // Mock Redux store.
       let store = mockStore({
         language: {
           code: languages[0].code
@@ -60,7 +69,7 @@ describe('Language actions', () => {
     });
 
     it('includes debug output when debug mode is enabled', () => {
-      // Mock Redux state.
+      // Mock Redux store.
       let store = mockStore({
         language: {
           code: languages[0].code
@@ -85,32 +94,24 @@ describe('Language actions', () => {
 
   describe('CHANGE_LANGUAGE action', () => {
     it('is created when selecting a language with a registered locale', () => {
-      // Mock Redux state.
-      let store = mockStore({
-        language: {
-          code: languages[0].code
-        }
-      });
+      // Mock Redux store.
+      let store = mockStore({});
 
       // Dispatch action with registered locale.
-      store.dispatch(changeLanguage(languages[1].code));
+      store.dispatch(changeLanguage(languages[0].code));
 
       // Locale registered so should use selected language.
       expect(store.getActions()).toEqual([
         {
           type: 'CHANGE_LANGUAGE',
-          code: languages[1].code
+          code: languages[0].code
         }
       ]);
     });
 
     it('is created when selecting a language without a registered locale', () => {
-      // Mock Redux state.
-      let store = mockStore({
-        language: {
-          code: languages[0].code
-        }
-      });
+      // Mock Redux store.
+      let store = mockStore({});
 
       // Dispatch action with unregistered locale.
       store.dispatch(changeLanguage('xyz'));
@@ -125,25 +126,23 @@ describe('Language actions', () => {
     });
 
     it('logs user metrics when analytics is enabled', () => {
-      // Mock Redux state.
-      let store = mockStore({
-        language: {
-          code: languages[0].code
-        }
-      });
+      // Mock Redux store.
+      let store = mockStore({});
 
-      // Enable analytics for test (Matomo script not loaded so no metrics sent)
+      // Enable analytics for test (tracking library mocked so no metrics sent)
       process.env.PASC_ENABLE_ANALYTICS = 'true';
 
       // Dispatch action with registered locale.
-      store.dispatch(changeLanguage(languages[1].code));
+      store.dispatch(changeLanguage(languages[0].code));
 
-      // Locale registered so should use selected language.
-      expect(store.getActions()).toEqual([
-        {
-          type: 'CHANGE_LANGUAGE',
-          code: languages[1].code
-        }
+      // Analytics library should have pushed event.
+      expect(global['_paq']).toEqual([
+        [
+          'trackEvent',
+          'Language',
+          'Change Language',
+          languages[0].code.toUpperCase()
+        ]
       ]);
     });
   });
