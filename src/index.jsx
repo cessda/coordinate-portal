@@ -22,8 +22,7 @@ if (process.env.PASC_DEBUG_MODE === 'true') {
 
 if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
   // Initialise Matomo Analytics.
-  // $FlowFixMe
-  let _paq = _paq || [];
+  let _paq = window._paq || [];
   let url = '//analytics.cessda.eu/';
 
   _paq.push(['setTrackerUrl', url + 'piwik.php']);
@@ -40,6 +39,8 @@ if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
   if (script.parentNode) {
     script.parentNode.insertBefore(element, script);
   }
+
+  window._paq = _paq;
 }
 
 const store: Store = createStore(
@@ -52,8 +53,7 @@ const history: Object = syncHistoryWithStore(browserHistory, store);
 history.listen((location: Object): void => {
   if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
     // Notify Matomo Analytics of page change.
-    // $FlowFixMe
-    let _paq = _paq || [];
+    let _paq = window._paq || [];
     _paq.push(['setReferrerUrl', location.pathname + location.search]);
     _paq.push(['setCustomUrl', location.pathname + location.search]);
     _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);

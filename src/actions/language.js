@@ -79,8 +79,7 @@ export const changeLanguage = (code: string): Thunk => {
     } else {
       if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
         // Notify Matomo Analytics of language change.
-        // $FlowFixMe
-        let _paq = _paq || [];
+        let _paq = window._paq || [];
         _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
       }
     }

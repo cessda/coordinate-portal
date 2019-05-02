@@ -27,8 +27,7 @@ export const initSearchkit = (): Thunk => {
         if (!init) {
           if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
             // Notify Matomo Analytics of new search query.
-            // $FlowFixMe
-            let _paq = _paq || [];
+            let _paq = window._paq || [];
             _paq.push(['setReferrerUrl', '/' + searchkit.history.location.search]);
             _paq.push(['setCustomUrl', '/' + searchkit.history.location.search]);
             _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);
@@ -144,8 +143,7 @@ export const toggleLongAbstract = (title: string, index: number): Thunk => {
   return (dispatch: Dispatch): void => {
     if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
       // Notify Matomo Analytics of toggling "Read more" for a study.
-      // $FlowFixMe
-      let _paq = _paq || [];
+      let _paq = window._paq || [];
       _paq.push(['trackEvent', 'Search', 'Read more', title]);
     }
 
