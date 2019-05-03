@@ -30,6 +30,7 @@
     "express-http-proxy": "^1.1.0",
     "immutable": "^3.8.1",
     "invariant": "^2.2.1",
+    "jest-junit": "^6.4.0",
     "jquery": "^3.2.1",
     "js-stylesheet": "0.0.1",
     "lodash": "^4.17.11",

@@ -1,5 +1,6 @@
 module.exports = {
   testMatch: ['**/tests/**/*.js'],
   coverageDirectory: './coverage',
-  collectCoverage: true
+  collectCoverage: true,
+  reporters: [ "default", "jest-junit" ]
 };
