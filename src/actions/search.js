@@ -132,6 +132,18 @@ export const toggleSummary = (): ToggleSummaryAction => {
   };
 };
 
+//////////// Redux Action Creator : TOGGLE_METADATA_PANELS
+
+export type ToggleMetadataPanelsAction = {
+  type: 'TOGGLE_METADATA_PANELS'
+}
+
+export const toggleMetadataPanels = (): ToggleMetadataPanelsAction => {
+  return {
+    type: 'TOGGLE_METADATA_PANELS'
+  };
+};
+
 //////////// Redux Action Creator : TOGGLE_LONG_DESCRIPTION
 
 export type ToggleLongAbstractAction = {
@@ -267,6 +279,7 @@ export type SearchAction =
   | ToggleMobileFiltersAction
   | ToggleAdvancedSearchAction
   | ToggleSummaryAction
+  | ToggleMetadataPanelsAction
   | ToggleLongAbstractAction
   | UpdateDisplayedAction
   | UpdateQueryAction
