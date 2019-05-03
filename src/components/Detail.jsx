@@ -184,7 +184,7 @@ class Detail extends HitItem<Props> {
           <strong className="data-label"/>
           <div className="tags">
             {this.generateElements(item.classifications, 'term', 'tag', (term) => {
-              return _.startCase(term);
+              return _.upperFirst(term);
             })}
           </div>
 
@@ -198,7 +198,7 @@ class Detail extends HitItem<Props> {
           <strong className="data-label"/>
           <div className="tags">
             {this.generateElements(item.keywords, 'term', 'tag', (term) => {
-              return _.startCase(term);
+              return _.upperFirst(term);
             })}
           </div>
 
