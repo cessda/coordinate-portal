@@ -120,11 +120,11 @@ export function getJsonLd(data: Object): Object {
     'description': data.abstract,
     'url': window.location.href,
     'sameAs': data.studyUrl,
-    'keywords': _.map(data.keywords || [], (i) => _.startCase(i.term)),
+    'keywords': _.map(data.keywords || [], (i) => _.upperFirst(i.term)),
     'variableMeasured': _.map(data.unitTypes, 'term').join(', '),
     'measurementTechnique': _.map(data.typeOfModeOfCollections, 'term').join(', '),
     'license': data.dataAccessFreeTexts || '',
-    'identifier': _.map(data.pidStudies || [], (i) => i.pid + ' (' + _.startCase(i.agency) +
+    'identifier': _.map(data.pidStudies || [], (i) => i.pid + ' (' + _.upperFirst(i.agency) +
                                                       ')').join(', '),
     'creator': creators,
     'temporalCoverage': data.dataCollectionPeriodStartdate.substring(0, 10) + '/' +
