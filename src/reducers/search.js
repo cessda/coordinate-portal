@@ -9,6 +9,7 @@ type State = {
   showMobileFilters: boolean,
   showAdvancedSearch: boolean,
   showFilterSummary: boolean,
+  expandMetadataPanels: boolean,
   displayed: Object[],
   jsonLd?: ?Object,
   similars?: {
@@ -24,6 +25,7 @@ const initialState: State = {
   showMobileFilters: false,
   showAdvancedSearch: false,
   showFilterSummary: false,
+  expandMetadataPanels: false,
   displayed: [],
   query: Object,
   state: Object
@@ -56,6 +58,11 @@ const search = (state: State, action: Action): State => {
     case 'TOGGLE_SUMMARY':
       return Object.assign({}, state, {
         showFilterSummary: !state.showFilterSummary
+      });
+
+    case 'TOGGLE_METADATA_PANELS':
+      return Object.assign({}, state, {
+        expandMetadataPanels: !state.expandMetadataPanels
       });
 
     case 'TOGGLE_LONG_DESCRIPTION':

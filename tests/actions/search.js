@@ -7,6 +7,7 @@ import {
   toggleAdvancedSearch,
   toggleLoading,
   toggleLongAbstract,
+  toggleMetadataPanels,
   toggleMobileFilters,
   toggleSummary,
   updateDisplayed,
@@ -346,6 +347,15 @@ describe('Search actions', () => {
       // Action should be returned.
       expect(toggleSummary()).toEqual({
         type: 'TOGGLE_SUMMARY'
+      });
+    });
+  });
+
+  describe('TOGGLE_METADATA_PANELS action', () => {
+    it('is created when metadata panel collapsed state changes', () => {
+      // Action should be returned.
+      expect(toggleMetadataPanels()).toEqual({
+        type: 'TOGGLE_METADATA_PANELS'
       });
     });
   });

@@ -6,17 +6,27 @@ import {HitItem} from 'searchkit';
 import {connect} from 'react-redux';
 import Panel from './Panel';
 import Translate, * as counterpart from 'react-translate-component';
-import type {State} from '../types';
+import type { Dispatch, State } from '../types';
 import * as _ from 'lodash';
 import moment from 'moment';
+import { bindActionCreators } from "redux";
+import { toggleMetadataPanels } from '../actions/search';
 
 type Props = {
   bemBlocks: Object,
   index: number,
-  item: Object
+  item: Object,
+  expandMetadataPanels: boolean,
+  toggleMetadataPanels: () => void
 };
 
 class Detail extends HitItem<Props> {
+  componentWillUnmount(): void {
+    if (this.props.expandMetadataPanels) {
+      this.props.toggleMetadataPanels();
+    }
+  }
+
   generateElements(field: any[], property?: ?string, element: 'p' | 'tag',
                    callback?: Function): Node[] {
     let elements: Node[] = [];
@@ -41,14 +51,14 @@ class Detail extends HitItem<Props> {
     return elements;
   }
 
-  formatDate(format: string, date1: string, date2?: string, dateFallback?: string,
+  formatDate(format: string, date1: string, date2?: string, dateFallback?: any[],
              dateFallbackProperty?: ?string): Node {
     if (!date1 && !date2 && !dateFallback) {
       return <Translate content="language.notAvailable.field"/>;
     }
     if (!date1 && !date2) {
       if (_.isArray(dateFallback)) {
-        return this.generateElements(dateFallback, dateFallbackProperty, 'p');
+        return this.generateElements((dateFallback: any), dateFallbackProperty, 'p');
       } else {
         return <p>{dateFallback}</p>;
       }
@@ -103,8 +113,15 @@ class Detail extends HitItem<Props> {
 
         <Panel className="section-header"
                title={counterpart.translate('metadata.methodology')}
-               collapsable={true}
-               defaultCollapsed={true}>
+               collapsable={false}
+               defaultCollapsed={false}>
+
+          <Translate className="data-label"
+                     component="strong"
+                     content="metadata.dataCollectionPeriod"/>
+          {this.formatDate('Do MMMM YYYY', item.dataCollectionPeriodStartdate,
+            item.dataCollectionPeriodEnddate, item.dataCollectionFreeTexts,
+            'dataCollectionFreeText')}
 
           <Translate className="data-label"
                      component="strong"
@@ -133,13 +150,6 @@ class Detail extends HitItem<Props> {
 
           <Translate className="data-label"
                      component="strong"
-                     content="metadata.dataCollectionPeriod"/>
-          {this.formatDate('Do MMMM YYYY', item.dataCollectionPeriodStartdate,
-            item.dataCollectionPeriodEnddate, item.dataCollectionFreeTexts,
-            'dataCollectionFreeText')}
-
-          <Translate className="data-label"
-                     component="strong"
                      content="metadata.languageOfDataFiles"/>
           <div className="tags mt-10">
             {this.generateElements(item.fileLanguages, null, 'tag', (term) => {
@@ -152,7 +162,8 @@ class Detail extends HitItem<Props> {
         <Panel className="section-header"
                title={counterpart.translate('metadata.access')}
                collapsable={true}
-               defaultCollapsed={true}>
+               defaultCollapsed={true}
+               linkCollapsedState={true}>
 
           <Translate className="data-label"
                      component="strong"
@@ -179,7 +190,8 @@ class Detail extends HitItem<Props> {
         <Panel className="section-header"
                title={counterpart.translate('metadata.topics')}
                collapsable={true}
-               defaultCollapsed={true}>
+               defaultCollapsed={true}
+               linkCollapsedState={true}>
 
           <strong className="data-label"/>
           <div className="tags">
@@ -193,7 +205,8 @@ class Detail extends HitItem<Props> {
         <Panel className="section-header"
                title={counterpart.translate('metadata.keywords')}
                collapsable={true}
-               defaultCollapsed={true}>
+               defaultCollapsed={true}
+               linkCollapsedState={true}>
 
           <strong className="data-label"/>
           <div className="tags">
@@ -210,8 +223,15 @@ class Detail extends HitItem<Props> {
 
 const mapStateToProps = (state: State, props: Props): Object => {
   return {
-    item: state.search.displayed[props.index]
+    item: state.search.displayed[props.index],
+    expandMetadataPanels: state.search.expandMetadataPanels
   };
 };
 
-export default connect(mapStateToProps)(Detail);
+const mapDispatchToProps = (dispatch: Dispatch): Object => {
+  return {
+    toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
