@@ -45,7 +45,7 @@ export function getLanguages(): Object[] {
     locale: de
   }, {
     code: 'el',
-    label: 'Νέα Ελληνικά',
+    label: 'Ελληνικά',
     index: 'cmmstudy_el',
     locale: el
   }, {
