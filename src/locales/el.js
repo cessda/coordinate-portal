@@ -65,27 +65,27 @@ module.exports = {
     one: '%(count)s αποτελέσμα βρέθηκε στις %(time)sms',
     other: '%(count)s αποτελέσματα βρέθηκαν στις %(time)sms'
   },
-  sorting: {
+ sorting: {
     relevance: 'Συνάφεια',
-    titleAscending: 'Title (ascending)',
-    titleDescending: 'Title (descending)',
-    dateAscending: 'Date of collection (ascending)',
-    dateDescending: 'Date of collection (descending)'
+    titleAscending: 'Τίτλος (αύξουσα)',
+    titleDescending: 'Τίτλος (φθίνουσα)',
+    dateAscending: 'Ημερομηνία συλλογής δεδομένων (αύξουσα)',
+    dateDescending: 'Ημερομηνία συλλογής δεδομένων (φθίνουσα)'
   },
   advancedSearch: {
-    label: 'Advanced search',
-    introduction: 'The following special characters can be used to perform advanced search queries:',
-    and: '<span class="%(className)s">+</span> signifies <strong>AND</strong> operation.',
-    or: '<span class="%(className)s">|</span> signifies <strong>OR</strong> operation.',
-    negates: '<span class="%(className)s">-</span> <strong>negates</strong> a single token.',
-    phrase: '<span class="%(className)s">"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.',
-    prefix: '<span class="%(className)s">*</span> at the end of a term signifies a <strong>prefix</strong> query.',
-    precedence: '<span class="%(className)s">(</span> and <span class="%(className)s">)</span> signify <strong>precedence</strong>.',
-    distance: '<span class="%(className)s">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).',
-    slop: '<span class="%(className)s">~N</span> after a phrase signifies <strong>slop</strong> amount.',
+    label: 'Σύνθετη αναζήτηση',
+    introduction: 'Οι παρακάτω ειδικοί χαρακτήρες μπορούν να χρησιμοποιηθούν σε ερωτήματα σύνθετης αναζήτησης:',
+    and: '<span class="%(className)s">+</span> δηλώνει τη λειτουργία <strong>ΚΑΙ(AND)</strong> operation.',
+    or: '<span class="%(className)s">|</span> δηλώνει τη λειτουργία<strong> Η(OR)</strong> operation.',
+    negates: '<span class="%(className)s">-</span> <strong>εξαιρεί</strong> μια απλή λέξη από την αναζήτηση.',
+    phrase: '<span class="%(className)s">"</span>  περικλείει μια σειρά από λέξεις σε μια ενιαία <strong>φράση</strong> για αναζήτηση.',
+    prefix: '<span class="%(className)s">*</span> δηλώνει ένα ερώτημα <strong>προθέματος</strong> στο τέλος κάθε όρου.',
+    precedence: '<span class="%(className)s">(</span> και <span class="%(className)s">)</span> δηλώνει <strong>προτεραιότητα</strong>.',
+    distance: '<span class="%(className)s">~N</span> όταν ακολουθεί μια λέξη ο ακέραιος N δηλώνει  <strong>την επιτρεπόμενη απόσταση,</strong> ώστε να ταιριάζουν οι δύο λέξεις(ασάφεια).',
+    slop: '<span class="%(className)s">~N</span> όταν ακολουθεί μια φράση ο ακέραιος N δηλώνει <strong>το πλήθος των χαρακτήρων</strong> που μπορεί να διαφέρουν.',
     escaping: {
-      heading: 'Escaping',
-      content: 'The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class="%(className)s">\\</span>.'
+      heading: 'Αναζήτηση δεσμευμένων χαρακτήρων',
+      content: 'Όλοι οι παραπάνω ειδικοί χαρακτήρες είναι δεσμευμένοι. Για να αναζητήσετε κάποιους από αυτούς τους ειδικούς χαρακτήρες, θα πρέπει να προηγηθεί το σύμβολο <span class="%(className)s">\\</span>.'
     },
     defaultOperator: {
       heading: 'Προεπιλεγμένος λογικός τελεστής',
