@@ -32,7 +32,7 @@ type Props = {
   goBack: () => void
 };
 
-class DetailPage extends Component<Props> {
+export class DetailPage extends Component<Props> {
   render(): Node {
     const {
       loading,
@@ -108,7 +108,7 @@ class DetailPage extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     loading: state.search.loading,
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
@@ -119,7 +119,7 @@ const mapStateToProps = (state: State): Object => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     goBack: bindActionCreators(goBack, dispatch)
   };
