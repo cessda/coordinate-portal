@@ -16,7 +16,7 @@ type Props = {
   setItems: any
 };
 
-class MultiSelect extends AbstractItemList<Props> {
+export class MultiSelect extends AbstractItemList<Props> {
   constructor(props: Props): void {
     super(props);
     (this: any).handleChange = this.handleChange.bind(this);

@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 type Props = {};
 
 // Extend the Searchkit SortingSelector component to support translations.
-class SortingSelector extends SearchkitSortingSelector<Props> {
+export class SortingSelector extends SearchkitSortingSelector<Props> {
   hasHits(): boolean {
     // Override behaviour to always return true so that the control is never disabled and hidden.
     return true;

@@ -16,7 +16,7 @@ type Props = {
   setItems: (number[]) => void
 };
 
-class Pagination extends AbstractItemList<Props> {
+export class Pagination extends AbstractItemList<Props> {
   render(): Node {
     const {items, selectedItems, setItems} = this.props;
     let links = [];

@@ -18,7 +18,7 @@ type Props = {
   push: (state: Object) => void
 };
 
-class Similars extends Component<Props> {
+export class Similars extends Component<Props> {
   render(): Node {
     const {item, similars, push} = this.props;
 
@@ -48,14 +48,14 @@ class Similars extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     item: state.search.displayed[0],
     similars: state.search.similars
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     push: bindActionCreators(push, dispatch)
   };

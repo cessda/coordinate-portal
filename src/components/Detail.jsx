@@ -20,7 +20,7 @@ type Props = {
   toggleMetadataPanels: () => void
 };
 
-class Detail extends HitItem<Props> {
+export class Detail extends HitItem<Props> {
   componentWillUnmount(): void {
     if (this.props.expandMetadataPanels) {
       this.props.toggleMetadataPanels();
@@ -221,14 +221,14 @@ class Detail extends HitItem<Props> {
   }
 }
 
-const mapStateToProps = (state: State, props: Props): Object => {
+export const mapStateToProps = (state: State, props: Props): Object => {
   return {
     item: state.search.displayed[props.index],
     expandMetadataPanels: state.search.expandMetadataPanels
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
   };

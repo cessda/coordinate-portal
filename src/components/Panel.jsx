@@ -17,13 +17,12 @@ type Props = {
 };
 
 // Extend the Searchkit Panel component to support tooltips and translations.
-class Panel extends SearchkitPanel<Props> {
+export class Panel extends SearchkitPanel<Props> {
   componentDidUpdate(prevProps: Props): void {
     if (this.props.linkCollapsedState &&
-        this.props.expandMetadataPanels !== prevProps.expandMetadataPanels) {
-      if (this.state.collapsed !== !this.props.expandMetadataPanels) {
-        this.toggleCollapsed();
-      }
+        this.props.expandMetadataPanels !== prevProps.expandMetadataPanels &&
+        this.state.collapsed !== !this.props.expandMetadataPanels) {
+      this.toggleCollapsed();
     }
   }
 
@@ -60,13 +59,13 @@ Panel.propTypes = Object.assign(SearchkitPanel.propTypes, {
   toggleMetadataPanels: PropTypes.func
 });
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     expandMetadataPanels: state.search.expandMetadataPanels
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
   };

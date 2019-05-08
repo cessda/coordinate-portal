@@ -9,7 +9,7 @@ type Props = {
   content: any
 };
 
-class Tooltip extends Component<Props> {
+export class Tooltip extends Component<Props> {
   render(): Node {
     const {
       content

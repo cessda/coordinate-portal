@@ -21,7 +21,7 @@ type Props = {
   toggleLongAbstract: any
 };
 
-class Result extends Component<Props> {
+export class Result extends Component<Props> {
   render(): Node {
     const { bemBlocks, index, item, push, changeLanguage, toggleLongAbstract } = this.props;
 
@@ -30,16 +30,14 @@ class Result extends Component<Props> {
     }
 
     let languages: Node[] = [];
-    if (item) {
-      for (let i: number = 0; i < item.langAvailableIn.length; i++) {
-        languages.push(<a key={i} className="button is-small is-white" onClick={() => {
-          changeLanguage(item.langAvailableIn[i]);
-          push({
-            pathname: 'detail',
-            search: '?q="' + item.id + '"'
-          });
-        }}>{item.langAvailableIn[i]}</a>);
-      }
+    for (let i: number = 0; i < item.langAvailableIn.length; i++) {
+      languages.push(<a key={i} className="button is-small is-white" onClick={() => {
+        changeLanguage(item.langAvailableIn[i]);
+        push({
+          pathname: 'detail',
+          search: '?q="' + item.id + '"'
+        });
+      }}>{item.langAvailableIn[i]}</a>);
     }
 
     let creators: Node[] = [];
@@ -132,13 +130,13 @@ class Result extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State, props: Props): Object => {
+export const mapStateToProps = (state: State, props: Props): Object => {
   return {
     item: state.search.displayed[props.index]
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     push: bindActionCreators(push, dispatch),
     changeLanguage: bindActionCreators(changeLanguage, dispatch),

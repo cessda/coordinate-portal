@@ -15,7 +15,7 @@ type Props = {
 };
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
-class SearchBox extends SearchkitSearchBox<Props> {
+export class SearchBox extends SearchkitSearchBox<Props> {
   onChange(event: any): void {
     const {
       pathname,
@@ -44,14 +44,14 @@ class SearchBox extends SearchkitSearchBox<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
     query: state.search.state.q
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     push: bindActionCreators(push, dispatch)
   };

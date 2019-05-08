@@ -13,7 +13,7 @@ type Props = {
   resetFilters: () => void
 };
 
-class Reset extends Component<Props> {
+export class Reset extends Component<Props> {
   render(): Node {
     const {
       pathname,
@@ -34,7 +34,7 @@ class Reset extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname
   };
