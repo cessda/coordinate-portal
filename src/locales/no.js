@@ -2,7 +2,7 @@ module.exports = {
   counterpart: {
     pluralize: (entry, count) => entry[
       (count === 0 && 'zero' in entry)
-        ? 'ingen' : (count === 1) ? 'ett' : 'andre'
+        ? 'zero' : (count === 1) ? 'one' : 'other'
       ]
   },
   cessda: 'Consortium of European Social Science Data Archives',
