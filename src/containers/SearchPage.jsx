@@ -20,7 +20,7 @@ import RefinementListFilter from '../components/RefinementListFilter';
 import NoHits from '../components/NoHits';
 import searchkit from '../utilities/searchkit';
 import * as _ from 'lodash';
-import * as $ from 'jquery';
+import $ from 'jquery';
 import type {State} from '../types';
 import moment from 'moment';
 
@@ -30,7 +30,7 @@ type Props = {
   results: number
 };
 
-class SearchPage extends Component<Props> {
+export class SearchPage extends Component<Props> {
   componentDidUpdate(): void {
     // Auto expand filters if they contain selected values.
     this.autoExpandFilter('classifications.term');
@@ -180,7 +180,7 @@ class SearchPage extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     showMobileFilters: state.search.showMobileFilters,
     filters: state.search.state,

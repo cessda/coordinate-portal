@@ -11,7 +11,7 @@
     "startprod": "node startprod.js",
     "build": "npm run clean && webpack --config webpack.prod.config.js -p --progress",
     "clean": "rimraf dist",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --verbose",
     "test:watch": "npm test -- --watch"
   },
   "dependencies": {

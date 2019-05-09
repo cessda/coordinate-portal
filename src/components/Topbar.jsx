@@ -13,7 +13,7 @@ type Props = {
   code: string
 };
 
-class TopBar extends Component<Props> {
+export class TopBar extends Component<Props> {
   render(): Node {
     return (
       <ActionBar>
@@ -67,7 +67,7 @@ class TopBar extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     code: state.language.code
   };

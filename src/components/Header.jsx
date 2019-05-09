@@ -31,7 +31,7 @@ type Props = {
   toggleAdvancedSearch: () => void
 };
 
-class Header extends Component<Props> {
+export class Header extends Component<Props> {
   render(): Node {
     const {
       pathname,
@@ -192,7 +192,7 @@ class Header extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
     code: state.language.code,
@@ -203,7 +203,7 @@ const mapStateToProps = (state: State): Object => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     push: bindActionCreators(push, dispatch),
     resetSearch: bindActionCreators(resetSearch, dispatch),

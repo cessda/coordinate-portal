@@ -109,6 +109,9 @@ describe('Search actions', () => {
       // Manually trigger search to execute query processor.
       searchkit.search();
 
+      // Execute second search to check init flag in setTimeout() callback.
+      searchkit.search();
+
       // Manually execute setTimeout() callback.
       jest.runAllTimers();
 
@@ -127,6 +130,30 @@ describe('Search actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'INIT_SEARCHKIT'
+        },
+        {
+          type: 'TOGGLE_LOADING',
+          loading: true
+        },
+        {
+          type: 'UPDATE_QUERY',
+          query: {
+            index: 'cmmstudy_en',
+            query: {
+              filtered: {
+                filter: {
+                  term: {
+                    isActive: true
+                  }
+                }
+              }
+            },
+            size: 20
+          }
+        },
+        {
+          type: 'UPDATE_STATE',
+          state: {}
         },
         {
           type: 'TOGGLE_LOADING',

@@ -15,7 +15,7 @@ import Translate from 'react-translate-component';
 
 type Props = {};
 
-class Footer extends Component<Props> {
+export class Footer extends Component<Props> {
   render(): Node {
     return (
       <footer>

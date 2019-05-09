@@ -19,7 +19,7 @@ type Props = {
   changeLanguage: any
 };
 
-class Language extends Component<Props> {
+export class Language extends Component<Props> {
   render(): Node {
     const {
       code,
@@ -53,14 +53,14 @@ class Language extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     code: state.language.code,
     list: state.language.list
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };

@@ -9,9 +9,9 @@ type Props = {
 };
 
 // Extend the Searchkit NoHits component to support translations.
-class NoHits extends SearchkitNoHits<Props> {}
+export class NoHits extends SearchkitNoHits<Props> {}
 
-const mapStateToProps = (state: State): Object => {
+export const mapStateToProps = (state: State): Object => {
   return {
     code: state.language.code
   };

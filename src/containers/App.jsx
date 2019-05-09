@@ -14,7 +14,7 @@ type Props = {
   children: ChildrenArray<Node>
 };
 
-class App extends Component<Props> {
+export class App extends Component<Props> {
   constructor(props: Props): void {
     super(props);
     props.initSearchkit();
@@ -26,7 +26,7 @@ class App extends Component<Props> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): Object => {
+export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
     initSearchkit: bindActionCreators(initSearchkit, dispatch),
     initTranslations: bindActionCreators(initTranslations, dispatch)

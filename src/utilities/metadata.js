@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as _ from 'lodash';
-import * as striptags from 'striptags';
+import striptags from 'striptags';
 
 // Creates a model to store/display study metadata in the user interface.
 // The comments indicate the label displayed in the UI for each property (it is not always obvious).
