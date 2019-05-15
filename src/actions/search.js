@@ -262,9 +262,11 @@ export type ResetSearchAction = {
 
 export const resetSearch = (): Thunk => {
   return (dispatch: Dispatch): void => {
-    searchkit.resetState();
-    searchkit.reloadSearch();
-
+    // Use timeout to ensure searchkit is reset after pending router events.
+    setTimeout(() => {
+      searchkit.resetState();
+      searchkit.reloadSearch();
+    });
     dispatch({
       type: 'RESET_SEARCH'
     });
