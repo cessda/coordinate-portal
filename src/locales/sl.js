@@ -134,13 +134,7 @@ module.exports = {
   },
   footer: {
     followUsOn: 'Sledite nam',
-    contactUs: 'Kontaktiraj nas',
-    menu: 'Meni',
-    about: 'O',
-    consortium: 'Konzorcij',
-    projects: 'Projekti',
-    researchInfrastructure: 'Raziskovalna infrastruktura',
-    contact: 'Kontakt',
-    privacy: 'Politika zasebnosti'
+    privacy: 'Politika zasebnosti',
+    tools: 'CESSDA Tools & Services'
   }
 };

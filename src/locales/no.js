@@ -134,14 +134,8 @@ module.exports = {
   },
   footer: {
     followUsOn: 'Følg oss på',
-    contactUs: 'Kontakt oss',
-    menu: 'Meny',
-    about: 'Om',
-    consortium: 'Konsortium',
-    projects: 'Prosjekter',
-    researchInfrastructure: 'Forskningsinfrastruktur',
-    contact: 'Kontakt',
-    privacy: 'Personvernpolicy'
+    privacy: 'Personvernpolicy',
+    tools: 'CESSDA Tools & Services'
   }
 };
 

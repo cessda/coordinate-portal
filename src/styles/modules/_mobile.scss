@@ -41,7 +41,7 @@
     }
 
     .reset-search {
-      background-color: #444444;
+      background-color: #2b5a9b;
       margin: 10px -0.75rem;
       padding: 5px;
       text-align: center;
@@ -147,9 +147,12 @@
       position: static !important;
     }
 
-    .is-3 {
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
+    .logo-footer {
+      margin: auto;
+    }
+
+    .is-4 {
+      text-align: center !important;
     }
   }
 }

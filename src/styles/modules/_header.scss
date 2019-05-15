@@ -37,21 +37,6 @@ header {
       color: $white;
       text-decoration: none;
     }
-    & .cessda_beta {
-      color: $white;
-      font-family: 'Kanit', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      max-width: 250px;
-    }
-
-    & .cessda_beta--blue {
-      font-family: 'Kanit', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 2px;
-      color: #81bae1;
-      font-weight: bold;
-    }
   }
 
   & .nav-toggle {

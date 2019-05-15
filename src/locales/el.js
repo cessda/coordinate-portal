@@ -134,13 +134,7 @@ module.exports = {
   },
   footer: {
     followUsOn: 'Ακολουθήστε μας στο',
-    contactUs: 'Επικοινωνία',
-    menu: 'Μενού',
-    about: 'Σχετικά',
-    consortium: 'Κοινοπραξία',
-    projects: 'Έργα',
-    researchInfrastructure: 'Ερευνητική υποδομή',
-    contact: 'Επικοινωνία',
-    privacy: 'Πολιτική Απορρήτου'
+    privacy: 'Πολιτική Απορρήτου',
+    tools: 'CESSDA Tools & Services'
   }
 };

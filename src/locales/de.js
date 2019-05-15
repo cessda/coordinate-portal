@@ -134,13 +134,7 @@ module.exports = {
   },
   footer: {
     followUsOn: 'Folge uns auf',
-    contactUs: 'Kontaktiere uns',
-    menu: 'Menü oder Seitenstruktur',
-    about: 'Über',
-    consortium: 'Konsortium',
-    projects: 'Projekte',
-    researchInfrastructure: 'Forschungsinfrastruktur',
-    contact: 'Kontakt',
-    privacy: 'Datenschutz-Bestimmungen'
+    privacy: 'Datenschutz-Bestimmungen',
+    tools: 'CESSDA Tools & Services'
   }
 };

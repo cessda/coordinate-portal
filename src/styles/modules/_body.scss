@@ -77,21 +77,25 @@ body {
     height: 35px;
     padding-top: 0;
     padding-right: 15px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     z-index: 2;
 
     @at-root header .language-picker {
       position: absolute;
-      top: 6px;
+      top: 1px;
       right: 0;
       padding-left: 15px;
       color: #ffffff;
 
       .Select {
         .Select-control {
-          .Select-value-label {
-            color: #ffffff !important;
+          .Select-value {
+            line-height: 33px;
+
+            .Select-value-label {
+              color: #ffffff !important;
+            }
           }
 
           .Select-arrow {
@@ -132,7 +136,7 @@ body {
 
   .sk-hits-stats {
     position: relative;
-    margin-top: 25px;
+    margin-top: 30px;
     padding-left: 10px;
     z-index: 1;
 
@@ -174,7 +178,7 @@ body {
 
   .sk-action-bar-row {
     display: block;
-    background-color: #f4f4f1;
+    background-color: #f8f8f8;
     padding: 10px 15px;
     border-radius: 3px;
 

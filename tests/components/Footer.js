@@ -43,10 +43,7 @@ describe('Footer component', () => {
       url: 'https://www.cessda.eu',
       sameAs: [
         'https://twitter.com/CESSDA_Data',
-        'https://www.facebook.com/Cessda-463858013634628',
-        'https://www.instagram.com/cessda_data',
         'https://www.linkedin.com/company/9392869',
-        'https://plus.google.com/112779581489694492154',
         'https://www.youtube.com/channel/UCqbZKb1Enh-WcFpg6t86wsA'
       ]
     });
