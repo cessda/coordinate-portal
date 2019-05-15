@@ -134,13 +134,7 @@ module.exports = {
   },
   footer: {
     followUsOn: 'Seuraa meitä:',
-    contactUs: 'Ota yhteyttä',
-    menu: 'Valikko',
-    about: 'Tietoja',
-    consortium: 'Konsortio',
-    projects: 'Hankkeet',
-    researchInfrastructure: 'Tutkimusinfrastruktuuri',
-    contact: 'Yhteystiedot',
-    privacy: 'Tietosuojakäytäntö'
+    privacy: 'Tietosuojakäytäntö',
+    tools: 'CESSDA Tools & Services'
   }
 };

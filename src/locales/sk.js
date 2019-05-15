@@ -134,14 +134,8 @@ module.exports = {
   },
   footer: {
     followUsOn: 'Sledujte nás na',
-    contactUs: 'Kontaktujte nás',
-    menu: 'Menu',
-    about: 'O nás',
-    consortium: 'Konzorcium',
-    projects: 'Projekty',
-    researchInfrastructure: 'Výskumná infraštruktúra',
-    contact: 'Kontakt',
-    privacy: 'Uchovávanie osobných dát'
+    privacy: 'Uchovávanie osobných dát',
+    tools: 'CESSDA Tools & Services'
   }
 };
 
