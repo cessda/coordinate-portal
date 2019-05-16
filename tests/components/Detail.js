@@ -174,7 +174,46 @@ describe('Detail component', () => {
     ).toContain('notAvailable');
   });
 
-  it('should handle formatting dates with fallback array', () => {
+  it('should handle formatting dates with fallback array containing date range', () => {
+    const { enzymeWrapper } = setup();
+    expect(
+      shallow(
+        enzymeWrapper.instance().formatDate(
+          'DD/MM/YYYY',
+          null,
+          null,
+          [
+            {
+              dataCollectionFreeText: '2003-02-01',
+              event: 'start'
+            },
+            {
+              dataCollectionFreeText: '2006-05-04',
+              event: 'end'
+            }
+          ],
+          'dataCollectionFreeText'
+        )
+      )
+        .find('p')
+        .text()
+    ).toBe('01/02/2003 - 04/05/2006');
+  });
+
+  it('should handle formatting dates with fallback array containing valid date', () => {
+    const { enzymeWrapper } = setup();
+    expect(
+      shallow(
+        enzymeWrapper
+          .instance()
+          .formatDate('DD/MM/YYYY', null, null, ['2003-02-01'])[0]
+      )
+        .find('p')
+        .text()
+    ).toBe('01/02/2003');
+  });
+
+  it('should handle formatting dates with fallback array containing random data', () => {
     const { enzymeWrapper } = setup();
     expect(
       shallow(
@@ -215,11 +254,11 @@ describe('Detail component', () => {
       shallow(
         enzymeWrapper
           .instance()
-          .formatDate('DD/MM/YYYY', 'Not a date', '04/05/2006')
+          .formatDate('DD/MM/YYYY', 'Not a date', '2006-05-04')
       )
         .find('p')
         .text()
-    ).toBe('Not a date - 05/04/2006');
+    ).toBe('Not a date - 04/05/2006');
   });
 
   it('should handle formatting dates as a range with valid second date', () => {
@@ -228,11 +267,11 @@ describe('Detail component', () => {
       shallow(
         enzymeWrapper
           .instance()
-          .formatDate('DD/MM/YYYY', '01/02/2003', '04/05/2006')
+          .formatDate('DD/MM/YYYY', '2003-02-01', '2006-05-04')
       )
         .find('p')
         .text()
-    ).toBe('02/01/2003 - 05/04/2006');
+    ).toBe('01/02/2003 - 04/05/2006');
   });
 
   it('should handle formatting dates as a range with invalid second date', () => {
@@ -241,11 +280,11 @@ describe('Detail component', () => {
       shallow(
         enzymeWrapper
           .instance()
-          .formatDate('DD/MM/YYYY', '01/02/2003', 'Not a date')
+          .formatDate('DD/MM/YYYY', '2003-02-01', 'Not a date')
       )
         .find('p')
         .text()
-    ).toBe('02/01/2003 - Not a date');
+    ).toBe('01/02/2003 - Not a date');
   });
 
   it('should reset metadata panels state on unmount if expanded', () => {
