@@ -61,6 +61,8 @@ local.properties
 
 ### Build
 /dist/
+/bin
+/obj/Debug
 
 ### Test Coverage
 /coverage/
