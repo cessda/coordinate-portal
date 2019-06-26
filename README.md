@@ -1,4 +1,4 @@
-# CESSDA.PASC.SEARCHKIT
+# CESSDA.CDC.SEARCHKIT
 
 This repository contains all source code for the CESSDA Data Catalogue web application.
 
@@ -185,5 +185,5 @@ As of *15th June 2018*...
 
 ## Resources
 
-* [Issue Tracker](https://bitbucket.org/cessda/cessda.pasc.version2/issues)
-* [Trello Development Board](https://trello.com/b/c9ibP7KR)
+* [Issue Tracker](https://bitbucket.org/cessda/cessda.cdc.version2/issues)
+
