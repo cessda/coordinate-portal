@@ -15,23 +15,24 @@
 
 
 // translations not available for all languages
-import cs from '../locales/cs';
+// data not available for all languages
+//import cs from '../locales/cs';
 import da from '../locales/da';
-import de from '../locales/de';
+//import de from '../locales/de';
 import el from '../locales/el';
 import en from '../locales/en';
-import et from '../locales/et';
+//import et from '../locales/et';
 import fi from '../locales/fi';
-import fr from '../locales/fr';
-import hu from '../locales/hu';
-import it from '../locales/it';
+//import fr from '../locales/fr';
+//import hu from '../locales/hu';
+//import it from '../locales/it';
 import nl from '../locales/nl';
 import no from '../locales/no';
-import pt from '../locales/pt';
+//import pt from '../locales/pt';
 import sk from '../locales/sk';
 import sl from '../locales/sl';
-import sr from '../locales/sr';
-import sv from '../locales/sv';
+//import sr from '../locales/sr';
+//import sv from '../locales/sv';
 
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
