@@ -43,22 +43,26 @@ export function getLanguages(): Object[] {
   //   index  : The Elasticsearch index containing data for this language.
   //   locale : The imported locale for this language.
   // }
-  return [{
+  return [
+  /*{
     code: 'cs',
     label: 'čeština',
     index: 'cmmstudy_cs',
     locale: cs
-  }, {
+  }, */
+  {
     code: 'da',
     label: 'dansk',
     index: 'cmmstudy_da',
     locale: da
-  }, {
+  },
+  /*{
     code: 'de',
     label: 'Deutsch',
     index: 'cmmstudy_de',
     locale: de
-  }, {
+  }, */
+  {
     code: 'el',
     label: 'Ελληνικά',
     index: 'cmmstudy_el',
@@ -68,17 +72,20 @@ export function getLanguages(): Object[] {
     label: 'English',
     index: 'cmmstudy_en',
     locale: en
-  },  {
+  },
+  /*{
     code: 'et',
     label: 'eesti',
     index: 'cmmstudy_et',
     locale: et
-  },{
+  },*/
+  {
     code: 'fi',
     label: 'suomi',
     index: 'cmmstudy_fi',
     locale: fi
-  }, {
+  },
+  /*{
     code: 'fr',
     label: 'Francais',
     index: 'cmmstudy_fr',
@@ -93,7 +100,8 @@ export function getLanguages(): Object[] {
     label: 'Italiano',
     index: 'cmmstudy_it',
     locale: it
-  }, {
+  } */
+  {
     code: 'nl',
     label: 'Nederlands',
     index: 'cmmstudy_nl',
@@ -103,12 +111,14 @@ export function getLanguages(): Object[] {
     label: 'Norsk',
     index: 'cmmstudy_no',
     locale: no
-  }, {
+  },
+  /*{
     code: 'pt',
     label: 'Português',
     index: 'cmmstudy_pt',
     locale: pt
-  }, {
+  }, */
+  {
     code: 'sk',
     label: 'Slovencina',
     index: 'cmmstudy_sk',
@@ -118,7 +128,8 @@ export function getLanguages(): Object[] {
     label: 'Slovenski',
     index: 'cmmstudy_sl',
     locale: sl
-  }, {
+  }
+  /*, {
     code: 'sr',
     label: 'српски језик',
     index: 'cmmstudy_sr',
@@ -128,5 +139,6 @@ export function getLanguages(): Object[] {
     label: 'Svenska',
     index: 'cmmstudy_sv',
     locale: sv
-  }];
+  } */
+  ];
 }
