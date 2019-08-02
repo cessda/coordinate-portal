@@ -65,7 +65,9 @@ pipeline {
 		}
 		stage('Build Docker image') {
 			 steps {
-				sh("docker build -t ${image_tag} .")
+				 ansiColor('xterm') {
+					sh("docker build -t ${image_tag} .")
+				}
 			}
             when { branch 'master' }
 		}
