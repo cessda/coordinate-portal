@@ -1,4 +1,4 @@
-# CESSDA.CDC.SEARCHKIT
+# CESSDA.CDC.SEARCHKIT v2.1.0
 
 This repository contains all source code for the CESSDA Data Catalogue web application.
 
@@ -126,7 +126,7 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (*as of April 2019*):
+N.B. list of CESSDA languages (*as of August 2019*):
 
 * cs (Czech)
 * da (Danish)
@@ -138,11 +138,10 @@ N.B. list of CESSDA languages (*as of April 2019*):
 * fi (Finnish)
 * fr (French)
 * hu (Hungarian)
-* lt (Lithuanian)
+* it (Italian)
 * nl (Dutch)
 * no (Norwegian)
 * pt (Portuguese)
-* ro (Romanian)
 * sk (Slovak)
 * sl (Slovenian)
 * sr (Serbian)
@@ -179,11 +178,30 @@ N.B. list of CESSDA languages (*as of April 2019*):
 
 ## Known Issues
 
-As of *15th June 2018*...
+As of * 6 August 2019*
 
-* Elasticsearch contains no index for SE and SK languages however they have translations in the user interface. Therefore these languages currently use the English "cmmstudy_en" index. See `/src/utilities/language.js` lines `36` abd `41`. If metadata is available in those languages, new indices should be created in Elasticsearch (i.e. "cmmstudy_se" and "cmmstudy_sk")
+* The User Interface only displays records that are available in the selected UI language. So the message shown towards the top left hand side e.g. '21460 results shown' refers to the selected language only, and not the total number of available records.
+
+* Not all UI languages have any records available to search/view in that language, so have been temporarily removed from the UI language menu, and hence cannot be selected (currently cs, de, et, fr, hu, it, pt, sr). Therefore these languages currently use the English "cmmstudy_en" index. When metadata is available in any of these languages, new indices should be created.
+
+* Not all UI languages have a corresponding UI translation (currently cs, da, et, hu, it, nl, pt, sr), so the labels appear in English (if the language is selectable, see above).
+
+ See [cessda.cdc.version2 README](https://bitbucket.org/cessda/cessda.cdc.version2/src/master/README.md) for more details regarding adding UI languages, indexes etc.
 
 ## Resources
 
 * [Issue Tracker](https://bitbucket.org/cessda/cessda.cdc.version2/issues)
 
+## Authors
+
+* **Ashley Fox <contracting AT foxonlinesolutions DOT co DOT uk>** - *Version 2.0.0 and 2.1.0 releases*
+
+You can find the list of all contributors [here](CONTRIBUTORS.md)
+
+## License
+
+This project is licensed under the Apache 2 License - see the [LICENSE](LICENSE) file for details
+
+## Acknowledgments
+
+N/A.

@@ -1,5 +1,36 @@
-### Windows
-# Windows thumbnail cache files
+# Dev
+/dev_files/
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+### OS generated files #
+######################
+
+### Windows ###
 Thumbs.db
 ehthumbs.db
 ehthumbs_vista.db
@@ -13,7 +44,7 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 
-### MacOS
+### MacOS ###
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -32,38 +63,54 @@ Temporary Items
 .apdisk
 Icon
 
-### Sass
+
+### IDE generated files #
+######################
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA/Jetbrains ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### Sass ###
 .sass-cache/
 *.css.map
 
-### JetBrains
-.idea/
-*.iws
-*.iml
 
-### Eclipse
-.project
-.metadata
-tmp/
-*.tmp
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-.recommenders
-.externalToolBuilders/
-*.launch
-.recommenders/
+### Maven files #
+######################
+target/
+!.mvn/wrapper/maven-wrapper.jar
 
-### Node
+
+### Node files #
+######################
 /node_modules/
 
-### Build
+### Build files #
+######################
 /dist/
 /bin
 /obj/Debug
 
-### Test Coverage
+### Test Coverage files #
+######################
 /coverage/
 junit.xml
