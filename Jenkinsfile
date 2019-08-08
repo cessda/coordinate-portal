@@ -48,7 +48,7 @@ pipeline {
 		stage('Run Sonar Scan') {
 			steps {
 				nodejs('node') {
-						withSonarQubeEnv('cessda-sonar') {
+					withSonarQubeEnv('cessda-sonar') {
 						sh "${scannerHome}/bin/sonar-scanner"
 					}
 				}
