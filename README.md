@@ -1,3 +1,5 @@
+
+[![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=cessda.cdc.searchkit%2Fmaster)](https://jenkins.cessda.eu/job/cessda.cdc.searchkit/job/master/)
 [![Bugs](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=bugs)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Code Smells](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=code_smells)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Coverage](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=coverage)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
