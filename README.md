@@ -200,10 +200,6 @@ As of * 6 August 2019*
 
  See [cessda.cdc.version2 README](https://bitbucket.org/cessda/cessda.cdc.version2/src/master/README.md) for more details regarding adding UI languages, indexes etc.
 
-## Resources
-
-* [Issue Tracker](https://bitbucket.org/cessda/cessda.cdc.version2/issues)
-
 ## Authors
 
 * **Ashley Fox <contracting AT foxonlinesolutions DOT co DOT uk>** - *Version 2.0.0 and 2.1.0 releases*
