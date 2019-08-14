@@ -18,6 +18,10 @@ This repository contains all source code for the CESSDA Data Catalogue web appli
 
 Separate repositories are provided for backend architecture; harvester, indexer and Elasticsearch instance.
 
+## Quality - Software Maturity Level
+
+The overall Software Maturity Level for this product and the individual scores for each attribute can be found in the  [SML](SML.md) file.
+
 ## Prerequisites
 
 [Node.js](https://nodejs.org/) version 10.15 (LTS) is required to install and run this application.
@@ -90,6 +94,7 @@ This project follows a best practice structure for React+Redux applications. See
     └── utilities       # Miscellaneous scripts and helpers.
 └── tests               # Jest unit tests.
 ```
+
 
 ## Technology Stack
 
