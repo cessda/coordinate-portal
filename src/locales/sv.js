@@ -147,6 +147,7 @@ module.exports = {
   footer: {
     followUsOn: 'Följ oss på',
     privacy: 'Integritetspolicy',
+    aup: 'Acceptable Use Policy',
     tools: 'CESSDA Tools & Services'
   }
 };
