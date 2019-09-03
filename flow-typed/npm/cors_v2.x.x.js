@@ -1,5 +1,5 @@
-// flow-typed signature: 8069c2f3f8822651cee2364cb0f777b5
-// flow-typed version: 606c536da0/cors_v2.x.x/flow_>=v0.53.x
+// flow-typed signature: 091d08416d3fa2b9a9c775b6971294de
+// flow-typed version: c6154227d1/cors_v2.x.x/flow_>=v0.53.x <=v0.103.x
 
 // @flow
 import type { $Request as Request, $Response as Response, NextFunction } from "express";

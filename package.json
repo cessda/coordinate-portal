@@ -30,9 +30,9 @@
     "express-http-proxy": "^1.1.0",
     "immutable": "^3.8.1",
     "invariant": "^2.2.1",
-    "jquery": "^3.2.1",
+    "jquery": "^3.4.1",
     "js-stylesheet": "0.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "method-override": "^2.3.5",
     "moment": "^2.24.0",
     "prop-types": "^15.6.0",
@@ -59,7 +59,7 @@
     "rimraf": "^2.6.2",
     "searchkit": "^2.3.2",
     "searchkit-express": "^0.2.1",
-    "striptags": "^3.1.0"
+    "striptags": "2.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.4.4",
@@ -96,7 +96,7 @@
     "webpack": "^3.10.0",
     "webpack-config": "^7.5.0",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-dev-server": "^2.9.3",
+    "webpack-dev-server": "^2.11.5",
     "webpack-hot-middleware": "^2.20.0"
   }
 }
