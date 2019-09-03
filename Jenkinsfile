@@ -14,6 +14,7 @@
 */
 pipeline {
 	options {
+		ansiColor('xterm')
 		buildDiscarder logRotator(artifactNumToKeepStr: '5', numToKeepStr: '10')
 	}
 
@@ -65,9 +66,7 @@ pipeline {
 		}
 		stage('Build Docker image') {
 			 steps {
-				 ansiColor('xterm') {
-					sh("docker build -t ${image_tag} .")
-				}
+				sh("docker build -t ${image_tag} .")
 			}
             when { branch 'master' }
 		}
