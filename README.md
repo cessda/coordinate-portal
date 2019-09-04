@@ -207,16 +207,37 @@ As of * 6 August 2019*
 
  See [cessda.cdc.version2 README](https://bitbucket.org/cessda/cessda.cdc.version2/src/master/README.md) for more details regarding adding UI languages, indexes etc.
 
-## Authors
+ ## Deployment
 
-* **Ashley Fox <contracting AT foxonlinesolutions DOT co DOT uk>** - *Version 2.0.0 and 2.1.0 releases*
+ The Jenkinsfile defines the deployment process. See also **'QA and Deployment'** section, above.
 
-You can find the list of all contributors [here](CONTRIBUTORS.md)
 
-## License
+ ## Built With
 
-This project is licensed under the Apache 2 License - see the [LICENSE](LICENSE) file for details
+ The Jenkinsfile defines the build process. See also **'QA and Deployment'** section, above.
 
-## Acknowledgments
 
-N/A.
+ ## Contributing
+
+ Please read [CESSDA Guideline for developers](https://bitbucket.org/cessda/cessda.guidelines.cit/wiki/Developers) for details on our code of conduct, and the process for submitting pull requests to us.
+
+ ## Versioning
+
+ See [Semantic Versioning](https://semver.org/) for guidance.
+
+ ## Contributors
+
+ You can find the list of contributors in the `CONTRIBUTORS.md` file.
+
+ ## License
+
+ See the [LICENSE](LICENSE) file.
+
+ ## FAQs
+
+ See the [FAQ](FAQ.md) file.
+
+ ## Acknowledgments
+
+ None at present.
+ 
