@@ -52,6 +52,11 @@ pipeline {
 					sh "npm run test"
 				}
 			}
+			post {
+				always {
+					junit 'junit.xml'
+				}
+			}
 		}
 		stage('Run Sonar Scan') {
 			steps {
@@ -94,9 +99,9 @@ pipeline {
             when { branch 'master' }
 		}
 	}
-	post {
-		always {
-			junit 'junit.xml'
-		}
-	}
+    post {
+        failure {
+            emailext body: '${DEFAULT_CONTENT}', subject: '${DEFAULT_SUBJECT}', to: 'support@cessda.eu'
+        }
+    }
 }
