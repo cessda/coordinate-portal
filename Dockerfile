@@ -22,10 +22,11 @@ COPY package*.json ./
 
 # NodeJS Install
 RUN npm install
+
+# Bundle app source and build webpack
+COPY . .
 RUN npm run build
 
-# Bundle app source
-COPY . .
-
+# Configure application startup
 EXPOSE 8088
 CMD [ "npm", "run", "startprod" ]
