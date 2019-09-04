@@ -39,6 +39,13 @@ pipeline {
 			}
 		}
 		stage('Run Unit Tests') {
+			agent {
+				dockerfile {
+					dir './build'
+					filename 'Dockerfile'
+					reuseNode true
+				}
+			}
 			steps {
 				nodejs('node') {
 					sh "npm install"
