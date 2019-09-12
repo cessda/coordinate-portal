@@ -4,6 +4,7 @@
 .git
 .gitattributes
 .gitignore
+coverage
 docs
 node_modules
 npm-debug.log
