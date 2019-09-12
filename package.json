@@ -9,7 +9,7 @@
     "postinstall": "flow-typed install --skip",
     "startdev": "node startdev.js",
     "startprod": "node startprod.js",
-    "build": "npm run clean && webpack --config webpack.prod.config.js -p --progress",
+    "build": "npm run clean && webpack --config webpack.prod.config.js -p",
     "clean": "rimraf dist",
     "test": "jest --detectOpenHandles --verbose",
     "test:watch": "npm test -- --watch"

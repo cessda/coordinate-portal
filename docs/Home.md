@@ -15,13 +15,11 @@ The following *Open Source* code repositories are used to build the harvester co
 - [cessda.cdc.osmh-repository-handler.nesstar](https://bitbucket.org/cessda/cessda.cdc.osmh-repository-handler.nesstar) (repository handler for OAI-PMH enabled NESSTAR endpoints serving DDI 1.2).
 - [cessda.cdc.osmh-repository-handler.oai-pmh](https://bitbucket.org/cessda/cessda.cdc.osmh-repository-handler.oai-pmh) (repository handler for OAI-PMH endpoints serving DDI 2.5).
 
-
 ### User Facing components
 
 The following *Open Source* code repository is used to build the user facing components:
 
 - [cessda.cdc.searchkit](https://bitbucket.org/cessda/cessda.cdc.searchkit) (user interface).
-
 
 ### Management components
 
@@ -33,9 +31,7 @@ The following private source code repositories are used to build the management 
 - mailrelay (used for sending messages relating to the health and status of the product to the DevOps team).
 - cessda.mgmt.reverse (reverse proxy used as part of the Certbot automated security certificate renewal process. Also provides authentication for components, as needed).
 
-
 ### QA and Deployment
-
 
 The following source code repositories are used to test and deploy the product's components:
 
@@ -43,18 +39,14 @@ The following source code repositories are used to test and deploy the product's
 - cessda.cdc.test (contains test scripts used to QA the product during the deployment process).
 - cessda.cdc.profile (contains and XSD file that can be used to check that the XML provided by an endpoint is compliant with the CMM profile).
 
-
-
 ## Advanced Search
 
 See [Advanced Search](ADVANCEDSEARCH.md) for details.
-
 
 ## Getting Started
 
 The various Jenkins jobs in the [DataCat](https://cit.cessda.eu/view/DataCat/) view are used to build, test and deploy the components.
 They are triggered automatically when code changes are committed to any of the Bitbucket repositories listed above.
-
 
 ## Common tasks
 
@@ -87,7 +79,6 @@ cessda.cdc.osmh-repository-handler.nesstar [NESSTAR repository handler configura
 
 and cessda.cdc.osmh-repository-handler.nesstar [NESSTAR repository handler tests](https://bitbucket.org/cessda/cessda.cdc.osmh-repository-handler.nesstar/src/development/src/test/java/eu/cessda/cdc/osmhhandler/nesstar/configuration/HandlerConfigurationPropertiesTest.java).
 
-
 ### To add language, create a new file (for each branch) in:
 
 cessda.cdc.osmh-indexer.cmm [Harvester mappings directory](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/main/resources/elasticsearch/mappings/),
@@ -106,11 +97,7 @@ cessda.cdc.searchkit [Searchkit language.js](https://bitbucket.org/cessda/cessda
 
 ## Springboot Admin
 
-If you cannot see a component in the [Springboot Admin GUI for dev](https://datacatalogue-dev.cessda.eu/admin/#/) or [Springboot Admin GUI for staging](https://datacatalogue-staging.cessda.eu/admin/#/) or [Springboot Admin GUI for production](https://datacatalogue.cessda.eu/admin/#/),  
-then redeploy the missing component (`cessda.cdc.osmh-indexer.cmm, cessda.cdc.osmh-repository-handler.nesstar` or `cessda.cdc.osmh-repository-handler.oai-pmh`) via Jenkins,
-so it can register with Springboot Admin.
-
-Make sure that the Docker file has the `"-Dspring.profiles.active"` flag set to the correct profile name (dev, staging or live) otherwise the component will not register.
+If you cannot see a component in the [Springboot Admin GUI (Development)](https://datacatalogue-dev.cessda.eu/admin/#/), [Springboot Admin GUI (Staging)](https://datacatalogue-staging.cessda.eu/admin/#/) or [Springboot Admin GUI (Production)](https://datacatalogue.cessda.eu/admin/#/), redeploy the missing component (`cessda.cdc.osmh-indexer.cmm, cessda.cdc.osmh-repository-handler.nesstar` or `cessda.cdc.osmh-repository-handler.oai-pmh`) via Jenkins, so it can register with Springboot Admin.
 
 ## Prerequisites
 
@@ -118,27 +105,21 @@ You need to set the values of various environment variables
 
 [TODO] list them.
 
-
 ## Installing
 
 The Jenkinsfile defines the build, test and deployment pipeline. See also **'QA and Deployment'** section, above.
-
 
 ## Running the tests
 
 See **'QA and Deployment'** section, above.
 
-
 ## Deployment
 
 The Jenkinsfile defines the deployment process. See also **'QA and Deployment'** section, above.
 
-
-
 ## Built With
 
 The Jenkinsfile defines the build process. See also **'QA and Deployment'** section, above.
-
 
 ## Contributing
 

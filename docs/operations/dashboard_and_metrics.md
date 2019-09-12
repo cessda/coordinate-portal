@@ -1,15 +1,14 @@
-[Home](../Home.md)
-
 # Metrics
 
+[Home](../Home.md)
+
 ## Kibana
+
 ![kibana dashboard of publication/years][kibana-cmm]
 
 kibana dashboard of publication/years
 
-
 ## Spring Boot Admin
-
 
 ### Spring Boot Admin Home page
 
@@ -29,10 +28,10 @@ kibana dashboard of publication/years
 
 ---
 
+![spring-boot-admin](../images/spring-boot-admin.png) "spring-boot-admin"
 
+![spring-boot-admin-app-down](../images/spring-boot-admin-app-down.png) "spring-boot-admin-app-down"
 
+![spring-boot-admin-handler](../images/spring-boot-admin-handler.png) "spring-boot-admin-handler"
 
-[spring-boot-admin]: ../images/spring-boot-admin.png "spring-boot-admin"
-[spring-boot-admin-app-down]: ../images/spring-boot-admin-app-down.png "spring-boot-admin-app-down"
-[spring-boot-admin-handler]: ../images/spring-boot-admin-handler.png "spring-boot-admin-handler"
-[kibana-cmm]: ../images/kibana-cmm.png "kibana-cmm"
+![kibana-cmm](../images/kibana-cmm.png) "kibana-cmm"

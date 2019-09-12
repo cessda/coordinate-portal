@@ -1,53 +1,38 @@
 # FAQ
 
-
 ## 1. For some Repos why does the handler fail to log the expected headers count
- 
+
 ### Description
 
 Eg: for GESIS and DANS repo
 
 Unable to parse RecordHeadersCount from oai-pmh xml response.
 
-```
-#!bash
-
+```log
 (getRecordHeaders)   (ListRecordHeadersServiceImpl.java:64) - ParseRecordHeaders retrieved [5923] of [-1] expected record headers for [https://dbk.gesis.org/dbkoai]
 ```
 
 Even with the logging on “DEBUG”, I’ve no real clues regarding our problem. Have you already seen this error?
 
-### Answer:
+### Answer
 
 That actually is a friendly message to notify you that although the application has processed N number of headers it could not guarantee what was expected because the endpoint does not explicitly provide the total number of headers to expect in the resumptionToken/@completeListSize. This element could also be missing from some repos like you have just noticed for DANS.  
 
+See example fully compliant element from UKDS:
 
-See example fully compliant element from UKDS 
+view-source: <http://services.fsd.uta.fi/v0/oai?verb=ListIdentifiers&metadataPrefix=ddi_c>
 
- 
-
-view-source: http://services.fsd.uta.fi/v0/oai?verb=ListIdentifiers&metadataPrefix=ddi_c
-
-```
-#!bash
-
-
-...
-
+```xml
 <resumptionToken completeListSize="1363" cursor="0">
-
-cursor%3A0%26from%3ANone%26until%3A2018-04-05T16%3A32%3A58Z%26completeListSize%3A1363%26metadataPrefix%3Addi_c
+    cursor%3A0%26from%3ANone%26until%3A2018-04-05T16%3A32%3A58Z%26completeListSize%3A1363%26metadataPrefix%3Addi_c
 </resumptionToken>
-...
 ```
 
 And one from DANS noting the missing attribute @completeListSize
 
-view-source: https://easy.dans.knaw.nl/oai/?verb=ListIdentifiers&metadataPrefix=oai_dc 
+view-source: <https://easy.dans.knaw.nl/oai/?verb=ListIdentifiers&metadataPrefix=oai_dc>
 
-```bash
-#!/bin/bash
-
+```xml
 <resumptionToken cursor="0">X1175934628/1</resumptionToken>
 ```
 

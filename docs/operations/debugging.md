@@ -1,7 +1,6 @@
-[Home](../Home.md)
-
-
 # Debugging
+
+[Home](../Home.md)
 
 Recommended tools
 
@@ -27,6 +26,8 @@ For analyzing and visualizing:
 - elasticsearch indices
 - managing indices, settings, mappings, replicas, closing and opening indices
 
-[Kibana]: ../images/kibana-cmm.png "Kibana analysis"
-[jsonEditor]: ../images/json_editor.png "Kibana analysis"
-[esHead]: ../images/head.png "Kibana analysis"
+![Kibana](../images/kibana-cmm.png) "Kibana analysis"
+
+![jsonEditor](../images/json_editor.png) "Kibana analysis"
+
+![esHead](../images/head.png) "Kibana analysis"

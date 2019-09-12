@@ -1,2 +1,16 @@
+# Don't pack documentation and build environment content into the Docker container
+*.md
+.editorconfig
+.git
+.gitattributes
+.gitignore
+docs
 node_modules
 npm-debug.log
+tests
+Jenkinsfile
+jest.config.js
+junit.xml
+sonar-project.properties
+startdev.js
+webpack.dev.config.js

@@ -21,12 +21,13 @@ RUN apt-get -qq update && apt-get -qq upgrade && apt-get install -qq autoconf au
 COPY package*.json ./
 
 # NodeJS Install
-RUN npm install
+RUN npm ci
 
 # Bundle app source and build webpack
 COPY . .
 RUN npm run build
 
 # Configure application startup
+USER cessda:cessda
 EXPOSE 8088
 CMD [ "npm", "run", "startprod" ]

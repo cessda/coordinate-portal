@@ -11,20 +11,20 @@ You should deploy all the components in the correct order, Admin, MailRelay and 
 
 ### Components to deploy
 
-1. cessda.pasc.admin - Spring Admin component
-2. cessda.mgmt.mailrelay - Mail relay used by Harvester/Indexer
-3. cessda.pasc.es - ElasticSearch Cluster
-4. cessda.pasc.osmh.repository-handler.oai-pmh (OAI-PMH Harvester)
-5. cessda.pasc.osmh.repository-handler.nesstar (NESSTAR Harvester)
-6. cessda.pasc.osmh-indexer.cmm (DC Indexer - CMM)
-7. cessda.pasc.searchkit (DC Frontend)
-8. cessda.pasc.reverse (Reverse Proxy for all DC components)
+1. cessda.cdc.admin - Spring Admin component
+2. cessda.cdc.mailrelay - Mail relay used by Harvester/Indexer
+3. cessda.cdc.es - ElasticSearch Cluster
+4. cessda.cdc.osmh.repository-handler.oai-pmh (OAI-PMH Harvester)
+5. cessda.cdc.osmh.repository-handler.nesstar (NESSTAR Harvester)
+6. cessda.cdc.osmh-indexer.cmm (DC Indexer - CMM)
+7. cessda.cdc.searchkit (DC Frontend)
+8. cessda.cdc.reverse (Reverse Proxy for all DC components)
 
 ### Procedure (Same for all components, we will use the dev environment for our procedure)
 
-1. Connect to CIT platform - [CESSDA CIT Platform](https://cit.cessda.eu)
+1. Connect to CI Server - [CESSDA CI Server](https://jenkins.cessda.eu)
 1. Select Component pipeline - For our example, we will use cessda.pasc.admin
-1. Select the dev branch
+1. Select the master branch
 
 ![Screen Shot 2018-06-19 at 10.32.11.png](https://bitbucket.org/repo/oLgpneG/images/906901221-Screen%20Shot%202018-06-19%20at%2010.32.11.png)
 
