@@ -1,7 +1,7 @@
 # CESSDA Data Catalogue v2.1.0
 
 The CESSDA Data Catalogue (CDC) harvests metadata from various endpoints.
-It uses different repository handlers to adapt the payload for each type of endpoint to a standard format (the Cessda Metadata Model, CMM).
+It uses different repository handlers (see 'Data Gathering components' below) to adapt the payload for each type of endpoint to a standard format (the Cessda Metadata Model, CMM).
 
 ## Project Structure
 
@@ -27,21 +27,16 @@ The following private source code repositories are used to build the management 
 
 - cessda.cdc.admin (Spring Boot admin console, the logs are useful to check progress of harvesting).
 - elasticsearch (backend to user interface, provides search and browse functionality).
-- kibana (used to analyse the raw content of the harvested data).
 - mailrelay (used for sending messages relating to the health and status of the product to the DevOps team).
 - cessda.mgmt.reverse (reverse proxy used as part of the Certbot automated security certificate renewal process. Also provides authentication for components, as needed).
 
 ### QA and Deployment
 
-The following source code repositories are used to test and deploy the product's components:
+The following private source code repositories are used to test and deploy the product's components:
 
 - cessda.cdc.deploy (contains all the scripts and infrastructure definitions needed to deploy the product).
 - cessda.cdc.test (contains test scripts used to QA the product during the deployment process).
-- cessda.cdc.profile (contains and XSD file that can be used to check that the XML provided by an endpoint is compliant with the CMM profile).
-
-## Advanced Search
-
-See [Advanced Search](ADVANCEDSEARCH.md) for details.
+- cessda.cmm.profile (contains and XSD file that can be used to check that the XML provided by an endpoint is compliant with the CMM profile).
 
 ## Getting Started
 
@@ -112,35 +107,3 @@ The Jenkinsfile defines the build, test and deployment pipeline. See also **'QA 
 ## Running the tests
 
 See **'QA and Deployment'** section, above.
-
-## Deployment
-
-The Jenkinsfile defines the deployment process. See also **'QA and Deployment'** section, above.
-
-## Built With
-
-The Jenkinsfile defines the build process. See also **'QA and Deployment'** section, above.
-
-## Contributing
-
-Please read [CESSDA Guideline for developers](https://bitbucket.org/cessda/cessda.guidelines.cit/wiki/Developers) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-See [Semantic Versioning](https://semver.org/) for guidance.
-
-## Contributors
-
-You can find the list of contributors in the `CONTRIBUTORS.md` file for each component repository.
-
-## License
-
-See the [LICENSE](LICENSE) file.
-
-## FAQs
-
-See the [FAQ](FAQ.md) file.
-
-## Acknowledgments
-
-None at present.

@@ -20,14 +20,15 @@ Separate repositories are provided for backend architecture; harvester, indexer 
 
 ## Quality - Software Maturity Level
 
-The overall Software Maturity Level for this product and the individual scores for each attribute can be found in the  [SML](SML.md) file.
+The overall Software Maturity Level for this product and the individual scores for each attribute can be found in the [SML](SML.md) file.
 
 ## Prerequisites
 
 [Node.js](https://nodejs.org/) version 10.15 (LTS) is required to install and run this application.
 
 When using the Ubuntu version 16 and above for deployment, you can use and allow libpng12-0 library to the Kernel repo.
-echo "deb http://mirrors.kernel.org/ubuntu/ xenial main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt install -y --allow-unauthenticated libpng12-0
+
+> `echo "deb http://mirrors.kernel.org/ubuntu/ xenial main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt install -y --allow-unauthenticated libpng12-0`
 
 You will need an existing local or remote Elasticsearch instance setup and running.
 
@@ -44,11 +45,9 @@ Please be aware of *Known Issues* (see bottom) before running.
     * Development: `npm run startdev`
     * Production: `npm run startprod` (Requires the application to be built. See *Building* below.)
 
-> **Building:** In order to run the application in production, it must first be built using the `npm run build` command.
-> This will compile assets into the `/dist` directory.
+> **Building:** In order to run the application in production, it must first be built using the `npm run build` command. This will compile assets into the `/dist` directory.
 
-> **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again.
-> This will ensure all locally installed dependencies match their development environment counterparts.
+> **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again. This will ensure all locally installed dependencies match their development environment counterparts.
 
 > **Testing:** Tests can be run using `npm run test`. Code coverage will be reported in the `/coverage` directory.
 
@@ -95,7 +94,6 @@ This project follows a best practice structure for React+Redux applications. See
 └── tests               # Jest unit tests.
 ```
 
-
 ## Technology Stack
 
 Several frameworks are used in this application.
@@ -128,7 +126,7 @@ For development, the following software tools are recommended and have full supp
 
 ## How To
 
-#### Add a new language
+### Add a new language
 
 1. Create a new language file in the `/src/locales` directory, using the 2 letter language ISO code for the file name. It is recommended to copy the English file `en.js` and use that as a template/starting point.
 2. Add your translations to the new file. Basic HTML markup is supported but its use should be limited. Some strings use variables which are defined as `%(VARIABLE)s`. Do not modify the JSON structure or object keys.
@@ -197,7 +195,7 @@ N.B. list of CESSDA languages (*as of August 2019*):
 
 ## Known Issues
 
-As of * 6 August 2019*
+As of *6 August 2019*
 
 * The User Interface only displays records that are available in the selected UI language. So the message shown towards the top left hand side e.g. '21460 results shown' refers to the selected language only, and not the total number of available records.
 
@@ -205,18 +203,36 @@ As of * 6 August 2019*
 
 * Not all UI languages have a corresponding UI translation (currently cs, da, et, hu, it, nl, pt, sr), so the labels appear in English (if the language is selectable, see above).
 
- See [cessda.cdc.version2 README](https://bitbucket.org/cessda/cessda.cdc.version2/src/master/README.md) for more details regarding adding UI languages, indexes etc.
+See [cessda.cdc.version2 README](https://bitbucket.org/cessda/cessda.cdc.version2/src/master/README.md) for more details regarding adding UI languages, indexes etc.
 
-## Authors
+## Deployment
 
-* **Ashley Fox <contracting AT foxonlinesolutions DOT co DOT uk>** - *Version 2.0.0 and 2.1.0 releases*
+The Jenkinsfile defines the deployment process. See also **'QA and Deployment'** section, above.
 
-You can find the list of all contributors [here](CONTRIBUTORS.md)
+## Built With
+
+The Jenkinsfile defines the build process. See also **'QA and Deployment'** section, above.
+
+## Contributing
+
+Please read [CESSDA Guideline for developers](https://bitbucket.org/cessda/cessda.guidelines.cit/wiki/Developers) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+See [Semantic Versioning](https://semver.org/) for guidance.
+
+## Contributors
+
+You can find the list of contributors in the `CONTRIBUTORS.md` file.
 
 ## License
 
-This project is licensed under the Apache 2 License - see the [LICENSE](LICENSE) file for details
+See the [LICENSE](LICENSE) file.
+
+## FAQs
+
+See the [FAQ](FAQ.md) file.
 
 ## Acknowledgments
 
-N/A.
+None at present.
