@@ -41,7 +41,7 @@ pipeline {
 		stage('Run Unit Tests') {
 			agent {
 				dockerfile {
-					dir './test'
+					dir './tests'
 					filename 'Dockerfile'
 					reuseNode true
 				}
