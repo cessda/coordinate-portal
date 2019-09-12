@@ -16,6 +16,10 @@ FROM node:10
 # Create app directory
 WORKDIR /usr/src/app
 
+# Create user
+RUN addgroup cessda
+RUN adduser --ingroup cessda --disabled-password --disabled-login cessda
+
 # Install app dependencies
 RUN apt-get -qq update && apt-get -qq upgrade && apt-get install -qq autoconf automake libtool libpng-dev nasm
 COPY package*.json ./
