@@ -13,11 +13,11 @@
 
 FROM node:10
 
-# Create app directory
-WORKDIR /usr/src/app
-
 # Install app dependencies
 RUN apt-get -qq update && apt-get -qq upgrade && apt-get install -qq autoconf automake libtool libpng-dev nasm
+
+# Create app directory
+WORKDIR /usr/src/app
 COPY package*.json ./
 
 # NodeJS Install
