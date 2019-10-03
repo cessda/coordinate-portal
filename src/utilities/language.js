@@ -32,7 +32,7 @@ import no from '../locales/no';
 import sk from '../locales/sk';
 import sl from '../locales/sl';
 //import sr from '../locales/sr';
-//import sv from '../locales/sv';
+import sv from '../locales/sv';
 
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
@@ -128,17 +128,17 @@ export function getLanguages(): Object[] {
     label: 'Slovenski',
     index: 'cmmstudy_sl',
     locale: sl
-  }
+  },
   /*, {
     code: 'sr',
     label: 'српски језик',
     index: 'cmmstudy_sr',
     locale: sr
-  }, {
+  },*/ {
     code: 'sv',
     label: 'Svenska',
     index: 'cmmstudy_sv',
     locale: sv
-  } */
+  }
   ];
 }
