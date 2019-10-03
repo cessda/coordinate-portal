@@ -49,8 +49,6 @@ pipeline {
 			}
 			steps {
 				nodejs('node') {
-					sh 'git config user.email "support@cessda.eu"'
-					sh 'git config user.name "CESSDA CI Server"'
 					sh "npm version ${version}.${env.BUILD_NUMBER}"
 					sh "npm ci"
 					sh "npm run test"
