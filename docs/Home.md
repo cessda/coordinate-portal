@@ -21,14 +21,22 @@ The following *Open Source* code repository is used to build the user facing com
 
 - [cessda.cdc.searchkit](https://bitbucket.org/cessda/cessda.cdc.searchkit) (user interface).
 
+
 ### Management components
 
 The following private source code repositories are used to build the management components:
 
 - cessda.cdc.admin (Spring Boot admin console, the logs are useful to check progress of harvesting).
-- elasticsearch (backend to user interface, provides search and browse functionality).
-- mailrelay (used for sending messages relating to the health and status of the product to the DevOps team).
-- cessda.mgmt.reverse (reverse proxy used as part of the Certbot automated security certificate renewal process. Also provides authentication for components, as needed).
+- cessda.cdc.deploy/elasticsearch (backend to user interface, provides search and browse functionality).
+- cessda.cdc.deploy/mailrelay (used for sending messages relating to the health and status of the product to the DevOps team).
+- cessda.cdc.reverse (reverse proxy used as part of the Certbot automated security certificate renewal process. Also provides authentication for components, as needed).
+- cessda.cdc.sitemapgenerator (generates a sitemap for use by [Google Data Search](https://toolbox.google.com/datasetsearch) crawler).
+
+### Documentation and issue tracking components
+
+The following private source code repositories are used to build the documentation components:
+- cessda.cdc.userguide (source files in reStructuredText markup language that are converted via Sphinx to ReadTheDocs format).
+- cessda.cdc.version2 (contains an issue tracker used internally to record the backlog).
 
 ### QA and Deployment
 
