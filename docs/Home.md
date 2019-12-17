@@ -21,14 +21,22 @@ The following *Open Source* code repository is used to build the user facing com
 
 - [cessda.cdc.searchkit](https://bitbucket.org/cessda/cessda.cdc.searchkit) (user interface).
 
+
 ### Management components
 
 The following private source code repositories are used to build the management components:
 
 - cessda.cdc.admin (Spring Boot admin console, the logs are useful to check progress of harvesting).
-- elasticsearch (backend to user interface, provides search and browse functionality).
-- mailrelay (used for sending messages relating to the health and status of the product to the DevOps team).
-- cessda.mgmt.reverse (reverse proxy used as part of the Certbot automated security certificate renewal process. Also provides authentication for components, as needed).
+- cessda.cdc.deploy/elasticsearch (backend to user interface, provides search and browse functionality).
+- cessda.cdc.deploy/mailrelay (used for sending messages relating to the health and status of the product to the DevOps team).
+- cessda.cdc.reverse (reverse proxy used as part of the Certbot automated security certificate renewal process. Also provides authentication for components, as needed).
+- cessda.cdc.sitemapgenerator (generates a sitemap for use by [Google Data Search](https://toolbox.google.com/datasetsearch) crawler).
+
+### Documentation and issue tracking components
+
+The following private source code repositories are used to build the documentation components:
+- cessda.cdc.userguide (source files in reStructuredText markup language that are converted via Sphinx to ReadTheDocs format).
+- cessda.cdc.version2 (contains an issue tracker used internally to record the backlog).
 
 ### QA and Deployment
 
@@ -58,9 +66,9 @@ Update the cessda.cdc.osmh-indexer.cmm README files for each branch after making
 
 ### To add endpoint/update URL of existing endpoint, edit the following files (for each branch):
 
-cessda.cdc.osmh-indexer.cmm [harvester configuration](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/main/resources/application.yml),
+cessda.cdc.osmh-indexer.cmm [harvester configuration](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/main/src/main/resources/application.yml),
 
-cessda.cdc.osmh-indexer.cmm [harvester tests](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/test/java/eu/cessda/cdc/oci/repository/cdcHarvesterDaoTest.java).
+cessda.cdc.osmh-indexer.cmm [harvester tests](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/main/src/test/java/eu/cessda/cdc/oci/repository/cdcHarvesterDaoTest.java).
 
 Depending on the repository type, you also need to edit EITHER:
 
@@ -76,17 +84,17 @@ and cessda.cdc.osmh-repository-handler.nesstar [NESSTAR repository handler tests
 
 ### To add language, create a new file (for each branch) in:
 
-cessda.cdc.osmh-indexer.cmm [Harvester mappings directory](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/main/resources/elasticsearch/mappings/),
+cessda.cdc.osmh-indexer.cmm [Harvester mappings directory](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/main/src/main/resources/elasticsearch/mappings/),
 
-cessda.cdc.osmh-indexer.cmm [Harvester settings directory](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/main/resources/elasticsearch/settings/),
+cessda.cdc.osmh-indexer.cmm [Harvester settings directory](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/main/src/main/resources/elasticsearch/settings/),
 
 cessda.cdc.searchkit [Searchkit locales directory](https://bitbucket.org/cessda/cessda.cdc.searchkit/src/master/src/locales/)
 
 and edit following files so lists of languages match:
 
-cdc.osmh-indexer.cmm [application.yaml](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/main/resources/application.yaml).
+cdc.osmh-indexer.cmm [application.yaml](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/main/src/main/resources/application.yaml).
 
-cdc.osmh-indexer.cmm [LanguageDocumentExtractorTest.java](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/develop/src/test/java/eu/cessda/cdc/oci/service/helpers/LanguageDocumentExtractorTest.java).
+cdc.osmh-indexer.cmm [LanguageDocumentExtractorTest.java](https://bitbucket.org/cessda/cessda.cdc.osmh-indexer.cmm/src/main/src/test/java/eu/cessda/cdc/oci/service/helpers/LanguageDocumentExtractorTest.java).
 
 cessda.cdc.searchkit [Searchkit language.js](https://bitbucket.org/cessda/cessda.cdc.searchkit/src/dev/src/utilities/language.js)
 
