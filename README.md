@@ -12,7 +12,7 @@
 [![Technical Debt](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=sqale_index)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Vulnerabilities](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=vulnerabilities)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 
-# CESSDA.PASC.SEARCHKIT v2.1.0
+# CESSDA.PASC.SEARCHKIT v2.2.0
 
 This repository contains all source code for the CESSDA Data Catalogue web application.
 

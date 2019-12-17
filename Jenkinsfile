@@ -23,7 +23,6 @@ pipeline {
 		module_name = "searchkit"
 		image_tag = "${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 		scannerHome = tool 'sonar-scanner'
-		version = "2.1"
 	}
 
 	agent {
@@ -49,7 +48,6 @@ pipeline {
 			}
 			steps {
 				nodejs('node') {
-					sh "npm version ${version}.${env.BUILD_NUMBER}"
 					sh "npm ci"
 					sh "npm run test"
 				}
