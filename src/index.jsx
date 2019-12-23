@@ -39,7 +39,7 @@ if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
   let _paq = window._paq || [];
   let url = '//analytics.cessda.eu/';
 
-  _paq.push(['setTrackerUrl', url + 'piwik.php']);
+  _paq.push(['setTrackerUrl', url + 'matomo.php']);
   _paq.push(['setSiteId', '2']);
 
   let element = document.createElement('script'),
@@ -48,7 +48,7 @@ if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
   element.type = 'text/javascript';
   element.async = true;
   element.defer = true;
-  element.src = url + 'piwik.js';
+  element.src = url + 'matomo.js';
 
   if (script.parentNode) {
     script.parentNode.insertBefore(element, script);
@@ -98,6 +98,7 @@ if (root instanceof HTMLElement) {
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage}/>
           <Route path="detail" component={DetailPage}/>
+          <Route path="study/pid" component={DetailPage}/>
           <Redirect from="*" to="/"/>
         </Route>
       </Router>

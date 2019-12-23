@@ -45,6 +45,19 @@ export const detailQuery = (id: string): Object => {
   };
 };
 
+// Query used to retrieve a single record by its pid (for detail page).
+export const pidQuery = (pidStudies: string): Object => {
+  return {
+    bool: {
+      must: {
+        match: {
+          pidStudies: pidStudies
+        }
+      }
+    }
+  };
+};
+
 // Query used to retrieve similar records for a specific title (for detail page).
 export const similarQuery = (title: string): Object => {
   return {
