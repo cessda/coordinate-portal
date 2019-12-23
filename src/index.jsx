@@ -98,6 +98,7 @@ if (root instanceof HTMLElement) {
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage}/>
           <Route path="detail" component={DetailPage}/>
+          <Route path="study/pid" component={DetailPage}/>
           <Redirect from="*" to="/"/>
         </Route>
       </Router>

@@ -14,7 +14,7 @@
 
 
 
-import searchkit, { detailQuery, similarQuery } from '../utilities/searchkit';
+import searchkit, { detailQuery, similarQuery, pidQuery } from '../utilities/searchkit';
 import * as elasticsearch from 'elasticsearch';
 import * as _ from 'lodash';
 import type { Dispatch, GetState, State, Thunk } from '../types';
@@ -65,6 +65,12 @@ export const initSearchkit = (): Thunk => {
       if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
           state.routing.locationBeforeTransitions.query.q !== undefined) {
         query.query = detailQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
+      }
+
+      // If viewing detail page, override query to retrieve single record using its pid.
+      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'pid' &&
+          state.routing.locationBeforeTransitions.query.q !== undefined) {
+        query.query = pidQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
       }
 
       // Add the current language index to the query for Elasticsearch.
