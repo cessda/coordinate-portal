@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import searchkit, { detailQuery, queryBuilder, similarQuery } from '../../src/utilities/searchkit';
+import searchkit, { detailQuery, pidQuery, queryBuilder, similarQuery } from '../../src/utilities/searchkit';
 
 describe('Searchkit utilities', () => {
   describe('queryBuilder()', () => {
@@ -31,6 +31,20 @@ describe('Searchkit utilities', () => {
           must: {
             match: {
               id: 1
+            }
+          }
+        }
+      });
+    });
+  });
+
+  describe('pidQuery()', () => {
+    it('should return a Searchkit query used to retrieve a single study based on PID', () => {
+      expect(pidQuery('UKDS__6358')).toEqual({
+        bool: {
+          must: {
+            match: {
+              pidStudies: 'UKDS__6358'
             }
           }
         }

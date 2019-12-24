@@ -95,7 +95,7 @@ export class DetailPage extends Component<Props> {
                   <span className="icon is-small">
                     <FaCode/>
                   </span>
-                   <Translate component="span" content="viewJson"/>
+                  <Translate component="span" content="viewJson"/>
                  </a>
 
                  <div className="is-clearfix"/>

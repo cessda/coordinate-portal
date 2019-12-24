@@ -46,12 +46,12 @@ export const detailQuery = (id: string): Object => {
 };
 
 // Query used to retrieve a single record by its pid (for detail page).
-export const pidQuery = (pidStudies: string): Object => {
+export const pidQuery = (pid: string): Object => {
   return {
     bool: {
       must: {
         match: {
-          pidStudies: pidStudies
+          pidStudies: pid
         }
       }
     }
