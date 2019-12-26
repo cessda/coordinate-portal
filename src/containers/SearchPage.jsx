@@ -89,7 +89,7 @@ export class SearchPage extends Component<Props> {
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={counterpart.translate(
                                       'filters.topic.placeholder')}/>}
-                                    size={500}/>
+                                    size={2700}/>
 
               <RangeFilter min={1900}
                            max={moment().year()}
