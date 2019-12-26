@@ -174,7 +174,26 @@ N.B. list of CESSDA languages (*as of August 2019*):
 
 #### Modify search filters
 
-1. All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`. The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields. Add additional markup for new filters as necessary.
+All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`. 
+
+1. Configure Elasticsearch CMMStudy fields to filter on:
+
+   - The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields. 
+   - Add additional markup for new filters as necessary.
+   
+2. Configure the number of items returned in the filters:
+
+   By changing the following field (Generally we have set these to 500):
+
+```
+<SideBar ...>
+              ...
+              <NameOfTypeOfFilter 
+                 id="ItsGivenID-toMatchElasticField"
+                 size={500}  # < -- Change number Here
+              />
+</SideBar>                 
+```
 
 > The Searchkit UI framework provides several filter controls and documentation can be found [here](http://docs.searchkit.co/stable).
 
