@@ -93,7 +93,7 @@ pipeline {
 		stage('Check Requirements and Deployments') {
 			steps {
 				dir('./infrastructure/gcp/') {
-					build job: 'cessda.cdc.deploy/master', parameters: [string(name: 'searchkit_image_tag', value: "${image_tag}"), string(name: 'module', value: 'searchkit')], wait: false
+					build job: 'cessda.cdc.deploy/master', parameters: [string(name: 'searchkit_image_tag', value: "${env.BRANCH_NAME}-${env.BUILD_NUMBER}")], wait: false
 				}
 			}
 			when { branch 'master' }

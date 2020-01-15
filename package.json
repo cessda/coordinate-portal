@@ -1,9 +1,9 @@
 {
-  "name": "cessda-pasc",
+  "name": "cessda.cdc.searchkit",
   "version": "2.2.0",
   "description": "CESSDA Data Catalogue: SearchKit",
   "license": "Apache-2.0",
-  "repository": "bitbucket:cessda/cessda.pasc.searchkit",
+  "repository": "bitbucket:cessda/cessda.cdc.searchkit",
   "private": true,
   "scripts": {
     "postinstall": "flow-typed install --skip",
