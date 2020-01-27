@@ -18,7 +18,7 @@
 // data not available for all languages
 //import cs from '../locales/cs';
 import da from '../locales/da';
-//import de from '../locales/de';
+import de from '../locales/de';
 import el from '../locales/el';
 import en from '../locales/en';
 //import et from '../locales/et';
@@ -56,12 +56,12 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_da',
     locale: da
   },
-  /*{
+  {
     code: 'de',
     label: 'Deutsch',
     index: 'cmmstudy_de',
     locale: de
-  }, */
+  },
   {
     code: 'el',
     label: 'Ελληνικά',
