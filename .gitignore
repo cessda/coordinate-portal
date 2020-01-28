@@ -103,6 +103,7 @@ target/
 ### Node files #
 ######################
 /node_modules/
+/flow-typed/
 
 ### Build files #
 ######################
