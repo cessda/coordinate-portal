@@ -13,5 +13,3 @@ Jenkinsfile
 jest.config.js
 junit.xml
 sonar-project.properties
-startdev.js
-webpack.dev.config.js
