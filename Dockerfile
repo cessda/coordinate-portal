@@ -25,9 +25,8 @@ RUN npm ci
 
 # Bundle app source and build webpack
 COPY . .
-RUN npm run build
 
 # Configure application startup
 USER node
 EXPOSE 8088
-CMD [ "node", "startprod.js" ]
+CMD [ "node", "startdev" ]
