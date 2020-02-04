@@ -29,4 +29,4 @@ COPY . .
 # Configure application startup
 USER node
 EXPOSE 8088
-CMD [ "node", "startdev" ]
+CMD [ "node", "startdev.js" ]
