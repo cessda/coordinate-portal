@@ -27,7 +27,7 @@ import fr from '../locales/fr';
 //import hu from '../locales/hu';
 //import it from '../locales/it';
 import nl from '../locales/nl';
-import no from '../locales/no';
+//import no from '../locales/no';
 //import pt from '../locales/pt';
 import sk from '../locales/sk';
 import sl from '../locales/sl';
