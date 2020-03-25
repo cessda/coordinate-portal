@@ -108,12 +108,13 @@ export function getLanguages(): Object[] {
     label: 'Nederlands',
     index: 'cmmstudy_nl',
     locale: nl
-  }, {
+  },
+  /*{
     code: 'no',
     label: 'Norsk',
     index: 'cmmstudy_no',
     locale: no
-  },
+  },*/
   /*{
     code: 'pt',
     label: 'Português',
