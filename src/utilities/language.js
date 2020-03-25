@@ -23,7 +23,7 @@ import el from '../locales/el';
 import en from '../locales/en';
 //import et from '../locales/et';
 import fi from '../locales/fi';
-//import fr from '../locales/fr';
+import fr from '../locales/fr';
 //import hu from '../locales/hu';
 //import it from '../locales/it';
 import nl from '../locales/nl';
@@ -85,17 +85,19 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_fi',
     locale: fi
   },
-  /*{
+  {
     code: 'fr',
     label: 'Francais',
     index: 'cmmstudy_fr',
     locale: fr
-  }, {
+  },
+  /*{
     code: 'hu',
     label: 'magyar',
     index: 'cmmstudy_hu',
     locale: hu
-  }, {
+  },*/
+   /*{
     code: 'it',
     label: 'Italiano',
     index: 'cmmstudy_it',
