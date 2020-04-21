@@ -81,7 +81,7 @@ module.exports = {
     relevance: 'Relevance',
     titleAscending: 'Title (oldest)',
     titleDescending: 'Title (newest)',
-    dateAscending: 'Date of collection (ascending)',
+    dateAscending: 'Date of collection (oldest)',
     dateDescending: 'Date of collection (newest)'
   },
   advancedSearch: {
