@@ -55,7 +55,7 @@ export function getStudyModel(data: Object): Object {
     fileLanguages: data._source.fileLanguages || [],
     // "Publisher"
     publisher: data._source.publisher ? data._source.publisher.publisher : '',
-    // "Year of publication"
+    // "Publication year"
     publicationYear: data._source.publicationYear || '',
     // "Terms of data access"
     dataAccessFreeTexts: data._source.dataAccessFreeTexts || [],

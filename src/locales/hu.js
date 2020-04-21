@@ -138,7 +138,7 @@ module.exports = {
     languageOfDataFiles: 'Language of data files',
     access: 'Access',
     publisher: 'Publisher',
-    yearOfPublication: 'Year of publication',
+    yearOfPublication: 'Publication year',
     termsOfDataAccess: 'Terms of data access',
     studyNumber: 'Study number',
     topics: 'Topics',
