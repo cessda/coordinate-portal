@@ -9,7 +9,7 @@ Eg: for GESIS and DANS repo
 Unable to parse RecordHeadersCount from oai-pmh xml response.
 
 ```log
-(getRecordHeaders)   (ListRecordHeadersServiceImpl.java:64) - ParseRecordHeaders retrieved [5923] of [-1] expected record headers for [http://dbkapps.gesis.org/dbkoai3]
+(getRecordHeaders)   (ListRecordHeadersServiceImpl.java:64) - ParseRecordHeaders retrieved [5923] of [-1] expected record headers for [https://dbkapps.gesis.org/dbkoai3]
 ```
 
 Even with the logging on “DEBUG”, I’ve no real clues regarding our problem. Have you already seen this error?
