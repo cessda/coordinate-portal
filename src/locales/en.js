@@ -119,7 +119,7 @@ module.exports = {
   readMore: 'Read more',
   readLess: 'Read less',
   viewJson: 'View JSON',
-  goToStudy: 'Go to study',
+  goToStudy: 'Go to publisher',
   forthcoming: 'Forthcoming',
   back: 'Back',
   close: 'Close',
