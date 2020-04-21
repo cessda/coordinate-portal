@@ -79,10 +79,10 @@ module.exports = {
   },
   sorting: {
     relevance: 'Relevance',
-    titleAscending: 'Title (ascending)',
-    titleDescending: 'Title (descending)',
+    titleAscending: 'Title (oldest)',
+    titleDescending: 'Title (newest)',
     dateAscending: 'Date of collection (ascending)',
-    dateDescending: 'Date of collection (descending)'
+    dateDescending: 'Date of collection (newest)'
   },
   advancedSearch: {
     label: 'Advanced search',
