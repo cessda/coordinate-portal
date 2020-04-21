@@ -19,7 +19,7 @@ module.exports = {
   },
   cessda: 'Consortium of European Social Science Data Archives',
   language: {
-    label: 'Language',
+    label: 'Study description available in',
     notAvailable: {
       field: 'Not available',
       heading: 'The requested data was not found.',
