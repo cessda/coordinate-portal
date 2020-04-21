@@ -133,7 +133,7 @@ module.exports = {
     timeDimension: 'Time dimension',
     analysisUnit: 'Analysis unit',
     samplingProcedure: 'Sampling procedure',
-    dataCollectionMethod: 'Data collection method',
+    dataCollectionMethod: 'Data collection mode',
     dataCollectionPeriod: 'Data collection period',
     languageOfDataFiles: 'Language of data files',
     access: 'Access',
