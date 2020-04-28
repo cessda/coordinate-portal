@@ -79,8 +79,8 @@ module.exports = {
   },
   sorting: {
     relevance: 'Relevance',
-    titleAscending: 'Title (oldest)',
-    titleDescending: 'Title (newest)',
+    titleAscending: 'Title (Z - A)',
+    titleDescending: 'Title (A - Z)',
     dateAscending: 'Date of collection (oldest)',
     dateDescending: 'Date of collection (newest)'
   },
