@@ -7,7 +7,7 @@
 [![Security Rating](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=security_rating)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Lines of Code](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=ncloc)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 
-# CESSDA.PASC.SEARCHKIT v2.2.0
+# CESSDA SEARCHKIT
 
 This repository contains all source code for the CESSDA Data Catalogue web application.
 
@@ -138,7 +138,7 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in markup using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (*as of August 2019*):
+N.B. list of CESSDA languages (*as of May 2020*):
 
 * cs (Czech)
 * da (Danish)
@@ -169,13 +169,13 @@ N.B. list of CESSDA languages (*as of August 2019*):
 
 #### Modify search filters
 
-All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`. 
+All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`.
 
 1. Configure Elasticsearch CMMStudy fields to filter on:
 
-   - The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields. 
+   - The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields.
    - Add additional markup for new filters as necessary.
-   
+
 2. Configure the number of items returned in the filters:
 
    By changing the following field (Generally we have set these to 500):
@@ -183,7 +183,7 @@ All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162
 ```
 <SideBar ...>
               ...
-              <NameOfTypeOfFilter 
+              <NameOfTypeOfFilter
                  id="ItsGivenID-toMatchElasticField"
                  size={500}  # < -- Change number Here
               />
