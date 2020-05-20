@@ -1,7 +1,0 @@
-{
-
-"sonarHost": "https://sonarqube.cessda.eu",
-
-"sonarProjectKey": "eu.cessda.pasc:pasc-searchkit"
-
-}
