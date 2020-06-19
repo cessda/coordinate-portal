@@ -152,11 +152,9 @@ describe('Search actions', () => {
           query: {
             index: 'cmmstudy_en',
             query: {
-              filtered: {
-                filter: {
-                  term: {
-                    isActive: true
-                  }
+              match: {
+                isActive: {
+                  query: true
                 }
               }
             },
@@ -176,11 +174,9 @@ describe('Search actions', () => {
           query: {
             index: 'cmmstudy_en',
             query: {
-              filtered: {
-                filter: {
-                  term: {
-                    isActive: true
-                  }
+              match: {
+                isActive: {
+                  query: true
                 }
               }
             },

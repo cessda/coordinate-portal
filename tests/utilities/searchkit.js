@@ -69,11 +69,9 @@ describe('Searchkit utilities', () => {
   describe('Default Query', () => {
     it('should filter results to only return active studies', () => {
       expect(searchkit.buildQuery().query.query).toEqual({
-        filtered: {
-          filter: {
-            term: {
-              isActive: true
-            }
+        match: {
+          isActive: {
+            query: true
           }
         }
       });
