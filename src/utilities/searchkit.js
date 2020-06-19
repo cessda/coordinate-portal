@@ -14,7 +14,7 @@
 
 
 
-import {BoolShould, FilteredQuery, SearchkitManager, TermQuery} from 'searchkit';
+import {SearchkitManager, BoolMust, MatchQuery} from 'searchkit';
 
 // Query builder used to create the query going to Elasticsearch (for search page).
 export const queryBuilder = (query: string, options: any): Object => {
@@ -77,11 +77,11 @@ const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
 // Customise default Elasticsearch query here.
 searchkit.addDefaultQuery((query) => {
   // Filter results to only return active study records.
-  return query.addQuery(FilteredQuery({
-    filter: BoolShould([
-      TermQuery('isActive', true)
+  return query.addQuery(
+    BoolMust([
+      MatchQuery('isActive', true)
     ])
-  }));
+  );
 });
 
 export default searchkit;
