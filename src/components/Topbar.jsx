@@ -51,7 +51,7 @@ export class TopBar extends Component<Props> {
                 key: 'relevance',
                 field: '_score',
                 order: 'desc',
-                defaultOption: false
+                defaultOption: true
               }, {
                 translation: 'sorting.titleAscending',
                 key: 'title-ascending',
@@ -75,7 +75,7 @@ export class TopBar extends Component<Props> {
                 key: 'date-descending',
                 field: 'dataCollectionPeriodStartdate',
                 order: 'desc',
-                defaultOption: true
+                defaultOption: false
               }]}/>
             </div>
           </div>
