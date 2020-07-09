@@ -37,7 +37,6 @@ helper.checkEnvironmentVariables = function (production) {
     console.error('        Missing environmental variable PASC_ELASTICSEARCH_URL.');
     console.log();
     process.exit();
-    return;
   } else {
     console.log('NOTICE : Using Elasticsearch instance at ' +
                 process.env.PASC_ELASTICSEARCH_URL + '.');

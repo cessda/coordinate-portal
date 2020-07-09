@@ -13,7 +13,7 @@
 process.noDeprecation = true;
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -24,25 +24,19 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].bundle.js',
     publicPath: '/static/'
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(true),
-    new ExtractTextPlugin('styles.css'),
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: true,
-      warnings: false,
-      output: {
-        comments: false
-      },
-      compress: {
-        warnings: false,
-        drop_console: true
-      }
-    }),
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'server/views/index.ejs'),
       minify: {
@@ -83,8 +77,8 @@ module.exports = {
         ]
       }
     }, {
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader']
+      test: /\.css$/i,
+      use: [MiniCssExtractPlugin.loader, 'css-loader']
     },
       {
         test: /\.(scss|sass)$/,
@@ -111,7 +105,7 @@ module.exports = {
               optimizationLevel: 4
             },
             pngquant: {
-              quality: '75-90',
+              quality: [0.75, 0.90],
               speed: 3
             }
           }

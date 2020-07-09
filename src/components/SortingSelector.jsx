@@ -31,10 +31,10 @@ export class SortingSelector extends SearchkitSortingSelector<Props> {
   }
 
   render(): Node {
-    _.map(this.accessor.options.options, (option: Object): Object => {
-      option.label = counterpart.translate(option.translation);
-      return option;
-    });
+    // _.map(this.accessor.options.options, (option: Object): Object => {
+    //   option.label = counterpart.translate(option.translation);
+    //   return option;
+    // });
     return super.render();
   }
 }

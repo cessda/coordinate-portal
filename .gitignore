@@ -93,6 +93,10 @@ nbdist/
 .sass-cache/
 *.css.map
 
+### Visual Studio ###
+.vscode/
+.vs/
+
 
 ### Maven files #
 ######################

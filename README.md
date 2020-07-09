@@ -40,10 +40,8 @@ Please be aware of *Known Issues* (see bottom) before running.
     * Development: `npm run startdev`
     * Production: `npm run startprod` (Requires the application to be built. See *Building* below.)
 
-> **Building:** In order to run the application in production, it must first be built using the `npm run build` command. This will compile assets into the `/dist` directory.
-
-> **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again. This will ensure all locally installed dependencies match their development environment counterparts.
-
+> **Building:** In order to run the application in production, it must first be built using the `npm run build` command. This will compile assets into the `/dist` directory.  
+> **Updating:** When fetching/pulling new builds it is recommended to run `npm install` again. This will ensure all locally installed dependencies match their development environment counterparts.  
 > **Testing:** Tests can be run using `npm run test`. Code coverage will be reported in the `/coverage` directory.
 
 ## Configuration
@@ -172,10 +170,8 @@ N.B. list of CESSDA languages (*as of May 2020*):
 All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`.
 
 1. Configure Elasticsearch CMMStudy fields to filter on:
-
-   - The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields.
-   - Add additional markup for new filters as necessary.
-
+   * The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields.
+   * Add additional markup for new filters as necessary.
 2. Configure the number of items returned in the filters:
 
    By changing the following field (Generally we have set these to 500):
@@ -187,7 +183,7 @@ All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162
                  id="ItsGivenID-toMatchElasticField"
                  size={500}  # < -- Change number Here
               />
-</SideBar>                 
+</SideBar>
 ```
 
 > The Searchkit UI framework provides several filter controls and documentation can be found [here](http://docs.searchkit.co/stable).
