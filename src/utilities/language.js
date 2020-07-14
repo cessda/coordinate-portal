@@ -16,7 +16,7 @@
 
 // translations not available for all languages
 // data not available for all languages
-//import cs from '../locales/cs';
+import cs from '../locales/cs';
 import da from '../locales/da';
 import de from '../locales/de';
 import el from '../locales/el';
