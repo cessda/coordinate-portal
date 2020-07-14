@@ -44,12 +44,12 @@ export function getLanguages(): Object[] {
   //   locale : The imported locale for this language.
   // }
   return [
-  /*{
+  {
     code: 'cs',
     label: 'čeština',
     index: 'cmmstudy_cs',
     locale: cs
-  }, */
+  }, 
   {
     code: 'da',
     label: 'dansk',
