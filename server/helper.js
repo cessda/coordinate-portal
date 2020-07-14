@@ -106,6 +106,8 @@ helper.getElasticsearchProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {
       return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + req.url;
+    }, filter: function(req, res) {
+      return req.method == 'GET';
     }
   });
 };

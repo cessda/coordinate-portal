@@ -6,8 +6,8 @@
 .gitignore
 coverage
 docs
+flow-typed
 node_modules
-npm-debug.log
 tests
 Jenkinsfile
 jest.config.js

@@ -40,17 +40,14 @@ pipeline {
 		}
 		stage('Run Unit Tests') {
 			agent {
-				dockerfile {
-					dir './tests'
-					filename 'Dockerfile'
+				docker {
+					image 'node:12'
 					reuseNode true
 				}
 			}
 			steps {
-				nodejs('node') {
-					sh "npm ci"
-					sh "npm run test"
-				}
+				sh "npm ci"
+				sh "npm run test"
 			}
 			post {
 				always {
@@ -60,7 +57,7 @@ pipeline {
 		}
 		stage('Run Sonar Scan') {
 			steps {
-				nodejs('node') {
+				nodejs('node-12') {
 					withSonarQubeEnv('cessda-sonar') {
 						sh "${scannerHome}/bin/sonar-scanner"
 					}
