@@ -28,7 +28,7 @@ import fr from '../locales/fr';
 //import it from '../locales/it';
 import nl from '../locales/nl';
 //import no from '../locales/no';
-//import pt from '../locales/pt';
+import pt from '../locales/pt';
 import sk from '../locales/sk';
 import sl from '../locales/sl';
 //import sr from '../locales/sr';
@@ -115,12 +115,12 @@ export function getLanguages(): Object[] {
     index: 'cmmstudy_no',
     locale: no
   },*/
-  /*{
+  {
     code: 'pt',
     label: 'Português',
     index: 'cmmstudy_pt',
     locale: pt
-  }, */
+  },
   {
     code: 'sk',
     label: 'Slovencina',
