@@ -66,12 +66,7 @@ module.exports = {
       exclude: /(node_modules)/,
       loader: 'babel-loader',
       options: {
-        babelrc: false,
-        presets: [
-          ['es2015', {modules: false}],
-          'react',
-          'flow'
-        ],
+        babelrc: true,
         plugins: [
           'transform-react-remove-prop-types'
         ]

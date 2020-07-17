@@ -15,7 +15,7 @@
 
 
 import {SortingSelector as SearchkitSortingSelector} from 'searchkit';
-import PropTypes from 'prop-types';
+import ReactPropTypes from 'prop-types';
 import counterpart from 'counterpart';
 import * as _ from 'lodash';
 import type {Node} from 'react';
@@ -41,13 +41,13 @@ export class SortingSelector extends SearchkitSortingSelector<Props> {
 
 // Override SortingSelector type checking to avoid errors.
 SortingSelector.propTypes = Object.assign(SearchkitSortingSelector.propTypes, {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      translation: PropTypes.string.isRequired,
-      label: PropTypes.string,
-      field: PropTypes.string,
-      order: PropTypes.string,
-      defaultOption: PropTypes.bool
+  options: ReactPropTypes.arrayOf(
+    ReactPropTypes.shape({
+      translation: ReactPropTypes.string.isRequired,
+      label: ReactPropTypes.string,
+      field: ReactPropTypes.string,
+      order: ReactPropTypes.string,
+      defaultOption: ReactPropTypes.bool
     })
   )
 });

@@ -48,15 +48,7 @@ module.exports = {
       exclude: /(node_modules)/,
       loader: 'babel-loader',
       options: {
-        babelrc: false,
-        presets: [
-          ['es2015', {modules: false}],
-          'react',
-          'flow'
-        ],
-        plugins: [
-          'flow-react-proptypes'
-        ]
+        babelrc: true
       }
     }, {
       test: /\.css$/,

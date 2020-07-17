@@ -12,5 +12,6 @@
 // limitations under the License.
 
 {
-	"presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-flow"]
+	"presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-flow"],
+	"plugins": ["flow-react-proptypes", "@babel/plugin-proposal-class-properties"]
 }
