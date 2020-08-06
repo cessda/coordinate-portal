@@ -20,6 +20,7 @@ import type {Dispatch, GetState, State, Thunk} from '../types';
 import * as _ from 'lodash';
 import moment from 'moment';
 import {getLanguages} from '../utilities/language';
+import en from '../locales/en';
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 
@@ -41,7 +42,7 @@ export const initTranslations = (): Thunk => {
         label: string,
         index: string,
       }[] = _.map(getLanguages(), function (language) {
-        counterpart.registerTranslations(language.code, language.locale);
+        counterpart.registerTranslations(language.code, en);
         return _.pick(language, ['code', 'label', 'index']);
       });
 
