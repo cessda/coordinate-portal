@@ -29,7 +29,8 @@ export function getLanguages(): Object[] {
     code: 'cs',
     label: 'čeština',
     index: 'cmmstudy_cs'
-  }, {
+  },
+  {
     code: 'da',
     label: 'dansk',
     index: 'cmmstudy_da'
@@ -43,15 +44,18 @@ export function getLanguages(): Object[] {
     code: 'el',
     label: 'Ελληνικά',
     index: 'cmmstudy_el'
-  }, {
+  },
+  {
     code: 'en',
     label: 'English',
     index: 'cmmstudy_en'
-  }, {
+  },
+  {
     code: 'et',
     label: 'eesti',
     index: 'cmmstudy_et'
-  }, {
+  },
+  {
     code: 'fi',
     label: 'suomi',
     index: 'cmmstudy_fi'
@@ -60,11 +64,13 @@ export function getLanguages(): Object[] {
     code: 'fr',
     label: 'Francais',
     index: 'cmmstudy_fr'
-  }, {
+  },
+  {
     code: 'hu',
     label: 'magyar',
     index: 'cmmstudy_hu'
-  }, {
+  },
+  {
     code: 'it',
     label: 'Italiano',
     index: 'cmmstudy_it'
@@ -72,27 +78,33 @@ export function getLanguages(): Object[] {
     code: 'nl',
     label: 'Nederlands',
     index: 'cmmstudy_nl'
-  }, {
+  },
+  {
     code: 'no',
     label: 'Norsk',
     index: 'cmmstudy_no'
-  }, {
+  },
+  {
     code: 'pt',
     label: 'Português',
     index: 'cmmstudy_pt'
-  }, {
+  },
+  {
     code: 'sk',
     label: 'Slovencina',
     index: 'cmmstudy_sk'
-  }, {
+  },
+  {
     code: 'sl',
     label: 'Slovenski',
     index: 'cmmstudy_sl'
-  }, {
+  },
+  {
     code: 'sr',
     label: 'српски језик',
     index: 'cmmstudy_sr'
-  }, {
+  },
+  {
     code: 'sv',
     label: 'Svenska',
     index: 'cmmstudy_sv'

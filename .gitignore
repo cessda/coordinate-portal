@@ -118,5 +118,6 @@ target/
 
 ### Test Coverage files #
 ######################
+/.scannerwork/
 /coverage/
 junit.xml
