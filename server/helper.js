@@ -26,7 +26,6 @@ helper.checkBuildDirectory = function () {
     console.error('ERROR : Unable to start Data Catalogue application.');
     console.error('        Missing \'/dist\' directory as application has not been built.');
     console.error('        Run command \'npm run build\' and try again.');
-    console.log();
     process.exit();
   }
 };
@@ -34,10 +33,8 @@ helper.checkBuildDirectory = function () {
 helper.checkEnvironmentVariables = function (production) {
   if (_.isEmpty(process.env.PASC_ELASTICSEARCH_URL)) {
     console.error('ERROR : Unable to start Data Catalogue application.');
-    console.error('        Missing environmental variable PASC_ELASTICSEARCH_URL.');
-    console.log();
+    console.error('        Missing environment variable PASC_ELASTICSEARCH_URL.');
     process.exit();
-    return;
   } else {
     console.log('NOTICE : Using Elasticsearch instance at ' +
                 process.env.PASC_ELASTICSEARCH_URL + '.');
@@ -109,6 +106,8 @@ helper.getElasticsearchProxy = function () {
   return proxy(process.env.PASC_ELASTICSEARCH_URL, {
     proxyReqPathResolver(req) {
       return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + req.url;
+    }, filter: function(req, res) {
+      return req.method == 'GET';
     }
   });
 };

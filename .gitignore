@@ -93,6 +93,10 @@ nbdist/
 .sass-cache/
 *.css.map
 
+### Visual Studio ###
+.vscode/
+.vs/
+
 
 ### Maven files #
 ######################
@@ -110,6 +114,7 @@ target/
 /dist/
 /bin
 /obj/Debug
+/views/
 
 ### Test Coverage files #
 ######################

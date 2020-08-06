@@ -16,23 +16,7 @@
 
 // translations not available for all languages
 // data not available for all languages
-import cs from '../locales/cs';
-import da from '../locales/da';
-import de from '../locales/de';
-import el from '../locales/el';
 import en from '../locales/en';
-//import et from '../locales/et';
-import fi from '../locales/fi';
-import fr from '../locales/fr';
-//import hu from '../locales/hu';
-//import it from '../locales/it';
-import nl from '../locales/nl';
-//import no from '../locales/no';
-import pt from '../locales/pt';
-import sk from '../locales/sk';
-import sl from '../locales/sl';
-//import sr from '../locales/sr';
-import sv from '../locales/sv';
 
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
@@ -48,100 +32,90 @@ export function getLanguages(): Object[] {
     code: 'cs',
     label: 'čeština',
     index: 'cmmstudy_cs',
-    locale: cs
-  }, 
-  {
+    locale: en
+  }, {
     code: 'da',
     label: 'dansk',
     index: 'cmmstudy_da',
-    locale: da
+    locale: en
   },
   {
     code: 'de',
     label: 'Deutsch',
     index: 'cmmstudy_de',
-    locale: de
+    locale: en
   },
   {
     code: 'el',
     label: 'Ελληνικά',
     index: 'cmmstudy_el',
-    locale: el
+    locale: en
   }, {
     code: 'en',
     label: 'English',
     index: 'cmmstudy_en',
     locale: en
-  },
-  /*{
+  }, {
     code: 'et',
     label: 'eesti',
     index: 'cmmstudy_et',
-    locale: et
-  },*/
-  {
+    locale: en
+  }, {
     code: 'fi',
     label: 'suomi',
     index: 'cmmstudy_fi',
-    locale: fi
+    locale: en
   },
   {
     code: 'fr',
     label: 'Francais',
     index: 'cmmstudy_fr',
-    locale: fr
-  },
-  /*{
+    locale: en
+  }, {
     code: 'hu',
     label: 'magyar',
     index: 'cmmstudy_hu',
-    locale: hu
-  },*/
-   /*{
+    locale: en
+  }, {
     code: 'it',
     label: 'Italiano',
     index: 'cmmstudy_it',
-    locale: it
-  } */
-  {
+    locale: en
+  }, {
     code: 'nl',
     label: 'Nederlands',
     index: 'cmmstudy_nl',
-    locale: nl
-  },
-  /*{
+    locale: en
+  }, {
     code: 'no',
     label: 'Norsk',
     index: 'cmmstudy_no',
-    locale: no
-  },*/
-  {
+    locale: en
+  }, {
     code: 'pt',
     label: 'Português',
     index: 'cmmstudy_pt',
-    locale: pt
-  },
-  {
+    locale: en
+  }, {
     code: 'sk',
     label: 'Slovencina',
     index: 'cmmstudy_sk',
-    locale: sk
+    locale: en
   }, {
     code: 'sl',
     label: 'Slovenski',
     index: 'cmmstudy_sl',
-    locale: sl
-  },
-  /*, {
+    locale: en
+  }, {
     code: 'sr',
     label: 'српски језик',
     index: 'cmmstudy_sr',
-    locale: sr
-  },*/ {
+    locale: en
+  }, {
     code: 'sv',
     label: 'Svenska',
     index: 'cmmstudy_sv',
-    locale: sv
+    locale: en
   }
   ];
 }

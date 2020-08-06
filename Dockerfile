@@ -11,10 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:10
-
-# Install app dependencies
-RUN apt-get -qq update && apt-get -qq upgrade && apt-get install -qq autoconf automake libtool libpng-dev nasm
+FROM node:12
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -25,8 +22,9 @@ RUN npm ci
 
 # Bundle app source and build webpack
 COPY . .
+RUN npm run build
 
 # Configure application startup
 USER node
 EXPOSE 8088
-CMD [ "node", "startdev.js" ]
+CMD [ "node", "startprod.js" ]
