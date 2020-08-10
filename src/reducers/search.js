@@ -77,7 +77,7 @@ const search = (state: State, action: Action): State => {
         expandMetadataPanels: !state.expandMetadataPanels
       });
 
-    case 'TOGGLE_LONG_DESCRIPTION':
+    case 'TOGGLE_LONG_DESCRIPTION': {
       let array: Object[] = _.cloneDeep(state.displayed);
 
       array[action.index].abstractExpanded = !array[action.index].abstractExpanded;
@@ -85,8 +85,9 @@ const search = (state: State, action: Action): State => {
       return Object.assign({}, state, {
         displayed: array
       });
+    }
 
-    case 'UPDATE_DISPLAYED':
+    case 'UPDATE_DISPLAYED': {
       let displayed: Object[] = [];
 
       for (let i: number = 0; i < action.displayed.length; i++) {
@@ -100,6 +101,7 @@ const search = (state: State, action: Action): State => {
         displayed: displayed,
         jsonLd: displayed.length === 1 ? getJsonLd(displayed[0]) : undefined
       });
+    }
 
     case 'UPDATE_QUERY':
       return Object.assign({}, state, {
@@ -111,7 +113,7 @@ const search = (state: State, action: Action): State => {
         state: action.state
       });
 
-    case 'UPDATE_SIMILARS':
+    case 'UPDATE_SIMILARS': {
       let similars: {
         id: string,
         title: string
@@ -133,6 +135,7 @@ const search = (state: State, action: Action): State => {
       return Object.assign({}, state, {
         similars: similars
       });
+    }
 
     case 'RESET_SEARCH':
       return state;

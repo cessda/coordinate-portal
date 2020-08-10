@@ -83,6 +83,7 @@ export class DetailPage extends Component<Props> {
                  {item.studyUrl &&
                   <a className="button is-small is-white is-pulled-right"
                      href={item.studyUrl}
+                     rel="noreferrer"
                      target="_blank">
                     <span className="icon is-small"><FaExternalLink/></span>
                     <Translate component="span" content="goToStudy"/>
@@ -91,6 +92,7 @@ export class DetailPage extends Component<Props> {
 
                  <a className="button is-small is-white is-pulled-right mr-15"
                     href={'/api/json/' + index + '/' + encodeURIComponent(item.id)}
+                    rel="noreferrer"
                     target="_blank">
                   <span className="icon is-small">
                     <FaCode/>
