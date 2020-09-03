@@ -23,7 +23,7 @@ import type { Dispatch, GetState, State, Thunk } from '../types';
 
 export type InitSearchkitAction = {
   type: 'INIT_SEARCHKIT'
-}
+};
 
 export const initSearchkit = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
@@ -107,7 +107,7 @@ export const initSearchkit = (): Thunk => {
 export type ToggleLoadingAction = {
   type: 'TOGGLE_LOADING',
   loading: boolean
-}
+};
 
 export const toggleLoading = (loading: boolean): ToggleLoadingAction => {
   return {
@@ -120,7 +120,7 @@ export const toggleLoading = (loading: boolean): ToggleLoadingAction => {
 
 export type ToggleMobileFiltersAction = {
   type: 'TOGGLE_MOBILE_FILTERS'
-}
+};
 
 export const toggleMobileFilters = (): ToggleMobileFiltersAction => {
   return {
@@ -132,7 +132,7 @@ export const toggleMobileFilters = (): ToggleMobileFiltersAction => {
 
 export type ToggleAdvancedSearchAction = {
   type: 'TOGGLE_ADVANCED_SEARCH'
-}
+};
 
 export const toggleAdvancedSearch = (): ToggleAdvancedSearchAction => {
   return {
@@ -144,7 +144,7 @@ export const toggleAdvancedSearch = (): ToggleAdvancedSearchAction => {
 
 export type ToggleSummaryAction = {
   type: 'TOGGLE_SUMMARY'
-}
+};
 
 export const toggleSummary = (): ToggleSummaryAction => {
   return {
@@ -156,7 +156,7 @@ export const toggleSummary = (): ToggleSummaryAction => {
 
 export type ToggleMetadataPanelsAction = {
   type: 'TOGGLE_METADATA_PANELS'
-}
+};
 
 export const toggleMetadataPanels = (): ToggleMetadataPanelsAction => {
   return {
@@ -169,7 +169,7 @@ export const toggleMetadataPanels = (): ToggleMetadataPanelsAction => {
 export type ToggleLongAbstractAction = {
   type: 'TOGGLE_LONG_DESCRIPTION',
   index: number
-}
+};
 
 export const toggleLongAbstract = (title: string, index: number): Thunk => {
   return (dispatch: Dispatch): void => {
@@ -192,7 +192,7 @@ export type UpdateDisplayedAction = {
   type: 'UPDATE_DISPLAYED',
   displayed: any,
   language: string
-}
+};
 
 export const updateDisplayed = (displayed: Object[]): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
@@ -209,7 +209,7 @@ export const updateDisplayed = (displayed: Object[]): Thunk => {
 export type UpdateQueryAction = {
   type: 'UPDATE_QUERY',
   query: Object
-}
+};
 
 export const updateQuery = (query: Object): UpdateQueryAction => {
   return {
@@ -223,7 +223,7 @@ export const updateQuery = (query: Object): UpdateQueryAction => {
 export type UpdateStateAction = {
   type: 'UPDATE_STATE',
   state: Object
-}
+};
 
 export const updateState = (state: Object): UpdateStateAction => {
   return {
@@ -237,7 +237,7 @@ export const updateState = (state: Object): UpdateStateAction => {
 export type UpdateSimilarsAction = {
   type: 'UPDATE_SIMILARS',
   similars: any
-}
+};
 
 export const updateSimilars = (item: Object): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
@@ -277,8 +277,8 @@ export const updateSimilars = (item: Object): Thunk => {
 //////////// Redux Action Creator : RESET_SEARCH
 
 export type ResetSearchAction = {
-  type: 'RESET_SEARCH';
-}
+  type: 'RESET_SEARCH'
+};
 
 export const resetSearch = (): Thunk => {
   return (dispatch: Dispatch): void => {

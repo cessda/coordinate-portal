@@ -31,7 +31,7 @@ export type InitTranslationsAction = {
     label: string,
     index: string
   }[]
-}
+};
 
 export const initTranslations = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
@@ -40,7 +40,7 @@ export const initTranslations = (): Thunk => {
       list: {
         code: string,
         label: string,
-        index: string,
+        index: string
       }[] = _.map(getLanguages(), function (language) {
         counterpart.registerTranslations(language.code, en);
         return _.pick(language, ['code', 'label', 'index']);
@@ -83,7 +83,7 @@ export const initTranslations = (): Thunk => {
 export type ChangeLanguageAction = {
   type: 'CHANGE_LANGUAGE',
   code: string
-}
+};
 
 export const changeLanguage = (code: string): Thunk => {
   return (dispatch: Dispatch): void => {
