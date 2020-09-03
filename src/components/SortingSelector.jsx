@@ -16,9 +16,7 @@
 
 import {SortingSelector as SearchkitSortingSelector} from 'searchkit';
 import ReactPropTypes from 'prop-types';
-import counterpart from 'counterpart';
 import * as _ from 'lodash';
-import type {Node} from 'react';
 import {connect} from 'react-redux';
 
 type Props = {};
@@ -29,21 +27,13 @@ export class SortingSelector extends SearchkitSortingSelector<Props> {
     // Override behaviour to always return true so that the control is never disabled and hidden.
     return true;
   }
-
-  render(): Node {
-    // _.map(this.accessor.options.options, (option: Object): Object => {
-    //   option.label = counterpart.translate(option.translation);
-    //   return option;
-    // });
-    return super.render();
-  }
 }
 
 // Override SortingSelector type checking to avoid errors.
 SortingSelector.propTypes = Object.assign(SearchkitSortingSelector.propTypes, {
   options: ReactPropTypes.arrayOf(
     ReactPropTypes.shape({
-      translation: ReactPropTypes.string.isRequired,
+      key: ReactPropTypes.string,
       label: ReactPropTypes.string,
       field: ReactPropTypes.string,
       order: ReactPropTypes.string,

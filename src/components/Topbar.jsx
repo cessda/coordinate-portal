@@ -17,6 +17,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {ActionBar, ActionBarRow} from 'searchkit';
+import * as counterpart from 'react-translate-component';
 import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
 import SortingSelector from './SortingSelector';
@@ -47,31 +48,31 @@ export class TopBar extends Component<Props> {
                          content="sortBy"/>
 
               <SortingSelector className="level-item" options={[{
-                translation: 'sorting.relevance',
+                label: counterpart.translate('sorting.relevance'),
                 key: 'relevance',
                 field: '_score',
                 order: 'desc',
                 defaultOption: true
               }, {
-                translation: 'sorting.titleAscending',
+                label: counterpart.translate('sorting.titleAscending'),
                 key: 'title-ascending',
                 field: 'titleStudy.raw',
                 order: 'asc',
                 defaultOption: false
               }, {
-                translation: 'sorting.titleDescending',
+                label: counterpart.translate('sorting.titleDescending'),
                 key: 'title-descending',
                 field: 'titleStudy.raw',
                 order: 'desc',
                 defaultOption: false
               }, {
-                translation: 'sorting.dateAscending',
+                label: counterpart.translate('sorting.dateAscending'),
                 key: 'date-ascending',
                 field: 'dataCollectionPeriodStartdate',
                 order: 'asc',
                 defaultOption: false
               }, {
-                translation: 'sorting.dateDescending',
+                label: counterpart.translate('sorting.dateDescending'),
                 key: 'date-descending',
                 field: 'dataCollectionPeriodStartdate',
                 order: 'desc',
