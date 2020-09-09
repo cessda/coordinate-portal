@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import searchkit, { detailQuery, pidQuery, queryBuilder, similarQuery } from '../../src/utilities/searchkit';
+import { detailQuery, pidQuery, queryBuilder, similarQuery } from '../../src/utilities/searchkit';
 
 describe('Searchkit utilities', () => {
   describe('queryBuilder()', () => {
@@ -60,18 +60,6 @@ describe('Searchkit utilities', () => {
             match: {
               titleStudy: 'Study Title'
             }
-          }
-        }
-      });
-    });
-  });
-
-  describe('Default Query', () => {
-    it('should filter results to only return active studies', () => {
-      expect(searchkit.buildQuery().query.query).toEqual({
-        match: {
-          isActive: {
-            query: true
           }
         }
       });
