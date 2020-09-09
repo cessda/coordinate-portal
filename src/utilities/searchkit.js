@@ -74,14 +74,4 @@ export const similarQuery = (title: string): Object => {
 // Define a single searchkit manager instance to power the application.
 const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
 
-// Customise default Elasticsearch query here.
-searchkit.addDefaultQuery((query) => {
-  // Filter results to only return active study records.
-  return query.addQuery(
-    BoolMust([
-      MatchQuery('isActive', true)
-    ])
-  );
-});
-
 export default searchkit;

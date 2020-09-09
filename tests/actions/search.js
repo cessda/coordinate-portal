@@ -151,13 +151,6 @@ describe('Search actions', () => {
           type: 'UPDATE_QUERY',
           query: {
             index: 'cmmstudy_en',
-            query: {
-              match: {
-                isActive: {
-                  query: true
-                }
-              }
-            },
             size: 20
           }
         },
@@ -173,13 +166,6 @@ describe('Search actions', () => {
           type: 'UPDATE_QUERY',
           query: {
             index: 'cmmstudy_en',
-            query: {
-              match: {
-                isActive: {
-                  query: true
-                }
-              }
-            },
             size: 20
           }
         },
