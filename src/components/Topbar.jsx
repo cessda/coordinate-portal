@@ -17,8 +17,8 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {ActionBar, ActionBarRow} from 'searchkit';
-import * as counterpart from 'react-translate-component';
 import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 import {connect} from 'react-redux';
 import SortingSelector from './SortingSelector';
 import PageSizeSelector from './PageSizeSelector';

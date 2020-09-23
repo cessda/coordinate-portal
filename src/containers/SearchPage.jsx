@@ -25,7 +25,7 @@ import {
   Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
   SearchkitProvider, SideBar
 } from 'searchkit';
-import * as counterpart from 'react-translate-component';
+import counterpart from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import Panel from '../components/Panel';
@@ -33,7 +33,7 @@ import RangeFilter from '../components/RangeFilter';
 import RefinementListFilter from '../components/RefinementListFilter';
 import NoHits from '../components/NoHits';
 import searchkit from '../utilities/searchkit';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import $ from 'jquery';
 import type {State} from '../types';
 import moment from 'moment';
