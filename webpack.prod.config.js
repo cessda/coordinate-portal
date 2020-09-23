@@ -19,7 +19,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   context: path.join(__dirname),
   entry: [
-    'babel-polyfill',
+    '@babel/polyfill',
     './src/index.jsx'
   ],
   output: {
