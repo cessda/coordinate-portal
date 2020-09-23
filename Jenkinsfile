@@ -77,7 +77,6 @@ pipeline {
 			 steps {
 				sh("docker build -t ${image_tag} .")
 			}
-			when { branch 'master' }
 		}
 		stage('Push Docker image') {
 			steps {
