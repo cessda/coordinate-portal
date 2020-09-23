@@ -59,7 +59,7 @@ pipeline {
 			 steps {
 				sh("docker build -t cdc-searchkit .")
 			}
-			when not { { branch 'master' } }
+			when { not { branch 'master' } }
 		}
 		stage('Run Sonar Scan') {
 			steps {
