@@ -55,6 +55,12 @@ pipeline {
 				}
 			}
 		}
+		stage('Test Docker image') {
+			 steps {
+				sh("docker build -t cdc-searchkit .")
+			}
+			when not { { branch 'master' } }
+		}
 		stage('Run Sonar Scan') {
 			steps {
 				nodejs('node-12') {
@@ -77,6 +83,7 @@ pipeline {
 			 steps {
 				sh("docker build -t ${image_tag} .")
 			}
+			when { branch 'master' }
 		}
 		stage('Push Docker image') {
 			steps {
