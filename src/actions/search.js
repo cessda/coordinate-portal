@@ -250,22 +250,21 @@ export const updateSimilars = (item: Object): Thunk => {
         host: window.location.hostname,
         port: window.location.port ||
               (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
-        path: '/api/es'
+        path: '/api/sk'
       }
     });
 
     return client.search({
-      index: index,
       size: 10,
       body: {
+        index: index,
         query: similarQuery(item.titleStudy)
       }
     }).then((response: Object): void => {
       dispatch({
         type: 'UPDATE_SIMILARS',
         similars: _.uniqBy(_.filter(response.hits.hits, (hit: Object): boolean => {
-          return hit._source && hit._source.id !== item.id && hit._source.titleStudy !==
-                 item.titleStudy;
+          return hit._source && hit._source.id !== item.id && hit._source.titleStudy !== item.titleStudy;
         }), (hit: Object): string => {
           return hit._source.titleStudy;
         })

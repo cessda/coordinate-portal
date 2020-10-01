@@ -14,7 +14,7 @@
 
 
 
-import {SearchkitManager, BoolMust, MatchQuery} from 'searchkit';
+import {SearchkitManager} from 'searchkit';
 
 // Query builder used to create the query going to Elasticsearch (for search page).
 export const queryBuilder = (query: string, options: any): Object => {

@@ -14,12 +14,14 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const _ = require('lodash');
-const SearchkitExpress = require('searchkit-express');
 const proxy = require('express-http-proxy');
 const express = require('express');
 const debug = require('debug')('SearchkitExpress');
 const request = require('request');
 const helper = {};
+
+// Defaults to localhost if unspecified
+const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
 
 helper.checkBuildDirectory = function () {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
@@ -31,13 +33,12 @@ helper.checkBuildDirectory = function () {
 };
 
 helper.checkEnvironmentVariables = function (production) {
-  if (_.isEmpty(process.env.PASC_ELASTICSEARCH_URL)) {
+  if (_.isEmpty(elasticsearchUrl)) {
     console.error('ERROR : Unable to start Data Catalogue application.');
     console.error('        Missing environment variable PASC_ELASTICSEARCH_URL.');
     process.exit();
   } else {
-    console.log('NOTICE : Using Elasticsearch instance at ' +
-                process.env.PASC_ELASTICSEARCH_URL + '.');
+    console.log('NOTICE : Using Elasticsearch instance at ' + elasticsearchUrl);
   }
 
   if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
@@ -64,7 +65,7 @@ helper.checkEnvironmentVariables = function (production) {
 helper.getSearchkitRouter = function () {
   let router = express.Router(),
     config = {
-      host: _.trimEnd(process.env.PASC_ELASTICSEARCH_URL, '/'),
+      host: _.trimEnd(elasticsearchUrl, '/'),
       queryProcessor: function (query) {
         return query;
       }
@@ -102,33 +103,23 @@ helper.getSearchkitRouter = function () {
   return router;
 };
 
-helper.getElasticsearchProxy = function () {
-  return proxy(process.env.PASC_ELASTICSEARCH_URL, {
-    proxyReqPathResolver(req) {
-      return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + req.url;
-    }, filter: function(req, res) {
-      return req.method == 'GET';
-    }
-  });
-};
-
 helper.getJsonProxy = function () {
-  return proxy(process.env.PASC_ELASTICSEARCH_URL, {
+  return proxy(elasticsearchUrl, {
     proxyReqPathResolver(req) {
       let arr = _.trim(req.url, '/').split('/'),
         index = arr[0],
         id = arr[1];
-      return _.trimEnd(url.parse(process.env.PASC_ELASTICSEARCH_URL).pathname, '/') + '/' + index +
+      return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index +
              '/cmmstudy/' + id;
     },
-    userResDecorator: function (proxyRes, proxyResData) {
+    userResDecorator: function (_proxyRes, proxyResData) {
       let json = JSON.parse(proxyResData.toString('utf8'));
       return JSON.stringify(!_.isEmpty(json._source) ? json._source : {
         error: 'Requested record was not found.'
       });
     },
     filter: function (req) {
-      return !(req.method !== 'GET' || req.url.match(/[\/?]/gi).length !== 2);
+      return req.method === 'GET' && req.url.match(/[\/?]/gi).length === 2;
     }
   });
 };
@@ -136,9 +127,7 @@ helper.getJsonProxy = function () {
 helper.startListening = function (app) {
   let port = Number(process.env.PASC_PORT || 8088);
   app.listen(port, function () {
-    console.log();
-    console.log('SUCCESS : Data Catalogue application is running at http://localhost:' + port + '.');
-    console.log();
+    console.log('SUCCESS : Data Catalogue application is running at http://localhost:' + port);
   });
 };
 
