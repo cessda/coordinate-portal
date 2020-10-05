@@ -18,7 +18,13 @@ describe('Searchkit utilities', () => {
     it('should return a Searchkit query object', () => {
       expect(queryBuilder('search text', {})).toEqual({
         simple_query_string: {
-          query: 'search text'
+          query: 'search text',
+          fields: [
+            "titleStudy^3",
+            "abstract^1.5",
+            "creators^1.5",
+            "keywords.properties",
+          ],
         }
       });
     });
