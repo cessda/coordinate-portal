@@ -22,12 +22,15 @@ export const queryBuilder = (query: string, options: any): Object => {
   qob[options.fullpath] = query;
   return {
     simple_query_string: {
-      query: query
+      query: query,
+      
       // Can limit to searching specific fields if required. Weightings can also be added.
-      // fields: [
-      //   'titleStudy',
-      //   'abstract',
-      // ]
+      fields: [
+        'titleStudy^3',
+        'abstract^1.5',
+        'creators^1.5',
+        'keywords.properties'
+      ]
     }
   };
 };

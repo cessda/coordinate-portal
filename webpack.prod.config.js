@@ -24,7 +24,7 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: '[name].[hash].bundle.js',
     publicPath: '/static/'
   },
   optimization: {
@@ -74,38 +74,35 @@ module.exports = {
     }, {
       test: /\.css$/i,
       use: [MiniCssExtractPlugin.loader, 'css-loader']
-    },
-      {
-        test: /\.(scss|sass)$/,
-        use: [{
-          loader: 'style-loader'
-        }, {
-          loader: 'css-loader'
-        }, {
-          loader: 'sass-loader'
-        }]
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: ['file-loader?context=src/images&name=images/[path][name].[ext]', {
-          loader: 'image-webpack-loader',
-          query: {
-            mozjpeg: {
-              progressive: true
-            },
-            gifsicle: {
-              interlaced: false
-            },
-            optipng: {
-              optimizationLevel: 4
-            },
-            pngquant: {
-              quality: [0.75, 0.90],
-              speed: 3
-            }
-          }
-        }]
-        // exclude: /node_modules/,
+    }, {
+      test: /\.(scss|sass)$/,
+      use: [{
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader'
+      }, {
+        loader: 'sass-loader'
       }]
+    }, {
+      test: /\.(jpe?g|png|gif|svg)$/i,
+      loaders: ['file-loader?context=src/images&name=images/[path][name].[ext]', {
+        loader: 'image-webpack-loader',
+        query: {
+          mozjpeg: {
+            progressive: true
+          },
+          gifsicle: {
+            interlaced: false
+          },
+          optipng: {
+            optimizationLevel: 4
+          },
+          pngquant: {
+            quality: [0.75, 0.90],
+            speed: 3
+          }
+        }
+      }]
+    }]
   }
 };
