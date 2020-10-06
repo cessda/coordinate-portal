@@ -20,11 +20,13 @@ describe('Searchkit utilities', () => {
         simple_query_string: {
           query: 'search text',
           fields: [
-            "titleStudy^3",
-            "abstract^1.5",
-            "creators^1.5",
-            "keywords.properties",
+            "titleStudy^4",
+            "abstract^2",
+            "creators^2",
+            "keywords.id^1.5",
+            "*^1",
           ],
+          "lenient": true,
         }
       });
     });
