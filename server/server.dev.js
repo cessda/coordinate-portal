@@ -55,8 +55,6 @@ module.exports = {
 
     app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/api/es', helper.getElasticsearchProxy());
-
     app.use('/api/json', helper.getJsonProxy());
 
     app.get('*', function (req, res) {
