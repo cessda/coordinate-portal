@@ -23,13 +23,15 @@ export const queryBuilder = (query: string, options: any): Object => {
   return {
     simple_query_string: {
       query: query,
+      lenient: true,
       
       // Can limit to searching specific fields if required. Weightings can also be added.
       fields: [
-        'titleStudy^3',
-        'abstract^1.5',
-        'creators^1.5',
-        'keywords.properties'
+        'titleStudy^4',
+        'abstract^2',
+        'creators^2',
+        'keywords.id^1.5',
+        '*^1'
       ]
     }
   };
