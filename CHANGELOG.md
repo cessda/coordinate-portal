@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changes
 
 - Fixed various React.js warnings present in development mode ([#232](https://bitbucket.org/cessda/cessda.cdc.version2/issues/232))
+- Applied Elasticsearch boosts at query time ([#224](https://bitbucket.org/cessda/cessda.cdc.version2/issues/224/why-no-results-with-title))
+	- This is due to the depreciation of index-time boosting
 - Fixed translations not being applied to the sorting selector ([#215](https://bitbucket.org/cessda/cessda.cdc.version2/issues/215))
 - Apply `eslint` suggested fixes ([#203](https://bitbucket.org/cessda/cessda.cdc.version2/issues/203))
 - Update Searchkit dependencies ([#198](https://bitbucket.org/cessda/cessda.cdc.version2/issues/198))
