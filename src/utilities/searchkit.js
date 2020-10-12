@@ -31,7 +31,19 @@ export const queryBuilder = (query: string, options: any): Object => {
         'abstract^2',
         'creators^2',
         'keywords.id^1.5',
-        '*^1'
+        'dataAccessFreeTexts',
+        'dataCollectionFreeTexts.dataCollectionFreeText',
+        'dataCollectionFreeTexts.event',
+        'dataCollectionPeriodEnddate',
+        'dataCollectionPeriodStartdate',
+        'dataCollectionYear',
+        'samplingProcedureFreeTexts',
+        'studyAreaCountries.*',
+        'keywords.*',
+        'typeOfModeOfCollections.*',
+        'typeOfTimeMethods.*',
+        'unitTypes.*',
+        'classifications.*'
       ]
     }
   };
