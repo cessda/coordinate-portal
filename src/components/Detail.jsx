@@ -200,12 +200,9 @@ export class Detail extends HitItem<Props> {
           component="strong"
           content="metadata.abstract"
         />
-        {item.abstract.split('\n').map(function(item, key) {
+        {item.abstract.split('\n').map(function(splitItem, key) {
           return (
-            <div key={key}>
-              {item}
-              <br />
-            </div>
+            <p key={key} dangerouslySetInnerHTML={{__html: splitItem + "<br/>"}}/>
           );
         })}
 
