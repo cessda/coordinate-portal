@@ -21,7 +21,8 @@ describe('Language utilities', () => {
           expect.objectContaining({
             code: expect.any(String),
             label: expect.any(String),
-            index: expect.any(String)
+            index: expect.any(String),
+            locale: expect.any(Object)
           })
         ])
       );
