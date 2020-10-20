@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import Panel from './Panel';
 import Translate, * as counterpart from 'react-translate-component';
 import type { Dispatch, State } from '../types';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { toggleMetadataPanels } from '../actions/search';
@@ -92,20 +92,20 @@ export class Detail extends HitItem<Props> {
     if (!date1 && !date2) {
       if (_.isArray(dateFallback)) {
         if (
-          (dateFallback: any).length === 2 &&
-          (dateFallback: any)[0].event === 'start' &&
-          (dateFallback: any)[1].event === 'end'
+          dateFallback.length === 2 &&
+          dateFallback[0].event === 'start' &&
+          dateFallback[1].event === 'end'
         ) {
           // Handle special case where array items are a start/end date range.
           return this.formatDate(
             format,
-            (dateFallback: any)[0][dateFallbackProperty],
-            (dateFallback: any)[1][dateFallbackProperty]
+            dateFallback[0][dateFallbackProperty],
+            dateFallback[1][dateFallbackProperty]
           );
         }
         // Generate elements for each date in the array.
         return this.generateElements(
-          (dateFallback: any),
+          dateFallback,
           dateFallbackProperty,
           'p',
           (date: string): string => {
@@ -156,9 +156,17 @@ export class Detail extends HitItem<Props> {
 
     let pidStudies: Node[] = [];
     for (let i: number = 0; i < item.pidStudies.length; i++) {
+
+      let pidString = item.pidStudies[i].pid;
+
+      // The agency field is an optional attribute, only append if present
+      if (item.pidStudies[i].agency) {
+        pidString = `${pidString} (${item.pidStudies[i].agency})`;
+      }
+
       pidStudies.push(
         <p key={i}>
-          {item.pidStudies[i].pid} ({item.pidStudies[i].agency})
+          {pidString}
         </p>
       );
     }

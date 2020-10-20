@@ -149,6 +149,16 @@ describe('Detail component', () => {
     expect(detail.exists()).toBe(true);
   });
 
+  it('should handle a pidStudy with no agency', () => {
+    const { enzymeWrapper } = setup({
+      pidStudies: [{
+        pid: "TestPid"
+      }]
+    });
+    const detail = enzymeWrapper.find('div.w-100');
+    expect(detail.exists()).toBe(true);
+  });
+
   it('should handle no title provided', () => {
     const { enzymeWrapper } = setup({
       titleStudy: undefined
