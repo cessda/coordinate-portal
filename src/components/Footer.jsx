@@ -55,6 +55,7 @@ export class Footer extends Component<Props> {
                   </ul>
                   <ul>
                     <li className="is-hidden-mobile">&nbsp;</li>
+                    <li><a href="./documentation/" target="_blank"><Translate content="footer.documentation"/></a></li>
                     <li><a href="https://www.cessda.eu/Privacy-policy" target="_blank"><Translate content="footer.privacy"/></a></li>
                     <li><a href="https://www.cessda.eu/Acceptable-Use-Policy" target="_blank"><Translate content="footer.aup"/></a></li>
                     <li><a href="https://www.cessda.eu/Tools-Services" target="_blank"><Translate content="footer.tools"/></a></li>
