@@ -13,27 +13,6 @@
 // limitations under the License.
 
 
-
-// translations not available for all languages
-// data not available for all languages
-//import cs from '../locales/cs';
-import da from '../locales/da';
-import de from '../locales/de';
-import el from '../locales/el';
-import en from '../locales/en';
-//import et from '../locales/et';
-import fi from '../locales/fi';
-import fr from '../locales/fr';
-//import hu from '../locales/hu';
-//import it from '../locales/it';
-import nl from '../locales/nl';
-//import no from '../locales/no';
-//import pt from '../locales/pt';
-import sk from '../locales/sk';
-import sl from '../locales/sl';
-//import sr from '../locales/sr';
-import sv from '../locales/sv';
-
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
   // To add a new language with an associated Elasticsearch index, use the following format:
@@ -41,72 +20,60 @@ export function getLanguages(): Object[] {
   //   code   : The 2 letter ISO code for this language.
   //   label  : The native label for this language.
   //   index  : The Elasticsearch index containing data for this language.
-  //   locale : The imported locale for this language.
   // }
   return [
   /*{
     code: 'cs',
     label: 'čeština',
-    index: 'cmmstudy_cs',
-    locale: cs
+    index: 'cmmstudy_cs'
   }, */
   {
     code: 'da',
     label: 'dansk',
-    index: 'cmmstudy_da',
-    locale: da
+    index: 'cmmstudy_da'
   },
   {
     code: 'de',
     label: 'Deutsch',
-    index: 'cmmstudy_de',
-    locale: de
+    index: 'cmmstudy_de'
   },
   {
     code: 'el',
     label: 'Ελληνικά',
-    index: 'cmmstudy_el',
-    locale: el
+    index: 'cmmstudy_el'
   }, {
     code: 'en',
     label: 'English',
-    index: 'cmmstudy_en',
-    locale: require("../../translations/en.json")
+    index: 'cmmstudy_en'
   },
   {
     code: 'fi',
     label: 'suomi',
-    index: 'cmmstudy_fi',
-    locale: require("../../translations/fi.json")
+    index: 'cmmstudy_fi'
   },
   {
     code: 'fr',
     label: 'Francais',
-    index: 'cmmstudy_fr',
-    locale: fr
+    index: 'cmmstudy_fr'
   },
   {
     code: 'nl',
     label: 'Nederlands',
-    index: 'cmmstudy_nl',
-    locale: nl
+    index: 'cmmstudy_nl'
   },
   {
     code: 'sk',
     label: 'Slovencina',
-    index: 'cmmstudy_sk',
-    locale: sk
+    index: 'cmmstudy_sk'
   }, {
     code: 'sl',
     label: 'Slovenski',
-    index: 'cmmstudy_sl',
-    locale: sl
+    index: 'cmmstudy_sl'
   },
   {
     code: 'sv',
     label: 'Svenska',
-    index: 'cmmstudy_sv',
-    locale: sv
+    index: 'cmmstudy_sv'
   }
   ];
 }
