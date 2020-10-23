@@ -16,7 +16,7 @@
 
 import searchkit, { detailQuery, similarQuery, pidQuery } from '../utilities/searchkit';
 import * as elasticsearch from 'elasticsearch';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import type { Dispatch, GetState, State, Thunk } from '../types';
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
@@ -27,7 +27,7 @@ export type InitSearchkitAction = {
 
 export const initSearchkit = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
-    let timer: number;
+    let timer: TimeoutID;
 
     searchkit.setQueryProcessor((query: Object): Object => {
       dispatch(toggleLoading(true));

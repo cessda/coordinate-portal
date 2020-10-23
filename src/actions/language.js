@@ -95,10 +95,14 @@ export function changeLanguage(code: string): Thunk {
   return (dispatch: Dispatch): void => {
     code = code.toLowerCase();
 
-    if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
-      // Notify Matomo Analytics of language change.
-      let _paq = window._paq || [];
-      _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
+    if (!getLanguages().find(element => element.code === code)) {
+      code = "en";
+    } else {
+      if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
+        // Notify Matomo Analytics of language change.
+        let _paq = window._paq || [];
+        _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
+      }
     }
 
     counterpart.setLocale(code);

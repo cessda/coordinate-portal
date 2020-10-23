@@ -22,11 +22,6 @@ export function getLanguages(): Object[] {
   //   index  : The Elasticsearch index containing data for this language.
   // }
   return [
-  /*{
-    code: 'cs',
-    label: 'čeština',
-    index: 'cmmstudy_cs'
-  }, */
   {
     code: 'da',
     label: 'dansk',

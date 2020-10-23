@@ -23,7 +23,7 @@ import counterpart from 'counterpart';
 import Reset from './Reset';
 import {queryBuilder} from '../utilities/searchkit';
 import SearchBox from './SearchBox';
-import type {State} from '../types';
+import type {Dispatch, State} from '../types';
 import {bindActionCreators} from 'redux';
 import {
   resetSearch, toggleAdvancedSearch, toggleMobileFilters, toggleSummary
