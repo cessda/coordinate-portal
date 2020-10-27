@@ -58,7 +58,7 @@ export class SearchPage extends Component<Props> {
     let filter = $(`.filter--${filterName.replace('.', '\\.')} > .is-collapsed`);
     if (!filter.data('expanded') &&
         !_.isEmpty(this.props.filters[filterName])) {
-      filter.data('expanded', true).click();
+      filter.data('expanded', true).trigger("click");
     }
   }
 

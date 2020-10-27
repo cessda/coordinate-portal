@@ -17,10 +17,9 @@
 import counterpart from 'counterpart';
 import searchkit from '../utilities/searchkit';
 import type {Dispatch, GetState, State, Thunk} from '../types';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment';
 import {getLanguages} from '../utilities/language';
-import en from '../locales/en';
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 
@@ -33,26 +32,33 @@ export type InitTranslationsAction = {
   }[]
 };
 
-export const initTranslations = (): Thunk => {
+export function initTranslations(): Thunk {
   return (dispatch: Dispatch, getState: GetState): void => {
     // Register translations provided from the "/locales" directory.
     let state: State = getState(),
       list: {
-        code: string,
-        label: string,
-        index: string
-      }[] = _.map(getLanguages(), function (language) {
-        counterpart.registerTranslations(language.code, en);
-        return _.pick(language, ['code', 'label', 'index']);
-      });
+        code: string;
+        label: string;
+        index: string;
+      }[] = _.map(getLanguages(), (language) => {
+          // Register translations from the respective JSON files
+          try {
+            counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
+          } catch (e) {
+            console.debug(`Couldn't load translation for language '${language.code}': ${e.message}`);
+          }
+          return _.pick(language, ['code', 'label', 'index']);
+        });
 
     counterpart.setLocale(state.language.code);
+
+    // Fallback to English if the locale is not available
+    counterpart.setFallbackLocale('en');
 
     moment.locale(state.language.code);
 
     searchkit.translateFunction = (key: string): string => {
-      let numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' :
-                                    'numberOfResults',
+      let numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults',
         translations: Object = {
           'searchbox.placeholder': counterpart.translate('search'),
           'hitstats.results_found': counterpart.translate(numberOfResults, {
@@ -76,7 +82,7 @@ export const initTranslations = (): Thunk => {
       list
     });
   };
-};
+}
 
 //////////// Redux Action Creator : CHANGE_LANGUAGE
 
@@ -85,12 +91,12 @@ export type ChangeLanguageAction = {
   code: string
 };
 
-export const changeLanguage = (code: string): Thunk => {
+export function changeLanguage(code: string): Thunk {
   return (dispatch: Dispatch): void => {
     code = code.toLowerCase();
 
-    if (!_.includes(counterpart.getAvailableLocales(), code)) {
-      code = 'en';
+    if (!getLanguages().find(element => element.code === code)) {
+      code = "en";
     } else {
       if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
         // Notify Matomo Analytics of language change.
@@ -110,7 +116,7 @@ export const changeLanguage = (code: string): Thunk => {
 
     searchkit.reloadSearch();
   };
-};
+}
 
 ////////////
 

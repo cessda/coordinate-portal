@@ -13,9 +13,6 @@
 // limitations under the License.
 
 
-
-// translations not available for all languages
-// data not available for all languages
 export function getLanguages(): Object[] {
   // Register translations stored in the "/locales" directory by adding them to the array below.
   // To add a new language with an associated Elasticsearch index, use the following format:
@@ -26,10 +23,6 @@ export function getLanguages(): Object[] {
   // }
   return [
   {
-    code: 'cs',
-    label: 'čeština',
-    index: 'cmmstudy_cs'
-  }, {
     code: 'da',
     label: 'dansk',
     index: 'cmmstudy_da'
@@ -47,11 +40,8 @@ export function getLanguages(): Object[] {
     code: 'en',
     label: 'English',
     index: 'cmmstudy_en'
-  }, {
-    code: 'et',
-    label: 'eesti',
-    index: 'cmmstudy_et'
-  }, {
+  },
+  {
     code: 'fi',
     label: 'suomi',
     index: 'cmmstudy_fi'
@@ -60,27 +50,13 @@ export function getLanguages(): Object[] {
     code: 'fr',
     label: 'Francais',
     index: 'cmmstudy_fr'
-  }, {
-    code: 'hu',
-    label: 'magyar',
-    index: 'cmmstudy_hu'
-  }, {
-    code: 'it',
-    label: 'Italiano',
-    index: 'cmmstudy_it'
-  }, {
+  },
+  {
     code: 'nl',
     label: 'Nederlands',
     index: 'cmmstudy_nl'
-  }, {
-    code: 'no',
-    label: 'Norsk',
-    index: 'cmmstudy_no'
-  }, {
-    code: 'pt',
-    label: 'Português',
-    index: 'cmmstudy_pt'
-  }, {
+  },
+  {
     code: 'sk',
     label: 'Slovencina',
     index: 'cmmstudy_sk'
@@ -88,11 +64,8 @@ export function getLanguages(): Object[] {
     code: 'sl',
     label: 'Slovenski',
     index: 'cmmstudy_sl'
-  }, {
-    code: 'sr',
-    label: 'српски језик',
-    index: 'cmmstudy_sr'
-  }, {
+  },
+  {
     code: 'sv',
     label: 'Svenska',
     index: 'cmmstudy_sv'

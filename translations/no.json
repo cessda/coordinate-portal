@@ -1,0 +1,9 @@
+{
+  "language": {
+    "notAvailable": {
+      "field": "Ikke tilgjengelig",
+      "heading": "Forespurte data ikke funnet.",
+      "content": "Data eksisterer ikke, eller er ikke tilgjengelig på valgt språk. Velg et alternativt språk eller start et nytt søk."
+    }
+  }
+}
