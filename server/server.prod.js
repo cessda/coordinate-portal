@@ -25,6 +25,9 @@ module.exports = {
 
     let app = express();
 
+    // Disable the x-powered-by HTTP header
+    app.disable("x-powered-by");
+
     app.use(compression());
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
