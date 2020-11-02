@@ -226,7 +226,7 @@ export class Detail extends HitItem<Props> {
             content="metadata.dataCollectionPeriod"
           />
           {this.formatDate(
-            'Do MMMM YYYY',
+            'L',
             item.dataCollectionPeriodStartdate,
             item.dataCollectionPeriodEnddate,
             item.dataCollectionFreeTexts,
