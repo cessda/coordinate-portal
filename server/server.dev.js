@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const cors = require('cors');
 const compression = require('compression');
 const methodOverride = require('method-override');
 const webpack = require('webpack');
@@ -57,10 +56,7 @@ module.exports = {
     app.use('/api/json', helper.getJsonProxy());
 
     app.get('*', function (req, res) {
-      res.setHeader('Cache-Control', 'max-age=0, private, must-revalidate');
-      res.setHeader('Access-Control-Allow-Headers',
-        'authorization,content-type,x-api-applicationid,access-control-allow-origin');
-
+      res.setHeader('Cache-Control', 'no-store');
       res.render('index');
     });
 

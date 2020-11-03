@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const cors = require('cors');
 const compression = require('compression');
 const methodOverride = require('method-override');
 const express = require('express');
@@ -40,9 +39,6 @@ module.exports = {
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 
     app.get('*', function (req, res) {
-      res.setHeader('Access-Control-Allow-Headers',
-        'authorization,content-type,x-api-applicationid', 'Access-Control-Allow-Origin');
-
       res.sendFile(path.join(path.join(__dirname, '../dist'), 'index.html'));
     });
 
