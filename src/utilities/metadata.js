@@ -31,7 +31,7 @@ export function getStudyModel(data: Object): Object {
     pidStudies: data._source.pidStudies || [],
     // "Abstract"
     abstract: _.trim(
-      striptags(_.replace(_.replace(data._source.abstract || '', '</p>', '\n\n'), '<p>', ''))),
+      striptags(data._source.abstract, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b'])),
     abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
       length: 500
     }),
