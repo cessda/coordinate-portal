@@ -19,6 +19,7 @@ describe('Searchkit utilities', () => {
       expect(queryBuilder('search text', {})).toEqual({
         simple_query_string: {
           query: 'search text',
+          default_operator: "AND",
           fields: [
             "titleStudy^4",
             "abstract^2",
