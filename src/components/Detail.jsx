@@ -208,11 +208,13 @@ export class Detail extends HitItem<Props> {
           component="strong"
           content="metadata.abstract"
         />
-        {item.abstract.split('\n').map(function(splitItem, key) {
-          return (
-            <p key={key} dangerouslySetInnerHTML={{__html: splitItem + "<br/>"}}/>
-          );
-        })}
+        <div className="data-abstract">
+          {item.abstract.split('\n').map(function (splitItem, key) {
+            return (
+              <p key={key} dangerouslySetInnerHTML={{ __html: splitItem }} />
+            );
+          })}
+        </div>
 
         <Panel
           className="section-header"
