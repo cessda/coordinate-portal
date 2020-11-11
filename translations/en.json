@@ -19,7 +19,7 @@
     "topic": {
       "label": "Topic",
       "placeholder": "Search topics",
-      "tooltip": "CESSDA Topic Classification serves to identify the general topics, subjects or themes of a study."
+      "tooltip": "<a href=\"https://vocabularies.cessda.eu/vocabulary/TopicClassification?lang=en\">CESSDA Topic Classification</a> serves to identify the general topics, subjects or themes of a study."
     },
     "collectionDates": {
       "label": "Collection years",
