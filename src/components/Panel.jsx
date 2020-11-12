@@ -66,8 +66,8 @@ export class Panel extends SearchkitPanel<Props> {
 
 // Override Panel type checking to avoid errors.
 Panel.propTypes = Object.assign(SearchkitPanel.propTypes, {
-  title: PropTypes.object,
-  tooltip: PropTypes.object,
+  title: PropTypes.string,
+  tooltip: PropTypes.string,
   linkCollapsedState: PropTypes.bool,
   expandMetadataPanels: PropTypes.bool,
   toggleMetadataPanels: PropTypes.func

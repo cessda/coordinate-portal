@@ -25,7 +25,7 @@ import {
   Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
   SearchkitProvider, SideBar
 } from 'searchkit';
-import counterpart from 'react-translate-component';
+import counterpart from 'counterpart';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import Panel from '../components/Panel';

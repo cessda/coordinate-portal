@@ -18,10 +18,9 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {FaQuestionCircle} from 'react-icons/lib/fa/index';
-import counterpart from 'counterpart';
 
 type Props = {
-  content: any
+  content: string
 };
 
 export class Tooltip extends Component<Props> {
@@ -40,7 +39,7 @@ export class Tooltip extends Component<Props> {
         <div className="dropdown-menu" role="menu">
           <div className="dropdown-content">
             <div className="dropdown-item">
-              <p dangerouslySetInnerHTML={{__html: counterpart.translate(content.props.content)}} />
+              <p dangerouslySetInnerHTML={{__html: content}} />
             </div>
           </div>
         </div>
