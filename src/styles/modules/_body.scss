@@ -249,17 +249,8 @@ body {
   }
 }
 
-.result-actions {
-  opacity: 0;
-  transition: opacity 250ms ease;
-
-  .button {
-    font-size: 13px;
-  }
-}
-
-.list_hit:hover .result-actions {
-  opacity: 1;
+.result-actions .button {
+  font-size: 13px;
 }
 
 .list_hit {
