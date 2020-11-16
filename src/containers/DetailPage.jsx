@@ -30,7 +30,7 @@ import Translate, * as counterpart from 'react-translate-component';
 import Similars from '../components/Similars';
 import { goBack } from 'react-router-redux';
 import type { Dispatch, State } from '../types';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 type Props = {
   loading: boolean,
@@ -66,7 +66,7 @@ export class DetailPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
-              <Panel title={counterpart.translate('similarResults.heading')}
+              <Panel title={<Translate content='similarResults.heading'/>}
                      collapsable={true}
                      defaultCollapsed={false}>
                 <Similars/>
@@ -75,9 +75,8 @@ export class DetailPage extends Component<Props> {
             <LayoutResults className="column is-8">
               {item &&
                <div className="panel">
-                 <a className="button is-small is-white is-pulled-left"
-                    onClick={goBack}>
-                   <FaAngleLeft/><span className="ml-5"><Translate content="back"/></span>
+                 <a className="button is-small is-white is-pulled-left" onClick={goBack}>
+                   <FaAngleLeft/><Translate className="ml-5" content="back"/>
                  </a>
 
                  {item.studyUrl &&
@@ -86,7 +85,7 @@ export class DetailPage extends Component<Props> {
                      rel="noreferrer"
                      target="_blank">
                     <span className="icon is-small"><FaExternalLink/></span>
-                    <Translate component="span" content="goToStudy"/>
+                    <Translate content="goToStudy"/>
                   </a>
                  }
 
@@ -94,10 +93,8 @@ export class DetailPage extends Component<Props> {
                     href={'/api/json/' + index + '/' + encodeURIComponent(item.id)}
                     rel="noreferrer"
                     target="_blank">
-                  <span className="icon is-small">
-                    <FaCode/>
-                  </span>
-                  <Translate component="span" content="viewJson"/>
+                  <span className="icon is-small"><FaCode/></span>
+                  <Translate content="viewJson"/>
                  </a>
 
                  <div className="is-clearfix"/>
@@ -108,7 +105,7 @@ export class DetailPage extends Component<Props> {
                <div className="panel pt-15">
                  <p className="fs-14 mb-15"><Translate component="strong"
                                                        content="language.notAvailable.heading"/></p>
-                 <p className="fs-14 mb-15"><Translate content="language.notAvailable.content"/></p>
+                 <Translate component="p" className="fs-14 mb-15" content="language.notAvailable.content"/>
                  <Language/>
                </div>
               }

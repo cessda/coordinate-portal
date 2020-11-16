@@ -154,50 +154,52 @@ export class Header extends Component<Props> {
           <div className="modal-background"/>
           <div className="modal-card">
             <div className="modal-card-head">
-              <p className="modal-card-title"><Translate content="advancedSearch.label"/></p>
+              <Translate component="p" className="modal-card-title" content="advancedSearch.label"/>
               <button className="delete" aria-label="close" onClick={toggleAdvancedSearch}/>
             </div>
             <section className="modal-card-body">
-              <p className="pb-10"><Translate content="advancedSearch.introduction"/></p>
-              <p><Translate content="advancedSearch.and"
+              <Translate component="p" className="pb-10" content="advancedSearch.introduction"/>
+              <Translate component="p" content="advancedSearch.and"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.or"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.or"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.negates"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.negates"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.phrase"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.phrase"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.prefix"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.prefix"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.precedence"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.precedence"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.distance"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.distance"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p><Translate content="advancedSearch.slop"
+                            unsafe/>
+              <Translate component="p" content="advancedSearch.slop"
                             with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
-              <p className="pt-15"><strong><Translate content="advancedSearch.escaping.heading"
-                                                      unsafe/></strong></p>
-              <p><Translate content="advancedSearch.escaping.content"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/></p>
+                            unsafe/>
               <p className="pt-15">
-                <strong><Translate content="advancedSearch.defaultOperator.heading"
-                                   unsafe/></strong></p>
-              <p><Translate content="advancedSearch.defaultOperator.content"
+                <Translate component="strong" content="advancedSearch.escaping.heading" unsafe/>
+              </p>
+              <Translate component="p" content="advancedSearch.escaping.content"
+                            with={{className: 'tag is-light has-text-weight-semibold'}}
+                            unsafe/>
+              <p className="pt-15">
+                <Translate component="strong" content="advancedSearch.defaultOperator.heading"unsafe/>
+              </p> 
+              <Translate component="p" content="advancedSearch.defaultOperator.content"
                             with={{className: 'has-text-weight-semibold'}}
-                            unsafe/></p>
+                            unsafe/>
             </section>
             <div className="modal-card-foot">
-              <button className="button is-light" onClick={toggleAdvancedSearch}>
-                <Translate content="close"/></button>
+              <Translate component="button" className="button is-light" 
+                            onClick={toggleAdvancedSearch} 
+                            content="close"/>
             </div>
           </div>
         </div>
