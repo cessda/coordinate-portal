@@ -335,6 +335,17 @@ body {
   display: block;
 }
 
+.data-abstract {
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  ol {
+    list-style-type: decimal;
+    padding-left: 30px;
+  }
+}
+
 .similars {
   a {
     margin-bottom: 15px;
