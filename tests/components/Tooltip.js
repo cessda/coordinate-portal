@@ -40,6 +40,6 @@ describe('Tooltip component', () => {
   it('should display content', () => {
     const { props, enzymeWrapper } = setup();
     const tooltip = enzymeWrapper.find('.dropdown');
-    expect(tooltip.render().text()).toBe(props.content);
+    expect(tooltip.find('p').text()).toBe(props.content);
   });
 });

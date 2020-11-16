@@ -25,7 +25,7 @@ export class RefinementListFilter extends SearchkitRefinementListFilter<Props> {
 
 // Override RefinementListFilter type checking to avoid errors.
 RefinementListFilter.propTypes = Object.assign(SearchkitRefinementListFilter.propTypes, {
-  title: PropTypes.string
+  title: PropTypes.object
 });
 
 export default connect()(RefinementListFilter);

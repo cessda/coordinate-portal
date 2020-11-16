@@ -25,7 +25,7 @@ export class RangeFilter extends SearchkitRangeFilter<Props> {}
 
 // Override RangeFilter type checking to avoid errors.
 RangeFilter.propTypes = Object.assign(SearchkitRangeFilter.propTypes, {
-  title: PropTypes.string
+  title: PropTypes.object
 });
 
 export default connect()(RangeFilter);

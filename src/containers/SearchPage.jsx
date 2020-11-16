@@ -25,7 +25,7 @@ import {
   Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
   SearchkitProvider, SideBar
 } from 'searchkit';
-import counterpart from 'counterpart';
+import Translate from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import Panel from '../components/Panel';
@@ -71,7 +71,7 @@ export class SearchPage extends Component<Props> {
           <LayoutBody className="columns">
             <SideBar className="column is-4">
               <RefinementListFilter id="classifications.term"
-                                    title={counterpart.translate('filters.topic.label')}
+                                    title={<Translate content='filters.topic.label'/>}
                                     field={'classifications.term'}
                                     fieldOptions={{
                                       type: 'nested',
@@ -80,33 +80,28 @@ export class SearchPage extends Component<Props> {
                                     orderKey="_term"
                                     orderDirection="asc"
                                     operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate(
-                                      'filters.topic.label')}
-                                                               tooltip={counterpart.translate(
-                                                                 'filters.topic.tooltip')}
+                                    containerComponent={<Panel title={<Translate content='filters.topic.label'/>}
+                                                               tooltip={<Translate content="filters.topic.tooltip" unsafe/>}
                                                                className="classifications"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.topic.placeholder')}/>}
+                                    listComponent={<MultiSelect placeholder={<Translate content='filters.topic.placeholder'/>}/>}
                                     size={2700}/>
 
               <RangeFilter min={1900}
                            max={moment().year()}
                            field="dataCollectionYear"
                            id="dataCollectionYear"
-                           title={counterpart.translate('filters.collectionDates.label')}
+                           title={<Translate content='filters.collectionDates.label'/>}
                            rangeComponent={RangeSliderInput}
-                           containerComponent={<Panel title={counterpart.translate(
-                             'filters.collectionDates.label')}
-                                                      tooltip={counterpart.translate(
-                                                        'filters.collectionDates.tooltip')}
+                           containerComponent={<Panel title={<Translate content='filters.collectionDates.label'/>}
+                                                      tooltip={<Translate content='filters.collectionDates.tooltip'/>}
                                                       className="dataCollectionYear"
                                                       collapsable={true}
                                                       defaultCollapsed={true}/>}/>
 
               <RefinementListFilter id="studyAreaCountries.country"
-                                    title={counterpart.translate('filters.country.label')}
+                                    title={<Translate content='filters.country.label'/>}
                                     field={'studyAreaCountries.country'}
                                     fieldOptions={{
                                       type: 'nested',
@@ -115,19 +110,16 @@ export class SearchPage extends Component<Props> {
                                     orderKey="_term"
                                     orderDirection="asc"
                                     operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate(
-                                      'filters.country.label')}
-                                                               tooltip={counterpart.translate(
-                                                                 'filters.country.tooltip')}
+                                    containerComponent={<Panel title={<Translate content='filters.country.label'/>}
+                                                               tooltip={<Translate content='filters.country.tooltip'/>}
                                                                className="studyAreaCountries"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.country.placeholder')}/>}
+                                    listComponent={<MultiSelect placeholder={<Translate content='filters.country.placeholder'/>}/>}
                                     size={500}/>
 
               <RefinementListFilter id="publisher.publisher"
-                                    title={counterpart.translate('filters.publisher.label')}
+                                    title={<Translate content='filters.publisher.label'/>}
                                     field={'publisher.publisher'}
                                     fieldOptions={{
                                       type: 'nested',
@@ -136,33 +128,26 @@ export class SearchPage extends Component<Props> {
                                     orderKey="_term"
                                     orderDirection="asc"
                                     operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate(
-                                      'filters.publisher.label')}
-                                                               tooltip={counterpart.translate(
-                                                                 'filters.publisher.tooltip')}
+                                    containerComponent={<Panel title={<Translate content='filters.publisher.label'/>}
+                                                               tooltip={<Translate content='filters.publisher.tooltip'/>}
                                                                className="publisher"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.publisher.placeholder')}/>}
+                                    listComponent={<MultiSelect placeholder={<Translate content='filters.publisher.placeholder'/>}/>}
                                     size={500}/>
 
               <RefinementListFilter id="fileLanguages"
-                                    title={counterpart.translate(
-                                      'filters.languageOfDataFiles.label')}
+                                    title={<Translate content='filters.languageOfDataFiles.label'/>}
                                     field={'fileLanguages'}
                                     orderKey="_term"
                                     orderDirection="asc"
                                     operator="OR"
-                                    containerComponent={<Panel title={counterpart.translate(
-                                      'filters.languageOfDataFiles.label')}
-                                                               tooltip={counterpart.translate(
-                                                                 'filters.languageOfDataFiles.tooltip')}
+                                    containerComponent={<Panel title={<Translate content='filters.languageOfDataFiles.label'/>}
+                                                               tooltip={<Translate content='filters.languageOfDataFiles.tooltip'/>}
                                                                className="language"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={counterpart.translate(
-                                      'filters.languageOfDataFiles.placeholder')}/>}
+                                    listComponent={<MultiSelect placeholder={<Translate content='filters.languageOfDataFiles.placeholder'/>}/>}
                                     size={500}/>
             </SideBar>
             <LayoutResults className="column is-8">
