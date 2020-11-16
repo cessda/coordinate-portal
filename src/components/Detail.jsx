@@ -333,7 +333,7 @@ export class Detail extends HitItem<Props> {
               'term',
               'tag',
               term => {
-                return <Link to={"/?classifications.term[0]=" + term}>{_.upperFirst(term)}</Link>;
+                return <Link to={"/?classifications.term[0]=" + encodeURI(term)}>{_.upperFirst(term)}</Link>;
               }
             )}
           </div>
@@ -348,7 +348,7 @@ export class Detail extends HitItem<Props> {
           <strong className="data-label" />
           <div className="tags">
             {this.generateElements(item.keywords, 'term', 'tag', term => {
-              return <Link to={"/?q=" + term}>{_.upperFirst(term)}</Link>;
+              return <Link to={"/?q=" + encodeURI(term)}>{_.upperFirst(term)}</Link>;
             })}
           </div>
         </Panel>

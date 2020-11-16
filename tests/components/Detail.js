@@ -186,7 +186,7 @@ describe('Detail component', () => {
   it('should handle generating elements with no value', () => {
     const { enzymeWrapper } = setup();
     expect(
-      shallow(enzymeWrapper.instance().generateElements([{}])[0]).html()
+      shallow(enzymeWrapper.instance().generateElements([""])[0]).html()
     ).toContain('notAvailable');
   });
 
