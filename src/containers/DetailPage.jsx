@@ -106,9 +106,10 @@ export class DetailPage extends Component<Props> {
               <Hits mod="sk-hits-grid" hitsPerPage={1} itemComponent={<Detail/>}/>
               {!loading && !item &&
                <div className="panel pt-15">
-                 <p className="fs-14 mb-15"><Translate component="strong"
-                                                       content="language.notAvailable.heading"/></p>
-                 <p className="fs-14 mb-15"><Translate content="language.notAvailable.content"/></p>
+                  <p className="fs-14 mb-15">
+                    <Translate component="strong"content="language.notAvailable.heading"/>
+                  </p>
+                 <Translate component="p" className="fs-14 mb-15" content="language.notAvailable.content"/>
                  <Language/>
                </div>
               }
