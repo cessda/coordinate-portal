@@ -16,10 +16,11 @@
 
 import type { Node } from 'react';
 import React from 'react';
+import { Link } from 'react-router';
 import { HitItem } from 'searchkit';
 import { connect } from 'react-redux';
 import Panel from './Panel';
-import Translate, * as counterpart from 'react-translate-component';
+import Translate from 'react-translate-component';
 import type { Dispatch, State } from '../types';
 import _ from 'lodash';
 import moment from 'moment';
@@ -50,14 +51,10 @@ export class Detail extends HitItem<Props> {
     let elements: Node[] = [];
 
     for (let i: number = 0; i < field.length; i++) {
-      let value: string = property
-        ? callback
-          ? callback(field[i][property])
-          : field[i][property]
-        : callback
-        ? callback(field[i])
-        : field[i];
-      if (value.length > 0) {
+      let value: any = property
+        ? (callback?.(field[i][property]) ?? field[i][property])
+        : (callback?.(field[i]) ?? field[i]);
+      if (value) {
         if (element === 'tag') {
           elements.push(
             <span className="tag" key={i}>
@@ -208,17 +205,15 @@ export class Detail extends HitItem<Props> {
           component="strong"
           content="metadata.abstract"
         />
-        <div className="data-abstract">
-          {item.abstract.split('\n').map(function (splitItem, key) {
-            return (
-              <p key={key} dangerouslySetInnerHTML={{ __html: splitItem }} />
-            );
-          })}
-        </div>
+        {item.abstract.split('\n').map(function(splitItem, key) {
+          return (
+            <p key={key} dangerouslySetInnerHTML={{__html: splitItem + "<br/>"}}/>
+          );
+        })}
 
         <Panel
           className="section-header"
-          title={counterpart.translate('metadata.methodology')}
+          title={<Translate content='metadata.methodology'/>}
           collapsable={false}
           defaultCollapsed={false}
         >
@@ -284,10 +279,9 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={counterpart.translate('metadata.access')}
+          title={<Translate content='metadata.access'/>}
           collapsable={true}
           defaultCollapsed={true}
-          linkCollapsedState={true}
         >
           <Translate
             className="data-label"
@@ -328,10 +322,9 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={counterpart.translate('metadata.topics')}
+          title={<Translate content='metadata.topics'/>}
           collapsable={true}
           defaultCollapsed={true}
-          linkCollapsedState={true}
         >
           <strong className="data-label" />
           <div className="tags">
@@ -340,7 +333,7 @@ export class Detail extends HitItem<Props> {
               'term',
               'tag',
               term => {
-                return _.upperFirst(term);
+                return <Link to={"/?classifications.term[0]=" + term}>{_.upperFirst(term)}</Link>;
               }
             )}
           </div>
@@ -348,15 +341,14 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={counterpart.translate('metadata.keywords')}
+          title={<Translate content='metadata.keywords'/>}
           collapsable={true}
           defaultCollapsed={true}
-          linkCollapsedState={true}
         >
           <strong className="data-label" />
           <div className="tags">
             {this.generateElements(item.keywords, 'term', 'tag', term => {
-              return _.upperFirst(term);
+              return <Link to={"/?q=" + term}>{_.upperFirst(term)}</Link>;
             })}
           </div>
         </Panel>
