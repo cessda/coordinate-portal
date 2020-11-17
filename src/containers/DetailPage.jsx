@@ -26,7 +26,7 @@ import Panel from '../components/Panel';
 import { connect } from 'react-redux';
 import { FaAngleLeft, FaCode, FaExternalLink } from 'react-icons/lib/fa/index';
 import { bindActionCreators } from 'redux';
-import Translate, * as counterpart from 'react-translate-component';
+import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
 import { goBack } from 'react-router-redux';
 import type { Dispatch, State } from '../types';

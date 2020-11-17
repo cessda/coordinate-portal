@@ -16,7 +16,6 @@
 
 import {SortingSelector as SearchkitSortingSelector} from 'searchkit';
 import ReactPropTypes from 'prop-types';
-import * as _ from 'lodash';
 import {connect} from 'react-redux';
 
 type Props = {};

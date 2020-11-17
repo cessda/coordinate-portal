@@ -14,21 +14,21 @@
 
 
 
-import type {Node} from 'react';
-import React, {Component} from 'react';
-import {GroupedSelectedFilters, HitsStats, ResetFilters} from 'searchkit';
+import type { Node } from 'react';
+import React, { Component } from 'react';
+import { GroupedSelectedFilters, HitsStats, ResetFilters } from 'searchkit';
 import Language from './Language';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import counterpart from 'counterpart';
 import Reset from './Reset';
-import {queryBuilder} from '../utilities/searchkit';
+import { queryBuilder } from '../utilities/searchkit';
 import SearchBox from './SearchBox';
-import type {Dispatch, State} from '../types';
-import {bindActionCreators} from 'redux';
+import type { Dispatch, State } from '../types';
+import { bindActionCreators } from 'redux';
 import {
   resetSearch, toggleAdvancedSearch, toggleMobileFilters, toggleSummary
 } from '../actions/search';
-import {push} from 'react-router-redux';
+import { push } from 'react-router-redux';
 import Translate from 'react-translate-component';
 
 type Props = {
@@ -64,8 +64,8 @@ export class Header extends Component<Props> {
       <header>
 
         <div className="container">
-          <div className="cessda-organisation"><a href="https://www.cessda.eu/"><Translate content="cessda"/></a></div>
-          <Language/>
+          <Translate component="a" className="cessda-organisation" href="https://www.cessda.eu/" content="cessda" />
+          <Language />
         </div>
 
         <div className="container">
@@ -75,36 +75,28 @@ export class Header extends Component<Props> {
                 <a className="cessda-eric" onClick={() => {
                   push('/');
                   resetSearch();
-                }}/>
+                }} />
               </div>
               {pathname === '/' &&
-               <HitsStats className="hits-count"/>
+                <HitsStats className="hits-count" />
               }
             </div>
             <div className="column">
-              <SearchBox
-                autofocus={true}
-                searchOnChange={true}
-                queryBuilder={queryBuilder}/>
+              <SearchBox autofocus={true} searchOnChange={true} queryBuilder={queryBuilder} />
 
               <div className="reset-search">
                 {pathname === '/' &&
-                 <a className="sk-reset-filters link mobile-filters-toggle"
-                    onClick={toggleMobileFilters}>
-                   {showMobileFilters && <Translate content="hideFilters"/>}
-                   {!showMobileFilters && <Translate content="showFilters"/>}
-                 </a>
+                  <a className="sk-reset-filters link mobile-filters-toggle" onClick={toggleMobileFilters}>
+                    {showMobileFilters && <Translate content="hideFilters" />}
+                    {!showMobileFilters && <Translate content="showFilters" />}
+                  </a>
                 }
 
                 {filters &&
-                 <a className="sk-reset-filters link" onClick={toggleSummary}>
-                   <Translate content="filters.summary.label"/>
-                 </a>
+                  <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
                 }
 
-                <a className="sk-reset-filters link" onClick={toggleAdvancedSearch}>
-                  <Translate content="advancedSearch.label"/>
-                </a>
+                <Translate component="a" className="sk-reset-filters link" onClick={toggleAdvancedSearch} content="advancedSearch.label" />
 
                 <ResetFilters component={Reset}
                               options={{query: false, filter: true, pagination: true}}
@@ -122,43 +114,44 @@ export class Header extends Component<Props> {
         </div>
 
         <div className={'modal' + (showFilterSummary ? ' is-active' : '')}>
-          <div className="modal-background"/>
+          <div className="modal-background" />
           <div className="modal-card">
             <div className="modal-card-head">
-              <p className="modal-card-title"><Translate content="filters.summary.label"/></p>
-              <button className="delete" aria-label="close" onClick={toggleSummary}/>
+              <p className="modal-card-title"><Translate content="filters.summary.label" /></p>
+              <button className="delete" aria-label="close" onClick={toggleSummary} />
             </div>
             <section className="modal-card-body">
               {filters &&
-               <div>
-                 <p className="pb-10"><Translate content="filters.summary.introduction"/></p>
-                 <GroupedSelectedFilters/>
-                 <p><Translate content="filters.summary.remove"/></p>
-               </div>
+                <div>
+                  <Translate component="p" className="pb-10" content="filters.summary.introduction" />
+                  <GroupedSelectedFilters />
+                  <Translate component="p" content="filters.summary.remove" />
+                </div>
               }
               {!filters &&
-               <div>
-                 <p className="pb-10"><Translate content="filters.summary.noFilters"/></p>
-                 <p><Translate content="filters.summary.close" unsafe/></p>
-               </div>
+                <div>
+                  <Translate component="p" className="pb-10" content="filters.summary.noFilters" />
+                  <Translate component="p" content="filters.summary.close" unsafe />
+                </div>
               }
             </section>
             <div className="modal-card-foot">
               <button className="button is-light" onClick={toggleSummary}>
-                <Translate content="close"/></button>
+                <Translate content="close" />
+              </button>
             </div>
           </div>
         </div>
 
         <div className={'modal' + (showAdvancedSearch ? ' is-active' : '')}>
-          <div className="modal-background"/>
+          <div className="modal-background" />
           <div className="modal-card">
             <div className="modal-card-head">
-              <Translate component="p" className="modal-card-title" content="advancedSearch.label"/>
-              <button className="delete" aria-label="close" onClick={toggleAdvancedSearch}/>
+              <Translate component="p" className="modal-card-title" content="advancedSearch.label" />
+              <button className="delete" aria-label="close" onClick={toggleAdvancedSearch} />
             </div>
             <section className="modal-card-body">
-              <Translate component="p" className="pb-10" content="advancedSearch.introduction"/>
+              <Translate component="p" className="pb-10" content="advancedSearch.introduction" />
               {this.generateTranslatedParagraph("advancedSearch.and")}
               {this.generateTranslatedParagraph("advancedSearch.or")}
               {this.generateTranslatedParagraph("advancedSearch.negates")}
@@ -168,12 +161,12 @@ export class Header extends Component<Props> {
               {this.generateTranslatedParagraph("advancedSearch.distance")}
               {this.generateTranslatedParagraph("advancedSearch.slop")}
               <p className="pt-15">
-                <Translate component="strong" content="advancedSearch.escaping.heading" unsafe/>
+                <Translate component="strong" content="advancedSearch.escaping.heading" unsafe />
               </p>
               {this.generateTranslatedParagraph("advancedSearch.escaping.content")}
               <p className="pt-15">
-                <Translate component="strong" content="advancedSearch.defaultOperator.heading"unsafe/>
-              </p> 
+                <Translate component="strong" content="advancedSearch.defaultOperator.heading" unsafe />
+              </p>
               <Translate component="p" content="advancedSearch.defaultOperator.content"
                             with={{className: 'has-text-weight-semibold'}}
                             unsafe/>
