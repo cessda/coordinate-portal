@@ -159,36 +159,18 @@ export class Header extends Component<Props> {
             </div>
             <section className="modal-card-body">
               <Translate component="p" className="pb-10" content="advancedSearch.introduction"/>
-              <Translate component="p" content="advancedSearch.and"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.or"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.negates"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.phrase"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.prefix"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.precedence"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.distance"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
-              <Translate component="p" content="advancedSearch.slop"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
+              {this.generateTranslatedParagraph("advancedSearch.and")}
+              {this.generateTranslatedParagraph("advancedSearch.or")}
+              {this.generateTranslatedParagraph("advancedSearch.negates")}
+              {this.generateTranslatedParagraph("advancedSearch.phrase")}
+              {this.generateTranslatedParagraph("advancedSearch.prefix")}
+              {this.generateTranslatedParagraph("advancedSearch.precedence")}
+              {this.generateTranslatedParagraph("advancedSearch.distance")}
+              {this.generateTranslatedParagraph("advancedSearch.slop")}
               <p className="pt-15">
                 <Translate component="strong" content="advancedSearch.escaping.heading" unsafe/>
               </p>
-              <Translate component="p" content="advancedSearch.escaping.content"
-                            with={{className: 'tag is-light has-text-weight-semibold'}}
-                            unsafe/>
+              {this.generateTranslatedParagraph("advancedSearch.escaping.content")}
               <p className="pt-15">
                 <Translate component="strong" content="advancedSearch.defaultOperator.heading"unsafe/>
               </p> 
@@ -205,6 +187,16 @@ export class Header extends Component<Props> {
         </div>
       </header>
     );
+  }
+
+  /**
+   * Returns a translatable \<p\> element with substitution enabled.
+   * @param {String} translationString the string to translate
+   */
+  generateTranslatedParagraph(translationString: String) {
+    return <Translate component="p" content={translationString}
+      with={{ className: 'tag is-light has-text-weight-semibold' }}
+      unsafe />;
   }
 }
 
