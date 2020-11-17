@@ -77,12 +77,8 @@ export class Result extends Component<Props> {
           {creators}
         </div>
         <div className={bemBlocks.item().mix(bemBlocks.container('desc'))}>
-          {item.abstractExpanded &&
-           item.abstract.split('\n').map(function(item, key) {
-             return (
-               <span key={key}>{item}<br/></span>
-             );
-           })
+          {item.abstractExpanded && 
+            <span dangerouslySetInnerHTML={{__html: item.abstract}}/>
           }
           {!item.abstractExpanded && item.abstractShort}
         </div>
