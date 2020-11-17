@@ -15,7 +15,7 @@
 
 
 import type {ChildrenArray, Node} from 'react';
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {initSearchkit} from '../actions/search';

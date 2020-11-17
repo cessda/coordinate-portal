@@ -14,7 +14,7 @@
 
 
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import striptags from 'striptags';
 
 // Creates a model to store/display study metadata in the user interface.
