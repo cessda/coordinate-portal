@@ -144,6 +144,30 @@ export class Detail extends HitItem<Props> {
     );
   }
 
+  generatePidElements(item): Node[] {
+    let pidStudies: Node[] = item.pidStudies.map((pidStudy, key) => {
+        let pidString: string = pidStudy.pid;
+
+        // The agency field is an optional attribute, only append if present
+        if (pidStudy.agency) {
+          pidString = `${pidString} (${pidStudy.agency})`;
+        }
+
+        return (
+          <p key={key}>
+            {pidString}
+          </p>
+        );
+      });
+
+    if (pidStudies.length === 0) {
+      pidStudies.push(
+        <Translate key="0" content="language.notAvailable.field" />
+      );
+    }
+    return pidStudies;
+  }
+
   render(): Node {
     const { item } = this.props;
 
@@ -151,33 +175,11 @@ export class Detail extends HitItem<Props> {
       return null;
     }
 
-    let pidStudies: Node[] = [];
-    for (let i: number = 0; i < item.pidStudies.length; i++) {
-
-      let pidString = item.pidStudies[i].pid;
-
-      // The agency field is an optional attribute, only append if present
-      if (item.pidStudies[i].agency) {
-        pidString = `${pidString} (${item.pidStudies[i].agency})`;
-      }
-
-      pidStudies.push(
-        <p key={i}>
-          {pidString}
-        </p>
-      );
-    }
-    if (pidStudies.length === 0) {
-      pidStudies.push(
-        <Translate key="0" content="language.notAvailable.field" />
-      );
-    }
-
     return (
-      <div className="w-100">
+      <article className="w-100">
         <Translate
           className="data-label mt-5"
-          component="strong"
+          component="h1"
           content="metadata.studyTitle"
         />
         <p>
@@ -188,40 +190,34 @@ export class Detail extends HitItem<Props> {
 
         <Translate
           className="data-label"
-          component="strong"
+          component="h2"
           content="metadata.creator"
         />
         {this.generateElements(item.creators, null, 'p')}
 
         <Translate
           className="data-label"
-          component="strong"
+          component="h2"
           content="metadata.studyPersistentIdentifier"
         />
-        {pidStudies}
+        {this.generatePidElements(item)}
 
         <Translate
           className="data-label"
-          component="strong"
+          component="h2"
           content="metadata.abstract"
         />
-        <div className="data-abstract">
-          {item.abstract.split('\n').map(function (splitItem, key) {
-            return (
-              <p key={key} dangerouslySetInnerHTML={{ __html: splitItem }} />
-            );
-          })}
-        </div>
+        <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.methodology'/>}
+          title={<Translate component="h2" content='metadata.methodology'/>}
           collapsable={false}
           defaultCollapsed={false}
         >
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.dataCollectionPeriod"
           />
           {this.formatDate(
@@ -234,42 +230,42 @@ export class Detail extends HitItem<Props> {
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.country"
           />
           {this.generateElements(item.studyAreaCountries, 'country', 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.timeDimension"
           />
           {this.generateElements(item.typeOfTimeMethods, 'term', 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.analysisUnit"
           />
           {this.generateElements(item.unitTypes, 'term', 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.samplingProcedure"
           />
           {this.generateElements(item.samplingProcedureFreeTexts, null, 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.dataCollectionMethod"
           />
           {this.generateElements(item.typeOfModeOfCollections, 'term', 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.languageOfDataFiles"
           />
           <div className="tags mt-10">
@@ -281,13 +277,13 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.access'/>}
+          title={<Translate component="h2" content='metadata.access'/>}
           collapsable={true}
           defaultCollapsed={true}
         >
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.publisher"
           />
           <p>
@@ -298,21 +294,21 @@ export class Detail extends HitItem<Props> {
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.yearOfPublication"
           />
           {this.formatDate('YYYY', item.publicationYear)}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.termsOfDataAccess"
           />
           {this.generateElements(item.dataAccessFreeTexts, null, 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.studyNumber"
           />
           <p>
@@ -324,11 +320,10 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.topics'/>}
+          title={<Translate component="h2" content='metadata.topics'/>}
           collapsable={true}
           defaultCollapsed={true}
         >
-          <strong className="data-label" />
           <div className="tags">
             {this.generateElements(
               item.classifications,
@@ -343,18 +338,17 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.keywords'/>}
+          title={<Translate component="h2" content='metadata.keywords'/>}
           collapsable={true}
           defaultCollapsed={true}
         >
-          <strong className="data-label" />
           <div className="tags">
             {this.generateElements(item.keywords, 'term', 'tag', term => {
               return <Link to={"/?q=" + encodeURI(term)}>{_.upperFirst(term)}</Link>;
             })}
           </div>
         </Panel>
-      </div>
+      </article>
     );
   }
 }
