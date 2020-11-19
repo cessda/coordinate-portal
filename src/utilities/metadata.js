@@ -30,8 +30,7 @@ export function getStudyModel(data: Object): Object {
     // "Study Persistent Identifier"
     pidStudies: data._source.pidStudies || [],
     // "Abstract"
-    abstract: _.trim(
-      striptags(data._source.abstract, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b'])),
+    abstract: stripHTMLElements(data._source.abstract),
     abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
       length: 500
     }),
@@ -73,6 +72,16 @@ export function getStudyModel(data: Object): Object {
     // [List of other metadata languages used for result buttons]
     langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], (i) => (i.toUpperCase())))
   };
+}
+
+/**
+ * Strip non-styling HTML tags from the given HTML string.
+ * @param {string} html the HTML to strip.
+ */
+function stripHTMLElements(html: string): string {
+  return _.trim(
+    striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b'])
+  );
 }
 
 // Generates study JSON-LD for Google indexing.

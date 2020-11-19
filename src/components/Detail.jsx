@@ -62,7 +62,7 @@ export class Detail extends HitItem<Props> {
             </span>
           );
         } else {
-          elements.push(<p key={i}>{value}</p>);
+          elements.push(<div key={i} dangerouslySetInnerHTML={{__html: value}}/>);
         }
       }
     }
