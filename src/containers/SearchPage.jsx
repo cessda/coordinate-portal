@@ -135,20 +135,6 @@ export class SearchPage extends Component<Props> {
                                                                defaultCollapsed={true}/>}
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.publisher.placeholder'/>}/>}
                                     size={500}/>
-
-              <RefinementListFilter id="fileLanguages"
-                                    title={<Translate content='filters.languageOfDataFiles.label'/>}
-                                    field={'fileLanguages'}
-                                    orderKey="_term"
-                                    orderDirection="asc"
-                                    operator="OR"
-                                    containerComponent={<Panel title={<Translate content='filters.languageOfDataFiles.label'/>}
-                                                               tooltip={<Translate content='filters.languageOfDataFiles.tooltip'/>}
-                                                               className="language"
-                                                               collapsable={true}
-                                                               defaultCollapsed={true}/>}
-                                    listComponent={<MultiSelect placeholder={<Translate content='filters.languageOfDataFiles.placeholder'/>}/>}
-                                    size={500}/>
             </SideBar>
             <LayoutResults className="column is-8">
               <TopBar/>
