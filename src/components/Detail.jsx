@@ -188,26 +188,32 @@ export class Detail extends HitItem<Props> {
           )}
         </p>
 
-        <Translate
-          className="data-label"
-          component="h2"
-          content="metadata.creator"
-        />
-        {this.generateElements(item.creators, null, 'p')}
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.creator"
+          />
+          {this.generateElements(item.creators, null, 'p')}
+        </section>
 
-        <Translate
-          className="data-label"
-          component="h2"
-          content="metadata.studyPersistentIdentifier"
-        />
-        {this.generatePidElements(item)}
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.studyPersistentIdentifier"
+          />
+          {this.generatePidElements(item)}
+        </section>
 
-        <Translate
-          className="data-label"
-          component="h2"
-          content="metadata.abstract"
-        />
-        <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.abstract"
+          />
+          <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
+        </section>
 
         <Panel
           className="section-header"
@@ -304,7 +310,9 @@ export class Detail extends HitItem<Props> {
             component="h3"
             content="metadata.termsOfDataAccess"
           />
-          {this.generateElements(item.dataAccessFreeTexts, null, 'p')}
+          <div className="data-abstract">
+            {this.generateElements(item.dataAccessFreeTexts, null, 'p')}
+          </div>
 
           <Translate
             className="data-label"

@@ -54,12 +54,10 @@ export class Panel extends SearchkitPanel<Props> {
     } = this.props;
 
     return (
-      <div className={'sk-panel__container' + (this.state.collapsed ? ' sk-panel__collapsed' : '')}>
-        {tooltip &&
-         <Tooltip content={tooltip}/>
-        }
+      <section className={'sk-panel__container' + (this.state.collapsed ? ' sk-panel__collapsed' : '')}>
+        {tooltip && <Tooltip content={tooltip}/>}
         {super.render()}
-      </div>
+      </section>
     );
   }
 }
