@@ -309,17 +309,6 @@ export class Detail extends HitItem<Props> {
             content="metadata.termsOfDataAccess"
           />
           {this.generateElements(item.dataAccessFreeTexts, null, 'p')}
-
-          <Translate
-            className="data-label"
-            component="strong"
-            content="metadata.studyNumber"
-          />
-          <p>
-            {item.studyNumber || (
-              <Translate content="language.notAvailable.field" />
-            )}
-          </p>
         </Panel>
 
         <Panel
