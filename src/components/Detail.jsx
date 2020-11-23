@@ -44,17 +44,14 @@ export class Detail extends HitItem<Props> {
 
   generateElements(
     field: any[],
-    property?: ?string,
     element: 'p' | 'tag',
     callback?: Function
   ): Node[] {
     let elements: Node[] = [];
 
     for (let i: number = 0; i < field.length; i++) {
-      let value: any = property
-        ? (callback?.(field[i][property]) ?? field[i][property])
-        : (callback?.(field[i]) ?? field[i]);
-      if (value) {
+      if (field[i]) {
+        let value: any = callback?.(field[i]) ?? field[i];
         if (element === 'tag') {
           elements.push(
             <span className="tag" key={i}>
@@ -67,7 +64,7 @@ export class Detail extends HitItem<Props> {
       }
     }
 
-    if (field.length === 0 || elements.length === 0) {
+    if (elements.length === 0) {
       elements.push(
         <Translate key="0" content="language.notAvailable.field" />
       );
@@ -103,16 +100,16 @@ export class Detail extends HitItem<Props> {
         // Generate elements for each date in the array.
         return this.generateElements(
           dateFallback,
-          dateFallbackProperty,
           'p',
           (date: string): string => {
+            let value: string = dateFallbackProperty ? date.dateFallbackProperty : date;
             let momentDate = moment(
-              date,
+              value,
               [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'],
               true
             );
             // Format array item as date if possible.
-            return momentDate.isValid() ? momentDate.format(format) : date;
+            return momentDate.isValid() ? momentDate.format(format) : value;
           }
         );
       } else {
@@ -194,7 +191,7 @@ export class Detail extends HitItem<Props> {
             component="h2"
             content="metadata.creator"
           />
-          {this.generateElements(item.creators, null, 'p')}
+          {this.generateElements(item.creators, 'p')}
         </section>
 
         <section>
@@ -239,35 +236,35 @@ export class Detail extends HitItem<Props> {
             component="h3"
             content="metadata.country"
           />
-          {this.generateElements(item.studyAreaCountries, 'country', 'p')}
+          {this.generateElements(item.studyAreaCountries, 'p', country => country.country)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.timeDimension"
           />
-          {this.generateElements(item.typeOfTimeMethods, 'term', 'p')}
+          {this.generateElements(item.typeOfTimeMethods, 'p', time => time.term)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.analysisUnit"
           />
-          {this.generateElements(item.unitTypes, 'term', 'p')}
+          {this.generateElements(item.unitTypes, 'p', unit => unit.term)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.samplingProcedure"
           />
-          {this.generateElements(item.samplingProcedureFreeTexts, null, 'p')}
+          {this.generateElements(item.samplingProcedureFreeTexts, 'p')}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.dataCollectionMethod"
           />
-          {this.generateElements(item.typeOfModeOfCollections, 'term', 'p')}
+          {this.generateElements(item.typeOfModeOfCollections, 'p', method => method.term)}
 
           <Translate
             className="data-label"
@@ -275,9 +272,7 @@ export class Detail extends HitItem<Props> {
             content="metadata.languageOfDataFiles"
           />
           <div className="tags mt-10">
-            {this.generateElements(item.fileLanguages, null, 'tag', term => {
-              return _.upperCase(term);
-            })}
+            {this.generateElements(item.fileLanguages, 'tag', term => _.upperCase(term))}
           </div>
         </Panel>
 
@@ -311,7 +306,7 @@ export class Detail extends HitItem<Props> {
             content="metadata.termsOfDataAccess"
           />
           <div className="data-abstract">
-            {this.generateElements(item.dataAccessFreeTexts, null, 'p')}
+            {this.generateElements(item.dataAccessFreeTexts, 'p')}
           </div>
 
           <Translate
@@ -335,10 +330,9 @@ export class Detail extends HitItem<Props> {
           <div className="tags">
             {this.generateElements(
               item.classifications,
-              'term',
               'tag',
               term => {
-                return <Link to={"/?classifications.term[0]=" + encodeURI(term)}>{_.upperFirst(term)}</Link>;
+                return <Link to={"/?classifications.term[0]=" + encodeURI(term.term)}>{_.upperFirst(term.term)}</Link>;
               }
             )}
           </div>
@@ -351,8 +345,8 @@ export class Detail extends HitItem<Props> {
           defaultCollapsed={true}
         >
           <div className="tags">
-            {this.generateElements(item.keywords, 'term', 'tag', term => {
-              return <Link to={"/?q=" + encodeURI(term)}>{_.upperFirst(term)}</Link>;
+            {this.generateElements(item.keywords, 'tag', keywords => {
+              return <Link to={"/?q=" + encodeURI(keywords.term)}>{_.upperFirst(keywords.term)}</Link>;
             })}
           </div>
         </Panel>
