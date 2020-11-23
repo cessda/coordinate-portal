@@ -231,7 +231,7 @@ describe('Detail component', () => {
           .instance()
           .formatDate('DD/MM/YYYY', null, null, ['2003-02-01'])[0]
       )
-        .find('p')
+        .find('div')
         .text()
     ).toBe('01/02/2003');
   });
@@ -244,7 +244,7 @@ describe('Detail component', () => {
           .instance()
           .formatDate('DD/MM/YYYY', null, null, ['Fallback'])[0]
       )
-        .find('p')
+        .find('div')
         .text()
     ).toBe('Fallback');
   });

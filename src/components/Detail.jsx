@@ -59,7 +59,7 @@ export class Detail extends HitItem<Props> {
             </span>
           );
         } else {
-          elements.push(<div key={i} dangerouslySetInnerHTML={{__html: value}}/>);
+          elements.push(<div key={i}>{value}</div>);
         }
       }
     }
@@ -305,9 +305,9 @@ export class Detail extends HitItem<Props> {
             component="h3"
             content="metadata.termsOfDataAccess"
           />
-          <div className="data-abstract">
-            {this.generateElements(item.dataAccessFreeTexts, 'p')}
-          </div>
+          {this.generateElements(item.dataAccessFreeTexts, 'p', text => { 
+            return <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
+          })}
 
           <Translate
             className="data-label"
