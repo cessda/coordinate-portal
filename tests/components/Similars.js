@@ -31,11 +31,11 @@ function setup(props) {
       },
       similars: [
         {
-          id: 1,
+          id: "1",
           title: 'Similar Study Title 1'
         },
         {
-          id: 2,
+          id: "2",
           title: 'Similar Study Title 2'
         }
       ],

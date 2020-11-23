@@ -1,7 +1,7 @@
 {
   "language": {
     "notAvailable": {
-      "field": "Ei saatavilla",
+      "field": "Ei tiedossa",
       "heading": "Hakemaasi aineistoa ei löytynyt.",
       "content": "Aineistoa ei ole tai se ei ole saatavilla valitsemallasi kielellä. Valitse toinen kieli tai tee uusi haku."
     }
