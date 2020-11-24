@@ -75,7 +75,7 @@ export class Detail extends HitItem<Props> {
 
   formatDate(
     format: string,
-    date1: string,
+    date1?: string,
     date2?: string,
     dateFallback?: any[],
     dateFallbackProperty?: ?string
@@ -101,7 +101,7 @@ export class Detail extends HitItem<Props> {
         return this.generateElements(
           dateFallback,
           'p',
-          (date: string): string => {
+          (date: any): string => {
             let value: string = dateFallbackProperty ? date.dateFallbackProperty : date;
             let momentDate = moment(
               value,
@@ -141,30 +141,6 @@ export class Detail extends HitItem<Props> {
     );
   }
 
-  generatePidElements(item): Node[] {
-    let pidStudies: Node[] = item.pidStudies.map((pidStudy, key) => {
-        let pidString: string = pidStudy.pid;
-
-        // The agency field is an optional attribute, only append if present
-        if (pidStudy.agency) {
-          pidString = `${pidString} (${pidStudy.agency})`;
-        }
-
-        return (
-          <p key={key}>
-            {pidString}
-          </p>
-        );
-      });
-
-    if (pidStudies.length === 0) {
-      pidStudies.push(
-        <Translate key="0" content="language.notAvailable.field" />
-      );
-    }
-    return pidStudies;
-  }
-
   render(): Node {
     const { item } = this.props;
 
@@ -180,9 +156,7 @@ export class Detail extends HitItem<Props> {
           content="metadata.studyTitle"
         />
         <p>
-          {item.titleStudy || (
-            <Translate content="language.notAvailable.field" />
-          )}
+          {item.titleStudy || <Translate content="language.notAvailable.field" />}
         </p>
 
         <section>
@@ -200,7 +174,16 @@ export class Detail extends HitItem<Props> {
             component="h2"
             content="metadata.studyPersistentIdentifier"
           />
-          {this.generatePidElements(item)}
+          {this.generateElements(item.pidStudies, 'p', pidStudy => {
+            let pidString: string = pidStudy.pid;
+
+            // The agency field is an optional attribute, only append if present
+            if (pidStudy.agency) {
+              pidString = `${pidString} (${pidStudy.agency})`;
+            }
+
+            return <p>{pidString}</p>;
+          })}
         </section>
 
         <section>
