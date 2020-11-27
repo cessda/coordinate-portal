@@ -1,9 +1,8 @@
-## CESSDA Software Maturity Levels (SML) ##
+# CESSDA Software Maturity Levels (SML)
 
 The overall score for CDC Searchkit (v2.1.0) is **Level 3**
 
 Which means *"Software is usable; the software can be used by most users although there may be some cost and risk"* (i.e. expected standard for CESSDA RI use).
-
 
 | Attribute  | Description  | Score  |
 |:----------|:----------|:----------|

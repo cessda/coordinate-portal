@@ -291,17 +291,6 @@ export class Detail extends HitItem<Props> {
           {this.generateElements(item.dataAccessFreeTexts, 'p', text => { 
             return <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
           })}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.studyNumber"
-          />
-          <p>
-            {item.studyNumber || (
-              <Translate content="language.notAvailable.field" />
-            )}
-          </p>
         </Panel>
 
         <Panel
