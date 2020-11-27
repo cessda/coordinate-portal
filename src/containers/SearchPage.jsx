@@ -100,9 +100,9 @@ export class SearchPage extends Component<Props> {
                                                       collapsable={true}
                                                       defaultCollapsed={true}/>}/>
 
-              <RefinementListFilter id="studyAreaCountries.country"
+              <RefinementListFilter id="studyAreaCountries.searchField"
                                     title={<Translate content='filters.country.label'/>}
-                                    field={'studyAreaCountries.country'}
+                                    field={'studyAreaCountries.searchField'}
                                     fieldOptions={{
                                       type: 'nested',
                                       options: {path: 'studyAreaCountries', min_doc_count: 1}
