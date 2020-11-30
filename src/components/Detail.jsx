@@ -102,7 +102,7 @@ export class Detail extends HitItem<Props> {
           dateFallback,
           'p',
           (date: string): string => {
-            let value: string = dateFallbackProperty ? date.dateFallbackProperty : date;
+            let value: string = dateFallbackProperty ? date[dateFallbackProperty] : date;
             let momentDate = moment(
               value,
               [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'],
