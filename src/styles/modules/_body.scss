@@ -305,6 +305,10 @@ body {
 
 .sk-panel__header {
   color: #555555;
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    font-size: 14px;
+  }
 }
 
 .sk-hits-list__meta {
@@ -327,6 +331,9 @@ body {
 }
 
 .data-abstract {
+  p {
+    margin-bottom: 10px;
+  }
   ul {
     list-style-type: disc;
     padding-left: 20px;

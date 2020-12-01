@@ -17,52 +17,54 @@
 import _ from 'lodash';
 import striptags from 'striptags';
 
-// Creates a model to store/display study metadata in the user interface.
-// The comments indicate the label displayed in the UI for each property (it is not always obvious).
+/** 
+ * Creates a model to store/display study metadata in the user interface.
+ * 
+ * The comments indicate the label displayed in the UI for each property (it is not always obvious).
+ */
 export function getStudyModel(data: Object): Object {
   return {
     // [Not visible in user interface]
     id: data._source.id || '',
-    // "Study title"
+    /** Study title */
     titleStudy: data._source.titleStudy || '',
-    // "Creator"
+    /** Creator */
     creators: data._source.creators || [],
-    // "Study Persistent Identifier"
+    /** Study Persistent Identifier */
     pidStudies: data._source.pidStudies || [],
-    // "Abstract"
-    abstract: _.trim(
-      striptags(data._source.abstract, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b'])),
+    /** Abstract */
+    abstract: stripHTMLElements(data._source.abstract || ''),
     abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
       length: 500
     }),
     abstractExpanded: false,
-    // "Country"
+    /** Country */
     studyAreaCountries: data._source.studyAreaCountries || [],
-    // "Time dimension"
+    /** Time dimension */
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
-    // "Analysis unit"
+    /** Analysis unit */
     unitTypes: data._source.unitTypes || [],
-    // "Sampling procedure"
+    /** Sampling procedure */
     samplingProcedureFreeTexts: data._source.samplingProcedureFreeTexts || [],
-    // "Data collection mode"
+    /** Data collection mode */
     typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
-    // "Data collection period"
+    /** Data collection period */
     dataCollectionPeriodStartdate: data._source.dataCollectionPeriodStartdate || '',
     dataCollectionPeriodEnddate: data._source.dataCollectionPeriodEnddate || '',
     dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
-    // "Language of data files"
+    /** Language of data files */
     fileLanguages: data._source.fileLanguages || [],
-    // "Publisher"
-    publisher: data._source.publisher ? data._source.publisher.publisher : '',
-    // "Publication year"
+    /** Publisher */
+    publisher: data._source.publisher?.publisher ?? '',
+    /** Publication year */
     publicationYear: data._source.publicationYear || '',
-    // "Terms of data access"
-    dataAccessFreeTexts: data._source.dataAccessFreeTexts || [],
-    // "Study number"
+    /** Terms of data access */
+    dataAccessFreeTexts: _.map(data._source.dataAccessFreeTexts || [], text => stripHTMLElements(text)),
+    /** Study number */
     studyNumber: data._source.studyNumber || '',
-    // "Topic"
+    /** Topic */
     classifications: data._source.classifications || [],
-    // "Keyword"
+    /** Keyword */
     keywords: data._source.keywords || [],
     // [Not visible in user interface]
     lastModified: data._source.lastModified || '',
@@ -73,6 +75,16 @@ export function getStudyModel(data: Object): Object {
     // [List of other metadata languages used for result buttons]
     langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], (i) => (i.toUpperCase())))
   };
+}
+
+/**
+ * Strip non-styling HTML tags from the given HTML string.
+ * @param {string} html the HTML to strip.
+ */
+function stripHTMLElements(html: string): string {
+  return _.trim(
+    striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+  );
 }
 
 // Generates study JSON-LD for Google indexing.

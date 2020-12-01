@@ -131,13 +131,13 @@ function setup(item) {
 describe('Detail component', () => {
   it('should render with supplied item', () => {
     const { enzymeWrapper } = setup();
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(true);
   });
 
   it('should not render with undefined item', () => {
     const { enzymeWrapper } = setup(false);
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(false);
   });
 
@@ -145,7 +145,7 @@ describe('Detail component', () => {
     const { enzymeWrapper } = setup({
       pidStudies: []
     });
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(true);
   });
 
@@ -155,7 +155,7 @@ describe('Detail component', () => {
         pid: "TestPid"
       }]
     });
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(true);
   });
 
@@ -163,7 +163,7 @@ describe('Detail component', () => {
     const { enzymeWrapper } = setup({
       titleStudy: undefined
     });
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(true);
   });
 
@@ -171,7 +171,7 @@ describe('Detail component', () => {
     const { enzymeWrapper } = setup({
       publisher: undefined
     });
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(true);
   });
 
@@ -179,7 +179,7 @@ describe('Detail component', () => {
     const { enzymeWrapper } = setup({
       studyNumber: undefined
     });
-    const detail = enzymeWrapper.find('div.w-100');
+    const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(true);
   });
 
@@ -231,7 +231,7 @@ describe('Detail component', () => {
           .instance()
           .formatDate('DD/MM/YYYY', null, null, ['2003-02-01'])[0]
       )
-        .find('p')
+        .find('div')
         .text()
     ).toBe('01/02/2003');
   });
@@ -244,7 +244,7 @@ describe('Detail component', () => {
           .instance()
           .formatDate('DD/MM/YYYY', null, null, ['Fallback'])[0]
       )
-        .find('p')
+        .find('div')
         .text()
     ).toBe('Fallback');
   });

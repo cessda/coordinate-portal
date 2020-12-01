@@ -15,5 +15,6 @@
 
 [options]
 module.name_mapper='^.*\.scss$' -> 'css-module-flow'
+esproposal.optional_chaining=enable
 
 [strict]

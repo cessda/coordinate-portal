@@ -50,8 +50,8 @@ export class Detail extends HitItem<Props> {
     let elements: Node[] = [];
 
     for (let i: number = 0; i < field.length; i++) {
-      let value: any = callback?.(field[i]) ?? field[i];
-      if (value) {
+      if (field[i]) {
+        let value: any = callback?.(field[i]) ?? field[i];
         if (element === 'tag') {
           elements.push(
             <span className="tag" key={i}>
@@ -59,12 +59,12 @@ export class Detail extends HitItem<Props> {
             </span>
           );
         } else {
-          elements.push(<p key={i}>{value}</p>);
+          elements.push(<div key={i}>{value}</div>);
         }
       }
     }
 
-    if (field.length === 0 || elements.length === 0) {
+    if (elements.length === 0) {
       elements.push(
         <Translate key="0" content="language.notAvailable.field" />
       );
@@ -75,7 +75,7 @@ export class Detail extends HitItem<Props> {
 
   formatDate(
     format: string,
-    date1: string,
+    date1?: string,
     date2?: string,
     dateFallback?: any[],
     dateFallbackProperty?: ?string
@@ -148,77 +148,62 @@ export class Detail extends HitItem<Props> {
       return null;
     }
 
-    let pidStudies: Node[] = [];
-    for (let i: number = 0; i < item.pidStudies.length; i++) {
-
-      let pidString = item.pidStudies[i].pid;
-
-      // The agency field is an optional attribute, only append if present
-      if (item.pidStudies[i].agency) {
-        pidString = `${pidString} (${item.pidStudies[i].agency})`;
-      }
-
-      pidStudies.push(
-        <p key={i}>
-          {pidString}
-        </p>
-      );
-    }
-    if (pidStudies.length === 0) {
-      pidStudies.push(
-        <Translate key="0" content="language.notAvailable.field" />
-      );
-    }
-
     return (
-      <div className="w-100">
+      <article className="w-100">
         <Translate
           className="data-label mt-5"
-          component="strong"
+          component="h1"
           content="metadata.studyTitle"
         />
         <p>
-          {item.titleStudy || (
-            <Translate content="language.notAvailable.field" />
-          )}
+          {item.titleStudy || <Translate content="language.notAvailable.field" />}
         </p>
 
-        <Translate
-          className="data-label"
-          component="strong"
-          content="metadata.creator"
-        />
-        {this.generateElements(item.creators, 'p')}
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.creator"
+          />
+          {this.generateElements(item.creators, 'p')}
+        </section>
 
-        <Translate
-          className="data-label"
-          component="strong"
-          content="metadata.studyPersistentIdentifier"
-        />
-        {pidStudies}
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.studyPersistentIdentifier"
+          />
+          {this.generateElements(item.pidStudies, 'p', pidStudy => {
+            let pidString: string = pidStudy.pid;
 
-        <Translate
-          className="data-label"
-          component="strong"
-          content="metadata.abstract"
-        />
-        <div className="data-abstract">
-          {item.abstract.split('\n').map(function (splitItem, key) {
-            return (
-              <p key={key} dangerouslySetInnerHTML={{ __html: splitItem }} />
-            );
+            // The agency field is an optional attribute, only append if present
+            if (pidStudy.agency) {
+              pidString = `${pidString} (${pidStudy.agency})`;
+            }
+
+            return <p>{pidString}</p>;
           })}
-        </div>
+        </section>
+
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.abstract"
+          />
+          <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
+        </section>
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.methodology'/>}
+          title={<Translate component="h2" content='metadata.methodology'/>}
           collapsable={false}
           defaultCollapsed={false}
         >
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.dataCollectionPeriod"
           />
           {this.formatDate(
@@ -231,42 +216,42 @@ export class Detail extends HitItem<Props> {
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.country"
           />
           {this.generateElements(item.studyAreaCountries, 'p', country => country.country)}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.timeDimension"
           />
           {this.generateElements(item.typeOfTimeMethods, 'p', time => time.term)}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.analysisUnit"
           />
           {this.generateElements(item.unitTypes, 'p', unit => unit.term)}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.samplingProcedure"
           />
           {this.generateElements(item.samplingProcedureFreeTexts, 'p')}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.dataCollectionMethod"
           />
           {this.generateElements(item.typeOfModeOfCollections, 'p', method => method.term)}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.languageOfDataFiles"
           />
           <div className="tags mt-10">
@@ -276,13 +261,13 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.access'/>}
+          title={<Translate component="h2" content='metadata.access'/>}
           collapsable={true}
           defaultCollapsed={true}
         >
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.publisher"
           />
           <p>
@@ -293,26 +278,27 @@ export class Detail extends HitItem<Props> {
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.yearOfPublication"
           />
           {this.formatDate('YYYY', item.publicationYear)}
 
           <Translate
             className="data-label"
-            component="strong"
+            component="h3"
             content="metadata.termsOfDataAccess"
           />
-          {this.generateElements(item.dataAccessFreeTexts, 'p')}
+          {this.generateElements(item.dataAccessFreeTexts, 'p', text => { 
+            return <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
+          })}
         </Panel>
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.topics'/>}
+          title={<Translate component="h2" content='metadata.topics'/>}
           collapsable={true}
           defaultCollapsed={true}
         >
-          <strong className="data-label" />
           <div className="tags">
             {this.generateElements(
               item.classifications,
@@ -326,18 +312,17 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate content='metadata.keywords'/>}
+          title={<Translate component="h2" content='metadata.keywords'/>}
           collapsable={true}
           defaultCollapsed={true}
         >
-          <strong className="data-label" />
           <div className="tags">
             {this.generateElements(item.keywords, 'tag', keywords => {
               return <Link to={"/?q=" + encodeURI(keywords.term)}>{_.upperFirst(keywords.term)}</Link>;
             })}
           </div>
         </Panel>
-      </div>
+      </article>
     );
   }
 }

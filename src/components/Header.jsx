@@ -186,7 +186,7 @@ export class Header extends Component<Props> {
    * Returns a translatable \<p\> element with substitution enabled.
    * @param {String} translationString the string to translate
    */
-  generateTranslatedParagraph(translationString: String) {
+  generateTranslatedParagraph(translationString: string) {
     return <Translate component="p" content={translationString}
       with={{ className: 'tag is-light has-text-weight-semibold' }}
       unsafe />;
