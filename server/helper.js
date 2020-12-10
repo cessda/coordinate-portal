@@ -28,7 +28,7 @@ helper.checkBuildDirectory = function () {
     console.error('ERROR : Unable to start Data Catalogue application.');
     console.error('        Missing \'/dist\' directory as application has not been built.');
     console.error('        Run command \'npm run build\' and try again.');
-    process.exit();
+    process.exit(16);
   }
 };
 
@@ -36,7 +36,7 @@ helper.checkEnvironmentVariables = function (production) {
   if (_.isEmpty(elasticsearchUrl)) {
     console.error('ERROR : Unable to start Data Catalogue application.');
     console.error('        Missing environment variable PASC_ELASTICSEARCH_URL.');
-    process.exit();
+    process.exit(17);
   } else {
     console.log('NOTICE : Using Elasticsearch instance at ' + elasticsearchUrl);
   }
@@ -127,9 +127,15 @@ helper.getJsonProxy = function () {
 
 helper.startListening = function (app) {
   let port = Number(process.env.PASC_PORT || 8088);
-  app.listen(port, function () {
+  
+  const server = app.listen(port, () => {
     console.log('SUCCESS : Data Catalogue application is running at http://localhost:' + port);
   });
+
+  process.on('exit', () => {
+    console.log('NOTICE : Shutting down');
+    server.close();
+  })
 };
 
 module.exports = helper;
