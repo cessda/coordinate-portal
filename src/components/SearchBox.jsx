@@ -56,6 +56,17 @@ export class SearchBox extends SearchkitSearchBox<Props> {
 
     super.onChange(event);
   }
+
+  /**
+   * Clears the query on the detail page
+   */
+  getValue(): string {
+    if (_.trim(this.props.pathname, '/') === 'detail') {
+      return "";
+    } else {
+      return super.getValue();
+    }
+  }
 }
 
 export const mapStateToProps = (state: State): Object => {
