@@ -249,14 +249,14 @@ export class Detail extends HitItem<Props> {
           />
           {this.generateElements(item.typeOfModeOfCollections, 'p', method => method.term)}
 
-          <Translate
+          {/* <Translate
             className="data-label"
             component="h3"
             content="metadata.languageOfDataFiles"
           />
           <div className="tags mt-10">
             {this.generateElements(item.fileLanguages, 'tag', term => _.upperCase(term))}
-          </div>
+          </div> */}
         </Panel>
 
         <Panel
