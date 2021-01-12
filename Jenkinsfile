@@ -104,7 +104,11 @@ pipeline {
 	}
 	post {
 		failure {
-			emailext body: '${DEFAULT_CONTENT}', subject: '${DEFAULT_SUBJECT}', to: 'support@cessda.eu'
+			script {
+				if (env.BRANCH_NAME == 'master') {
+					emailext body: '${DEFAULT_CONTENT}', subject: '${DEFAULT_SUBJECT}', to: 'support@cessda.eu'
+				}
+			}
 		}
 	}
 }

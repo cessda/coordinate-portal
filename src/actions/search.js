@@ -61,16 +61,20 @@ export const initSearchkit = (): Thunk => {
         }
       }, 3000);
 
-      // If viewing detail page, override query to retrieve single record using its ID.
-      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' &&
-          state.routing.locationBeforeTransitions.query.q !== undefined) {
-        query.query = detailQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
-      }
+      const path = _.trim(state.routing.locationBeforeTransitions.pathname, '/');
+      const pathQuery = state.routing.locationBeforeTransitions.query.q;
 
-      // If viewing detail page, override query to retrieve single record using its pid.
-      if (_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'pid' &&
-          state.routing.locationBeforeTransitions.query.q !== undefined) {
-        query.query = pidQuery(_.trim(state.routing.locationBeforeTransitions.query.q, '"'));
+      if (path === 'detail' && pathQuery !== undefined) {
+        // If viewing detail page, override query to retrieve single record using its ID.
+        query.query = detailQuery(_.trim(pathQuery, '"'));     
+
+      } else if (path === 'pid' && pathQuery !== undefined) {
+        // If viewing detail page, override query to retrieve single record using its pid.
+        query.query = pidQuery(_.trim(pathQuery, '"'));
+
+      } else {
+        // Elasticsearch will match almost anything without this
+        query.min_score = 0.5; 
       }
 
       // Add the current language index to the query for Elasticsearch.

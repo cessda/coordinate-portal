@@ -151,6 +151,7 @@ describe('Search actions', () => {
           type: 'UPDATE_QUERY',
           query: {
             index: 'cmmstudy_en',
+            min_score: 0.5,
             size: 20
           }
         },
@@ -166,6 +167,7 @@ describe('Search actions', () => {
           type: 'UPDATE_QUERY',
           query: {
             index: 'cmmstudy_en',
+            min_score: 0.5,
             size: 20
           }
         },
