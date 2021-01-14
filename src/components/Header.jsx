@@ -19,6 +19,7 @@ import React, { Component } from 'react';
 import { GroupedSelectedFilters, HitsStats, ResetFilters } from 'searchkit';
 import Language from './Language';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import counterpart from 'counterpart';
 import Reset from './Reset';
 import { queryBuilder } from '../utilities/searchkit';
@@ -72,10 +73,12 @@ export class Header extends Component<Props> {
           <div className="columns">
             <div className="column is-narrow">
               <div className="logo">
-                <a className="cessda-eric" onClick={() => {
-                  push('/');
-                  resetSearch();
-                }} />
+                <Link className="cessda-eric" to="/" onClick={()=>{
+                  // Only reset search on the root path, otherwise two locations are added to the browser history
+                  if(pathname === '/') {
+                    resetSearch()
+                  }
+                }}/>
               </div>
               {pathname === '/' &&
                 <HitsStats className="hits-count" />
