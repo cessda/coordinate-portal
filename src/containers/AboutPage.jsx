@@ -37,9 +37,9 @@ export class AboutPage extends Component<Props> {
         <Layout size="l">
           <Header/>
           <LayoutBody className="columns">
-            <LayoutResults className="column is-8">
-              <article>
-                <h1>About</h1>
+            <LayoutResults>
+              <article className="data-abstract">
+                <h1 className="data-label">About</h1>
 
                 <p>
                   The CESSDA Data Catalogue (CDC) harvests metadata from various endpoints. 

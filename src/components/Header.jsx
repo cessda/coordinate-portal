@@ -99,7 +99,9 @@ export class Header extends Component<Props> {
                   <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
                 }
 
-                <Translate component="a" className="sk-reset-filters link" onClick={toggleAdvancedSearch} content="advancedSearch.label" />
+                <Link to="/about">
+                  <Translate className="sk-reset-filters link" content="about.label"/>
+                </Link>
 
                 <ResetFilters component={Reset}
                               options={{query: false, filter: true, pagination: true}}
