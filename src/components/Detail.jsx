@@ -240,7 +240,9 @@ export class Detail extends HitItem<Props> {
             component="h3"
             content="metadata.samplingProcedure"
           />
-          {this.generateElements(item.samplingProcedureFreeTexts, 'p')}
+          {this.generateElements(item.samplingProcedureFreeTexts, 'p', text => 
+            <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
+          )}
 
           <Translate
             className="data-label"

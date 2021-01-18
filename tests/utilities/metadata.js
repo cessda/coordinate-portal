@@ -64,7 +64,9 @@ describe('Metadata utilities', () => {
             publisher: {
               publisher: 'UK Data Service'
             },
-            samplingProcedureFreeTexts: [],
+            samplingProcedureFreeTexts: [
+              'Sampling Procedure<script></script>'
+            ],
             studyAreaCountries: [
               {
                 abbr: 'EN',
@@ -143,7 +145,9 @@ describe('Metadata utilities', () => {
         ],
         publicationYear: '2001-01-01',
         publisher: 'UK Data Service',
-        samplingProcedureFreeTexts: [],
+        samplingProcedureFreeTexts: [
+          'Sampling Procedure'
+        ],
         studyAreaCountries: [
           {
             abbr: 'EN',

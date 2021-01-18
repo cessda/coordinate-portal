@@ -45,7 +45,7 @@ export function getStudyModel(data: Object): Object {
     /** Analysis unit */
     unitTypes: data._source.unitTypes || [],
     /** Sampling procedure */
-    samplingProcedureFreeTexts: data._source.samplingProcedureFreeTexts || [],
+    samplingProcedureFreeTexts: _.map(data._source.samplingProcedureFreeTexts || [], text => stripHTMLElements(text)),
     /** Data collection mode */
     typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
     /** Data collection period */
