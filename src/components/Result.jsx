@@ -31,13 +31,14 @@ type Props = {
   index: any,
   item: any,
   push: any,
+  result: any,
   changeLanguage: any,
   toggleLongAbstract: any
 };
 
 export class Result extends Component<Props> {
   render(): Node {
-    const { bemBlocks, index, item, push, changeLanguage, toggleLongAbstract } = this.props;
+    const { bemBlocks, index, item, push, result, changeLanguage, toggleLongAbstract } = this.props;
 
     if (item === undefined) {
       return null;
@@ -71,16 +72,14 @@ export class Result extends Component<Props> {
           <Link to={{
             pathname: 'detail',
             search: '?q="' + item.id + '"'
-          }}>{item.titleStudy}</Link>
+          }}><span dangerouslySetInnerHTML={{__html:_.get(result,"highlight.titleStudy",false) || result._source.titleStudy}}></span></Link>
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
           {creators}
         </div>
         <div className={bemBlocks.item().mix(bemBlocks.container('desc'))}>
-          {item.abstractExpanded && 
-            <span dangerouslySetInnerHTML={{__html: item.abstract}}/>
-          }
-          {!item.abstractExpanded && item.abstractShort}
+          {item.abstractExpanded && <span dangerouslySetInnerHTML={{__html: item.abstractHighlight || item.abstract}}/>} 
+          {!item.abstractExpanded && <span dangerouslySetInnerHTML={{__html: item.abstractHighlightShort || item.abstractShort}}/>}
         </div>
         <span className="level mt-10 result-actions">
           <span className="level-left is-hidden-touch">

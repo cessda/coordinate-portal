@@ -37,6 +37,10 @@ export function getStudyModel(data: Object): Object {
     abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
       length: 500
     }),
+    abstractHighlight: typeof data.highlight!='undefined' ? stripHTMLElements(data.highlight.abstract || '') : '',
+    abstractHighlightShort: typeof data.highlight!='undefined' ? _.truncate(_.trim(striptags(data.highlight.abstract || '')), {
+      length: 500
+    }) : '',
     abstractExpanded: false,
     /** Country */
     studyAreaCountries: data._source.studyAreaCountries || [],
@@ -79,7 +83,7 @@ export function getStudyModel(data: Object): Object {
 
 /**
  * Strip non-styling HTML tags from the given HTML string.
- * @param {string} html the HTML to strip.
+ * @param {string} html the HTML to strip. 
  */
 function stripHTMLElements(html: string): string {
   return _.trim(
