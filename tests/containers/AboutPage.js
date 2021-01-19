@@ -11,19 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module.exports = {
-  // Collect test coverage
-  collectCoverage: true,
-  coverageDirectory: './coverage',
+import _ from 'lodash';
+import React from 'react';
+import { AboutPage } from '../../src/containers/AboutPage';
 
-  // Add the JUnit reporter so that test results can be displayed in Jenkins
-  reporters: ['default', 'jest-junit'],
-
-  // Setup Enzyme, this removes the need for imports in the tests
-  setupFilesAfterEnv: ["jest-enzyme"],
-  testEnvironment: "enzyme",
-  testEnvironmentOptions: {
-    enzymeAdapter: "react15"
-  },
-  testMatch: ['**/tests/**/*.js']
-};
+describe("AboutPage container", () => {
+  it("Should render", () => {
+    const enzymeWrapper = shallow(<AboutPage/>);
+    const searchPage = enzymeWrapper.find('SearchkitProvider');
+    expect(searchPage).toExist();
+  });
+});

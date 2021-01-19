@@ -67,10 +67,4 @@ export class AboutPage extends Component<Props> {
   }
 }
 
-export const mapDispatchToProps = (dispatch: Dispatch): Object => {
-  return {
-    goBack: bindActionCreators(goBack, dispatch)
-  };
-};
-
-export default connect(mapDispatchToProps)(AboutPage);
+export default connect()(AboutPage);
