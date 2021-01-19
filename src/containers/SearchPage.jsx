@@ -64,12 +64,6 @@ export class SearchPage extends Component<Props> {
 
   render(): Node {
     const {showMobileFilters} = this.props;
-    const customHighlight = {
-        "fields" : {
-        "titleStudy": { "number_of_fragments" : 0 },
-        "abstract": { "number_of_fragments" : 0 }
-         }
-      };
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
@@ -167,7 +161,6 @@ export class SearchPage extends Component<Props> {
               <Hits scrollTo={true}
                     mod="sk-hits-list"
                     hitsPerPage={30}
-                    customHighlight={customHighlight}
                     itemComponent={Result}
                     key={'hitList'}/>
 
