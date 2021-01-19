@@ -116,7 +116,6 @@ describe('Header component', () => {
 
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps()).toEqual({
-      push: expect.any(Function),
       resetSearch: expect.any(Function),
       toggleSummary: expect.any(Function),
       toggleMobileFilters: expect.any(Function),

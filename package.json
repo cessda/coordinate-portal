@@ -11,7 +11,7 @@
     "babel": "babel src -d views",
     "build": "npm run clean && webpack --config webpack.prod.config.js -p",
     "clean": "rimraf dist",
-    "test": "jest",
+    "test": "jest --verbose",
     "test:watch": "npm test -- --watch",
     "flow": "flow"
   },

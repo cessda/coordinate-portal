@@ -29,7 +29,6 @@ import { bindActionCreators } from 'redux';
 import {
   resetSearch, toggleAdvancedSearch, toggleMobileFilters, toggleSummary
 } from '../actions/search';
-import { push } from 'react-router-redux';
 import Translate from 'react-translate-component';
 
 type Props = {
@@ -39,7 +38,6 @@ type Props = {
   showFilterSummary: boolean,
   showMobileFilters: boolean,
   showAdvancedSearch: boolean,
-  push: (path: string) => void,
   resetSearch: () => void,
   toggleSummary: () => void,
   toggleMobileFilters: () => void,
@@ -50,7 +48,6 @@ export class Header extends Component<Props> {
   render(): Node {
     const {
       pathname,
-      push,
       resetSearch,
       filters,
       showFilterSummary,
@@ -75,8 +72,8 @@ export class Header extends Component<Props> {
               <div className="logo">
                 <Link className="cessda-eric" to="/" onClick={()=>{
                   // Only reset search on the root path, otherwise two locations are added to the browser history
-                  if(pathname === '/') {
-                    resetSearch()
+                  if (pathname === '/') {
+                    resetSearch();
                   }
                 }}/>
               </div>
@@ -90,8 +87,7 @@ export class Header extends Component<Props> {
               <div className="reset-search">
                 {pathname === '/' &&
                   <a className="sk-reset-filters link mobile-filters-toggle" onClick={toggleMobileFilters}>
-                    {showMobileFilters && <Translate content="hideFilters" />}
-                    {!showMobileFilters && <Translate content="showFilters" />}
+                    {showMobileFilters ? <Translate content="hideFilters"/> : <Translate content="showFilters"/>}
                   </a>
                 }
 
@@ -118,71 +114,74 @@ export class Header extends Component<Props> {
           </div>
         </div>
 
-        <div className={'modal' + (showFilterSummary ? ' is-active' : '')}>
-          <div className="modal-background" />
-          <div className="modal-card">
-            <div className="modal-card-head">
-              <p className="modal-card-title"><Translate content="filters.summary.label" /></p>
-              <button className="delete" aria-label="close" onClick={toggleSummary} />
-            </div>
-            <section className="modal-card-body">
-              {filters &&
-                <div>
-                  <Translate component="p" className="pb-10" content="filters.summary.introduction" />
-                  <GroupedSelectedFilters />
-                  <Translate component="p" content="filters.summary.remove" />
-                </div>
-              }
-              {!filters &&
-                <div>
-                  <Translate component="p" className="pb-10" content="filters.summary.noFilters" />
-                  <Translate component="p" content="filters.summary.close" unsafe />
-                </div>
-              }
-            </section>
-            <div className="modal-card-foot">
-              <button className="button is-light" onClick={toggleSummary}>
-                <Translate content="close" />
-              </button>
+        {showFilterSummary &&
+          <div className="modal is-active">
+            <div className="modal-background"/>
+            <div className="modal-card">
+              <div className="modal-card-head">
+                <Translate component="h2" className="modal-card-title" content="filters.summary.label"/>
+                <button className="delete" aria-label="close" onClick={toggleSummary} />
+              </div>
+              <section className="modal-card-body">
+                {filters ?
+                  <div>
+                    <Translate component="p" className="pb-10" content="filters.summary.introduction" />
+                    <GroupedSelectedFilters />
+                    <Translate component="p" content="filters.summary.remove" />
+                  </div>
+                :
+                  <div>
+                    <Translate component="p" className="pb-10" content="filters.summary.noFilters" />
+                    <Translate component="p" content="filters.summary.close" unsafe />
+                  </div>
+                }
+              </section>
+              <div className="modal-card-foot">
+                <button className="button is-light" onClick={toggleSummary}>
+                  <Translate content="close" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        }
 
-        <div className={'modal' + (showAdvancedSearch ? ' is-active' : '')}>
-          <div className="modal-background" />
-          <div className="modal-card">
-            <div className="modal-card-head">
-              <Translate component="p" className="modal-card-title" content="advancedSearch.label" />
-              <button className="delete" aria-label="close" onClick={toggleAdvancedSearch} />
-            </div>
-            <section className="modal-card-body">
-              <Translate component="p" className="pb-10" content="advancedSearch.introduction" />
-              {this.generateTranslatedParagraph("advancedSearch.and")}
-              {this.generateTranslatedParagraph("advancedSearch.or")}
-              {this.generateTranslatedParagraph("advancedSearch.negates")}
-              {this.generateTranslatedParagraph("advancedSearch.phrase")}
-              {this.generateTranslatedParagraph("advancedSearch.prefix")}
-              {this.generateTranslatedParagraph("advancedSearch.precedence")}
-              {this.generateTranslatedParagraph("advancedSearch.distance")}
-              {this.generateTranslatedParagraph("advancedSearch.slop")}
-              <p className="pt-15">
-                <Translate component="strong" content="advancedSearch.escaping.heading" unsafe />
-              </p>
-              {this.generateTranslatedParagraph("advancedSearch.escaping.content")}
-              <p className="pt-15">
-                <Translate component="strong" content="advancedSearch.defaultOperator.heading" unsafe />
-              </p>
-              <Translate component="p" content="advancedSearch.defaultOperator.content"
-                            with={{className: 'has-text-weight-semibold'}}
-                            unsafe/>
-            </section>
-            <div className="modal-card-foot">
-              <Translate component="button" className="button is-light" 
-                            onClick={toggleAdvancedSearch} 
-                            content="close"/>
+        {showAdvancedSearch &&
+          <div className="modal is-active">
+            <div className="modal-background" />
+            <div className="modal-card">
+              <div className="modal-card-head">
+                <Translate component="p" className="modal-card-title" content="advancedSearch.label" />
+                <button className="delete" aria-label="close" onClick={toggleAdvancedSearch} />
+              </div>
+              <section className="modal-card-body">
+                <Translate component="p" className="pb-10" content="advancedSearch.introduction" />
+                {this.generateTranslatedParagraph("advancedSearch.and")}
+                {this.generateTranslatedParagraph("advancedSearch.or")}
+                {this.generateTranslatedParagraph("advancedSearch.negates")}
+                {this.generateTranslatedParagraph("advancedSearch.phrase")}
+                {this.generateTranslatedParagraph("advancedSearch.prefix")}
+                {this.generateTranslatedParagraph("advancedSearch.precedence")}
+                {this.generateTranslatedParagraph("advancedSearch.distance")}
+                {this.generateTranslatedParagraph("advancedSearch.slop")}
+                <p className="pt-15">
+                  <Translate component="strong" content="advancedSearch.escaping.heading" unsafe />
+                </p>
+                {this.generateTranslatedParagraph("advancedSearch.escaping.content")}
+                <p className="pt-15">
+                  <Translate component="strong" content="advancedSearch.defaultOperator.heading" unsafe />
+                </p>
+                <Translate component="p" content="advancedSearch.defaultOperator.content"
+                              with={{className: 'has-text-weight-semibold'}}
+                              unsafe/>
+              </section>
+              <div className="modal-card-foot">
+                <Translate component="button" className="button is-light" 
+                              onClick={toggleAdvancedSearch} 
+                              content="close"/>
+              </div>
             </div>
           </div>
-        </div>
+        }
       </header>
     );
   }
@@ -211,7 +210,6 @@ export const mapStateToProps = (state: State): Object => {
 
 export const mapDispatchToProps = (dispatch: Dispatch): Object => {
   return {
-    push: bindActionCreators(push, dispatch),
     resetSearch: bindActionCreators(resetSearch, dispatch),
     toggleSummary: bindActionCreators(toggleSummary, dispatch),
     toggleMobileFilters: bindActionCreators(toggleMobileFilters, dispatch),

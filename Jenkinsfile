@@ -47,7 +47,7 @@ pipeline {
 			}
 			steps {
 				sh "npm ci"
-				sh "npm run test"
+				sh "npm test"
 			}
 			post {
 				always {
