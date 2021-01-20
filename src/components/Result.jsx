@@ -72,14 +72,14 @@ export class Result extends Component<Props> {
           <Link to={{
             pathname: 'detail',
             search: '?q="' + item.id + '"'
-          }}><span dangerouslySetInnerHTML={{__html:_.get(result,"highlight.titleStudy",false) || result._source.titleStudy}}></span></Link>
+          }}><span dangerouslySetInnerHTML={{__html: item.titleStudyHighlight || item.titleStudy}}></span></Link>
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
           {creators}
         </div>
         <div className={bemBlocks.item().mix(bemBlocks.container('desc'))}>
           {item.abstractExpanded && <span dangerouslySetInnerHTML={{__html: item.abstractHighlight || item.abstract}}/>} 
-          {!item.abstractExpanded && <span dangerouslySetInnerHTML={{__html: item.abstractHighlightShort || item.abstractShort}}/>}
+          {!item.abstractExpanded && <div dangerouslySetInnerHTML={{__html: item.abstractHighlightShort || item.abstractShort}}/>}
         </div>
         <span className="level mt-10 result-actions">
           <span className="level-left is-hidden-touch">

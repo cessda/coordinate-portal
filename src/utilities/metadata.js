@@ -28,6 +28,8 @@ export function getStudyModel(data: Object): Object {
     id: data._source.id || '',
     /** Study title */
     titleStudy: data._source.titleStudy || '',
+    titleStudyHighlight: typeof data.highlight!=='undefined' ? stripHTMLElements(data.highlight.titleStudy || '') : '',
+    //titleStudyHighlight: stripHTMLElements(data.highlight.titleStudy || ''),
     /** Creator */
     creators: data._source.creators || [],
     /** Study Persistent Identifier */
