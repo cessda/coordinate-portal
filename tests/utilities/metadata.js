@@ -21,9 +21,12 @@ describe('Metadata utilities', () => {
           _source: {
             id: 1,
             titleStudy: 'Study Title',
+            titleStudyHighlight: 'Study Title',
             abstract: 'Abstract',
             abstractExpanded: false,
             abstractShort: 'Abstract',
+            abstractHighlight: 'Abstract',
+            abstractHighlightShort: 'Abstract',
             classifications: [
               {
                 id: 'UKDS1234',
@@ -104,9 +107,12 @@ describe('Metadata utilities', () => {
       ).toEqual({
         id: 1,
         titleStudy: 'Study Title',
+        titleStudyHighlight: '',
         abstract: 'Abstract',
         abstractExpanded: false,
         abstractShort: 'Abstract',
+        abstractHighlight: '',
+        abstractHighlightShort: '',
         classifications: [
           {
             id: 'UKDS1234',
@@ -191,9 +197,12 @@ describe('Metadata utilities', () => {
       ).toEqual({
         id: '',
         titleStudy: '',
+        titleStudyHighlight: '',
         abstract: '',
         abstractExpanded: false,
         abstractShort: '',
+        abstractHighlight: '',
+        abstractHighlightShort: '',
         classifications: [],
         creators: [],
         dataAccessFreeTexts: [],

@@ -170,9 +170,12 @@ describe('Search reducer', () => {
         {
           id: '',
           titleStudy: '',
+          titleStudyHighlight: '',
           abstract: '',
           abstractExpanded: false,
           abstractShort: '',
+          abstractHighlight: '',
+          abstractHighlightShort: '',
           classifications: [],
           creators: [],
           dataAccessFreeTexts: [],
@@ -309,9 +312,12 @@ describe('Search reducer', () => {
         {
           id: 1,
           titleStudy: 'Study Title',
+          titleStudyHighlight: '',
           abstract: 'Abstract',
           abstractExpanded: false,
           abstractShort: 'Abstract',
+          abstractHighlight: '',
+          abstractHighlightShort: '',
           classifications: [
             {
               id: 'UKDS1234',
