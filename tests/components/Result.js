@@ -124,7 +124,7 @@ describe('Result component', () => {
 
   it('should hide long abstract if not expanded', () => {
     const { enzymeWrapper } = setup();
-    expect(enzymeWrapper.find('.sk-hits-list__desc span').length).toBe(0);
+    expect(enzymeWrapper.find('.sk-hits-list__desc span.abstr').length).toBe(0);
   });
 
   it('should toggle long abstract', () => {
