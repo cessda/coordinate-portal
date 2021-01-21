@@ -14,20 +14,11 @@
 
 import type { Node } from 'react';
 import React, { Component } from 'react';
-import { Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } from 'searchkit';
+import { Layout, LayoutBody, LayoutResults, SearchkitProvider } from 'searchkit';
 import Header from '../components/Header';
-import Language from '../components/Language';
-import Detail from '../components/Detail';
-import Footer from '../components/Footer.jsx';
+import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
-import Panel from '../components/Panel';
 import { connect } from 'react-redux';
-import { FaAngleLeft, FaCode, FaExternalLink } from 'react-icons/lib/fa/index';
-import { bindActionCreators } from 'redux';
-import Translate from 'react-translate-component';
-import Similars from '../components/Similars';
-import { goBack } from 'react-router-redux';
-import type { Dispatch, State } from '../types';
 import _ from 'lodash';
 
 export class AboutPage extends Component<Props> {
@@ -38,23 +29,21 @@ export class AboutPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <LayoutResults>
-              <article className="data-abstract">
-                <h1 className="data-label">About</h1>
+              <article className="about-container">
+                <h1 className="about-title">About</h1>
 
                 <p>
-                  The CESSDA Data Catalogue (CDC) harvests metadata from various endpoints. 
-                  It uses different repository handlers to adapt the payload for each type 
-                  of endpoint to a standard format (the CESSDA Metadata Model, CMM).
+                  The CESSDA Data Catalogue (CDC) contains descriptions (metadata) of the more than 30,000 data collections held by CESSDA’s Service Providers (SP),
+                  representing 20 European countries. It is a one-stop shop for searching and finding data, enabling effective access to European social science data.
+                  The data described are varied. They may be quantitative, qualitative or mixed-modes data, cross-sectional or longitudinal, recently collected or historical data.
                 </p>
                 
                 <p>
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa.
-                  Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, 
-                  sit amet commodo magna eros quis urna.
-                </p>
-
-                <p>
-                  Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.
+                  {/* An a element is used here because the documentation is not part of the React application */}
+                  The <a href="/documentation/">User Guide</a> presents an overview of how to use the CDC for searching,
+                  including basic search and applying filters as well as advanced search. The CDC is a portal for discovering data.
+                  Detailed descriptions of data collections are provided. For information and procedures to access data,
+                  there is a link in the lower right of each entry to the website of the data provider [“Access data”].
                 </p>
 
               </article>
@@ -63,7 +52,7 @@ export class AboutPage extends Component<Props> {
           <Footer/>
         </Layout>
       </SearchkitProvider>
-    )
+    );
   }
 }
 
