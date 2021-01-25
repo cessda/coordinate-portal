@@ -300,7 +300,7 @@ describe('Search reducer', () => {
                 dataAccessFreeTexts: ['Data Access Free Texts'],
                 lastModified: '2001-01-01T12:00:00Z',
                 isActive: true,
-                langAvailableIn: ['en'],
+                langAvailableIn: [{langCode: 'en', language: 'English'}],
                 studyUrl: 'http://example.com'
               }
             }
