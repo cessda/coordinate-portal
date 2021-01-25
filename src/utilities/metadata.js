@@ -79,7 +79,7 @@ export function getStudyModel(data: Object): Object {
     // [Not visible in user interface]
     isActive: data._source.isActive,
     // [List of other metadata languages used for result buttons]
-    langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], (i) => (i.toUpperCase())))
+    langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], i => i.langCode.toUpperCase()))
   };
 }
 
