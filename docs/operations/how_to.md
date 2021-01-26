@@ -41,7 +41,7 @@ To add a new language whose two letter prefix is **"dv"**
     - `languages: ['en', 'fi', 'de', 'dv' ]`
 1. Add a Index setting file with pattern cmmstudy_settings_**dv**.  If not set index will be created with default elasticsearch settings
     - You should think about creating a "stopword" section in your ElasticSearch settings (Look at English or German settings file). You can find a list of available "Stopwords" table on ElasticSearch documentation
-[ElasticSearch Stopwords](https://www.elastic.co/guide/en/elasticsearch/reference/2.4/analysis-lang-analyzer.html)
+[ElasticSearch Stopwords](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/analysis-lang-analyzer.html)
 1. Add a Mappings file with pattern cmmstudy_mappings_**dv**.  If not set index will be created with default elasticsearch mappings with dynamic field type detections.
 
 ## Disabling switches
