@@ -323,14 +323,14 @@ body {
   }
 }
 
-.data-label {
+.data-label, .about-title {
   font-weight: 700;
   font-size: 14px;
   margin-top: 15px;
   display: block;
 }
 
-.data-abstract {
+.data-abstract, .about-container {
   p {
     margin-bottom: 10px;
   }

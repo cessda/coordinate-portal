@@ -132,5 +132,8 @@
     "privacy": "Privacy Policy",
     "aup": "Acceptable Use Policy",
     "tools": "CESSDA Tools & Services"
+  },
+  "about": {
+    "label": "About"
   }
 }

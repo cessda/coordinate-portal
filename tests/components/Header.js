@@ -15,7 +15,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
 import { Header, mapDispatchToProps, mapStateToProps } from '../../src/components/Header';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -52,10 +52,9 @@ describe('Header component', () => {
   });
 
   it('should navigate to home from logo', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(props.push).not.toHaveBeenCalled();
+    const { enzymeWrapper } = setup();
     enzymeWrapper.find('.cessda-eric').simulate('click');
-    expect(props.push).toHaveBeenCalled();
+    
   });
 
   it('should show hide button when mobile filters visible', () => {
@@ -117,7 +116,6 @@ describe('Header component', () => {
 
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps()).toEqual({
-      push: expect.any(Function),
       resetSearch: expect.any(Function),
       toggleSummary: expect.any(Function),
       toggleMobileFilters: expect.any(Function),
