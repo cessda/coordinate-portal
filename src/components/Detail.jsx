@@ -47,11 +47,11 @@ export class Detail extends HitItem<Props> {
     element: 'p' | 'tag',
     callback?: Function
   ): Node[] {
-    let elements: Node[] = [];
+    const elements: Node[] = [];
 
     for (let i: number = 0; i < field.length; i++) {
       if (field[i]) {
-        let value: any = callback?.(field[i]) ?? field[i];
+        const value: any = callback?.(field[i]) ?? field[i];
         if (element === 'tag') {
           elements.push(
             <span className="tag" key={i}>
@@ -102,8 +102,8 @@ export class Detail extends HitItem<Props> {
           dateFallback,
           'p',
           (date: string): string => {
-            let value: string = dateFallbackProperty ? date[dateFallbackProperty] : date;
-            let momentDate = moment(
+            const value: string = dateFallbackProperty ? date[dateFallbackProperty] : date;
+            const momentDate = moment(
               value,
               [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'],
               true
@@ -273,9 +273,7 @@ export class Detail extends HitItem<Props> {
             content="metadata.publisher"
           />
           <p>
-            {item.publisher || (
-              <Translate content="language.notAvailable.field" />
-            )}
+            {item.publisher || <Translate content="language.notAvailable.field" />}
           </p>
 
           <Translate
@@ -305,9 +303,7 @@ export class Detail extends HitItem<Props> {
             {this.generateElements(
               item.classifications,
               'tag',
-              term => {
-                return <Link to={"/?classifications.term[0]=" + encodeURI(term.term)}>{_.upperFirst(term.term)}</Link>;
-              }
+              classifications => <Link to={"/?classifications.term[0]=" + encodeURI(classifications.term)}>{_.upperFirst(classifications.term)}</Link>
             )}
           </div>
         </Panel>
@@ -319,9 +315,9 @@ export class Detail extends HitItem<Props> {
           defaultCollapsed={true}
         >
           <div className="tags">
-            {this.generateElements(item.keywords, 'tag', keywords => {
-              return <Link to={"/?q=" + encodeURI(keywords.term)}>{_.upperFirst(keywords.term)}</Link>;
-            })}
+            {this.generateElements(item.keywords, 'tag', keywords => 
+              <Link to={`/?q="${encodeURI(keywords.term)}"`}>{_.upperFirst(keywords.term)}</Link>
+            )}
           </div>
         </Panel>
       </article>
