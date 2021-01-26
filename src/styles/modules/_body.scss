@@ -68,7 +68,12 @@ body {
       margin-right: 5px;
     }
   }
-
+  .sk-hits-list .sk-hits-list-hit {
+    em {
+    background: transparent;
+    font-weight: bold
+  }
+}
   .go-to-collection, .go-to-study {
     margin-right: 10px;
   }
