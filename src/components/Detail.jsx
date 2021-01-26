@@ -264,8 +264,7 @@ export class Detail extends HitItem<Props> {
         <Panel
           className="section-header"
           title={<Translate component="h2" content='metadata.access'/>}
-          collapsable={true}
-          defaultCollapsed={true}
+          collapsable={false}
         >
           <Translate
             className="data-label"
@@ -296,8 +295,7 @@ export class Detail extends HitItem<Props> {
         <Panel
           className="section-header"
           title={<Translate component="h2" content='metadata.topics'/>}
-          collapsable={true}
-          defaultCollapsed={true}
+          collapsable={false}
         >
           <div className="tags">
             {this.generateElements(
@@ -311,8 +309,7 @@ export class Detail extends HitItem<Props> {
         <Panel
           className="section-header"
           title={<Translate component="h2" content='metadata.keywords'/>}
-          collapsable={true}
-          defaultCollapsed={true}
+          collapsable={false}
         >
           <div className="tags">
             {this.generateElements(item.keywords, 'tag', keywords => 
