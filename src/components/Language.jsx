@@ -25,6 +25,7 @@ import Select from 'react-select';
 
 type Props = {
   code: string,
+  label: string,
   list: {
     code: string,
     label: string,
@@ -37,16 +38,17 @@ export class Language extends Component<Props> {
   render(): Node {
     const {
       code,
+      label,
       list,
       changeLanguage
     } = this.props;
 
-    let countries: {
+    let languages: {
       label: string,
       value: string
     }[] = [];
     for (let i: number = 0; i < list.length; i++) {
-      countries.push({
+      languages.push({
         label: list[i].label,
         value: list[i].code
       });
@@ -57,11 +59,11 @@ export class Language extends Component<Props> {
         <Translate component="label"
                    content="language.label"/>
         <Select value={code}
-                options={countries}
+                options={languages}
                 searchable={false}
                 clearable={false}
                 autosize={true}
-                onChange={(option) => changeLanguage(option.value)}/>
+                onChange={(option) => changeLanguage(option.value, option.label)}/>
       </div>
     );
   }
@@ -70,6 +72,7 @@ export class Language extends Component<Props> {
 export const mapStateToProps = (state: State): Object => {
   return {
     code: state.language.code,
+    label: state.language.label,
     list: state.language.list
   };
 };

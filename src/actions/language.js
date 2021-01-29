@@ -63,6 +63,7 @@ export function initTranslations(): Thunk {
           'searchbox.placeholder': counterpart.translate('search'),
           'hitstats.results_found': counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
+            label: getState().language.label,
             time: searchkit.getTime()
           }),
           'NoHits.NoResultsFound': counterpart.translate('noHits.noResultsFound', {
@@ -88,10 +89,11 @@ export function initTranslations(): Thunk {
 
 export type ChangeLanguageAction = {
   type: 'CHANGE_LANGUAGE',
-  code: string
+  code: string,
+  label: string
 };
 
-export function changeLanguage(code: string): Thunk {
+export function changeLanguage(code: string, label: string): Thunk {
   return (dispatch: Dispatch): void => {
     code = code.toLowerCase();
 
@@ -111,7 +113,8 @@ export function changeLanguage(code: string): Thunk {
 
     dispatch({
       type: 'CHANGE_LANGUAGE',
-      code
+      code,
+      label
     });
 
     searchkit.reloadSearch();

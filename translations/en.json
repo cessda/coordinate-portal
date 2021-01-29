@@ -8,7 +8,7 @@
       "content": "It may not exist or is not available in the selected language. Choose an alternative language or start a new search."
     }
   },
-  "search": "Find Social and Economic Research Data",
+  "search": "Select a language for optimal results",
   "noHits": {
     "noResultsFound": "No results found for \"%(query)s\" in the selected language.",
     "searchWithoutFilters": "Search for \"%(query)s\" without filters",
@@ -36,6 +36,11 @@
       "placeholder": "Search countries",
       "tooltip": "Country in which the study took place."
     },
+    "langAvailableIn": {
+      "label": "Search language(s)",
+      "placeholder": "Search language(s)",
+      "tooltip": "Language of study titles and abstract / description."
+    },
     "publisher": {
       "label": "Publisher",
       "placeholder": "Search publishers",
@@ -50,9 +55,9 @@
     }
   },
   "numberOfResults": {
-    "zero": "%(count)s results found",
-    "one": "%(count)s result found",
-    "other": "%(count)s results found"
+    "zero": "%(count)s results found in %(label)s",
+    "one": "%(count)s result found in %(label)s",
+    "other": "%(count)s results found in %(label)s"
   },
   "numberOfResultsWithTime": {
     "zero": "%(count)s results found in %(time)sms",
@@ -67,7 +72,7 @@
     "dateDescending": "Date of collection (newest)"
   },
   "advancedSearch": {
-    "label": "Advanced search",
+    "label": "Search help",
     "introduction": "The following special characters can be used to perform advanced search queries:",
     "and": "<span class=\"%(className)s\">+</span> signifies <strong>AND</strong> operation.",
     "or": "<span class=\"%(className)s\">|</span> signifies <strong>OR</strong> operation.",

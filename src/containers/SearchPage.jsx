@@ -23,7 +23,7 @@ import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
   Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
-  SearchkitProvider, SideBar
+  SearchkitProvider, Select, SideBar
 } from 'searchkit';
 import Translate from 'react-translate-component';
 import Header from '../components/Header';
@@ -51,7 +51,7 @@ export class SearchPage extends Component<Props> {
     this.autoExpandFilter('dataCollectionYear');
     this.autoExpandFilter('studyAreaCountries.country');
     this.autoExpandFilter('publisher.publisher');
-    this.autoExpandFilter('fileLanguages');
+    this.autoExpandFilter('langAvailableIn.language');
   }
 
   autoExpandFilter(filterName: string): void {
@@ -76,6 +76,24 @@ export class SearchPage extends Component<Props> {
           <Header/>
           <LayoutBody className="columns">
             <SideBar className="column is-4">
+          {/*  <RefinementListFilter id="langAvailableIn.language"
+                                    title={<Translate content='filters.langAvailableIn.label'/>}
+                                    field={'langAvailableIn.language'}
+                                    fieldOptions={{
+                                      type: 'nested',
+                                      options: {path: 'langAvailableIn', min_doc_count: 1}
+                                    }}
+                                    orderKey="_term"
+                                    orderDirection="asc"
+                                    operator="OR"
+                                    containerComponent={<Panel title={<Translate content='filters.langAvailableIn.label'/>}
+                                                               tooltip={<Translate content='filters.langAvailableIn.tooltip'/>}
+                                                               className="langAvailableIn"
+                                                               collapsable={true}
+                                                               defaultCollapsed={false}/>}
+                                    listComponent={<MultiSelect placeholder={<Translate content='filters.langAvailableIn.placeholder'/>}/>}
+                                    size={500}/> */}
+                                    
               <RefinementListFilter id="classifications.term"
                                     title={<Translate content='filters.topic.label'/>}
                                     field={'classifications.term'}

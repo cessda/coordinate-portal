@@ -16,6 +16,7 @@ import type {Action} from '../actions';
 
 type State = {
   code: string,
+  label: string,
   list?: {
     code: string,
     label: string,
@@ -24,7 +25,8 @@ type State = {
 };
 
 const initialState: State = {
-  code: 'en'
+  code: 'en',
+  label: 'English'
 };
 
 const language = (state: State, action: Action): State => {
@@ -40,7 +42,8 @@ const language = (state: State, action: Action): State => {
 
     case 'CHANGE_LANGUAGE':
       return Object.assign({}, state, {
-        code: action.code
+        code: action.code,
+        label: action.label
       });
 
     default:

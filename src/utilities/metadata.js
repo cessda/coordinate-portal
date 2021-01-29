@@ -46,6 +46,9 @@ export function getStudyModel(data: Object): Object {
     abstractExpanded: false,
     /** Country */
     studyAreaCountries: data._source.studyAreaCountries || [],
+     /** Search languages */
+    searchLanguages: data._source.langAvailableIn || [],
+    langAvailableIn: data._source.langAvailableIn || [],
     /** Time dimension */
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
     /** Analysis unit */
@@ -79,7 +82,7 @@ export function getStudyModel(data: Object): Object {
     // [Not visible in user interface]
     isActive: data._source.isActive,
     // [List of other metadata languages used for result buttons]
-    langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], i => i.langCode.toUpperCase()))
+    descAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], i => i.langCode.toUpperCase()))
   };
 }
 
