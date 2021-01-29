@@ -76,6 +76,24 @@ export const similarQuery = (title: string): Object => {
   };
 };
 
+// Match all query
+export const matchAllQuery = (): Object => {
+  return {
+    match_all: {},
+  };
+};
+
+// Aggregation used to get the total number of unique records
+export const uniqueAggregation = (): Object => {
+  return {
+    unique_id: {
+      cardinality: {
+        field: "id"
+      }
+    }
+  };
+};
+
 // Define a single searchkit manager instance to power the application.
 const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
 

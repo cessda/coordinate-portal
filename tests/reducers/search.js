@@ -24,7 +24,8 @@ describe('Search reducer', () => {
       expandMetadataPanels: false,
       displayed: [],
       query: Object,
-      state: Object
+      state: Object,
+      totalStudies: 0
     });
   });
 

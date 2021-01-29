@@ -41,7 +41,8 @@ type Props = {
   resetSearch: () => void,
   toggleSummary: () => void,
   toggleMobileFilters: () => void,
-  toggleAdvancedSearch: () => void
+  toggleAdvancedSearch: () => void,
+  totalStudies: Number
 };
 
 export class Header extends Component<Props> {
@@ -55,7 +56,8 @@ export class Header extends Component<Props> {
       showMobileFilters,
       toggleMobileFilters,
       showAdvancedSearch,
-      toggleAdvancedSearch
+      toggleAdvancedSearch,
+      totalStudies
     } = this.props;
 
     return (
@@ -94,6 +96,8 @@ export class Header extends Component<Props> {
                 {filters &&
                   <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
                 }
+
+                <div className="sk-reset-filters">{totalStudies}</div>
 
                 <Link to="/about">
                   <Translate className="sk-reset-filters link" content="about.label"/>
@@ -204,7 +208,8 @@ export const mapStateToProps = (state: State): Object => {
     filters: state.search.query.post_filter,
     showFilterSummary: state.search.showFilterSummary,
     showMobileFilters: state.search.showMobileFilters,
-    showAdvancedSearch: state.search.showAdvancedSearch
+    showAdvancedSearch: state.search.showAdvancedSearch,
+    totalStudies: state.search.totalStudies
   };
 };
 
