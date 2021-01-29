@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2019
+// Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -24,7 +24,8 @@ describe('Search reducer', () => {
       expandMetadataPanels: false,
       displayed: [],
       query: Object,
-      state: Object
+      state: Object,
+      totalStudies: 0
     });
   });
 

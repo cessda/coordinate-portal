@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2019
+// Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -12,8 +12,18 @@
 // limitations under the License.
 
 module.exports = {
-  testMatch: ['**/tests/**/*.js'],
-  coverageDirectory: './coverage',
+  // Collect test coverage
   collectCoverage: true,
-  reporters: ['default', 'jest-junit']
+  coverageDirectory: './coverage',
+
+  // Add the JUnit reporter so that test results can be displayed in Jenkins
+  reporters: ['default', 'jest-junit'],
+
+  // Setup Enzyme, this removes the need for imports in the tests
+  setupFilesAfterEnv: ["jest-enzyme"],
+  testEnvironment: "enzyme",
+  testEnvironmentOptions: {
+    enzymeAdapter: "react15"
+  },
+  testMatch: ['**/tests/**/*.js']
 };

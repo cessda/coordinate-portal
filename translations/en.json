@@ -19,12 +19,12 @@
     "topic": {
       "label": "Topic",
       "placeholder": "Search topics",
-      "tooltip": "<a href=\"https://vocabularies.cessda.eu/vocabulary/TopicClassification?lang=en\">CESSDA Topic Classification</a> serves to identify the general topics, subjects or themes of a study."
+      "tooltip": "<a href=\"https://vocabularies.cessda.eu/vocabulary/TopicClassification?lang=en\">CESSDA Topic Classification</a> serves to identify the general topics, subjects or themes of a study. Note: Some studies use other topic classifications and are not included in the filter."
     },
     "collectionDates": {
       "label": "Collection years",
       "placeholder": "Search years",
-      "tooltip": "The period, in years, when the data were collected."
+      "tooltip": "The year(s) in which the data for the study were collected."
     },
     "languageOfDataFiles": {
       "label": "Language of data files",
@@ -34,7 +34,7 @@
     "country": {
       "label": "Country",
       "placeholder": "Search countries",
-      "tooltip": "Country in which the study took place."
+      "tooltip": "The country which the data cover. Note: the filter only includes those studies where the metadata provide an ISO 3166-1 country code. Use an additional free-text search with country name for more results."
     },
     "langAvailableIn": {
       "label": "Search language(s)",
@@ -44,7 +44,7 @@
     "publisher": {
       "label": "Publisher",
       "placeholder": "Search publishers",
-      "tooltip": "Name of the institution publishing the research data. Will usually be the CESSDA Service Provider providing the metadata information."
+      "tooltip": "Name of the institution providing the information (metadata) on the study."
     },
     "summary": {
       "label": "Filter summary",
@@ -137,5 +137,8 @@
     "privacy": "Privacy Policy",
     "aup": "Acceptable Use Policy",
     "tools": "CESSDA Tools & Services"
+  },
+  "about": {
+    "label": "About"
   }
 }

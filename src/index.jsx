@@ -1,5 +1,5 @@
 // @flow
-// Copyright CESSDA ERIC 2017-2019
+// Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import AboutPage from './containers/AboutPage';
 import SearchPage from './containers/SearchPage';
 import DetailPage from './containers/DetailPage';
 import App from './containers/App';
@@ -99,6 +100,7 @@ if (root instanceof HTMLElement) {
           <IndexRoute component={SearchPage}/>
           <Route path="detail" component={DetailPage}/>
           <Route path="study/pid" component={DetailPage}/>
+          <Route path="about" component={AboutPage}/>
           <Redirect from="*" to="/"/>
         </Route>
       </Router>

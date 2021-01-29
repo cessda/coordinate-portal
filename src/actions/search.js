@@ -1,5 +1,5 @@
 // @flow
-// Copyright CESSDA ERIC 2017-2019
+// Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -14,10 +14,23 @@
 
 
 
-import searchkit, { detailQuery, similarQuery, pidQuery } from '../utilities/searchkit';
-import * as elasticsearch from 'elasticsearch';
+import searchkit, { detailQuery, similarQuery, pidQuery, matchAllQuery, uniqueAggregation } from '../utilities/searchkit';
+import { Client } from 'elasticsearch';
 import _ from 'lodash';
 import type { Dispatch, GetState, State, Thunk } from '../types';
+
+// Get a new Elasticsearch Client
+function elasticsearchClient() {
+  return new Client({
+    host: {
+      protocol: _.trim(window.location.protocol, ':'),
+      host: window.location.hostname,
+      port: window.location.port ||
+        (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
+      path: '/api/sk'
+    }
+  });
+}
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 
@@ -82,6 +95,8 @@ export const initSearchkit = (): Thunk => {
 
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
+
+      dispatch(updateTotalStudies());
 
       return query;
     });
@@ -248,17 +263,7 @@ export const updateSimilars = (item: Object): Thunk => {
     let state: State = getState(),
       index: string = _.find(state.language.list, { 'code': state.language.code }).index;
 
-    let client: Object = new elasticsearch.Client({
-      host: {
-        protocol: _.trim(window.location.protocol, ':'),
-        host: window.location.hostname,
-        port: window.location.port ||
-              (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
-        path: '/api/sk'
-      }
-    });
-
-    return client.search({
+    return elasticsearchClient().search({
       size: 10,
       body: {
         index: index,
@@ -267,11 +272,13 @@ export const updateSimilars = (item: Object): Thunk => {
     }).then((response: Object): void => {
       dispatch({
         type: 'UPDATE_SIMILARS',
-        similars: _.uniqBy(_.filter(response.hits.hits, (hit: Object): boolean => {
-          return hit._source && hit._source.id !== item.id && hit._source.titleStudy !== item.titleStudy;
-        }), (hit: Object): string => {
-          return hit._source.titleStudy;
-        })
+        similars: _.uniqBy(
+          _.filter( 
+            response.hits.hits, 
+            (hit: Object): boolean => hit._source && hit._source.id !== item.id && hit._source.titleStudy !== item.titleStudy
+          ),
+          (hit: Object): string => hit._source.titleStudy
+        )
       });
     });
   };
@@ -296,6 +303,34 @@ export const resetSearch = (): Thunk => {
   };
 };
 
+//////////// Redux Action Creator : UPDATE_TOTAL_STUDIES
+
+export type UpdateTotalStudiesAction = {
+  type: 'UPDATE_TOTAL_STUDIES',
+  totalStudies: Number
+};
+
+export const updateTotalStudies = (item: Object): Thunk => {
+  return (dispatch: Dispatch, getState: GetState): void => {
+
+    const index = "cmmstudy_*";
+
+    return elasticsearchClient().search({
+      size: 0,
+      body: {
+        index: index,
+        query: matchAllQuery(),
+        aggs: uniqueAggregation()
+      }
+    }).then((response: Object): void => {
+      dispatch({
+        type: 'UPDATE_TOTAL_STUDIES',
+        totalStudies: response.aggregations.unique_id.value
+      });
+    });
+  };
+};
+
 ////////////
 
 export type SearchAction =
@@ -310,4 +345,5 @@ export type SearchAction =
   | UpdateQueryAction
   | UpdateStateAction
   | UpdateSimilarsAction
-  | ResetSearchAction;
+  | ResetSearchAction
+  | UpdateTotalStudiesAction;

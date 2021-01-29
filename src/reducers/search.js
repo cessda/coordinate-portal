@@ -1,5 +1,5 @@
 // @flow
-// Copyright CESSDA ERIC 2017-2019
+// Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -29,7 +29,8 @@ type State = {
     title: string
   }[],
   query: any,
-  state: any
+  state: any,
+  totalStudies: Number
 };
 
 const initialState: State = {
@@ -40,7 +41,8 @@ const initialState: State = {
   expandMetadataPanels: false,
   displayed: [],
   query: Object,
-  state: Object
+  state: Object,
+  totalStudies: 0
 };
 
 const search = (state: State, action: Action): State => {
@@ -139,6 +141,11 @@ const search = (state: State, action: Action): State => {
 
     case 'RESET_SEARCH':
       return state;
+    
+    case 'UPDATE_TOTAL_STUDIES':
+      return Object.assign({}, state, {
+        totalStudies: action.totalStudies
+      });
 
     default:
       return state;

@@ -1,4 +1,3 @@
-// @flow
 // Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,19 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import _ from 'lodash';
+import React from 'react';
+import { AboutPage } from '../../src/containers/AboutPage';
 
-
-import {PageSizeSelector as SearchkitPageSizeSelector} from 'searchkit';
-import {connect} from 'react-redux';
-
-type Props = {};
-
-// Extend the Searchkit PageSizeSelector component to stay visible at all times.
-export class PageSizeSelector extends SearchkitPageSizeSelector<Props> {
-  hasHits(): boolean {
-    // Override behaviour to always return true so that the control is never disabled and hidden.
-    return true;
-  }
-}
-
-export default connect()(PageSizeSelector);
+describe("AboutPage container", () => {
+  it("Should render", () => {
+    const enzymeWrapper = shallow(<AboutPage/>);
+    const searchPage = enzymeWrapper.find('SearchkitProvider');
+    expect(searchPage).toExist();
+  });
+});

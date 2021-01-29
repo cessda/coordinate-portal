@@ -311,6 +311,7 @@ body {
 .sk-panel__header {
   color: #555555;
   h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 15px;
     font-weight: 700;
     font-size: 14px;
   }
@@ -328,14 +329,14 @@ body {
   }
 }
 
-.data-label {
+.data-label, .about-title {
   font-weight: 700;
   font-size: 14px;
   margin-top: 15px;
   display: block;
 }
 
-.data-abstract {
+.data-abstract, .about-container {
   p {
     margin-bottom: 10px;
   }
@@ -347,6 +348,10 @@ body {
     list-style-type: decimal;
     padding-left: 30px;
   }
+}
+
+.tag a:hover{
+  text-decoration: underline;
 }
 
 .similars {
