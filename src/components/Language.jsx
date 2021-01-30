@@ -56,8 +56,7 @@ export class Language extends Component<Props> {
 
     return (
       <div className="language-picker">
-        <Translate component="label"
-                   content="language.label"/>
+        
         <Select value={code}
                 options={languages}
                 searchable={false}

@@ -8,7 +8,7 @@
       "content": "It may not exist or is not available in the selected language. Choose an alternative language or start a new search."
     }
   },
-  "search": "Select a language for optimal results",
+  "search": "Select a language for optimal search results",
   "noHits": {
     "noResultsFound": "No results found for \"%(query)s\" in the selected language.",
     "searchWithoutFilters": "Search for \"%(query)s\" without filters",
@@ -55,14 +55,14 @@
     }
   },
   "numberOfResults": {
-    "zero": "%(count)s results found in %(label)s",
-    "one": "%(count)s result found in %(label)s",
-    "other": "%(count)s results found in %(label)s"
+    "zero": "%(count)s studies found in %(label)s from a total of %(total)s",
+    "one": "%(count)s studies found in %(label)s from a total of %(total)s",
+    "other": "%(count)s studies found in %(label)s from a total of %(total)s"
   },
   "numberOfResultsWithTime": {
-    "zero": "%(count)s results found in %(time)sms",
-    "one": "%(count)s result found in %(time)sms",
-    "other": "%(count)s results found in %(time)sms"
+    "zero": "%(count)s studies found in %(time)sms",
+    "one": "%(count)s studies found in %(time)sms",
+    "other": "%(count)s studies found in %(time)sms"
   },
   "sorting": {
     "relevance": "Relevance",

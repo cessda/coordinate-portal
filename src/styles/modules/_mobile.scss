@@ -3,6 +3,17 @@
 }
 
 @media screen and (max-width: 1023px) {
+
+  @at-root header .language-picker {
+    position: absolute;
+    top: 1px;
+    right: 10px;
+
+  
+    
+
+  }
+
   header {
     background: #ffffff !important;
 
@@ -36,7 +47,7 @@
       }
     }
 
-    .sk-search-box {
+    .sk-search-box, .search-wrapper {
       margin: 0 auto;
     }
 
@@ -84,10 +95,7 @@
     }
   }
 
-  .sk-hits-stats {
-    //margin-top: 5px;
-    //width: 100%;
-  }
+ 
 
   .mobile-filters-toggle {
     display: inline-block !important;

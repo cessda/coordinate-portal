@@ -93,7 +93,7 @@ export class SearchPage extends Component<Props> {
                                                                defaultCollapsed={false}/>}
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.langAvailableIn.placeholder'/>}/>}
                                     size={500}/> */}
-                                    
+
               <RefinementListFilter id="classifications.term"
                                     title={<Translate content='filters.topic.label'/>}
                                     field={'classifications.term'}

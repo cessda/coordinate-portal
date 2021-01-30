@@ -42,7 +42,6 @@ type Props = {
   toggleSummary: () => void,
   toggleMobileFilters: () => void,
   toggleAdvancedSearch: () => void,
-  totalStudies: Number
 };
 
 export class Header extends Component<Props> {
@@ -57,7 +56,6 @@ export class Header extends Component<Props> {
       toggleMobileFilters,
       showAdvancedSearch,
       toggleAdvancedSearch,
-      totalStudies
     } = this.props;
 
     return (
@@ -65,7 +63,7 @@ export class Header extends Component<Props> {
 
         <div className="container">
           <Translate component="a" className="cessda-organisation" href="https://www.cessda.eu/" content="cessda" />
-          <Language />
+        
         </div>
 
         <div className="container">
@@ -83,9 +81,11 @@ export class Header extends Component<Props> {
                 <HitsStats className="hits-count" />
               }
             </div>
-            <div className="column">
+            <div className="column"><div className="search-wrapper">
               <SearchBox autofocus={true} searchOnChange={true} queryBuilder={queryBuilder} />
-
+              <Language />
+              </div>
+  
               <div className="reset-search">
                 {pathname === '/' &&
                   <a className="sk-reset-filters link mobile-filters-toggle" onClick={toggleMobileFilters}>
@@ -97,7 +97,7 @@ export class Header extends Component<Props> {
                   <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
                 }
 
-                <div className="sk-reset-filters">{totalStudies}</div>
+                
 
                 <Link to="/about">
                   <Translate className="sk-reset-filters link" content="about.label"/>

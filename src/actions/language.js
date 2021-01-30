@@ -36,6 +36,7 @@ export function initTranslations(): Thunk {
   return (dispatch: Dispatch, getState: GetState): void => {
     // Register translations provided from the "/locales" directory.
     let state: State = getState(),
+    
       list: {
         code: string;
         label: string;
@@ -64,6 +65,7 @@ export function initTranslations(): Thunk {
           'hitstats.results_found': counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
             label: getState().language.label,
+            total: getState().search.totalStudies,
             time: searchkit.getTime()
           }),
           'NoHits.NoResultsFound': counterpart.translate('noHits.noResultsFound', {

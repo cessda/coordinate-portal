@@ -185,19 +185,21 @@ describe('Search reducer', () => {
           dataCollectionPeriodStartdate: '',
           fileLanguages: [],
           keywords: [],
+          descAvailableIn: [],
           langAvailableIn: [],
           lastModified: '',
           pidStudies: [],
           publicationYear: '',
           publisher: '',
           samplingProcedureFreeTexts: [],
+          descAvailableIn: [],
           studyAreaCountries: [],
           studyNumber: '',
           typeOfModeOfCollections: [],
           typeOfTimeMethods: [],
           unitTypes: [],
-          studyUrl: undefined,
-          isActive: undefined
+          studyUrl: '',
+          isActive: ''
         }
       ],
       jsonLd: {
@@ -212,6 +214,7 @@ describe('Search reducer', () => {
         license: [],
         measurementTechnique: '',
         name: '',
+        sameAs: '',
         spatialCoverage: '',
         temporalCoverage: '/',
         url: 'http://localhost/',
@@ -347,7 +350,8 @@ describe('Search reducer', () => {
               vocabUri: 'http://example.com'
             }
           ],
-          langAvailableIn: ['EN'],
+          descAvailableIn: ['EN'],
+          langAvailableIn: [{langCode: 'en', language: 'English'}],
           lastModified: '2001-01-01T12:00:00Z',
           pidStudies: [
             {

@@ -131,6 +131,7 @@ describe('Metadata utilities', () => {
         dataCollectionFreeTexts: [],
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '2001',
+        descAvailableIn: ['EN'],
         fileLanguages: ['en'],
         isActive: true,
         keywords: [
@@ -141,7 +142,7 @@ describe('Metadata utilities', () => {
             vocabUri: 'http://example.com'
           }
         ],
-        langAvailableIn: ['EN'],
+        langAvailableIn: [{langCode: 'en', language: 'English'}],
         lastModified: '2001-01-01T12:00:00Z',
         pidStudies: [
           {
@@ -209,7 +210,9 @@ describe('Metadata utilities', () => {
         dataCollectionFreeTexts: [],
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '',
+        descAvailableIn: [],
         fileLanguages: [],
+        isActive:'',
         keywords: [],
         langAvailableIn: [],
         lastModified: '',
@@ -219,6 +222,7 @@ describe('Metadata utilities', () => {
         samplingProcedureFreeTexts: [],
         studyAreaCountries: [],
         studyNumber: '',
+        studyUrl: '',
         typeOfModeOfCollections: [],
         typeOfTimeMethods: [],
         unitTypes: []

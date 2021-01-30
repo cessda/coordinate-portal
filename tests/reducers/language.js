@@ -20,7 +20,8 @@ describe('Language reducer', () => {
 
   it('should return the initial state', () => {
     expect(language(undefined, {})).toEqual({
-      code: 'en'
+      code: 'en',
+      label: 'English'
     });
   });
 
