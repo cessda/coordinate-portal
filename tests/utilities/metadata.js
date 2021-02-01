@@ -55,7 +55,7 @@ describe('Metadata utilities', () => {
                 vocabUri: 'http://example.com'
               }
             ],
-            langAvailableIn: [{langCode: 'en', language: 'English'}],
+            langAvailableIn: ['EN'],
             lastModified: '2001-01-01T12:00:00Z',
             pidStudies: [
               {
@@ -131,7 +131,6 @@ describe('Metadata utilities', () => {
         dataCollectionFreeTexts: [],
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '2001',
-        descAvailableIn: ['EN'],
         fileLanguages: ['en'],
         isActive: true,
         keywords: [
@@ -142,7 +141,7 @@ describe('Metadata utilities', () => {
             vocabUri: 'http://example.com'
           }
         ],
-        langAvailableIn: [{langCode: 'en', language: 'English'}],
+        langAvailableIn: ['EN'],
         lastModified: '2001-01-01T12:00:00Z',
         pidStudies: [
           {
@@ -210,7 +209,6 @@ describe('Metadata utilities', () => {
         dataCollectionFreeTexts: [],
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '',
-        descAvailableIn: [],
         fileLanguages: [],
         isActive:'',
         keywords: [],

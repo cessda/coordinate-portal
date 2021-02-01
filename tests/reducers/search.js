@@ -185,14 +185,12 @@ describe('Search reducer', () => {
           dataCollectionPeriodStartdate: '',
           fileLanguages: [],
           keywords: [],
-          descAvailableIn: [],
           langAvailableIn: [],
           lastModified: '',
           pidStudies: [],
           publicationYear: '',
           publisher: '',
           samplingProcedureFreeTexts: [],
-          descAvailableIn: [],
           studyAreaCountries: [],
           studyNumber: '',
           typeOfModeOfCollections: [],
@@ -304,7 +302,7 @@ describe('Search reducer', () => {
                 dataAccessFreeTexts: ['Data Access Free Texts'],
                 lastModified: '2001-01-01T12:00:00Z',
                 isActive: true,
-                langAvailableIn: [{langCode: 'en', language: 'English'}],
+                langAvailableIn: ['en'],
                 studyUrl: 'http://example.com'
               }
             }
@@ -350,8 +348,7 @@ describe('Search reducer', () => {
               vocabUri: 'http://example.com'
             }
           ],
-          descAvailableIn: ['EN'],
-          langAvailableIn: [{langCode: 'en', language: 'English'}],
+          langAvailableIn: ['EN'],
           lastModified: '2001-01-01T12:00:00Z',
           pidStudies: [
             {

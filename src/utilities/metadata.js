@@ -82,7 +82,7 @@ export function getStudyModel(data: Object): Object {
 
     isActive: data._source.isActive || '',
     // [List of other metadata languages used for result buttons]
-    descAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], i => i.langCode.toUpperCase()))
+    langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], (i) => (i.toUpperCase())))
   };
 }
 

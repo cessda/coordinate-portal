@@ -44,14 +44,14 @@ export class Result extends Component<Props> {
     }
 
     let languages: Node[] = [];
-    for (let i: number = 0; i < item.descAvailableIn.length; i++) {
+    for (let i: number = 0; i < item.langAvailableIn.length; i++) {
       languages.push(<a key={i} className="button is-small is-white" onClick={() => {
-        changeLanguage(item.descAvailableIn[i]);
+        changeLanguage(item.langAvailableIn[i]);
         push({
           pathname: 'detail',
           search: '?q="' + item.id + '"'
         });
-      }}>{item.descAvailableIn[i]}</a>);
+      }}>{item.langAvailableIn[i]}</a>);
     }
 
     let creators: Node[] = [];

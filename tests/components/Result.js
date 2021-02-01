@@ -50,7 +50,7 @@ function setup(item) {
                 'University of Essex',
                 'John Smith (University of Essex)'
               ],
-              descAvailableIn: ['EN'],
+              langAvailableIn: ['EN'],
               studyUrl: 'http://example.com'
             },
             item || {}
