@@ -57,7 +57,6 @@ function setup(item) {
               dataCollectionPeriodEnddate: '',
               dataCollectionPeriodStartdate: '2001',
               fileLanguages: ['en'],
-              isActive: true,
               keywords: [
                 {
                   id: 'UKDS1234',

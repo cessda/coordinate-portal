@@ -24,17 +24,17 @@ export function getLanguages(): Object[] {
   return [
   {
     code: 'da',
-    label: 'dansk',
+    label: 'Danish',
     index: 'cmmstudy_da'
   },
   {
     code: 'de',
-    label: 'Deutsch',
+    label: 'German',
     index: 'cmmstudy_de'
   },
   {
     code: 'el',
-    label: 'Ελληνικά',
+    label: 'Greek',
     index: 'cmmstudy_el'
   }, {
     code: 'en',
@@ -43,31 +43,31 @@ export function getLanguages(): Object[] {
   },
   {
     code: 'fi',
-    label: 'suomi',
+    label: 'Finnish',
     index: 'cmmstudy_fi'
   },
   {
     code: 'fr',
-    label: 'Francais',
+    label: 'French',
     index: 'cmmstudy_fr'
   },
   {
     code: 'nl',
-    label: 'Nederlands',
+    label: 'Dutch',
     index: 'cmmstudy_nl'
   },
   {
     code: 'sk',
-    label: 'Slovencina',
+    label: 'Slovakian',
     index: 'cmmstudy_sk'
   }, {
     code: 'sl',
-    label: 'Slovenski',
+    label: 'Slovenian',
     index: 'cmmstudy_sl'
   },
   {
     code: 'sv',
-    label: 'Svenska',
+    label: 'Swedish',
     index: 'cmmstudy_sv'
   }
   ];

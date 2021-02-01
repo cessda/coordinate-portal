@@ -52,7 +52,11 @@ describe('Language actions', () => {
       // Mock Redux store.
       let store = mockStore({
         language: {
-          code: languages[0].code
+          code: languages[0].code,
+          label: 'English'
+        },
+        search: {
+          totalStudies: 0
         }
       });
 
@@ -66,7 +70,9 @@ describe('Language actions', () => {
       expect(searchkit.translateFunction('hitstats.results_found')).toBe(
         counterpart.translate('numberOfResults', {
           count: 0,
-          time: 0
+          time: 0,
+          total: 0,
+          label: 'English',
         })
       );
 
@@ -85,7 +91,11 @@ describe('Language actions', () => {
       // Mock Redux store.
       let store = mockStore({
         language: {
-          code: languages[0].code
+          code: languages[0].code,
+          label: 'English'
+        },
+        search: {
+          totalStudies: 0
         }
       });
 

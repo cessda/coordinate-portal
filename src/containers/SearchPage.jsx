@@ -51,7 +51,6 @@ export class SearchPage extends Component<Props> {
     this.autoExpandFilter('dataCollectionYear');
     this.autoExpandFilter('studyAreaCountries.country');
     this.autoExpandFilter('publisher.publisher');
-    this.autoExpandFilter('fileLanguages');
   }
 
   autoExpandFilter(filterName: string): void {

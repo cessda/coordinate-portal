@@ -46,7 +46,6 @@ describe('Metadata utilities', () => {
             dataCollectionPeriodEnddate: '',
             dataCollectionPeriodStartdate: '2001',
             fileLanguages: ['en'],
-            isActive: true,
             keywords: [
               {
                 id: 'UKDS1234',
@@ -132,7 +131,6 @@ describe('Metadata utilities', () => {
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '2001',
         fileLanguages: ['en'],
-        isActive: true,
         keywords: [
           {
             id: 'UKDS1234',
@@ -219,6 +217,7 @@ describe('Metadata utilities', () => {
         samplingProcedureFreeTexts: [],
         studyAreaCountries: [],
         studyNumber: '',
+        studyUrl: undefined,
         typeOfModeOfCollections: [],
         typeOfTimeMethods: [],
         unitTypes: []
@@ -254,7 +253,6 @@ describe('Metadata utilities', () => {
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
           fileLanguages: ['en'],
-          isActive: true,
           keywords: [
             {
               id: 'UKDS1234',
@@ -379,7 +377,6 @@ describe('Metadata utilities', () => {
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
           fileLanguages: ['en'],
-          isActive: true,
           keywords: undefined,
           langAvailableIn: ['EN'],
           lastModified: '2001-01-01T12:00:00Z',
