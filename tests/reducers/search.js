@@ -196,8 +196,7 @@ describe('Search reducer', () => {
           typeOfModeOfCollections: [],
           typeOfTimeMethods: [],
           unitTypes: [],
-          studyUrl: '',
-          isActive: ''
+          studyUrl: undefined
         }
       ],
       jsonLd: {
@@ -212,7 +211,7 @@ describe('Search reducer', () => {
         license: [],
         measurementTechnique: '',
         name: '',
-        sameAs: '',
+        sameAs: undefined,
         spatialCoverage: '',
         temporalCoverage: '/',
         url: 'http://localhost/',
@@ -301,7 +300,6 @@ describe('Search reducer', () => {
                 dataCollectionYear: 2001,
                 dataAccessFreeTexts: ['Data Access Free Texts'],
                 lastModified: '2001-01-01T12:00:00Z',
-                isActive: true,
                 langAvailableIn: ['en'],
                 studyUrl: 'http://example.com'
               }
@@ -339,7 +337,6 @@ describe('Search reducer', () => {
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
           fileLanguages: ['en'],
-          isActive: true,
           keywords: [
             {
               id: 'UKDS1234',
