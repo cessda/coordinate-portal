@@ -115,7 +115,10 @@
     "creator": "Creator",
     "studyPersistentIdentifier": "Study number / PID",
     "abstract": "Abstract",
-    "methodology": "Methodology",
+    "methodology": {
+      "label": "Methodology",
+      "tooltip": "Terminology used is generally based on DDI controlled vocabularies: Time Method, Analysis Unit, Sampling Procedure and Mode of Collection, available at <a href=\"https://vocabularies.cessda.eu/\">CESSDA Vocabulary Service<a/>."
+    },
     "country": "Country",
     "timeDimension": "Time dimension",
     "analysisUnit": "Analysis unit",
@@ -128,8 +131,14 @@
     "yearOfPublication": "Publication year",
     "termsOfDataAccess": "Terms of data access",
     "studyNumber": "Study number",
-    "topics": "Topics",
-    "keywords": "Keywords"
+    "topics": {
+      "label": "Topics",
+      "tooltip": "Many but not all metadata providers use <a href=\"https://vocabularies.cessda.eu/vocabulary/TopicClassification?lang=en\">CESSDA Topic Classification</a> for their topic terms."
+    },
+    "keywords": {
+      "label": "Keywords",
+      "tooltip": "Many but not all metadata providers use <a href=\"https://elsst.cessda.eu/\">ELSST Thesaurus</a> for their keywords."
+    }
   },
   "footer": {
     "followUsOn": "Follow us on",

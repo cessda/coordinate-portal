@@ -197,7 +197,8 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content='metadata.methodology'/>}
+          title={<Translate component="h2" content="metadata.methodology.label"/>}
+          tooltip={<Translate content="metadata.methodology.tooltip" unsafe/>}
           collapsable={false}
           defaultCollapsed={false}
         >
@@ -294,7 +295,8 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content='metadata.topics'/>}
+          title={<Translate component="h2" content='metadata.topics.label'/>}
+          tooltip={<Translate content="metadata.topics.tooltip" unsafe/>}
           collapsable={false}
         >
           <div className="tags">
@@ -308,7 +310,8 @@ export class Detail extends HitItem<Props> {
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content='metadata.keywords'/>}
+          title={<Translate component="h2" content='metadata.keywords.label'/>}
+          tooltip={<Translate content="metadata.keywords.tooltip" unsafe/>}
           collapsable={false}
         >
           <div className="tags">
