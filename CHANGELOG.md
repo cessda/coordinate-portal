@@ -6,27 +6,38 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 *For each release, use the following sub-sections:*
-*- Added (for new features)*
-*- Changed (for changes in existing functionality)*
-*- Deprecated (for soon-to-be removed features)*
-*- Removed (for now removed features)*
-*- Fixed (for any bug fixes)*
-*- Security (in case of vulnerabilities)*
+
+- *Added (for new features)*
+- *Changed (for changes in existing functionality)*
+- *Deprecated (for soon-to-be removed features)*
+- *Removed (for now removed features)*
+- *Fixed (for any bug fixes)*
+- *Security (in case of vulnerabilities)*
 
 ## [Unreleased]
 
 ### Additions
 
+- Add an about page with links to the documentation, this replaces the advanced search popup ([#259](https://bitbucket.org/cessda/cessda.cdc.version2/issues/259))
+- Use a localised field derived from the country ISO code for the country filter ([#252](https://bitbucket.org/cessda/cessda.cdc.version2/issues/252))
 - Add missing translations for `language.notAvailable.field` ([#250](https://bitbucket.org/cessda/cessda.cdc.version2/issues/250))
+- Move the language selector into the search box, and add the total number of studies to the interface ([#241](https://bitbucket.org/cessda/cessda.cdc.version2/issues/241))
 - Reintroduce translation support, localise "Not Available" ([#235](https://bitbucket.org/cessda/cessda.cdc.version2/issues/235))
 - Whitelist styling HTML tags ([#226](https://bitbucket.org/cessda/cessda.cdc.version2/issues/226))
 - Add link to the CESSDA Topics Classification CV ([#208](https://bitbucket.org/cessda/cessda.cdc.version2/issues/208))
 - Add option to set default language as part of endpoint specification ([#192](https://bitbucket.org/cessda/cessda.cdc.version2/issues/192))
 - Make the keywords and topics clickable in the detail view ([#175](https://bitbucket.org/cessda/cessda.cdc.version2/issues/175))
 - Added Code of Conduct ([#174](https://bitbucket.org/cessda/cessda.cdc.version2/issues/174))
+- Add tooltip attributions to CVS and ELSST on the study detail page ([#173](https://bitbucket.org/cessda/cessda.cdc.version2/issues/173))
+- Added highlighting for searched terms in the search results page ([#145](https://bitbucket.org/cessda/cessda.cdc.version2/issues/145))
 
 ### Changes
 
+- Updated the tooltips for the search filters ([#266](https://bitbucket.org/cessda/cessda.cdc.version2/issues/266))
+- Keep all sections visible in the study details page at all times ([#263](https://bitbucket.org/cessda/cessda.cdc.version2/issues/263))
+- Add a minimum results score to prevent irrelevant matches from being returned by Elasticsearch ([#258](https://bitbucket.org/cessda/cessda.cdc.version2/issues/258))
+- Rename "Go to publisher" to "Access data" ([#254](https://bitbucket.org/cessda/cessda.cdc.version2/issues/254))
+- Improve the semantics of the HTML on the detail page ([#245](https://bitbucket.org/cessda/cessda.cdc.version2/issues/245))
 - Change the default search operator to be AND ([#242](https://bitbucket.org/cessda/cessda.cdc.version2/issues/242))
 - Include all fields in the search, except for the fields the CDC user group wants to exclude ([#238](https://bitbucket.org/cessda/cessda.cdc.version2/issues/238))
 - Fixed various React.js warnings present in development mode ([#232](https://bitbucket.org/cessda/cessda.cdc.version2/issues/232))
@@ -43,7 +54,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removals
 
+- Remove the data file language from the detail page ([#255](https://bitbucket.org/cessda/cessda.cdc.version2/issues/255))
 - Remove the Elasticsearch proxy ([#237](https://bitbucket.org/cessda/cessda.cdc.version2/issues/237))
+- Fix HTML tags appearing in various sections of the detail page ([#226](https://bitbucket.org/cessda/cessda.cdc.version2/issues/226))
 - Remove unnecessary filtering in the default request ([#217](https://bitbucket.org/cessda/cessda.cdc.version2/issues/217))
 - Remove "Not available" if no PID agency is present ([#156](https://bitbucket.org/cessda/cessda.cdc.version2/issues/156))
 
