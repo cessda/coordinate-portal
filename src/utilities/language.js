@@ -14,61 +14,62 @@
 
 
 export function getLanguages(): Object[] {
-  // Register translations stored in the "/locales" directory by adding them to the array below.
+  // Register translations stored in the "/translations" directory by adding them to the array below.
   // To add a new language with an associated Elasticsearch index, use the following format:
   // {
   //   code   : The 2 letter ISO code for this language.
-  //   label  : The native label for this language.
+  //   label  : The English label for this language.
   //   index  : The Elasticsearch index containing data for this language.
   // }
   return [
-  {
-    code: 'da',
-    label: 'Danish',
-    index: 'cmmstudy_da'
-  },
-  {
-    code: 'de',
-    label: 'German',
-    index: 'cmmstudy_de'
-  },
-  {
-    code: 'el',
-    label: 'Greek',
-    index: 'cmmstudy_el'
-  }, {
-    code: 'en',
-    label: 'English',
-    index: 'cmmstudy_en'
-  },
-  {
-    code: 'fi',
-    label: 'Finnish',
-    index: 'cmmstudy_fi'
-  },
-  {
-    code: 'fr',
-    label: 'French',
-    index: 'cmmstudy_fr'
-  },
-  {
-    code: 'nl',
-    label: 'Dutch',
-    index: 'cmmstudy_nl'
-  },
-  {
-    code: 'sk',
-    label: 'Slovakian',
-    index: 'cmmstudy_sk'
-  }, {
-    code: 'sl',
-    label: 'Slovenian',
-    index: 'cmmstudy_sl'
-  },
-  {
-    code: 'sv',
-    label: 'Swedish',
-    index: 'cmmstudy_sv'
-  }
+    {
+      code: 'da',
+      label: 'Danish',
+      index: 'cmmstudy_da'
+    },
+    {
+      code: 'nl',
+      label: 'Dutch',
+      index: 'cmmstudy_nl'
+    },
+    {
+      code: 'en',
+      label: 'English',
+      index: 'cmmstudy_en'
+    },
+    {
+      code: 'fi',
+      label: 'Finnish',
+      index: 'cmmstudy_fi'
+    },
+    {
+      code: 'fr',
+      label: 'French',
+      index: 'cmmstudy_fr'
+    },
+    {
+      code: 'de',
+      label: 'German',
+      index: 'cmmstudy_de'
+    },
+    {
+      code: 'el',
+      label: 'Greek',
+      index: 'cmmstudy_el'
+    },
+    {
+      code: 'sk',
+      label: 'Slovakian',
+      index: 'cmmstudy_sk'
+    }, {
+      code: 'sl',
+      label: 'Slovenian',
+      index: 'cmmstudy_sl'
+    },
+    {
+      code: 'sv',
+      label: 'Swedish',
+      index: 'cmmstudy_sv'
+    }
   ];
 }
