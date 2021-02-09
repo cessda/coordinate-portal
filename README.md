@@ -132,25 +132,18 @@ For development, the following software tools are recommended and have full supp
 
 > Translations can be displayed in mark-up using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
 
-N.B. list of CESSDA languages (*as of May 2020*):
+N.B. list of CESSDA languages (*as of Feb 2021*):
 
-* cs (Czech)
 * da (Danish)
 * de (German)
 * el (Greek)
 * en (English)
-* es (Spanish)
-* et (Estonian)
 * fi (Finnish)
 * fr (French)
-* hu (Hungarian)
-* it (Italian)
 * nl (Dutch)
 * no (Norwegian)
-* pt (Portuguese)
 * sk (Slovak)
 * sl (Slovenian)
-* sr (Serbian)
 * sv (Swedish)
 
 ### Add a new field
@@ -201,23 +194,11 @@ All queries performed against Elasticsearch are defined in one file for easy mod
 
 ## Known Issues
 
-As of *2 October 2020*
+As of *9 February 2021*
 
-* The User Interface only displays records that are available in the selected UI language. So the message shown towards the top left hand side e.g. '21460 results shown' refers to the selected language only, and not the total number of available records.
-
-* All languages are available for selection, but currently only da, de, el, en, fi, fr, nl, sk, sl and sv have records associated with them.
-
-* Not all UI languages have a corresponding UI translation (currently cs, da, et, hu, it, nl, pt, sr), so the labels appear in English (if the language is selectable, see above).
+* All languages are available for selection, however Slovenian and Swedish currently have no records associated with them.
 
 See [cessda.cdc.version2 README](https://bitbucket.org/cessda/cessda.cdc.version2/src/master/README.md) for more details regarding adding UI languages, indexes etc.
-
-## Deployment
-
-The Jenkinsfile defines the deployment process. See also **'QA and Deployment'** section, above.
-
-## Built With
-
-The Jenkinsfile defines the build process. See also **'QA and Deployment'** section, above.
 
 ## Contributing
 
