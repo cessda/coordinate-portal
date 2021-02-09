@@ -14,7 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
-## [Unreleased]
+## [2.3.0] - 2021-02-09
+
+OSMH Handler OAI-PMH - [10.5281/zenodo.4525832](https://zenodo.org/record/4525832)
 
 ### Additions
 
