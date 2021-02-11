@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.3.1] - 2021-02-11
 
+[10.5281/zenodo.4534768](https://zenodo.org/record/4534768)
+
 ### Removals
 
 - Removed the ability to enable analytics using the `PASC_ELASTICSEARCH_URL` environment variable ([#282](https://bitbucket.org/cessda/cessda.cdc.version2/issues/282))
