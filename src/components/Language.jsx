@@ -16,7 +16,6 @@
 
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import Translate from 'react-translate-component';
 import {connect} from 'react-redux';
 import {changeLanguage} from '../actions/language';
 import {bindActionCreators} from 'redux';
@@ -25,7 +24,6 @@ import Select from 'react-select';
 
 type Props = {
   code: string,
-  label: string,
   list: {
     code: string,
     label: string,
@@ -38,7 +36,6 @@ export class Language extends Component<Props> {
   render(): Node {
     const {
       code,
-      label,
       list,
       changeLanguage
     } = this.props;
@@ -56,13 +53,12 @@ export class Language extends Component<Props> {
 
     return (
       <div className="language-picker">
-        
         <Select value={code}
                 options={languages}
                 searchable={false}
                 clearable={false}
                 autosize={true}
-                onChange={(option) => changeLanguage(option.value, option.label)}/>
+                onChange={(option) => changeLanguage(option.value)}/>
       </div>
     );
   }
@@ -71,7 +67,6 @@ export class Language extends Component<Props> {
 export const mapStateToProps = (state: State): Object => {
   return {
     code: state.language.code,
-    label: state.language.label,
     list: state.language.list
   };
 };
