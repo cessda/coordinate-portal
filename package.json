@@ -1,6 +1,6 @@
 {
   "name": "cessda.cdc.searchkit",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "CESSDA Data Catalogue: Searchkit",
   "license": "Apache-2.0",
   "repository": "bitbucket:cessda/cessda.cdc.searchkit",
