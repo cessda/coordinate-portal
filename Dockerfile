@@ -12,6 +12,7 @@
 # limitations under the License.
 
 FROM node:12
+ENV PASC_ENABLE_ANALYTICS = "true"
 
 # Create app directory
 WORKDIR /usr/src/app
