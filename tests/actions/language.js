@@ -53,7 +53,7 @@ describe('Language actions', () => {
       let store = mockStore({
         language: {
           code: languages[0].code,
-          label: 'English'
+          label: languages[0].label,
         },
         search: {
           totalStudies: 0
@@ -72,7 +72,7 @@ describe('Language actions', () => {
           count: 0,
           time: 0,
           total: 0,
-          label: 'English',
+          label: 'Danish',
         })
       );
 
@@ -92,7 +92,7 @@ describe('Language actions', () => {
       let store = mockStore({
         language: {
           code: languages[0].code,
-          label: 'English'
+          label: languages[0].label,
         },
         search: {
           totalStudies: 0
@@ -127,6 +127,7 @@ describe('Language actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'CHANGE_LANGUAGE',
+          label: languages[0].label,
           code: languages[0].code
         }
       ]);
@@ -143,6 +144,7 @@ describe('Language actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'CHANGE_LANGUAGE',
+          label: 'English',
           code: 'en'
         }
       ]);
