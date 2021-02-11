@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [2.3.1] - 2021-02-11
+
+### Removals
+
+- Removed the ability to enable analytics using the `PASC_ELASTICSEARCH_URL` environment variable ([#282](https://bitbucket.org/cessda/cessda.cdc.version2/issues/282))
+
+### Fixes
+
+- Fixed Searchkit breaking when selecting a study language using the "Study description available in" links ([#279](https://bitbucket.org/cessda/cessda.cdc.version2/issues/279))
+
 ## [2.3.0] - 2021-02-09
 
 [10.5281/zenodo.4525832](https://zenodo.org/record/4525832)

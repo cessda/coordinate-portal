@@ -52,25 +52,23 @@ export const initSearchkit = (): Thunk => {
 
       timer = setTimeout((): void => {
         if (!init) {
-          if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
-            // Notify Matomo Analytics of new search query.
-            let _paq = window._paq || [];
-            _paq.push(['setReferrerUrl', '/' + searchkit.history.location.search]);
-            _paq.push(['setCustomUrl', '/' + searchkit.history.location.search]);
-            _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);
+          // Notify Matomo Analytics of new search query.
+          let _paq = window._paq || [];
+          _paq.push(['setReferrerUrl', '/' + searchkit.history.location.search]);
+          _paq.push(['setCustomUrl', '/' + searchkit.history.location.search]);
+          _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);
 
-            // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
-            _paq.push(['deleteCustomVariables', 'page']);
-            _paq.push(['setGenerationTimeMs', 0]);
-            _paq.push(['trackPageView']);
+          // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+          _paq.push(['deleteCustomVariables', 'page']);
+          _paq.push(['setGenerationTimeMs', 0]);
+          _paq.push(['trackPageView']);
 
-            // Make Matomo aware of newly added content
-            let content = document.getElementById('root');
-            _paq.push(['MediaAnalytics::scanForMedia', content]);
-            _paq.push(['FormAnalytics::scanForForms', content]);
-            _paq.push(['trackContentImpressionsWithinNode', content]);
-            _paq.push(['enableLinkTracking']);
-          }
+          // Make Matomo aware of newly added content
+          let content = document.getElementById('root');
+          _paq.push(['MediaAnalytics::scanForMedia', content]);
+          _paq.push(['FormAnalytics::scanForForms', content]);
+          _paq.push(['trackContentImpressionsWithinNode', content]);
+          _paq.push(['enableLinkTracking']);
         }
       }, 3000);
 
@@ -192,12 +190,10 @@ export type ToggleLongAbstractAction = {
 
 export const toggleLongAbstract = (title: string, index: number): Thunk => {
   return (dispatch: Dispatch): void => {
-    if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
-      // Notify Matomo Analytics of toggling "Read more" for a study.
-      let _paq = window._paq || [];
-      _paq.push(['trackEvent', 'Search', 'Read more', title]);
-    }
-
+    // Notify Matomo Analytics of toggling "Read more" for a study.
+    let _paq = window._paq || [];
+    _paq.push(['trackEvent', 'Search', 'Read more', title]);
+    
     dispatch({
       type: 'TOGGLE_LONG_DESCRIPTION',
       index

@@ -108,11 +108,10 @@ export function changeLanguage(code: string): Thunk {
       code = "en";
       label = languages.find(element => element.code === code).label;
     } else {
-      if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
-        // Notify Matomo Analytics of language change.
-        let _paq = window._paq || [];
-        _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
-      }
+      // Notify Matomo Analytics of language change.
+      const _paq = window._paq || [];
+      _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
+
       label = language.label;
     }
 
