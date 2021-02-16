@@ -28,7 +28,6 @@ describe('Language actions', () => {
   beforeEach(() => {
     // Reset environment variables.
     process.env.PASC_DEBUG_MODE = 'false';
-    process.env.PASC_ENABLE_ANALYTICS = 'false';
 
     // Manually initialise searchkit history.
     searchkit.history = {
@@ -53,7 +52,7 @@ describe('Language actions', () => {
       let store = mockStore({
         language: {
           code: languages[0].code,
-          label: 'English'
+          label: languages[0].label,
         },
         search: {
           totalStudies: 0
@@ -72,7 +71,7 @@ describe('Language actions', () => {
           count: 0,
           time: 0,
           total: 0,
-          label: 'English',
+          label: 'Danish',
         })
       );
 
@@ -92,7 +91,7 @@ describe('Language actions', () => {
       let store = mockStore({
         language: {
           code: languages[0].code,
-          label: 'English'
+          label: languages[0].label,
         },
         search: {
           totalStudies: 0
@@ -127,6 +126,7 @@ describe('Language actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'CHANGE_LANGUAGE',
+          label: languages[0].label,
           code: languages[0].code
         }
       ]);
@@ -143,6 +143,7 @@ describe('Language actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'CHANGE_LANGUAGE',
+          label: 'English',
           code: 'en'
         }
       ]);
@@ -151,9 +152,6 @@ describe('Language actions', () => {
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
       let store = mockStore({});
-
-      // Enable analytics for test (tracking library mocked so no metrics sent)
-      process.env.PASC_ENABLE_ANALYTICS = 'true';
 
       // Dispatch action with registered locale.
       store.dispatch(changeLanguage(languages[0].code));

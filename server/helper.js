@@ -41,12 +41,6 @@ helper.checkEnvironmentVariables = function (production) {
     console.log('NOTICE : Using Elasticsearch instance at ' + elasticsearchUrl);
   }
 
-  if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
-    console.log('NOTICE : Matomo Analytics tracking is enabled.');
-  } else {
-    console.log('NOTICE : Matomo Analytics tracking is disabled.');
-  }
-
   if (production) {
     if (process.env.PASC_DEBUG_MODE === 'true') {
       console.warn('WARNING : Debug mode is enabled. Disable for production use.');

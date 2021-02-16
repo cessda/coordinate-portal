@@ -45,7 +45,6 @@ describe('Search actions', () => {
   beforeEach(() => {
     // Reset environment variables.
     process.env.PASC_DEBUG_MODE = 'false';
-    process.env.PASC_ENABLE_ANALYTICS = 'false';
 
     // Manually initialise searchkit history.
     searchkit.history = {
@@ -298,9 +297,6 @@ describe('Search actions', () => {
         }
       });
 
-      // Enable analytics for test (tracking library mocked so no metrics sent)
-      process.env.PASC_ENABLE_ANALYTICS = 'true';
-
       // Dispatch action.
       store.dispatch(initSearchkit());
 
@@ -403,9 +399,6 @@ describe('Search actions', () => {
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
       let store = mockStore({});
-
-      // Enable analytics for test (tracking library mocked so no metrics sent)
-      process.env.PASC_ENABLE_ANALYTICS = 'true';
 
       // Dispatch action.
       store.dispatch(toggleLongAbstract('Study Title', 1));

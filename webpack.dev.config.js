@@ -32,8 +32,7 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       PASC_DEBUG_MODE: false,
       PASC_PORT: 8088,
-      PASC_ELASTICSEARCH_URL: null,
-      PASC_ENABLE_ANALYTICS: false
+      PASC_ELASTICSEARCH_URL: null
     })
   ],
   resolve: {

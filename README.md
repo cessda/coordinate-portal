@@ -49,7 +49,6 @@ The application can be configured using the following environment variables.
 | `PASC_DEBUG_MODE`        | No       | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
 | `PASC_PORT`              | No       | `8088`        | The port number which will be used to access this web application.
 | `PASC_ELASTICSEARCH_URL` | Yes      | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
-| `PASC_ENABLE_ANALYTICS`  | No       | `false`       | Enables collecting user metrics which are sent to Matomo Analytics. This is a build time parameter.
 
 Set environment variables using the following syntax.
 

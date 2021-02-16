@@ -95,18 +95,24 @@ export type ChangeLanguageAction = {
   label: string
 };
 
-export function changeLanguage(code: string, label: string): Thunk {
+export function changeLanguage(code: string): Thunk {
   return (dispatch: Dispatch): void => {
+    const languages = getLanguages();
     code = code.toLowerCase();
 
-    if (!getLanguages().find(element => element.code === code)) {
+    const language = languages.find(element => element.code === code);
+
+    let label: string;
+
+    if (!language) {
       code = "en";
+      label = languages.find(element => element.code === code).label;
     } else {
-      if (process.env.PASC_ENABLE_ANALYTICS === 'true') {
-        // Notify Matomo Analytics of language change.
-        let _paq = window._paq || [];
-        _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
-      }
+      // Notify Matomo Analytics of language change.
+      const _paq = window._paq || [];
+      _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
+
+      label = language.label;
     }
 
     counterpart.setLocale(code);
