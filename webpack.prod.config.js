@@ -20,7 +20,7 @@ module.exports = {
   context: path.join(__dirname),
   entry: [
     '@babel/polyfill',
-    './src/index.jsx'
+    './src/index.tsx'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -57,15 +57,14 @@ module.exports = {
     alias: {
       react: path.resolve('./node_modules/react')
     },
-    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json']
+    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json', '.ts', '.tsx']
   },
   module: {
     rules: [{
-      test: /\.jsx?$/,
+      test: /\.(ts|js)x?$/,
       exclude: /(node_modules)/,
       loader: 'babel-loader',
       options: {
-        babelrc: true,
         plugins: [
           'transform-react-remove-prop-types'
         ]

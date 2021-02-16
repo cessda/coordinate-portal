@@ -17,10 +17,9 @@ import counterpart from 'counterpart';
 import searchkit from '../../src/utilities/searchkit';
 import { changeLanguage, initTranslations } from '../../src/actions/language';
 import { getLanguages } from '../../src/utilities/language';
-import type { Store } from '../../src/types';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
-const mockStore: Store = configureMockStore([thunk]);
+const mockStore = configureMockStore([thunk]);
 
 describe('Language actions', () => {
   const languages = getLanguages();

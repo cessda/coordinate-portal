@@ -1,3 +1,4 @@
+
 // Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -11,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-{
-	"presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
-	"plugins": ["@babel/plugin-proposal-class-properties"]
+import {PageSizeSelector as SearchkitPageSizeSelector} from 'searchkit';
+import {connect} from 'react-redux';
+
+// Extend the Searchkit PageSizeSelector component to stay visible at all times.
+export class PageSizeSelector extends SearchkitPageSizeSelector {
+  hasHits(): boolean {
+    // Override behaviour to always return true so that the control is never disabled and hidden.
+    return true;
+  }
 }
+
+export default connect()(PageSizeSelector);

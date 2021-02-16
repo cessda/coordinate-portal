@@ -27,12 +27,11 @@ import {
   updateSimilars,
   updateState
 } from '../../src/actions/search';
-import type { Store } from '../../src/types';
 import { getLanguages } from '../../src/utilities/language';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { Client } from 'elasticsearch';
 
-const mockStore: Store = configureMockStore([thunk]);
+const mockStore = configureMockStore([thunk]);
 
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
