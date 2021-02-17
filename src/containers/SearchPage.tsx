@@ -36,9 +36,7 @@ import moment from 'moment';
 
 type Props = {
   showMobileFilters: boolean;
-  filters: ((...args: Array<any>) => any) | {
-    [key: string]: any;
-  };
+  filters: any;
   results: number;
 };
 

@@ -11,9 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {getJsonLd, getStudyModel} from '../utilities/metadata';
+import {CMMStudy, getJsonLd, getStudyModel} from '../utilities/metadata';
 import type {Action} from '../actions';
 import _ from 'lodash';
+import { ToggleLongAbstractAction, UpdateDisplayedAction } from '../actions/search';
 
 type State = {
   loading: boolean;
@@ -21,9 +22,7 @@ type State = {
   showAdvancedSearch: boolean;
   showFilterSummary: boolean;
   expandMetadataPanels: boolean;
-  displayed: {
-    [key: string]: any;
-  }[];
+  displayed: CMMStudy[];
   jsonLd?: {
     [key: string]: any;
   } | null | undefined;
@@ -33,7 +32,7 @@ type State = {
   }[];
   query: any;
   state: any;
-  totalStudies: Number;
+  totalStudies: number;
 };
 
 const initialState: State = {
@@ -83,9 +82,7 @@ const search = (state: State, action: Action): State => {
       });
 
     case 'TOGGLE_LONG_DESCRIPTION': {
-      let array: {
-        [key: string]: any;
-      }[] = _.cloneDeep(state.displayed);
+      let array = _.cloneDeep(state.displayed);
 
       array[action.index].abstractExpanded = !array[action.index].abstractExpanded;
 
@@ -95,16 +92,7 @@ const search = (state: State, action: Action): State => {
     }
 
     case 'UPDATE_DISPLAYED': {
-      let displayed: {
-        [key: string]: any;
-      }[] = [];
-
-      for (let i: number = 0; i < action.displayed.length; i++) {
-        if (action.displayed[i]._source === undefined) {
-          continue;
-        }
-        displayed.push(getStudyModel(action.displayed[i]));
-      }
+      const displayed = getStudyModel(action.displayed);
 
       return Object.assign({}, state, {
         displayed: displayed,

@@ -23,15 +23,14 @@ import _ from "lodash";
 import moment from "moment";
 import { bindActionCreators } from "redux";
 import { toggleMetadataPanels } from "../actions/search";
+import { CMMStudy } from "../utilities/metadata";
 
 type Props = {
   bemBlocks: {
     [key: string]: any;
   };
   index: number;
-  item: {
-    [key: string]: any;
-  };
+  item: CMMStudy;
   expandMetadataPanels: boolean;
   toggleMetadataPanels: () => void;
 };
@@ -95,7 +94,7 @@ export class Detail extends HitItem<Props> {
             {this.generateElements(
               dateFallback,
               'p',
-              (date: string): string => {
+              (date: any): string => {
                 const value: string = dateFallbackProperty ? date[dateFallbackProperty] : date;
                 const momentDate = moment(
                   value,
@@ -309,9 +308,7 @@ export class Detail extends HitItem<Props> {
   }
 }
 
-export const mapStateToProps = (state: State, props: Props): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State, props: Props): CMMStudy => {
   return {
     item: state.search.displayed[props.index],
     expandMetadataPanels: state.search.expandMetadataPanels

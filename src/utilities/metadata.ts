@@ -11,26 +11,113 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { SearchResponse } from 'elasticsearch';
 import _ from 'lodash';
 import striptags from 'striptags';
+
+export type CMMStudy = {
+  id: string;
+  code: string;
+  /** Creator */
+  creators: string[];
+  /** Data collection start data */
+  dataCollectionPeriodStartdate: string;
+  /** Data collection end date */
+  dataCollectionPeriodEnddate: string;
+  /** Data collection year */
+  dataCollectionYear: number;
+  /** Data collection free text */
+  dataCollectionFreeTexts: DataCollectionFreeText[];
+  /** Terms of data access */
+  dataAccessFreeTexts: string[];
+  /** Publication year */
+  publicationYear: string;
+  /** Data collection mode */
+  typeOfModeOfCollections: TermVocabAttributes[];
+  /** Keywords */
+  keywords: TermVocabAttributes[];
+  /** Sampling procedure free text */
+  samplingProcedureFreeTexts: string[];
+  /** Topic classifications */
+  classifications: TermVocabAttributes[];
+  /** Abstract */
+  abstract: string;
+  abstractShort: string;
+  abstractHighlight: string;
+  abstractHighlightShort: string;
+  abstractExpanded: boolean;
+  /** Study title */
+  titleStudy: string;
+  titleStudyHighlight: string;
+  studyUrl: string;
+  /** Study number */
+  studyNumber: string;
+  /** Time dimension */
+  typeOfTimeMethods: TermVocabAttributes[];
+  /** Language of data files */
+  fileLanguages: string[];
+  /** Sampling procedure */
+  typeOfSamplingProcedures: VocabAttributes[];
+  /** Publisher */
+  publisher: Publisher;
+  /** Country */
+  studyAreaCountries: Country[];
+  /** Analysis unit */
+  unitTypes: TermVocabAttributes[];
+  /** Study Persistent Identifier */
+  pidStudies: Pid[];
+  lastModified: string;
+  langAvailableIn: string[];
+  studyXmlSourceUrl: string[];
+};
+
+export type Country = {
+  abbr: string;
+  country: string;
+  searchField: string;
+}
+
+export type DataCollectionFreeText = {
+  dataCollectionFreeText: string;
+  event: string;
+}
+
+export type Pid = {
+  agency: string;
+  pid: string;
+}
+
+export type Publisher = {
+  abbr: string;
+  publisher: string;
+}
+
+export type TermVocabAttributes = {
+  vocab: string;
+  vocabUri: string;
+  id: string;
+  term: string;
+}
+
+export type VocabAttributes = {
+  vocab: string;
+  vocabUri: string;
+  id: string;
+}
 
 /** 
  * Creates a model to store/display study metadata in the user interface.
  * 
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(data: { [key: string]: any;}) {
-  return {
-    // [Not visible in user interface]
+export function getStudyModel(searchResponse: SearchResponse<CMMStudy>): CMMStudy[] {
+  return searchResponse.hits.hits.map(data => ({
     id: data._source.id || '',
-    /** Study title */
     titleStudy: data._source.titleStudy || '',
     titleStudyHighlight: typeof data.highlight !== 'undefined' ? stripHTMLElements(data.highlight.titleStudy || '') : '',
-    /** Creator */
+    code: data._source.code,
     creators: data._source.creators || [],
-    /** Study Persistent Identifier */
     pidStudies: data._source.pidStudies || [],
-    /** Abstract */
     abstract: stripHTMLElements(data._source.abstract || ''),
     abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
       length: 500
@@ -40,41 +127,28 @@ export function getStudyModel(data: { [key: string]: any;}) {
       length: 500
     }) : '',
     abstractExpanded: false,
-    /** Country */
     studyAreaCountries: data._source.studyAreaCountries || [],
-    /** Time dimension */
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
-    /** Analysis unit */
     unitTypes: data._source.unitTypes || [],
-    /** Sampling procedure */
+    typeOfSamplingProcedures: data._source.typeOfSamplingProcedures,
     samplingProcedureFreeTexts: _.map(data._source.samplingProcedureFreeTexts || [], text => stripHTMLElements(text)),
-    /** Data collection mode */
     typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
-    /** Data collection period */
     dataCollectionPeriodStartdate: data._source.dataCollectionPeriodStartdate || '',
     dataCollectionPeriodEnddate: data._source.dataCollectionPeriodEnddate || '',
     dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
-    /** Language of data files */
+    dataCollectionYear: data._source.dataCollectionYear,
     fileLanguages: data._source.fileLanguages || [],
-    /** Publisher */
-    publisher: data._source.publisher?.publisher ?? '',
-    /** Publication year */
+    publisher: data._source.publisher,
     publicationYear: data._source.publicationYear || '',
-    /** Terms of data access */
     dataAccessFreeTexts: _.map(data._source.dataAccessFreeTexts || [], text => stripHTMLElements(text)),
-    /** Study number */
     studyNumber: data._source.studyNumber || '',
-    /** Topic */
     classifications: data._source.classifications || [],
-    /** Keyword */
     keywords: data._source.keywords || [],
-    // [Not visible in user interface]
     lastModified: data._source.lastModified || '',
-    // [Not visible in user interface]
     studyUrl: data._source.studyUrl,
-    // [List of other metadata languages used for result buttons]
+    studyXmlSourceUrl: data._source.studyXmlSourceUrl,
     langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], i => i.toUpperCase()))
-  };
+  }));
 }
 
 /**

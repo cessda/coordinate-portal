@@ -21,7 +21,6 @@ module.exports = {
     '@babel/polyfill',
     'event-source-polyfill',
     'webpack-hot-middleware/client?reload=true',
-    './src/index.jsx'],
     './src/index.tsx'
   ],
   output: {

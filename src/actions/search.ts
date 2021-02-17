@@ -13,9 +13,10 @@
 // limitations under the License.
 
 import searchkit, { detailQuery, similarQuery, pidQuery, matchAllQuery, uniqueAggregation } from "../utilities/searchkit";
-import { Client } from "elasticsearch";
+import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Dispatch, GetState, State, Thunk } from "../types";
+import { CMMStudy } from "../utilities/metadata";
 
 // Get a new Elasticsearch Client
 function elasticsearchClient() {
@@ -40,15 +41,11 @@ export const initSearchkit = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     let timer: NodeJS.Timeout;
 
-    searchkit.setQueryProcessor((query: {
-      [key: string]: any;
-    }): {
-      [key: string]: any;
-    } => {
+    searchkit.setQueryProcessor((query) => {
       dispatch(toggleLoading(true));
 
-      let state: State = getState(),
-          init: boolean = timer === undefined;
+      const state: State = getState()
+      const init = timer === undefined;
 
       clearTimeout(timer);
 
@@ -101,9 +98,7 @@ export const initSearchkit = (): Thunk => {
       return query;
     });
 
-    searchkit.addResultsListener((results: {
-      [key: string]: any;
-    }): void => {
+    searchkit.addResultsListener((results: SearchResponse<CMMStudy>): void => {
       let state: State = getState();
 
       // Load similar results if viewing detail page and data exists.
@@ -113,7 +108,7 @@ export const initSearchkit = (): Thunk => {
         dispatch(updateSimilars(results.hits.hits[0]._source));
       }
 
-      dispatch(updateDisplayed(results.hits.hits));
+      dispatch(updateDisplayed(results));
       dispatch(toggleLoading(false));
     });
 
@@ -209,13 +204,11 @@ export const toggleLongAbstract = (title: string, index: number): Thunk => {
 
 export type UpdateDisplayedAction = {
   type: "UPDATE_DISPLAYED";
-  displayed: any;
+  displayed: SearchResponse<CMMStudy>;
   language: string;
 };
 
-export const updateDisplayed = (displayed: {
-  [key: string]: any;
-}[]): Thunk => {
+export const updateDisplayed = <T>(displayed: SearchResponse<CMMStudy>): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     dispatch({
       type: 'UPDATE_DISPLAYED',
@@ -268,14 +261,12 @@ export type UpdateSimilarsAction = {
   similars: any;
 };
 
-export const updateSimilars = (item: {
-  [key: string]: any;
-}): Thunk => {
+export const updateSimilars = (item: CMMStudy): Thunk => {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state: State = getState();
     const index: string = _.find(state.language.list, { 'code': state.language.code }).index;
 
-    const response = await elasticsearchClient().search({
+    const response = await elasticsearchClient().search<CMMStudy>({
       size: 10,
       body: {
         index: index,

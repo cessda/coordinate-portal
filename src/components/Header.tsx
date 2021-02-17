@@ -28,7 +28,7 @@ import {
 } from '../actions/search';
 import Translate from 'react-translate-component';
 
-type Props = {
+interface Props {
   pathname: string;
   code: string;
   filters?: {
