@@ -29,18 +29,18 @@ import {
 import Translate from 'react-translate-component';
 
 interface Props {
-  pathname: string;
-  code: string;
+  pathname?: string;
+  code?: string;
   filters?: {
     [key: string]: any;
   };
-  showFilterSummary: boolean;
-  showMobileFilters: boolean;
-  showAdvancedSearch: boolean;
-  resetSearch: () => void;
-  toggleSummary: () => void;
-  toggleMobileFilters: () => void;
-  toggleAdvancedSearch: () => void;
+  showFilterSummary?: boolean;
+  showMobileFilters?: boolean;
+  showAdvancedSearch?: boolean;
+  resetSearch?: () => void;
+  toggleSummary?: () => void;
+  toggleMobileFilters?: () => void;
+  toggleAdvancedSearch?: () => void;
 };
 
 export class Header extends Component<Props> {
@@ -72,7 +72,7 @@ export class Header extends Component<Props> {
               <div className="logo">
                 <Link className="cessda-eric" to="/" onClick={()=>{
                   // Only reset search on the root path, otherwise two locations are added to the browser history
-                  if (pathname === '/') {
+                  if (resetSearch && pathname === '/') {
                     resetSearch();
                   }
                 }}/>

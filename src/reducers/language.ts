@@ -14,7 +14,7 @@
 
 import { Action } from "../actions";
 
-type State = {
+export type LanguageState = {
   code: string;
   label: string;
   list?: {
@@ -24,16 +24,12 @@ type State = {
   }[];
 };
 
-const initialState: State = {
+const initialState: LanguageState = {
   code: 'en',
   label: 'English'
 };
 
-const language = (state: State, action: Action): State => {
-  if (typeof state === 'undefined') {
-    return initialState;
-  }
-
+const language = (state = initialState, action: Action): LanguageState => {
   switch (action.type) {
     case 'INIT_TRANSLATIONS':
       return Object.assign({}, state, {

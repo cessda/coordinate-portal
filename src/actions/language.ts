@@ -18,11 +18,13 @@ import { Dispatch, GetState, State, Thunk } from "../types";
 import _ from "lodash";
 import moment from "moment";
 import { getLanguages } from "../utilities/language";
+import { getPaq } from "..";
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
+export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";
 
 export type InitTranslationsAction = {
-  type: "INIT_TRANSLATIONS";
+  type: typeof INIT_TRANSLATIONS;
   list: {
     code: string;
     label: string;
@@ -80,16 +82,17 @@ export function initTranslations(): Thunk {
     };
 
     dispatch({
-      type: 'INIT_TRANSLATIONS',
+      type: INIT_TRANSLATIONS,
       list
     });
   };
 }
 
 //////////// Redux Action Creator : CHANGE_LANGUAGE
+export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE";
 
 export type ChangeLanguageAction = {
-  type: "CHANGE_LANGUAGE";
+  type: typeof CHANGE_LANGUAGE;
   code: string;
   label: string;
 };
@@ -105,10 +108,10 @@ export function changeLanguage(code: string): Thunk {
 
     if (!language) {
       code = "en";
-      label = languages.find(element => element.code === code).label;
+      label = languages.find(element => element.code === code)?.label || '';
     } else {
       // Notify Matomo Analytics of language change.
-      const _paq = window._paq || [];
+      const _paq = getPaq();
       _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
 
       label = language.label;
@@ -119,7 +122,7 @@ export function changeLanguage(code: string): Thunk {
     moment.locale(code);
 
     dispatch({
-      type: 'CHANGE_LANGUAGE',
+      type: CHANGE_LANGUAGE,
       code,
       label
     });

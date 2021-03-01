@@ -16,16 +16,17 @@ import _ from 'lodash';
 import striptags from 'striptags';
 
 export type CMMStudy = {
+  /** The internal ID of the study */
   id: string;
   code: string;
   /** Creator */
   creators: string[];
   /** Data collection start data */
-  dataCollectionPeriodStartdate: string;
+  dataCollectionPeriodStartdate?: string;
   /** Data collection end date */
-  dataCollectionPeriodEnddate: string;
+  dataCollectionPeriodEnddate?: string;
   /** Data collection year */
-  dataCollectionYear: number;
+  dataCollectionYear?: number;
   /** Data collection free text */
   dataCollectionFreeTexts: DataCollectionFreeText[];
   /** Terms of data access */
@@ -49,7 +50,7 @@ export type CMMStudy = {
   /** Study title */
   titleStudy: string;
   titleStudyHighlight: string;
-  studyUrl: string;
+  studyUrl?: string;
   /** Study number */
   studyNumber: string;
   /** Time dimension */
@@ -68,7 +69,7 @@ export type CMMStudy = {
   pidStudies: Pid[];
   lastModified: string;
   langAvailableIn: string[];
-  studyXmlSourceUrl: string[];
+  studyXmlSourceUrl: string;
 };
 
 export type Country = {
@@ -112,25 +113,21 @@ export type VocabAttributes = {
  */
 export function getStudyModel(searchResponse: SearchResponse<CMMStudy>): CMMStudy[] {
   return searchResponse.hits.hits.map(data => ({
-    id: data._source.id || '',
-    titleStudy: data._source.titleStudy || '',
+    id: data._source.id,
+    titleStudy: data._source.titleStudy,
     titleStudyHighlight: typeof data.highlight !== 'undefined' ? stripHTMLElements(data.highlight.titleStudy || '') : '',
     code: data._source.code,
     creators: data._source.creators || [],
     pidStudies: data._source.pidStudies || [],
-    abstract: stripHTMLElements(data._source.abstract || ''),
-    abstractShort: _.truncate(_.trim(striptags(data._source.abstract || '')), {
-      length: 500
-    }),
-    abstractHighlight: typeof data.highlight != 'undefined' ? stripHTMLElements(data.highlight.abstract || '') : '',
-    abstractHighlightShort: typeof data.highlight != 'undefined' ? _.truncate(_.trim(striptags(data.highlight.abstract || '')), {
-      length: 500
-    }) : '',
+    abstract: stripHTMLElements(data._source.abstract),
+    abstractShort: truncateAbstract(striptags(data._source.abstract)),
+    abstractHighlight: typeof data.highlight != 'undefined' ? stripHTMLElements(data.highlight.abstract) : '',
+    abstractHighlightShort: typeof data.highlight != 'undefined' ? truncateAbstract(striptags(data.highlight.abstract)) : '',
     abstractExpanded: false,
     studyAreaCountries: data._source.studyAreaCountries || [],
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
     unitTypes: data._source.unitTypes || [],
-    typeOfSamplingProcedures: data._source.typeOfSamplingProcedures,
+    typeOfSamplingProcedures: data._source.typeOfSamplingProcedures || [],
     samplingProcedureFreeTexts: _.map(data._source.samplingProcedureFreeTexts || [], text => stripHTMLElements(text)),
     typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
     dataCollectionPeriodStartdate: data._source.dataCollectionPeriodStartdate || '',
@@ -151,26 +148,24 @@ export function getStudyModel(searchResponse: SearchResponse<CMMStudy>): CMMStud
   }));
 }
 
+function truncateAbstract(string: string): string {
+  const trimmedString = _.trim(string);
+  return _.truncate(trimmedString, { length: 500 } );
+}
+
 /**
  * Strip non-styling HTML tags from the given HTML string.
  * @param {string} html the HTML to strip. 
  */
 function stripHTMLElements(html: string) {
-  return _.trim(
-    striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
-  );
+  const strippedHTML = striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+  return _.trim(strippedHTML);
 }
 
 // Generates study JSON-LD for Google indexing.
-export function getJsonLd(data: {[key: string]: any; }): {[key: string]: any;} {
-  if (!data) {
-    return {};
-  }
-
+export function getJsonLd(data: CMMStudy) {
   // Attempt to split people from organisations in the creator field.
-  let creators: {
-    [key: string]: any;
-  }[] = [];
+  let creators = [];
   for (let i: number = 0; i < data.creators.length; i++) {
     // Format: "Name (Organisation)"
     let matches = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi.exec(data.creators[i]);
@@ -223,14 +218,29 @@ export function getJsonLd(data: {[key: string]: any; }): {[key: string]: any;} {
     'keywords': _.map(data.keywords || [], i => _.upperFirst(i.term)),
     'variableMeasured': _.map(data.unitTypes, 'term').join(', '),
     'measurementTechnique': _.map(data.typeOfModeOfCollections, 'term').join(', '),
-    'license': data.dataAccessFreeTexts || '',
+    'license': data.dataAccessFreeTexts,
     'identifier': _.map(data.pidStudies || [], (i) => i.pid + ' (' + _.upperFirst(i.agency) +
                                                       ')').join(', '),
     'creator': creators,
-    'temporalCoverage': data.dataCollectionPeriodStartdate.substring(0, 10) + '/' +
-                        data.dataCollectionPeriodEnddate.substring(0, 10),
+    'temporalCoverage': extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
     'spatialCoverage': _.map(data.studyAreaCountries, 'country').join(', '),
     'datePublished': data.publicationYear.substring(0, 10),
     'dateModified': data.lastModified.substring(0, 10)
   };
 }
+
+function extractDataCollectionPeriod(dataCollectionPeriodStartdate?: string, dataCollectionPeriodEnddate?: string) {
+
+  if (!dataCollectionPeriodStartdate) {
+    return '';
+  }
+
+  const startDate = dataCollectionPeriodStartdate.substring(0, 10) + '/';
+
+  if (!dataCollectionPeriodEnddate) {
+    return startDate;
+  }
+
+  return startDate + dataCollectionPeriodEnddate.substring(0, 10);
+}
+

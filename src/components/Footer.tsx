@@ -13,16 +13,10 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {
-  FaLinkedinSquare,
-  FaTwitterSquare,
-  FaYoutubeSquare
-} from 'react-icons/lib/fa/index';
+import {FaLinkedinSquare, FaTwitterSquare, FaYoutubeSquare} from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
 
-type Props = {};
-
-export class Footer extends Component<Props> {
+export class Footer extends Component {
 
   render() {
     return (

@@ -12,10 +12,10 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, DispatchProp} from 'react-redux';
 import {FaQuestionCircle} from 'react-icons/lib/fa/index';
 
-type Props = {
+type Props = DispatchProp<any> & {
   content: any;
 };
 
@@ -45,4 +45,4 @@ export class Tooltip extends Component<Props> {
   }
 }
 
-export default connect(null, null)(Tooltip);
+export default connect()(Tooltip);

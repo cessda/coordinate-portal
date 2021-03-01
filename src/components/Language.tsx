@@ -62,18 +62,14 @@ export class Language extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     code: state.language.code,
     list: state.language.list
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };

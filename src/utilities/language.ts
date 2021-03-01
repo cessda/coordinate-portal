@@ -65,7 +65,10 @@ export function getLanguages(): Language[] {
 };
 
 export type Language = {
+  /** The ISO code of the language */
   code: string,
+  /** The English name of the language */
   label: string,
+  /** The index where the language's studies are stored */
   index: string,
 };

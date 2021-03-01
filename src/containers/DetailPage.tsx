@@ -16,7 +16,7 @@ import { Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } f
 import Header from '../components/Header';
 import Language from '../components/Language';
 import Detail from '../components/Detail';
-import Footer from '../components/Footer.jsx';
+import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
 import Panel from '../components/Panel';
 import { connect } from 'react-redux';
@@ -61,7 +61,7 @@ export class DetailPage extends Component<Props> {
     } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
-    let index: string = (_.find(list, { 'code': code }) || {}).index;
+    const index = (_.find(list, { 'code': code }) || {}).index;
 
     return (
       <SearchkitProvider searchkit={searchkit}>
@@ -125,9 +125,7 @@ export class DetailPage extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     loading: state.search.loading,
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
@@ -138,9 +136,7 @@ export const mapStateToProps = (state: State): {
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     goBack: bindActionCreators(goBack, dispatch)
   };

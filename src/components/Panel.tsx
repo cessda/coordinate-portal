@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from 'react';
-import { Panel as SearchkitPanel } from 'searchkit';
+import { Panel as SearchkitPanel, PanelProps } from 'searchkit';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Tooltip from './Tooltip';
@@ -21,15 +21,16 @@ import type { Dispatch, State } from '../types';
 import { bindActionCreators } from 'redux';
 import { toggleMetadataPanels } from '../actions/search';
 
-type Props = {
-  tooltip: any;
+interface Props extends PanelProps {
+  tooltip: JSX.Element | string;
   linkCollapsedState: boolean;
   expandMetadataPanels: boolean;
   toggleMetadataPanels: () => void;
 };
 
 // Extend the Searchkit Panel component to support tooltips and translations.
-export class Panel extends SearchkitPanel<Props> {
+export class Panel extends SearchkitPanel {
+  props: Props;
 
   componentDidUpdate(prevProps: Props): void {
     if (this.props.linkCollapsedState &&
@@ -70,17 +71,13 @@ Panel.propTypes = Object.assign(SearchkitPanel.propTypes, {
   toggleMetadataPanels: PropTypes.func
 });
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     expandMetadataPanels: state.search.expandMetadataPanels
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
   };

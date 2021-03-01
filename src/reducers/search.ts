@@ -14,9 +14,23 @@
 import {CMMStudy, getJsonLd, getStudyModel} from '../utilities/metadata';
 import type {Action} from '../actions';
 import _ from 'lodash';
-import { ToggleLongAbstractAction, UpdateDisplayedAction } from '../actions/search';
+import { 
+  INIT_SEARCHKIT, 
+  RESET_SEARCH, 
+  TOGGLE_ADVANCED_SEARCH, 
+  TOGGLE_LOADING, 
+  TOGGLE_LONG_DESCRIPTION, 
+  TOGGLE_METADATA_PANELS,
+  TOGGLE_MOBILE_FILTERS, 
+  TOGGLE_SUMMARY, 
+  UPDATE_DISPLAYED, 
+  UPDATE_QUERY, 
+  UPDATE_SIMILARS, 
+  UPDATE_STATE, 
+  UPDATE_TOTAL_STUDIES 
+} from '../actions/search';
 
-type State = {
+export type SearchState = {
   loading: boolean;
   showMobileFilters: boolean;
   showAdvancedSearch: boolean;
@@ -35,7 +49,7 @@ type State = {
   totalStudies: number;
 };
 
-const initialState: State = {
+const initialState: SearchState = {
   loading: true,
   showMobileFilters: false,
   showAdvancedSearch: false,
@@ -47,41 +61,37 @@ const initialState: State = {
   totalStudies: 0
 };
 
-const search = (state: State, action: Action): State => {
-  if (typeof state === 'undefined') {
-    return initialState;
-  }
-
+const search = (state: SearchState = initialState, action: Action): SearchState => {
   switch (action.type) {
-    case 'INIT_SEARCHKIT':
+    case INIT_SEARCHKIT:
       return state;
 
-    case 'TOGGLE_LOADING':
+    case TOGGLE_LOADING:
       return Object.assign({}, state, {
         loading: action.loading
       });
 
-    case 'TOGGLE_MOBILE_FILTERS':
+    case TOGGLE_MOBILE_FILTERS:
       return Object.assign({}, state, {
         showMobileFilters: !state.showMobileFilters
       });
 
-    case 'TOGGLE_ADVANCED_SEARCH':
+    case TOGGLE_ADVANCED_SEARCH:
       return Object.assign({}, state, {
         showAdvancedSearch: !state.showAdvancedSearch
       });
 
-    case 'TOGGLE_SUMMARY':
+    case TOGGLE_SUMMARY:
       return Object.assign({}, state, {
         showFilterSummary: !state.showFilterSummary
       });
 
-    case 'TOGGLE_METADATA_PANELS':
+    case TOGGLE_METADATA_PANELS:
       return Object.assign({}, state, {
         expandMetadataPanels: !state.expandMetadataPanels
       });
 
-    case 'TOGGLE_LONG_DESCRIPTION': {
+    case TOGGLE_LONG_DESCRIPTION: {
       let array = _.cloneDeep(state.displayed);
 
       array[action.index].abstractExpanded = !array[action.index].abstractExpanded;
@@ -91,7 +101,7 @@ const search = (state: State, action: Action): State => {
       });
     }
 
-    case 'UPDATE_DISPLAYED': {
+    case UPDATE_DISPLAYED: {
       const displayed = getStudyModel(action.displayed);
 
       return Object.assign({}, state, {
@@ -100,29 +110,29 @@ const search = (state: State, action: Action): State => {
       });
     }
 
-    case 'UPDATE_QUERY':
+    case UPDATE_QUERY:
       return Object.assign({}, state, {
         query: action.query
       });
 
-    case 'UPDATE_STATE':
+    case UPDATE_STATE:
       return Object.assign({}, state, {
         state: action.state
       });
 
-    case 'UPDATE_SIMILARS': {
+    case UPDATE_SIMILARS: {
       let similars: {
         id: string;
         title: string;
       }[] = [];
 
       for (let i: number = 0; i < action.similars.length; i++) {
-        if (action.similars[i]._source === undefined) {
+        if (!action.similars[i]) {
           continue;
         }
         similars.push({
-          id: action.similars[i]._source.id,
-          title: action.similars[i]._source.titleStudy
+          id: action.similars[i].id,
+          title: action.similars[i].titleStudy
         });
         if (i > 3) {
           break;
@@ -134,10 +144,10 @@ const search = (state: State, action: Action): State => {
       });
     }
 
-    case 'RESET_SEARCH':
+    case RESET_SEARCH:
       return state;
 
-    case 'UPDATE_TOTAL_STUDIES':
+    case UPDATE_TOTAL_STUDIES:
       return Object.assign({}, state, {
         totalStudies: action.totalStudies
       });

@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import MultiSelect from '../components/MultiSelect.jsx';
-import Result from '../components/Result.jsx';
-import Footer from '../components/Footer.jsx';
+import MultiSelect from '../components/MultiSelect';
+import Result from '../components/Result';
+import Footer from '../components/Footer';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {

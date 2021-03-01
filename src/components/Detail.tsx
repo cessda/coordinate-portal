@@ -14,7 +14,7 @@
 
 import React from "react";
 import { Link } from "react-router";
-import { HitItem } from "searchkit";
+import { HitItemProps } from "searchkit";
 import { connect } from "react-redux";
 import Panel from "./Panel";
 import Translate from "react-translate-component";
@@ -23,19 +23,16 @@ import _ from "lodash";
 import moment from "moment";
 import { bindActionCreators } from "redux";
 import { toggleMetadataPanels } from "../actions/search";
-import { CMMStudy } from "../utilities/metadata";
+import { CMMStudy, DataCollectionFreeText } from "../utilities/metadata";
 
-type Props = {
-  bemBlocks: {
-    [key: string]: any;
-  };
+interface Props extends HitItemProps {
   index: number;
   item: CMMStudy;
   expandMetadataPanels: boolean;
   toggleMetadataPanels: () => void;
 };
 
-export class Detail extends HitItem<Props> {
+export class Detail extends React.Component<Props> {
 
   componentWillUnmount(): void {
     if (this.props.expandMetadataPanels) {
@@ -43,11 +40,11 @@ export class Detail extends HitItem<Props> {
     }
   }
 
-  generateElements<T>(
+  generateElements<T, R>(
     field: T[],
     element: 'p' | 'tag',
-    callback?: (args: any) => T
-  ): JSX.Element[] {
+    callback?: (args: T) => R
+  ) {
     const elements: JSX.Element[] = [];
 
     for (let i: number = 0; i < field.length; i++) {
@@ -76,40 +73,33 @@ export class Detail extends HitItem<Props> {
     format: string,
     date1?: string,
     date2?: string,
-    dateFallback?: any[],
-    dateFallbackProperty?: string
-  ): JSX.Element {
+    dateFallback?: DataCollectionFreeText[]
+  ): JSX.Element | JSX.Element[] {
     if (!date1 && !date2 && !dateFallback) {
       return <Translate content="language.notAvailable.field" />;
     }
-    if (!date1 && !date2) {
-      if (_.isArray(dateFallback)) {
-        if (dateFallback.length === 2 && dateFallback[0].event === 'start' && dateFallback[1].event === 'end') {
-          // Handle special case where array items are a start/end date range.
-          return this.formatDate(format, dateFallback[0][dateFallbackProperty], dateFallback[1][dateFallbackProperty]);
-        }
-        // Generate elements for each date in the array.
-        return (
-          <div>
-            {this.generateElements(
-              dateFallback,
-              'p',
-              (date: any): string => {
-                const value: string = dateFallbackProperty ? date[dateFallbackProperty] : date;
-                const momentDate = moment(
-                  value,
-                  [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'],
-                  true
-                );
-                // Format array item as date if possible.
-                return momentDate.isValid() ? momentDate.format(format) : value;
-              }
-            )}
-          </div>
-        );
-      } else {
-        return <p>{dateFallback}</p>;
+    if (!date1 && !date2 && dateFallback) {
+      if (dateFallback.length === 2 && dateFallback[0].event === 'start' && dateFallback[1].event === 'end') {
+        // Handle special case where array items are a start/end date range.
+        return this.formatDate(format, dateFallback[0].dataCollectionFreeText, dateFallback[1].dataCollectionFreeText);
       }
+      // Generate elements for each date in the array.
+      return (
+          this.generateElements(
+            dateFallback,
+            'p',
+            date => {
+              const value = date.dataCollectionFreeText;
+              const momentDate = moment(
+                value,
+                [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'],
+                true
+              );
+              // Format array item as date if possible.
+              return momentDate.isValid() ? momentDate.format(format) : value;
+            }
+          )
+      );
     }
     let momentDate1 = moment(date1, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
     if (!date2) {
@@ -118,10 +108,11 @@ export class Detail extends HitItem<Props> {
     }
     let momentDate2 = moment(date2, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
     // Format two dates as range.
-    return <p>
-        {momentDate1.isValid() ? momentDate1.format(format) : date1} -{' '}
-        {momentDate2.isValid() ? momentDate2.format(format) : date2}
-      </p>;
+    return (
+      <p>
+        {momentDate1.isValid() ? momentDate1.format(format) : date1} - {momentDate2.isValid() ? momentDate2.format(format) : date2}
+      </p>
+    );
   }
 
   render() {
@@ -158,7 +149,7 @@ export class Detail extends HitItem<Props> {
             content="metadata.studyPersistentIdentifier"
           />
           {this.generateElements(item.pidStudies, 'p', pidStudy => {
-            let pidString: string = pidStudy.pid;
+            let pidString = pidStudy.pid;
 
             // The agency field is an optional attribute, only append if present
             if (pidStudy.agency) {
@@ -194,8 +185,7 @@ export class Detail extends HitItem<Props> {
             'DD/MM/Y',
             item.dataCollectionPeriodStartdate,
             item.dataCollectionPeriodEnddate,
-            item.dataCollectionFreeTexts,
-            'dataCollectionFreeText'
+            item.dataCollectionFreeTexts
           )}
 
           <Translate
@@ -308,16 +298,14 @@ export class Detail extends HitItem<Props> {
   }
 }
 
-export const mapStateToProps = (state: State, props: Props): CMMStudy => {
+export const mapStateToProps = (state: State, props: Props) => {
   return {
     item: state.search.displayed[props.index],
     expandMetadataPanels: state.search.expandMetadataPanels
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
   };

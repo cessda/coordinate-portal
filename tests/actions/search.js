@@ -15,17 +15,29 @@ import thunk from 'redux-thunk';
 import searchkit, { queryBuilder } from '../../src/utilities/searchkit';
 import {
   initSearchkit,
+  INIT_SEARCHKIT,
   resetSearch,
+  RESET_SEARCH,
   toggleAdvancedSearch,
   toggleLoading,
   toggleLongAbstract,
   toggleMetadataPanels,
   toggleMobileFilters,
   toggleSummary,
+  TOGGLE_ADVANCED_SEARCH,
+  TOGGLE_LOADING,
+  TOGGLE_LONG_DESCRIPTION,
+  TOGGLE_METADATA_PANELS,
+  TOGGLE_MOBILE_FILTERS,
+  TOGGLE_SUMMARY,
   updateDisplayed,
   updateQuery,
   updateSimilars,
-  updateState
+  updateState,
+  UPDATE_DISPLAYED,
+  UPDATE_QUERY,
+  UPDATE_SIMILARS,
+  UPDATE_STATE
 } from '../../src/actions/search';
 import { getLanguages } from '../../src/utilities/language';
 import _ from 'lodash';
@@ -63,7 +75,11 @@ describe('Search actions', () => {
       return {
         search: () => {
           return Promise.resolve({
-            aggregations: {},
+            aggregations: {
+              unique_id: {
+                value: 1
+              }
+            },
             hits: {
               hits: [
                 {
@@ -139,14 +155,14 @@ describe('Search actions', () => {
       // State should contain actions in sequence for results page.
       expect(store.getActions()).toEqual([
         {
-          type: 'INIT_SEARCHKIT'
+          type: INIT_SEARCHKIT
         },
         {
-          type: 'TOGGLE_LOADING',
+          type: TOGGLE_LOADING,
           loading: true
         },
         {
-          type: 'UPDATE_QUERY',
+          type: UPDATE_QUERY,
           query: {
             index: 'cmmstudy_en',
             min_score: 0.5,
@@ -154,15 +170,15 @@ describe('Search actions', () => {
           }
         },
         {
-          type: 'UPDATE_STATE',
+          type: UPDATE_STATE,
           state: {}
         },
         {
-          type: 'TOGGLE_LOADING',
+          type: TOGGLE_LOADING,
           loading: true
         },
         {
-          type: 'UPDATE_QUERY',
+          type: UPDATE_QUERY,
           query: {
             index: 'cmmstudy_en',
             min_score: 0.5,
@@ -170,16 +186,26 @@ describe('Search actions', () => {
           }
         },
         {
-          type: 'UPDATE_STATE',
+          type: UPDATE_STATE,
           state: {}
         },
         {
-          type: 'UPDATE_DISPLAYED',
-          displayed: [],
+          type: UPDATE_DISPLAYED,
+          displayed: {
+            aggregations: {},
+            hits: {
+              hasChanged: true,
+              hits: [],
+              ids: "",
+              total: 0
+            },
+            timed_out: false,
+            took: 1
+          },
           language: 'en'
         },
         {
-          type: 'TOGGLE_LOADING',
+          type: TOGGLE_LOADING,
           loading: false
         }
       ]);
@@ -233,14 +259,14 @@ describe('Search actions', () => {
       // State should contain actions in sequence for detail page.
       expect(store.getActions()).toEqual([
         {
-          type: 'INIT_SEARCHKIT'
+          type: INIT_SEARCHKIT
         },
         {
-          type: 'TOGGLE_LOADING',
+          type: TOGGLE_LOADING,
           loading: true
         },
         {
-          type: 'UPDATE_QUERY',
+          type: UPDATE_QUERY,
           query: {
             index: 'cmmstudy_en',
             query: {
@@ -256,22 +282,30 @@ describe('Search actions', () => {
           }
         },
         {
-          type: 'UPDATE_STATE',
+          type: UPDATE_STATE,
           state: {}
         },
         {
-          type: 'UPDATE_DISPLAYED',
-          displayed: [
-            {
-              _source: {
-                id: 1
-              }
-            }
-          ],
+          type: UPDATE_DISPLAYED,
+          displayed: {
+            aggregations: {},
+            hits: {
+              hasChanged: true,
+              hits: [{
+                _source: {
+                  id: 1
+                }
+              }],
+              ids: "",
+              total: 1,
+            },
+            timed_out: false,
+            took: 1
+          },
           language: 'en'
         },
         {
-          type: 'TOGGLE_LOADING',
+          type: TOGGLE_LOADING,
           loading: false
         }
       ]);
@@ -328,7 +362,7 @@ describe('Search actions', () => {
     it('is created when application has started loading', () => {
       // Action should be returned with updated loading state.
       expect(toggleLoading(true)).toEqual({
-        type: 'TOGGLE_LOADING',
+        type: TOGGLE_LOADING,
         loading: true
       });
     });
@@ -336,7 +370,7 @@ describe('Search actions', () => {
     it('is created when application has finished loading', () => {
       // Action should be returned with updated loading state.
       expect(toggleLoading(false)).toEqual({
-        type: 'TOGGLE_LOADING',
+        type: TOGGLE_LOADING,
         loading: false
       });
     });
@@ -346,7 +380,7 @@ describe('Search actions', () => {
     it('is created when mobile filter visibility changes', () => {
       // Action should be returned.
       expect(toggleMobileFilters()).toEqual({
-        type: 'TOGGLE_MOBILE_FILTERS'
+        type: TOGGLE_MOBILE_FILTERS
       });
     });
   });
@@ -355,7 +389,7 @@ describe('Search actions', () => {
     it('is created when advanced search visibility changes', () => {
       // Action should be returned.
       expect(toggleAdvancedSearch()).toEqual({
-        type: 'TOGGLE_ADVANCED_SEARCH'
+        type: TOGGLE_ADVANCED_SEARCH
       });
     });
   });
@@ -364,7 +398,7 @@ describe('Search actions', () => {
     it('is created when filter summary visibility changes', () => {
       // Action should be returned.
       expect(toggleSummary()).toEqual({
-        type: 'TOGGLE_SUMMARY'
+        type: TOGGLE_SUMMARY
       });
     });
   });
@@ -373,7 +407,7 @@ describe('Search actions', () => {
     it('is created when metadata panel collapsed state changes', () => {
       // Action should be returned.
       expect(toggleMetadataPanels()).toEqual({
-        type: 'TOGGLE_METADATA_PANELS'
+        type: TOGGLE_METADATA_PANELS
       });
     });
   });
@@ -389,7 +423,7 @@ describe('Search actions', () => {
       // State should contain study index.
       expect(store.getActions()).toEqual([
         {
-          type: 'TOGGLE_LONG_DESCRIPTION',
+          type: TOGGLE_LONG_DESCRIPTION,
           index: 1
         }
       ]);
@@ -422,9 +456,7 @@ describe('Search actions', () => {
       store.dispatch(
         updateDisplayed([
           {
-            _source: {
-              id: 1
-            }
+            id: '1'
           }
         ])
       );
@@ -432,12 +464,10 @@ describe('Search actions', () => {
       // State should contain displayed studies and language.
       expect(store.getActions()).toEqual([
         {
-          type: 'UPDATE_DISPLAYED',
+          type: UPDATE_DISPLAYED,
           displayed: [
             {
-              _source: {
-                id: 1
-              }
+              id: '1'
             }
           ],
           language: 'en'
@@ -459,7 +489,7 @@ describe('Search actions', () => {
 
       // Action should be returned with updated query.
       expect(updateQuery(query)).toEqual({
-        type: 'UPDATE_QUERY',
+        type: UPDATE_QUERY,
         query: query
       });
     });
@@ -474,7 +504,7 @@ describe('Search actions', () => {
 
       // Action should be returned with updated state.
       expect(updateState(state)).toEqual({
-        type: 'UPDATE_STATE',
+        type: UPDATE_STATE,
         state: state
       });
     });
@@ -493,24 +523,20 @@ describe('Search actions', () => {
       });
 
       // Dispatch action and wait for promise.
-      store
-        .dispatch(
+      return store.dispatch(
           updateSimilars({
-            id: 1,
+            id: "1",
             titleStudy: 'Study Title'
           })
-        )
-        .then(() => {
+        ).then(() => {
           // State should contain similar studies.
           expect(store.getActions()).toEqual([
             {
-              type: 'UPDATE_SIMILARS',
+              type: UPDATE_SIMILARS,
               similars: [
                 {
-                  _source: {
-                    id: 2,
-                    titleStudy: 'Similar Study Title'
-                  }
+                  id: 2,
+                  titleStudy: 'Similar Study Title'
                 }
               ]
             }
@@ -530,7 +556,7 @@ describe('Search actions', () => {
       // Action should be returned.
       expect(store.getActions()).toEqual([
         {
-          type: 'RESET_SEARCH'
+          type: RESET_SEARCH
         }
       ]);
     });

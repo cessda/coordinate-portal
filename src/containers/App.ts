@@ -12,24 +12,24 @@
 // limitations under the License.
 
 import { Component } from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { AnyAction, bindActionCreators } from "redux";
+import { connect, Dispatch } from "react-redux";
 import { initSearchkit } from "../actions/search";
 import { initTranslations } from "../actions/language";
-import { Dispatch } from "../types";
+import { Thunk } from "../types";
 
 type Props = {
-  initSearchkit: () => void;
-  initTranslations: () => void;
+  initSearchkit: () => Thunk;
+  initTranslations: () => Thunk;
   children: JSX.Element;
 };
 
 export class App extends Component<Props> {
 
-  constructor(props: Props) {
+  constructor(props?: Props) {
     super(props);
-    props.initSearchkit();
-    props.initTranslations();
+    this.props.initSearchkit();
+    this.props.initTranslations();
   }
 
   render() {
@@ -37,9 +37,7 @@ export class App extends Component<Props> {
   }
 }
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     initSearchkit: bindActionCreators(initSearchkit, dispatch),
     initTranslations: bindActionCreators(initTranslations, dispatch)

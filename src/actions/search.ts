@@ -1,4 +1,3 @@
-
 // Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -17,6 +16,7 @@ import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Dispatch, GetState, State, Thunk } from "../types";
 import { CMMStudy } from "../utilities/metadata";
+import { getPaq } from "..";
 
 // Get a new Elasticsearch Client
 function elasticsearchClient() {
@@ -32,16 +32,17 @@ function elasticsearchClient() {
 }
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
+export const INIT_SEARCHKIT = "INIT_SEARCHKIT";
 
 export type InitSearchkitAction = {
-  type: "INIT_SEARCHKIT";
+  type: typeof INIT_SEARCHKIT;
 };
 
 export const initSearchkit = (): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     let timer: NodeJS.Timeout;
 
-    searchkit.setQueryProcessor((query) => {
+    searchkit.setQueryProcessor((query: any) => {
       dispatch(toggleLoading(true));
 
       const state: State = getState()
@@ -52,7 +53,7 @@ export const initSearchkit = (): Thunk => {
       timer = setTimeout((): void => {
         if (!init) {
           // Notify Matomo Analytics of new search query.
-          let _paq = window._paq || [];
+          const _paq = getPaq();
           _paq.push(['setReferrerUrl', '/' + searchkit.history.location.search]);
           _paq.push(['setCustomUrl', '/' + searchkit.history.location.search]);
           _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);
@@ -74,11 +75,11 @@ export const initSearchkit = (): Thunk => {
       const path = _.trim(state.routing.locationBeforeTransitions.pathname, '/');
       const pathQuery = state.routing.locationBeforeTransitions.query.q;
 
-      if (path === 'detail' && pathQuery !== undefined) {
+      if (path === 'detail' && pathQuery) {
         // If viewing detail page, override query to retrieve single record using its ID.
         query.query = detailQuery(_.trim(pathQuery, '"'));
 
-      } else if (path === 'pid' && pathQuery !== undefined) {
+      } else if (path === 'pid' && pathQuery) {
         // If viewing detail page, override query to retrieve single record using its pid.
         query.query = pidQuery(_.trim(pathQuery, '"'));
 
@@ -113,105 +114,112 @@ export const initSearchkit = (): Thunk => {
     });
 
     dispatch({
-      type: 'INIT_SEARCHKIT'
+      type: INIT_SEARCHKIT
     });
   };
 };
 
 //////////// Redux Action Creator : TOGGLE_LOADING
+export const TOGGLE_LOADING = "TOGGLE_LOADING";
 
 export type ToggleLoadingAction = {
-  type: "TOGGLE_LOADING";
+  type: typeof TOGGLE_LOADING;
   loading: boolean;
 };
 
 export const toggleLoading = (loading: boolean): ToggleLoadingAction => {
   return {
-    type: 'TOGGLE_LOADING',
+    type: TOGGLE_LOADING,
     loading
   };
 };
 
 //////////// Redux Action Creator : TOGGLE_MOBILE_FILTERS
+export const TOGGLE_MOBILE_FILTERS = "TOGGLE_MOBILE_FILTERS";
 
 export type ToggleMobileFiltersAction = {
-  type: "TOGGLE_MOBILE_FILTERS";
+  type: typeof TOGGLE_MOBILE_FILTERS;
 };
 
 export const toggleMobileFilters = (): ToggleMobileFiltersAction => {
   return {
-    type: 'TOGGLE_MOBILE_FILTERS'
+    type: TOGGLE_MOBILE_FILTERS
   };
 };
 
 //////////// Redux Action Creator : TOGGLE_ADVANCED_SEARCH
+export const TOGGLE_ADVANCED_SEARCH = "TOGGLE_ADVANCED_SEARCH";
 
 export type ToggleAdvancedSearchAction = {
-  type: "TOGGLE_ADVANCED_SEARCH";
+  type: typeof TOGGLE_ADVANCED_SEARCH;
 };
 
 export const toggleAdvancedSearch = (): ToggleAdvancedSearchAction => {
   return {
-    type: 'TOGGLE_ADVANCED_SEARCH'
+    type: TOGGLE_ADVANCED_SEARCH
   };
 };
 
 //////////// Redux Action Creator : TOGGLE_SUMMARY
+export const TOGGLE_SUMMARY = "TOGGLE_SUMMARY";
 
 export type ToggleSummaryAction = {
-  type: "TOGGLE_SUMMARY";
+  type: typeof TOGGLE_SUMMARY;
 };
 
 export const toggleSummary = (): ToggleSummaryAction => {
   return {
-    type: 'TOGGLE_SUMMARY'
+    type: TOGGLE_SUMMARY
   };
 };
 
 //////////// Redux Action Creator : TOGGLE_METADATA_PANELS
+export const TOGGLE_METADATA_PANELS = "TOGGLE_METADATA_PANELS";
 
 export type ToggleMetadataPanelsAction = {
-  type: "TOGGLE_METADATA_PANELS";
+  type: typeof TOGGLE_METADATA_PANELS;
 };
 
 export const toggleMetadataPanels = (): ToggleMetadataPanelsAction => {
   return {
-    type: 'TOGGLE_METADATA_PANELS'
+    type: TOGGLE_METADATA_PANELS
   };
 };
 
 //////////// Redux Action Creator : TOGGLE_LONG_DESCRIPTION
+export const TOGGLE_LONG_DESCRIPTION = "TOGGLE_LONG_DESCRIPTION";
 
 export type ToggleLongAbstractAction = {
-  type: "TOGGLE_LONG_DESCRIPTION";
+  type: typeof TOGGLE_LONG_DESCRIPTION;
   index: number;
 };
 
 export const toggleLongAbstract = (title: string, index: number): Thunk => {
   return (dispatch: Dispatch): void => {
     // Notify Matomo Analytics of toggling "Read more" for a study.
-    let _paq = window._paq || [];
+    const _paq = getPaq();
     _paq.push(['trackEvent', 'Search', 'Read more', title]);
 
     dispatch({
-      type: 'TOGGLE_LONG_DESCRIPTION',
+      type: TOGGLE_LONG_DESCRIPTION,
       index
     });
   };
 };
 
 //////////// Redux Action Creator : UPDATE_DISPLAYED
+export const UPDATE_DISPLAYED = "UPDATE_DISPLAYED";
 
 export type UpdateDisplayedAction = {
-  type: "UPDATE_DISPLAYED";
+  type: typeof UPDATE_DISPLAYED;
   displayed: SearchResponse<CMMStudy>;
   language: string;
 };
 
-export const updateDisplayed = <T>(displayed: SearchResponse<CMMStudy>): Thunk => {
+export const updateDisplayed = (displayed: SearchResponse<CMMStudy>): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     dispatch({
-      type: 'UPDATE_DISPLAYED',
+      type: UPDATE_DISPLAYED,
       displayed,
       language: getState().language.code
     });
@@ -219,46 +227,41 @@ export const updateDisplayed = <T>(displayed: SearchResponse<CMMStudy>): Thunk =
 };
 
 //////////// Redux Action Creator : UPDATE_QUERY
+export const UPDATE_QUERY = "UPDATE_QUERY";
 
 export type UpdateQueryAction = {
-  type: "UPDATE_QUERY";
-  query: {
-    [key: string]: any;
-  };
+  type: typeof UPDATE_QUERY;
+  query: Record<string, any>;
 };
 
-export const updateQuery = (query: {
-  [key: string]: any;
-}): UpdateQueryAction => {
+export const updateQuery = (query: Record<string, any>): UpdateQueryAction => {
   return {
-    type: 'UPDATE_QUERY',
+    type: UPDATE_QUERY,
     query
   };
 };
 
 //////////// Redux Action Creator : UPDATE_STATE
+export const UPDATE_STATE = "UPDATE_STATE";
 
 export type UpdateStateAction = {
-  type: "UPDATE_STATE";
-  state: {
-    [key: string]: any;
-  };
+  type: typeof UPDATE_STATE;
+  state: State;
 };
 
-export const updateState = (state: {
-  [key: string]: any;
-}): UpdateStateAction => {
+export const updateState = (state: State): UpdateStateAction => {
   return {
-    type: 'UPDATE_STATE',
+    type: UPDATE_STATE,
     state
   };
 };
 
 //////////// Redux Action Creator : UPDATE_SIMILARS
+export const UPDATE_SIMILARS = "UPDATE_SIMILARS";
 
 export type UpdateSimilarsAction = {
-  type: "UPDATE_SIMILARS";
-  similars: any;
+  type: typeof UPDATE_SIMILARS;
+  similars: CMMStudy[];
 };
 
 export const updateSimilars = (item: CMMStudy): Thunk => {
@@ -275,19 +278,20 @@ export const updateSimilars = (item: CMMStudy): Thunk => {
     });
 
     dispatch({
-      type: 'UPDATE_SIMILARS',
+      type: UPDATE_SIMILARS,
       similars: _.uniqBy(
         _.filter(response.hits.hits, (hit => hit._source && hit._source.id !== item.id && hit._source.titleStudy !== item.titleStudy)),
         (hit => hit._source.titleStudy)
-      )
+      ).map(hit => hit._source)
     });
   };
 };
 
 //////////// Redux Action Creator : RESET_SEARCH
+export const RESET_SEARCH = "RESET_SEARCH";
 
 export type ResetSearchAction = {
-  type: "RESET_SEARCH";
+  type: typeof RESET_SEARCH;
 };
 
 export const resetSearch = (): Thunk => {
@@ -298,16 +302,17 @@ export const resetSearch = (): Thunk => {
       searchkit.reloadSearch();
     });
     dispatch({
-      type: 'RESET_SEARCH'
+      type: RESET_SEARCH
     });
   };
 };
 
 //////////// Redux Action Creator : UPDATE_TOTAL_STUDIES
+export const UPDATE_TOTAL_STUDIES = "UPDATE_TOTAL_STUDIES";
 
 export type UpdateTotalStudiesAction = {
-  type: "UPDATE_TOTAL_STUDIES";
-  totalStudies: Number;
+  type: typeof UPDATE_TOTAL_STUDIES;
+  totalStudies: number;
 };
 
 export const updateTotalStudies = (): Thunk => {
@@ -325,7 +330,7 @@ export const updateTotalStudies = (): Thunk => {
     });
 
     dispatch({
-      type: 'UPDATE_TOTAL_STUDIES',
+      type: UPDATE_TOTAL_STUDIES,
       totalStudies: response.aggregations.unique_id.value
     });
   };

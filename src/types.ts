@@ -16,11 +16,9 @@
 
 import { Dispatch as ReduxDispatch, Store as ReduxStore } from "redux";
 import { Action } from "./actions";
-import { Reducers } from "./reducers";
+import Reducers from "./reducers";
 
-type $ExtractFunctionReturn = <V>(v: (...args: any) => V) => V;
-
-export type State = $ObjMap<Reducers, $ExtractFunctionReturn>;
+export type State = ReturnType<typeof Reducers>;
 
 export type GetState = () => State;
 
