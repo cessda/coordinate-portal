@@ -19,7 +19,7 @@ module.exports = {
   reporters: ['default', 'jest-junit'],
 
   // Setup Enzyme, this removes the need for imports in the tests
-  setupFilesAfterEnv: ["jest-enzyme", "./beforeTests.js"],
+  setupFilesAfterEnv: ["jest-enzyme"],
   testEnvironment: "enzyme",
   testEnvironmentOptions: {
     enzymeAdapter: "react15"

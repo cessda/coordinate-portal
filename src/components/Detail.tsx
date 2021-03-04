@@ -246,7 +246,7 @@ export class Detail extends React.Component<Props> {
             content="metadata.publisher"
           />
           <p>
-            {item.publisher || <Translate content="language.notAvailable.field" />}
+            {item.publisher ? item.publisher.publisher : <Translate content="language.notAvailable.field" />}
           </p>
 
           <Translate

@@ -18,21 +18,20 @@ import Footer from '../components/Footer';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
-  Hits, Layout, LayoutBody, LayoutResults, Pagination as SearchkitPagination, RangeSliderInput,
+  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination, RangeFilter, RangeSliderInput,
   SearchkitProvider, SideBar
 } from 'searchkit';
 import Translate from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import Panel from '../components/Panel';
-import RangeFilter from '../components/RangeFilter';
 import RefinementListFilter from '../components/RefinementListFilter';
-import NoHits from '../components/NoHits';
 import searchkit from '../utilities/searchkit';
 import _ from 'lodash';
 import $ from 'jquery';
 import type {State} from '../types';
 import moment from 'moment';
+import counterpart from 'counterpart';
 
 type Props = {
   showMobileFilters: boolean;
@@ -95,7 +94,7 @@ export class SearchPage extends Component<Props> {
                            max={moment().year()}
                            field="dataCollectionYear"
                            id="dataCollectionYear"
-                           title={<Translate content='filters.collectionDates.label'/>}
+                           title={counterpart.translate('filters.collectionDates.label')}
                            rangeComponent={RangeSliderInput}
                            containerComponent={<Panel title={<Translate content='filters.collectionDates.label'/>}
                                                       tooltip={<Translate content='filters.collectionDates.tooltip'/>}

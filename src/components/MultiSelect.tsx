@@ -29,9 +29,9 @@ type Props = {
 
 export class MultiSelect extends AbstractItemList<Props> {
 
-  constructor(props: Props): void {
+  constructor(props: Props) {
     super(props);
-    (this as any).handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(selectedOptions: {

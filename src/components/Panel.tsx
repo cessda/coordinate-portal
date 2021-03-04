@@ -48,7 +48,7 @@ export class Panel extends SearchkitPanel {
     }
   }
 
-  render(): any {
+  render() {
     const {
       tooltip
     } = this.props;
@@ -64,7 +64,7 @@ export class Panel extends SearchkitPanel {
 
 // Override Panel type checking to avoid errors.
 Panel.propTypes = Object.assign(SearchkitPanel.propTypes, {
-  title: PropTypes.object,
+  title: PropTypes.any,
   tooltip: PropTypes.object,
   linkCollapsedState: PropTypes.bool,
   expandMetadataPanels: PropTypes.bool,

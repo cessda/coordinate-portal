@@ -19,7 +19,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   context: path.join(__dirname),
   entry: [
-    '@babel/polyfill',
     './src/index.tsx'
   ],
   output: {

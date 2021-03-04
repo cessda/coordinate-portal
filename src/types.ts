@@ -16,9 +16,9 @@
 
 import { Dispatch as ReduxDispatch, Store as ReduxStore } from "redux";
 import { Action } from "./actions";
-import Reducers from "./reducers";
+import { rootReducer } from "./reducers";
 
-export type State = ReturnType<typeof Reducers>;
+export type State = ReturnType<typeof rootReducer>;
 
 export type GetState = () => State;
 

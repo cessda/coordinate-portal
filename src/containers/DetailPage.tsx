@@ -27,21 +27,17 @@ import Similars from '../components/Similars';
 import { goBack } from 'react-router-redux';
 import type { Dispatch, State } from '../types';
 import _ from 'lodash';
+import { Language as LanguageType } from '../utilities/language';
+import { CMMStudy } from '../utilities/metadata';
 
 type Props = {
   loading: boolean;
-  item?: {
-    [key: string]: any;
-  };
+  item?: CMMStudy;
   jsonLd?: {
     [key: string]: any;
   };
   code: string;
-  list: {
-    code: string;
-    label: string;
-    index: string;
-  }[];
+  list: LanguageType[];
   query: {
     [key: string]: any;
   };

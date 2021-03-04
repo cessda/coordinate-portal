@@ -22,6 +22,4 @@ const reducers = {
   search: search
 };
 
-export type Reducers = typeof reducers;
-
-export default combineReducers(reducers);
+export const rootReducer = combineReducers(reducers);

@@ -24,11 +24,11 @@ import DetailPage from "./containers/DetailPage";
 import App from "./containers/App";
 import { browserHistory, IndexRoute, Redirect, Route, Router } from "react-router";
 import { routerMiddleware, syncHistoryWithStore } from "react-router-redux";
-import reducers from "./reducers";
+import { rootReducer as reducers } from "./reducers";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { detect } from "detect-browser";
-// import "./styles/design.scss";
+import "./styles/design.scss";
 import { Store } from "./types";
 
 // Initialise Matomo Analytics.
