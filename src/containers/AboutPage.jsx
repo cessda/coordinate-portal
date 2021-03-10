@@ -19,7 +19,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import Translate from 'react-translate-component';
 
 export class AboutPage extends Component<Props> {

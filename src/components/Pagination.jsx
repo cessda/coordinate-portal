@@ -16,7 +16,7 @@
 
 import type {Node} from 'react';
 import React from 'react';
-import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/lib/fa/index';
+import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/fa';
 import {connect} from 'react-redux';
 import {AbstractItemList} from 'searchkit';
 

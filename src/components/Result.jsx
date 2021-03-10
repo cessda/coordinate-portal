@@ -16,7 +16,7 @@
 
 import type { Node } from 'react';
 import React, { Component } from 'react';
-import { FaAngleDown, FaAngleUp, FaExternalLink, FaLanguage } from 'react-icons/lib/fa/index';
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt, FaLanguage } from 'react-icons/fa';
 import Translate from 'react-translate-component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -125,7 +125,7 @@ export class Result extends Component<Props> {
                  <a className="button is-small is-white"
                     href={item.studyUrl}
                     target="_blank">
-                   <span className="icon is-small"><FaExternalLink/></span>
+                   <span className="icon is-small"><FaExternalLinkAlt/></span>
                    <Translate component="span" content="goToStudy"/>
                  </a>
                 }
