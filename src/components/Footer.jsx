@@ -18,10 +18,10 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
-  FaLinkedinSquare,
+  FaLinkedin,
   FaTwitterSquare,
   FaYoutubeSquare
-} from 'react-icons/lib/fa/index';
+} from 'react-icons/fa';
 import Translate from 'react-translate-component';
 
 type Props = {};
@@ -50,7 +50,7 @@ export class Footer extends Component<Props> {
                   <ul className="footer-social">
                     <li><Translate content="footer.followUsOn"/>:</li>
                     <li><a href="https://twitter.com/CESSDA_Data" target="_blank"><FaTwitterSquare/></a></li>
-                    <li><a href="https://www.linkedin.com/company/9392869" target="_blank"><FaLinkedinSquare/></a></li>
+                    <li><a href="https://www.linkedin.com/company/9392869" target="_blank"><FaLinkedin/></a></li>
                     <li><a href="https://www.youtube.com/channel/UCqbZKb1Enh-WcFpg6t86wsA" target="_blank"><FaYoutubeSquare/></a></li>
                   </ul>
                   <ul>

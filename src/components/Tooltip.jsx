@@ -17,7 +17,7 @@
 import type {Node} from 'react';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {FaQuestionCircle} from 'react-icons/lib/fa/index';
+import {FaQuestionCircle} from 'react-icons/fa';
 
 type Props = {
   content: any
