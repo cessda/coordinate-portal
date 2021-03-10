@@ -21,7 +21,7 @@ pipeline {
 	environment {
 		product_name = "cdc"
 		module_name = "searchkit"
-		image_tag = "${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+		image_tag = "${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME.toLowerCase().replaceAll('[^a-z0-9\\.\\_\\-]', '-')}-${env.BUILD_NUMBER}"
 		scannerHome = tool 'sonar-scanner'
 	}
 
@@ -55,12 +55,6 @@ pipeline {
 				}
 			}
 		}
-		stage('Test Docker image') {
-			 steps {
-				sh("docker build -t cdc-searchkit .")
-			}
-			when { not { branch 'master' } }
-		}
 		stage('Run Sonar Scan') {
 			steps {
 				nodejs('node-12') {
@@ -83,7 +77,6 @@ pipeline {
 			 steps {
 				sh("docker build -t ${image_tag} .")
 			}
-			when { branch 'master' }
 		}
 		stage('Push Docker image') {
 			steps {
