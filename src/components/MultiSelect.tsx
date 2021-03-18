@@ -14,7 +14,6 @@
 
 import React from 'react';
 import Select from 'react-select';
-import {connect} from 'react-redux';
 import {AbstractItemList} from 'searchkit';
 
 type Props = {
@@ -27,7 +26,7 @@ type Props = {
   setItems: any;
 };
 
-export class MultiSelect extends AbstractItemList<Props> {
+export default class MultiSelect extends AbstractItemList<Props> {
 
   constructor(props: Props) {
     super(props);
@@ -82,5 +81,3 @@ export class MultiSelect extends AbstractItemList<Props> {
     );
   }
 }
-
-export default connect()(MultiSelect);

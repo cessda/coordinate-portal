@@ -26,6 +26,7 @@ function setup() {
     options: [
       {
         translation: 'sorting.relevance',
+        label: '',
         key: 'relevance',
         field: '_score',
         order: 'desc',
@@ -33,24 +34,28 @@ function setup() {
       },
       {
         translation: 'sorting.titleAscending',
+        label: '',
         key: 'title-ascending',
         field: 'titleStudy.raw',
         order: 'asc'
       },
       {
         translation: 'sorting.titleDescending',
+        label: '',
         key: 'title-descending',
         field: 'titleStudy.raw',
         order: 'desc'
       },
       {
         translation: 'sorting.dateAscending',
+        label: '',
         key: 'date-ascending',
         field: 'dataCollectionPeriodStartdate',
         order: 'asc'
       },
       {
         translation: 'sorting.dateDescending',
+        label: '',
         key: 'date-descending',
         field: 'dataCollectionPeriodStartdate',
         order: 'desc'

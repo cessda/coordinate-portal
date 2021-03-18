@@ -11,22 +11,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {SearchBox as SearchkitSearchBox} from 'searchkit';
-import {connect} from 'react-redux';
-import {push} from 'react-router-redux';
-import {bindActionCreators} from 'redux';
+import {SearchBox as SearchkitSearchBox, SearchBoxProps} from 'searchkit';
+import {connect, Dispatch} from 'react-redux';
+import {LocationAction, push} from 'react-router-redux';
+import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
 import {detect} from 'detect-browser';
 import _ from 'lodash';
 
-type Props = {
+interface Props extends SearchBoxProps {
   pathname: string;
-  push: (path: string) => void;
+  push: (path: string) => LocationAction;
   query: string;
 };
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
-export class SearchBox extends SearchkitSearchBox<Props> {
+export class SearchBox extends SearchkitSearchBox {
+  
+  props: Props;
+
+  constructor(props: Props) {
+    super(props);
+    this.props = props;
+  }
+
+  static defaultProps = {
+    id: 'q',
+    mod: 'sk-search-box',
+    searchThrottleTime: 200,
+    blurAction: 'search',
+    pathname: '',
+    push,
+    query: ''
+  }
+
   onChange(event: any): void {
     const {
       pathname,
@@ -66,18 +84,14 @@ export class SearchBox extends SearchkitSearchBox<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
     query: state.search.state.q
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     push: bindActionCreators(push, dispatch)
   };

@@ -17,7 +17,7 @@ import searchkit from "../utilities/searchkit";
 import { Dispatch, GetState, State, Thunk } from "../types";
 import _ from "lodash";
 import moment from "moment";
-import { getLanguages } from "../utilities/language";
+import { getLanguages, Language } from "../utilities/language";
 import { getPaq } from "..";
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
@@ -25,29 +25,22 @@ export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";
 
 export type InitTranslationsAction = {
   type: typeof INIT_TRANSLATIONS;
-  list: {
-    code: string;
-    label: string;
-    index: string;
-  }[];
+  languages: Language[];
 };
 
 export function initTranslations(): Thunk {
   return (dispatch: Dispatch, getState: GetState): void => {
-    // Register translations provided from the "/locales" directory.
-    let state: State = getState(),
-        list: {
-      code: string;
-      label: string;
-      index: string;
-    }[] = _.map(getLanguages(), language => {
+
+    const state = getState();
+    const languages = getLanguages();
+
+    languages.forEach(language => {
       // Register translations from the respective JSON files
       try {
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
         console.debug(`Couldn't load translation for language '${language.code}': ${e.message}`);
       }
-      return _.pick(language, ['code', 'label', 'index']);
     });
 
     counterpart.setLocale(state.language.code);
@@ -57,33 +50,38 @@ export function initTranslations(): Thunk {
 
     moment.locale(state.language.code);
 
-    searchkit.translateFunction = (key: string): string => {
-      let numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults',
-          translations: {
-        [key: string]: any;
-      } = {
-        'searchbox.placeholder': counterpart.translate('search'),
-        'hitstats.results_found': counterpart.translate(numberOfResults, {
-          count: searchkit.getHitsCount(),
-          label: getState().language.label,
-          total: getState().search.totalStudies,
-          time: searchkit.getTime()
-        }),
-        'NoHits.NoResultsFound': counterpart.translate('noHits.noResultsFound', {
-          query: searchkit.getQueryAccessor().state.value || ''
-        }),
-        'NoHits.SearchWithoutFilters': counterpart.translate('noHits.searchWithoutFilters', {
-          query: searchkit.getQueryAccessor().state.value || ''
-        }),
-        'NoHits.Error': counterpart.translate('noHits.error'),
-        'NoHits.ResetSearch': counterpart.translate('noHits.resetSearch')
+    searchkit.translateFunction = (key: string): string | undefined => {
+      const numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
+      switch (key) {
+        case 'searchbox.placeholder': 
+          return counterpart.translate('search');
+        case 'hitstats.results_found': 
+          return counterpart.translate(numberOfResults, {
+            count: searchkit.getHitsCount(),
+            label: state.language.label,
+            total: state.search.totalStudies,
+            time: searchkit.getTime()
+          });
+        case 'NoHits.NoResultsFound': 
+          return counterpart.translate('noHits.noResultsFound', {
+            query: searchkit.getQueryAccessor().state.value
+          });
+        case 'NoHits.SearchWithoutFilters': 
+          return counterpart.translate('noHits.searchWithoutFilters', {
+            query: searchkit.getQueryAccessor().state.value
+          });
+        case 'NoHits.Error': 
+          return counterpart.translate('noHits.error');
+        case 'NoHits.ResetSearch': 
+          return counterpart.translate('noHits.resetSearch');
+        default:
+          return undefined;
       };
-      return translations[key];
     };
 
     dispatch({
       type: INIT_TRANSLATIONS,
-      list
+      languages
     });
   };
 }

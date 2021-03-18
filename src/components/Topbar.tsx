@@ -83,9 +83,7 @@ export class TopBar extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     code: state.language.code
   };

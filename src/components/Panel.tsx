@@ -15,22 +15,32 @@
 import React from 'react';
 import { Panel as SearchkitPanel, PanelProps } from 'searchkit';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import Tooltip from './Tooltip';
-import type { Dispatch, State } from '../types';
-import { bindActionCreators } from 'redux';
-import { toggleMetadataPanels } from '../actions/search';
+import type { State } from '../types';
+import { AnyAction, bindActionCreators } from 'redux';
+import { toggleMetadataPanels, ToggleMetadataPanelsAction } from '../actions/search';
 
 interface Props extends PanelProps {
-  tooltip: JSX.Element | string;
-  linkCollapsedState: boolean;
+  tooltip?: JSX.Element | string;
+  linkCollapsedState?: boolean;
   expandMetadataPanels: boolean;
-  toggleMetadataPanels: () => void;
+  toggleMetadataPanels: () => ToggleMetadataPanelsAction;
 };
 
 // Extend the Searchkit Panel component to support tooltips and translations.
 export class Panel extends SearchkitPanel {
   props: Props;
+
+  static defaultProps = Object.assign({}, SearchkitPanel.defaultProps, {
+    expandMetadataPanels: false,
+    toggleMetadataPanels
+  });
+
+  constructor(props: Props = Panel.defaultProps) {
+    super(props);
+    this.props = props;
+  }
 
   componentDidUpdate(prevProps: Props): void {
     if (this.props.linkCollapsedState &&
@@ -77,7 +87,7 @@ export const mapStateToProps = (state: State) => {
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch) => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
   };

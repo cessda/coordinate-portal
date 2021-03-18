@@ -19,29 +19,29 @@ import Detail from '../components/Detail';
 import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
 import Panel from '../components/Panel';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { FaAngleLeft, FaCode, FaExternalLink } from 'react-icons/lib/fa/index';
-import { bindActionCreators } from 'redux';
+import { AnyAction, bindActionCreators } from 'redux';
 import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
-import { goBack } from 'react-router-redux';
-import type { Dispatch, State } from '../types';
+import { goBack, RouterAction } from 'react-router-redux';
+import type { State } from '../types';
 import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../utilities/metadata';
 
 type Props = {
   loading: boolean;
-  item?: CMMStudy;
-  jsonLd?: {
+  item: CMMStudy | undefined;
+  jsonLd: {
     [key: string]: any;
-  };
+  } | null | undefined;
   code: string;
   list: LanguageType[];
   query: {
     [key: string]: any;
   };
-  goBack: () => void;
+  goBack: () => RouterAction;
 };
 
 export class DetailPage extends Component<Props> {
@@ -132,7 +132,7 @@ export const mapStateToProps = (state: State) => {
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch) => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     goBack: bindActionCreators(goBack, dispatch)
   };

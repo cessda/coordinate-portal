@@ -12,22 +12,22 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, State} from '../types';
+import {connect, Dispatch} from 'react-redux';
+import {AnyAction, bindActionCreators} from 'redux';
+import type {State} from '../types';
 import searchkit from '../utilities/searchkit';
-import {push} from 'react-router-redux';
+import {push, RouterAction} from 'react-router-redux';
 import Translate from 'react-translate-component';
+import { CMMStudy } from '../utilities/metadata';
+import { LocationDescriptor } from 'history';
 
 type Props = {
-  item: unknown;
-  similars?: {
+  item: CMMStudy;
+  similars: {
     id: string;
     title: string;
   }[];
-  push: (state: {
-    [key: string]: any;
-  }) => void;
+  push: (state: LocationDescriptor) => RouterAction;
 };
 
 export class Similars extends Component<Props> {
@@ -65,18 +65,14 @@ export class Similars extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     item: state.search.displayed[0],
     similars: state.search.similars
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     push: bindActionCreators(push, dispatch)
   };

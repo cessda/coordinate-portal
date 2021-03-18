@@ -15,21 +15,21 @@
 import React from "react";
 import { Link } from "react-router";
 import { HitItemProps } from "searchkit";
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
 import Panel from "./Panel";
 import Translate from "react-translate-component";
-import { Dispatch, State } from "../types";
+import { State } from "../types";
 import _ from "lodash";
 import moment from "moment";
-import { bindActionCreators } from "redux";
-import { toggleMetadataPanels } from "../actions/search";
+import { AnyAction, bindActionCreators } from "redux";
+import { toggleMetadataPanels, ToggleMetadataPanelsAction } from "../actions/search";
 import { CMMStudy, DataCollectionFreeText } from "../utilities/metadata";
 
 interface Props extends HitItemProps {
   index: number;
   item: CMMStudy;
   expandMetadataPanels: boolean;
-  toggleMetadataPanels: () => void;
+  toggleMetadataPanels: () => ToggleMetadataPanelsAction;
 };
 
 export class Detail extends React.Component<Props> {
@@ -305,7 +305,7 @@ export const mapStateToProps = (state: State, props: Props) => {
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch) => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
   };

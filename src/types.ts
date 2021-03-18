@@ -14,7 +14,7 @@
 
 
 
-import { Dispatch as ReduxDispatch, Store as ReduxStore } from "redux";
+import { AnyAction, Dispatch as ReduxDispatch, Store as ReduxStore } from "redux";
 import { Action } from "./actions";
 import { rootReducer } from "./reducers";
 

@@ -14,11 +14,11 @@
 import React, { Component } from 'react';
 import { FaAngleDown, FaAngleUp, FaExternalLink, FaLanguage } from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { connect, Dispatch } from 'react-redux';
+import { AnyAction, bindActionCreators } from 'redux';
 import { toggleLongAbstract } from '../actions/search';
 import { Link } from 'react-router';
-import type { Dispatch, State } from '../types';
+import type { State } from '../types';
 import { changeLanguage } from '../actions/language';
 import { push } from 'react-router-redux';
 
@@ -148,17 +148,13 @@ export class Result extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State, props: Props): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State, props: Props) => {
   return {
     item: state.search.displayed[props.index]
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     push: bindActionCreators(push, dispatch),
     changeLanguage: bindActionCreators(changeLanguage, dispatch),

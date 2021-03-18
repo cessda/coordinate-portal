@@ -13,14 +13,11 @@
 // limitations under the License.
 
 import {PageSizeSelector as SearchkitPageSizeSelector} from 'searchkit';
-import {connect} from 'react-redux';
 
 // Extend the Searchkit PageSizeSelector component to stay visible at all times.
-export class PageSizeSelector extends SearchkitPageSizeSelector {
+export default class PageSizeSelector extends SearchkitPageSizeSelector {
   hasHits(): boolean {
     // Override behaviour to always return true so that the control is never disabled and hidden.
     return true;
   }
 }
-
-export default connect()(PageSizeSelector);

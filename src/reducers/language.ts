@@ -13,27 +13,25 @@
 // limitations under the License.
 
 import { Action } from "../actions";
+import { Language } from "../utilities/language";
 
 export type LanguageState = {
   code: string;
   label: string;
-  list?: {
-    code: string;
-    label: string;
-    index: string;
-  }[];
+  list: Language[];
 };
 
 const initialState: LanguageState = {
   code: 'en',
-  label: 'English'
+  label: 'English',
+  list: []
 };
 
 const language = (state = initialState, action: Action): LanguageState => {
   switch (action.type) {
     case 'INIT_TRANSLATIONS':
       return Object.assign({}, state, {
-        list: action.list
+        list: action.languages
       });
 
     case 'CHANGE_LANGUAGE':

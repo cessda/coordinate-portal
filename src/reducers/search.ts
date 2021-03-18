@@ -17,6 +17,7 @@ import _ from 'lodash';
 import { 
   INIT_SEARCHKIT, 
   RESET_SEARCH, 
+  SearchkitState, 
   TOGGLE_ADVANCED_SEARCH, 
   TOGGLE_LOADING, 
   TOGGLE_LONG_DESCRIPTION, 
@@ -40,12 +41,12 @@ export type SearchState = {
   jsonLd?: {
     [key: string]: any;
   } | null | undefined;
-  similars?: {
+  similars: {
     id: string;
     title: string;
   }[];
-  query: any;
-  state: any;
+  query: Record<string, any>;
+  state: SearchkitState;
   totalStudies: number;
 };
 
@@ -54,10 +55,11 @@ const initialState: SearchState = {
   showMobileFilters: false,
   showAdvancedSearch: false,
   showFilterSummary: false,
+  similars: [],
   expandMetadataPanels: false,
   displayed: [],
   query: Object,
-  state: Object,
+  state: { q: '' },
   totalStudies: 0
 };
 

@@ -12,11 +12,10 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {FaLinkedinSquare, FaTwitterSquare, FaYoutubeSquare} from 'react-icons/lib/fa/index';
 import Translate from 'react-translate-component';
 
-export class Footer extends Component {
+export default class Footer extends Component {
 
   render() {
     return (
@@ -73,5 +72,3 @@ export class Footer extends Component {
     );
   }
 }
-
-export default connect()(Footer);

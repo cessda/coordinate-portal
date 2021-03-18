@@ -13,12 +13,10 @@
 
 import {SortingSelector as SearchkitSortingSelector} from 'searchkit';
 import ReactPropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
-type Props = {};
 
 // Extend the Searchkit SortingSelector component to support translations.
-export class SortingSelector extends SearchkitSortingSelector<Props> {
+export default class SortingSelector extends SearchkitSortingSelector {
 
   hasHits(): boolean {
     // Override behaviour to always return true so that the control is never disabled and hidden.
@@ -38,5 +36,3 @@ SortingSelector.propTypes = Object.assign(SearchkitSortingSelector.propTypes, {
     })
   )
 });
-
-export default connect()(SortingSelector);

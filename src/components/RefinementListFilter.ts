@@ -15,14 +15,11 @@
 
 import {RefinementListFilter as SearchkitRefinementListFilter} from 'searchkit';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
 // Extend the Searchkit RefinementListFilter component to support translations.
-export class RefinementListFilter extends SearchkitRefinementListFilter {}
+export default class RefinementListFilter extends SearchkitRefinementListFilter {}
 
 // Override RefinementListFilter type checking to avoid errors.
 RefinementListFilter.propTypes = Object.assign(SearchkitRefinementListFilter.propTypes, {
   title: PropTypes.object
 });
-
-export default connect()(RefinementListFilter);

@@ -73,7 +73,11 @@ export const initSearchkit = (): Thunk => {
       }, 3000);
 
       const path = _.trim(state.routing.locationBeforeTransitions.pathname, '/');
-      const pathQuery = state.routing.locationBeforeTransitions.query.q;
+      let pathQuery = state.routing.locationBeforeTransitions.query.q;
+
+      if (_.isArray(pathQuery)) {
+        pathQuery = pathQuery[0];
+      }
 
       if (path === 'detail' && pathQuery) {
         // If viewing detail page, override query to retrieve single record using its ID.
@@ -89,7 +93,7 @@ export const initSearchkit = (): Thunk => {
       }
 
       // Add the current language index to the query for Elasticsearch.
-      query.index = _.find(state.language.list, { 'code': state.language.code }).index;
+      query.index = _.find(state.language.list, { 'code': state.language.code })?.index;
 
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
@@ -244,12 +248,16 @@ export const updateQuery = (query: Record<string, any>): UpdateQueryAction => {
 //////////// Redux Action Creator : UPDATE_STATE
 export const UPDATE_STATE = "UPDATE_STATE";
 
-export type UpdateStateAction = {
-  type: typeof UPDATE_STATE;
-  state: State;
+export type SearchkitState = {
+  q: string;
 };
 
-export const updateState = (state: State): UpdateStateAction => {
+export type UpdateStateAction = {
+  type: typeof UPDATE_STATE;
+  state: SearchkitState;
+};
+
+export const updateState = (state: any): UpdateStateAction => {
   return {
     type: UPDATE_STATE,
     state
@@ -267,7 +275,7 @@ export type UpdateSimilarsAction = {
 export const updateSimilars = (item: CMMStudy): Thunk => {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state: State = getState();
-    const index: string = _.find(state.language.list, { 'code': state.language.code }).index;
+    const index = _.find(state.language.list, { 'code': state.language.code })?.index;
 
     const response = await elasticsearchClient().search<CMMStudy>({
       size: 10,
@@ -318,12 +326,10 @@ export type UpdateTotalStudiesAction = {
 export const updateTotalStudies = (): Thunk => {
   return async (dispatch: Dispatch, getState: GetState) => {
 
-    const index = "cmmstudy_*";
-
     const response = await elasticsearchClient().search({
       size: 0,
       body: {
-        index: index,
+        index: "cmmstudy_*",
         query: matchAllQuery(),
         aggs: uniqueAggregation()
       }

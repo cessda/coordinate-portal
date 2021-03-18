@@ -182,9 +182,7 @@ export class SearchPage extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     showMobileFilters: state.search.showMobileFilters,
     filters: state.search.state,

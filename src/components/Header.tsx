@@ -15,32 +15,30 @@
 import React, { Component } from 'react';
 import { GroupedSelectedFilters, HitsStats, ResetFilters } from 'searchkit';
 import Language from './Language';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router';
 import counterpart from 'counterpart';
 import Reset from './Reset';
 import { queryBuilder } from '../utilities/searchkit';
 import SearchBox from './SearchBox';
-import type { Dispatch, State } from '../types';
-import { bindActionCreators } from 'redux';
+import type { State, Thunk } from '../types';
+import { AnyAction, bindActionCreators } from 'redux';
 import {
-  resetSearch, toggleAdvancedSearch, toggleMobileFilters, toggleSummary
+  resetSearch, toggleAdvancedSearch, ToggleAdvancedSearchAction, toggleMobileFilters, ToggleMobileFiltersAction, toggleSummary, ToggleSummaryAction
 } from '../actions/search';
 import Translate from 'react-translate-component';
 
 interface Props {
-  pathname?: string;
-  code?: string;
-  filters?: {
-    [key: string]: any;
-  };
-  showFilterSummary?: boolean;
-  showMobileFilters?: boolean;
-  showAdvancedSearch?: boolean;
-  resetSearch?: () => void;
-  toggleSummary?: () => void;
-  toggleMobileFilters?: () => void;
-  toggleAdvancedSearch?: () => void;
+  pathname: string;
+  code: string;
+  filters: any;
+  showFilterSummary: boolean;
+  showMobileFilters: boolean;
+  showAdvancedSearch: boolean;
+  resetSearch: () => Thunk;
+  toggleSummary: () => ToggleSummaryAction;
+  toggleMobileFilters: () => ToggleMobileFiltersAction;
+  toggleAdvancedSearch: () => ToggleAdvancedSearchAction;
 };
 
 export class Header extends Component<Props> {
@@ -201,23 +199,18 @@ export class Header extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State): {
-  [key: string]: any;
-} => {
+export const mapStateToProps = (state: State) => {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
     code: state.language.code,
     filters: state.search.query.post_filter,
     showFilterSummary: state.search.showFilterSummary,
     showMobileFilters: state.search.showMobileFilters,
-    showAdvancedSearch: state.search.showAdvancedSearch,
-    totalStudies: state.search.totalStudies
+    showAdvancedSearch: state.search.showAdvancedSearch
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch): {
-  [key: string]: any;
-} => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     resetSearch: bindActionCreators(resetSearch, dispatch),
     toggleSummary: bindActionCreators(toggleSummary, dispatch),

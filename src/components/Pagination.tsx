@@ -13,21 +13,10 @@
 // limitations under the License.
 
 import React from 'react';
-import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/lib/fa/index';
-import {connect} from 'react-redux';
+import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/lib/fa';
 import {AbstractItemList} from 'searchkit';
 
-type Props = {
-  items: {
-    key: string | number;
-    label: string;
-    page: number;
-  }[];
-  selectedItems: number[];
-  setItems: (arg0: number[]) => void;
-};
-
-export class Pagination extends AbstractItemList<Props> {
+export default class Pagination extends AbstractItemList {
 
   render() {
     const {items, selectedItems, setItems} = this.props;
@@ -77,4 +66,3 @@ export class Pagination extends AbstractItemList<Props> {
   }
 }
 
-export default connect()(Pagination);

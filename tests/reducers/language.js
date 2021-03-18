@@ -34,7 +34,7 @@ describe('Language reducer', () => {
         {},
         {
           type: 'INIT_TRANSLATIONS',
-          list: list
+          languages: list
         }
       )
     ).toEqual({

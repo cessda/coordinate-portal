@@ -13,11 +13,12 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {connect, Dispatch} from 'react-redux';
 import {changeLanguage} from '../actions/language';
-import {bindActionCreators} from 'redux';
-import type {Dispatch, State} from '../types';
-import Select from 'react-select';
+import {AnyAction, bindActionCreators} from 'redux';
+import type {State} from '../types';
+import Select, { Options } from 'react-select';
+import { isArray } from 'lodash';
 
 type Props = {
   code: string;
@@ -38,16 +39,12 @@ export class Language extends Component<Props> {
       changeLanguage
     } = this.props;
 
-    let languages: {
-      label: string;
-      value: string;
-    }[] = [];
-    for (let i: number = 0; i < list.length; i++) {
-      languages.push({
-        label: list[i].label,
-        value: list[i].code
-      });
-    }
+    const languages: Options<string> = list.map(language => {
+      return {
+        label: language.label,
+        value: language.code
+      };
+    });
 
     return (
       <div className="language-picker">
@@ -56,7 +53,11 @@ export class Language extends Component<Props> {
                 searchable={false}
                 clearable={false}
                 autosize={true}
-                onChange={(option) => changeLanguage(option.value)}/>
+                onChange={(option) => {
+                  if (option && !isArray(option)) {
+                    return changeLanguage(option.value);
+                  }
+                }}/>
       </div>
     );
   }
@@ -69,7 +70,7 @@ export const mapStateToProps = (state: State) => {
   };
 };
 
-export const mapDispatchToProps = (dispatch: Dispatch) => {
+export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     changeLanguage: bindActionCreators(changeLanguage, dispatch)
   };

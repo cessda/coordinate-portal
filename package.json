@@ -6,9 +6,9 @@
   "repository": "bitbucket:cessda/cessda.cdc.searchkit",
   "private": true,
   "scripts": {
-    "startdev": "tsc && node startdev.js",
+    "startdev": "node startdev.js",
     "startprod": "node startprod.js",
-    "build": "tsc && npm run clean && webpack --config webpack.prod.config.js -p",
+    "build": "npm run clean && webpack --config webpack.prod.config.js -p",
     "clean": "rimraf dist",
     "test": "jest --verbose",
     "test:watch": "npm test -- --watch",
