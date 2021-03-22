@@ -99,7 +99,7 @@ export class DetailPage extends Component<Props> {
                  <div className="is-clearfix"/>
                </div>
               }
-              <Hits mod="sk-hits-grid" hitsPerPage={1} itemComponent={<Detail/>}/>
+              <Hits mod="sk-hits-grid" hitsPerPage={1} itemComponent={Detail}/>
               {!loading && !item &&
                <div className="panel pt-15">
                   <p className="fs-14 mb-15">

@@ -91,8 +91,8 @@ helper.getSearchkitRouter = function () {
 
   router.post('/_search', function (req, res) {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
-    let queryBody = config.queryProcessor(req.body || {}, req, res);
-    elasticRequest('/_search', queryBody).pipe(res);
+    let queryBody = config.queryProcessor(req.body || {});
+    elasticRequest(req.url, queryBody).pipe(res);
   });
 
   return router;

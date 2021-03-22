@@ -6,13 +6,13 @@
   "repository": "bitbucket:cessda/cessda.cdc.searchkit",
   "private": true,
   "scripts": {
-    "startdev": "node startdev.js",
+    "startdev": "tsc && node startdev.js",
     "startprod": "node startprod.js",
-    "build": "npm run clean && webpack --config webpack.prod.config.js -p",
+    "build": "tsc && npm run clean && webpack --config webpack.prod.config.js -p",
     "clean": "rimraf dist",
-    "test": "jest --verbose",
+    "test": "tsc && jest --verbose",
     "test:watch": "npm test -- --watch",
-    "flow": "flow"
+    "tsc": "tsc"
   },
   "dependencies": {
     "body-parser": "1.19.0",

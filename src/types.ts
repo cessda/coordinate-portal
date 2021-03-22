@@ -14,7 +14,7 @@
 
 
 
-import { AnyAction, Dispatch as ReduxDispatch, Store as ReduxStore } from "redux";
+import { Dispatch as ReduxDispatch, Store as ReduxStore } from "redux";
 import { Action } from "./actions";
 import { rootReducer } from "./reducers";
 
@@ -26,6 +26,6 @@ export type Dispatch = ReduxDispatch<Action> & ThunkDispatch<Action>;
 
 export type ThunkDispatch<A> = (arg0: (arg0: Dispatch, arg1: GetState) => Promise<void> | void) => A;
 
-export type Thunk = (dispatch: Dispatch, getState: GetState) => void;
+export type Thunk = (dispatch: Dispatch, getState: GetState) => Promise<void> | void;
 
 export type Store = ReduxStore<State, Action>;

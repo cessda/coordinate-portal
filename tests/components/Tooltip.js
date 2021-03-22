@@ -12,11 +12,8 @@
 // limitations under the License.
 
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
-import { Tooltip } from '../../src/components/Tooltip';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { shallow } from 'enzyme';
+import Tooltip from '../../src/components/Tooltip';
 
 // Mock props and shallow render component for test.
 function setup() {

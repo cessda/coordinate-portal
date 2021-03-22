@@ -14,7 +14,7 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { RangeFilter } from '../../src/components/RangeFilter';
+import RangeFilter from '../../src/components/RangeFilter';
 import searchkit from '../../src/utilities/searchkit';
 
 Enzyme.configure({ adapter: new Adapter() });

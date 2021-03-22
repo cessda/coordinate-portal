@@ -98,8 +98,6 @@ export const initSearchkit = (): Thunk => {
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
 
-      dispatch(updateTotalStudies());
-
       return query;
     });
 
@@ -116,6 +114,8 @@ export const initSearchkit = (): Thunk => {
       dispatch(updateDisplayed(results));
       dispatch(toggleLoading(false));
     });
+
+    dispatch(updateTotalStudies());
 
     dispatch({
       type: INIT_SEARCHKIT
@@ -324,21 +324,24 @@ export type UpdateTotalStudiesAction = {
 };
 
 export const updateTotalStudies = (): Thunk => {
-  return async (dispatch: Dispatch, getState: GetState) => {
+  return async (dispatch: Dispatch) => {
+    try {
+      const response = await elasticsearchClient().search({
+        size: 0,
+        body: {
+          index: "cmmstudy_*",
+          query: matchAllQuery(),
+          aggs: uniqueAggregation()
+        }
+      });
 
-    const response = await elasticsearchClient().search({
-      size: 0,
-      body: {
-        index: "cmmstudy_*",
-        query: matchAllQuery(),
-        aggs: uniqueAggregation()
-      }
-    });
-
-    dispatch({
-      type: UPDATE_TOTAL_STUDIES,
-      totalStudies: response.aggregations.unique_id.value
-    });
+      dispatch({
+        type: UPDATE_TOTAL_STUDIES,
+        totalStudies: response.aggregations.unique_id.value
+      });
+    } catch (e) {
+      console.error(e);
+    }
   };
 };
 

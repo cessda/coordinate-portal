@@ -78,7 +78,7 @@ describe('Language actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'INIT_TRANSLATIONS',
-          list: _.map(languages, function(language) {
+          languages: _.map(languages, function(language) {
             return _.pick(language, ['code', 'label', 'index']);
           })
         }

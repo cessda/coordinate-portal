@@ -21,29 +21,27 @@ import _ from 'lodash';
 
 interface Props extends SearchBoxProps {
   pathname: string;
-  push: (path: string) => LocationAction;
+  push: LocationAction;
   query: string;
 };
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
+// @ts-ignore
 export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props: Props) {
+  constructor(props: Props = SearchBox.defaultProps) {
     super(props);
     this.props = props;
   }
 
-  static defaultProps = {
-    id: 'q',
-    mod: 'sk-search-box',
-    searchThrottleTime: 200,
-    blurAction: 'search',
+  // @ts-ignore
+  static defaultProps: Props = Object.assign({}, SearchkitSearchBox.defaultProps, {
     pathname: '',
     push,
     query: ''
-  }
+  });
 
   onChange(event: any): void {
     const {

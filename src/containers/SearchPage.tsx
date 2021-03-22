@@ -19,13 +19,12 @@ import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
   Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination, RangeFilter, RangeSliderInput,
-  SearchkitProvider, SideBar
+  RefinementListFilter, SearchkitProvider, SideBar
 } from 'searchkit';
 import Translate from 'react-translate-component';
 import Header from '../components/Header';
 import {connect} from 'react-redux';
 import Panel from '../components/Panel';
-import RefinementListFilter from '../components/RefinementListFilter';
 import searchkit from '../utilities/searchkit';
 import _ from 'lodash';
 import $ from 'jquery';
@@ -73,7 +72,7 @@ export class SearchPage extends Component<Props> {
           <LayoutBody className="columns">
             <SideBar className="column is-4">
               <RefinementListFilter id="classifications.term"
-                                    title={<Translate content='filters.topic.label'/>}
+                                    title={counterpart.translate('filters.topic.label')}
                                     field={'classifications.term'}
                                     fieldOptions={{
                                       type: 'nested',
@@ -87,6 +86,7 @@ export class SearchPage extends Component<Props> {
                                                                className="classifications"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
+                                    // @ts-ignore
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.topic.placeholder'/>}/>}
                                     size={2700}/>
 
@@ -103,7 +103,7 @@ export class SearchPage extends Component<Props> {
                                                       defaultCollapsed={true}/>}/>
 
               <RefinementListFilter id="studyAreaCountries.searchField"
-                                    title={<Translate content='filters.country.label'/>}
+                                    title={counterpart.translate('filters.country.label')}
                                     field={'studyAreaCountries.searchField'}
                                     fieldOptions={{
                                       type: 'nested',
@@ -117,11 +117,12 @@ export class SearchPage extends Component<Props> {
                                                                className="studyAreaCountries"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
+                                    // @ts-ignore
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.country.placeholder'/>}/>}
                                     size={500}/>
 
               <RefinementListFilter id="publisher.publisher"
-                                    title={<Translate content='filters.publisher.label'/>}
+                                    title={counterpart.translate('filters.publisher.label')}
                                     field={'publisher.publisher'}
                                     fieldOptions={{
                                       type: 'nested',
@@ -135,6 +136,7 @@ export class SearchPage extends Component<Props> {
                                                                className="publisher"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
+                                    // @ts-ignore
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.publisher.placeholder'/>}/>}
                                     size={500}/>
 
@@ -158,7 +160,7 @@ export class SearchPage extends Component<Props> {
               <SearchkitPagination pageScope={3}
                                    showLast={true}
                                    showNumbers={true}
-                                   listComponent={<Pagination/>}/>
+                                   listComponent={Pagination}/>
 
               <Hits scrollTo={true}
                     mod="sk-hits-list"
@@ -172,7 +174,7 @@ export class SearchPage extends Component<Props> {
               <SearchkitPagination pageScope={3}
                                    showLast={true}
                                    showNumbers={true}
-                                   listComponent={<Pagination/>}/>
+                                   listComponent={Pagination}/>
             </LayoutResults>
           </LayoutBody>
           <Footer/>

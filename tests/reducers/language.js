@@ -13,7 +13,7 @@
 
 import language from '../../src/reducers/language';
 import { getLanguages } from '../../src/utilities/language';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 describe('Language reducer', () => {
   const languages = getLanguages();
@@ -21,7 +21,8 @@ describe('Language reducer', () => {
   it('should return the initial state', () => {
     expect(language(undefined, {})).toEqual({
       code: 'en',
-      label: 'English'
+      label: 'English',
+      list: []
     });
   });
 

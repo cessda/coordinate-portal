@@ -13,35 +13,30 @@
 // limitations under the License.
 
 import React from 'react';
-import Select from 'react-select';
-import {AbstractItemList} from 'searchkit';
+import Select, { HandlerRendererResult } from 'react-select';
+import {AbstractItemList, ItemListProps} from 'searchkit';
 
-type Props = {
-  placeholder: any;
-  clearable: boolean;
-  items: any;
-  selectedItems: any;
-  disabled: any;
-  showCount: any;
-  setItems: any;
+interface Props extends ItemListProps {
+  placeholder?: string | JSX.Element | undefined;
+  clearable?: boolean;
 };
 
-export default class MultiSelect extends AbstractItemList<Props> {
+export default class MultiSelect extends AbstractItemList {
+  props: Props;
 
   constructor(props: Props) {
     super(props);
+    this.props = props;
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(selectedOptions: {
-    [key: string]: any;
-  }[] = []): void {
-    this.props.setItems(selectedOptions.map(el => el.value));
+  handleChange(selectedOptions: any): void {
+    this.props.setItems(selectedOptions?.map((el: { value: any; }) => el.value));
   }
 
   renderValue(value: {
     [key: string]: any;
-  }): string {
+  }): HandlerRendererResult {
     return value.label.replace('undefined', '0');
   }
 

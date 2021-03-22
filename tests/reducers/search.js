@@ -26,6 +26,10 @@ describe('Search reducer', () => {
       displayed: [],
       query: Object,
       state: Object,
+      similars: [],
+      state: {
+        q: ""
+      },
       totalStudies: 0
     });
   });

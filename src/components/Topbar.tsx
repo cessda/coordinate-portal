@@ -11,20 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, {Component} from 'react';
+import React from 'react';
 import {ActionBar, ActionBarRow} from 'searchkit';
 import Translate from 'react-translate-component';
 import counterpart from 'counterpart';
-import {connect} from 'react-redux';
 import SortingSelector from './SortingSelector';
 import PageSizeSelector from './PageSizeSelector';
-import type {State} from '../types';
 
-type Props = {
-  code: string;
-};
-
-export class TopBar extends Component<Props> {
+export default class TopBar extends React.Component {
 
   render() {
     return (
@@ -82,11 +76,3 @@ export class TopBar extends Component<Props> {
     );
   }
 }
-
-export const mapStateToProps = (state: State) => {
-  return {
-    code: state.language.code
-  };
-};
-
-export default connect(mapStateToProps, null)(TopBar);

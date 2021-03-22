@@ -20,7 +20,6 @@ describe('Metadata utilities', () => {
         getStudyModel({
           hits:{
             hits: [
-          // @ts-ignore
           {
           _source: {
             id: "1",
@@ -206,7 +205,6 @@ describe('Metadata utilities', () => {
 
     it('should return a study model with default values', () => {
       expect(
-        // @ts-ignore
         getStudyModel({ hits: { hits: [{_source:{}}]  } })
       ).toEqual([{
         id: undefined,

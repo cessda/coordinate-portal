@@ -18,6 +18,10 @@ module.exports = {
   // Add the JUnit reporter so that test results can be displayed in Jenkins
   reporters: ['default', 'jest-junit'],
 
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+  },
+
   // Setup Enzyme, this removes the need for imports in the tests
   setupFilesAfterEnv: ["jest-enzyme"],
   testEnvironment: "enzyme",

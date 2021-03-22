@@ -58,8 +58,8 @@ export function initTranslations(): Thunk {
         case 'hitstats.results_found': 
           return counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
-            label: state.language.label,
-            total: state.search.totalStudies,
+            label: getState().language.label,
+            total: getState().search.totalStudies,
             time: searchkit.getTime()
           });
         case 'NoHits.NoResultsFound': 

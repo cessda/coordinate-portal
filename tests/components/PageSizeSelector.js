@@ -14,7 +14,7 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { PageSizeSelector } from '../../src/components/PageSizeSelector';
+import PageSizeSelector from '../../src/components/PageSizeSelector';
 import searchkit from '../../src/utilities/searchkit';
 
 Enzyme.configure({ adapter: new Adapter() });

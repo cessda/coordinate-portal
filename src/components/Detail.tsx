@@ -14,7 +14,6 @@
 
 import React from "react";
 import { Link } from "react-router";
-import { HitItemProps } from "searchkit";
 import { connect, Dispatch } from "react-redux";
 import Panel from "./Panel";
 import Translate from "react-translate-component";
@@ -25,7 +24,7 @@ import { AnyAction, bindActionCreators } from "redux";
 import { toggleMetadataPanels, ToggleMetadataPanelsAction } from "../actions/search";
 import { CMMStudy, DataCollectionFreeText } from "../utilities/metadata";
 
-interface Props extends HitItemProps {
+interface Props {
   index: number;
   item: CMMStudy;
   expandMetadataPanels: boolean;

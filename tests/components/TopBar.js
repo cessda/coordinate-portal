@@ -14,7 +14,7 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { TopBar, mapStateToProps } from '../../src/components/Topbar';
+import TopBar from '../../src/components/Topbar';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -35,18 +35,5 @@ describe('TopBar component', () => {
     const { enzymeWrapper } = setup();
     const topBar = enzymeWrapper.find('.level');
     expect(topBar.exists()).toBe(true);
-  });
-
-  it('should map state to props', () => {
-    const { props } = setup();
-    expect(
-      mapStateToProps({
-        language: {
-          code: props.code
-        }
-      })
-    ).toEqual({
-      code: props.code
-    });
   });
 });
