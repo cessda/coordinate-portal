@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from 'react';
-import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/lib/fa';
+import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/fa';
 import {AbstractItemList} from 'searchkit';
 
 export default class Pagination extends AbstractItemList {

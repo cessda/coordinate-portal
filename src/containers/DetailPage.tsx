@@ -20,7 +20,7 @@ import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
 import Panel from '../components/Panel';
 import { connect, Dispatch } from 'react-redux';
-import { FaAngleLeft, FaCode, FaExternalLink } from 'react-icons/lib/fa/index';
+import { FaAngleLeft, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { AnyAction, bindActionCreators } from 'redux';
 import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
@@ -83,7 +83,7 @@ export class DetailPage extends Component<Props> {
                      href={item.studyUrl}
                      rel="noreferrer"
                      target="_blank">
-                    <span className="icon is-small"><FaExternalLink/></span>
+                    <span className="icon is-small"><FaExternalLinkAlt/></span>
                     <Translate content="goToStudy"/>
                   </a>
                  }

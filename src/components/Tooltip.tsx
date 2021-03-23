@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import {FaQuestionCircle} from 'react-icons/lib/fa/index';
+import {FaQuestionCircle} from 'react-icons/fa';
 
 interface Props {
   content: JSX.Element | string;
