@@ -14,13 +14,14 @@
 import { Component } from "react";
 import { AnyAction, bindActionCreators } from "redux";
 import { connect, Dispatch } from "react-redux";
-import { initSearchkit } from "../actions/search";
+import { initSearchkit, updateTotalStudies } from "../actions/search";
 import { initTranslations } from "../actions/language";
 import { Thunk } from "../types";
 
 type Props = {
   initSearchkit: () => Thunk;
   initTranslations: () => Thunk;
+  updateTotalStudies: () => Thunk;
   children: JSX.Element;
 };
 
@@ -30,6 +31,7 @@ export class App extends Component<Props> {
     super(props);
     this.props.initSearchkit();
     this.props.initTranslations();
+    this.props.updateTotalStudies();
   }
 
   render() {
@@ -40,7 +42,8 @@ export class App extends Component<Props> {
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {
     initSearchkit: bindActionCreators(initSearchkit, dispatch),
-    initTranslations: bindActionCreators(initTranslations, dispatch)
+    initTranslations: bindActionCreators(initTranslations, dispatch),
+    updateTotalStudies: bindActionCreators(updateTotalStudies, dispatch)
   };
 };
 

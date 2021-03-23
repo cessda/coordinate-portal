@@ -115,8 +115,6 @@ export const initSearchkit = (): Thunk => {
       dispatch(toggleLoading(false));
     });
 
-    dispatch(updateTotalStudies());
-
     dispatch({
       type: INIT_SEARCHKIT
     });

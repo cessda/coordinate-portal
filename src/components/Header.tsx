@@ -35,6 +35,7 @@ interface Props {
   showFilterSummary: boolean;
   showMobileFilters: boolean;
   showAdvancedSearch: boolean;
+  totalStudies: number;
   resetSearch: () => Thunk;
   toggleSummary: () => ToggleSummaryAction;
   toggleMobileFilters: () => ToggleMobileFiltersAction;
@@ -206,7 +207,9 @@ export const mapStateToProps = (state: State) => {
     filters: state.search.query.post_filter,
     showFilterSummary: state.search.showFilterSummary,
     showMobileFilters: state.search.showMobileFilters,
-    showAdvancedSearch: state.search.showAdvancedSearch
+    showAdvancedSearch: state.search.showAdvancedSearch,
+    // Needed to refresh the total amount of studies
+    totalStudies: state.search.totalStudies
   };
 };
 
