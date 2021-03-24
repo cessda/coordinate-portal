@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 module.exports = {
   // Collect test coverage
   collectCoverage: true,
@@ -19,11 +18,16 @@ module.exports = {
   // Add the JUnit reporter so that test results can be displayed in Jenkins
   reporters: ['default', 'jest-junit'],
 
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+  },
+
   // Setup Enzyme, this removes the need for imports in the tests
   setupFilesAfterEnv: ["jest-enzyme"],
   testEnvironment: "enzyme",
   testEnvironmentOptions: {
     enzymeAdapter: "react15"
   },
+
   testMatch: ['**/tests/**/*.js']
 };

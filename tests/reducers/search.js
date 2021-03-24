@@ -11,12 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { INIT_SEARCHKIT } from '../../src/actions/search';
 import search from '../../src/reducers/search';
 import { queryBuilder } from '../../src/utilities/searchkit';
 
 describe('Search reducer', () => {
   it('should return the initial state', () => {
-    expect(search(undefined, {})).toEqual({
+    expect(search(undefined, { type: INIT_SEARCHKIT })).toEqual({
       loading: true,
       showMobileFilters: false,
       showAdvancedSearch: false,
@@ -25,6 +26,10 @@ describe('Search reducer', () => {
       displayed: [],
       query: Object,
       state: Object,
+      similars: [],
+      state: {
+        q: ""
+      },
       totalStudies: 0
     });
   });
@@ -146,7 +151,11 @@ describe('Search reducer', () => {
         {},
         {
           type: 'UPDATE_DISPLAYED',
-          displayed: []
+          displayed: {
+            hits: {
+              hits: []
+            }
+          }
         }
       )
     ).toEqual({
@@ -159,18 +168,20 @@ describe('Search reducer', () => {
         {},
         {
           type: 'UPDATE_DISPLAYED',
-          displayed: [
-            {
-              _source: {}
+          displayed: {
+            hits: {
+              hits: [{
+                _source: {}
+              }]
             }
-          ]
+          }
         }
       )
     ).toEqual({
       displayed: [
         {
-          id: '',
-          titleStudy: '',
+          id: undefined,
+          titleStudy: undefined,
           titleStudyHighlight: '',
           abstract: '',
           abstractExpanded: false,
@@ -179,24 +190,28 @@ describe('Search reducer', () => {
           abstractHighlightShort: '',
           classifications: [],
           creators: [],
+          code: undefined,
           dataAccessFreeTexts: [],
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '',
+          dataCollectionYear: undefined,
           fileLanguages: [],
           keywords: [],
           langAvailableIn: [],
           lastModified: '',
           pidStudies: [],
           publicationYear: '',
-          publisher: '',
+          publisher: undefined,
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [],
           studyNumber: '',
+          studyUrl: undefined,
+          studyXmlSourceUrl: undefined,
           typeOfModeOfCollections: [],
           typeOfTimeMethods: [],
+          typeOfSamplingProcedures: [],
           unitTypes: [],
-          studyUrl: undefined
         }
       ],
       jsonLd: {
@@ -210,10 +225,10 @@ describe('Search reducer', () => {
         keywords: [],
         license: [],
         measurementTechnique: '',
-        name: '',
+        name: undefined,
         sameAs: undefined,
         spatialCoverage: '',
-        temporalCoverage: '/',
+        temporalCoverage: '',
         url: 'http://localhost/',
         variableMeasured: ''
       }
@@ -224,93 +239,97 @@ describe('Search reducer', () => {
         {},
         {
           type: 'UPDATE_DISPLAYED',
-          displayed: [
-            {},
-            {
-              _source: {
-                id: 1,
-                titleStudy: 'Study Title',
-                studyNumber: 'UKDS1234',
-                abstract: 'Abstract',
-                classifications: [
-                  {
-                    vocab: 'Vocab',
-                    vocabUri: 'http://example.com',
-                    id: 'UKDS1234',
-                    term: 'Term'
+          displayed: {
+            hits: {
+              hits: [
+                {
+                  _source: {
+                    id: "1",
+                    titleStudy: 'Study Title',
+                    studyNumber: 'UKDS1234',
+                    abstract: 'Abstract',
+                    classifications: [
+                      {
+                        vocab: 'Vocab',
+                        vocabUri: 'http://example.com',
+                        id: 'UKDS1234',
+                        term: 'Term'
+                      }
+                    ],
+                    keywords: [
+                      {
+                        vocab: 'Vocab',
+                        vocabUri: 'http://example.com',
+                        id: 'UKDS1234',
+                        term: 'Term'
+                      }
+                    ],
+                    typeOfTimeMethods: [
+                      {
+                        vocab: 'Vocab',
+                        vocabUri: 'http://example.com',
+                        id: 'UKDS1234',
+                        term: 'Term'
+                      }
+                    ],
+                    studyAreaCountries: [
+                      {
+                        abbr: 'EN',
+                        country: 'England',
+                        searchField: 'England'
+                      }
+                    ],
+                    unitTypes: [
+                      {
+                        vocab: 'Vocab',
+                        vocabUri: 'http://example.com',
+                        id: 'UKDS1234',
+                        term: 'Term'
+                      }
+                    ],
+                    publisher: {
+                      abbr: 'UKDS',
+                      publisher: 'UK Data Service'
+                    },
+                    publicationYear: '2001-01-01',
+                    pidStudies: [
+                      {
+                        agency: 'UKDS',
+                        pid: 'UKDS1234'
+                      }
+                    ],
+                    fileLanguages: ['en'],
+                    creators: [
+                      'Jane Doe',
+                      'University of Essex',
+                      'John Smith (University of Essex)',
+                      'Joe Bloggs, University of Essex'
+                    ],
+                    typeOfModeOfCollections: [
+                      {
+                        vocab: 'Vocab',
+                        vocabUri: 'http://example.com',
+                        id: 'UKDS1234',
+                        term: 'Term'
+                      }
+                    ],
+                    dataCollectionPeriodStartdate: '2001',
+                    dataCollectionYear: 2001,
+                    dataAccessFreeTexts: ['Data Access Free Texts'],
+                    lastModified: '2001-01-01T12:00:00Z',
+                    langAvailableIn: ['en'],
+                    studyUrl: 'http://example.com'
                   }
-                ],
-                keywords: [
-                  {
-                    vocab: 'Vocab',
-                    vocabUri: 'http://example.com',
-                    id: 'UKDS1234',
-                    term: 'Term'
-                  }
-                ],
-                typeOfTimeMethods: [
-                  {
-                    vocab: 'Vocab',
-                    vocabUri: 'http://example.com',
-                    id: 'UKDS1234',
-                    term: 'Term'
-                  }
-                ],
-                studyAreaCountries: [
-                  {
-                    abbr: 'EN',
-                    country: 'England'
-                  }
-                ],
-                unitTypes: [
-                  {
-                    vocab: 'Vocab',
-                    vocabUri: 'http://example.com',
-                    id: 'UKDS1234',
-                    term: 'Term'
-                  }
-                ],
-                publisher: {
-                  abbr: 'UKDS',
-                  publisher: 'UK Data Service'
-                },
-                publicationYear: '2001-01-01',
-                pidStudies: [
-                  {
-                    agency: 'UKDS',
-                    pid: 'UKDS1234'
-                  }
-                ],
-                fileLanguages: ['en'],
-                creators: [
-                  'Jane Doe',
-                  'University of Essex',
-                  'John Smith (University of Essex)',
-                  'Joe Bloggs, University of Essex'
-                ],
-                typeOfModeOfCollections: [
-                  {
-                    vocab: 'Vocab',
-                    vocabUri: 'http://example.com',
-                    id: 'UKDS1234',
-                    term: 'Term'
-                  }
-                ],
-                dataCollectionPeriodStartdate: '2001',
-                dataCollectionYear: 2001,
-                dataAccessFreeTexts: ['Data Access Free Texts'],
-                lastModified: '2001-01-01T12:00:00Z',
-                langAvailableIn: ['en'],
-                studyUrl: 'http://example.com'
-              }
+                }
+              ]
             }
-          ]
+          }
         }
       )
     ).toEqual({
       displayed: [
         {
-          id: 1,
+          id: '1',
           titleStudy: 'Study Title',
           titleStudyHighlight: '',
           abstract: 'Abstract',
@@ -326,6 +345,7 @@ describe('Search reducer', () => {
               vocabUri: 'http://example.com'
             }
           ],
+          code: undefined,
           creators: [
             'Jane Doe',
             'University of Essex',
@@ -336,6 +356,7 @@ describe('Search reducer', () => {
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
+          dataCollectionYear: 2001,
           fileLanguages: ['en'],
           keywords: [
             {
@@ -354,16 +375,21 @@ describe('Search reducer', () => {
             }
           ],
           publicationYear: '2001-01-01',
-          publisher: 'UK Data Service',
+          publisher: {
+            abbr: 'UKDS',
+            publisher: 'UK Data Service'
+          },
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
               abbr: 'EN',
-              country: 'England'
+              country: 'England',
+              searchField: 'England'
             }
           ],
           studyNumber: 'UKDS1234',
           studyUrl: 'http://example.com',
+          studyXmlSourceUrl: undefined,
           typeOfModeOfCollections: [
             {
               id: 'UKDS1234',
@@ -380,6 +406,7 @@ describe('Search reducer', () => {
               vocabUri: 'http://example.com'
             }
           ],
+          typeOfSamplingProcedures: [],
           unitTypes: [
             {
               id: 'UKDS1234',
@@ -491,30 +518,21 @@ describe('Search reducer', () => {
         {
           type: 'UPDATE_SIMILARS',
           similars: [
-            {},
             {
-              _source: {
-                id: 1,
-                titleStudy: 'Study Title 1'
-              }
+              id: '1',
+              titleStudy: 'Study Title 1'
             },
             {
-              _source: {
-                id: 2,
-                titleStudy: 'Study Title 2'
-              }
+              id: '2',
+              titleStudy: 'Study Title 2'
             },
             {
-              _source: {
-                id: 3,
-                titleStudy: 'Study Title 3'
-              }
+              id: '3',
+              titleStudy: 'Study Title 3'
             },
             {
-              _source: {
-                id: 4,
-                titleStudy: 'Study Title 4'
-              }
+              id: '4',
+              titleStudy: 'Study Title 4'
             }
           ]
         }
@@ -522,19 +540,19 @@ describe('Search reducer', () => {
     ).toEqual({
       similars: [
         {
-          id: 1,
+          id: '1',
           title: 'Study Title 1'
         },
         {
-          id: 2,
+          id: '2',
           title: 'Study Title 2'
         },
         {
-          id: 3,
+          id: '3',
           title: 'Study Title 3'
         },
         {
-          id: 4,
+          id: '4',
           title: 'Study Title 4'
         }
       ]
@@ -548,6 +566,7 @@ describe('Search reducer', () => {
       showAdvancedSearch: false,
       showFilterSummary: false,
       expandMetadataPanels: false,
+      totalStudies: 0,
       displayed: [],
       query: Object,
       state: Object
@@ -566,6 +585,7 @@ describe('Search reducer', () => {
       showAdvancedSearch: false,
       showFilterSummary: false,
       expandMetadataPanels: false,
+      totalStudies: 0,
       displayed: [],
       query: Object,
       state: Object

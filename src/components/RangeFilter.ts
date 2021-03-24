@@ -11,7 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-{
-	"presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
-	"plugins": ["@babel/plugin-proposal-class-properties", "@babel/plugin-transform-runtime"]
-}
+import {RangeFilter as SearchkitRangeFilter} from 'searchkit';
+import PropTypes from 'prop-types';
+
+// Extend the Searchkit RangeFilter component to support translations.
+export default class RangeFilter extends SearchkitRangeFilter {}
+
+// Override RangeFilter type checking to avoid errors.
+RangeFilter.propTypes = Object.assign(SearchkitRangeFilter.propTypes, {
+  title: PropTypes.object,
+});

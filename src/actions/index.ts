@@ -1,3 +1,4 @@
+
 // Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -11,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-{
-	"presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
-	"plugins": ["@babel/plugin-proposal-class-properties", "@babel/plugin-transform-runtime"]
-}
+
+
+import { LanguageAction } from "./language";
+import { SearchAction } from "./search";
+
+export type Action = LanguageAction | SearchAction;

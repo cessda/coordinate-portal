@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
@@ -196,14 +196,14 @@ describe('Detail component', () => {
     ).toContain('notAvailable');
   });
 
-  it('should handle formatting dates with fallback array containing date range', () => {
+  it('should handle special case where array items are a start/end date range', () => {
     const { enzymeWrapper } = setup();
     expect(
       shallow(
         enzymeWrapper.instance().formatDate(
           'DD/MM/YYYY',
-          null,
-          null,
+          undefined,
+          undefined,
           [
             {
               dataCollectionFreeText: '2003-02-01',
@@ -213,8 +213,7 @@ describe('Detail component', () => {
               dataCollectionFreeText: '2006-05-04',
               event: 'end'
             }
-          ],
-          'dataCollectionFreeText'
+          ]
         )
       )
         .find('p')
@@ -222,43 +221,27 @@ describe('Detail component', () => {
     ).toBe('01/02/2003 - 04/05/2006');
   });
 
-  it('should handle formatting dates with fallback array containing valid date', () => {
+  it('should handle formatting dates with fallback array containing date range', () => {
     const { enzymeWrapper } = setup();
     expect(
       shallow(
-        enzymeWrapper
-          .instance()
-          .formatDate('DD/MM/YYYY', null, null, ['2003-02-01'])[0]
+        enzymeWrapper.instance().formatDate(
+          'DD/MM/YYYY',
+          undefined,
+          undefined,
+          [
+            {
+              dataCollectionFreeText: '2003-02-01'
+            },
+            {
+              dataCollectionFreeText: '2006-05-04'
+            }
+          ]
+        )[0]
       )
         .find('div')
         .text()
     ).toBe('01/02/2003');
-  });
-
-  it('should handle formatting dates with fallback array containing random data', () => {
-    const { enzymeWrapper } = setup();
-    expect(
-      shallow(
-        enzymeWrapper
-          .instance()
-          .formatDate('DD/MM/YYYY', null, null, ['Fallback'])[0]
-      )
-        .find('div')
-        .text()
-    ).toBe('Fallback');
-  });
-
-  it('should handle formatting dates with fallback string', () => {
-    const { enzymeWrapper } = setup();
-    expect(
-      shallow(
-        enzymeWrapper
-          .instance()
-          .formatDate('DD/MM/YYYY', null, null, 'Fallback')
-      )
-        .find('p')
-        .text()
-    ).toBe('Fallback');
   });
 
   it('should handle formatting dates with invalid first date', () => {

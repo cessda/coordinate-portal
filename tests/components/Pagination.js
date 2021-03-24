@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { Pagination } from '../../src/components/Pagination';
+import Pagination from '../../src/components/Pagination';
 
 Enzyme.configure({ adapter: new Adapter() });
 

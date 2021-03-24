@@ -10,7 +10,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-process.noDeprecation = true;
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -19,8 +18,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   context: path.join(__dirname),
   entry: [
-    '@babel/polyfill',
-    './src/index.jsx'
+    './src/index.tsx'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -57,15 +55,14 @@ module.exports = {
     alias: {
       react: path.resolve('./node_modules/react')
     },
-    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json']
+    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json', '.ts', '.tsx']
   },
   module: {
     rules: [{
-      test: /\.jsx?$/,
+      test: /\.(ts|js)x?$/,
       exclude: /(node_modules)/,
       loader: 'babel-loader',
       options: {
-        babelrc: true,
         plugins: [
           'transform-react-remove-prop-types'
         ]

@@ -18,10 +18,10 @@ module.exports = {
   devtool: 'sourcemap',
   context: path.join(__dirname),
   entry: [
-    '@babel/polyfill',
     'event-source-polyfill',
     'webpack-hot-middleware/client?reload=true',
-    './src/index.jsx'],
+    './src/index.tsx'
+  ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -39,16 +39,13 @@ module.exports = {
     alias: {
       react: path.resolve('./node_modules/react')
     },
-    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json']
+    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json', '.ts', '.tsx']
   },
   module: {
     rules: [{
-      test: /\.jsx?$/,
+      test: /\.(ts|js)x?$/,
       exclude: /(node_modules)/,
-      loader: 'babel-loader',
-      options: {
-        babelrc: true
-      }
+      loader: 'babel-loader'
     }, {
       test: /\.css$/,
       use: ['style-loader', 'css-loader']

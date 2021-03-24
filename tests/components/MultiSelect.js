@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
-import { MultiSelect } from '../../src/components/MultiSelect';
+import MultiSelect from '../../src/components/MultiSelect';
 
 Enzyme.configure({ adapter: new Adapter() });
 
