@@ -23,6 +23,7 @@ function setup() {
   const props = {
     initSearchkit: jest.fn(),
     initTranslations: jest.fn(),
+    updateTotalStudies: jest.fn(),
     children: <div/>
   };
   const enzymeWrapper = shallow(<App {...props} />);
@@ -41,7 +42,8 @@ describe('App container', () => {
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps()).toEqual({
       initSearchkit: expect.any(Function),
-      initTranslations: expect.any(Function)
+      initTranslations: expect.any(Function),
+      updateTotalStudies: expect.any(Function)
     });
   });
 });
