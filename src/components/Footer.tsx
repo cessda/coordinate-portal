@@ -30,8 +30,8 @@ export default class Footer extends Component {
                 <div className="column is-4 has-text-centered">
                   <ul>
                     <li><strong>CESSDA ERIC</strong></li>
-                    <li>Parkveien 20</li>
-                    <li>5007 Bergen, Norway</li>
+                    <li>Solheimsgaten 16</li>
+                    <li>5058 Bergen, Norway</li>
                     <li>+47 401 00 964</li>
                     <li>cessda@cessda.eu</li>
                   </ul>
