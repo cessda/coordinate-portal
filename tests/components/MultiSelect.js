@@ -104,8 +104,8 @@ describe('MultiSelect component', () => {
 
   it('should render value', () => {
     const { props, enzymeWrapper } = setup();
-    expect(enzymeWrapper.instance().renderValue(props.items[0])).toBe(
-      props.items[0].label
+    expect(enzymeWrapper.instance().renderValue(props.items[0])).toStrictEqual(
+      React.createElement("span", undefined, props.items[0].label)
     );
   });
 });

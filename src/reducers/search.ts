@@ -40,7 +40,7 @@ export type SearchState = {
   displayed: CMMStudy[];
   jsonLd?: {
     [key: string]: any;
-  } | null | undefined;
+  } | null;
   similars: {
     id: string;
     title: string;
