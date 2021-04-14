@@ -78,7 +78,7 @@ export class SearchPage extends Component<Props> {
                                       type: 'nested',
                                       options: {path: 'classifications', min_doc_count: 1}
                                     }}
-                                    orderKey="_term"
+                                    orderKey="_key"
                                     orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={<Translate content='filters.topic.label'/>}
@@ -109,7 +109,7 @@ export class SearchPage extends Component<Props> {
                                       type: 'nested',
                                       options: {path: 'studyAreaCountries', min_doc_count: 1}
                                     }}
-                                    orderKey="_term"
+                                    orderKey="_key"
                                     orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={<Translate content='filters.country.label'/>}
@@ -128,7 +128,7 @@ export class SearchPage extends Component<Props> {
                                       type: 'nested',
                                       options: {path: 'publisher', min_doc_count: 1}
                                     }}
-                                    orderKey="_term"
+                                    orderKey="_key"
                                     orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={<Translate content='filters.publisher.label'/>}
@@ -143,7 +143,7 @@ export class SearchPage extends Component<Props> {
               {/* <RefinementListFilter id="fileLanguages"
                                     title={<Translate content='filters.languageOfDataFiles.label'/>}
                                     field={'fileLanguages'}
-                                    orderKey="_term"
+                                    orderKey="_key"
                                     orderDirection="asc"
                                     operator="OR"
                                     containerComponent={<Panel title={<Translate content='filters.languageOfDataFiles.label'/>}
