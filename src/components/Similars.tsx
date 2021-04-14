@@ -16,10 +16,9 @@ import {connect, Dispatch} from 'react-redux';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
 import searchkit from '../utilities/searchkit';
-import {push, RouterAction} from 'react-router-redux';
+import {push} from 'react-router-redux';
 import Translate from 'react-translate-component';
 import { CMMStudy } from '../utilities/metadata';
-import { LocationDescriptor } from 'history';
 
 type Props = {
   item: CMMStudy;
@@ -27,7 +26,7 @@ type Props = {
     id: string;
     title: string;
   }[];
-  push: (state: LocationDescriptor) => RouterAction;
+  push: typeof push;
 };
 
 export class Similars extends Component<Props> {
@@ -35,8 +34,7 @@ export class Similars extends Component<Props> {
   render() {
     const {
       item,
-      similars,
-      push
+      similars    
     } = this.props;
 
     let links: JSX.Element[] = [];
@@ -44,7 +42,7 @@ export class Similars extends Component<Props> {
     if (item !== undefined && similars !== undefined) {
       for (let i: number = 0; i < similars.length; i++) {
         links.push(<a key={i} onClick={() => {
-          push({
+          this.props.push({
             pathname: 'detail',
             search: '?q="' + similars[i].id + '"'
           });

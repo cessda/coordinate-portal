@@ -26,9 +26,9 @@ type Props = {
   bemBlocks: any;
   index: any;
   item: any;
-  push: any;
-  changeLanguage: any;
-  toggleLongAbstract: any;
+  push: typeof push;
+  changeLanguage: typeof changeLanguage;
+  toggleLongAbstract: typeof toggleLongAbstract;
 };
 
 export class Result extends Component<Props> {
@@ -38,9 +38,6 @@ export class Result extends Component<Props> {
       bemBlocks,
       index,
       item,
-      push,
-      changeLanguage,
-      toggleLongAbstract
     } = this.props;
 
     if (item === undefined) {
@@ -51,8 +48,8 @@ export class Result extends Component<Props> {
     for (let i: number = 0; i < item.langAvailableIn.length; i++) {
       languages.push(
         <a key={i} className="button is-small is-white" onClick={() => {
-          changeLanguage(item.langAvailableIn[i]);
-          push({
+          this.props.changeLanguage(item.langAvailableIn[i]);
+          this.props.push({
             pathname: 'detail',
             search: '?q="' + item.id + '"'
           });
@@ -96,7 +93,7 @@ export class Result extends Component<Props> {
               <div className="control">
                 {item.abstract.length > 500 &&
                  <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
-                   toggleLongAbstract(item.titleStudy, index);
+                   this.props.toggleLongAbstract(item.titleStudy, index);
                  }}>
                    {item.abstractExpanded &&
                     <span>

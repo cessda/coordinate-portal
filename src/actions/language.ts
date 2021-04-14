@@ -14,8 +14,7 @@
 
 import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
-import { Dispatch, GetState, State, Thunk } from "../types";
-import _ from "lodash";
+import { Dispatch, GetState, Thunk } from "../types";
 import moment from "moment";
 import { getLanguages, Language } from "../utilities/language";
 import { getPaq } from "..";
@@ -76,7 +75,7 @@ export function initTranslations(): Thunk {
           return counterpart.translate('noHits.resetSearch');
         default:
           return undefined;
-      };
+      }
     };
 
     dispatch({

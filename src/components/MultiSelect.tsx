@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import React from 'react';
-import Select, { HandlerRendererResult } from 'react-select';
+import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
 import {AbstractItemList, ItemListProps} from 'searchkit';
 
 interface Props extends ItemListProps {
-  placeholder?: string | JSX.Element | undefined;
+  placeholder: string | JSX.Element | undefined;
   clearable?: boolean;
 };
 
@@ -34,10 +34,12 @@ export default class MultiSelect extends AbstractItemList {
     this.props.setItems(selectedOptions?.map((el: { value: any; }) => el.value));
   }
 
-  renderValue(value: {
-    [key: string]: any;
-  }): HandlerRendererResult {
-    return value.label.replace('undefined', '0');
+  renderValue(value: Option<OptionValues>): HandlerRendererResult {
+    if (value.label) {
+      return <span>{value.label.replace('undefined', '0')}</span>;
+    } else {
+      return null;
+    }
   }
 
   render() {
@@ -50,13 +52,7 @@ export default class MultiSelect extends AbstractItemList {
       showCount
     } = this.props;
 
-    let options: {
-      [key: string]: any;
-    }[] = items.map((option: {
-      [key: string]: any;
-    }): {
-      [key: string]: any;
-    } => {
+    let options: Options<OptionValues> = items.map((option): Option<OptionValues> => {
       let label = option.title || option.label || option.key;
       if (showCount) {
         label += ` (${option.doc_count}) `;

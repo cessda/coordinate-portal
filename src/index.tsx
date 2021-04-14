@@ -57,7 +57,6 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 history.listen(location => {
   // Notify Matomo Analytics of page change.
-  const _paq = getPaq();
   _paq.push(['setReferrerUrl', location.pathname + location.search]);
   _paq.push(['setCustomUrl', location.pathname + location.search]);
   _paq.push(['setDocumentTitle', 'CESSDA Data Catalogue']);

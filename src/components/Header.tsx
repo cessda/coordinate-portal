@@ -53,8 +53,7 @@ export class Header extends Component<Props> {
       toggleSummary,
       showMobileFilters,
       toggleMobileFilters,
-      showAdvancedSearch,
-      toggleAdvancedSearch
+      showAdvancedSearch
     } = this.props;
 
     return (
@@ -154,7 +153,7 @@ export class Header extends Component<Props> {
             <div className="modal-card">
               <div className="modal-card-head">
                 <Translate component="p" className="modal-card-title" content="advancedSearch.label" />
-                <button className="delete" aria-label="close" onClick={toggleAdvancedSearch} />
+                <button className="delete" aria-label="close" onClick={this.props.toggleAdvancedSearch} />
               </div>
               <section className="modal-card-body">
                 <Translate component="p" className="pb-10" content="advancedSearch.introduction" />
