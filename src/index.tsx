@@ -33,7 +33,7 @@ import { Store } from "./types";
 
 // Initialise Matomo Analytics.
 const _paq = getPaq();
-const url = '//analytics.cessda.eu/';
+const url = 'https://analytics.cessda.eu/';
 
 _paq.push(['setTrackerUrl', url + 'matomo.php']);
 _paq.push(['setSiteId', '2']);
