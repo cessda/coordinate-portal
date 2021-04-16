@@ -22,6 +22,7 @@ const helper = {};
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
+const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
 
 helper.checkBuildDirectory = function () {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
@@ -42,7 +43,7 @@ helper.checkEnvironmentVariables = function (production) {
   }
 
   if (production) {
-    if (process.env.PASC_DEBUG_MODE === 'true') {
+    if (debugEnabled) {
       console.warn('WARNING : Debug mode is enabled. Disable for production use.');
     }
 
@@ -50,27 +51,21 @@ helper.checkEnvironmentVariables = function (production) {
       console.warn('WARNING : Node environment is not set to production.');
     }
   } else {
-    if (process.env.PASC_DEBUG_MODE === 'true') {
+    if (debugEnabled) {
       console.log('NOTICE : Debug mode is enabled.');
     }
   }
 };
 
 helper.getSearchkitRouter = function () {
-  let router = express.Router(),
-    config = {
-      host: _.trimEnd(elasticsearchUrl, '/'),
-      queryProcessor: function (query) {
-        return query;
-      }
-    },
-    requestClient = request.defaults({
-      pool: {
-        maxSockets: 500
-      }
-    });
+  const router = express.Router();
+  const config = {
+    host: _.trimEnd(elasticsearchUrl, '/'),
+    queryProcessor: (query) => query
+  };
+  const requestClient = request.defaults({ pool: { maxSockets: 500 } });
 
-  let elasticRequest = function (url, body) {
+  const elasticRequest = function (url, body) {
     let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + '/cmmstudy' + url;
     debug('Start Elastic Request', fullUrl);
     if (_.isObject(body)) {
@@ -98,26 +93,31 @@ helper.getSearchkitRouter = function () {
   return router;
 };
 
-helper.getJsonProxy = function () {
-  return proxy(elasticsearchUrl, {
-    proxyReqPathResolver(req) {
-      let arr = _.trim(req.url, '/').split('/'),
-        index = arr[0],
-        id = arr[1];
-      return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index +
-             '/cmmstudy/' + id;
-    },
-    userResDecorator: function (_proxyRes, proxyResData) {
-      let json = JSON.parse(proxyResData.toString('utf8'));
-      return JSON.stringify(!_.isEmpty(json._source) ? json._source : {
-        error: 'Requested record was not found.'
-      });
-    },
-    filter: function (req) {
-      return req.method === 'GET' && req.url.match(/[\/?]/gi).length === 2;
+helper.jsonProxy = proxy(elasticsearchUrl, {
+  parseReqBody: false,
+  proxyReqPathResolver: (req) => {
+    const arr = _.trim(req.url, '/').split('/');
+    const index = arr[0];
+    const id = arr[1];
+    return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index + '/cmmstudy/' + id;
+  },
+  userResDecorator: (_proxyRes, proxyResData) => {
+    const json = JSON.parse(proxyResData.toString('utf8'));
+    let result;
+    if (!_.isEmpty(json._source)) {
+      result = JSON.stringify(json._source);
+    } else {
+      // When running in debug mode, return the actual response from Elasticsearch
+      if (debugEnabled) {
+        result = proxyResData;
+      } else {
+        result = "{\"error\":\"Requested record was not found.\"}";
+      }
     }
-  });
-};
+    return result;
+  },
+  filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi).length === 2
+});
 
 helper.startListening = function (app) {
   let port = Number(process.env.PASC_PORT || 8088);
