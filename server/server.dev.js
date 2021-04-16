@@ -25,8 +25,8 @@ module.exports = {
   start: function () {
     helper.checkEnvironmentVariables();
 
-    let app = express(),
-        compiler = webpack(config);
+    const app = express();
+    const compiler = webpack(config);
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, 'views'));
@@ -53,7 +53,7 @@ module.exports = {
 
     app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/api/json', helper.getJsonProxy());
+    app.use('/api/json', helper.jsonProxy);
 
     app.get('*', function (req, res) {
       res.setHeader('Cache-Control', 'no-store');

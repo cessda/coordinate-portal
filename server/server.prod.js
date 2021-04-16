@@ -34,7 +34,7 @@ module.exports = {
 
     app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/api/json', helper.getJsonProxy());
+    app.use('/api/json', helper.jsonProxy);
 
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 
