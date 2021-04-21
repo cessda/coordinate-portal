@@ -18,16 +18,13 @@ import {changeLanguage} from '../actions/language';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
 import Select, { Options } from 'react-select';
-import { isArray } from 'lodash';
+import {isArray} from 'lodash';
+import {Language as LanguageType} from '../utilities/language';
 
 type Props = {
   code: string;
-  list: {
-    code: string;
-    label: string;
-    index: string;
-  }[];
-  changeLanguage: any;
+  list: LanguageType[];
+  changeLanguage: typeof changeLanguage;
 };
 
 export class Language extends Component<Props> {
@@ -54,7 +51,7 @@ export class Language extends Component<Props> {
                 clearable={false}
                 autosize={true}
                 onChange={(option) => {
-                  if (option && !isArray(option)) {
+                  if (option && !isArray(option) && option.value) {
                     return changeLanguage(option.value);
                   }
                 }}/>
