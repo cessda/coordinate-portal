@@ -53,12 +53,13 @@ describe('Language component', () => {
   it('should handle on change', () => {
     const { props, enzymeWrapper } = setup();
     expect(props.changeLanguage).not.toHaveBeenCalled();
-    enzymeWrapper.find('Select').simulate('change', {
-      target: {
-        value: props.list[1]
-      }
+
+    props.list.forEach(language => {
+      enzymeWrapper.find('Select').simulate('change', {
+        value: language
+      });
+      expect(props.changeLanguage).toHaveBeenCalledWith(language);
     });
-    expect(props.changeLanguage).toHaveBeenCalled();
   });
 
   it('should map state to props', () => {
