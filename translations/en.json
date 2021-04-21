@@ -56,12 +56,12 @@
   },
   "numberOfResults": {
     "zero": "%(count)s studies found in %(label)s from a total of %(total)s",
-    "one": "%(count)s study found in %(label)s from a total of %(total)s",
+    "one": "%(count)s studies found in %(label)s from a total of %(total)s",
     "other": "%(count)s studies found in %(label)s from a total of %(total)s"
   },
   "numberOfResultsWithTime": {
     "zero": "%(count)s studies found in %(time)sms",
-    "one": "%(count)s study found in %(time)sms",
+    "one": "%(count)s studies found in %(time)sms",
     "other": "%(count)s studies found in %(time)sms"
   },
   "sorting": {
@@ -150,8 +150,5 @@
   "about": {
     "label": "About",
     "content": "<p>The CESSDA Data Catalogue (CDC) contains descriptions (metadata) of the more than 30,000 data collections held by CESSDA’s Service Providers (SP), representing 20 European countries. It is a one-stop shop for searching and finding data, enabling effective access to European social science data. The data described are varied. They may be quantitative, qualitative or mixed-modes data, cross-sectional or longitudinal, recently collected or historical data.</p><p>The <a href=\"/documentation/\">User Guide</a> presents an overview of how to use the CDC for searching, including basic search and applying filters as well as advanced search. The CDC is a portal for discovering data. Detailed descriptions of data collections are provided. For information and procedures to access data, there is a link in the lower right of each entry to the website of the data provider [“Access data”].</p>"
-  },
-  "documentation": {
-    "label": "User Guide"
   }
 }
