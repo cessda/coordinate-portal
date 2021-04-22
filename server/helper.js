@@ -19,40 +19,56 @@ const express = require('express');
 const debug = require('debug')('SearchkitExpress');
 const request = require('request');
 const helper = {};
+const winston = require('winston');
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
 
+// Logger
+const logger = winston.createLogger({
+  level: 'debug',
+  format: winston.format.combine(
+    winston.format.splat(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console()
+  ]
+});
+
 helper.checkBuildDirectory = function () {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
-    console.error('ERROR : Unable to start Data Catalogue application.');
-    console.error('        Missing \'/dist\' directory as application has not been built.');
-    console.error('        Run command \'npm run build\' and try again.');
+    logger.error(
+      'Unable to start Data Catalogue application.\n' + 
+      'Missing \'/dist\' directory as application has not been built.\n' +
+      'Run command \'npm run build\' and try again.'
+    );
     process.exit(16);
   }
 };
 
 helper.checkEnvironmentVariables = function (production) {
   if (_.isEmpty(elasticsearchUrl)) {
-    console.error('ERROR : Unable to start Data Catalogue application.');
-    console.error('        Missing environment variable PASC_ELASTICSEARCH_URL.');
+    logger.error(
+      'ERROR : Unable to start Data Catalogue application.\n' + 
+      'Missing environment variable PASC_ELASTICSEARCH_URL.'
+    );
     process.exit(17);
   } else {
-    console.log('NOTICE : Using Elasticsearch instance at ' + elasticsearchUrl);
+    logger.info('Using Elasticsearch instance at ' + elasticsearchUrl);
   }
 
   if (production) {
     if (debugEnabled) {
-      console.warn('WARNING : Debug mode is enabled. Disable for production use.');
+      logger.warn('Debug mode is enabled. Disable for production use.');
     }
-
     if (process.env.NODE_ENV !== 'production') {
-      console.warn('WARNING : Node environment is not set to production.');
+      logger.warn('Node environment is not set to production.');
     }
   } else {
     if (debugEnabled) {
-      console.log('NOTICE : Debug mode is enabled.');
+      logger.info('Debug mode is enabled.');
     }
   }
 };
@@ -67,9 +83,9 @@ helper.getSearchkitRouter = function () {
 
   const elasticRequest = function (url, body) {
     let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + '/cmmstudy' + url;
-    debug('Start Elastic Request', fullUrl);
+    logger.debug('Start Elasticsearch Request: %s', fullUrl);
     if (_.isObject(body)) {
-      debug('Request body', body);
+      logger.debug('Request body', {body: body});
     }
     delete body.index;
     return requestClient.post({
@@ -78,15 +94,15 @@ helper.getSearchkitRouter = function () {
       json: _.isObject(body),
       forever: true
     }).on('response', function (response) {
-      debug('Finished Elastic Request', fullUrl, response.statusCode);
+      logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
     }).on('error', function (response) {
-      debug('Error Elastic Request', fullUrl, response.statusCode);
+      logger.error('Elasticsearch Request failed: %s, code: %d', fullUrl, response.statusCode);
     });
   };
 
   router.post('/_search', function (req, res) {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
-    let queryBody = config.queryProcessor(req.body || {});
+    const queryBody = config.queryProcessor(req.body || {});
     elasticRequest(req.url, queryBody).pipe(res);
   });
 
@@ -123,11 +139,11 @@ helper.startListening = function (app) {
   let port = Number(process.env.PASC_PORT || 8088);
   
   const server = app.listen(port, () => {
-    console.log('SUCCESS : Data Catalogue application is running at http://localhost:' + port);
+    logger.info('Data Catalogue application is running at http://localhost:' + port);
   });
 
   process.on('exit', () => {
-    console.log('NOTICE : Shutting down');
+    logger.info('Shutting down');
     server.close();
   })
 };
