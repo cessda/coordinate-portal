@@ -22,7 +22,7 @@ module.exports = {
     helper.checkBuildDirectory();
     helper.checkEnvironmentVariables(true);
 
-    let app = express();
+    const app = express();
 
     // Disable the x-powered-by HTTP header
     app.disable("x-powered-by");
