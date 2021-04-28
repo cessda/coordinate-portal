@@ -12,11 +12,8 @@
 // limitations under the License.
 
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import { shallow } from 'enzyme';
 import TopBar from '../../src/components/Topbar';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 // Mock props and shallow render component for test.
 function setup() {

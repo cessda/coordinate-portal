@@ -16,6 +16,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   context: path.join(__dirname),
   entry: [
     './src/index.tsx'

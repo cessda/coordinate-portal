@@ -11,13 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import { shallow } from 'enzyme';
 import { mapDispatchToProps, mapStateToProps, Panel } from '../../src/components/Panel';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 // Mock props and shallow render component for test.
 function setup(props) {
@@ -61,7 +58,7 @@ describe('Panel component', () => {
     enzymeWrapper.setProps({
       expandMetadataPanels: false
     });
-    expect(props.expandMetadataPanels).toBe(true);
+    expect(props.expandMetadataPanels).toBe(false);
   });
 
   it('should not refresh metadata panels state on update when not linking collapsed state', () => {

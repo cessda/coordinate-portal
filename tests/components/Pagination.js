@@ -11,13 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
-import Pagination from '../../src/components/Pagination';
+import { shallow } from 'enzyme';
 
-Enzyme.configure({ adapter: new Adapter() });
+import Pagination from '../../src/components/Pagination';
 
 // Mock props and shallow render component for test.
 function setup(props) {

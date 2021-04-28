@@ -38,7 +38,7 @@ module.exports = {
 
     app.use(webpackMiddleware(compiler, {
       publicPath: config.output.publicPath,
-      contentBase: 'src',
+      index: 'src',
       stats: {
         colors: true,
         hash: false,
