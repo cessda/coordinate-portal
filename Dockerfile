@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:12
+FROM node:14
 
 # Create app directory
 WORKDIR /usr/src/app

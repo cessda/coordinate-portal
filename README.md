@@ -19,7 +19,7 @@ The overall Software Maturity Level for this product and the individual scores f
 
 ## Prerequisites
 
-[Node.js](https://nodejs.org/) version 12 (LTS) is required to install and run this application.
+[Node.js](https://nodejs.org/) version 14 (LTS) is required to install and run this application.
 
 You will need an existing local or remote Elasticsearch instance setup and running.
 
@@ -44,11 +44,13 @@ Please be aware of *Known Issues* (see bottom) before running.
 
 The application can be configured using the following environment variables.
 
-| Variable                 | Required | Default Value | Description
-| ------------------------ | -------- | ------------- | -----------
-| `PASC_DEBUG_MODE`        | No       | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
-| `PASC_PORT`              | No       | `8088`        | The port number which will be used to access this web application.
-| `PASC_ELASTICSEARCH_URL` | Yes      | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
+| Variable                     | Default Value | Description
+| ---------------------------- | ------------- | -----------
+| `PASC_DEBUG_MODE`            | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
+| `PASC_PORT`                  | `8088`        | The port number which will be used to access this web application.
+| `PASC_ELASTICSEARCH_URL`     | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
+| `SEARCHKIT_LOG_LEVEL`        | `info`        | The logging level used for server side events
+| `SEARCHKIT_USE_JSON_LOGGING` | `false`       | Whether to log using JSON rather than plain text
 
 Set environment variables using the following syntax.
 
@@ -91,17 +93,17 @@ The primary programming language is Flow and JSX in ECMAScript 6. See *Tooling* 
 | Framework/Technology                                 | Description                                              |
 | ---------------------------------------------------- | -------------------------------------------------------- |
 | JavaScript/[JSX](https://facebook.github.io/jsx/)    | ECMAScript with XML-like syntax extensions.              |
-| [React](https://reactjs.org/)                        | JavaScript library for building user interfaces.         |
+| [React](https://reactjs.org/)                        | JavaScript library for building web applications.        |
 | [Redux](https://redux.js.org/)                       | Predictable state container for JavaScript applications. |
 | [Searchkit](http://www.searchkit.co/)                | React component library for Elasticsearch.               |
 | [Babel](https://babeljs.io/)                         | JavaScript compiler for ECMAScript 6.                    |
-| [Flow](https://flow.org/)                            | Static type checker for JavaScript.                      |
-| [Flow-Typed](https://github.com/flowtype/flow-typed) | Central repository for Flow library definitions.         |
+| [TypeScript](https://www.typescriptlang.org/)        | Static type checker for JavaScript.                      |
 | [Webpack](https://webpack.js.org/)                   | JavaScript module bundler.                               |
 | [Sass](http://sass-lang.com/)                        | CSS extension language.                                  |
 | [Bulma](https://bulma.io/)                           | CSS framework based on Flexbox.                          |
 | [Jest](https://jestjs.io/)                           | JavaScript testing framework.                            |
 | [Enzyme](https://airbnb.io/enzyme/)                  | JavaScript testing utility for React Components.         |
+| [Winston](https://github.com/winstonjs/winston)      | JavaScript logging framework.                            |
 
 See [`package.json`](package.json) in the root directory for a full list of third party libraries used.
 
@@ -147,7 +149,7 @@ N.B. list of CESSDA languages (*as of Feb 2021*):
 
 ### Add a new field
 
-1. Each study retrieved from Elasticsearch is first routed through the `getStudyModel()` method located in `/src/utilities/metadata.js`. This cleans the data ready to be used throughout the application. Add the new field to the object returned from this method. Like other fields, it should be provided from Elasticsearch as a child property of the `data._source` object.
+1. Each study retrieved from Elasticsearch is first routed through the `getStudyModel()` method located in `/src/utilities/metadata.js`. This cleans the data and applies type restrictions. Add the new field to the object returned from this method. Like other fields, it should be provided from Elasticsearch as a child property of the `data._source` object.
 2. If the field should be displayed on the search page for each result, modify the `/src/components/Result.jsx` component. Add additional HTML mark-up as necessary and the new field will be available as a child property of the `item` object. For example `<p>{item.newField}</p>`.
 3. If the field should be displayed on the study detail page, modify the `/src/components/Detail.jsx` component. Add additional HTML mark-up as necessary and the new field will be available as a child property of the `item` object. For example `<p>{item.newField}</p>`.
 4. Remember to add new strings to the translations located in `/src/locales` if necessary (i.e. for the new field label etc.)

@@ -16,7 +16,6 @@ const url = require('url');
 const _ = require('lodash');
 const proxy = require('express-http-proxy');
 const express = require('express');
-const debug = require('debug')('SearchkitExpress');
 const request = require('request');
 const helper = {};
 const winston = require('winston');
@@ -24,39 +23,54 @@ const winston = require('winston');
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
+const logLevel = process.env.SEARCHKIT_LOG_LEVEL || 'info';
+const loggerFormat = (() => {
+  if (process.env.SEARCHKIT_USE_JSON_LOGGING === 'true') {
+    return new winston.format.json();
+  } else {
+    return winston.format.printf(
+      ({ level, message, timestamp }) => `[${timestamp}][${level}] ${message}`
+    );
+  }
+});
 
 // Logger
 const logger = winston.createLogger({
-  level: 'debug',
+  level: logLevel,
   format: winston.format.combine(
+    winston.format.timestamp(),
     winston.format.splat(),
-    winston.format.json()
+    loggerFormat()
   ),
   transports: [
+    new winston.transports.Console()
+  ],
+  exceptionHandlers: [
+    new winston.transports.Console()
+  ],
+  rejectionHandlers: [
     new winston.transports.Console()
   ]
 });
 
-helper.checkBuildDirectory = function () {
+helper.checkBuildDirectory = () => {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
     logger.error(
-      'Unable to start Data Catalogue application.\n' + 
-      'Missing \'/dist\' directory as application has not been built.\n' +
+      'Production startup failed as the application has not been built. ' +
       'Run command \'npm run build\' and try again.'
     );
     process.exit(16);
   }
 };
 
-helper.checkEnvironmentVariables = function (production) {
+helper.checkEnvironmentVariables = (production) => {
   if (_.isEmpty(elasticsearchUrl)) {
     logger.error(
-      'ERROR : Unable to start Data Catalogue application.\n' + 
-      'Missing environment variable PASC_ELASTICSEARCH_URL.'
+      'Unable to start Data Catalogue application. Missing environment variable PASC_ELASTICSEARCH_URL.'
     );
     process.exit(17);
   } else {
-    logger.info('Using Elasticsearch instance at ' + elasticsearchUrl);
+    logger.info('Using Elasticsearch instance at %s', elasticsearchUrl);
   }
 
   if (production) {
@@ -73,37 +87,34 @@ helper.checkEnvironmentVariables = function (production) {
   }
 };
 
-helper.getSearchkitRouter = function () {
+helper.getSearchkitRouter = () => {
   const router = express.Router();
-  const config = {
-    host: _.trimEnd(elasticsearchUrl, '/'),
-    queryProcessor: (query) => query
-  };
+  const host = _.trimEnd(elasticsearchUrl, '/');
+
   const requestClient = request.defaults({ pool: { maxSockets: 500 } });
 
-  const elasticRequest = function (url, body) {
-    let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + '/cmmstudy' + url;
-    logger.debug('Start Elasticsearch Request: %s', fullUrl);
-    if (_.isObject(body)) {
-      logger.debug('Request body', {body: body});
-    }
-    delete body.index;
-    return requestClient.post({
-      url: fullUrl,
-      body: body,
-      json: _.isObject(body),
-      forever: true
-    }).on('response', function (response) {
-      logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
-    }).on('error', function (response) {
-      logger.error('Elasticsearch Request failed: %s, code: %d', fullUrl, response.statusCode);
-    });
-  };
-
-  router.post('/_search', function (req, res) {
+  router.post('/_search', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
-    const queryBody = config.queryProcessor(req.body || {});
-    elasticRequest(req.url, queryBody).pipe(res);
+
+    const fullUrl = host + '/' + (req.body.index || 'cmmstudy_en') + '/cmmstudy' + url;
+    logger.debug('Start Elasticsearch Request: %s', fullUrl);
+
+    if (_.isObject(req.body)) {
+      logger.debug('Request body', { body: req.body });
+    }
+
+    delete req.body.index;
+
+    requestClient.get({
+      url: fullUrl,
+      body: req.body,
+      json: _.isObject(req.body),
+      forever: true
+    }).on('response', (response) => {
+      logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
+    }).on('error', (response) => {
+      logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
+    }).pipe(res);
   });
 
   return router;
@@ -132,20 +143,18 @@ helper.jsonProxy = proxy(elasticsearchUrl, {
     }
     return result;
   },
-  filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi).length === 2
+  filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
 });
 
-helper.startListening = function (app) {
+helper.startListening = (app) => {
   let port = Number(process.env.PASC_PORT || 8088);
-  
-  const server = app.listen(port, () => {
-    logger.info('Data Catalogue application is running at http://localhost:' + port);
-  });
+
+  const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
   process.on('exit', () => {
     logger.info('Shutting down');
     server.close();
-  })
+  });
 };
 
 module.exports = helper;
