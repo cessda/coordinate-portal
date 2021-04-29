@@ -105,7 +105,7 @@ helper.getSearchkitRouter = () => {
 
     delete req.body.index;
 
-    requestClient.get({
+    requestClient.post({
       url: fullUrl,
       body: req.body,
       json: _.isObject(req.body),
