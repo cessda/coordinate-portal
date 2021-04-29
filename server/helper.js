@@ -96,7 +96,7 @@ helper.getSearchkitRouter = () => {
   router.post('/_search', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
 
-    const fullUrl = host + '/' + (req.body.index || 'cmmstudy_en') + '/cmmstudy' + url;
+    const fullUrl = host + '/' + (req.body.index || 'cmmstudy_en') + '/cmmstudy' + req.url;
     logger.debug('Start Elasticsearch Request: %s', fullUrl);
 
     if (_.isObject(req.body)) {
