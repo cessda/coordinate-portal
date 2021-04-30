@@ -13,7 +13,7 @@
 
 import {SearchBox as SearchkitSearchBox, SearchBoxProps} from 'searchkit';
 import {connect, Dispatch} from 'react-redux';
-import {LocationAction, push} from 'react-router-redux';
+import {push} from 'react-router-redux';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
 import {detect} from 'detect-browser';
@@ -21,7 +21,7 @@ import _ from 'lodash';
 
 interface Props extends SearchBoxProps {
   pathname: string;
-  push: LocationAction;
+  push: typeof push;
   query: string;
 };
 

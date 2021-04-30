@@ -32,6 +32,16 @@ function setup(props) {
           key: 'Key',
           value: 'Value',
           doc_count: 2
+        },
+        {
+          key: 'Key',
+          value: 25,
+          doc_count: 2
+        },
+        {
+          key: 'Key',
+          value: undefined,
+          doc_count: 2
         }
       ],
       selectedItems: undefined,
@@ -73,7 +83,7 @@ describe('MultiSelect component', () => {
     });
     const options = enzymeWrapper.find('Select').prop('options');
     expect(options[0].label).toBe(
-      `${props.items[0].label} (${props.items.length}) `
+      `${props.items[0].label} (${props.items[0].doc_count}) `
     );
   });
 
@@ -89,7 +99,7 @@ describe('MultiSelect component', () => {
     const { props, enzymeWrapper } = setup();
     expect((props.selectedItems || []).length).toBe(0);
     enzymeWrapper.instance().handleChange(props.items);
-    expect((props.selectedItems || []).length).toBe(2);
+    expect((props.selectedItems || []).length).toBe(props.items.length);
   });
 
   it('should handle change without parameter', () => {
@@ -98,6 +108,18 @@ describe('MultiSelect component', () => {
     enzymeWrapper.instance().handleChange();
     expect((props.selectedItems || []).length).toBe(0);
   });
+
+  it('should handle change with a single parameter', () => {
+    const { props, enzymeWrapper } = setup();
+    expect((props.selectedItems || []).length).toBe(0);
+    enzymeWrapper.instance().handleChange(props.items[0]);
+    expect((props.selectedItems || []).length).toBe(1);
+  });
+
+  it('should handle a null value', () => {
+    const { props, enzymeWrapper } = setup();
+    expect(enzymeWrapper.instance().renderValue({label: undefined})).toBe(null);
+  })
 
   it('should render value', () => {
     const { props, enzymeWrapper } = setup();
