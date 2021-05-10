@@ -49,8 +49,10 @@ The application can be configured using the following environment variables.
 | `PASC_DEBUG_MODE`            | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
 | `PASC_PORT`                  | `8088`        | The port number which will be used to access this web application.
 | `PASC_ELASTICSEARCH_URL`     | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
-| `SEARCHKIT_LOG_LEVEL`        | `info`        | The logging level used for server side events
-| `SEARCHKIT_USE_JSON_LOGGING` | `false`       | Whether to log using JSON rather than plain text
+| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined` | The username to use when accessing a secured Elasticsearch cluster.
+| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined` | The password to use when accessing a secured Elasticsearch cluster.
+| `SEARCHKIT_LOG_LEVEL`        | `info`        | The logging level used for server side events.
+| `SEARCHKIT_USE_JSON_LOGGING` | `false`       | Whether to log using JSON rather than plain text.
 
 Set environment variables using the following syntax.
 
@@ -68,20 +70,18 @@ This project follows a best practice structure for React+Redux applications. See
 <ROOT>
 ├── coverage            # The output directory for the code coverage report using the test command.
 ├── dist                # The output directory for compilation using the build command.
-├── flow-typed          # Flow library definitions for type checking.
-├── infrastructure      # Scripts and configuration for deployment.
-├── node_modules        # Third party packages and node dependencies.
+├── node_modules        # Third party packages and dependencies.
 ├── server              # Markup and scripts for the server instance.
 └── src                 # Contains all source code and assets for the application.
     ├── actions         # Redux actions and action creators for state container.
     ├── components      # React user interface components.
     ├── containers      # React page container components.
     ├── img             # Image assets.
-    ├── locales         # Language translations.
     ├── reducers        # Redux reducers for state container.
     ├── styles          # SASS files for styling.
     └── utilities       # Miscellaneous scripts and helpers.
-└── tests               # Jest unit tests.
+├── tests               # Jest unit tests.
+└── translations        # Language translations.
 ```
 
 ## Technology Stack
@@ -119,7 +119,7 @@ For development, the following software tools are recommended and have full supp
 
 ### Add a new language
 
-1. Create a new language file in the `/src/locales` directory, using the 2 letter language ISO code for the file name. It is recommended to copy the English file `en.json` and use that as a template/starting point.
+1. Create a new language file in the `/translations` directory, using the 2 letter language ISO code for the file name. It is recommended to copy the English file `en.json` and use that as a template/starting point.
 2. Add your translations to the new file. Basic HTML mark-up is supported but its use should be limited. Some strings use variables which are defined as `%(VARIABLE)s`. Do not modify the JSON structure or object keys.
 3. Notify the application about this new file by adding it to the languages array defined in `/src/utilities/language.js`. It is expected that each language will have its own Elasticsearch index. Use the following syntax:
 
