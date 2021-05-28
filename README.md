@@ -176,7 +176,7 @@ By changing the following field (Generally we have set these to 500):
 </SideBar>
 ```
 
-> The Searchkit UI framework provides several filter controls and documentation can be found at <http://docs.searchkit.co/stable>
+> The Searchkit UI framework provides several filter controls and documentation can be found at <https://searchkit.github.io/searchkit/v2.0.0/>
 
 ### Modify sorting fields
 

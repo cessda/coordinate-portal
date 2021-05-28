@@ -91,13 +91,13 @@ export class Header extends Component<Props> {
                   </a>
                 }
 
-                {filters &&
-                  <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
-                }
+                <Translate component={Link} to="/about" className="sk-reset-filters link" content="about.label"/>
 
                 <Translate component="a" href="/documentation" className="sk-reset-filters link" content="documentation.label"/>
 
-                <Translate component={Link} to="/about" className="sk-reset-filters link" content="about.label"/>
+                {filters &&
+                  <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
+                }
 
                 <ResetFilters component={Reset}
                               options={{query: false, filter: true, pagination: true}}

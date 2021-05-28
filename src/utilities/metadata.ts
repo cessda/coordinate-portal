@@ -15,7 +15,7 @@ import { SearchResponse } from 'elasticsearch';
 import _ from 'lodash';
 import striptags from 'striptags';
 
-export type CMMStudy = {
+export interface CMMStudy {
   /** The internal ID of the study */
   id: string;
   code: string;
@@ -72,35 +72,35 @@ export type CMMStudy = {
   studyXmlSourceUrl: string;
 };
 
-export type Country = {
+export interface Country {
   abbr: string;
   country: string;
   searchField: string;
 }
 
-export type DataCollectionFreeText = {
+export interface DataCollectionFreeText {
   dataCollectionFreeText: string;
   event: string;
 }
 
-export type Pid = {
+export interface Pid {
   agency: string;
   pid: string;
 }
 
-export type Publisher = {
+export interface Publisher {
   abbr: string;
   publisher: string;
 }
 
-export type TermVocabAttributes = {
+export interface TermVocabAttributes {
   vocab: string;
   vocabUri: string;
   id: string;
   term: string;
 }
 
-export type VocabAttributes = {
+export interface VocabAttributes {
   vocab: string;
   vocabUri: string;
   id: string;
@@ -128,7 +128,7 @@ export function getStudyModel(searchResponse: SearchResponse<CMMStudy>): CMMStud
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
     unitTypes: data._source.unitTypes || [],
     typeOfSamplingProcedures: data._source.typeOfSamplingProcedures || [],
-    samplingProcedureFreeTexts: _.map(data._source.samplingProcedureFreeTexts || [], text => stripHTMLElements(text)),
+    samplingProcedureFreeTexts: (data._source.samplingProcedureFreeTexts || []).map(text => stripHTMLElements(text)),
     typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
     dataCollectionPeriodStartdate: data._source.dataCollectionPeriodStartdate || '',
     dataCollectionPeriodEnddate: data._source.dataCollectionPeriodEnddate || '',
@@ -137,14 +137,14 @@ export function getStudyModel(searchResponse: SearchResponse<CMMStudy>): CMMStud
     fileLanguages: data._source.fileLanguages || [],
     publisher: data._source.publisher,
     publicationYear: data._source.publicationYear || '',
-    dataAccessFreeTexts: _.map(data._source.dataAccessFreeTexts || [], text => stripHTMLElements(text)),
+    dataAccessFreeTexts: (data._source.dataAccessFreeTexts || []).map(text => stripHTMLElements(text)),
     studyNumber: data._source.studyNumber || '',
     classifications: data._source.classifications || [],
     keywords: data._source.keywords || [],
     lastModified: data._source.lastModified || '',
     studyUrl: data._source.studyUrl,
     studyXmlSourceUrl: data._source.studyXmlSourceUrl,
-    langAvailableIn: _.sortBy(_.map(data._source.langAvailableIn || [], i => i.toUpperCase()))
+    langAvailableIn: (data._source.langAvailableIn || []).map(i => i.toUpperCase()).sort()
   }));
 }
 
