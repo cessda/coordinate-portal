@@ -14,6 +14,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## Unreleased [2.4.0] - 2021-06-XX
+
+### Additions
+
+- Enabled ElasticSearch security ([#321](https://bitbucket.org/cessda/cessda.cdc.version2/issues/321))
+  
+- Added support for structured JSON logging ([#313](https://bitbucket.org/cessda/cessda.cdc.version2/issues/313))
+  
+- Added separate tab for User Guide ([#305](https://bitbucket.org/cessda/cessda.cdc.version2/issues/305))
+
+### Changes
+
+- Updated ElasticSearch from version 5.6 to 6.8 ([#312](https://bitbucket.org/cessda/cessda.cdc.version2/issues/312))
+
+- Updated CESSDA Main Office address in footer ([#310](https://bitbucket.org/cessda/cessda.cdc.version2/issues/310))
+  
+- Converted Searchkit from JavaScript to TypeScript ([#307](https://bitbucket.org/cessda/cessda.cdc.version2/issues/307))
+
+- Updated 'About' text in line with User Guide improvements for latest release. ([#304](https://bitbucket.org/cessda/cessda.cdc.version2/issues/304))
+
+- Simplified the Jenkinsfile used to build Searchkit ([#294](https://bitbucket.org/cessda/cessda.cdc.version2/issues/294))
+  
+- Updated many 3rd party dependencies, via [Renovate Bot](https://github.com/renovatebot)
+
+### Deprecated
+
+- Remove section if no entries
+
+### Removals
+
+- Remove section if no entries
+
+### Fixes
+
+- Fix tests broken by relying on internal implementation details in react-icons ([#269](https://bitbucket.org/cessda/cessda.cdc.version2/issues/269))
+
+### Security
+
+- Remove section if no entries
+
 ## [2.3.1] - 2021-02-11
 
 [10.5281/zenodo.4534768](https://zenodo.org/record/4534768)
