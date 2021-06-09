@@ -14,6 +14,7 @@
 import { SearchResponse } from 'elasticsearch';
 import _ from 'lodash';
 import striptags from 'striptags';
+import { Dataset, Organization, Person, WithContext } from 'schema-dts';
 
 export type CMMStudy = {
   /** The internal ID of the study */
@@ -163,53 +164,50 @@ function stripHTMLElements(html: string) {
 }
 
 // Generates study JSON-LD for Google indexing.
-export function getJsonLd(data: CMMStudy) {
+export function getJsonLd(data: CMMStudy): WithContext<Dataset> {
   // Attempt to split people from organisations in the creator field.
-  let creators = [];
-  for (let i: number = 0; i < data.creators.length; i++) {
+  const creators: Array<Organization | Person> = data.creators.map(creator => {
     // Format: "Name (Organisation)"
-    let matches = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi.exec(data.creators[i]);
+    let matches = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi.exec(creator);
     if (matches) {
-      creators.push({
+      return {
         '@type': 'Person',
         'name': _.trim(matches[1]),
         'affiliation': {
           '@type': 'Organization',
           'name': _.trim(matches[2])
         }
-      });
-      continue;
+      };
     }
     // Format: "Name, Organisation"
-    matches = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi.exec(data.creators[i]);
+    matches = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi.exec(creator);
     if (matches) {
-      creators.push({
+      return {
         '@type': 'Person',
         'name': _.trim(matches[1]),
         'affiliation': {
           '@type': 'Organization',
           'name': _.trim(matches[2])
         }
-      });
-      continue;
+      };
     }
     // Assume organisation if it contains any of the following words.
-    creators.push({
-      '@type': _.includes(data.creators[i].toLowerCase(), 'university') ||
-               _.includes(data.creators[i].toLowerCase(), 'institute') ||
-               _.includes(data.creators[i].toLowerCase(), 'polytechnic') ||
-               _.includes(data.creators[i].toLowerCase(), 'government') ||
-               _.includes(data.creators[i].toLowerCase(), 'department') ||
-               _.includes(data.creators[i].toLowerCase(), 'faculty') ||
-               _.includes(data.creators[i].toLowerCase(), 'division') ||
-               _.includes(data.creators[i].toLowerCase(), 'agency') ||
-               _.includes(data.creators[i].toLowerCase(), 'unit') ? 'Organization' : 'Person',
-      'name': _.trim(data.creators[i])
-    });
-  }
+    return {
+      '@type': _.includes(creator.toLowerCase(), 'university') ||
+               _.includes(creator.toLowerCase(), 'institute') ||
+               _.includes(creator.toLowerCase(), 'polytechnic') ||
+               _.includes(creator.toLowerCase(), 'government') ||
+               _.includes(creator.toLowerCase(), 'department') ||
+               _.includes(creator.toLowerCase(), 'faculty') ||
+               _.includes(creator.toLowerCase(), 'division') ||
+               _.includes(creator.toLowerCase(), 'agency') ||
+               _.includes(creator.toLowerCase(), 'unit') ? 'Organization' : 'Person',
+      'name': _.trim(creator)
+    }
+  });
 
   return {
-    '@context': 'http://schema.org/',
+    '@context': 'https://schema.org',
     '@type': 'Dataset',
     'name': data.titleStudy,
     'description': data.abstract,
@@ -219,8 +217,7 @@ export function getJsonLd(data: CMMStudy) {
     'variableMeasured': _.map(data.unitTypes, 'term').join(', '),
     'measurementTechnique': _.map(data.typeOfModeOfCollections, 'term').join(', '),
     'license': data.dataAccessFreeTexts,
-    'identifier': _.map(data.pidStudies || [], (i) => i.pid + ' (' + _.upperFirst(i.agency) +
-                                                      ')').join(', '),
+    'identifier': _.map(data.pidStudies || [], (i) => i.pid + ' (' + _.upperFirst(i.agency) + ')').join(', '),
     'creator': creators,
     'temporalCoverage': extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
     'spatialCoverage': _.map(data.studyAreaCountries, 'country').join(', '),

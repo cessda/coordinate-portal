@@ -61,7 +61,6 @@ export class Header extends Component<Props> {
 
         <div className="container">
           <Translate component="a" className="cessda-organisation" href="https://www.cessda.eu/" content="cessda" />
-        
         </div>
 
         <div className="container">
@@ -124,16 +123,16 @@ export class Header extends Component<Props> {
               </div>
               <section className="modal-card-body">
                 {filters ?
-                  <div>
+                  <>
                     <Translate component="p" className="pb-10" content="filters.summary.introduction" />
                     <GroupedSelectedFilters />
                     <Translate component="p" content="filters.summary.remove" />
-                  </div>
+                  </>
                 :
-                  <div>
+                  <>
                     <Translate component="p" className="pb-10" content="filters.summary.noFilters" />
                     <Translate component="p" content="filters.summary.close" unsafe />
-                  </div>
+                  </>
                 }
               </section>
               <div className="modal-card-foot">
