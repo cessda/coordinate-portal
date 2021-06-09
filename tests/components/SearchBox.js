@@ -150,4 +150,9 @@ describe('SearchBox component', () => {
       push: expect.any(Function)
     });
   });
+
+  it('should construct without props', () => {
+    const enzymeWrapper = new SearchBox();
+    expect(enzymeWrapper.render()).toBeFalsy();
+  })
 });
