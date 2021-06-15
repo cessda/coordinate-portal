@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { Action } from "../actions";
+import { CHANGE_LANGUAGE, INIT_TRANSLATIONS } from "../actions/language";
 import { Language } from "../utilities/language";
 
 export type LanguageState = {
@@ -27,14 +28,14 @@ const initialState: LanguageState = {
   list: []
 };
 
-const language = (state = initialState, action: Action): LanguageState => {
+export default function language(state = initialState, action: Action): LanguageState {
   switch (action.type) {
-    case 'INIT_TRANSLATIONS':
+    case INIT_TRANSLATIONS:
       return Object.assign({}, state, {
         list: action.languages
       });
 
-    case 'CHANGE_LANGUAGE':
+    case CHANGE_LANGUAGE:
       return Object.assign({}, state, {
         code: action.code,
         label: action.label
@@ -43,6 +44,4 @@ const language = (state = initialState, action: Action): LanguageState => {
     default:
       return state;
   }
-};
-
-export default language;
+}

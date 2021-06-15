@@ -29,13 +29,12 @@ import type { State } from '../types';
 import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../utilities/metadata';
+import { Dataset, WithContext } from 'schema-dts';
 
 type Props = {
   loading: boolean;
   item: CMMStudy | undefined;
-  jsonLd: {
-    [key: string]: any;
-  } | null | undefined;
+  jsonLd: WithContext<Dataset> | undefined;
   code: string;
   list: LanguageType[];
   query: {
