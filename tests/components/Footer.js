@@ -35,7 +35,7 @@ describe('Footer component', () => {
 
   it('should include logo', () => {
     const { enzymeWrapper } = setup();
-    const logo = enzymeWrapper.find('.logo-footer');
+    const logo = enzymeWrapper.find('#footerlogo');
 
     expect(logo.exists()).toBe(true);
   });
