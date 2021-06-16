@@ -29,12 +29,13 @@ import type { State } from '../types';
 import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../utilities/metadata';
-import { Dataset, WithContext } from 'schema-dts';
 
 type Props = {
   loading: boolean;
   item: CMMStudy | undefined;
-  jsonLd: WithContext<Dataset> | undefined;
+  jsonLd: {
+    [key: string]: any;
+  } | null | undefined;
   code: string;
   list: LanguageType[];
   query: {
@@ -60,8 +61,9 @@ export class DetailPage extends Component<Props> {
 
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l">
+        <Layout>
           <Header/>
+          <div className="container">
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
               <Panel title={<Translate content='similarResults.heading'/>}
@@ -110,6 +112,7 @@ export class DetailPage extends Component<Props> {
               }
             </LayoutResults>
           </LayoutBody>
+          </div>
           <script type="application/ld+json">
             {JSON.stringify(jsonLd)}
           </script>

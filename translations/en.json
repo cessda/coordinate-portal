@@ -152,6 +152,6 @@
     "content": "<p>This is the CESSDA Data Catalogue (CDC) version 2.4.0. It contains descriptions (metadata) of the more than 30,000 data collections held by CESSDA’s Service Providers (SP), representing 20 European countries. It is a one-stop shop for searching and finding data, enabling effective access to European social science data. The data described are varied. They may be quantitative, qualitative or mixed-modes data, cross-sectional or longitudinal, recently collected or historical data.</p><p>The <a href=\"/documentation/\">User Guide</a> presents an overview of how to use the CDC for searching, including basic search and applying filters as well as advanced search. The CDC is a portal for discovering data. Detailed dataset descriptions are provided. For information and procedures to access data, there is a link in the lower right of each entry to the website of the data provider [“Access data”].</p>"
   },
   "documentation": {
-    "label": "User Guide"
+    "label": "Docs"
   }
 }

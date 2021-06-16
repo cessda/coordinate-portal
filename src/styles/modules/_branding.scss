@@ -1,8 +1,13 @@
 $white: #ffffff;
-$light_blue: #1e87f0;
+$light_blue: #0c66c0;
 $dark_blue: #2b5a9b;
 $light_grey: #f8f8f8;
 $dark_grey: #4e4d56;
+
+
+.columns:last-child {
+  margin-bottom: 0;
+}
 
 body .sk-layout {
   a {
@@ -12,44 +17,35 @@ body .sk-layout {
   header {
     position: relative;
     padding-bottom: 0;
-    min-height: 192px;
     background: url("../img/line-background.png") no-repeat right center;
     background-size: 50%;
 
     .column {
-      padding-bottom: 9px;
+     
     }
 
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
+    #topstripe {
       height: 36px;
-      width: 100%;
-      border-top: 36px solid $dark_grey;
+      background: $dark_grey;
     }
 
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 50px;
-      width: 100%;
-      border-bottom: 50px solid $dark_blue;
+    #bluestripe {
+  
+      background-color: $dark_blue;
+      .container .columns {
+        margin-left:0.75rem;
+        margin-right:0.75rem;
+      
+      }
     }
+
 
     .cessda-organisation {
-      height: 21px;
-      position: absolute;
-      top: 8px;
-      left: 0;
-      padding: 0 15px 0 25px;
-	    z-index:10;
       color: $white;
       font-weight: 500;
       font-size: 13px;
+      line-height: 36px;
+      padding-left: 0.75rem;
 
       a {
         display: block;
@@ -62,19 +58,35 @@ body .sk-layout {
       position: relative;
       text-align: center;
       width: 275px;
-      margin-top: 45px;
-      z-index: 1;
+      margin-top: 20px;
+      margin-bottom:15px;
+  
+      svg {
+        height: 60px;
+        width: auto;
+      }
+
+      .st0 {
+        fill: #43484e;
+      }
+
+      .st3 {
+        opacity: 0.2;
+        fill: #f2f7fb;
+        enable-background: new;
+      }
+      .st5 {
+        fill: #fff;
+      }
 
       .cessda-eric {
         display: block;
-        background: url("../img/cessda_logo_dc.png") no-repeat;
-        background-size: 275px 69px;
         height: 69px;
         width: 275px;
       }
 
       @media screen and (max-width: 768px) {
-        margin: 30px auto;
+        margin: 20px auto -20px auto;
       }
     }
 
@@ -173,7 +185,7 @@ body .sk-layout {
     }
 
     .data-label {
-      color: $light_blue;
+      color: $dark_grey;
     }
   }
 
@@ -217,15 +229,17 @@ body .sk-layout {
 
   footer {
     position: relative;
-    background-color: $light_grey;
-    color: $dark_grey;
+    background-color: $dark_grey;
+    color: $white;
     font-weight: 500;
-
+    .ssst0 {
+      fill: #fff;
+    }
     .hero {
       background-color: transparent;
 
       .hero-body {
-        padding: 60px 1.5rem;
+        padding: 15px 1.5rem;
 
         .footer-line {
           position: absolute;
@@ -236,13 +250,14 @@ body .sk-layout {
           border-top: 1px solid $dark_grey;
         }
 
-        .logo-footer {
-          background: url("../img/logo-footer.png") no-repeat;
-          background-size: 220px 60px;
-          height: 60px;
-          width: 220px;
+        #footerlogo {
+          height: 40px;
+          width: auto;
+          margin-top:4px
         }
-
+        .blinks {
+          margin-top: 10px;
+        }
         .footer-social {
           list-style: none;
 
@@ -256,7 +271,8 @@ body .sk-layout {
               font-size: 22px;
               font-weight: normal;
 
-              &:hover, &:hover svg {
+              &:hover,
+              &:hover svg {
                 color: $light_blue;
               }
             }
@@ -264,8 +280,8 @@ body .sk-layout {
         }
 
         a {
-          color: $light_blue;
-
+          color: white;
+          font-weight: 400;
           &:hover {
             text-decoration: underline;
           }
