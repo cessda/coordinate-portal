@@ -59,7 +59,7 @@ export class SearchBox extends SearchkitSearchBox {
     }
 
     // Redirect from 'detail' page to 'search results' page if users change search query text.
-    if (_.trim(pathname, '/') === 'detail') {
+    if (_.trim(pathname, '/')) {
       if (detect()?.name === 'ie') {
         // Workaround for legacy Internet Explorer bug where change event is fired multiple times.
         if (event.target.value !== query) {
@@ -77,7 +77,7 @@ export class SearchBox extends SearchkitSearchBox {
    * Clears the query on the detail page
    */
   getValue(): string {
-    if (_.trim(this.props.pathname, '/') === 'detail') {
+    if (_.trim(this.props.pathname, '/')) {
       return "";
     } else {
       return super.getValue();
