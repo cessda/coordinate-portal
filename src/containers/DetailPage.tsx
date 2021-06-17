@@ -60,8 +60,9 @@ export class DetailPage extends Component<Props> {
 
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l">
+        <Layout>
           <Header/>
+          <div className="container">
           <LayoutBody className="columns">
             <SideBar className="is-hidden-mobile column is-4">
               <Panel title={<Translate content='similarResults.heading'/>}
@@ -110,6 +111,7 @@ export class DetailPage extends Component<Props> {
               }
             </LayoutResults>
           </LayoutBody>
+          </div>
           <script type="application/ld+json">
             {JSON.stringify(jsonLd)}
           </script>
