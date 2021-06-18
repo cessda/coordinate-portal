@@ -148,7 +148,7 @@ export class Header extends Component<Props> {
                 }
 
                    {filters &&
-                  <Translate component="a" className="sk-reset-filters link" onClick={toggleSummary} content="filters.summary.label" />
+                  <Translate component="a" className="sk-reset-filters link is-hidden-mobile" onClick={toggleSummary} content="filters.summary.label" />
                 }
 
                 <ResetFilters component={Reset}

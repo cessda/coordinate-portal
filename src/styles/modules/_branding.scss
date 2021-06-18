@@ -8,7 +8,38 @@ $dark_grey: #4e4d56;
 .columns:last-child {
   margin-bottom: 0;
 }
+.button.is-small {
+  font-size: 0.9rem;
+}
+.button.is-info {
 
+  background-color:#3671c3;
+}
+.button.is-info:hover, .button.is-info.is-hovered {
+  background-color: #477fcc;
+  border-color: transparent;
+  color: #fff;
+}
+.data-abstract b {
+font-weight: 600;
+display: inline-block;
+margin-top:5px;
+}
+.summary-header  {
+padding-left: 3px;
+  font-weight: 700;
+  font-size: 17px;
+padding-bottom: 5px;
+}
+.data-label {
+   padding: 3px;
+  margin-bottom: 3px;
+  background: $light_grey;
+  border-radius: 3px;
+}
+.data-abstract, article .sk-panel__content > div, .sk-panel__content > p, .sk-panel__content > span, article > section > div, article > p {
+  padding-left: 3px;
+}
 body .sk-layout {
   a {
     color: $light_blue;
@@ -39,7 +70,7 @@ body .sk-layout {
       }
     }
 
-
+    
     .cessda-organisation {
       color: $white;
       font-weight: 500;
