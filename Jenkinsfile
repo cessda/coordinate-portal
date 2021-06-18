@@ -41,7 +41,7 @@ pipeline {
 		stage('Run Unit Tests') {
 			agent {
 				docker {
-					image 'node:12'
+					image 'node:14'
 					reuseNode true
 				}
 			}

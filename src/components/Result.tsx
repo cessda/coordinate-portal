@@ -95,17 +95,16 @@ export class Result extends Component<Props> {
                  <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
                    this.props.toggleLongAbstract(item.titleStudy, index);
                  }}>
-                   {item.abstractExpanded &&
-                    <span>
+                   {item.abstractExpanded ?
+                    <>
                       <span className="icon is-small"><FaAngleUp/></span>
                       <Translate component="span" content="readLess"/>
-                    </span>
-                   }
-                   {!item.abstractExpanded &&
-                    <span>
+                    </>
+                   :
+                    <>
                       <span className="icon is-small"><FaAngleDown/></span>
                       <Translate component="span" content="readMore"/>
-                    </span>
+                    </>
                    }
                  </a>
                 }

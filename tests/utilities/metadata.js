@@ -334,7 +334,7 @@ describe('Metadata utilities', () => {
           ]
         })
       ).toEqual({
-        '@context': 'http://schema.org/',
+        '@context': 'https://schema.org',
         '@type': 'Dataset',
         creator: [
           {
@@ -456,7 +456,7 @@ describe('Metadata utilities', () => {
           ]
         })
       ).toEqual({
-        '@context': 'http://schema.org/',
+        '@context': 'https://schema.org',
         '@type': 'Dataset',
         creator: [
           {

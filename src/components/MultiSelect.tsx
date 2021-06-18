@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import _ from 'lodash';
 import React from 'react';
 import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
 import {AbstractItemList, ItemListProps} from 'searchkit';
@@ -30,8 +31,20 @@ export default class MultiSelect extends AbstractItemList {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(selectedOptions: any): void {
-    this.props.setItems(selectedOptions?.map((el: { value: any; }) => el.value));
+  handleChange(selectedOptions: Option<OptionValues> | Options<OptionValues> | null) {
+    if (_.isArray(selectedOptions)) {
+      const items: string[] = [];
+      selectedOptions.forEach(el => {
+        if (el.value) {
+          items.push(el.value.toString());
+        } else {
+          items.push('');
+        }
+      });
+      this.props.setItems(items);
+    } else if (selectedOptions?.value) {
+      this.props.setItems([selectedOptions.value.toString()])
+    }
   }
 
   renderValue(value: Option<OptionValues>): HandlerRendererResult {
@@ -52,7 +65,7 @@ export default class MultiSelect extends AbstractItemList {
       showCount
     } = this.props;
 
-    let options: Options<OptionValues> = items.map((option): Option<OptionValues> => {
+    const options: Options<OptionValues> = items.map((option): Option<OptionValues> => {
       let label = option.title || option.label || option.key;
       if (showCount) {
         label += ` (${option.doc_count}) `;

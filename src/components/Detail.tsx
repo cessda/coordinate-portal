@@ -123,11 +123,15 @@ export class Detail extends React.Component<Props> {
 
     return (
       <article className="w-100">
+      <div className="summary-header">
+Summary information
+      </div>
         <Translate
           className="data-label mt-5"
           component="h1"
           content="metadata.studyTitle"
         />
+
         <p>
           {item.titleStudy || <Translate content="language.notAvailable.field" />}
         </p>

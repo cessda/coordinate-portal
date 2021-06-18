@@ -9,7 +9,7 @@ body {
   font-size: 1rem;
 
   #root {
-    color: $greyish-brown;
+    color: #333;
   }
 
   .columns {
@@ -68,7 +68,11 @@ body {
       margin-right: 5px;
     }
   }
+  h4.sk-hits-list-hit {
+    font-weight: 600;
+ }
   .sk-hits-list .sk-hits-list-hit {
+   
     em {
     background: transparent;
     font-weight: bold
@@ -102,7 +106,7 @@ body {
             line-height: 42px;
 
             .Select-value-label {
-              color: #555 !important;
+              color: #000 !important;
               cursor: pointer;
             }
           }
@@ -142,14 +146,16 @@ body {
   }
   .search-wrapper {
     position: relative;
-    right:0;
     max-width:600px;
+    margin: 30px auto 0 auto;
     }
   .sk-hits-stats {
-    position: relative;
-    margin-top: 30px;
-    padding-left: 10px;
+   display:flex;
+    margin-top: 0px;
+    height:100%;
     z-index: 1;
+    justify-content: center;
+  align-items: center;
 
     .sk-hits-stats__info {
       color: #ffffff;
@@ -160,18 +166,16 @@ body {
 
   .reset-search {
     position: relative;
-    text-align: right;
+    text-align: left;
     z-index: 1;
-
-    @media screen and (max-width: 768px) {
-      text-align: center;
-    }
+padding: 6px 0;
+   
   }
 
   .sk-reset-filters {
     color: #ffffff !important;
     display: inline-block;
-    margin: 37px 5px 0;
+    margin: 0 4px 0 0;
     padding: 6px 10px;
     flex-grow: 0;
     font-size: 14px;
@@ -319,7 +323,8 @@ body {
   h1, h2, h3, h4, h5, h6 {
     margin-bottom: 15px;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 17px;
+    padding-left: 3px;
   }
 }
 
@@ -336,8 +341,8 @@ body {
 }
 
 .data-label, .about-title {
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 16px;
   margin-top: 15px;
   display: block;
 }
@@ -365,6 +370,7 @@ body {
     margin-bottom: 15px;
     display: block;
     font-size: 14px;
+    font-weight:600;
 
     &:hover {
       text-decoration: underline;

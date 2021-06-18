@@ -5,11 +5,7 @@
 header {
   background-color: $cessda_blueish;
 
-  @media screen and (min-width: 769px) {
-    & > .container > .columns > .column {
-      min-height: 137px;
-    }
-  }
+
 
   .navbar {
     margin: 0 auto;
@@ -87,7 +83,7 @@ header {
     color: $light_grey;
     height: 45px;
     max-width: 600px;
-    margin: 56px 0 0 auto;
+    margin: 0 auto;
     z-index: 1;
 
     &.is-focused {
@@ -121,7 +117,7 @@ header {
     }
 
     @media screen and (max-width: 768px) {
-      margin: 0 auto 0 auto;
+      margin: 18px auto;
     }
   }
 }

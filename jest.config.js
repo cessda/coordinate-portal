@@ -26,7 +26,7 @@ module.exports = {
   setupFilesAfterEnv: ["jest-enzyme"],
   testEnvironment: "enzyme",
   testEnvironmentOptions: {
-    enzymeAdapter: "react15"
+    enzymeAdapter: "react16"
   },
 
   testMatch: ['**/tests/**/*.js']
