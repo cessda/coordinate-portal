@@ -17,7 +17,6 @@ import { Link } from "react-router";
 import { connect, Dispatch } from "react-redux";
 import Panel from "./Panel";
 import Translate from "react-translate-component";
-import { FaAngleLeft, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { State } from "../types";
 import _ from "lodash";
 import moment from "moment";
