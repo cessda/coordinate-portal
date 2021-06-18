@@ -19,6 +19,7 @@ export const queryBuilder = (query: string) => {
     simple_query_string: {
       query: query,
       lenient: true,
+      default_operator: "AND",
 
       // Can limit to searching specific fields if required. Weightings can also be added.
       fields: [

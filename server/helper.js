@@ -22,11 +22,13 @@ const winston = require('winston');
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
+const elasticsearchUsername = process.env.SEARCHKIT_ELASTICSEARCH_USERNAME;
+const elasticsearchPassword = process.env.SEARCHKIT_ELASTICSEARCH_PASSWORD;
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
 const logLevel = process.env.SEARCHKIT_LOG_LEVEL || 'info';
 const loggerFormat = (() => {
   if (process.env.SEARCHKIT_USE_JSON_LOGGING === 'true') {
-    return new winston.format.json();
+    return winston.format.json();
   } else {
     return winston.format.printf(
       ({ level, message, timestamp }) => `[${timestamp}][${level}] ${message}`
@@ -93,6 +95,17 @@ helper.getSearchkitRouter = () => {
 
   const requestClient = request.defaults({ pool: { maxSockets: 500 } });
 
+  // Configure authentication
+  let authentication = undefined;
+  if (elasticsearchUsername && elasticsearchPassword) {
+    logger.info('Elasticsearch authentication configured');
+    authentication = {
+      username: elasticsearchUsername,
+      password: elasticsearchPassword,
+      sendImmediately: true
+    };
+  }
+
   router.post('/_search', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
 
@@ -109,7 +122,8 @@ helper.getSearchkitRouter = () => {
       url: fullUrl,
       body: req.body,
       json: _.isObject(req.body),
-      forever: true
+      forever: true,
+      auth: authentication
     }).on('response', (response) => {
       logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
     }).on('error', (response) => {
@@ -120,31 +134,50 @@ helper.getSearchkitRouter = () => {
   return router;
 };
 
-helper.jsonProxy = proxy(elasticsearchUrl, {
-  parseReqBody: false,
-  proxyReqPathResolver: (req) => {
-    const arr = _.trim(req.url, '/').split('/');
-    const index = arr[0];
-    const id = arr[1];
-    return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index + '/cmmstudy/' + id;
-  },
-  userResDecorator: (_proxyRes, proxyResData) => {
-    const json = JSON.parse(proxyResData.toString('utf8'));
-    let result;
-    if (!_.isEmpty(json._source)) {
-      result = JSON.stringify(json._source);
-    } else {
-      // When running in debug mode, return the actual response from Elasticsearch
-      if (debugEnabled) {
-        result = proxyResData;
-      } else {
-        result = "{\"error\":\"Requested record was not found.\"}";
+helper.jsonProxy = () => {
+  let elasticsearchAuthorisaton = undefined;
+
+  // Only configure Elasticsearch authentication if both username and password are set
+  if (elasticsearchUsername && elasticsearchPassword) {
+    elasticsearchAuthorisaton = `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`
+  }
+
+  return proxy(elasticsearchUrl, {
+    parseReqBody: false,
+    proxyReqPathResolver: (req) => {
+      const arr = _.trim(req.url, '/').split('/');
+      const index = arr[0];
+      const id = arr[1];
+      return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index + '/cmmstudy/' + id;
+    },
+    // Add Elasticsearch authorisation if configured
+    proxyReqOptDecorator: (proxyReqOpts) => {
+      if (elasticsearchAuthorisaton) {
+        proxyReqOpts.headers = {
+          ...proxyReqOpts.headers,
+          authorization: elasticsearchAuthorisaton
+        }
       }
-    }
-    return result;
-  },
-  filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
-});
+      return proxyReqOpts;
+    },
+    userResDecorator: (_proxyRes, proxyResData) => {
+      const json = JSON.parse(proxyResData.toString('utf8'));
+      let result;
+      if (!_.isEmpty(json._source)) {
+        result = JSON.stringify(json._source);
+      } else {
+        // When running in debug mode, return the actual response from Elasticsearch
+        if (debugEnabled) {
+          result = proxyResData;
+        } else {
+          result = "{\"error\":\"Requested record was not found.\"}";
+        }
+      }
+      return result;
+    },
+    filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
+  });
+};
 
 helper.startListening = (app) => {
   let port = Number(process.env.PASC_PORT || 8088);

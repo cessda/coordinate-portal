@@ -36,17 +36,20 @@ export class SearchBox extends SearchkitSearchBox {
     this.props = props;
   }
 
-  // @ts-ignore
-  static defaultProps: Props = Object.assign({}, SearchkitSearchBox.defaultProps, {
-    pathname: '',
-    push,
-    query: ''
-  });
+  static defaultProps: Props = {
+    ...SearchkitSearchBox.defaultProps, 
+    ...{
+      // Needed due to incomplete type information in SearchkitSearchBox.defaultProps
+      blurAction: "search",
+      pathname: '',
+      push,
+      query: '',
+    }
+  };
 
   onChange(event: any): void {
     const {
       pathname,
-      push,
       query
     } = this.props;
 
@@ -56,14 +59,14 @@ export class SearchBox extends SearchkitSearchBox {
     }
 
     // Redirect from 'detail' page to 'search results' page if users change search query text.
-    if (_.trim(pathname, '/') === 'detail') {
+    if (_.trim(pathname, '/')) {
       if (detect()?.name === 'ie') {
         // Workaround for legacy Internet Explorer bug where change event is fired multiple times.
         if (event.target.value !== query) {
-          push('/');
+          this.props.push('/');
         }
       } else {
-        push('/');
+        this.props.push('/');
       }
     }
 
@@ -74,7 +77,7 @@ export class SearchBox extends SearchkitSearchBox {
    * Clears the query on the detail page
    */
   getValue(): string {
-    if (_.trim(this.props.pathname, '/') === 'detail') {
+    if (_.trim(this.props.pathname, '/')) {
       return "";
     } else {
       return super.getValue();
@@ -82,17 +85,17 @@ export class SearchBox extends SearchkitSearchBox {
   }
 }
 
-export const mapStateToProps = (state: State) => {
+export function mapStateToProps(state: State) {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
     query: state.search.state.q
   };
-};
+}
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     push: bindActionCreators(push, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);

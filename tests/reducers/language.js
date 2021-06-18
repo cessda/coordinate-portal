@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { CHANGE_LANGUAGE, INIT_TRANSLATIONS } from "../../src/actions/language";
 import language from '../../src/reducers/language';
 import { getLanguages } from '../../src/utilities/language';
 import _ from 'lodash';
@@ -34,7 +35,7 @@ describe('Language reducer', () => {
       language(
         {},
         {
-          type: 'INIT_TRANSLATIONS',
+          type: INIT_TRANSLATIONS,
           languages: list
         }
       )
@@ -48,7 +49,7 @@ describe('Language reducer', () => {
       language(
         {},
         {
-          type: 'CHANGE_LANGUAGE',
+          type: CHANGE_LANGUAGE,
           code: languages[0].code
         }
       )
