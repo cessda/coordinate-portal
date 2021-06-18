@@ -4,6 +4,13 @@
 
 @media screen and (max-width: 1023px) {
 
+  .button.is-small {
+    font-size: 0.8rem;
+  }
+.blinks {
+
+font-size:14px;
+}
   @at-root header .language-picker {
     position: absolute;
     top: 1px;
@@ -17,6 +24,10 @@
 body {
   .search-wrapper {
 
+    }
+    .sk-reset-filters {
+      padding: 4px;
+      font-size:13px;
     }
   }
   header {
@@ -44,10 +55,9 @@ body {
     .reset-search {
       background-color: #2b5a9b;
     max-width:100%;
+    padding:6px 3px;
 
-      .sk-reset-filters {
-        padding: 4px 6px;
-      }
+     
     }
   }
 }
