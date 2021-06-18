@@ -17,6 +17,7 @@ import { Link } from "react-router";
 import { connect, Dispatch } from "react-redux";
 import Panel from "./Panel";
 import Translate from "react-translate-component";
+import { FaAngleLeft, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { State } from "../types";
 import _ from "lodash";
 import moment from "moment";
@@ -123,11 +124,15 @@ export class Detail extends React.Component<Props> {
 
     return (
       <article className="w-100">
+      <div className="summary-header">
+Summary information
+      </div>
         <Translate
           className="data-label mt-5"
           component="h1"
           content="metadata.studyTitle"
         />
+
         <p>
           {item.titleStudy || <Translate content="language.notAvailable.field" />}
         </p>
