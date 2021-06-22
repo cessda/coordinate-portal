@@ -35,8 +35,8 @@ export default class Footer extends Component {
                 </div>
               
                 <div className="column is-8 blinks">
-                <a href="./documentation/" target="_blank">Docs</a> | <a href="./about/">About</a> | <a href="https://www.cessda.eu/Privacy-policy" target="_blank"><Translate content="footer.privacy"/></a> | <a href="https://www.cessda.eu/Acceptable-Use-Policy" target="_blank"><Translate content="footer.aup"/></a>
-                     
+                <a href="./documentation/" target="_blank">User Guide</a> | <a href="./about/">About</a> | <a href="https://www.cessda.eu/Privacy-policy" target="_blank"><Translate content="footer.privacy"/></a> | <a href="https://www.cessda.eu/Acceptable-Use-Policy" target="_blank"><Translate content="footer.aup"/></a>
+                    
                 </div>
               </div>
             </div>
