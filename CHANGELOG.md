@@ -19,40 +19,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Additions
 
 - Enabled ElasticSearch security ([#321](https://bitbucket.org/cessda/cessda.cdc.version2/issues/321))
-  
 - Added support for structured JSON logging ([#313](https://bitbucket.org/cessda/cessda.cdc.version2/issues/313))
-  
-- Added separate tab for User Guide ([#305](https://bitbucket.org/cessda/cessda.cdc.version2/issues/305))
+- Added a direct link to the User Guide in the header ([#305](https://bitbucket.org/cessda/cessda.cdc.version2/issues/305))
+- Added support for logging with JSON ([#313](https://bitbucket.org/cessda/cessda.cdc.version2/issues/313))
 
 ### Changes
 
 - Updated ElasticSearch from version 5.6 to 6.8 ([#312](https://bitbucket.org/cessda/cessda.cdc.version2/issues/312))
-
-- Updated CESSDA Main Office address in footer ([#310](https://bitbucket.org/cessda/cessda.cdc.version2/issues/310))
-  
+- Added support for Elasticsearch security ([#321](https://bitbucket.org/cessda/cessda.cdc.version2/issues/321))
 - Converted Searchkit from JavaScript to TypeScript ([#307](https://bitbucket.org/cessda/cessda.cdc.version2/issues/307))
-
-- Updated 'About' text in line with User Guide improvements for latest release. ([#304](https://bitbucket.org/cessda/cessda.cdc.version2/issues/304))
-
+- Updated 'About' text in line with User Guide improvements for latest release ([#304](https://bitbucket.org/cessda/cessda.cdc.version2/issues/304))
 - Simplified the Jenkinsfile used to build Searchkit ([#294](https://bitbucket.org/cessda/cessda.cdc.version2/issues/294))
-  
 - Updated many 3rd party dependencies, via [Renovate Bot](https://github.com/renovatebot)
-
-### Deprecated
-
-- Remove section if no entries
-
-### Removals
-
-- Remove section if no entries
+- Updated Node.js to 14 ([#269](https://bitbucket.org/cessda/cessda.cdc.version2/issues/269))
+- User interface adjustments ([#270](https://bitbucket.org/cessda/cessda.cdc.version2/issues/270))
+- Updated outdated links that were displayed if JavaScript was disabled ([#322](https://bitbucket.org/cessda/cessda.cdc.version2/issues/322))
 
 ### Fixes
 
 - Fix tests broken by relying on internal implementation details in react-icons ([#269](https://bitbucket.org/cessda/cessda.cdc.version2/issues/269))
+- Fixed search not working on the about page ([#344](https://bitbucket.org/cessda/cessda.cdc.version2/issues/344))
+- Fix the default operator, **AND**, not being applied to searches ([#242](https://bitbucket.org/cessda/cessda.cdc.version2/issues/242))
 
-### Security
+## [2.3.2]
 
-- Remove section if no entries
+### Changes
+
+- Updated CESSDA Main Office address in footer ([#310](https://bitbucket.org/cessda/cessda.cdc.version2/issues/310))
 
 ## [2.3.1] - 2021-02-11
 
