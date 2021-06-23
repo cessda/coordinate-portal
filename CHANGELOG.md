@@ -35,23 +35,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - User interface adjustments ([#270](https://bitbucket.org/cessda/cessda.cdc.version2/issues/270))
 - Updated outdated links that were displayed if JavaScript was disabled ([#322](https://bitbucket.org/cessda/cessda.cdc.version2/issues/322))
 
-### Deprecated
-
-- Remove section if no entries
-
-### Removals
-
-- Remove section if no entries
-
 ### Fixes
 
 - Fix tests broken by relying on internal implementation details in react-icons ([#269](https://bitbucket.org/cessda/cessda.cdc.version2/issues/269))
 - Fixed search not working on the about page ([#344](https://bitbucket.org/cessda/cessda.cdc.version2/issues/344))
 - Fix the default operator, **AND**, not being applied to searches ([#242](https://bitbucket.org/cessda/cessda.cdc.version2/issues/242))
-
-### Security
-
-- Remove section if no entries
 
 ## [2.3.2]
 
