@@ -54,7 +54,7 @@
     "@types/elasticsearch": "5.0.38",
     "@types/enzyme": "3.10.8",
     "@types/enzyme-adapter-react-16": "1.0.6",
-    "@types/express": "4.17.12",
+    "@types/express": "4.17.13",
     "@types/express-http-proxy": "1.6.1",
     "@types/jest": "26.0.23",
     "@types/jquery": "3.5.5",
