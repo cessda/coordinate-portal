@@ -13,26 +13,30 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import RangeFilter from '../../src/components/RangeFilter';
+import PageSizeSelector from '../../src/components/PageSizeSelector';
 import searchkit from '../../src/utilities/searchkit';
 
 // Mock props and shallow render component for test.
 function setup() {
   const props = {
     searchkit: searchkit,
-    id: 'id',
-    field: 'field'
+    options: [10, 30, 50, 150]
   };
-  const enzymeWrapper = shallow(<RangeFilter {...props} />);
+  const enzymeWrapper = shallow<PageSizeSelector>(<PageSizeSelector {...props} />);
   return {
     props,
     enzymeWrapper
   };
 }
 
-describe('RangeFilter component', () => {
+describe('PageSizeSelector component', () => {
   it('should render', () => {
     const { enzymeWrapper } = setup();
     expect(enzymeWrapper.exists()).toBe(true);
+  });
+
+  it('should handle has hits', () => {
+    const { enzymeWrapper } = setup();
+    expect(enzymeWrapper.instance().hasHits()).toBe(true);
   });
 });

@@ -17,7 +17,7 @@ import React from 'react';
 import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
 import {AbstractItemList, ItemListProps} from 'searchkit';
 
-interface Props extends ItemListProps {
+export interface Props extends ItemListProps {
   placeholder: string | JSX.Element | undefined;
   clearable?: boolean;
 };

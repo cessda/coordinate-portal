@@ -27,32 +27,4 @@ describe('Language utilities', () => {
       );
     });
   });
-
-  describe('Locales', () => {
-    it('should handle pluralisation', () => {
-      const languages = getLanguages();
-      for (let i = 0; i < languages.length; i++) {
-        if (
-          languages[i].locale &&
-          languages[i].locale.counterpart &&
-          languages[i].locale.counterpart.pluralize
-        ) {
-          const entry = {
-            one: 'one',
-            other: 'other',
-            zero: 'zero'
-          };
-          expect(languages[i].locale.counterpart.pluralize(entry, 0)).toBe(
-            'zero'
-          );
-          expect(languages[i].locale.counterpart.pluralize(entry, 1)).toBe(
-            'one'
-          );
-          expect(languages[i].locale.counterpart.pluralize(entry, 2)).toBe(
-            'other'
-          );
-        }
-      }
-    });
-  });
 });

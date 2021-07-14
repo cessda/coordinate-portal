@@ -112,7 +112,7 @@ export interface VocabAttributes {
  * 
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(searchResponse: SearchResponse<CMMStudy>): CMMStudy[] {
+export function getStudyModel(searchResponse: Pick<SearchResponse<CMMStudy>, 'hits'>): CMMStudy[] {
   return searchResponse.hits.hits.map(data => ({
     id: data._source.id,
     titleStudy: data._source.titleStudy,

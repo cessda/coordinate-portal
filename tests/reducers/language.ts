@@ -15,11 +15,13 @@ import { CHANGE_LANGUAGE, INIT_TRANSLATIONS } from "../../src/actions/language";
 import language from '../../src/reducers/language';
 import { getLanguages } from '../../src/utilities/language';
 import _ from 'lodash';
+import { RESET_SEARCH } from "../../src/actions/search";
 
 describe('Language reducer', () => {
   const languages = getLanguages();
 
   it('should return the initial state', () => {
+    //@ts-ignore
     expect(language(undefined, {})).toEqual({
       code: 'en',
       label: 'English',
@@ -28,11 +30,10 @@ describe('Language reducer', () => {
   });
 
   it('should handle INIT_TRANSLATIONS', () => {
-    const list = _.map(languages, function(language) {
-      return _.pick(language, ['code', 'label', 'index']);
-    });
+    const list = _.map(languages, (language) => _.pick(language, ['code', 'label', 'index']));
     expect(
       language(
+        //@ts-ignore
         {},
         {
           type: INIT_TRANSLATIONS,
@@ -47,6 +48,7 @@ describe('Language reducer', () => {
   it('should handle CHANGE_LANGUAGE', () => {
     expect(
       language(
+        //@ts-ignore
         {},
         {
           type: CHANGE_LANGUAGE,
@@ -60,8 +62,10 @@ describe('Language reducer', () => {
 
   it('should handle unknown action type', () => {
     const state = {
-      code: 'en'
+      code: 'en',
+      label: 'English',
+      list: []
     };
-    expect(language(state, {})).toEqual(state);
+    expect(language(state, {type: RESET_SEARCH})).toEqual(state);
   });
 });

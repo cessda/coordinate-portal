@@ -16,7 +16,7 @@ import { detailQuery, pidQuery, queryBuilder, similarQuery } from '../../src/uti
 describe('Searchkit utilities', () => {
   describe('queryBuilder()', () => {
     it('should return a Searchkit query object', () => {
-      expect(queryBuilder('search text', {})).toEqual({
+      expect(queryBuilder('search text')).toEqual({
         simple_query_string: {
           query: 'search text',
           default_operator: 'AND',
@@ -35,11 +35,11 @@ describe('Searchkit utilities', () => {
 
   describe('detailQuery()', () => {
     it('should return a Searchkit query used to retrieve a single study', () => {
-      expect(detailQuery(1)).toEqual({
+      expect(detailQuery("1")).toEqual({
         bool: {
           must: {
             match: {
-              id: 1
+              id: "1"
             }
           }
         }

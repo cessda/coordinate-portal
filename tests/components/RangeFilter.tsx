@@ -11,14 +11,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
 import React from 'react';
-import { AboutPage } from '../../src/containers/AboutPage';
+import { shallow } from 'enzyme';
+import RangeFilter from '../../src/components/RangeFilter';
+import searchkit from '../../src/utilities/searchkit';
 
-describe("AboutPage container", () => {
-  it("Should render", () => {
-    const enzymeWrapper = shallow(<AboutPage/>);
-    const searchPage = enzymeWrapper.find('SearchkitProvider');
-    expect(searchPage).toExist();
+// Mock props and shallow render component for test.
+function setup() {
+  const props = {
+    searchkit: searchkit,
+    id: 'id',
+    field: 'field',
+    min: 0,
+    max: 100,
+    title: 'title'
+  };
+  const enzymeWrapper = shallow(<RangeFilter {...props} />);
+  return {
+    props,
+    enzymeWrapper
+  };
+}
+
+describe('RangeFilter component', () => {
+  it('should render', () => {
+    const { enzymeWrapper } = setup();
+    expect(enzymeWrapper.exists()).toBe(true);
   });
 });

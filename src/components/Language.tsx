@@ -60,7 +60,7 @@ export class Language extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State) => {
+export const mapStateToProps = (state: Pick<State, "language">) => {
   return {
     code: state.language.code,
     list: state.language.list
