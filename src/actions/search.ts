@@ -27,7 +27,8 @@ function elasticsearchClient() {
       port: window.location.port ||
         (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
       path: '/api/sk'
-    }
+    },
+    requestTimeout: Infinity
   });
 }
 

@@ -91,6 +91,8 @@ export const uniqueAggregation = () => {
 };
 
 // Define a single searchkit manager instance to power the application.
-const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
+const searchkit: SearchkitManager = new SearchkitManager('/api/sk', {
+  timeout: Infinity
+});
 
 export default searchkit;
