@@ -93,7 +93,7 @@ export const uniqueAggregation = () => {
 // Define a single searchkit manager instance to power the application.
 const searchkit: SearchkitManager = new SearchkitManager('/api/sk', {
   // Avoid timing out searches on slow connections.
-  timeout: Infinity
+  timeout: 2147483647 // Largest supported timeout.
 });
 
 export default searchkit;

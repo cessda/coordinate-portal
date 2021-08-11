@@ -29,7 +29,7 @@ function elasticsearchClient() {
       path: '/api/sk'
     },
     // Avoid timing out searches on slow connections.
-    requestTimeout: Infinity
+    requestTimeout: 2147483647 // Largest supported timeout.
   });
 }
 
