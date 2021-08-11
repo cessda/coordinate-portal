@@ -28,6 +28,7 @@ function elasticsearchClient() {
         (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
       path: '/api/sk'
     },
+    // Avoid timing out searches on slow connections.
     requestTimeout: Infinity
   });
 }
