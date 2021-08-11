@@ -128,6 +128,7 @@ helper.getSearchkitRouter = () => {
       logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
     }).on('error', (response) => {
       logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
+      res.sendStatus(502);
     }).pipe(res);
   });
 
@@ -159,6 +160,10 @@ helper.jsonProxy = () => {
         }
       }
       return proxyReqOpts;
+    },
+    proxyErrorHandler: (err, res, next) => {
+      logger.error('Elasticsearch Request failed: %s', err?.message);
+      res.sendStatus(502);
     },
     userResDecorator: (_proxyRes, proxyResData) => {
       const json = JSON.parse(proxyResData.toString('utf8'));
