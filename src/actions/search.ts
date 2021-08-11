@@ -27,7 +27,9 @@ function elasticsearchClient() {
       port: window.location.port ||
         (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
       path: '/api/sk'
-    }
+    },
+    // Avoid timing out searches on slow connections.
+    requestTimeout: 2147483647 // Largest supported timeout.
   });
 }
 
