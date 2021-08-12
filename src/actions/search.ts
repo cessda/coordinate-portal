@@ -16,7 +16,7 @@ import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Dispatch, GetState, State, Thunk } from "../types";
 import { CMMStudy } from "../utilities/metadata";
-import { getPaq } from "..";
+import getPaq from "../utilities/getPaq";
 
 // Get a new Elasticsearch Client
 function elasticsearchClient() {
