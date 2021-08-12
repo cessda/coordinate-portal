@@ -30,6 +30,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { detect } from "detect-browser";
 import "./styles/design.scss";
 import { Store } from "./types";
+import getPaq from "./utilities/getPaq";
 
 // Initialise Matomo Analytics.
 const _paq = getPaq();
@@ -99,15 +100,4 @@ if (root instanceof HTMLElement) {
   );
 }
 
-export function getPaq(): any[][] {
-
-  //@ts-ignore
-  if (!window["_paq"]) {
-    //@ts-ignore
-    window["_paq"] = [];
-  }
-
-  //@ts-ignore
-  return window["_paq"];
-}
 
