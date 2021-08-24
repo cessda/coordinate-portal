@@ -16,7 +16,7 @@ import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
 import { Dispatch, GetState, Thunk } from "../types";
 import moment from "moment";
-import { getLanguages, Language } from "../utilities/language";
+import { languages, Language } from "../utilities/language";
 import { getPaq } from "..";
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
@@ -24,14 +24,13 @@ export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";
 
 export type InitTranslationsAction = {
   type: typeof INIT_TRANSLATIONS;
-  languages: Language[];
+  languages: readonly Language[];
 };
 
 export function initTranslations(): Thunk {
   return (dispatch: Dispatch, getState: GetState): void => {
 
     const state = getState();
-    const languages = getLanguages();
 
     languages.forEach(language => {
       // Register translations from the respective JSON files
@@ -96,7 +95,6 @@ export type ChangeLanguageAction = {
 
 export function changeLanguage(code: string): Thunk {
   return (dispatch: Dispatch): void => {
-    const languages = getLanguages();
     code = code.toLowerCase();
 
     const language = languages.find(element => element.code === code);
