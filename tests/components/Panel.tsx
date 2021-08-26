@@ -14,11 +14,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { mapDispatchToProps, mapStateToProps, Panel } from '../../src/components/Panel';
+import { mapDispatchToProps, mapStateToProps, Panel, Props } from '../../src/components/Panel';
 
 // Mock props and shallow render component for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>) {
+  const props = _.extend(
     {
       tooltip: {},
       defaultCollapsed: false,
@@ -26,7 +26,7 @@ function setup(props) {
       expandMetadataPanels: false,
       toggleMetadataPanels: jest.fn()
     },
-    props || {}
+    partialProps || {}
   );
 
   // Mock toggleMetadataPanels() to update expanded state.
@@ -34,7 +34,7 @@ function setup(props) {
     props.expandMetadataPanels = !props.expandMetadataPanels;
   });
 
-  const enzymeWrapper = shallow(<Panel {...props} />);
+  const enzymeWrapper = shallow<Panel>(<Panel {...props} />);
   return {
     props,
     enzymeWrapper
@@ -96,6 +96,7 @@ describe('Panel component', () => {
     const { props } = setup();
     expect(
       mapStateToProps({
+        //@ts-expect-error
         search: {
           expandMetadataPanels: props.expandMetadataPanels
         }
@@ -106,7 +107,7 @@ describe('Panel component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(i => i)).toEqual({
       toggleMetadataPanels: expect.any(Function)
     });
   });

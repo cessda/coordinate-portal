@@ -11,28 +11,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
+import _, { identity } from 'lodash';
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import {
   Detail,
   mapDispatchToProps,
-  mapStateToProps
+  mapStateToProps,
+  Props
 } from '../../src/components/Detail';
+import { CMMStudy } from '../../src/utilities/metadata';
 
 // Mock props and shallow render component for test.
-function setup(item) {
+function setup(item?: Partial<CMMStudy>) {
   const props = {
-    bemBlocks: jest.fn(),
     index: 0,
-    item:
-      item === false
-        ? undefined
-        : _.extend(
+    item: _.extend(
             {
-              id: 1,
+              id: "1",
               titleStudy: 'Study Title',
+              titleStudyHighlight: '',
               abstract: 'Abstract',
+              abstractHighlight: '',
+              abstractHighlightShort: '',
               abstractExpanded: false,
               abstractShort: 'Abstract',
               classifications: [
@@ -43,6 +44,7 @@ function setup(item) {
                   vocabUri: 'http://example.com'
                 }
               ],
+              code: 'UKDS',
               creators: [
                 'Jane Doe',
                 'University of Essex',
@@ -71,12 +73,16 @@ function setup(item) {
                 }
               ],
               publicationYear: '2001-01-01',
-              publisher: 'UK Data Service',
+              publisher: {
+                abbr: 'UKDS',
+                publisher: 'UK Data Service'
+              },
               samplingProcedureFreeTexts: [],
               studyAreaCountries: [
                 {
                   abbr: 'EN',
-                  country: 'England'
+                  country: 'England',
+                  searchField: 'England'
                 }
               ],
               studyNumber: 'UKDS1234',
@@ -97,6 +103,7 @@ function setup(item) {
                   vocabUri: 'http://example.com'
                 }
               ],
+              typeOfSamplingProcedures: [],
               unitTypes: [
                 {
                   id: 'UKDS1234',
@@ -104,7 +111,8 @@ function setup(item) {
                   vocab: 'Vocab',
                   vocabUri: 'http://example.com'
                 }
-              ]
+              ],
+              studyXmlSourceUrl: ''
             },
             item || {}
           ),
@@ -132,7 +140,8 @@ describe('Detail component', () => {
   });
 
   it('should not render with undefined item', () => {
-    const { enzymeWrapper } = setup(false);
+    //@ts-expect-error
+    const enzymeWrapper =  shallow(<Detail item={undefined} />);
     const detail = enzymeWrapper.find('article.w-100');
     expect(detail.exists()).toBe(false);
   });
@@ -148,7 +157,8 @@ describe('Detail component', () => {
   it('should handle a pidStudy with no agency', () => {
     const { enzymeWrapper } = setup({
       pidStudies: [{
-        pid: "TestPid"
+        pid: "TestPid",
+        agency: "TestAgency"
       }]
     });
     const detail = enzymeWrapper.find('article.w-100');
@@ -180,24 +190,22 @@ describe('Detail component', () => {
   });
 
   it('should handle generating elements with no value', () => {
-    const { enzymeWrapper } = setup();
+    // "" is a falsy value, so should be dropped.
     expect(
-      shallow(enzymeWrapper.instance().generateElements([""])[0]).html()
+      mount(<>{Detail.generateElements([""], "p", e => e)}</>).html()
     ).toContain('notAvailable');
   });
 
   it('should handle formatting dates with missing data', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(enzymeWrapper.instance().formatDate('DD/MM/YYYY')).html()
+      mount(<>{Detail.formatDate('DD/MM/YYYY')}</>).html()
     ).toContain('notAvailable');
   });
 
   it('should handle special case where array items are a start/end date range', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(
-        enzymeWrapper.instance().formatDate(
+      mount(<>{
+        Detail.formatDate(
           'DD/MM/YYYY',
           undefined,
           undefined,
@@ -211,7 +219,7 @@ describe('Detail component', () => {
               event: 'end'
             }
           ]
-        )
+        )}</>
       )
         .find('p')
         .text()
@@ -219,71 +227,57 @@ describe('Detail component', () => {
   });
 
   it('should handle formatting dates with fallback array containing date range', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(
-        enzymeWrapper.instance().formatDate(
+      mount(<>{
+        Detail.formatDate(
           'DD/MM/YYYY',
           undefined,
           undefined,
           [
             {
-              dataCollectionFreeText: '2003-02-01'
+              dataCollectionFreeText: '2003-02-01',
+              event: ''
             },
             {
-              dataCollectionFreeText: '2006-05-04'
+              dataCollectionFreeText: '2006-05-04',
+              event: ''
             }
           ]
-        )[0]
+        )}</>
       )
         .find('div')
+        .first()
         .text()
     ).toBe('01/02/2003');
   });
 
   it('should handle formatting dates with invalid first date', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(enzymeWrapper.instance().formatDate('DD/MM/YYYY', 'Not a date'))
+      mount(<>{Detail.formatDate('DD/MM/YYYY', 'Not a date')}</>)
         .find('p')
         .text()
     ).toBe('Not a date');
   });
 
   it('should handle formatting dates as a range with invalid first date', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(
-        enzymeWrapper
-          .instance()
-          .formatDate('DD/MM/YYYY', 'Not a date', '2006-05-04')
-      )
+      mount(<>{Detail.formatDate('DD/MM/YYYY', 'Not a date', '2006-05-04')}</>)
         .find('p')
         .text()
     ).toBe('Not a date - 04/05/2006');
   });
 
   it('should handle formatting dates as a range with valid second date', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(
-        enzymeWrapper
-          .instance()
-          .formatDate('DD/MM/YYYY', '2003-02-01', '2006-05-04')
-      )
+      mount(<>{Detail.formatDate('DD/MM/YYYY', '2003-02-01', '2006-05-04')}</>)
         .find('p')
         .text()
     ).toBe('01/02/2003 - 04/05/2006');
   });
 
   it('should handle formatting dates as a range with invalid second date', () => {
-    const { enzymeWrapper } = setup();
     expect(
-      shallow(
-        enzymeWrapper
-          .instance()
-          .formatDate('DD/MM/YYYY', '2003-02-01', 'Not a date')
-      )
+      mount(<>{Detail.formatDate('DD/MM/YYYY', '2003-02-01', 'Not a date')}</>)
         .find('p')
         .text()
     ).toBe('01/02/2003 - Not a date');
@@ -311,6 +305,7 @@ describe('Detail component', () => {
     expect(
       mapStateToProps(
         {
+          //@ts-expect-error
           search: {
             displayed: [props.item],
             expandMetadataPanels: props.expandMetadataPanels
@@ -325,7 +320,7 @@ describe('Detail component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(a => a)).toEqual({
       toggleMetadataPanels: expect.any(Function)
     });
   });

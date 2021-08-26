@@ -31,7 +31,7 @@ import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../utilities/metadata';
 import { Dataset, WithContext } from 'schema-dts';
 
-type Props = {
+export interface Props {
   loading: boolean;
   item: CMMStudy | undefined;
   jsonLd: WithContext<Dataset> | undefined;

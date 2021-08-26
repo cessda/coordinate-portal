@@ -39,7 +39,7 @@ import {
   UPDATE_SIMILARS,
   UPDATE_STATE
 } from '../../src/actions/search';
-import { getLanguages } from '../../src/utilities/language';
+import { languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { Client } from 'elasticsearch';
 
@@ -51,7 +51,6 @@ jest.mock('elasticsearch', () => ({
 }));
 
 describe('Search actions', () => {
-  const languages = getLanguages();
 
   beforeEach(() => {
     // Reset environment variables.
@@ -201,8 +200,7 @@ describe('Search actions', () => {
             },
             timed_out: false,
             took: 1
-          },
-          language: 'en'
+          }
         },
         {
           type: TOGGLE_LOADING,
@@ -301,8 +299,7 @@ describe('Search actions', () => {
             },
             timed_out: false,
             took: 1
-          },
-          language: 'en'
+          }
         },
         {
           type: TOGGLE_LOADING,
@@ -469,8 +466,7 @@ describe('Search actions', () => {
             {
               id: '1'
             }
-          ],
-          language: 'en'
+          ]
         }
       ]);
     });

@@ -14,11 +14,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { DetailPage, mapDispatchToProps, mapStateToProps } from '../../src/containers/DetailPage';
+import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../src/containers/DetailPage';
 
 // Mock props and shallow render container for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>) {
+  const props = _.extend(
     {
       loading: false,
       item: {
@@ -37,7 +37,7 @@ function setup(props) {
       query: {},
       goBack: jest.fn()
     },
-    props || {}
+    partialProps || {}
   );
   const enzymeWrapper = shallow(<DetailPage {...props} />);
   return {
@@ -77,14 +77,17 @@ describe('DetailPage container', () => {
     expect(
       mapStateToProps({
         routing: {
+          //@ts-expect-error
           locationBeforeTransitions: {
             query: props.query
           }
         },
         language: {
           code: props.code,
+          label: "English",
           list: props.list
         },
+        //@ts-expect-error
         search: {
           loading: props.loading,
           displayed: [props.item],
@@ -106,14 +109,17 @@ describe('DetailPage container', () => {
     expect(
       mapStateToProps({
         routing: {
+          //@ts-expect-error
           locationBeforeTransitions: {
             query: props.query
           }
         },
         language: {
           code: props.code,
+          label: "English",
           list: props.list
         },
+        //@ts-expect-error
         search: {
           loading: props.loading,
           displayed: [],
@@ -131,7 +137,7 @@ describe('DetailPage container', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(i => i)).toEqual({
       goBack: expect.any(Function)
     });
   });

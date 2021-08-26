@@ -20,7 +20,7 @@ import {push} from 'react-router-redux';
 import Translate from 'react-translate-component';
 import { CMMStudy } from '../utilities/metadata';
 
-type Props = {
+export interface Props {
   item: CMMStudy;
   similars: {
     id: string;

@@ -15,40 +15,30 @@ import { INIT_SEARCHKIT } from '../../src/actions/search';
 import search from '../../src/reducers/search';
 import { queryBuilder } from '../../src/utilities/searchkit';
 
+const initialState = search(undefined, { type: INIT_SEARCHKIT });
+
 describe('Search reducer', () => {
   it('should return the initial state', () => {
-    expect(search(undefined, { type: INIT_SEARCHKIT })).toEqual({
-      loading: true,
-      showMobileFilters: false,
-      showAdvancedSearch: false,
-      showFilterSummary: false,
-      expandMetadataPanels: false,
-      displayed: [],
-      query: Object,
-      state: Object,
-      similars: [],
-      state: {
-        q: ""
-      },
-      totalStudies: 0
-    });
+    // @ts-expect-error
+    expect(search(undefined, { type: undefined })).toEqual(initialState);
   });
 
   it('should handle INIT_SEARCHKIT', () => {
     expect(
       search(
-        {},
+        initialState,
         {
           type: 'INIT_SEARCHKIT'
         }
       )
-    ).toEqual({});
+    ).toEqual(initialState);
   });
 
   it('should handle TOGGLE_LOADING', () => {
     expect(
       search(
         {
+          ...initialState,
           loading: false
         },
         {
@@ -57,6 +47,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       loading: true
     });
   });
@@ -65,6 +56,7 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           showMobileFilters: false
         },
         {
@@ -72,6 +64,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       showMobileFilters: true
     });
   });
@@ -80,6 +73,7 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           showAdvancedSearch: false
         },
         {
@@ -87,6 +81,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       showAdvancedSearch: true
     });
   });
@@ -95,6 +90,7 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           showFilterSummary: false
         },
         {
@@ -102,6 +98,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       showFilterSummary: true
     });
   });
@@ -110,6 +107,7 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           expandMetadataPanels: false
         },
         {
@@ -117,6 +115,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       expandMetadataPanels: true
     });
   });
@@ -125,7 +124,9 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           displayed: [
+            // @ts-expect-error - Incomplete CMMStudy
             {
               abstractExpanded: false
             }
@@ -137,6 +138,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       displayed: [
         {
           abstractExpanded: true
@@ -148,29 +150,33 @@ describe('Search reducer', () => {
   it('should handle UPDATE_DISPLAYED', () => {
     expect(
       search(
-        {},
+        initialState,
         {
           type: 'UPDATE_DISPLAYED',
           displayed: {
             hits: {
-              hits: []
+              hits: [],
+              total: 0,
+              max_score: 0
             }
           }
         }
       )
     ).toEqual({
+      ...initialState,
       displayed: [],
       jsonLd: undefined
     });
 
     expect(
       search(
-        {},
+        initialState,
         {
           type: 'UPDATE_DISPLAYED',
           displayed: {
             hits: {
               hits: [{
+                //@ts-expect-error
                 _source: {}
               }]
             }
@@ -178,6 +184,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       displayed: [
         {
           id: undefined,
@@ -236,18 +243,29 @@ describe('Search reducer', () => {
 
     expect(
       search(
-        {},
+        initialState,
         {
           type: 'UPDATE_DISPLAYED',
           displayed: {
             hits: {
+              total: 1,
+              max_score: 1,
               hits: [
                 {
+                  _id: "1",
+                  _index: "cmmstudy_en",
+                  _type: "cmmstudy",
+                  _score: 1,
                   _source: {
                     id: "1",
                     titleStudy: 'Study Title',
                     studyNumber: 'UKDS1234',
                     abstract: 'Abstract',
+                    abstractExpanded: false,
+                    abstractShort: '',
+                    abstractHighlight: '',
+                    abstractHighlightShort: '',
+                    code: 'UKDS',
                     classifications: [
                       {
                         vocab: 'Vocab',
@@ -316,9 +334,14 @@ describe('Search reducer', () => {
                     dataCollectionPeriodStartdate: '2001',
                     dataCollectionYear: 2001,
                     dataAccessFreeTexts: ['Data Access Free Texts'],
+                    dataCollectionFreeTexts: [],
                     lastModified: '2001-01-01T12:00:00Z',
                     langAvailableIn: ['en'],
-                    studyUrl: 'http://example.com'
+                    samplingProcedureFreeTexts: [],
+                    studyUrl: 'http://example.com',
+                    studyXmlSourceUrl: 'http://example.com/study',
+                    titleStudyHighlight: '',
+                    typeOfSamplingProcedures: []
                   }
                 }
               ]
@@ -327,6 +350,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       displayed: [
         {
           id: '1',
@@ -345,7 +369,7 @@ describe('Search reducer', () => {
               vocabUri: 'http://example.com'
             }
           ],
-          code: undefined,
+          code: "UKDS",
           creators: [
             'Jane Doe',
             'University of Essex',
@@ -389,7 +413,7 @@ describe('Search reducer', () => {
           ],
           studyNumber: 'UKDS1234',
           studyUrl: 'http://example.com',
-          studyXmlSourceUrl: undefined,
+          studyXmlSourceUrl: "http://example.com/study",
           typeOfModeOfCollections: [
             {
               id: 'UKDS1234',
@@ -468,7 +492,7 @@ describe('Search reducer', () => {
     const query = {
       query: {
         bool: {
-          must: [queryBuilder('search text', {})]
+          must: [queryBuilder('search text')]
         }
       }
     };
@@ -476,6 +500,7 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           query: {}
         },
         {
@@ -484,6 +509,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       query: query
     });
   });
@@ -497,7 +523,8 @@ describe('Search reducer', () => {
     expect(
       search(
         {
-          state: {}
+          ...initialState,
+          state: { q: '' }
         },
         {
           type: 'UPDATE_STATE',
@@ -505,6 +532,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       state: state
     });
   });
@@ -513,23 +541,28 @@ describe('Search reducer', () => {
     expect(
       search(
         {
+          ...initialState,
           similars: []
         },
         {
           type: 'UPDATE_SIMILARS',
           similars: [
+            //@ts-expect-error
             {
               id: '1',
               titleStudy: 'Study Title 1'
             },
+            //@ts-expect-error
             {
               id: '2',
               titleStudy: 'Study Title 2'
             },
+            //@ts-expect-error
             {
               id: '3',
               titleStudy: 'Study Title 3'
             },
+            //@ts-expect-error
             {
               id: '4',
               titleStudy: 'Study Title 4'
@@ -538,6 +571,7 @@ describe('Search reducer', () => {
         }
       )
     ).toEqual({
+      ...initialState,
       similars: [
         {
           id: '1',
@@ -560,17 +594,7 @@ describe('Search reducer', () => {
   });
 
   it('should handle RESET_SEARCH', () => {
-    const state = {
-      loading: true,
-      showMobileFilters: false,
-      showAdvancedSearch: false,
-      showFilterSummary: false,
-      expandMetadataPanels: false,
-      totalStudies: 0,
-      displayed: [],
-      query: Object,
-      state: Object
-    };
+    const state = initialState;
     expect(
       search(state, {
         type: 'RESET_SEARCH'
@@ -579,17 +603,8 @@ describe('Search reducer', () => {
   });
 
   it('should handle unknown action type', () => {
-    const state = {
-      loading: true,
-      showMobileFilters: false,
-      showAdvancedSearch: false,
-      showFilterSummary: false,
-      expandMetadataPanels: false,
-      totalStudies: 0,
-      displayed: [],
-      query: Object,
-      state: Object
-    };
+    const state = initialState;
+    //@ts-expect-error
     expect(search(state, {})).toEqual(state);
   });
 });

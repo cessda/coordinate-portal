@@ -11,12 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { getLanguages } from '../../src/utilities/language';
+import { languages } from '../../src/utilities/language';
 
 describe('Language utilities', () => {
   describe('getLanguages()', () => {
     it('should return a list of languages', () => {
-      expect(getLanguages()).toEqual(
+      expect(languages).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             code: expect.any(String),

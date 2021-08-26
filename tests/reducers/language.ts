@@ -13,12 +13,11 @@
 
 import { CHANGE_LANGUAGE, INIT_TRANSLATIONS } from "../../src/actions/language";
 import language from '../../src/reducers/language';
-import { getLanguages } from '../../src/utilities/language';
+import { languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { RESET_SEARCH } from "../../src/actions/search";
 
 describe('Language reducer', () => {
-  const languages = getLanguages();
 
   it('should return the initial state', () => {
     //@ts-ignore

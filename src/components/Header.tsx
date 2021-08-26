@@ -33,7 +33,7 @@ import {
 } from "../actions/search";
 import Translate from "react-translate-component";
 
-interface Props {
+export interface Props {
   pathname: string;
   code: string;
   filters: any;
