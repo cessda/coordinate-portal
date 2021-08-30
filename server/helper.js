@@ -127,7 +127,9 @@ helper.getSearchkitRouter = () => {
     }).on('response', (response) => {
       logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
     }).on('error', (response) => {
+      // When a connection error occurs send a 502 error to the client.
       logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
+      res.sendStatus(502);
     }).pipe(res);
   });
 
@@ -159,6 +161,11 @@ helper.jsonProxy = () => {
         }
       }
       return proxyReqOpts;
+    },
+    // Handle connection errors to Elasticsearch.
+    proxyErrorHandler: (err, res, next) => {
+      logger.error('Elasticsearch Request failed: %s', err?.message);
+      res.sendStatus(502);
     },
     userResDecorator: (_proxyRes, proxyResData) => {
       const json = JSON.parse(proxyResData.toString('utf8'));
