@@ -60,7 +60,7 @@
     "@types/jquery": "3.5.5",
     "@types/mini-css-extract-plugin": "1.2.2",
     "@types/prop-types": "15.7.3",
-    "@types/react-dom": "15.5.12",
+    "@types/react-dom": "16.9.14",
     "@types/react-icons": "2.2.7",
     "@types/react-redux": "5.0.21",
     "@types/react-router": "3.0.24",

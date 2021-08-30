@@ -22,7 +22,7 @@ import { AnyAction, bindActionCreators } from 'redux';
 import { toggleMetadataPanels, ToggleMetadataPanelsAction } from '../actions/search';
 
 // @ts-ignore
-interface Props extends PanelProps {
+export interface Props extends PanelProps {
   title? : JSX.Element | string;
   tooltip?: JSX.Element | string;
   linkCollapsedState?: boolean;

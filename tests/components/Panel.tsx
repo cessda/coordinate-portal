@@ -34,6 +34,7 @@ function setup(partialProps?: Partial<Props>) {
     props.expandMetadataPanels = !props.expandMetadataPanels;
   });
 
+  // @ts-expect-error
   const enzymeWrapper = shallow<Panel>(<Panel {...props} />);
   return {
     props,
