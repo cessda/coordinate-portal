@@ -14,6 +14,7 @@
 import {CMMStudy, getJsonLd, getStudyModel} from '../utilities/metadata';
 import type {Action} from '../actions';
 import _ from 'lodash';
+import { Dataset, WithContext } from 'schema-dts';
 import { 
   INIT_SEARCHKIT, 
   RESET_SEARCH, 
@@ -31,16 +32,15 @@ import {
   UPDATE_TOTAL_STUDIES 
 } from '../actions/search';
 
-export type SearchState = {
+
+export interface SearchState {
   loading: boolean;
   showMobileFilters: boolean;
   showAdvancedSearch: boolean;
   showFilterSummary: boolean;
   expandMetadataPanels: boolean;
   displayed: CMMStudy[];
-  jsonLd?: {
-    [key: string]: any;
-  } | null;
+  jsonLd?: WithContext<Dataset>;
   similars: {
     id: string;
     title: string;
@@ -63,7 +63,7 @@ const initialState: SearchState = {
   totalStudies: 0
 };
 
-const search = (state: SearchState = initialState, action: Action): SearchState => {
+export default function search(state: SearchState = initialState, action: Action): SearchState {
   switch (action.type) {
     case INIT_SEARCHKIT:
       return state;
@@ -123,22 +123,14 @@ const search = (state: SearchState = initialState, action: Action): SearchState 
       });
 
     case UPDATE_SIMILARS: {
-      let similars: {
-        id: string;
-        title: string;
-      }[] = [];
+      const similars: SearchState['similars'] = [];
 
-      for (let i: number = 0; i < action.similars.length; i++) {
-        if (!action.similars[i]) {
-          continue;
-        }
+      // Select the first 4 studies only
+      for (let i: number = 0; i < Math.min(action.similars.length, 4); i++) {
         similars.push({
           id: action.similars[i].id,
           title: action.similars[i].titleStudy
         });
-        if (i > 3) {
-          break;
-        }
       }
 
       return Object.assign({}, state, {
@@ -157,6 +149,4 @@ const search = (state: SearchState = initialState, action: Action): SearchState 
     default:
       return state;
   }
-};
-
-export default search;
+}

@@ -19,6 +19,7 @@ export const queryBuilder = (query: string) => {
     simple_query_string: {
       query: query,
       lenient: true,
+      default_operator: "AND",
 
       // Can limit to searching specific fields if required. Weightings can also be added.
       fields: [
@@ -90,6 +91,9 @@ export const uniqueAggregation = () => {
 };
 
 // Define a single searchkit manager instance to power the application.
-const searchkit: SearchkitManager = new SearchkitManager('/api/sk');
+const searchkit: SearchkitManager = new SearchkitManager('/api/sk', {
+  // Avoid timing out searches on slow connections.
+  timeout: 2147483647 // Largest supported timeout.
+});
 
 export default searchkit;

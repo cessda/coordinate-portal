@@ -67,8 +67,9 @@ export class SearchPage extends Component<Props> {
     };
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l" className={showMobileFilters ? 'show-mobile-filters' : ''}>
+        <Layout className={showMobileFilters ? 'show-mobile-filters' : ''}>
           <Header/>
+          <div className="container">
           <LayoutBody className="columns">
             <SideBar className="column is-4">
               <RefinementListFilter id="classifications.term"
@@ -177,6 +178,7 @@ export class SearchPage extends Component<Props> {
                                    listComponent={Pagination}/>
             </LayoutResults>
           </LayoutBody>
+          </div>
           <Footer/>
         </Layout>
       </SearchkitProvider>

@@ -30,13 +30,18 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { detect } from "detect-browser";
 import "./styles/design.scss";
 import { Store } from "./types";
+import getPaq from "./utilities/getPaq";
 
 // Initialise Matomo Analytics.
 const _paq = getPaq();
-const url = 'https://analytics.cessda.eu/';
+const url = 'https://cessda.matomo.cloud/';
+const url2 = 'https://analytics.cessda.eu/';
+const siteId = '2';
+const siteId2 = '2';
 
 _paq.push(['setTrackerUrl', url + 'matomo.php']);
-_paq.push(['setSiteId', '2']);
+_paq.push(['setSiteId', siteId]);
+_paq.push(['addTracker', url2 + 'matomo.php', siteId2]);
 
 const element = document.createElement('script');
 const script = document.getElementsByTagName('script')[0];
@@ -63,7 +68,7 @@ history.listen(location => {
 
   // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
   _paq.push(['deleteCustomVariables', 'page']);
-  _paq.push(['setGenerationTimeMs', 0]);
+ // _paq.push(['setGenerationTimeMs', 0]);
   _paq.push(['trackPageView']);
 
   // Make Matomo aware of newly added content
@@ -95,15 +100,4 @@ if (root instanceof HTMLElement) {
   );
 }
 
-export function getPaq(): any[][] {
-
-  //@ts-ignore
-  if (!window["_paq"]) {
-    //@ts-ignore
-    window["_paq"] = [];
-  }
-
-  //@ts-ignore
-  return window["_paq"];
-}
 
