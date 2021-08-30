@@ -23,11 +23,8 @@ module.exports = {
   },
 
   // Setup Enzyme, this removes the need for imports in the tests
-  setupFilesAfterEnv: ["jest-enzyme"],
-  testEnvironment: "enzyme",
-  testEnvironmentOptions: {
-    enzymeAdapter: "react16"
-  },
+  setupFilesAfterEnv: ["<rootDir>setupTests.js"],
+  testEnvironment: "jsdom",
 
   testMatch: ['**/tests/**/*.js']
 };
