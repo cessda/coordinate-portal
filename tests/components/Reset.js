@@ -12,12 +12,9 @@
 // limitations under the License.
 
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import { shallow } from 'enzyme';
 import { mapStateToProps, Reset } from '../../src/components/Reset';
-import * as _ from 'lodash';
-
-Enzyme.configure({ adapter: new Adapter() });
+import _ from 'lodash';
 
 // Mock props and shallow render component for test.
 function setup(props) {

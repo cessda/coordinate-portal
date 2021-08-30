@@ -22,7 +22,7 @@ module.exports = {
     helper.checkBuildDirectory();
     helper.checkEnvironmentVariables(true);
 
-    let app = express();
+    const app = express();
 
     // Disable the x-powered-by HTTP header
     app.disable("x-powered-by");
@@ -34,11 +34,11 @@ module.exports = {
 
     app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/api/json', helper.jsonProxy);
+    app.use('/api/json', helper.jsonProxy());
 
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 
-    app.get('*', function (req, res) {
+    app.get('*', (_req, res) => {
       res.sendFile(path.join(path.join(__dirname, '../dist'), 'index.html'));
     });
 

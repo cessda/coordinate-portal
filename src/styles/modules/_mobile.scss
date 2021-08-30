@@ -4,16 +4,32 @@
 
 @media screen and (max-width: 1023px) {
 
+  .button.is-small {
+    font-size: 0.8rem;
+  }
+.blinks {
+
+font-size:14px;
+}
   @at-root header .language-picker {
     position: absolute;
     top: 1px;
-    right: 10px;
+    right: 1px;
 
   
     
 
   }
 
+body {
+  .search-wrapper {
+
+    }
+    .sk-reset-filters {
+      padding: 4px;
+      font-size:13px;
+    }
+  }
   header {
     background: #ffffff !important;
 
@@ -21,22 +37,9 @@
       display: none;
     }
 
-    .columns {
-      display: block !important;
 
-      .column {
-        padding-bottom: 0 !important;
-        min-height: auto !important;
-      }
-    }
+   
 
-    .cessda-organisation {
-      padding-left: 60px !important;
-    }
-
-    .logo {
-      margin: 50px auto 0 !important;
-    }
 
     .sk-hits-stats {
       margin: 0;
@@ -47,19 +50,14 @@
       }
     }
 
-    .sk-search-box, .search-wrapper {
-      margin: 0 auto;
-    }
+ 
 
     .reset-search {
       background-color: #2b5a9b;
-      margin: 10px -0.75rem;
-      padding: 5px;
-      text-align: center;
+    max-width:100%;
+    padding:6px 3px;
 
-      .sk-reset-filters {
-        margin: 5px;
-      }
+     
     }
   }
 }
@@ -74,7 +72,8 @@
   }
 
   .sk-search-box {
-    ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+
+       ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
       font-size: 13px;
     }
 

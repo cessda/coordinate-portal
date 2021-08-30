@@ -38,7 +38,7 @@ module.exports = {
 
     app.use(webpackMiddleware(compiler, {
       publicPath: config.output.publicPath,
-      contentBase: 'src',
+      index: 'src',
       stats: {
         colors: true,
         hash: false,
@@ -53,9 +53,9 @@ module.exports = {
 
     app.use('/api/sk', helper.getSearchkitRouter());
 
-    app.use('/api/json', helper.jsonProxy);
+    app.use('/api/json', helper.jsonProxy());
 
-    app.get('*', function (req, res) {
+    app.get('*', (_req, res) => {
       res.setHeader('Cache-Control', 'no-store');
       res.render('index');
     });

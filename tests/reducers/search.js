@@ -215,7 +215,7 @@ describe('Search reducer', () => {
         }
       ],
       jsonLd: {
-        '@context': 'http://schema.org/',
+        '@context': 'https://schema.org',
         '@type': 'Dataset',
         creator: [],
         dateModified: '',
@@ -418,7 +418,7 @@ describe('Search reducer', () => {
         }
       ],
       jsonLd: {
-        '@context': 'http://schema.org/',
+        '@context': 'https://schema.org',
         '@type': 'Dataset',
         creator: [
           {

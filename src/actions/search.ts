@@ -16,7 +16,7 @@ import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Dispatch, GetState, State, Thunk } from "../types";
 import { CMMStudy } from "../utilities/metadata";
-import { getPaq } from "..";
+import getPaq from "../utilities/getPaq";
 
 // Get a new Elasticsearch Client
 function elasticsearchClient() {
@@ -27,7 +27,9 @@ function elasticsearchClient() {
       port: window.location.port ||
         (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
       path: '/api/sk'
-    }
+    },
+    // Avoid timing out searches on slow connections.
+    requestTimeout: 2147483647 // Largest supported timeout.
   });
 }
 
@@ -60,11 +62,11 @@ export const initSearchkit = (): Thunk => {
 
           // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
           _paq.push(['deleteCustomVariables', 'page']);
-          _paq.push(['setGenerationTimeMs', 0]);
+      //    _paq.push(['setGenerationTimeMs', 0]);
           _paq.push(['trackPageView']);
 
           // Make Matomo aware of newly added content
-          let content = document.getElementById('root');
+          const content = document.getElementById('root');
           _paq.push(['MediaAnalytics::scanForMedia', content]);
           _paq.push(['FormAnalytics::scanForForms', content]);
           _paq.push(['trackContentImpressionsWithinNode', content]);
@@ -93,7 +95,7 @@ export const initSearchkit = (): Thunk => {
       }
 
       // Add the current language index to the query for Elasticsearch.
-      query.index = _.find(state.language.list, { 'code': state.language.code })?.index;
+      query.index = _.find(state.language.list, { code: state.language.code })?.index;
 
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));

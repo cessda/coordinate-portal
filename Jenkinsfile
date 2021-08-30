@@ -41,13 +41,13 @@ pipeline {
 		stage('Run Unit Tests') {
 			agent {
 				docker {
-					image 'node:12'
+					image 'node:14'
 					reuseNode true
 				}
 			}
 			steps {
 				sh "npm ci"
-				sh "npm test"
+				sh "npm test -- --forceExit"
 			}
 			post {
 				always {

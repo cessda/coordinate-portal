@@ -12,11 +12,8 @@
 // limitations under the License.
 
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import { shallow } from 'enzyme';
 import { Language, mapDispatchToProps, mapStateToProps } from '../../src/components/Language';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 // Mock props and shallow render component for test.
 function setup() {
@@ -53,12 +50,13 @@ describe('Language component', () => {
   it('should handle on change', () => {
     const { props, enzymeWrapper } = setup();
     expect(props.changeLanguage).not.toHaveBeenCalled();
-    enzymeWrapper.find('Select').simulate('change', {
-      target: {
-        value: props.list[1]
-      }
+
+    props.list.forEach(language => {
+      enzymeWrapper.find('Select').simulate('change', {
+        value: language
+      });
+      expect(props.changeLanguage).toHaveBeenCalledWith(language);
     });
-    expect(props.changeLanguage).toHaveBeenCalled();
   });
 
   it('should map state to props', () => {

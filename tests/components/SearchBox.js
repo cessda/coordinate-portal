@@ -11,10 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import { shallow } from 'enzyme';
 import { mapDispatchToProps, mapStateToProps, SearchBox } from '../../src/components/SearchBox';
 import searchkit from '../../src/utilities/searchkit';
 import { detect } from 'detect-browser';
@@ -23,8 +22,6 @@ import { detect } from 'detect-browser';
 jest.mock('detect-browser', () => ({
   detect: jest.fn()
 }));
-
-Enzyme.configure({ adapter: new Adapter() });
 
 // Mock props and shallow render component for test.
 function setup(props, browser) {
@@ -153,4 +150,9 @@ describe('SearchBox component', () => {
       push: expect.any(Function)
     });
   });
+
+  it('should construct without props', () => {
+    const enzymeWrapper = new SearchBox();
+    expect(enzymeWrapper.render()).toBeFalsy();
+  })
 });

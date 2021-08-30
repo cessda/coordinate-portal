@@ -16,120 +16,185 @@ const url = require('url');
 const _ = require('lodash');
 const proxy = require('express-http-proxy');
 const express = require('express');
-const debug = require('debug')('SearchkitExpress');
 const request = require('request');
 const helper = {};
+const winston = require('winston');
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
+const elasticsearchUsername = process.env.SEARCHKIT_ELASTICSEARCH_USERNAME;
+const elasticsearchPassword = process.env.SEARCHKIT_ELASTICSEARCH_PASSWORD;
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
+const logLevel = process.env.SEARCHKIT_LOG_LEVEL || 'info';
+const loggerFormat = (() => {
+  if (process.env.SEARCHKIT_USE_JSON_LOGGING === 'true') {
+    return winston.format.json();
+  } else {
+    return winston.format.printf(
+      ({ level, message, timestamp }) => `[${timestamp}][${level}] ${message}`
+    );
+  }
+});
 
-helper.checkBuildDirectory = function () {
+// Logger
+const logger = winston.createLogger({
+  level: logLevel,
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.splat(),
+    loggerFormat()
+  ),
+  transports: [
+    new winston.transports.Console()
+  ],
+  exceptionHandlers: [
+    new winston.transports.Console()
+  ],
+  rejectionHandlers: [
+    new winston.transports.Console()
+  ]
+});
+
+helper.checkBuildDirectory = () => {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
-    console.error('ERROR : Unable to start Data Catalogue application.');
-    console.error('        Missing \'/dist\' directory as application has not been built.');
-    console.error('        Run command \'npm run build\' and try again.');
+    logger.error(
+      'Production startup failed as the application has not been built. ' +
+      'Run command \'npm run build\' and try again.'
+    );
     process.exit(16);
   }
 };
 
-helper.checkEnvironmentVariables = function (production) {
+helper.checkEnvironmentVariables = (production) => {
   if (_.isEmpty(elasticsearchUrl)) {
-    console.error('ERROR : Unable to start Data Catalogue application.');
-    console.error('        Missing environment variable PASC_ELASTICSEARCH_URL.');
+    logger.error(
+      'Unable to start Data Catalogue application. Missing environment variable PASC_ELASTICSEARCH_URL.'
+    );
     process.exit(17);
   } else {
-    console.log('NOTICE : Using Elasticsearch instance at ' + elasticsearchUrl);
+    logger.info('Using Elasticsearch instance at %s', elasticsearchUrl);
   }
 
   if (production) {
     if (debugEnabled) {
-      console.warn('WARNING : Debug mode is enabled. Disable for production use.');
+      logger.warn('Debug mode is enabled. Disable for production use.');
     }
-
     if (process.env.NODE_ENV !== 'production') {
-      console.warn('WARNING : Node environment is not set to production.');
+      logger.warn('Node environment is not set to production.');
     }
   } else {
     if (debugEnabled) {
-      console.log('NOTICE : Debug mode is enabled.');
+      logger.info('Debug mode is enabled.');
     }
   }
 };
 
-helper.getSearchkitRouter = function () {
+helper.getSearchkitRouter = () => {
   const router = express.Router();
-  const config = {
-    host: _.trimEnd(elasticsearchUrl, '/'),
-    queryProcessor: (query) => query
-  };
+  const host = _.trimEnd(elasticsearchUrl, '/');
+
   const requestClient = request.defaults({ pool: { maxSockets: 500 } });
 
-  const elasticRequest = function (url, body) {
-    let fullUrl = config.host + '/' + (body.index || 'cmmstudy_en') + '/cmmstudy' + url;
-    debug('Start Elastic Request', fullUrl);
-    if (_.isObject(body)) {
-      debug('Request body', body);
-    }
-    delete body.index;
-    return requestClient.post({
-      url: fullUrl,
-      body: body,
-      json: _.isObject(body),
-      forever: true
-    }).on('response', function (response) {
-      debug('Finished Elastic Request', fullUrl, response.statusCode);
-    }).on('error', function (response) {
-      debug('Error Elastic Request', fullUrl, response.statusCode);
-    });
-  };
+  // Configure authentication
+  let authentication = undefined;
+  if (elasticsearchUsername && elasticsearchPassword) {
+    logger.info('Elasticsearch authentication configured');
+    authentication = {
+      username: elasticsearchUsername,
+      password: elasticsearchPassword,
+      sendImmediately: true
+    };
+  }
 
-  router.post('/_search', function (req, res) {
+  router.post('/_search', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
-    let queryBody = config.queryProcessor(req.body || {});
-    elasticRequest(req.url, queryBody).pipe(res);
+
+    const fullUrl = host + '/' + (req.body.index || 'cmmstudy_en') + '/cmmstudy' + req.url;
+    logger.debug('Start Elasticsearch Request: %s', fullUrl);
+
+    if (_.isObject(req.body)) {
+      logger.debug('Request body', { body: req.body });
+    }
+
+    delete req.body.index;
+
+    requestClient.post({
+      url: fullUrl,
+      body: req.body,
+      json: _.isObject(req.body),
+      forever: true,
+      auth: authentication
+    }).on('response', (response) => {
+      logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
+    }).on('error', (response) => {
+      // When a connection error occurs send a 502 error to the client.
+      logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
+      res.sendStatus(502);
+    }).pipe(res);
   });
 
   return router;
 };
 
-helper.jsonProxy = proxy(elasticsearchUrl, {
-  parseReqBody: false,
-  proxyReqPathResolver: (req) => {
-    const arr = _.trim(req.url, '/').split('/');
-    const index = arr[0];
-    const id = arr[1];
-    return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index + '/cmmstudy/' + id;
-  },
-  userResDecorator: (_proxyRes, proxyResData) => {
-    const json = JSON.parse(proxyResData.toString('utf8'));
-    let result;
-    if (!_.isEmpty(json._source)) {
-      result = JSON.stringify(json._source);
-    } else {
-      // When running in debug mode, return the actual response from Elasticsearch
-      if (debugEnabled) {
-        result = proxyResData;
-      } else {
-        result = "{\"error\":\"Requested record was not found.\"}";
-      }
-    }
-    return result;
-  },
-  filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi).length === 2
-});
+helper.jsonProxy = () => {
+  let elasticsearchAuthorisaton = undefined;
 
-helper.startListening = function (app) {
-  let port = Number(process.env.PASC_PORT || 8088);
-  
-  const server = app.listen(port, () => {
-    console.log('SUCCESS : Data Catalogue application is running at http://localhost:' + port);
+  // Only configure Elasticsearch authentication if both username and password are set
+  if (elasticsearchUsername && elasticsearchPassword) {
+    elasticsearchAuthorisaton = `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`
+  }
+
+  return proxy(elasticsearchUrl, {
+    parseReqBody: false,
+    proxyReqPathResolver: (req) => {
+      const arr = _.trim(req.url, '/').split('/');
+      const index = arr[0];
+      const id = arr[1];
+      return _.trimEnd(url.parse(elasticsearchUrl).pathname, '/') + '/' + index + '/cmmstudy/' + id;
+    },
+    // Add Elasticsearch authorisation if configured
+    proxyReqOptDecorator: (proxyReqOpts) => {
+      if (elasticsearchAuthorisaton) {
+        proxyReqOpts.headers = {
+          ...proxyReqOpts.headers,
+          authorization: elasticsearchAuthorisaton
+        }
+      }
+      return proxyReqOpts;
+    },
+    // Handle connection errors to Elasticsearch.
+    proxyErrorHandler: (err, res, next) => {
+      logger.error('Elasticsearch Request failed: %s', err?.message);
+      res.sendStatus(502);
+    },
+    userResDecorator: (_proxyRes, proxyResData) => {
+      const json = JSON.parse(proxyResData.toString('utf8'));
+      let result;
+      if (!_.isEmpty(json._source)) {
+        result = JSON.stringify(json._source);
+      } else {
+        // When running in debug mode, return the actual response from Elasticsearch
+        if (debugEnabled) {
+          result = proxyResData;
+        } else {
+          result = "{\"error\":\"Requested record was not found.\"}";
+        }
+      }
+      return result;
+    },
+    filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
   });
+};
+
+helper.startListening = (app) => {
+  let port = Number(process.env.PASC_PORT || 8088);
+
+  const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
   process.on('exit', () => {
-    console.log('NOTICE : Shutting down');
+    logger.info('Shutting down');
     server.close();
-  })
+  });
 };
 
 module.exports = helper;

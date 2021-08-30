@@ -21,11 +21,12 @@ import { Link } from 'react-router';
 import type { State } from '../types';
 import { changeLanguage } from '../actions/language';
 import { push } from 'react-router-redux';
+import { CMMStudy } from '../utilities/metadata';
 
 type Props = {
   bemBlocks: any;
   index: any;
-  item: any;
+  item: CMMStudy;
   push: typeof push;
   changeLanguage: typeof changeLanguage;
   toggleLongAbstract: typeof toggleLongAbstract;
@@ -95,17 +96,16 @@ export class Result extends Component<Props> {
                  <a className={bemBlocks.item().mix('button is-small is-white')} onClick={() => {
                    this.props.toggleLongAbstract(item.titleStudy, index);
                  }}>
-                   {item.abstractExpanded &&
-                    <span>
+                   {item.abstractExpanded ?
+                    <>
                       <span className="icon is-small"><FaAngleUp/></span>
                       <Translate component="span" content="readLess"/>
-                    </span>
-                   }
-                   {!item.abstractExpanded &&
-                    <span>
+                    </>
+                   :
+                    <>
                       <span className="icon is-small"><FaAngleDown/></span>
                       <Translate component="span" content="readMore"/>
-                    </span>
+                    </>
                    }
                  </a>
                 }

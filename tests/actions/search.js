@@ -47,7 +47,9 @@ const mockStore = configureMockStore([thunk]);
 
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
-  Client: jest.fn()
+  Client: jest.fn(() => ({
+    search: () => Promise.reject("Mocked!") // Default mock.
+  }))
 }));
 
 describe('Search actions', () => {
@@ -348,7 +350,7 @@ describe('Search actions', () => {
         ['setCustomUrl', '/?q=search%20text'],
         ['setDocumentTitle', 'CESSDA Data Catalogue'],
         ['deleteCustomVariables', 'page'],
-        ['setGenerationTimeMs', 0],
+      //  ['setGenerationTimeMs', 0],
         ['trackPageView'],
         ['MediaAnalytics::scanForMedia', null],
         ['FormAnalytics::scanForForms', null],
