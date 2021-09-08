@@ -21,6 +21,10 @@ import Translate from 'react-translate-component';
 
 export class AboutPage extends Component {
 
+  componentDidMount() {
+    document.title = "About - CESSDA Data Catalogue";
+  }
+
   render() {
     return (
       <SearchkitProvider searchkit={searchkit}>

@@ -45,6 +45,14 @@ type Props = {
 
 export class DetailPage extends Component<Props> {
 
+  componentDidUpdate() {
+    if (this.props.item) {
+      document.title = `${this.props.item.titleStudy} - CESSDA Data Catalogue`;
+    } else {
+      document.title = "Not found: CESSDA Data Catalogue";
+    }
+  }
+
   render() {
     const {
       loading,
