@@ -19,9 +19,10 @@ import {
   mapStateToProps,
   Result
 } from '../../src/components/Result';
+import { CMMStudy } from '../../src/utilities/metadata';
 
 // Mock props and shallow render component for test.
-function setup(item) {
+function setup(item?: Partial<CMMStudy> | false) {
   const props = {
     bemBlocks: {
       container: jest.fn(),
@@ -36,8 +37,7 @@ function setup(item) {
             {
               id: 1,
               titleStudy: 'Study Title',
-              abstract:
-                "Long Abstract.\nAipiscing elit ut aliquam purus sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non enim praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus.",
+              abstract: "Long Abstract.\nAipiscing elit ut aliquam purus sit amet luctus venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non enim praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus.",
               abstractExpanded: false,
               abstractShort: 'Short Abstract',
               abstractHighlight: 'Long Abstract highlighted',
@@ -58,9 +58,7 @@ function setup(item) {
   };
 
   // Mock bemBlocks.container() to manage CSS classes.
-  props.bemBlocks.container.mockImplementation(classes => {
-    return `sk-hits-list__${classes}`;
-  });
+  props.bemBlocks.container.mockImplementation(classes => `sk-hits-list__${classes}`);
 
   // Mock bemBlocks.item() to manage CSS classes.
   props.bemBlocks.item.mockImplementation(() => {
@@ -73,9 +71,12 @@ function setup(item) {
 
   // Mock toggleLongAbstract() to update long abstract visibility.
   props.toggleLongAbstract.mockImplementation(() => {
-    props.item.abstractExpanded = !props.item.abstractExpanded;
+    if (props.item) {
+      props.item.abstractExpanded = !props.item.abstractExpanded;
+    }
   });
 
+  //@ts-ignore
   const enzymeWrapper = shallow(<Result {...props} />);
   return {
     props,
@@ -126,12 +127,12 @@ describe('Result component', () => {
 
   it('should toggle long abstract', () => {
     const { props, enzymeWrapper } = setup();
-    expect(props.item.abstractExpanded).toBe(false);
+    expect(props.item?.abstractExpanded).toBe(false);
     enzymeWrapper
       .find('.button')
       .at(0)
       .simulate('click');
-    expect(props.item.abstractExpanded).toBe(true);
+    expect(props.item?.abstractExpanded).toBe(true);
   });
 
   it('should change language', () => {
@@ -152,6 +153,7 @@ describe('Result component', () => {
       mapStateToProps(
         {
           search: {
+            //@ts-ignore
             displayed: [props.item]
           }
         },
@@ -163,7 +165,7 @@ describe('Result component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(jest.fn())).toEqual({
       push: expect.any(Function),
       changeLanguage: expect.any(Function),
       toggleLongAbstract: expect.any(Function)

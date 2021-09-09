@@ -19,33 +19,29 @@ import type {State} from '../types';
 import {detect} from 'detect-browser';
 import _ from 'lodash';
 
-interface Props extends SearchBoxProps {
+export interface Props extends SearchBoxProps  {
   pathname: string;
   push: typeof push;
   query: string;
 };
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
-// @ts-ignore
+//@ts-expect-error
 export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props: Props = SearchBox.defaultProps) {
+  constructor(props: Props = SearchBox.defaultProps as Props) {
     super(props);
     this.props = props;
   }
 
-  static defaultProps: Props = {
+  static defaultProps = {
     ...SearchkitSearchBox.defaultProps, 
-    ...{
-      // Needed due to incomplete type information in SearchkitSearchBox.defaultProps
-      blurAction: "search",
-      pathname: '',
-      push,
-      query: '',
-    }
-  };
+    pathname: '',
+    push,
+    query: '',
+  } as Props;
 
   onChange(event: any): void {
     const {

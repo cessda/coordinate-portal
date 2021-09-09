@@ -14,9 +14,9 @@
 import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { mapDispatchToProps, mapStateToProps, SearchBox } from '../../src/components/SearchBox';
+import { mapDispatchToProps, mapStateToProps, SearchBox, Props } from '../../src/components/SearchBox';
 import searchkit from '../../src/utilities/searchkit';
-import { detect } from 'detect-browser';
+import { Browser, BrowserInfo, detect } from 'detect-browser';
 
 // Mock detect() in detect-browser module.
 jest.mock('detect-browser', () => ({
@@ -24,25 +24,26 @@ jest.mock('detect-browser', () => ({
 }));
 
 // Mock props and shallow render component for test.
-function setup(props, browser) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>, browser?: Browser) {
+  const props = _.extend(
     {
       searchkit: searchkit,
       pathname: '/',
       push: jest.fn(),
       query: 'search text'
     },
-    props || {}
+    partialProps || {}
   );
 
   // Mock detect-browser detect() to return custom browser type.
-  detect.mockImplementation(() => {
-    return {
-      name: browser || 'chrome'
-    };
-  });
+  (detect as jest.MockedFunction<typeof detect>).mockImplementation(() =>  ({
+    name: browser || "chrome", 
+    version: (browser === "ie") ? "11" : "90",
+    os: null,
+    type: "browser"
+  }));
 
-  const enzymeWrapper = shallow(<SearchBox {...props} />);
+  const enzymeWrapper = shallow<SearchBox>(<SearchBox {...props} />);
   return {
     props,
     enzymeWrapper
@@ -129,10 +130,12 @@ describe('SearchBox component', () => {
     expect(
       mapStateToProps({
         routing: {
+          //@ts-expect-error
           locationBeforeTransitions: {
             pathname: props.pathname
           }
         },
+        //@ts-expect-error
         search: {
           state: {
             q: props.query
@@ -146,7 +149,7 @@ describe('SearchBox component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(i => i)).toEqual({
       push: expect.any(Function)
     });
   });

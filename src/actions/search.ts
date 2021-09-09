@@ -216,16 +216,14 @@ export const UPDATE_DISPLAYED = "UPDATE_DISPLAYED";
 
 export type UpdateDisplayedAction = {
   type: typeof UPDATE_DISPLAYED;
-  displayed: SearchResponse<CMMStudy>;
-  language: string;
+  displayed: Pick<SearchResponse<CMMStudy>, "hits">;
 };
 
 export const updateDisplayed = (displayed: SearchResponse<CMMStudy>): Thunk => {
   return (dispatch: Dispatch, getState: GetState): void => {
     dispatch({
       type: UPDATE_DISPLAYED,
-      displayed,
-      language: getState().language.code
+      displayed
     });
   };
 };

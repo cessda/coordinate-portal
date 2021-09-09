@@ -13,27 +13,29 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Header, mapDispatchToProps, mapStateToProps } from '../../src/components/Header';
+import { Header, mapDispatchToProps, mapStateToProps, Props } from '../../src/components/Header';
 import _ from 'lodash';
 
+const initialProps: Props = {
+  pathname: '/',
+  code: '',
+  filters: {},
+  showFilterSummary: false,
+  showMobileFilters: false,
+  showAdvancedSearch: false,
+  totalStudies: 0,
+  resetSearch: jest.fn(),
+  toggleSummary: jest.fn(),
+  toggleMobileFilters: jest.fn(),
+  toggleAdvancedSearch: jest.fn()
+};
+
 // Mock props and shallow render component for test.
-function setup(props) {
-  props = _.extend(
-    {
-      pathname: '/',
-      code: '',
-      filters: {},
-      showFilterSummary: false,
-      showMobileFilters: false,
-      showAdvancedSearch: false,
-      push: jest.fn(),
-      resetSearch: jest.fn(),
-      toggleSummary: jest.fn(),
-      toggleMobileFilters: jest.fn(),
-      toggleAdvancedSearch: jest.fn()
-    },
-    props || {}
-  );
+function setup(partialProps?: Partial<Props>) {
+  const props = {
+    ...initialProps,
+    ...partialProps
+  }
   const enzymeWrapper = shallow(<Header {...props} />);
   return {
     props,
@@ -85,13 +87,17 @@ describe('Header component', () => {
     expect(
       mapStateToProps({
         routing: {
+          //@ts-ignore
           locationBeforeTransitions: {
             pathname: props.pathname
           }
         },
         language: {
-          code: props.code
+          code: props.code,
+          label: '',
+          list: []
         },
+        //@ts-ignore
         search: {
           query: {
             post_filter: props.filters
@@ -112,7 +118,7 @@ describe('Header component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(a => a)).toEqual({
       resetSearch: expect.any(Function),
       toggleSummary: expect.any(Function),
       toggleMobileFilters: expect.any(Function),

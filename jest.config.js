@@ -22,9 +22,11 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy"
   },
 
+  preset: 'ts-jest/presets/js-with-babel',
+
   // Setup Enzyme, this removes the need for imports in the tests
   setupFilesAfterEnv: ["<rootDir>setupTests.js"],
   testEnvironment: "jsdom",
 
-  testMatch: ['**/tests/**/*.js']
+  testMatch: ["**/tests/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"]
 };

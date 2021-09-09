@@ -37,7 +37,7 @@ describe('App container', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(jest.fn())).toEqual({
       initSearchkit: expect.any(Function),
       initTranslations: expect.any(Function),
       updateTotalStudies: expect.any(Function)
