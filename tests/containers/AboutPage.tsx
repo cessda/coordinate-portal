@@ -15,6 +15,7 @@ import { shallow } from 'enzyme';
 import _ from 'lodash';
 import React from 'react';
 import { AboutPage } from '../../src/containers/AboutPage';
+import { shallow } from 'enzyme';
 
 describe("AboutPage container", () => {
   it("Should render", () => {

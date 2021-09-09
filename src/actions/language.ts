@@ -17,7 +17,7 @@ import searchkit from "../utilities/searchkit";
 import { Dispatch, GetState, Thunk } from "../types";
 import moment from "moment";
 import { languages, Language } from "../utilities/language";
-import { getPaq } from "..";
+import getPaq from "../utilities/getPaq";
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";

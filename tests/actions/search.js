@@ -47,7 +47,9 @@ const mockStore = configureMockStore([thunk]);
 
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
-  Client: jest.fn()
+  Client: jest.fn(() => ({
+    search: () => Promise.reject("Mocked!") // Default mock.
+  }))
 }));
 
 describe('Search actions', () => {

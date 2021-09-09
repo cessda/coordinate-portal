@@ -16,7 +16,7 @@ import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Dispatch, GetState, State, Thunk } from "../types";
 import { CMMStudy } from "../utilities/metadata";
-import { getPaq } from "..";
+import getPaq from "../utilities/getPaq";
 
 // Get a new Elasticsearch Client
 function elasticsearchClient() {
@@ -27,7 +27,9 @@ function elasticsearchClient() {
       port: window.location.port ||
         (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
       path: '/api/sk'
-    }
+    },
+    // Avoid timing out searches on slow connections.
+    requestTimeout: 2147483647 // Largest supported timeout.
   });
 }
 
