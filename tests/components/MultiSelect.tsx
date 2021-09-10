@@ -14,11 +14,11 @@
 import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
-import MultiSelect from '../../src/components/MultiSelect';
+import MultiSelect, { Props } from '../../src/components/MultiSelect';
 
 // Mock props and shallow render component for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>) {
+  const props = _.assignIn(
     {
       placeholder: '',
       items: [
@@ -44,12 +44,13 @@ function setup(props) {
           doc_count: 2
         }
       ],
-      selectedItems: undefined,
+      selectedItems: [],
       disabled: false,
       showCount: false,
-      setItems: jest.fn()
+      setItems: jest.fn(),
+      toggleItem: function() {}
     },
-    props || {}
+    partialProps || {}
   );
 
   // Mock setItems() to update selected items.
@@ -57,7 +58,7 @@ function setup(props) {
     props.selectedItems = items;
   });
 
-  const enzymeWrapper = shallow(<MultiSelect {...props} />);
+  const enzymeWrapper = shallow<MultiSelect>(<MultiSelect {...props} />);
   return {
     props,
     enzymeWrapper
@@ -73,7 +74,7 @@ describe('MultiSelect component', () => {
 
   it('should populate options', () => {
     const { props, enzymeWrapper } = setup();
-    const options = enzymeWrapper.find('Select').prop('options');
+    const options = enzymeWrapper.find('Select').prop('options') as any[];
     expect(options.length).toBe(props.items.length);
   });
 
@@ -81,7 +82,7 @@ describe('MultiSelect component', () => {
     const { props, enzymeWrapper } = setup({
       showCount: true
     });
-    const options = enzymeWrapper.find('Select').prop('options');
+    const options = enzymeWrapper.find('Select').prop('options') as any[];
     expect(options[0].label).toBe(
       `${props.items[0].label} (${props.items[0].doc_count}) `
     );
@@ -91,7 +92,7 @@ describe('MultiSelect component', () => {
     const { props, enzymeWrapper } = setup({
       showCount: false
     });
-    const options = enzymeWrapper.find('Select').prop('options');
+    const options = enzymeWrapper.find('Select').prop('options') as any[];
     expect(options[0].label).toBe(props.items[0].label);
   });
 
@@ -102,10 +103,10 @@ describe('MultiSelect component', () => {
     expect((props.selectedItems || []).length).toBe(props.items.length);
   });
 
-  it('should handle change without parameter', () => {
+  it('should handle change with a null parameter', () => {
     const { props, enzymeWrapper } = setup();
     expect((props.selectedItems || []).length).toBe(0);
-    enzymeWrapper.instance().handleChange();
+    enzymeWrapper.instance().handleChange(null);
     expect((props.selectedItems || []).length).toBe(0);
   });
 
@@ -116,7 +117,7 @@ describe('MultiSelect component', () => {
     expect((props.selectedItems || []).length).toBe(1);
   });
 
-  it('should handle a null value', () => {
+  it('should handle an undefined value', () => {
     const { props, enzymeWrapper } = setup();
     expect(enzymeWrapper.instance().renderValue({label: undefined})).toBe(null);
   })

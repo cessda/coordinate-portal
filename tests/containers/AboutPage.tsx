@@ -12,27 +12,13 @@
 // limitations under the License.
 
 import React from 'react';
+import { AboutPage } from '../../src/containers/AboutPage';
 import { shallow } from 'enzyme';
-import RangeFilter from '../../src/components/RangeFilter';
-import searchkit from '../../src/utilities/searchkit';
 
-// Mock props and shallow render component for test.
-function setup() {
-  const props = {
-    searchkit: searchkit,
-    id: 'id',
-    field: 'field'
-  };
-  const enzymeWrapper = shallow(<RangeFilter {...props} />);
-  return {
-    props,
-    enzymeWrapper
-  };
-}
-
-describe('RangeFilter component', () => {
-  it('should render', () => {
-    const { enzymeWrapper } = setup();
-    expect(enzymeWrapper.exists()).toBe(true);
+describe("AboutPage container", () => {
+  it("Should render", () => {
+    const enzymeWrapper = shallow(<AboutPage/>);
+    const searchPage = enzymeWrapper.find('SearchkitProvider');
+    expect(searchPage.exists()).toBe(true);
   });
 });

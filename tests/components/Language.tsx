@@ -19,6 +19,7 @@ import { Language, mapDispatchToProps, mapStateToProps } from '../../src/compone
 function setup() {
   const props = {
     code: 'en',
+    label: 'English',
     list: [
       {
         code: 'en',
@@ -65,6 +66,7 @@ describe('Language component', () => {
       mapStateToProps({
         language: {
           code: props.code,
+          label: props.label,
           list: props.list
         }
       })
@@ -75,7 +77,7 @@ describe('Language component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(jest.fn())).toEqual({
       changeLanguage: expect.any(Function)
     });
   });

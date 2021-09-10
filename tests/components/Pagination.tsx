@@ -16,10 +16,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Pagination from '../../src/components/Pagination';
+import { ItemListProps } from 'searchkit';
 
 // Mock props and shallow render component for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<ItemListProps>) {
+  const props = _.extend(
     {
       items: [
         {
@@ -49,9 +50,10 @@ function setup(props) {
         }
       ],
       selectedItems: [],
-      setItems: jest.fn()
+      setItems: jest.fn(),
+      toggleItem: function() {}
     },
-    props || {}
+    partialProps || {}
   );
 
   // Mock setItems() to update selected items.

@@ -13,34 +13,26 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import { mapStateToProps, Reset } from '../../src/components/Reset';
+import { mapStateToProps, Props, Reset } from '../../src/components/Reset';
 import _ from 'lodash';
 
 // Mock props and shallow render component for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>) {
+  const props = _.extend(
     {
       pathname: '/',
-      bemBlock: jest.fn(),
+      // Mock bemBlock() to manage CSS classes.
+      bemBlock: jest.fn(() => ({
+        mix: jest.fn(classes => ({
+          state: jest.fn(() => `sk-reset-filters ${classes}`)
+        }))
+      })),
       hasFilters: false,
       translate: jest.fn(),
       resetFilters: jest.fn()
     },
-    props || {}
+    partialProps || {}
   );
-
-  // Mock bemBlock() to manage CSS classes.
-  props.bemBlock.mockImplementation(() => {
-    return {
-      mix: jest.fn().mockImplementation(classes => {
-        return {
-          state: jest.fn().mockImplementation(() => {
-            return `sk-reset-filters ${classes}`;
-          })
-        };
-      })
-    };
-  });
 
   const enzymeWrapper = shallow(<Reset {...props} />);
   return {
@@ -79,6 +71,7 @@ describe('Reset component', () => {
     expect(
       mapStateToProps({
         routing: {
+          //@ts-ignore
           locationBeforeTransitions: {
             pathname: props.pathname
           }

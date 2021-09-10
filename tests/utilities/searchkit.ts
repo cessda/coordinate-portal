@@ -11,12 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { detailQuery, pidQuery, queryBuilder, similarQuery } from '../../src/utilities/searchkit';
+import { detailQuery, matchAllQuery, pidQuery, queryBuilder, similarQuery, uniqueAggregation } from '../../src/utilities/searchkit';
 
 describe('Searchkit utilities', () => {
   describe('queryBuilder()', () => {
     it('should return a Searchkit query object', () => {
-      expect(queryBuilder('search text', {})).toEqual({
+      expect(queryBuilder('search text')).toEqual({
         simple_query_string: {
           query: 'search text',
           default_operator: 'AND',
@@ -35,11 +35,11 @@ describe('Searchkit utilities', () => {
 
   describe('detailQuery()', () => {
     it('should return a Searchkit query used to retrieve a single study', () => {
-      expect(detailQuery(1)).toEqual({
+      expect(detailQuery("1")).toEqual({
         bool: {
           must: {
             match: {
-              id: 1
+              id: "1"
             }
           }
         }
@@ -74,4 +74,16 @@ describe('Searchkit utilities', () => {
       });
     });
   });
+
+  describe('matchAllQuery()', () => {
+    it('should return a match all query', () => {
+      expect(matchAllQuery()).toBeTruthy()
+    })
+  })
+
+  describe('uniqueAggregation()', () => {
+    it('should return a unique aggregation', () => {
+      expect(uniqueAggregation()).toBeTruthy()
+    })
+  })
 });

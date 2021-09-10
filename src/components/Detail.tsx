@@ -24,7 +24,7 @@ import { AnyAction, bindActionCreators } from "redux";
 import { toggleMetadataPanels, ToggleMetadataPanelsAction } from "../actions/search";
 import { CMMStudy, DataCollectionFreeText } from "../utilities/metadata";
 
-interface Props {
+export interface Props {
   index: number;
   item: CMMStudy;
   expandMetadataPanels: boolean;
@@ -39,7 +39,7 @@ export class Detail extends React.Component<Props> {
     }
   }
 
-  generateElements<T, R>(
+  static generateElements<T, R>(
     field: T[],
     element: 'p' | 'tag',
     callback?: (args: T) => R
@@ -68,7 +68,7 @@ export class Detail extends React.Component<Props> {
     return elements;
   }
 
-  formatDate(
+  static formatDate(
     format: string,
     date1?: string,
     date2?: string,
@@ -80,11 +80,11 @@ export class Detail extends React.Component<Props> {
     if (!date1 && !date2 && dateFallback) {
       if (dateFallback.length === 2 && dateFallback[0].event === 'start' && dateFallback[1].event === 'end') {
         // Handle special case where array items are a start/end date range.
-        return this.formatDate(format, dateFallback[0].dataCollectionFreeText, dateFallback[1].dataCollectionFreeText);
+        return Detail.formatDate(format, dateFallback[0].dataCollectionFreeText, dateFallback[1].dataCollectionFreeText);
       }
       // Generate elements for each date in the array.
       return (
-          this.generateElements(
+          Detail.generateElements(
             dateFallback,
             'p',
             date => {
@@ -100,12 +100,12 @@ export class Detail extends React.Component<Props> {
           )
       );
     }
-    let momentDate1 = moment(date1, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
+    const momentDate1 = moment(date1, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
     if (!date2) {
       // Format single date.
       return <p>{momentDate1.isValid() ? momentDate1.format(format) : date1}</p>;
     }
-    let momentDate2 = moment(date2, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
+    const momentDate2 = moment(date2, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
     // Format two dates as range.
     return (
       <p>
@@ -142,7 +142,7 @@ Summary information
             component="h2"
             content="metadata.creator"
           />
-          {this.generateElements(item.creators, 'p')}
+          {Detail.generateElements(item.creators, 'p')}
         </section>
 
         <section>
@@ -151,7 +151,7 @@ Summary information
             component="h2"
             content="metadata.studyPersistentIdentifier"
           />
-          {this.generateElements(item.pidStudies, 'p', pidStudy => {
+          {Detail.generateElements(item.pidStudies, 'p', pidStudy => {
             let pidString = pidStudy.pid;
 
             // The agency field is an optional attribute, only append if present
@@ -184,7 +184,7 @@ Summary information
             component="h3"
             content="metadata.dataCollectionPeriod"
           />
-          {this.formatDate(
+          {Detail.formatDate(
             'DD/MM/Y',
             item.dataCollectionPeriodStartdate,
             item.dataCollectionPeriodEnddate,
@@ -196,28 +196,28 @@ Summary information
             component="h3"
             content="metadata.country"
           />
-          {this.generateElements(item.studyAreaCountries, 'p', country => country.country)}
+          {Detail.generateElements(item.studyAreaCountries, 'p', country => country.country)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.timeDimension"
           />
-          {this.generateElements(item.typeOfTimeMethods, 'p', time => time.term)}
+          {Detail.generateElements(item.typeOfTimeMethods, 'p', time => time.term)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.analysisUnit"
           />
-          {this.generateElements(item.unitTypes, 'p', unit => unit.term)}
+          {Detail.generateElements(item.unitTypes, 'p', unit => unit.term)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.samplingProcedure"
           />
-          {this.generateElements(item.samplingProcedureFreeTexts, 'p', text => 
+          {Detail.generateElements(item.samplingProcedureFreeTexts, 'p', text => 
             <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
           )}
 
@@ -226,7 +226,7 @@ Summary information
             component="h3"
             content="metadata.dataCollectionMethod"
           />
-          {this.generateElements(item.typeOfModeOfCollections, 'p', method => method.term)}
+          {Detail.generateElements(item.typeOfModeOfCollections, 'p', method => method.term)}
 
           {/* <Translate
             className="data-label"
@@ -234,7 +234,7 @@ Summary information
             content="metadata.languageOfDataFiles"
           />
           <div className="tags mt-10">
-            {this.generateElements(item.fileLanguages, 'tag', term => _.upperCase(term))}
+            {Detail.generateElements(item.fileLanguages, 'tag', term => _.upperCase(term))}
           </div> */}
         </Panel>
 
@@ -257,16 +257,16 @@ Summary information
             component="h3"
             content="metadata.yearOfPublication"
           />
-          {this.formatDate('YYYY', item.publicationYear)}
+          {Detail.formatDate('YYYY', item.publicationYear)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.termsOfDataAccess"
           />
-          {this.generateElements(item.dataAccessFreeTexts, 'p', text => { 
-            return <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
-          })}
+          {Detail.generateElements(item.dataAccessFreeTexts, 'p', text => 
+            <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} />
+          )}
         </Panel>
 
         <Panel
@@ -276,7 +276,7 @@ Summary information
           collapsable={false}
         >
           <div className="tags">
-            {this.generateElements(
+            {Detail.generateElements(
               item.classifications,
               'tag',
               classifications => <Link to={"/?classifications.term[0]=" + encodeURI(classifications.term)}>{_.upperFirst(classifications.term)}</Link>
@@ -291,7 +291,7 @@ Summary information
           collapsable={false}
         >
           <div className="tags">
-            {this.generateElements(item.keywords, 'tag', keywords => 
+            {Detail.generateElements(item.keywords, 'tag', keywords => 
               <Link to={`/?q="${encodeURI(keywords.term)}"`}>{_.upperFirst(keywords.term)}</Link>
             )}
           </div>

@@ -15,7 +15,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import type {State} from '../types';
 
-type Props = {
+export type Props = {
   pathname: string;
   bemBlock: (...args: Array<any>) => any;
   hasFilters: boolean;

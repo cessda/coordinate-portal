@@ -19,8 +19,14 @@ describe('Metadata utilities', () => {
       expect(
         getStudyModel({
           hits:{
+            total: 1,
+            max_score: 1,
             hits: [
           {
+            _index: 'cmmstudy',
+            _score: 1,
+            _id: "1",
+            _type: "cmmstudy",
           _source: {
             id: "1",
             titleStudy: 'Study Title',
@@ -205,6 +211,7 @@ describe('Metadata utilities', () => {
 
     it('should return a study model with default values', () => {
       expect(
+        //@ts-ignore
         getStudyModel({ hits: { hits: [{_source:{}}]  } })
       ).toEqual([{
         id: undefined,

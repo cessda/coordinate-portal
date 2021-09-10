@@ -32,7 +32,7 @@ import type {State} from '../types';
 import moment from 'moment';
 import counterpart from 'counterpart';
 
-type Props = {
+export type Props = {
   showMobileFilters: boolean;
   filters: any;
   results: number;

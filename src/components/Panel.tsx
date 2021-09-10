@@ -22,7 +22,7 @@ import { AnyAction, bindActionCreators } from 'redux';
 import { toggleMetadataPanels, ToggleMetadataPanelsAction } from '../actions/search';
 
 // @ts-ignore
-interface Props extends PanelProps {
+export interface Props extends PanelProps {
   title? : JSX.Element | string;
   tooltip?: JSX.Element | string;
   linkCollapsedState?: boolean;
@@ -35,10 +35,11 @@ export class Panel extends SearchkitPanel {
   // @ts-ignore
   props: Props;
 
-  static defaultProps = Object.assign({}, SearchkitPanel.defaultProps, {
+  static readonly defaultProps = {
+    ...SearchkitPanel.defaultProps, 
     expandMetadataPanels: false,
     toggleMetadataPanels
-  });
+  };
 
   constructor(props: Props = Panel.defaultProps) {
     super(props);
@@ -79,7 +80,7 @@ export class Panel extends SearchkitPanel {
 // Override Panel type checking to avoid errors.
 Panel.propTypes = Object.assign(SearchkitPanel.propTypes, {
   title: PropTypes.any,
-  tooltip: PropTypes.object,
+  tooltip: PropTypes.any,
   linkCollapsedState: PropTypes.bool,
   expandMetadataPanels: PropTypes.bool,
   toggleMetadataPanels: PropTypes.func

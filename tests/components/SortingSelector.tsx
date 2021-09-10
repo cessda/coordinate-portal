@@ -13,23 +13,60 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import PageSizeSelector from '../../src/components/PageSizeSelector';
+import SortingSelector from '../../src/components/SortingSelector';
 import searchkit from '../../src/utilities/searchkit';
 
 // Mock props and shallow render component for test.
 function setup() {
   const props = {
     searchkit: searchkit,
-    options: [10, 30, 50, 150]
+    options: [
+      {
+        translation: 'sorting.relevance',
+        label: '',
+        key: 'relevance',
+        field: '_score',
+        order: 'desc',
+        defaultOption: true
+      },
+      {
+        translation: 'sorting.titleAscending',
+        label: '',
+        key: 'title-ascending',
+        field: 'titleStudy.raw',
+        order: 'asc'
+      },
+      {
+        translation: 'sorting.titleDescending',
+        label: '',
+        key: 'title-descending',
+        field: 'titleStudy.raw',
+        order: 'desc'
+      },
+      {
+        translation: 'sorting.dateAscending',
+        label: '',
+        key: 'date-ascending',
+        field: 'dataCollectionPeriodStartdate',
+        order: 'asc'
+      },
+      {
+        translation: 'sorting.dateDescending',
+        label: '',
+        key: 'date-descending',
+        field: 'dataCollectionPeriodStartdate',
+        order: 'desc'
+      }
+    ]
   };
-  const enzymeWrapper = shallow(<PageSizeSelector {...props} />);
+  const enzymeWrapper = shallow<SortingSelector>(<SortingSelector {...props} />);
   return {
     props,
     enzymeWrapper
   };
 }
 
-describe('PageSizeSelector component', () => {
+describe('SortingSelector component', () => {
   it('should render', () => {
     const { enzymeWrapper } = setup();
     expect(enzymeWrapper.exists()).toBe(true);

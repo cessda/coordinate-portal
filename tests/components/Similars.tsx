@@ -14,12 +14,12 @@
 import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { mapDispatchToProps, mapStateToProps, Similars } from '../../src/components/Similars';
+import { mapDispatchToProps, mapStateToProps, Props, Similars } from '../../src/components/Similars';
 import searchkit from '../../src/utilities/searchkit';
 
 // Mock props and shallow render component for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>) {
+  const props = _.extend(
     {
       searchkit: searchkit,
       item: {
@@ -38,7 +38,7 @@ function setup(props) {
       ],
       push: jest.fn()
     },
-    props || {}
+    partialProps || {}
   );
 
   // Manually initialise searchkit history.
@@ -93,6 +93,7 @@ describe('Similars component', () => {
     const { props } = setup();
     expect(
       mapStateToProps({
+        //@ts-expect-error
         search: {
           displayed: [props.item],
           similars: props.similars
@@ -105,7 +106,7 @@ describe('Similars component', () => {
   });
 
   it('should map dispatch to props', () => {
-    expect(mapDispatchToProps()).toEqual({
+    expect(mapDispatchToProps(i => i)).toEqual({
       push: expect.any(Function)
     });
   });

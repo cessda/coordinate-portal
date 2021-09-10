@@ -11,15 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
-import React from 'react';
-import { AboutPage } from '../../src/containers/AboutPage';
-import { shallow } from 'enzyme';
+import { languages } from '../../src/utilities/language';
 
-describe("AboutPage container", () => {
-  it("Should render", () => {
-    const enzymeWrapper = shallow(<AboutPage/>);
-    const searchPage = enzymeWrapper.find('SearchkitProvider');
-    expect(searchPage.exists()).toBe(true);
+describe('Language utilities', () => {
+  describe('getLanguages()', () => {
+    it('should return a list of languages', () => {
+      expect(languages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: expect.any(String),
+            label: expect.any(String),
+            index: expect.any(String)
+          })
+        ])
+      );
+    });
   });
 });

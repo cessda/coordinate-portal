@@ -14,17 +14,17 @@
 import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { mapStateToProps, SearchPage } from '../../src/containers/SearchPage';
+import { mapStateToProps, Props, SearchPage } from '../../src/containers/SearchPage';
 
 // Mock props and shallow render container for test.
-function setup(props) {
-  props = _.extend(
+function setup(partialProps?: Partial<Props>) {
+  const props = _.extend(
     {
       showMobileFilters: false,
       filters: {},
       results: 0
     },
-    props || {}
+    partialProps || {}
   );
   const enzymeWrapper = shallow(<SearchPage {...props} />);
   return {
@@ -62,6 +62,7 @@ describe('SearchPage container', () => {
     const { props } = setup();
     expect(
       mapStateToProps({
+        //@ts-ignore
         search: {
           showMobileFilters: props.showMobileFilters,
           state: props.filters,

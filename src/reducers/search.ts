@@ -58,7 +58,7 @@ const initialState: SearchState = {
   similars: [],
   expandMetadataPanels: false,
   displayed: [],
-  query: Object,
+  query: {},
   state: { q: '' },
   totalStudies: 0
 };
