@@ -39,11 +39,12 @@ import {
   UPDATE_SIMILARS,
   UPDATE_STATE
 } from '../../src/actions/search';
-import { languages } from '../../src/utilities/language';
+import { Language, languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { Client } from 'elasticsearch';
+import { State, Thunk } from '../../src/types';
 
-const mockStore = configureMockStore([thunk]);
+const mockStore = configureMockStore<State, Thunk>([thunk]);
 
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
@@ -51,6 +52,14 @@ jest.mock('elasticsearch', () => ({
     search: () => Promise.reject("Mocked!") // Default mock.
   }))
 }));
+
+const ClientMock = Client as jest.MockedClass<typeof Client>;
+
+const enLanguage: Language = {
+  code: 'en',
+  label: 'English',
+  index: 'cmmstudy_en'
+}
 
 describe('Search actions', () => {
 
@@ -69,10 +78,12 @@ describe('Search actions', () => {
     };
 
     // Mock Matomo Analytics library (no metrics will actually be sent).
+    // @ts-ignore
     global['_paq'] = [];
 
     // Mock elasticsearch Client() to prevent http request and resolve promise.
-    Client.mockImplementation(() => {
+    // @ts-expect-error - only returns what's tested.
+    ClientMock.mockImplementation(() => {
       return {
         search: () => {
           return Promise.resolve({
@@ -113,8 +124,9 @@ describe('Search actions', () => {
 
     it('is created when initialising searchkit on the results page', () => {
       // Mock Redux store.
-      let store = mockStore({
+      const store = mockStore({
         routing: {
+          // @ts-expect-error
           locationBeforeTransitions: {
             pathname: '/',
             query: {
@@ -123,15 +135,13 @@ describe('Search actions', () => {
           }
         },
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: _.map(languages, (language) => _.pick(language, ['code', 'label', 'index']))
         }
       });
 
       // Dispatch action.
-      store.dispatch(initSearchkit());
+      initSearchkit()(store.dispatch, store.getState, undefined);
 
       // Manually trigger search to execute query processor.
       searchkit.search();
@@ -165,7 +175,7 @@ describe('Search actions', () => {
         {
           type: UPDATE_QUERY,
           query: {
-            index: 'cmmstudy_en',
+            index: enLanguage.index,
             min_score: 0.5,
             size: 20
           }
@@ -181,7 +191,7 @@ describe('Search actions', () => {
         {
           type: UPDATE_QUERY,
           query: {
-            index: 'cmmstudy_en',
+            index: enLanguage.index,
             min_score: 0.5,
             size: 20
           }
@@ -215,6 +225,7 @@ describe('Search actions', () => {
       // Mock Redux store.
       let store = mockStore({
         routing: {
+          // @ts-expect-error
           locationBeforeTransitions: {
             pathname: '/detail',
             query: {
@@ -223,15 +234,13 @@ describe('Search actions', () => {
           }
         },
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: languages
         }
       });
 
       // Dispatch action.
-      store.dispatch(initSearchkit());
+      initSearchkit()(store.dispatch, store.getState, undefined);
 
       // Manually trigger search to execute query processor.
       searchkit.search();
@@ -314,6 +323,7 @@ describe('Search actions', () => {
       // Mock Redux store.
       let store = mockStore({
         routing: {
+          // @ts-expect-error
           locationBeforeTransitions: {
             pathname: '/',
             query: {
@@ -322,15 +332,13 @@ describe('Search actions', () => {
           }
         },
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: languages
         }
       });
 
       // Dispatch action.
-      store.dispatch(initSearchkit());
+      initSearchkit()(store.dispatch, store.getState, undefined);
 
       // Manually trigger search to execute query processor.
       searchkit.search();
@@ -342,6 +350,7 @@ describe('Search actions', () => {
       jest.runAllTimers();
 
       // Analytics library should have pushed events.
+      // @ts-expect-error
       expect(global['_paq']).toEqual([
         ['setReferrerUrl', '/?q=search%20text'],
         ['setCustomUrl', '/?q=search%20text'],
@@ -414,10 +423,11 @@ describe('Search actions', () => {
   describe('TOGGLE_LONG_DESCRIPTION action', () => {
     it('is created when long study description visibility changes', () => {
       // Mock Redux store.
-      let store = mockStore({});
+      // @ts-expect-error
+      const store = mockStore({});
 
       // Dispatch action.
-      store.dispatch(toggleLongAbstract('Study Title', 1));
+      toggleLongAbstract('Study Title', 1)(store.dispatch, store.getState, undefined);
 
       // State should contain study index.
       expect(store.getActions()).toEqual([
@@ -430,12 +440,14 @@ describe('Search actions', () => {
 
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
-      let store = mockStore({});
+      // @ts-expect-error
+      const store = mockStore({});
 
       // Dispatch action.
-      store.dispatch(toggleLongAbstract('Study Title', 1));
+      toggleLongAbstract('Study Title', 1)(store.dispatch, store.getState, undefined);
 
       // Analytics library should have pushed event.
+      // @ts-expect-error
       expect(global['_paq']).toEqual([
         ['trackEvent', 'Search', 'Read more', 'Study Title']
       ]);
@@ -445,14 +457,17 @@ describe('Search actions', () => {
   describe('UPDATE_DISPLAYED action', () => {
     it('is created when the list of displayed studies is updated', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({
         language: {
-          code: 'en'
+          currentLanguage: enLanguage,
+          list: []
         }
       });
 
       // Dispatch action.
       store.dispatch(
+        // @ts-expect-error
         updateDisplayed([
           {
             id: '1'
@@ -480,7 +495,7 @@ describe('Search actions', () => {
       const query = {
         query: {
           bool: {
-            must: [queryBuilder('search text', {})]
+            must: [queryBuilder('search text')]
           }
         }
       };
@@ -511,22 +526,22 @@ describe('Search actions', () => {
   describe('UPDATE_SIMILARS action', () => {
     it('is created when the list of similar studies is updated', () => {
       // Mock Redux store.
-      let store = mockStore({
+      // @ts-expect-error
+      const store = mockStore({
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: languages
         }
       });
 
       // Dispatch action and wait for promise.
-      return store.dispatch(
-          updateSimilars({
-            id: "1",
-            titleStudy: 'Study Title'
-          })
-        ).then(() => {
+      // @ts-expect-error
+      const similars = updateSimilars({
+        id: "1",
+        titleStudy: 'Study Title'
+      })
+
+      return similars(store.dispatch, store.getState, undefined).then(() => {
           // State should contain similar studies.
           expect(store.getActions()).toEqual([
             {
@@ -546,6 +561,7 @@ describe('Search actions', () => {
   describe('RESET_SEARCH action', () => {
     it('is created when the list of similar studies is updated', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({});
 
       // Dispatch action.

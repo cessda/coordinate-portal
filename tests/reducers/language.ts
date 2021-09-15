@@ -61,9 +61,8 @@ describe('Language reducer', () => {
 
   it('should handle unknown action type', () => {
     const state = {
-      code: 'en',
-      label: 'English',
-      list: []
+      currentLanguage: languages[0],
+      list: languages
     };
     expect(language(state, {type: RESET_SEARCH})).toEqual(state);
   });

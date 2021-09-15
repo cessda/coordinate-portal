@@ -14,17 +14,15 @@
 
 import { Action } from "../actions";
 import { CHANGE_LANGUAGE, INIT_TRANSLATIONS } from "../actions/language";
-import { Language } from "../utilities/language";
+import { languages, Language } from "../utilities/language";
 
-export type LanguageState = {
-  code: string;
-  label: string;
-  list: Language[];
+export interface LanguageState {
+  currentLanguage: Language;
+  list: readonly Language[];
 };
 
 const initialState: LanguageState = {
-  code: 'en',
-  label: 'English',
+  currentLanguage: languages.find(l => l.code === "en") || languages[0],
   list: []
 };
 
@@ -37,7 +35,7 @@ export default function language(state = initialState, action: Action): Language
 
     case CHANGE_LANGUAGE:
       return Object.assign({}, state, {
-        code: action.code,
+        currentLanguage: languages.find(l => l.code === action.code) || languages[0],
         label: action.label
       });
 

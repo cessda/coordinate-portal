@@ -29,7 +29,6 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { detect } from "detect-browser";
 import "./styles/design.scss";
-import { Store } from "./types";
 import getPaq from "./utilities/getPaq";
 
 // Initialise Matomo Analytics.
@@ -56,7 +55,7 @@ if (script?.parentNode) {
 }
 
 
-const store: Store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk, routerMiddleware(browserHistory))));
+const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk, routerMiddleware(browserHistory))));
 
 const history = syncHistoryWithStore(browserHistory, store);
 
