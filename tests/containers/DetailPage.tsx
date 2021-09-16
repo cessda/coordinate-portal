@@ -15,6 +15,7 @@ import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../src/containers/DetailPage';
+import { languages } from '../../src/utilities/language';
 
 // Mock props and shallow render container for test.
 function setup(partialProps?: Partial<Props>) {
@@ -26,14 +27,7 @@ function setup(partialProps?: Partial<Props>) {
         studyUrl: 'http://example.com'
       },
       jsonLd: {},
-      code: 'en',
-      list: [
-        {
-          code: 'en',
-          label: 'English',
-          index: 'cmmstudy_en'
-        }
-      ],
+      currentLanguage: languages[0],
       query: {},
       goBack: jest.fn()
     },
@@ -51,18 +45,6 @@ describe('DetailPage container', () => {
     const { enzymeWrapper } = setup();
     const detailPage = enzymeWrapper.find('SearchkitProvider');
     expect(detailPage.exists()).toBe(true);
-  });
-
-  it('should handle not finding language code for index', () => {
-    const { enzymeWrapper } = setup({
-      code: 'fi'
-    });
-    expect(
-      enzymeWrapper
-        .find('.button')
-        .at(2)
-        .prop('href')
-    ).toBe('/api/json/undefined/1');
   });
 
   it('should show message when study not found', () => {
@@ -83,9 +65,8 @@ describe('DetailPage container', () => {
           }
         },
         language: {
-          code: props.code,
-          label: "English",
-          list: props.list
+          currentLanguage: props.currentLanguage,
+          list: []
         },
         //@ts-expect-error
         search: {
@@ -98,8 +79,7 @@ describe('DetailPage container', () => {
       loading: props.loading,
       item: props.item,
       jsonLd: props.jsonLd,
-      code: props.code,
-      list: props.list,
+      currentLanguage: props.currentLanguage,
       query: props.query
     });
   });
@@ -115,9 +95,8 @@ describe('DetailPage container', () => {
           }
         },
         language: {
-          code: props.code,
-          label: "English",
-          list: props.list
+          currentLanguage: props.currentLanguage,
+          list: []
         },
         //@ts-expect-error
         search: {
@@ -130,8 +109,7 @@ describe('DetailPage container', () => {
       loading: props.loading,
       item: undefined,
       jsonLd: props.jsonLd,
-      code: props.code,
-      list: props.list,
+      currentLanguage: props.currentLanguage,
       query: props.query
     });
   });

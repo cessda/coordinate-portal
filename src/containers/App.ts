@@ -21,8 +21,8 @@ import { Thunk } from "../types";
 type Props = {
   initSearchkit: () => Thunk;
   initTranslations: () => Thunk;
-  updateTotalStudies: () => Thunk;
-  children: JSX.Element;
+  updateTotalStudies: () => Thunk<Promise<void>>;
+  children: JSX.Element
 };
 
 export class App extends Component<Props> {

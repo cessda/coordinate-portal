@@ -14,7 +14,7 @@
 
 import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
-import { Dispatch, GetState, Thunk } from "../types";
+import { Dispatch, Thunk } from "../types";
 import moment from "moment";
 import { languages, Language } from "../utilities/language";
 import getPaq from "../utilities/getPaq";
@@ -28,7 +28,7 @@ export type InitTranslationsAction = {
 };
 
 export function initTranslations(): Thunk {
-  return (dispatch: Dispatch, getState: GetState): void => {
+  return (dispatch, getState) => {
 
     const state = getState();
 
@@ -37,16 +37,16 @@ export function initTranslations(): Thunk {
       try {
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
-        console.debug(`Couldn't load translation for language '${language.code}': ${e.message}`);
+        console.debug(`Couldn't load translation for language '${language.code}': ${(e as Error).message}`);
       }
     });
 
-    counterpart.setLocale(state.language.code);
+    counterpart.setLocale(state.language.currentLanguage.code);
 
     // Fallback to English if the locale is not available
     counterpart.setFallbackLocale('en');
 
-    moment.locale(state.language.code);
+    moment.locale(state.language.currentLanguage.code);
 
     searchkit.translateFunction = (key: string): string | undefined => {
       const numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
@@ -56,7 +56,7 @@ export function initTranslations(): Thunk {
         case 'hitstats.results_found': 
           return counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
-            label: getState().language.label,
+            label: getState().language.currentLanguage.label,
             total: getState().search.totalStudies,
             time: searchkit.getTime()
           });
@@ -94,7 +94,7 @@ export type ChangeLanguageAction = {
 };
 
 export function changeLanguage(code: string): Thunk {
-  return (dispatch: Dispatch): void => {
+  return (dispatch) => {
     code = code.toLowerCase();
 
     const language = languages.find(element => element.code === code);

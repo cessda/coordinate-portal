@@ -18,11 +18,10 @@ import {changeLanguage} from '../actions/language';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
 import Select, { Options } from 'react-select';
-import {isArray} from 'lodash';
 import {Language as LanguageType} from '../utilities/language';
 
 type Props = {
-  code: string;
+  currentLanguage: LanguageType;
   list: LanguageType[];
   changeLanguage: typeof changeLanguage;
 };
@@ -31,7 +30,7 @@ export class Language extends Component<Props> {
 
   render() {
     const {
-      code,
+      currentLanguage,
       list,
       changeLanguage
     } = this.props;
@@ -45,13 +44,13 @@ export class Language extends Component<Props> {
 
     return (
       <div className="language-picker">
-        <Select value={code}
+        <Select value={currentLanguage.code}
                 options={languages}
                 searchable={false}
                 clearable={false}
                 autosize={true}
                 onChange={(option) => {
-                  if (option && !isArray(option) && option.value) {
+                  if (option && !Array.isArray(option) && option.value) {
                     return changeLanguage(option.value);
                   }
                 }}/>
@@ -60,12 +59,12 @@ export class Language extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: Pick<State, "language">) => {
+export function mapStateToProps(state: Pick<State, "language">) {
   return {
-    code: state.language.code,
+    currentLanguage: state.language.currentLanguage,
     list: state.language.list
   };
-};
+}
 
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {

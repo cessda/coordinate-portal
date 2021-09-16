@@ -24,6 +24,7 @@ import type { State, Thunk } from "../types";
 import { AnyAction, bindActionCreators } from "redux";
 import {
   resetSearch,
+  ResetSearchAction,
   toggleAdvancedSearch,
   ToggleAdvancedSearchAction,
   toggleMobileFilters,
@@ -32,16 +33,17 @@ import {
   ToggleSummaryAction,
 } from "../actions/search";
 import Translate from "react-translate-component";
+import { Language as LanguageType } from '../utilities/language';
 
 export interface Props {
   pathname: string;
-  code: string;
+  currentLanguage: LanguageType;
   filters: any;
   showFilterSummary: boolean;
   showMobileFilters: boolean;
   showAdvancedSearch: boolean;
   totalStudies: number;
-  resetSearch: () => Thunk;
+  resetSearch: () => ResetSearchAction;
   toggleSummary: () => ToggleSummaryAction;
   toggleMobileFilters: () => ToggleMobileFiltersAction;
   toggleAdvancedSearch: () => ToggleAdvancedSearchAction;
@@ -262,10 +264,10 @@ export class Header extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State) => {
+export function mapStateToProps(state: State) {
   return {
     pathname: state.routing.locationBeforeTransitions.pathname,
-    code: state.language.code,
+    currentLanguage: state.language.currentLanguage,
     filters: state.search.query.post_filter,
     showFilterSummary: state.search.showFilterSummary,
     showMobileFilters: state.search.showMobileFilters,
@@ -273,15 +275,15 @@ export const mapStateToProps = (state: State) => {
     // Needed to refresh the total amount of studies
     totalStudies: state.search.totalStudies
   };
-};
+}
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     resetSearch: bindActionCreators(resetSearch, dispatch),
     toggleSummary: bindActionCreators(toggleSummary, dispatch),
     toggleMobileFilters: bindActionCreators(toggleMobileFilters, dispatch),
     toggleAdvancedSearch: bindActionCreators(toggleAdvancedSearch, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

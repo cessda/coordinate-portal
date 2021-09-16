@@ -35,8 +35,7 @@ export interface Props {
   loading: boolean;
   item: CMMStudy | undefined;
   jsonLd: WithContext<Dataset> | undefined;
-  code: string;
-  list: LanguageType[];
+  currentLanguage: LanguageType;
   query: {
     [key: string]: any;
   };
@@ -50,13 +49,12 @@ export class DetailPage extends Component<Props> {
       loading,
       item,
       jsonLd,
-      code,
-      list,
+      currentLanguage,
       goBack
     } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
-    const index = (_.find(list, { 'code': code }) || {}).index;
+    const index = currentLanguage.index;
 
     return (
       <SearchkitProvider searchkit={searchkit}>
@@ -127,8 +125,7 @@ export const mapStateToProps = (state: State) => {
     loading: state.search.loading,
     item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
     jsonLd: state.search.jsonLd,
-    code: state.language.code,
-    list: state.language.list,
+    currentLanguage: state.language.currentLanguage,
     query: state.routing.locationBeforeTransitions.query
   };
 };
