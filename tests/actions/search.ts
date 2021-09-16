@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import searchkit, { queryBuilder } from '../../src/utilities/searchkit';
 import {
   initSearchkit,
@@ -43,14 +43,22 @@ import { Language, languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { Client } from 'elasticsearch';
 import { State, Thunk } from '../../src/types';
+import { AnyAction } from 'redux';
 
-const mockStore = configureMockStore<State, Thunk>([thunk]);
+const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>>([thunk]);
 
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
   Client: jest.fn(() => ({
     search: () => Promise.reject("Mocked!") // Default mock.
   }))
+}));
+
+// Create a SearchkitManager with an instant timeout.
+jest.mock('../../src/utilities/searchkit', () => ({
+  __esModule: true,
+  ...jest.requireActual('../../src/utilities/searchkit'),
+  default: new (require('searchkit').SearchkitManager)('api/sk', { timeout: 0 })
 }));
 
 const ClientMock = Client as jest.MockedClass<typeof Client>;
@@ -117,10 +125,8 @@ describe('Search actions', () => {
   });
 
   describe('INIT_SEARCHKIT action', () => {
-    beforeEach(() => {
-      // Action uses setTimeout() so use fake timers for these tests.
-      jest.useFakeTimers();
-    });
+    // Action uses setTimeout() so use fake timers for these tests.
+    beforeEach(() => jest.useFakeTimers());
 
     it('is created when initialising searchkit on the results page', () => {
       // Mock Redux store.
@@ -141,7 +147,7 @@ describe('Search actions', () => {
       });
 
       // Dispatch action.
-      initSearchkit()(store.dispatch, store.getState, undefined);
+      store.dispatch(initSearchkit());
 
       // Manually trigger search to execute query processor.
       searchkit.search();
@@ -240,7 +246,7 @@ describe('Search actions', () => {
       });
 
       // Dispatch action.
-      initSearchkit()(store.dispatch, store.getState, undefined);
+      store.dispatch(initSearchkit());
 
       // Manually trigger search to execute query processor.
       searchkit.search();
@@ -338,7 +344,7 @@ describe('Search actions', () => {
       });
 
       // Dispatch action.
-      initSearchkit()(store.dispatch, store.getState, undefined);
+      store.dispatch(initSearchkit());
 
       // Manually trigger search to execute query processor.
       searchkit.search();
@@ -364,6 +370,8 @@ describe('Search actions', () => {
         ['enableLinkTracking']
       ]);
     });
+
+    afterEach(() => jest.clearAllTimers());
   });
 
   describe('TOGGLE_LOADING action', () => {
@@ -427,7 +435,7 @@ describe('Search actions', () => {
       const store = mockStore({});
 
       // Dispatch action.
-      toggleLongAbstract('Study Title', 1)(store.dispatch, store.getState, undefined);
+      store.dispatch(toggleLongAbstract('Study Title', 1));
 
       // State should contain study index.
       expect(store.getActions()).toEqual([
@@ -444,7 +452,7 @@ describe('Search actions', () => {
       const store = mockStore({});
 
       // Dispatch action.
-      toggleLongAbstract('Study Title', 1)(store.dispatch, store.getState, undefined);
+      store.dispatch(toggleLongAbstract('Study Title', 1));
 
       // Analytics library should have pushed event.
       // @ts-expect-error
@@ -541,7 +549,7 @@ describe('Search actions', () => {
         titleStudy: 'Study Title'
       })
 
-      return similars(store.dispatch, store.getState, undefined).then(() => {
+      return store.dispatch(similars).then(() => {
           // State should contain similar studies.
           expect(store.getActions()).toEqual([
             {
@@ -559,6 +567,9 @@ describe('Search actions', () => {
   });
 
   describe('RESET_SEARCH action', () => {
+    // Action uses setTimeout() so use fake timers for these tests.
+    beforeEach(() => jest.useFakeTimers());
+
     it('is created when the list of similar studies is updated', () => {
       // Mock Redux store.
       // @ts-expect-error
@@ -574,5 +585,8 @@ describe('Search actions', () => {
         }
       ]);
     });
+
+    // Clear any pending timers
+    afterEach(() => jest.clearAllTimers());
   });
 });

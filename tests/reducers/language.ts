@@ -22,8 +22,11 @@ describe('Language reducer', () => {
   it('should return the initial state', () => {
     //@ts-ignore
     expect(language(undefined, {})).toEqual({
-      code: 'en',
-      label: 'English',
+      currentLanguage: {
+        code: 'en',
+        label: 'English',
+        index: 'cmmstudy_en'
+      },
       list: []
     });
   });
@@ -55,7 +58,7 @@ describe('Language reducer', () => {
         }
       )
     ).toEqual({
-      code: languages[0].code
+      currentLanguage: languages[0]
     });
   });
 

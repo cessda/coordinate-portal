@@ -30,14 +30,6 @@ pipeline {
 	}
 
 	stages {
-		stage('Check environment') {
-			steps {
-				echo "Check environment"
-				echo "product_name = ${product_name}"
-				echo "module_name = ${module_name}"
-				echo "image_tag = ${image_tag}"
-			}
-		}
 		stage('Run Unit Tests') {
 			agent {
 				docker {
@@ -47,7 +39,7 @@ pipeline {
 			}
 			steps {
 				sh "npm ci"
-				sh "npm test -- --forceExit"
+				sh "npm test"
 			}
 			post {
 				always {
