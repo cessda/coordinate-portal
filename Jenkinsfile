@@ -39,7 +39,7 @@ pipeline {
 			}
 			steps {
 				sh "npm ci"
-				sh "npm test"
+				sh "npm test -- --forceExit"
 			}
 			post {
 				always {
