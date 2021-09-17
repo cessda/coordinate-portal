@@ -14,18 +14,18 @@
 import searchkit, { detailQuery, similarQuery, pidQuery, matchAllQuery, uniqueAggregation } from "../utilities/searchkit";
 import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
-import { Dispatch, GetState, State, Thunk } from "../types";
+import { Thunk } from "../types";
 import { CMMStudy } from "../utilities/metadata";
 import getPaq from "../utilities/getPaq";
 
 // Get a new Elasticsearch Client
 function elasticsearchClient() {
+  const protocol = _.trim(window.location.protocol, ':');
   return new Client({
     host: {
-      protocol: _.trim(window.location.protocol, ':'),
+      protocol: protocol,
       host: window.location.hostname,
-      port: window.location.port ||
-        (_.endsWith(_.trim(window.location.protocol, ':'), 's') ? 443 : 80),
+      port: window.location.port || (protocol.endsWith('s') ? 443 : 80),
       path: '/api/sk'
     },
     // Avoid timing out searches on slow connections.
@@ -40,14 +40,14 @@ export type InitSearchkitAction = {
   type: typeof INIT_SEARCHKIT;
 };
 
-export const initSearchkit = (): Thunk => {
-  return (dispatch: Dispatch, getState: GetState): void => {
+export function initSearchkit(): Thunk {
+  return (dispatch, getState) => {
     let timer: NodeJS.Timeout;
 
     searchkit.setQueryProcessor((query: any) => {
       dispatch(toggleLoading(true));
 
-      const state: State = getState()
+      const state = getState();
       const init = timer === undefined;
 
       clearTimeout(timer);
@@ -62,7 +62,7 @@ export const initSearchkit = (): Thunk => {
 
           // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
           _paq.push(['deleteCustomVariables', 'page']);
-      //    _paq.push(['setGenerationTimeMs', 0]);
+          //    _paq.push(['setGenerationTimeMs', 0]);
           _paq.push(['trackPageView']);
 
           // Make Matomo aware of newly added content
@@ -77,8 +77,8 @@ export const initSearchkit = (): Thunk => {
       const path = _.trim(state.routing.locationBeforeTransitions.pathname, '/');
       let pathQuery = state.routing.locationBeforeTransitions.query.q;
 
-      if (_.isArray(pathQuery)) {
-        pathQuery = pathQuery[0];
+      if (Array.isArray(pathQuery)) {
+        pathQuery = pathQuery.join();
       }
 
       if (path === 'detail' && pathQuery) {
@@ -95,7 +95,7 @@ export const initSearchkit = (): Thunk => {
       }
 
       // Add the current language index to the query for Elasticsearch.
-      query.index = _.find(state.language.list, { code: state.language.code })?.index;
+      query.index = state.language.currentLanguage.index;
 
       dispatch(updateQuery(query));
       dispatch(updateState(searchkit.state));
@@ -104,12 +104,12 @@ export const initSearchkit = (): Thunk => {
     });
 
     searchkit.addResultsListener((results: SearchResponse<CMMStudy>): void => {
-      let state: State = getState();
+      const state = getState();
 
       // Load similar results if viewing detail page and data exists.
       if ((_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' || _.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'study/pid') &&
-          results.hits.hits.length > 0 &&
-          results.hits.hits[0]._source) {
+        results.hits.hits.length > 0 &&
+        results.hits.hits[0]._source) {
         dispatch(updateSimilars(results.hits.hits[0]._source));
       }
 
@@ -121,7 +121,7 @@ export const initSearchkit = (): Thunk => {
       type: INIT_SEARCHKIT
     });
   };
-};
+}
 
 //////////// Redux Action Creator : TOGGLE_LOADING
 export const TOGGLE_LOADING = "TOGGLE_LOADING";
@@ -199,7 +199,7 @@ export type ToggleLongAbstractAction = {
 };
 
 export const toggleLongAbstract = (title: string, index: number): Thunk => {
-  return (dispatch: Dispatch): void => {
+  return (dispatch) => {
     // Notify Matomo Analytics of toggling "Read more" for a study.
     const _paq = getPaq();
     _paq.push(['trackEvent', 'Search', 'Read more', title]);
@@ -219,14 +219,12 @@ export type UpdateDisplayedAction = {
   displayed: Pick<SearchResponse<CMMStudy>, "hits">;
 };
 
-export const updateDisplayed = (displayed: SearchResponse<CMMStudy>): Thunk => {
-  return (dispatch: Dispatch, getState: GetState): void => {
-    dispatch({
-      type: UPDATE_DISPLAYED,
-      displayed
-    });
+export function updateDisplayed(displayed: SearchResponse<CMMStudy>): UpdateDisplayedAction {
+  return {
+    type: UPDATE_DISPLAYED,
+    displayed
   };
-};
+}
 
 //////////// Redux Action Creator : UPDATE_QUERY
 export const UPDATE_QUERY = "UPDATE_QUERY";
@@ -236,12 +234,12 @@ export type UpdateQueryAction = {
   query: Record<string, any>;
 };
 
-export const updateQuery = (query: Record<string, any>): UpdateQueryAction => {
+export function updateQuery(query: Record<string, any>): UpdateQueryAction {
   return {
     type: UPDATE_QUERY,
     query
   };
-};
+}
 
 //////////// Redux Action Creator : UPDATE_STATE
 export const UPDATE_STATE = "UPDATE_STATE";
@@ -255,12 +253,12 @@ export type UpdateStateAction = {
   state: SearchkitState;
 };
 
-export const updateState = (state: any): UpdateStateAction => {
+export function updateState(state: SearchkitState): UpdateStateAction {
   return {
     type: UPDATE_STATE,
     state
   };
-};
+}
 
 //////////// Redux Action Creator : UPDATE_SIMILARS
 export const UPDATE_SIMILARS = "UPDATE_SIMILARS";
@@ -270,15 +268,14 @@ export type UpdateSimilarsAction = {
   similars: CMMStudy[];
 };
 
-export const updateSimilars = (item: CMMStudy): Thunk => {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    const state: State = getState();
-    const index = _.find(state.language.list, { 'code': state.language.code })?.index;
+export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
+  return async (dispatch, getState) => {
+    const state = getState();
 
     const response = await elasticsearchClient().search<CMMStudy>({
       size: 10,
       body: {
-        index: index,
+        index: state.language.currentLanguage.index,
         query: similarQuery(item.titleStudy)
       }
     });
@@ -291,7 +288,7 @@ export const updateSimilars = (item: CMMStudy): Thunk => {
       ).map(hit => hit._source)
     });
   };
-};
+}
 
 //////////// Redux Action Creator : RESET_SEARCH
 export const RESET_SEARCH = "RESET_SEARCH";
@@ -300,18 +297,17 @@ export type ResetSearchAction = {
   type: typeof RESET_SEARCH;
 };
 
-export const resetSearch = (): Thunk => {
-  return (dispatch: Dispatch): void => {
-    // Use timeout to ensure searchkit is reset after pending router events.
-    setTimeout(() => {
-      searchkit.resetState();
-      searchkit.reloadSearch();
-    });
-    dispatch({
-      type: RESET_SEARCH
-    });
+export function resetSearch(): ResetSearchAction {
+  // Use timeout to ensure searchkit is reset after pending router events.
+  setTimeout(() => {
+    searchkit.resetState();
+    searchkit.reloadSearch();
+  });
+
+  return {
+    type: RESET_SEARCH
   };
-};
+}
 
 //////////// Redux Action Creator : UPDATE_TOTAL_STUDIES
 export const UPDATE_TOTAL_STUDIES = "UPDATE_TOTAL_STUDIES";
@@ -321,8 +317,8 @@ export type UpdateTotalStudiesAction = {
   totalStudies: number;
 };
 
-export const updateTotalStudies = (): Thunk => {
-  return async (dispatch: Dispatch) => {
+export function updateTotalStudies(): Thunk<Promise<void>> {
+  return async (dispatch) => {
     try {
       const response = await elasticsearchClient().search({
         size: 0,
@@ -341,7 +337,7 @@ export const updateTotalStudies = (): Thunk => {
       console.error(e);
     }
   };
-};
+}
 
 ////////////
 

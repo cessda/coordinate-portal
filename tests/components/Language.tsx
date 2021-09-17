@@ -17,15 +17,15 @@ import { Language, mapDispatchToProps, mapStateToProps } from '../../src/compone
 
 // Mock props and shallow render component for test.
 function setup() {
-  const props = {
+  const english = {
     code: 'en',
     label: 'English',
+    index: 'cmmstudy_en'
+  };
+  const props = {
+    currentLanguage: english,
     list: [
-      {
-        code: 'en',
-        label: 'English',
-        index: 'cmmstudy_en'
-      },
+      english,
       {
         code: 'fi',
         label: 'Suomi',
@@ -65,13 +65,12 @@ describe('Language component', () => {
     expect(
       mapStateToProps({
         language: {
-          code: props.code,
-          label: props.label,
+          currentLanguage: props.currentLanguage,
           list: props.list
         }
       })
     ).toEqual({
-      code: props.code,
+      currentLanguage: props.currentLanguage,
       list: props.list
     });
   });

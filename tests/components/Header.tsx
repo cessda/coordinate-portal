@@ -15,10 +15,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Header, mapDispatchToProps, mapStateToProps, Props } from '../../src/components/Header';
 import _ from 'lodash';
+import { languages } from '../../src/utilities/language';
 
 const initialProps: Props = {
   pathname: '/',
-  code: '',
+  currentLanguage: languages[0],
   filters: {},
   showFilterSummary: false,
   showMobileFilters: false,
@@ -93,8 +94,7 @@ describe('Header component', () => {
           }
         },
         language: {
-          code: props.code,
-          label: '',
+          currentLanguage: props.currentLanguage,
           list: []
         },
         //@ts-ignore
@@ -109,7 +109,7 @@ describe('Header component', () => {
       })
     ).toEqual({
       pathname: props.pathname,
-      code: props.code,
+      currentLanguage: props.currentLanguage,
       filters: props.filters,
       showFilterSummary: props.showFilterSummary,
       showMobileFilters: props.showMobileFilters,

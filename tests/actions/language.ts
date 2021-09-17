@@ -12,14 +12,22 @@
 // limitations under the License.
 
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import counterpart from 'counterpart';
 import searchkit from '../../src/utilities/searchkit';
 import { changeLanguage, initTranslations } from '../../src/actions/language';
-import { languages } from '../../src/utilities/language';
+import { Language, languages } from '../../src/utilities/language';
 import _ from 'lodash';
+import { State } from '../../src/types';
+import { AnyAction } from 'redux';
 
-const mockStore = configureMockStore([thunk]);
+const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>>([thunk]);
+
+const enLanguage: Language = {
+  code: 'en',
+  label: 'English',
+  index: 'cmmstudy_en'
+}
 
 describe('Language actions', () => {
 
@@ -38,10 +46,11 @@ describe('Language actions', () => {
     };
 
     // Mock Matomo Analytics library (no metrics will actually be sent).
+    // @ts-expect-error
     global['_paq'] = [];
 
     // Register a translation required for tests.
-    counterpart.registerTranslations(languages[0].code, languages[0].locale);
+    counterpart.registerTranslations(enLanguage.code, enLanguage);
   });
 
   describe('INIT_TRANSLATIONS action', () => {
@@ -49,9 +58,10 @@ describe('Language actions', () => {
       // Mock Redux store.
       let store = mockStore({
         language: {
-          code: languages[0].code,
-          label: languages[0].label,
+          currentLanguage: enLanguage,
+          list: languages
         },
+        // @ts-expect-error
         search: {
           totalStudies: 0
         }
@@ -61,6 +71,7 @@ describe('Language actions', () => {
       store.dispatch(initTranslations());
 
       // At least 1 translation should be registered
+      // @ts-expect-error - Workaround types not including conterpart.getAvailableLocales()
       expect(counterpart.getAvailableLocales().length).toBeGreaterThan(0);
 
       // Translations should not include debug information.
@@ -69,7 +80,7 @@ describe('Language actions', () => {
           count: 0,
           time: 0,
           total: 0,
-          label: 'Danish',
+          label: enLanguage.label,
         })
       );
 
@@ -88,9 +99,10 @@ describe('Language actions', () => {
       // Mock Redux store.
       let store = mockStore({
         language: {
-          code: languages[0].code,
-          label: languages[0].label,
+          currentLanguage: enLanguage,
+          list: languages
         },
+        // @ts-expect-error
         search: {
           totalStudies: 0
         }
@@ -115,6 +127,7 @@ describe('Language actions', () => {
   describe('CHANGE_LANGUAGE action', () => {
     it('is created when selecting a language with a registered locale', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({});
 
       // Dispatch action with registered locale.
@@ -132,6 +145,7 @@ describe('Language actions', () => {
 
     it('is created when selecting a language without a registered locale', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({});
 
       // Dispatch action with unregistered locale.
@@ -149,12 +163,14 @@ describe('Language actions', () => {
 
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({});
 
       // Dispatch action with registered locale.
       store.dispatch(changeLanguage(languages[0].code));
 
       // Analytics library should have pushed event.
+      // @ts-expect-error
       expect(global['_paq']).toEqual([
         [
           'trackEvent',

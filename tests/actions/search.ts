@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import searchkit, { queryBuilder } from '../../src/utilities/searchkit';
 import {
   initSearchkit,
@@ -39,11 +39,13 @@ import {
   UPDATE_SIMILARS,
   UPDATE_STATE
 } from '../../src/actions/search';
-import { languages } from '../../src/utilities/language';
+import { Language, languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { Client } from 'elasticsearch';
+import { State, Thunk } from '../../src/types';
+import { AnyAction } from 'redux';
 
-const mockStore = configureMockStore([thunk]);
+const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>>([thunk]);
 
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
@@ -51,6 +53,21 @@ jest.mock('elasticsearch', () => ({
     search: () => Promise.reject("Mocked!") // Default mock.
   }))
 }));
+
+// Create a SearchkitManager with an instant timeout.
+jest.mock('../../src/utilities/searchkit', () => ({
+  __esModule: true,
+  ...jest.requireActual('../../src/utilities/searchkit'),
+  default: new (require('searchkit').SearchkitManager)('api/sk', { timeout: 0 })
+}));
+
+const ClientMock = Client as jest.MockedClass<typeof Client>;
+
+const enLanguage: Language = {
+  code: 'en',
+  label: 'English',
+  index: 'cmmstudy_en'
+}
 
 describe('Search actions', () => {
 
@@ -69,10 +86,12 @@ describe('Search actions', () => {
     };
 
     // Mock Matomo Analytics library (no metrics will actually be sent).
+    // @ts-ignore
     global['_paq'] = [];
 
     // Mock elasticsearch Client() to prevent http request and resolve promise.
-    Client.mockImplementation(() => {
+    // @ts-expect-error - only returns what's tested.
+    ClientMock.mockImplementation(() => {
       return {
         search: () => {
           return Promise.resolve({
@@ -106,15 +125,14 @@ describe('Search actions', () => {
   });
 
   describe('INIT_SEARCHKIT action', () => {
-    beforeEach(() => {
-      // Action uses setTimeout() so use fake timers for these tests.
-      jest.useFakeTimers();
-    });
+    // Action uses setTimeout() so use fake timers for these tests.
+    beforeEach(() => jest.useFakeTimers());
 
     it('is created when initialising searchkit on the results page', () => {
       // Mock Redux store.
-      let store = mockStore({
+      const store = mockStore({
         routing: {
+          // @ts-expect-error
           locationBeforeTransitions: {
             pathname: '/',
             query: {
@@ -123,10 +141,8 @@ describe('Search actions', () => {
           }
         },
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: _.map(languages, (language) => _.pick(language, ['code', 'label', 'index']))
         }
       });
 
@@ -165,7 +181,7 @@ describe('Search actions', () => {
         {
           type: UPDATE_QUERY,
           query: {
-            index: 'cmmstudy_en',
+            index: enLanguage.index,
             min_score: 0.5,
             size: 20
           }
@@ -181,7 +197,7 @@ describe('Search actions', () => {
         {
           type: UPDATE_QUERY,
           query: {
-            index: 'cmmstudy_en',
+            index: enLanguage.index,
             min_score: 0.5,
             size: 20
           }
@@ -215,6 +231,7 @@ describe('Search actions', () => {
       // Mock Redux store.
       let store = mockStore({
         routing: {
+          // @ts-expect-error
           locationBeforeTransitions: {
             pathname: '/detail',
             query: {
@@ -223,10 +240,8 @@ describe('Search actions', () => {
           }
         },
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: languages
         }
       });
 
@@ -314,6 +329,7 @@ describe('Search actions', () => {
       // Mock Redux store.
       let store = mockStore({
         routing: {
+          // @ts-expect-error
           locationBeforeTransitions: {
             pathname: '/',
             query: {
@@ -322,10 +338,8 @@ describe('Search actions', () => {
           }
         },
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: languages
         }
       });
 
@@ -342,6 +356,7 @@ describe('Search actions', () => {
       jest.runAllTimers();
 
       // Analytics library should have pushed events.
+      // @ts-expect-error
       expect(global['_paq']).toEqual([
         ['setReferrerUrl', '/?q=search%20text'],
         ['setCustomUrl', '/?q=search%20text'],
@@ -355,6 +370,8 @@ describe('Search actions', () => {
         ['enableLinkTracking']
       ]);
     });
+
+    afterEach(() => jest.clearAllTimers());
   });
 
   describe('TOGGLE_LOADING action', () => {
@@ -414,7 +431,8 @@ describe('Search actions', () => {
   describe('TOGGLE_LONG_DESCRIPTION action', () => {
     it('is created when long study description visibility changes', () => {
       // Mock Redux store.
-      let store = mockStore({});
+      // @ts-expect-error
+      const store = mockStore({});
 
       // Dispatch action.
       store.dispatch(toggleLongAbstract('Study Title', 1));
@@ -430,12 +448,14 @@ describe('Search actions', () => {
 
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
-      let store = mockStore({});
+      // @ts-expect-error
+      const store = mockStore({});
 
       // Dispatch action.
       store.dispatch(toggleLongAbstract('Study Title', 1));
 
       // Analytics library should have pushed event.
+      // @ts-expect-error
       expect(global['_paq']).toEqual([
         ['trackEvent', 'Search', 'Read more', 'Study Title']
       ]);
@@ -445,14 +465,17 @@ describe('Search actions', () => {
   describe('UPDATE_DISPLAYED action', () => {
     it('is created when the list of displayed studies is updated', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({
         language: {
-          code: 'en'
+          currentLanguage: enLanguage,
+          list: []
         }
       });
 
       // Dispatch action.
       store.dispatch(
+        // @ts-expect-error
         updateDisplayed([
           {
             id: '1'
@@ -480,7 +503,7 @@ describe('Search actions', () => {
       const query = {
         query: {
           bool: {
-            must: [queryBuilder('search text', {})]
+            must: [queryBuilder('search text')]
           }
         }
       };
@@ -511,22 +534,22 @@ describe('Search actions', () => {
   describe('UPDATE_SIMILARS action', () => {
     it('is created when the list of similar studies is updated', () => {
       // Mock Redux store.
-      let store = mockStore({
+      // @ts-expect-error
+      const store = mockStore({
         language: {
-          code: 'en',
-          list: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          currentLanguage: enLanguage,
+          list: languages
         }
       });
 
       // Dispatch action and wait for promise.
-      return store.dispatch(
-          updateSimilars({
-            id: "1",
-            titleStudy: 'Study Title'
-          })
-        ).then(() => {
+      // @ts-expect-error
+      const similars = updateSimilars({
+        id: "1",
+        titleStudy: 'Study Title'
+      })
+
+      return store.dispatch(similars).then(() => {
           // State should contain similar studies.
           expect(store.getActions()).toEqual([
             {
@@ -544,8 +567,12 @@ describe('Search actions', () => {
   });
 
   describe('RESET_SEARCH action', () => {
+    // Action uses setTimeout() so use fake timers for these tests.
+    beforeEach(() => jest.useFakeTimers());
+
     it('is created when the list of similar studies is updated', () => {
       // Mock Redux store.
+      // @ts-expect-error
       let store = mockStore({});
 
       // Dispatch action.
@@ -558,5 +585,8 @@ describe('Search actions', () => {
         }
       ]);
     });
+
+    // Clear any pending timers
+    afterEach(() => jest.clearAllTimers());
   });
 });
