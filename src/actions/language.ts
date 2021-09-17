@@ -14,7 +14,7 @@
 
 import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
-import { Dispatch, Thunk } from "../types";
+import { Thunk } from "../types";
 import moment from "moment";
 import { languages, Language } from "../utilities/language";
 import getPaq from "../utilities/getPaq";

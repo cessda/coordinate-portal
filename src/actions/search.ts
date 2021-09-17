@@ -14,7 +14,7 @@
 import searchkit, { detailQuery, similarQuery, pidQuery, matchAllQuery, uniqueAggregation } from "../utilities/searchkit";
 import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
-import { Dispatch, State, Thunk } from "../types";
+import { Thunk } from "../types";
 import { CMMStudy } from "../utilities/metadata";
 import getPaq from "../utilities/getPaq";
 
