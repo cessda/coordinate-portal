@@ -11,119 +11,113 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _, { identity } from 'lodash';
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import {
   Detail,
   mapDispatchToProps,
-  mapStateToProps,
-  Props
-} from '../../src/components/Detail';
+  mapStateToProps} from '../../src/components/Detail';
 import { CMMStudy } from '../../src/utilities/metadata';
+import { DateTimeFormatter } from '@js-joda/core';
 
 // Mock props and shallow render component for test.
 function setup(item?: Partial<CMMStudy>) {
   const props = {
     index: 0,
-    item: _.extend(
-            {
-              id: "1",
-              titleStudy: 'Study Title',
-              titleStudyHighlight: '',
-              abstract: 'Abstract',
-              abstractHighlight: '',
-              abstractHighlightShort: '',
-              abstractExpanded: false,
-              abstractShort: 'Abstract',
-              classifications: [
-                {
-                  id: 'UKDS1234',
-                  term: 'Term',
-                  vocab: 'Vocab',
-                  vocabUri: 'http://example.com'
-                }
-              ],
-              code: 'UKDS',
-              creators: [
-                'Jane Doe',
-                'University of Essex',
-                'John Smith (University of Essex)',
-                'Joe Bloggs, University of Essex'
-              ],
-              dataAccessFreeTexts: ['Data Access Free Texts'],
-              dataCollectionFreeTexts: [],
-              dataCollectionPeriodEnddate: '',
-              dataCollectionPeriodStartdate: '2001',
-              fileLanguages: ['en'],
-              keywords: [
-                {
-                  id: 'UKDS1234',
-                  term: 'Term',
-                  vocab: 'Vocab',
-                  vocabUri: 'http://example.com'
-                }
-              ],
-              langAvailableIn: ['EN'],
-              lastModified: '2001-01-01T12:00:00Z',
-              pidStudies: [
-                {
-                  agency: 'UKDS',
-                  pid: 'UKDS1234'
-                }
-              ],
-              publicationYear: '2001-01-01',
-              publisher: {
-                abbr: 'UKDS',
-                publisher: 'UK Data Service'
-              },
-              samplingProcedureFreeTexts: [],
-              studyAreaCountries: [
-                {
-                  abbr: 'EN',
-                  country: 'England',
-                  searchField: 'England'
-                }
-              ],
-              studyNumber: 'UKDS1234',
-              studyUrl: 'http://example.com',
-              typeOfModeOfCollections: [
-                {
-                  id: 'UKDS1234',
-                  term: 'Term',
-                  vocab: 'Vocab',
-                  vocabUri: 'http://example.com'
-                }
-              ],
-              typeOfTimeMethods: [
-                {
-                  id: 'UKDS1234',
-                  term: 'Term',
-                  vocab: 'Vocab',
-                  vocabUri: 'http://example.com'
-                }
-              ],
-              typeOfSamplingProcedures: [],
-              unitTypes: [
-                {
-                  id: 'UKDS1234',
-                  term: 'Term',
-                  vocab: 'Vocab',
-                  vocabUri: 'http://example.com'
-                }
-              ],
-              studyXmlSourceUrl: ''
-            },
-            item || {}
-          ),
+    item: {
+      id: "1",
+      titleStudy: 'Study Title',
+      titleStudyHighlight: '',
+      abstract: 'Abstract',
+      abstractHighlight: '',
+      abstractHighlightShort: '',
+      abstractExpanded: false,
+      abstractShort: 'Abstract',
+      classifications: [
+        {
+          id: 'UKDS1234',
+          term: 'Term',
+          vocab: 'Vocab',
+          vocabUri: 'http://example.com'
+        }
+      ],
+      code: 'UKDS',
+      creators: [
+        'Jane Doe',
+        'University of Essex',
+        'John Smith (University of Essex)',
+        'Joe Bloggs, University of Essex'
+      ],
+      dataAccessFreeTexts: ['Data Access Free Texts'],
+      dataCollectionFreeTexts: [],
+      dataCollectionPeriodEnddate: '',
+      dataCollectionPeriodStartdate: '2001',
+      fileLanguages: ['en'],
+      keywords: [
+        {
+          id: 'UKDS1234',
+          term: 'Term',
+          vocab: 'Vocab',
+          vocabUri: 'http://example.com'
+        }
+      ],
+      langAvailableIn: ['EN'],
+      lastModified: '2001-01-01T12:00:00Z',
+      pidStudies: [
+        {
+          agency: 'UKDS',
+          pid: 'UKDS1234'
+        }
+      ],
+      publicationYear: '2001-01-01',
+      publisher: {
+        abbr: 'UKDS',
+        publisher: 'UK Data Service'
+      },
+      samplingProcedureFreeTexts: [],
+      studyAreaCountries: [
+        {
+          abbr: 'EN',
+          country: 'England',
+          searchField: 'England'
+        }
+      ],
+      studyNumber: 'UKDS1234',
+      studyUrl: 'http://example.com',
+      typeOfModeOfCollections: [
+        {
+          id: 'UKDS1234',
+          term: 'Term',
+          vocab: 'Vocab',
+          vocabUri: 'http://example.com'
+        }
+      ],
+      typeOfTimeMethods: [
+        {
+          id: 'UKDS1234',
+          term: 'Term',
+          vocab: 'Vocab',
+          vocabUri: 'http://example.com'
+        }
+      ],
+      typeOfSamplingProcedures: [],
+      unitTypes: [
+        {
+          id: 'UKDS1234',
+          term: 'Term',
+          vocab: 'Vocab',
+          vocabUri: 'http://example.com'
+        }
+      ],
+      studyXmlSourceUrl: '',
+      ...item
+    },
     expandMetadataPanels: true,
     toggleMetadataPanels: jest.fn()
   };
 
   // Mock toggleMetadataPanels() to update state.
-  props.toggleMetadataPanels.mockImplementation(() => {
-    props.expandMetadataPanels = !props.expandMetadataPanels;
-  });
+  props.toggleMetadataPanels.mockImplementation(() => props.expandMetadataPanels = !props.expandMetadataPanels);
 
   const enzymeWrapper = shallow(<Detail {...props} />);
   return {
@@ -198,7 +192,7 @@ describe('Detail component', () => {
 
   it('should handle formatting dates with missing data', () => {
     expect(
-      mount(<>{Detail.formatDate('DD/MM/YYYY')}</>).html()
+      mount(<>{Detail.formatDate(Detail.dateFormatter)}</>).html()
     ).toContain('notAvailable');
   });
 
@@ -206,7 +200,7 @@ describe('Detail component', () => {
     expect(
       mount(<>{
         Detail.formatDate(
-          'DD/MM/YYYY',
+          Detail.dateFormatter,
           undefined,
           undefined,
           [
@@ -230,7 +224,7 @@ describe('Detail component', () => {
     expect(
       mount(<>{
         Detail.formatDate(
-          'DD/MM/YYYY',
+          Detail.dateFormatter,
           undefined,
           undefined,
           [
@@ -253,7 +247,7 @@ describe('Detail component', () => {
 
   it('should handle formatting dates with invalid first date', () => {
     expect(
-      mount(<>{Detail.formatDate('DD/MM/YYYY', 'Not a date')}</>)
+      mount(<>{Detail.formatDate(Detail.dateFormatter, 'Not a date')}</>)
         .find('p')
         .text()
     ).toBe('Not a date');
@@ -261,7 +255,7 @@ describe('Detail component', () => {
 
   it('should handle formatting dates as a range with invalid first date', () => {
     expect(
-      mount(<>{Detail.formatDate('DD/MM/YYYY', 'Not a date', '2006-05-04')}</>)
+      mount(<>{Detail.formatDate(Detail.dateFormatter, 'Not a date', '2006-05-04')}</>)
         .find('p')
         .text()
     ).toBe('Not a date - 04/05/2006');
@@ -269,7 +263,7 @@ describe('Detail component', () => {
 
   it('should handle formatting dates as a range with valid second date', () => {
     expect(
-      mount(<>{Detail.formatDate('DD/MM/YYYY', '2003-02-01', '2006-05-04')}</>)
+      mount(<>{Detail.formatDate(Detail.dateFormatter, '2003-02-01', '2006-05-04')}</>)
         .find('p')
         .text()
     ).toBe('01/02/2003 - 04/05/2006');
@@ -277,7 +271,7 @@ describe('Detail component', () => {
 
   it('should handle formatting dates as a range with invalid second date', () => {
     expect(
-      mount(<>{Detail.formatDate('DD/MM/YYYY', '2003-02-01', 'Not a date')}</>)
+      mount(<>{Detail.formatDate(Detail.dateFormatter, '2003-02-01', 'Not a date')}</>)
         .find('p')
         .text()
     ).toBe('01/02/2003 - Not a date');
