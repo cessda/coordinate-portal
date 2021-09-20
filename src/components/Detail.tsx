@@ -19,10 +19,10 @@ import Panel from "./Panel";
 import Translate from "react-translate-component";
 import { State } from "../types";
 import _ from "lodash";
-import moment from "moment";
 import { AnyAction, bindActionCreators } from "redux";
 import { toggleMetadataPanels, ToggleMetadataPanelsAction } from "../actions/search";
 import { CMMStudy, DataCollectionFreeText } from "../utilities/metadata";
+import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder, OffsetDateTime, TemporalQuery } from "@js-joda/core";
 
 export interface Props {
   index: number;
@@ -32,6 +32,17 @@ export interface Props {
 };
 
 export class Detail extends React.Component<Props> {
+
+  private static readonly formatter = new DateTimeFormatterBuilder()
+    .appendValue(ChronoField.YEAR)
+    .optionalStart().appendLiteral("-").appendValue(ChronoField.MONTH_OF_YEAR)
+      .optionalStart().appendLiteral("-").appendValue(ChronoField.DAY_OF_MONTH)
+        .optionalStart().appendLiteral( "T" ).append(DateTimeFormatter.ISO_OFFSET_TIME).optionalEnd()
+      .optionalEnd()
+    .optionalEnd()
+    .toFormatter();
+
+  static readonly dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");
 
   componentWillUnmount(): void {
     if (this.props.expandMetadataPanels) {
@@ -69,7 +80,7 @@ export class Detail extends React.Component<Props> {
   }
 
   static formatDate(
-    format: string,
+    dateTimeFormatter: DateTimeFormatter,
     date1?: string,
     date2?: string,
     dateFallback?: DataCollectionFreeText[]
@@ -80,38 +91,46 @@ export class Detail extends React.Component<Props> {
     if (!date1 && !date2 && dateFallback) {
       if (dateFallback.length === 2 && dateFallback[0].event === 'start' && dateFallback[1].event === 'end') {
         // Handle special case where array items are a start/end date range.
-        return Detail.formatDate(format, dateFallback[0].dataCollectionFreeText, dateFallback[1].dataCollectionFreeText);
+        return Detail.formatDate(dateTimeFormatter, dateFallback[0].dataCollectionFreeText, dateFallback[1].dataCollectionFreeText);
       }
       // Generate elements for each date in the array.
       return (
           Detail.generateElements(
             dateFallback,
             'p',
-            date => {
-              const value = date.dataCollectionFreeText;
-              const momentDate = moment(
-                value,
-                [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'],
-                true
-              );
-              // Format array item as date if possible.
-              return momentDate.isValid() ? momentDate.format(format) : value;
-            }
+            date => Detail.parseDate(date.dataCollectionFreeText, dateTimeFormatter)
           )
       );
     }
-    const momentDate1 = moment(date1, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
-    if (!date2) {
-      // Format single date.
-      return <p>{momentDate1.isValid() ? momentDate1.format(format) : date1}</p>;
+
+    if (date1) {
+      if (!date2) {
+        return <p>{Detail.parseDate(date1, dateTimeFormatter)}</p>;
+      } else {
+        return <p>{Detail.parseDate(date1, dateTimeFormatter)} - {Detail.parseDate(date2, dateTimeFormatter)}</p>
+      }
+    } else {
+      return <Translate content="language.notAvailable.field" />;
     }
-    const momentDate2 = moment(date2, [moment.ISO_8601, 'YYYY-MM-DD', 'YYYY-MM', 'YYYY'], true);
-    // Format two dates as range.
-    return (
-      <p>
-        {momentDate1.isValid() ? momentDate1.format(format) : date1} - {momentDate2.isValid() ? momentDate2.format(format) : date2}
-      </p>
-    );
+  }
+
+  /**
+   * Attempt to format the given date string.
+   * 
+   * @param dateString the date string to parse.
+   * @param dateTimeFormatter the formatter to use.
+   * @returns a formatted date, or the original string if an error occured when formatting.
+   */
+  private static parseDate(dateString: string, dateTimeFormatter: DateTimeFormatter): string {
+    // Format array item as date if possible.
+    try {
+      const temporalAccessor = Detail.formatter.parse(dateString);
+      return dateTimeFormatter.format(temporalAccessor);
+    } catch (e) {
+      // Handle unparsable strings by returning the given value.
+      console.debug(e);
+      return dateString;
+    }
   }
 
   render() {
@@ -185,7 +204,7 @@ Summary information
             content="metadata.dataCollectionPeriod"
           />
           {Detail.formatDate(
-            'DD/MM/Y',
+            Detail.dateFormatter,
             item.dataCollectionPeriodStartdate,
             item.dataCollectionPeriodEnddate,
             item.dataCollectionFreeTexts
@@ -257,7 +276,7 @@ Summary information
             component="h3"
             content="metadata.yearOfPublication"
           />
-          {Detail.formatDate('YYYY', item.publicationYear)}
+          {Detail.formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
 
           <Translate
             className="data-label"

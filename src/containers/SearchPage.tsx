@@ -29,7 +29,6 @@ import searchkit from '../utilities/searchkit';
 import _ from 'lodash';
 import $ from 'jquery';
 import type {State} from '../types';
-import moment from 'moment';
 import counterpart from 'counterpart';
 
 export type Props = {
@@ -92,7 +91,7 @@ export class SearchPage extends Component<Props> {
                                     size={2700}/>
 
               <RangeFilter min={1900}
-                           max={moment().year()}
+                           max={new Date().getFullYear()}
                            field="dataCollectionYear"
                            id="dataCollectionYear"
                            title={counterpart.translate('filters.collectionDates.label')}

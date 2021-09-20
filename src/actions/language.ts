@@ -15,7 +15,6 @@
 import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
 import { Thunk } from "../types";
-import moment from "moment";
 import { languages, Language } from "../utilities/language";
 import getPaq from "../utilities/getPaq";
 
@@ -45,8 +44,6 @@ export function initTranslations(): Thunk {
 
     // Fallback to English if the locale is not available
     counterpart.setFallbackLocale('en');
-
-    moment.locale(state.language.currentLanguage.code);
 
     searchkit.translateFunction = (key: string): string | undefined => {
       const numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
@@ -113,8 +110,6 @@ export function changeLanguage(code: string): Thunk {
     }
 
     counterpart.setLocale(code);
-
-    moment.locale(code);
 
     dispatch({
       type: CHANGE_LANGUAGE,
