@@ -18,11 +18,12 @@ import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
 import { connect } from 'react-redux';
 import Translate from 'react-translate-component';
+import counterpart from 'counterpart';
 
 export class AboutPage extends Component {
 
   componentDidMount() {
-    document.title = "About - CESSDA Data Catalogue";
+    document.title = `About - ${counterpart.translate('datacatalogue')}`;
   }
 
   render() {

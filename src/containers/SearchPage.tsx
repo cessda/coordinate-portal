@@ -53,9 +53,9 @@ export class SearchPage extends Component<Props> {
 
     // Set the page title
     if (this.props.filters.q) {
-      document.title = `${this.props.filters.q} - CESSDA Data Catalogue`;
+      document.title = `${this.props.filters.q} - ${counterpart.translate('datacatalogue')}`;
     } else {
-      document.title = "CESSDA Data Catalogue";
+      document.title = counterpart.translate('datacatalogue');
     }
   }
 

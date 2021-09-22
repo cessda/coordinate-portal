@@ -30,6 +30,7 @@ import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../utilities/metadata';
 import { Dataset, WithContext } from 'schema-dts';
+import counterpart from 'counterpart';
 
 type Props = {
   loading: boolean;
@@ -47,9 +48,9 @@ export class DetailPage extends Component<Props> {
 
   componentDidUpdate() {
     if (this.props.item) {
-      document.title = `${this.props.item.titleStudy} - CESSDA Data Catalogue`;
+      document.title = `${this.props.item.titleStudy} - ${counterpart.translate('datacatalogue')}`;
     } else {
-      document.title = "Not found: CESSDA Data Catalogue";
+      document.title = `Not found - ${counterpart.translate('datacatalogue')}`;
     }
   }
 
