@@ -41,7 +41,7 @@ type Props = {
 export class SearchPage extends Component<Props> {
 
   componentDidMount() {
-    document.title = "CESSDA Data Catalogue";
+    document.title = counterpart.translate('datacatalogue');
   }
 
   componentDidUpdate(): void {
