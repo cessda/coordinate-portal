@@ -115,6 +115,7 @@ target/
 /bin
 /obj/Debug
 /views/
+/server/*.js
 
 ### Test Coverage files #
 ######################

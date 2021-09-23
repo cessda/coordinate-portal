@@ -12,9 +12,9 @@
 // limitations under the License.
 
 import { SearchResponse } from 'elasticsearch';
-import _ from 'lodash';
 import striptags from 'striptags';
 import { Dataset, Organization, Person, WithContext } from 'schema-dts';
+import _ from 'lodash';
 
 export interface CMMStudy {
   /** The internal ID of the study */
@@ -147,7 +147,7 @@ export function getStudyModel(searchResponse: Pick<SearchResponse<CMMStudy>, 'hi
 }
 
 function truncateAbstract(string: string): string {
-  const trimmedString = _.trim(string);
+  const trimmedString = string.trim();
   return _.truncate(trimmedString, { length: 500 } );
 }
 
@@ -157,73 +157,79 @@ function truncateAbstract(string: string): string {
  */
 function stripHTMLElements(html: string) {
   const strippedHTML = striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
-  return _.trim(strippedHTML);
+  return strippedHTML.trim();
 }
+
+/** Format: "Name (Organisation)" */
+const bracketRegex = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi;
+/** Format: "Name, Organisation" */
+const commaRegex = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi;
 
 // Generates study JSON-LD for Google indexing.
 export function getJsonLd(data: CMMStudy): WithContext<Dataset> {
   // Attempt to split people from organisations in the creator field.
   const creators: Array<Organization | Person> = data.creators.map(creator => {
-    // Format: "Name (Organisation)"
-    let matches = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi.exec(creator);
-    if (matches) {
+    const bracketMatches = bracketRegex.exec(creator);
+    if (bracketMatches) {
       return {
         '@type': 'Person',
-        'name': _.trim(matches[1]),
-        'affiliation': {
+        name: bracketMatches[1].trim(),
+        affiliation: {
           '@type': 'Organization',
-          'name': _.trim(matches[2])
+          name: bracketMatches[2].trim()
         }
       };
     }
-    // Format: "Name, Organisation"
-    matches = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi.exec(creator);
-    if (matches) {
+
+    const commaMatches = commaRegex.exec(creator);
+    if (commaMatches) {
       return {
         '@type': 'Person',
-        'name': _.trim(matches[1]),
-        'affiliation': {
+        name: commaMatches[1].trim(),
+        affiliation: {
           '@type': 'Organization',
-          'name': _.trim(matches[2])
+          name: commaMatches[2].trim()
         }
       };
     }
+    
+    const creatorLower = creator.toLowerCase();
     // Assume organisation if it contains any of the following words.
     return {
-      '@type': _.includes(creator.toLowerCase(), 'university') ||
-               _.includes(creator.toLowerCase(), 'institute') ||
-               _.includes(creator.toLowerCase(), 'polytechnic') ||
-               _.includes(creator.toLowerCase(), 'government') ||
-               _.includes(creator.toLowerCase(), 'department') ||
-               _.includes(creator.toLowerCase(), 'faculty') ||
-               _.includes(creator.toLowerCase(), 'division') ||
-               _.includes(creator.toLowerCase(), 'agency') ||
-               _.includes(creator.toLowerCase(), 'unit') ? 'Organization' : 'Person',
-      'name': _.trim(creator)
+      '@type': creatorLower.includes('university') ||
+               creatorLower.includes('institute') ||
+               creatorLower.includes('polytechnic') ||
+               creatorLower.includes('government') ||
+               creatorLower.includes('department') ||
+               creatorLower.includes('faculty') ||
+               creatorLower.includes('division') ||
+               creatorLower.includes('agency') ||
+               creatorLower.includes('unit') ? 'Organization' : 'Person',
+      name: creator.trim()
     }
   });
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    'name': data.titleStudy,
-    'description': data.abstract,
-    'url': window.location.href,
-    'sameAs': data.studyUrl,
-    'keywords': _.map(data.keywords || [], i => _.upperFirst(i.term)),
-    'variableMeasured': _.map(data.unitTypes, 'term').join(', '),
-    'measurementTechnique': _.map(data.typeOfModeOfCollections, 'term').join(', '),
-    'license': data.dataAccessFreeTexts,
-    'identifier': _.map(data.pidStudies || [], (i) => i.pid + ' (' + _.upperFirst(i.agency) + ')').join(', '),
-    'creator': creators,
-    'temporalCoverage': extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
-    'spatialCoverage': _.map(data.studyAreaCountries, 'country').join(', '),
-    'datePublished': data.publicationYear.substring(0, 10),
-    'dateModified': data.lastModified.substring(0, 10)
+    name: data.titleStudy,
+    description: data.abstract,
+    url: window.location.href,
+    sameAs: data.studyUrl,
+    keywords: data.keywords.map(i => _.upperFirst(i.term)),
+    variableMeasured: data.unitTypes.map(u => u.term).join(', '),
+    measurementTechnique: data.typeOfModeOfCollections.map(t => t.term).join(', '),
+    license: data.dataAccessFreeTexts,
+    identifier: data.pidStudies.map(i => i.pid + ' (' + i.agency + ')').join(', '),
+    creator: creators,
+    temporalCoverage: extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
+    spatialCoverage: data.studyAreaCountries.map(s => s.country).join(', '),
+    datePublished: data.publicationYear.substring(0, 10),
+    dateModified: data.lastModified.substring(0, 10)
   };
 }
 
-function extractDataCollectionPeriod(dataCollectionPeriodStartdate?: string, dataCollectionPeriodEnddate?: string) {
+function extractDataCollectionPeriod(dataCollectionPeriodStartdate: string | undefined, dataCollectionPeriodEnddate: string | undefined) {
 
   if (!dataCollectionPeriodStartdate) {
     return '';
