@@ -16,6 +16,7 @@ pipeline {
 	options {
 		ansiColor('xterm')
 		buildDiscarder logRotator(artifactNumToKeepStr: '5', numToKeepStr: '20')
+		timeout(time: 1, unit: 'HOURS') // Abort a stalled build
 	}
 
 	environment {
@@ -59,9 +60,7 @@ pipeline {
 		}
 		stage('Get Quality Gate Status') {
 			steps {
-				timeout(time: 1, unit: 'HOURS') {
-					waitForQualityGate abortPipeline: true
-				}
+				waitForQualityGate abortPipeline: true
 			}
 			when { branch 'master' }
 		}
