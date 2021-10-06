@@ -30,6 +30,7 @@ import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../utilities/metadata';
 import { Dataset, WithContext } from 'schema-dts';
+import counterpart from 'counterpart';
 
 export interface Props {
   loading: boolean;
@@ -43,6 +44,14 @@ export interface Props {
 };
 
 export class DetailPage extends Component<Props> {
+
+  componentDidUpdate() {
+    if (this.props.item) {
+      document.title = `${this.props.item.titleStudy} - ${counterpart.translate('datacatalogue')}`;
+    } else {
+      document.title = `${counterpart.translate('language.notAvailable.title')} - ${counterpart.translate('datacatalogue')}`;
+    }
+  }
 
   render() {
     const {

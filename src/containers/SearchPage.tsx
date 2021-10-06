@@ -39,16 +39,27 @@ export type Props = {
 
 export class SearchPage extends Component<Props> {
 
+  componentDidMount() {
+    document.title = counterpart.translate('datacatalogue');
+  }
+
   componentDidUpdate(): void {
     // Auto expand filters if they contain selected values.
     this.autoExpandFilter('classifications.term');
     this.autoExpandFilter('dataCollectionYear');
     this.autoExpandFilter('studyAreaCountries.country');
     this.autoExpandFilter('publisher.publisher');
+
+    // Set the page title
+    if (this.props.filters.q) {
+      document.title = `${this.props.filters.q} - ${counterpart.translate('datacatalogue')}`;
+    } else {
+      document.title = counterpart.translate('datacatalogue');
+    }
   }
 
   autoExpandFilter(filterName: string): void {
-    let filter = $(`.filter--${filterName.replace('.', '\\.')} > .is-collapsed`);
+    const filter = $(`.filter--${filterName.replace('.', '\\.')} > .is-collapsed`);
     if (!filter.data('expanded') && !_.isEmpty(this.props.filters[filterName])) {
       filter.data('expanded', true).trigger("click");
     }
