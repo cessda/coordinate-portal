@@ -23,7 +23,7 @@ import counterpart from 'counterpart';
 export class AboutPage extends Component {
 
   componentDidMount() {
-    document.title = `About - ${counterpart.translate('datacatalogue')}`;
+    document.title = `${counterpart.translate('about.label')} - ${counterpart.translate('datacatalogue')}`;
   }
 
   render() {
