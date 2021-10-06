@@ -50,7 +50,7 @@ export class DetailPage extends Component<Props> {
     if (this.props.item) {
       document.title = `${this.props.item.titleStudy} - ${counterpart.translate('datacatalogue')}`;
     } else {
-      document.title = `Not found - ${counterpart.translate('datacatalogue')}`;
+      document.title = `${counterpart.translate('language.notAvailable.title')} - ${counterpart.translate('datacatalogue')}`;
     }
   }
 
