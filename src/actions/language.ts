@@ -36,7 +36,12 @@ export function initTranslations(): Thunk {
       try {
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
-        console.debug(`Couldn't load translation for language '${language.code}': ${(e as Error).message}`);
+        const errorMessage = `Couldn't load translation for language '${language.code}'`;
+        if (e instanceof Error) {
+          console.debug(`${errorMessage}: ${e.message}`);
+        } else {
+          console.debug(`${errorMessage}: ${e}`);
+        }
       }
     });
 

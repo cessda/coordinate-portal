@@ -68,7 +68,7 @@ export default class MultiSelect extends AbstractItemList {
     const options: Options<OptionValues> = items.map((option): Option<OptionValues> => {
       let label = option.title || option.label || option.key;
       if (showCount) {
-        label += ` (${option.doc_count}) `;
+        label += ` (${option.doc_count})`;
       }
       return {value: option.key, label};
     });

@@ -170,15 +170,13 @@ Summary information
             component="h2"
             content="metadata.studyPersistentIdentifier"
           />
-          {Detail.generateElements(item.pidStudies, 'p', pidStudy => {
-            let pidString = pidStudy.pid;
-
+          {Detail.generateElements(item.pidStudies.filter(p => p.pid), 'p', pidStudy => {
             // The agency field is an optional attribute, only append if present
             if (pidStudy.agency) {
-              pidString = `${pidString} (${pidStudy.agency})`;
+              return <p>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
             }
 
-            return <p>{pidString}</p>;
+            return <p>{pidStudy.pid}</p>;
           })}
         </section>
 

@@ -84,7 +84,7 @@ describe('MultiSelect component', () => {
     });
     const options = enzymeWrapper.find('Select').prop('options') as any[];
     expect(options[0].label).toBe(
-      `${props.items[0].label} (${props.items[0].doc_count}) `
+      `${props.items[0].label} (${props.items[0].doc_count})`
     );
   });
 
