@@ -70,7 +70,9 @@
     "titleAscending": "Title (A - Z)",
     "titleDescending": "Title (Z - A)",
     "dateAscending": "Date of collection (oldest)",
-    "dateDescending": "Date of collection (newest)"
+    "dateDescending": "Date of collection (newest)",
+    "publicationDateAscending": "Date of publication (oldest)",
+    "publicationDateDescending": "Date of publication (newest)"
   },
   "advancedSearch": {
     "label": "Search help",
