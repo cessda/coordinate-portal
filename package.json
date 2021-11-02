@@ -22,7 +22,7 @@
     "detect-browser": "5.2.1",
     "elasticsearch": "16.7.2",
     "express": "4.17.1",
-    "express-http-proxy": "1.6.2",
+    "express-http-proxy": "1.6.3",
     "jquery": "3.6.0",
     "lodash": "4.17.21",
     "method-override": "3.0.0",
