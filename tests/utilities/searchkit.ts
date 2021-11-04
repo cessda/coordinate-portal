@@ -36,12 +36,8 @@ describe('Searchkit utilities', () => {
   describe('detailQuery()', () => {
     it('should return a Searchkit query used to retrieve a single study', () => {
       expect(detailQuery("1")).toEqual({
-        bool: {
-          must: {
-            match: {
-              id: "1"
-            }
-          }
+        ids: {
+          values: ["1"]
         }
       });
     });
@@ -63,11 +59,16 @@ describe('Searchkit utilities', () => {
 
   describe('similarQuery()', () => {
     it('should return a Searchkit query used to retrieve similar studies', () => {
-      expect(similarQuery('Study Title')).toEqual({
+      expect(similarQuery('id', 'Study Title')).toEqual({
         bool: {
           must: {
             match: {
               titleStudy: 'Study Title'
+            }
+          },
+          must_not: {
+            ids: {
+              values: ['id']
             }
           }
         }

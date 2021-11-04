@@ -37,9 +37,9 @@ export class Similars extends Component<Props> {
       similars    
     } = this.props;
 
-    let links: JSX.Element[] = [];
+    const links: JSX.Element[] = [];
 
-    if (item !== undefined && similars !== undefined) {
+    if (item && similars) {
       for (let i: number = 0; i < similars.length; i++) {
         links.push(<a key={i} onClick={() => {
           this.props.push({

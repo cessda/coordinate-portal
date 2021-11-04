@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
 import React from 'react';
 import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
 import {AbstractItemList, ItemListProps} from 'searchkit';
@@ -32,7 +31,7 @@ export default class MultiSelect extends AbstractItemList {
   }
 
   handleChange(selectedOptions: Option<OptionValues> | Options<OptionValues> | null) {
-    if (_.isArray(selectedOptions)) {
+    if (Array.isArray(selectedOptions)) {
       const items: string[] = [];
       selectedOptions.forEach(el => {
         if (el.value) {

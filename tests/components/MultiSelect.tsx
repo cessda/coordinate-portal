@@ -11,47 +11,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
 import MultiSelect, { Props } from '../../src/components/MultiSelect';
 
 // Mock props and shallow render component for test.
 function setup(partialProps?: Partial<Props>) {
-  const props = _.assignIn(
-    {
-      placeholder: '',
-      items: [
-        {
-          label: 'Label',
-          key: 'Key',
-          value: 'Value',
-          doc_count: 2
-        },
-        {
-          key: 'Key',
-          value: 'Value',
-          doc_count: 2
-        },
-        {
-          key: 'Key',
-          value: 25,
-          doc_count: 2
-        },
-        {
-          key: 'Key',
-          value: undefined,
-          doc_count: 2
-        }
-      ],
-      selectedItems: [],
-      disabled: false,
-      showCount: false,
-      setItems: jest.fn(),
-      toggleItem: function() {}
-    },
-    partialProps || {}
-  );
+  const props = {
+    placeholder: '',
+    items: [
+      {
+        label: 'Label',
+        key: 'Key',
+        value: 'Value',
+        doc_count: 2
+      },
+      {
+        key: 'Key',
+        value: 'Value',
+        doc_count: 2
+      },
+      {
+        key: 'Key',
+        value: 25,
+        doc_count: 2
+      },
+      {
+        key: 'Key',
+        value: undefined,
+        doc_count: 2
+      }
+    ],
+    selectedItems: [],
+    disabled: false,
+    showCount: false,
+    toggleItem: () => { },
+
+    // Include partial props.
+    ...partialProps,
+
+    // setItems must remain as a mock, so is reassigned.
+    setItems: jest.fn()
+  };
 
   // Mock setItems() to update selected items.
   props.setItems.mockImplementation(items => {
@@ -118,7 +119,7 @@ describe('MultiSelect component', () => {
   });
 
   it('should handle an undefined value', () => {
-    const { props, enzymeWrapper } = setup();
+    const { enzymeWrapper } = setup();
     expect(enzymeWrapper.instance().renderValue({label: undefined})).toBe(null);
   })
 
