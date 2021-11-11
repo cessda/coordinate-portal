@@ -69,12 +69,6 @@ export class SearchPage extends Component<Props> {
     const {
       showMobileFilters
     } = this.props;
-    const customHighlight = {
-      "fields": {
-        "titleStudy": { "number_of_fragments": 0 },
-        "abstract": { "number_of_fragments": 0 }
-      }
-    };
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout className={showMobileFilters ? 'show-mobile-filters' : ''}>
@@ -97,7 +91,6 @@ export class SearchPage extends Component<Props> {
                                                                className="classifications"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    // @ts-ignore
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.topic.placeholder'/>}/>}
                                     size={2700}/>
 
@@ -128,7 +121,6 @@ export class SearchPage extends Component<Props> {
                                                                className="studyAreaCountries"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    // @ts-ignore
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.country.placeholder'/>}/>}
                                     size={500}/>
 
@@ -147,7 +139,6 @@ export class SearchPage extends Component<Props> {
                                                                className="publisher"
                                                                collapsable={true}
                                                                defaultCollapsed={true}/>}
-                                    // @ts-ignore
                                     listComponent={<MultiSelect placeholder={<Translate content='filters.publisher.placeholder'/>}/>}
                                     size={500}/>
 
@@ -176,7 +167,12 @@ export class SearchPage extends Component<Props> {
               <Hits scrollTo={true}
                     mod="sk-hits-list"
                     hitsPerPage={30}
-                    customHighlight={customHighlight}
+                    customHighlight={{
+                      fields: {
+                        titleStudy: { number_of_fragments: 0 }, 
+                        abstract: { number_of_fragments: 0 }
+                      }
+                    }}
                     itemComponent={Result}
                     key={'hitList'}/>
 

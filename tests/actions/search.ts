@@ -285,12 +285,8 @@ describe('Search actions', () => {
           query: {
             index: 'cmmstudy_en',
             query: {
-              bool: {
-                must: {
-                  match: {
-                    id: 'search text'
-                  }
-                }
+              ids: {
+                values: ['search text']
               }
             },
             size: 20

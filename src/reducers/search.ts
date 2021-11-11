@@ -123,15 +123,10 @@ export default function search(state: SearchState = initialState, action: Action
       });
 
     case UPDATE_SIMILARS: {
-      const similars: SearchState['similars'] = [];
-
-      // Select the first 4 studies only
-      for (let i: number = 0; i < Math.min(action.similars.length, 4); i++) {
-        similars.push({
-          id: action.similars[i].id,
-          title: action.similars[i].titleStudy
-        });
-      }
+      const similars: SearchState['similars'] = action.similars.map(s => ({
+        id: s.id,
+        title: s.titleStudy
+      }));
 
       return Object.assign({}, state, {
         similars: similars

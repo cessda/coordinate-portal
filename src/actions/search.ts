@@ -273,19 +273,16 @@ export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
     const state = getState();
 
     const response = await elasticsearchClient().search<CMMStudy>({
-      size: 10,
+      size: 5,
       body: {
         index: state.language.currentLanguage.index,
-        query: similarQuery(item.titleStudy)
+        query: similarQuery(item.id, item.titleStudy)
       }
     });
 
     dispatch({
       type: UPDATE_SIMILARS,
-      similars: _.uniqBy(
-        _.filter(response.hits.hits, (hit => hit._source && hit._source.id !== item.id && hit._source.titleStudy !== item.titleStudy)),
-        (hit => hit._source.titleStudy)
-      ).map(hit => hit._source)
+      similars: response.hits.hits.map(hit => hit._source)
     });
   };
 }

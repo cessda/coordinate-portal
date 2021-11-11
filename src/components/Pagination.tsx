@@ -20,7 +20,7 @@ export default class Pagination extends AbstractItemList {
 
   render() {
     const {items, selectedItems, setItems} = this.props;
-    let links = [];
+    const links = [];
 
     for (let i: number = 0; i < items.length; i++) {
       if (i === 0 || i === items.length - 1) {
@@ -38,7 +38,10 @@ export default class Pagination extends AbstractItemList {
           <li key={items[i].key}>
             <a className={'pagination-link' + current}
                href={'/?p=' + items[i].page}
-               onClick={(e) => {e.preventDefault(); setItems([items[i].page]);}}>
+               onClick={(e) => {
+                 e.preventDefault(); 
+                 setItems([items[i].page]);
+                }}>
               {items[i].label}
             </a>
           </li>
@@ -50,12 +53,18 @@ export default class Pagination extends AbstractItemList {
       <nav className="pagination is-centered is-small" role="navigation" aria-label="pagination">
         <a className="pagination-previous"
            href={'/?p=' + items[0].page}
-           onClick={(e) => {e.preventDefault(); setItems([items[0].page]);}}>
+           onClick={(e) => {
+             e.preventDefault(); 
+             setItems([items[0].page]);
+            }}>
           <FaChevronLeft/>
         </a>
         <a className="pagination-next"
            href={'/?p=' + items[items.length - 1].page}
-           onClick={(e) => {e.preventDefault(); setItems([items[items.length - 1].page]);}}>
+           onClick={(e) => {
+             e.preventDefault(); 
+             setItems([items[items.length - 1].page]);
+            }}>
           <FaChevronRight/>
         </a>
         <ul className="pagination-list">

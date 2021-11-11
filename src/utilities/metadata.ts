@@ -94,17 +94,14 @@ export interface Publisher {
   publisher: string;
 }
 
-export interface TermVocabAttributes {
-  vocab: string;
-  vocabUri: string;
-  id: string;
-  term: string;
-}
-
 export interface VocabAttributes {
   vocab: string;
   vocabUri: string;
   id: string;
+}
+
+export interface TermVocabAttributes extends VocabAttributes {
+  term: string;
 }
 
 /** 

@@ -13,8 +13,10 @@
 
 import {SearchkitManager} from 'searchkit';
 
-// Query builder used to create the query going to Elasticsearch (for search page).
-export const queryBuilder = (query: string) => {
+/** 
+ * Query builder used to create the query going to Elasticsearch (for search page).
+ */
+export function queryBuilder(query: string) {
   return {
     simple_query_string: {
       query: query,
@@ -23,31 +25,32 @@ export const queryBuilder = (query: string) => {
 
       // Can limit to searching specific fields if required. Weightings can also be added.
       fields: [
-        'titleStudy^4', 
-        'abstract^2', 
-        'creators^2', 
-        'keywords.id^1.5', 
+        'titleStudy^4',
+        'abstract^2',
+        'creators^2',
+        'keywords.id^1.5',
         '*' // Include all other fields at the default weighting
       ]
     }
   };
-};
+}
 
-// Query used to retrieve a single record by its ID (for detail page).
-export const detailQuery = (id: string) => {
+/** 
+ * Query used to retrieve a single record by its ID (for detail page).
+ * @param id the document to retrieve.
+ */
+export function detailQuery(id: string) {
   return {
-    bool: {
-      must: {
-        match: {
-          id: id
-        }
-      }
+    ids: {
+      values: [id]
     }
   };
-};
+}
 
-// Query used to retrieve a single record by its pid (for detail page).
-export const pidQuery = (pid: string) => {
+/** 
+ * Query used to retrieve a single record by its pid (for detail page).
+ */
+export function pidQuery(pid: string) {
   return {
     bool: {
       must: {
@@ -57,30 +60,43 @@ export const pidQuery = (pid: string) => {
       }
     }
   };
-};
+}
 
-// Query used to retrieve similar records for a specific title (for detail page).
-export const similarQuery = (title: string) => {
+/**
+ * Query used to retrieve similar records for a specific title (for detail page).
+ * @param id the document id, used to exclude the original document from the query.
+ * @param title the title of the document to retrieve similar records for.
+ */
+export function similarQuery(id: string, title: string) {
   return {
     bool: {
       must: {
         match: {
           titleStudy: title
         }
+      },
+      must_not: {
+        ids: {
+          values: [id]
+        }
       }
     }
   };
-};
+}
 
-// Match all query
-export const matchAllQuery = () => {
+/**
+ * Match all query
+ */ 
+export function matchAllQuery() {
   return {
     match_all: {}
   };
-};
+}
 
-// Aggregation used to get the total number of unique records
-export const uniqueAggregation = () => {
+/** 
+ * Aggregation used to get the total number of unique records 
+ */
+export function uniqueAggregation() {
   return {
     unique_id: {
       cardinality: {
@@ -88,7 +104,7 @@ export const uniqueAggregation = () => {
       }
     }
   };
-};
+}
 
 // Define a single searchkit manager instance to power the application.
 const searchkit: SearchkitManager = new SearchkitManager('/api/sk', {
