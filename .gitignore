@@ -112,10 +112,8 @@ target/
 ### Build files #
 ######################
 /dist/
-/bin
-/obj/Debug
-/views/
 /server/*.js
+*.tsbuildinfo
 
 ### Test Coverage files #
 ######################
