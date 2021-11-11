@@ -6,13 +6,13 @@
   "repository": "bitbucket:cessda/cessda.cdc.searchkit",
   "private": true,
   "scripts": {
-    "startdev": "tsc && node startdev.js",
+    "startdev": "tsc --build && node startdev.js",
     "startprod": "node startprod.js",
-    "build": "tsc && npm run clean && webpack --config webpack.prod.config.js",
+    "build": "tsc --build && npm run clean && webpack --config webpack.prod.config.js",
     "clean": "rimraf dist",
     "test": "jest --verbose",
     "test:watch": "npm test -- --watch",
-    "tsc": "tsc"
+    "tsc": "tsc --build"
   },
   "dependencies": {
     "@js-joda/core": "4.3.1",
