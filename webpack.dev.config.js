@@ -10,13 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+const common = require('./webpack.common');
 const path = require('path');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 
-module.exports = {
+module.exports = merge(common, {
   mode: 'development',
   devtool: 'sourcemap',
-  context: path.join(__dirname),
   entry: [
     'event-source-polyfill',
     'webpack-hot-middleware/client?reload=true',
@@ -34,50 +35,5 @@ module.exports = {
       PASC_PORT: 8088,
       PASC_ELASTICSEARCH_URL: null
     })
-  ],
-  resolve: {
-    alias: {
-      react: path.resolve('./node_modules/react')
-    },
-    extensions: ['.js', '.jsx', '.webpack.js', '.web.js', '.json', '.ts', '.tsx']
-  },
-  module: {
-    rules: [{
-      test: /\.(ts|js)x?$/,
-      exclude: /(node_modules)/,
-      loader: 'babel-loader'
-    }, {
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader']
-    }, {
-      test: /\.(scss|sass)$/,
-      use: [{
-        loader: 'style-loader' // creates style nodes from JS strings
-      }, {
-        loader: 'css-loader' // translates CSS into CommonJS
-      }, {
-        loader: 'sass-loader' // compiles Sass to CSS
-      }]
-    }, {
-      test: /\.(jpe?g|png|gif|svg)$/i,
-      loaders: ['file-loader?context=src/images&name=images/[path][name].[ext]', {
-        loader: 'image-webpack-loader',
-        query: {
-          mozjpeg: {
-            progressive: true
-          },
-          gifsicle: {
-            interlaced: false
-          },
-          optipng: {
-            optimizationLevel: 4
-          },
-          pngquant: {
-            quality: [0.75, 0.90],
-            speed: 3
-          }
-        }
-      }]
-    }]
-  }
-};
+  ]
+});
