@@ -8,8 +8,8 @@
   "scripts": {
     "startdev": "tsc --build && node startdev.js",
     "startprod": "node startprod.js",
-    "build": "tsc --build && npm run clean && webpack --config webpack.prod.config.js",
-    "clean": "rimraf dist",
+    "build": "tsc --build && webpack --config webpack.prod.config.js",
+    "clean": "rimraf dist && tsc --build --clean",
     "test": "jest --verbose",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc --build"

@@ -17,8 +17,7 @@ import {
   Detail,
   mapDispatchToProps,
   mapStateToProps} from '../../src/components/Detail';
-import { CMMStudy } from '../../src/utilities/metadata';
-import { DateTimeFormatter } from '@js-joda/core';
+import { CMMStudy } from '../../common/metadata';
 
 // Mock props and shallow render component for test.
 function setup(item?: Partial<CMMStudy>) {

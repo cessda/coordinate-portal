@@ -71,8 +71,9 @@ This project follows a best practice structure for React+Redux applications. See
 ├── coverage            # The output directory for the code coverage report using the test command.
 ├── dist                # The output directory for compilation using the build command.
 ├── node_modules        # Third party packages and dependencies.
-├── server              # Markup and scripts for the server instance.
-└── src                 # Contains all source code and assets for the application.
+├── server              # Common source code, shared between the client and the server.
+├── server              # Markup and source code for the Searchkit server.
+└── src                 # Contains all source code and assets for the client.
     ├── actions         # Redux actions and action creators for state container.
     ├── components      # React user interface components.
     ├── containers      # React page container components.

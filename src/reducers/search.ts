@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {CMMStudy, getJsonLd, getStudyModel} from '../utilities/metadata';
+import {CMMStudy, getJsonLd, getStudyModel} from '../../common/metadata';
 import type {Action} from '../actions';
 import _ from 'lodash';
 import { Dataset, WithContext } from 'schema-dts';
@@ -108,7 +108,7 @@ export default function search(state: SearchState = initialState, action: Action
 
       return Object.assign({}, state, {
         displayed: displayed,
-        jsonLd: displayed.length === 1 ? getJsonLd(displayed[0]) : undefined
+        jsonLd: displayed.length === 1 ? getJsonLd(displayed[0], window.location.href) : undefined
       });
     }
 

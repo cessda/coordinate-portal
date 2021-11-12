@@ -166,7 +166,7 @@ const bracketRegex = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi;
 const commaRegex = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi;
 
 // Generates study JSON-LD for Google indexing.
-export function getJsonLd(data: CMMStudy): WithContext<Dataset> {
+export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
   // Attempt to split people from organisations in the creator field.
   const creators: Array<Organization | Person> = data.creators.map(creator => {
     const bracketMatches = bracketRegex.exec(creator);
@@ -214,7 +214,7 @@ export function getJsonLd(data: CMMStudy): WithContext<Dataset> {
     '@type': 'Dataset',
     name: data.titleStudy,
     description: data.abstract,
-    url: window.location.href,
+    url: href, // Needs to generate a URL if href is undefined
     sameAs: data.studyUrl,
     keywords: data.keywords.map(i => _.upperFirst(i.term)),
     variableMeasured: data.unitTypes.map(u => u.term).join(', '),

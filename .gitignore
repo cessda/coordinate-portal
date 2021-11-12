@@ -112,6 +112,8 @@ target/
 ### Build files #
 ######################
 /dist/
+/common/*.js
+/common/*.d.ts
 /server/*.js
 /server/*.d.ts
 *.tsbuildinfo
