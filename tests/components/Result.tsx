@@ -19,7 +19,7 @@ import {
   mapStateToProps,
   Result
 } from '../../src/components/Result';
-import { CMMStudy } from '../../src/utilities/metadata';
+import { CMMStudy } from '../../common/metadata';
 
 // Mock props and shallow render component for test.
 function setup(item?: Partial<CMMStudy> | false) {

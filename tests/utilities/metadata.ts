@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { getJsonLd, getStudyModel } from '../../src/utilities/metadata';
+import { getJsonLd, getStudyModel } from '../../common/metadata';
 
 describe('Metadata utilities', () => {
   describe('getStudyModel()', () => {
@@ -380,7 +380,7 @@ describe('Metadata utilities', () => {
         sameAs: 'http://example.com',
         spatialCoverage: 'England',
         temporalCoverage: '2001/',
-        url: 'http://localhost/',
+        url: undefined,
         variableMeasured: 'Term'
       });
     });
@@ -502,7 +502,7 @@ describe('Metadata utilities', () => {
         sameAs: 'http://example.com',
         spatialCoverage: 'England',
         temporalCoverage: '2001/',
-        url: 'http://localhost/',
+        url: undefined,
         variableMeasured: 'Term'
       });
     });

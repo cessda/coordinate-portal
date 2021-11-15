@@ -10,15 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const fs = require('fs');
-const path = require('path');
-const url = require('url');
-const _ = require('lodash');
-const proxy = require('express-http-proxy');
-const express = require('express');
-const request = require('request');
-const helper = {};
-const winston = require('winston');
+import fs from 'fs';
+import path from 'path';
+import url from 'url';
+import _ from 'lodash';
+import proxy from 'express-http-proxy';
+import express from 'express';
+import request from 'request';
+import winston from 'winston';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -26,7 +25,7 @@ const elasticsearchUsername = process.env.SEARCHKIT_ELASTICSEARCH_USERNAME;
 const elasticsearchPassword = process.env.SEARCHKIT_ELASTICSEARCH_PASSWORD;
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
 const logLevel = process.env.SEARCHKIT_LOG_LEVEL || 'info';
-const loggerFormat = (() => {
+function loggerFormat() {
   if (process.env.SEARCHKIT_USE_JSON_LOGGING === 'true') {
     return winston.format.json();
   } else {
@@ -34,7 +33,7 @@ const loggerFormat = (() => {
       ({ level, message, timestamp }) => `[${timestamp}][${level}] ${message}`
     );
   }
-});
+}
 
 // Logger
 const logger = winston.createLogger({
@@ -50,12 +49,9 @@ const logger = winston.createLogger({
   exceptionHandlers: [
     new winston.transports.Console()
   ],
-  rejectionHandlers: [
-    new winston.transports.Console()
-  ]
 });
 
-helper.checkBuildDirectory = () => {
+export function checkBuildDirectory() {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
     logger.error(
       'Production startup failed as the application has not been built. ' +
@@ -63,9 +59,9 @@ helper.checkBuildDirectory = () => {
     );
     process.exit(16);
   }
-};
+}
 
-helper.checkEnvironmentVariables = (production) => {
+export function checkEnvironmentVariables(production: boolean) {
   if (_.isEmpty(elasticsearchUrl)) {
     logger.error(
       'Unable to start Data Catalogue application. Missing environment variable PASC_ELASTICSEARCH_URL.'
@@ -87,16 +83,16 @@ helper.checkEnvironmentVariables = (production) => {
       logger.info('Debug mode is enabled.');
     }
   }
-};
+}
 
-helper.getSearchkitRouter = () => {
+export function getSearchkitRouter() {
   const router = express.Router();
   const host = _.trimEnd(elasticsearchUrl, '/');
 
   const requestClient = request.defaults({ pool: { maxSockets: 500 } });
 
   // Configure authentication
-  let authentication = undefined;
+  let authentication: any = undefined;
   if (elasticsearchUsername && elasticsearchPassword) {
     logger.info('Elasticsearch authentication configured');
     authentication = {
@@ -134,14 +130,14 @@ helper.getSearchkitRouter = () => {
   });
 
   return router;
-};
+}
 
-helper.jsonProxy = () => {
-  let elasticsearchAuthorisaton = undefined;
+export function jsonProxy() {
+  let elasticsearchAuthorisaton: string | undefined = undefined;
 
   // Only configure Elasticsearch authentication if both username and password are set
   if (elasticsearchUsername && elasticsearchPassword) {
-    elasticsearchAuthorisaton = `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`
+    elasticsearchAuthorisaton = `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`;
   }
 
   return proxy(elasticsearchUrl, {
@@ -158,12 +154,12 @@ helper.jsonProxy = () => {
         proxyReqOpts.headers = {
           ...proxyReqOpts.headers,
           authorization: elasticsearchAuthorisaton
-        }
+        };
       }
       return proxyReqOpts;
     },
     // Handle connection errors to Elasticsearch.
-    proxyErrorHandler: (err, res, next) => {
+    proxyErrorHandler: (err, res) => {
       logger.error('Elasticsearch Request failed: %s', err?.message);
       res.sendStatus(502);
     },
@@ -184,10 +180,10 @@ helper.jsonProxy = () => {
     },
     filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
   });
-};
+}
 
-helper.startListening = (app) => {
-  let port = Number(process.env.PASC_PORT || 8088);
+export function startListening(app: express.Express) {
+  const port = Number(process.env.PASC_PORT || 8088);
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
@@ -195,6 +191,4 @@ helper.startListening = (app) => {
     logger.info('Shutting down');
     server.close();
   });
-};
-
-module.exports = helper;
+}

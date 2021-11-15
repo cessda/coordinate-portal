@@ -10,31 +10,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const compression = require('compression');
-const methodOverride = require('method-override');
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const helper = require('./helper');
+import compression from 'compression';
+import methodOverride from 'method-override';
+import express from 'express';
+import bodyParser from 'body-parser';
+import path from 'path';
+import { checkBuildDirectory, checkEnvironmentVariables, getSearchkitRouter, jsonProxy, startListening } from './helper';
 
-module.exports = {
-  start: function () {
-    helper.checkBuildDirectory();
-    helper.checkEnvironmentVariables(true);
+export function start () {
+    checkBuildDirectory();
+    checkEnvironmentVariables(true);
 
     const app = express();
-
-    // Disable the x-powered-by HTTP header
-    app.disable("x-powered-by");
 
     app.use(compression());
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    app.use('/api/sk', helper.getSearchkitRouter());
+    app.use('/api/sk', getSearchkitRouter());
 
-    app.use('/api/json', helper.jsonProxy());
+    app.use('/api/json', jsonProxy());
 
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 
@@ -42,6 +38,5 @@ module.exports = {
       res.sendFile(path.join(path.join(__dirname, '../dist'), 'index.html'));
     });
 
-    helper.startListening(app);
-  }
+    startListening(app);
 };
