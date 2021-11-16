@@ -59,13 +59,13 @@ export default class TopBar extends React.Component {
               }, {
                 label: counterpart.translate('sorting.dateAscending'),
                 key: 'date-ascending',
-                field: 'dataCollectionPeriodStartdate',
+                field: 'dataCollectionPeriodEnddate',
                 order: 'asc',
                 defaultOption: false
               }, {
                 label: counterpart.translate('sorting.dateDescending'),
                 key: 'date-descending',
-                field: 'dataCollectionPeriodStartdate',
+                field: 'dataCollectionPeriodEnddate',
                 order: 'desc',
                 defaultOption: false
               }, {
