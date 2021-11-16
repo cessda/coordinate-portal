@@ -71,7 +71,7 @@ export interface CMMStudy {
   lastModified: string;
   langAvailableIn: string[];
   studyXmlSourceUrl: string;
-};
+}
 
 export interface Country {
   abbr: string;

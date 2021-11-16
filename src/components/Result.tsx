@@ -61,18 +61,54 @@ export class Result extends Component<Props> {
     }
 
     let creators: JSX.Element[] = [];
-    for (let i: number = 0; i < item.creators.length; i++) {
-      creators.push(
-        <span key={i}>
-          {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
-        </span>
-      );
-      if (i === 2 && item.creators.length > 3) {
-        creators.push(<span key={3}>({item.creators.length - 3} more)</span>);
-        break;
-      }
-    }
-
+	  switch (item.creators.length) {
+	    case 1:
+	        creators.push(
+	        <span key={0}>
+	          {item.creators[0]}{''}
+	        </span>
+	      );
+	        break;
+	    case 2:
+	        creators.push(
+	        <span key={0}>
+	          {item.creators[0]}{'; '}
+	        </span>,
+			<span key={1}>
+	          {item.creators[1]}{''}
+	        </span>
+	      );
+	        break;
+	    case 3:
+	        creators.push(
+	        <span key={0}>
+	          {item.creators[0]}{'; '}
+	        </span>,
+			<span key={1}>
+	          {item.creators[1]}{'; '}
+	        </span>,
+			<span key={2}>
+	          {item.creators[2]}{''}
+	        </span>
+	      );
+	        break;
+		default:
+			creators.push(
+	        <span key={0}>
+	          	{item.creators[0]}{'; '}
+	        </span>,
+			<span key={1}>
+          		{item.creators[1]}{'; '}
+	        </span>,
+			<span key={2}>
+          		{item.creators[2]}{'; '}
+	        </span>,
+			<span key={3}>
+				({item.creators.length - 3} more)
+			</span>
+	      );
+	}
+	
     return (
       <div className="list_hit" data-qa="hit">
         <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>

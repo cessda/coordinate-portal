@@ -41,7 +41,7 @@ export interface Props {
     [key: string]: any;
   };
   goBack: () => RouterAction;
-};
+}
 
 export class DetailPage extends Component<Props> {
 
