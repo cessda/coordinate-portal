@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import React, {Component} from 'react';
-import {FaLinkedin, FaTwitterSquare, FaYoutubeSquare} from 'react-icons/fa';
 import Translate from 'react-translate-component';
 
 export default class Footer extends Component {
@@ -44,7 +43,7 @@ export default class Footer extends Component {
         </section>
         <script type="application/ld+json">
           {JSON.stringify({
-            "@context": "http://schema.org",
+            "@context": "https://schema.org",
             "@type": "Organization",
             "name": "CESSDA ERIC",
             "url": "https://www.cessda.eu",

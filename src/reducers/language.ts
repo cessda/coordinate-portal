@@ -19,7 +19,7 @@ import { languages, Language } from "../utilities/language";
 export interface LanguageState {
   currentLanguage: Language;
   list: readonly Language[];
-};
+}
 
 const initialState: LanguageState = {
   currentLanguage: languages.find(l => l.code === "en") || languages[0],

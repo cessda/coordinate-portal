@@ -67,7 +67,6 @@ history.listen(location => {
 
   // Remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
   _paq.push(['deleteCustomVariables', 'page']);
- // _paq.push(['setGenerationTimeMs', 0]);
   _paq.push(['trackPageView']);
 
   // Make Matomo aware of newly added content

@@ -48,7 +48,7 @@ export interface SearchState {
   query: Record<string, any>;
   state: SearchkitState;
   totalStudies: number;
-};
+}
 
 const initialState: SearchState = {
   loading: true,

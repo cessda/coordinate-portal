@@ -32,6 +32,25 @@ type Props = {
   toggleLongAbstract: typeof toggleLongAbstract;
 };
 
+function generateCreatorElements(item: CMMStudy) {
+  let creators: JSX.Element[] = [];
+
+  for (let i: number = 0; i < item.creators.length; i++) {
+    creators.push(
+      <span key={i}>
+        {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
+      </span>
+    );
+
+    if (i === 2 && item.creators.length > 3) {
+      creators.push(<span key={3}>({item.creators.length - 3} more)</span>);
+      break;
+    }
+  }
+
+  return creators;
+}
+
 export class Result extends Component<Props> {
 
   render() {
@@ -60,19 +79,8 @@ export class Result extends Component<Props> {
       );
     }
 
-    let creators: JSX.Element[] = [];
-    for (let i: number = 0; i < item.creators.length; i++) {
-      creators.push(
-        <span key={i}>
-          {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
-        </span>
-      );
-      if (i === 2 && item.creators.length > 3) {
-        creators.push(<span key={3}>({item.creators.length - 3} more)</span>);
-        break;
-      }
-    }
-
+    const creators = generateCreatorElements(item);
+	
     return (
       <div className="list_hit" data-qa="hit">
         <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>

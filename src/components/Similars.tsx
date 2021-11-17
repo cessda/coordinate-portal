@@ -27,7 +27,7 @@ export interface Props {
     title: string;
   }[];
   push: typeof push;
-};
+}
 
 export class Similars extends Component<Props> {
 

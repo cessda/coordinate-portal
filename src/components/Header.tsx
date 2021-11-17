@@ -20,7 +20,7 @@ import counterpart from "counterpart";
 import Reset from "./Reset";
 import { queryBuilder } from "../utilities/searchkit";
 import SearchBox from "./SearchBox";
-import type { State, Thunk } from "../types";
+import type { State } from "../types";
 import { AnyAction, bindActionCreators } from "redux";
 import {
   resetSearch,
