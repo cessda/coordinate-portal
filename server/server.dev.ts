@@ -10,20 +10,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const compression = require('compression');
-const methodOverride = require('method-override');
-const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const express = require('express');
-const bodyParser = require('body-parser');
-const config = require('../webpack.dev.config.js');
-const path = require('path');
-const helper = require('./helper');
+import compression from 'compression';
+import methodOverride from 'method-override';
+import webpack from 'webpack';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import express from 'express';
+import bodyParser from 'body-parser';
+// @ts-ignore
+import config from '../webpack.dev.config.js';
+import path from 'path';
+import { checkEnvironmentVariables, getSearchkitRouter, jsonProxy, startListening } from './helper';
 
-module.exports = {
-  start: function () {
-    helper.checkEnvironmentVariables();
+export function start() {
+    checkEnvironmentVariables(false);
 
     const app = express();
     const compiler = webpack(config);
@@ -36,6 +36,7 @@ module.exports = {
     app.use(bodyParser.json());
     app.use(methodOverride());
 
+    // @ts-expect-error - incorrect typings
     app.use(webpackMiddleware(compiler, {
       publicPath: config.output.publicPath,
       index: 'src',
@@ -51,15 +52,14 @@ module.exports = {
 
     app.use(webpackHotMiddleware(compiler));
 
-    app.use('/api/sk', helper.getSearchkitRouter());
+    app.use('/api/sk', getSearchkitRouter());
 
-    app.use('/api/json', helper.jsonProxy());
+    app.use('/api/json', jsonProxy());
 
     app.get('*', (_req, res) => {
       res.setHeader('Cache-Control', 'no-store');
       res.render('index');
     });
 
-    helper.startListening(app);
-  }
+    startListening(app);
 };

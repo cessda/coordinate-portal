@@ -18,7 +18,7 @@ import type {State} from '../types';
 import searchkit from '../utilities/searchkit';
 import {push} from 'react-router-redux';
 import Translate from 'react-translate-component';
-import { CMMStudy } from '../utilities/metadata';
+import { CMMStudy } from '../../common/metadata';
 
 export interface Props {
   item: CMMStudy;

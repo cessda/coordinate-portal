@@ -28,7 +28,7 @@ import { goBack, RouterAction } from 'react-router-redux';
 import type { State } from '../types';
 import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
-import { CMMStudy } from '../utilities/metadata';
+import { CMMStudy } from '../../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
 import counterpart from 'counterpart';
 

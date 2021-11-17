@@ -15,7 +15,7 @@ import searchkit, { detailQuery, similarQuery, pidQuery, matchAllQuery, uniqueAg
 import { Client, SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Thunk } from "../types";
-import { CMMStudy } from "../utilities/metadata";
+import { CMMStudy } from "../../common/metadata";
 import getPaq from "../utilities/getPaq";
 
 // Get a new Elasticsearch Client

@@ -21,7 +21,7 @@ import { State } from "../types";
 import _ from "lodash";
 import { AnyAction, bindActionCreators } from "redux";
 import { toggleMetadataPanels, ToggleMetadataPanelsAction } from "../actions/search";
-import { CMMStudy, DataCollectionFreeText } from "../utilities/metadata";
+import { CMMStudy, DataCollectionFreeText } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
 
 export interface Props {

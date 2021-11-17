@@ -21,7 +21,7 @@ import { Link } from 'react-router';
 import type { State } from '../types';
 import { changeLanguage } from '../actions/language';
 import { push } from 'react-router-redux';
-import { CMMStudy } from '../utilities/metadata';
+import { CMMStudy } from '../../common/metadata';
 
 type Props = {
   bemBlocks: any;
