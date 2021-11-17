@@ -47,7 +47,7 @@ describe('Footer component', () => {
     expect(script.prop('type')).toEqual('application/ld+json');
 
     expect(JSON.parse(script.text())).toEqual({
-      '@context': 'http://schema.org',
+      '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'CESSDA ERIC',
       url: 'https://www.cessda.eu',
