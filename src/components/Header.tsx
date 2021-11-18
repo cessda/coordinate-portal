@@ -53,9 +53,12 @@ export class Header extends Component<Props> {
   render() {
     const {
       pathname,
+      resetSearch,
       filters,
       showFilterSummary,
+      toggleSummary,
       showMobileFilters,
+      toggleMobileFilters,
       showAdvancedSearch,
     } = this.props;
 
