@@ -32,7 +32,6 @@ export class Language extends Component<Props> {
     const {
       currentLanguage,
       list,
-      changeLanguage
     } = this.props;
 
     const languages: Options<string> = list.map(language => {

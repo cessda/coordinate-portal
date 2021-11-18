@@ -26,7 +26,6 @@ import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
 import { goBack, RouterAction } from 'react-router-redux';
 import type { State } from '../types';
-import _ from 'lodash';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
@@ -59,7 +58,6 @@ export class DetailPage extends Component<Props> {
       item,
       jsonLd,
       currentLanguage,
-      goBack
     } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.

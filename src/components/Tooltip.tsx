@@ -16,7 +16,7 @@ import {FaQuestionCircle} from 'react-icons/fa';
 
 interface Props {
   content: JSX.Element | string;
-};
+}
 
 export default class Tooltip extends Component<Props> {
 
