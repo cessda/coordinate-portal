@@ -15,21 +15,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Security (in case of vulnerabilities)*
 
 ## [2.5.0] - 2021-11-23
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5709998.svg)](https://doi.org/10.5281/zenodo.5709998)
 
 ### Additions
 
+- Added `ts-jest` support, convert all tests to use TypeScript ([#351](https://bitbucket.org/cessda/cessda.cdc.version2/issues/351))
+- Change the page title depending on the current study or search query ([#364](https://bitbucket.org/cessda/cessda.cdc.version2/issues/364))
+- Add sorting options for filtering studies by date published ([#289](https://bitbucket.org/cessda/cessda.cdc.version2/issues/289))
+- Add Czech language support ([#372](https://bitbucket.org/cessda/cessda.cdc.version2/issues/372))
+
 ### Changes
 
-### Deprecations
+- Replaced `moment` with `js-joda`, fixing various date handling bugs ([#354](https://bitbucket.org/cessda/cessda.cdc.version2/issues/354))
+- Optimised the related studies queries to perform the required filtering on Elasticsearch ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
+- Optimised the study details Elasticsearch query to retrieve the study by ID, rather than perform a search for the ID and selecting the first result ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
+- Converted the server components to use TypeScript ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
+- Extracted common Webpack configuration to `webpack.common.js` ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
+- Sort by the collection end date, rather than the collection start date ([#370](https://bitbucket.org/cessda/cessda.cdc.version2/issues/370))
 
 ### Removals
 
+- Removed `jest-enzyme` and `jest-environment-enzyme` as these were not compatible with Jest 27 ([#269](https://bitbucket.org/cessda/cessda.cdc.version2/issues/269))
+
 ### Fixes
+
+- Handle slow connections between the client and the server by setting the connection timeout to the largest supported values ([#350](https://bitbucket.org/cessda/cessda.cdc.version2/issues/350))
+- Only show the available date fields on the Detail page ([#354](https://bitbucket.org/cessda/cessda.cdc.version2/issues/354))
+- Filter out PID objects that are missing a persistent identifier, fixing cases where the agency would be displayed on its own ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
+- Fixed some code smells identified by SonarQube ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
 
 ### Security
 
 ## [2.4.0] - 2021-06-23
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5017246.svg)](https://doi.org/10.5281/zenodo.5017246)
 
 ### Additions
