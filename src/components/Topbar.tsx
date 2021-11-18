@@ -69,12 +69,6 @@ export default class TopBar extends React.Component {
                 order: 'desc',
                 defaultOption: false
               }, {
-                label: counterpart.translate('sorting.publicationDateAscending'),
-                key: 'publication-date-ascending',
-                field: 'publicationYear',
-                order: 'asc',
-                defaultOption: false
-              }, {
                 label: counterpart.translate('sorting.publicationDateDescending'),
                 key: 'publication-date-descending',
                 field: 'publicationYear',
