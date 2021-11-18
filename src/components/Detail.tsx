@@ -29,7 +29,7 @@ export interface Props {
   item: CMMStudy;
   expandMetadataPanels: boolean;
   toggleMetadataPanels: () => ToggleMetadataPanelsAction;
-};
+}
 
 export class Detail extends React.Component<Props> {
 

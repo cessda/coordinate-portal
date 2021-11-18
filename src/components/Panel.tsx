@@ -28,7 +28,7 @@ export interface Props extends PanelProps {
   linkCollapsedState?: boolean;
   expandMetadataPanels: boolean;
   toggleMetadataPanels: () => ToggleMetadataPanelsAction;
-};
+}
 
 // Extend the Searchkit Panel component to support tooltips and translations.
 export class Panel extends SearchkitPanel {

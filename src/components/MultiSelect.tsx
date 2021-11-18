@@ -19,7 +19,7 @@ import {AbstractItemList, ItemListProps} from 'searchkit';
 export interface Props extends ItemListProps {
   placeholder: string | JSX.Element | undefined;
   clearable?: boolean;
-};
+}
 
 export default class MultiSelect extends AbstractItemList {
   props: Props;

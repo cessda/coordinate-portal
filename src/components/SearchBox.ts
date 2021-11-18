@@ -23,7 +23,7 @@ export interface Props extends SearchBoxProps  {
   pathname: string;
   push: typeof push;
   query: string;
-};
+}
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
 //@ts-expect-error
@@ -31,7 +31,7 @@ export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props: Props = SearchBox.defaultProps as Props) {
+  constructor(props: Props = SearchBox.defaultProps) {
     super(props);
     this.props = props;
   }
