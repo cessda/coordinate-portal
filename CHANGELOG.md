@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixes
 
+- Fixed JSON data previously included studyXmlSourceUrl pointing to the source record ([#385](https://bitbucket.org/cessda/cessda.cdc.versions/issues/385))
 - Handle slow connections between the client and the server by setting the connection timeout to the largest supported values ([#350](https://bitbucket.org/cessda/cessda.cdc.version2/issues/350))
 - Only show the available date fields on the Detail page ([#354](https://bitbucket.org/cessda/cessda.cdc.version2/issues/354))
 - Filter out PID objects that are missing a persistent identifier, fixing cases where the agency would be displayed on its own ([#369](https://bitbucket.org/cessda/cessda.cdc.version2/issues/369))
