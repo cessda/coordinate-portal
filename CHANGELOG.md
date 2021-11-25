@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
-## [2.5.0] - 2021-11-23
+## [2.5.0] - 2021-11-25
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5709998.svg)](https://doi.org/10.5281/zenodo.5709998)
 
