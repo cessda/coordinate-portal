@@ -40,7 +40,8 @@ export type Props = {
 export class SearchPage extends Component<Props> {
 
   componentDidMount() {
-    document.title = counterpart.translate('datacatalogue');
+    this.updateTitle();
+    searchkit.reloadSearch();
   }
 
   componentDidUpdate(): void {
@@ -51,6 +52,10 @@ export class SearchPage extends Component<Props> {
     this.autoExpandFilter('publisher.publisher');
 
     // Set the page title
+    this.updateTitle();
+  }
+
+  updateTitle() {
     if (this.props.filters.q) {
       document.title = `${this.props.filters.q} - ${counterpart.translate('datacatalogue')}`;
     } else {

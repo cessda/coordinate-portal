@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { Component } from 'react';
-import { Hits, Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } from 'searchkit';
+import { Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } from 'searchkit';
 import Header from '../components/Header';
 import Language from '../components/Language';
 import Detail from '../components/Detail';
@@ -24,27 +24,46 @@ import { FaAngleLeft, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { AnyAction, bindActionCreators } from 'redux';
 import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
-import { goBack, RouterAction } from 'react-router-redux';
+import { goBack } from 'react-router-redux';
 import type { State } from '../types';
 import { Language as LanguageType } from '../utilities/language';
 import { CMMStudy } from '../../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
 import counterpart from 'counterpart';
+import { updateStudy } from '../actions/search';
 
 export interface Props {
   loading: boolean;
   item: CMMStudy | undefined;
   jsonLd: WithContext<Dataset> | undefined;
+  params: {id: string};
   currentLanguage: LanguageType;
   query: {
     [key: string]: any;
   };
-  goBack: () => RouterAction;
+  goBack: typeof goBack;
+  updateStudy: typeof updateStudy;
 }
 
 export class DetailPage extends Component<Props> {
 
+  componentDidMount() {
+    const id = this.props.params.id;
+    this.props.updateStudy(id);
+    this.updateTitle();
+  }
+
   componentDidUpdate() {
+    const id = this.props.params.id;
+
+    if (id != this.props.item?.id) {
+      this.props.updateStudy(id);
+    }
+
+    this.updateTitle();
+  }
+
+  private updateTitle() {
     if (this.props.item) {
       document.title = `${this.props.item.titleStudy} - ${counterpart.translate('datacatalogue')}`;
     } else {
@@ -58,7 +77,7 @@ export class DetailPage extends Component<Props> {
       item,
       jsonLd,
       currentLanguage,
-	  goBack
+	    goBack
     } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
@@ -105,7 +124,7 @@ export class DetailPage extends Component<Props> {
                  <div className="is-clearfix"/>
                </div>
               }
-              <Hits mod="sk-hits-grid" hitsPerPage={1} itemComponent={Detail}/>
+              {item && <Detail item={item}/>}
               {!loading && !item &&
                <div className="panel pt-15">
                   <p className="fs-14 mb-15">
@@ -128,20 +147,21 @@ export class DetailPage extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State) => {
+export function mapStateToProps(state: State) {
   return {
     loading: state.search.loading,
-    item: state.search.displayed.length === 1 ? state.search.displayed[0] : undefined,
+    item: state.search.displayed[0],
     jsonLd: state.search.jsonLd,
     currentLanguage: state.language.currentLanguage,
     query: state.routing.locationBeforeTransitions.query
   };
-};
+}
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
-    goBack: bindActionCreators(goBack, dispatch)
+    goBack: bindActionCreators(goBack, dispatch),
+    updateStudy: bindActionCreators(updateStudy, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailPage);

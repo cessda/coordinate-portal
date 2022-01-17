@@ -13,10 +13,7 @@
 
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import {
-  Detail,
-  mapDispatchToProps,
-  mapStateToProps} from '../../src/components/Detail';
+import Detail from '../../src/components/Detail';
 import { CMMStudy } from '../../common/metadata';
 
 // Mock props and shallow render component for test.
@@ -291,30 +288,5 @@ describe('Detail component', () => {
     });
     enzymeWrapper.unmount();
     expect(props.toggleMetadataPanels).not.toHaveBeenCalled();
-  });
-
-  it('should map state to props', () => {
-    const { props } = setup();
-    expect(
-      mapStateToProps(
-        {
-          //@ts-expect-error
-          search: {
-            displayed: [props.item],
-            expandMetadataPanels: props.expandMetadataPanels
-          }
-        },
-        props
-      )
-    ).toEqual({
-      item: props.item,
-      expandMetadataPanels: props.expandMetadataPanels
-    });
-  });
-
-  it('should map dispatch to props', () => {
-    expect(mapDispatchToProps(a => a)).toEqual({
-      toggleMetadataPanels: expect.any(Function)
-    });
   });
 });

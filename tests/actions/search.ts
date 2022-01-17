@@ -42,7 +42,7 @@ import {
 import { Language, languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { Client } from 'elasticsearch';
-import { State, Thunk } from '../../src/types';
+import { State } from '../../src/types';
 import { AnyAction } from 'redux';
 
 const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>>([thunk]);

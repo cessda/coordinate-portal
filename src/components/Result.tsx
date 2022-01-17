@@ -67,15 +67,12 @@ export class Result extends Component<Props> {
     let languages: JSX.Element[] = [];
     for (let i: number = 0; i < item.langAvailableIn.length; i++) {
       languages.push(
-        <a key={i} className="button is-small is-white" onClick={() => {
-          this.props.changeLanguage(item.langAvailableIn[i]);
-          this.props.push({
-            pathname: 'detail',
-            search: '?q="' + item.id + '"'
-          });
-        }}>
+        <Link key={i}
+              className="button is-small is-white" 
+              to={`/detail/${encodeURIComponent(item.id)}?lang=${item.langAvailableIn[i].toLowerCase()}`} 
+              onClick={()=> this.props.changeLanguage(item.langAvailableIn[i])}>
           {item.langAvailableIn[i]}
-        </a>
+        </Link>
       );
     }
 
@@ -85,8 +82,7 @@ export class Result extends Component<Props> {
       <div className="list_hit" data-qa="hit">
         <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>
           <Link to={{
-            pathname: 'detail',
-            search: '?q="' + item.id + '"'
+            pathname: `detail/${encodeURIComponent(item.id)}`
           }}><span dangerouslySetInnerHTML={{__html: item.titleStudyHighlight || item.titleStudy}}></span></Link>
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
@@ -153,11 +149,11 @@ export class Result extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State, props: Props) => {
+export function mapStateToProps(state: State, props: Props) {
   return {
     item: state.search.displayed[props.index]
   };
-};
+}
 
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
   return {

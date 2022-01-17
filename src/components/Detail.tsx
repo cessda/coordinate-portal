@@ -14,24 +14,17 @@
 
 import React from "react";
 import { Link } from "react-router";
-import { connect, Dispatch } from "react-redux";
 import Panel from "./Panel";
 import Translate from "react-translate-component";
-import { State } from "../types";
 import _ from "lodash";
-import { AnyAction, bindActionCreators } from "redux";
-import { toggleMetadataPanels, ToggleMetadataPanelsAction } from "../actions/search";
 import { CMMStudy, DataCollectionFreeText } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
 
 export interface Props {
-  index: number;
   item: CMMStudy;
-  expandMetadataPanels: boolean;
-  toggleMetadataPanels: () => ToggleMetadataPanelsAction;
 }
 
-export class Detail extends React.Component<Props> {
+export default class Detail extends React.Component<Props> {
 
   private static readonly formatter = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR)
@@ -43,12 +36,6 @@ export class Detail extends React.Component<Props> {
     .toFormatter();
 
   static readonly dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");
-
-  componentWillUnmount(): void {
-    if (this.props.expandMetadataPanels) {
-      this.props.toggleMetadataPanels();
-    }
-  }
 
   static generateElements<T, R>(
     field: T[],
@@ -317,18 +304,3 @@ Summary information
     );
   }
 }
-
-export const mapStateToProps = (state: State, props: Props) => {
-  return {
-    item: state.search.displayed[props.index],
-    expandMetadataPanels: state.search.expandMetadataPanels
-  };
-};
-
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-  return {
-    toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Detail);

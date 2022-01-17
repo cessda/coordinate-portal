@@ -16,30 +16,27 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { mapDispatchToProps, mapStateToProps, Props, Similars } from '../../src/components/Similars';
 import searchkit from '../../src/utilities/searchkit';
+import { mockStudy } from '../mockdata';
 
 // Mock props and shallow render component for test.
 function setup(partialProps?: Partial<Props>) {
-  const props = _.extend(
-    {
-      searchkit: searchkit,
-      item: {
-        id: 1,
-        title: 'Study Title'
+  const props = {
+    searchkit: searchkit,
+    language: 'en',
+    item: mockStudy,
+    similars: [
+      {
+        id: "1",
+        title: 'Similar Study Title 1'
       },
-      similars: [
-        {
-          id: "1",
-          title: 'Similar Study Title 1'
-        },
-        {
-          id: "2",
-          title: 'Similar Study Title 2'
-        }
-      ],
-      push: jest.fn()
-    },
-    partialProps || {}
-  );
+      {
+        id: "2",
+        title: 'Similar Study Title 2'
+      }
+    ],
+    push: jest.fn(),
+    ...partialProps 
+  };
 
   // Manually initialise searchkit history.
   searchkit.history = {

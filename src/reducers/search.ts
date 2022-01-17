@@ -28,7 +28,7 @@ import {
   UPDATE_DISPLAYED, 
   UPDATE_QUERY, 
   UPDATE_SIMILARS, 
-  UPDATE_STATE, 
+  UPDATE_STATE,
   UPDATE_TOTAL_STUDIES 
 } from '../actions/search';
 
