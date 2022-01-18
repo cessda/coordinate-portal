@@ -16,6 +16,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../src/containers/DetailPage';
 import { languages } from '../../src/utilities/language';
+import { updateStudy } from '../../src/actions/search';
 
 // Mock props and shallow render container for test.
 function setup(partialProps?: Partial<Props>) {
@@ -28,8 +29,9 @@ function setup(partialProps?: Partial<Props>) {
       },
       jsonLd: {},
       currentLanguage: languages[0],
-      query: {},
-      goBack: jest.fn()
+      query: undefined,
+      goBack: jest.fn(),
+      updateStudy: jest.fn()
     },
     partialProps || {}
   );
@@ -61,7 +63,9 @@ describe('DetailPage container', () => {
         routing: {
           //@ts-expect-error
           locationBeforeTransitions: {
-            query: props.query
+            query: {
+              q: props.query
+            } 
           }
         },
         language: {
@@ -91,7 +95,9 @@ describe('DetailPage container', () => {
         routing: {
           //@ts-expect-error
           locationBeforeTransitions: {
-            query: props.query
+            query: {
+              q: props.query
+            } 
           }
         },
         language: {

@@ -45,9 +45,12 @@ export class Similars extends Component<Props> {
     if (item && similars) {
       for (let i: number = 0; i < similars.length; i++) {
         // Construct the similar URL
-        const similarUrl = `?lang=${language}&q="${similars[i].id}"`;
-
-        links.push(<Link key={i} to={`/detail/${encodeURIComponent(similars[i].id)}`}>{similars[i].title}</Link>);
+        links.push(<Link key={i} to={{
+          pathname: '/detail',
+          query: {
+            q: similars[i].id
+          }
+        }}>{similars[i].title}</Link>);
       }
     }
 

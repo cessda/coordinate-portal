@@ -26,37 +26,25 @@ import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
 import { goBack } from 'react-router-redux';
 import type { State } from '../types';
-import { Language as LanguageType } from '../utilities/language';
-import { CMMStudy } from '../../common/metadata';
-import { Dataset, WithContext } from 'schema-dts';
 import counterpart from 'counterpart';
 import { updateStudy } from '../actions/search';
 
-export interface Props {
-  loading: boolean;
-  item: CMMStudy | undefined;
-  jsonLd: WithContext<Dataset> | undefined;
-  params: {id: string};
-  currentLanguage: LanguageType;
-  query: {
-    [key: string]: any;
-  };
-  goBack: typeof goBack;
-  updateStudy: typeof updateStudy;
-}
+export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
 
 export class DetailPage extends Component<Props> {
 
   componentDidMount() {
-    const id = this.props.params.id;
-    this.props.updateStudy(id);
+    const id = this.props.query;
+    if (id) {
+      this.props.updateStudy(id);
+    }
     this.updateTitle();
   }
 
   componentDidUpdate() {
-    const id = this.props.params.id;
+    const id = this.props.query;
 
-    if (id != this.props.item?.id) {
+    if (id && id != this.props.item?.id) {
       this.props.updateStudy(id);
     }
 
@@ -148,12 +136,14 @@ export class DetailPage extends Component<Props> {
 }
 
 export function mapStateToProps(state: State) {
+  const item = state.search.displayed[0];
+  const query = state.routing.locationBeforeTransitions.query.q;
   return {
     loading: state.search.loading,
-    item: state.search.displayed[0],
+    item: item ? item : undefined,
     jsonLd: state.search.jsonLd,
     currentLanguage: state.language.currentLanguage,
-    query: state.routing.locationBeforeTransitions.query
+    query: Array.isArray(query) ? query.join() : query
   };
 }
 

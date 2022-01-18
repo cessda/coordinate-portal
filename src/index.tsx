@@ -89,7 +89,7 @@ if (root instanceof HTMLElement) {
       <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage} />
-          <Route path="detail/:id" component={DetailPage} />
+          <Route path="detail" component={DetailPage} />
           <Route path="study/pid/:pid" component={DetailPage} />
           <Route path="about" component={AboutPage} />
           <Redirect from="*" to="/" />

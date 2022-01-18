@@ -148,7 +148,9 @@ export function changeLanguage(code: string): Thunk {
       code,
       label
     });
-    dispatch(updateStudy(state.search.displayed[0].id));
+    if (state.search.displayed[0]) {
+      dispatch(updateStudy(state.search.displayed[0].id));
+    }
 
     //searchkit.reloadSearch();
   };

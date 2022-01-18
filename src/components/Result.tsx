@@ -69,7 +69,13 @@ export class Result extends Component<Props> {
       languages.push(
         <Link key={i}
               className="button is-small is-white" 
-              to={`/detail/${encodeURIComponent(item.id)}?lang=${item.langAvailableIn[i].toLowerCase()}`} 
+              to={{
+                pathname: '/detail',
+                query: {
+                  q: item.id,
+                  lang: item.langAvailableIn[i].toLowerCase()
+                }
+              }} 
               onClick={()=> this.props.changeLanguage(item.langAvailableIn[i])}>
           {item.langAvailableIn[i]}
         </Link>
@@ -82,7 +88,10 @@ export class Result extends Component<Props> {
       <div className="list_hit" data-qa="hit">
         <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>
           <Link to={{
-            pathname: `detail/${encodeURIComponent(item.id)}`
+            pathname: "/detail",
+            query: {
+             q: item.id
+            }
           }}><span dangerouslySetInnerHTML={{__html: item.titleStudyHighlight || item.titleStudy}}></span></Link>
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>

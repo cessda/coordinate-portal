@@ -234,9 +234,7 @@ export function updateQuery(query: Record<string, any>): UpdateQueryAction {
 //////////// Redux Action Creator : UPDATE_STATE
 export const UPDATE_STATE = "UPDATE_STATE";
 
-export type SearchkitState = {
-  q: string;
-};
+export type SearchkitState = any;
 
 export type UpdateStateAction = {
   type: typeof UPDATE_STATE;
