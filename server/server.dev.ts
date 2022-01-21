@@ -15,12 +15,14 @@ import methodOverride from 'method-override';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import express from 'express';
+import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, getSearchkitRouter, jsonProxy, startListening } from './helper';
+import { checkEnvironmentVariables, getSearchkitRouter, externalApi, jsonProxy, startListening, startMetricsListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
+import responseTime from 'response-time'
+import { RequestParams } from '@elastic/elasticsearch';
 
 export function start() {
     checkEnvironmentVariables(false);
@@ -53,6 +55,49 @@ export function start() {
     app.use(webpackHotMiddleware(compiler));
 
     app.use('/api/sk', getSearchkitRouter());
+    
+    //Metrics middleware for API
+    const metricsAllTimer = restResponseTimeAllHistogram.startTimer();
+    const metricsLangTimer = restResponseTimeLangHistogram.startTimer();
+    const metricsPublTimer = restResponseTimePublisherHistogram.startTimer();
+    app.use('/api/data', responseTime((req:Request, res:Response, time:number)=>{
+      //ALL
+      if (req?.route?.path){
+        restResponseTimeAllHistogram.observe({
+          method: req.method,
+          route: req.route.path,
+          status_code: res.statusCode
+        }, Math.round(time*1000))
+        const secondsAll = metricsAllTimer();
+      }
+      //LANG
+      if (req.query.metadataLanguage){
+        restResponseTimeLangHistogram.observe({
+          method: req.method,
+          route: req.route.path,
+          lang: req.query.metadataLanguage as string,
+          status_code: res.statusCode
+        }, Math.round(time*1000))
+        const secondsLang = metricsLangTimer();
+      }
+      //PUBLISHER
+      if (req.query.publishers){
+        let publishers:any = req.query.publishers
+        publishers.forEach(function (value: any) {
+          restResponseTimePublisherHistogram.observe({
+            method: req.method,
+            route: req.route.path,
+            publ: value as string,
+            status_code: res.statusCode
+          }, Math.round(time*1000))
+        });
+        const secondsPublis =  metricsPublTimer();
+      }
+    }))
+
+    app.use('/api/data', externalApi());
+
+    app.use('/api/mt', startMetricsListening());
 
     app.use('/api/json', jsonProxy());
 
