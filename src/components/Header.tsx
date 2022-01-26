@@ -24,30 +24,13 @@ import type { State } from "../types";
 import { AnyAction, bindActionCreators } from "redux";
 import {
   resetSearch,
-  ResetSearchAction,
   toggleAdvancedSearch,
-  ToggleAdvancedSearchAction,
   toggleMobileFilters,
-  ToggleMobileFiltersAction,
   toggleSummary,
-  ToggleSummaryAction,
 } from "../actions/search";
 import Translate from "react-translate-component";
-import { Language as LanguageType } from '../utilities/language';
 
-export interface Props {
-  pathname: string;
-  currentLanguage: LanguageType;
-  filters: any;
-  showFilterSummary: boolean;
-  showMobileFilters: boolean;
-  showAdvancedSearch: boolean;
-  totalStudies: number;
-  resetSearch: () => ResetSearchAction;
-  toggleSummary: () => ToggleSummaryAction;
-  toggleMobileFilters: () => ToggleMobileFiltersAction;
-  toggleAdvancedSearch: () => ToggleAdvancedSearchAction;
-}
+export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
 export class Header extends Component<Props> {
   render() {

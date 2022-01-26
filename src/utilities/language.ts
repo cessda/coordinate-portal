@@ -67,6 +67,8 @@ export const languages: readonly Language[] =
     index: 'cmmstudy_sv'
   }];
 
+export const languageMap: ReadonlyMap<string, {label: string, index: string}> = new Map(languages.map(l => [l.code, {label: l.label, index: l.index}]));
+
 export type Language = {
   /** The ISO code of the language */
   code: string,

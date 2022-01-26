@@ -19,11 +19,7 @@ import type {State} from '../types';
 import {detect} from 'detect-browser';
 import _ from 'lodash';
 
-export interface Props extends SearchBoxProps  {
-  pathname: string;
-  push: typeof push;
-  query: string;
-}
+export type Props = SearchBoxProps & ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
 //@ts-expect-error
@@ -31,17 +27,17 @@ export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props: Props = SearchBox.defaultProps) {
+  constructor(props = SearchBox.defaultProps) {
     super(props);
     this.props = props;
   }
 
-  static defaultProps = {
-    ...SearchkitSearchBox.defaultProps, 
+  static defaultProps: Props = {
+    ...SearchkitSearchBox.defaultProps as SearchBoxProps, 
     pathname: '',
     push,
     query: '',
-  } as Props;
+  };
 
   onChange(event: any): void {
     const {

@@ -11,35 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, {Component} from 'react';
+import React from 'react';
 import {FaQuestionCircle} from 'react-icons/fa';
 
-interface Props {
-  content: JSX.Element | string;
-}
 
-export default class Tooltip extends Component<Props> {
-
-  render() {
-    const {
-      content
-    } = this.props;
-
-    return (
-      <div className="dropdown is-hoverable is-right">
-        <div className="dropdown-trigger">
-          <button className="button" aria-haspopup="true">
-            <FaQuestionCircle/>
-          </button>
-        </div>
-        <div className="dropdown-menu" role="menu">
-          <div className="dropdown-content">
-            <div className="dropdown-item">
-              <p>{content}</p>
-            </div>
-          </div>
+export default (props: {content: JSX.Element | string}) => (
+  <div className="dropdown is-hoverable is-right">
+    <div className="dropdown-trigger">
+      <button className="button" aria-haspopup="true">
+        <FaQuestionCircle />
+      </button>
+    </div>
+    <div className="dropdown-menu" role="menu">
+      <div className="dropdown-content">
+        <div className="dropdown-item">
+          <p>{props.content}</p>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  </div>
+)

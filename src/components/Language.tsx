@@ -18,13 +18,10 @@ import {changeLanguage} from '../actions/language';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
 import Select, { Options } from 'react-select';
-import {Language as LanguageType} from '../utilities/language';
+import { browserHistory } from 'react-router';
+import { push } from 'react-router-redux';
 
-type Props = {
-  currentLanguage: LanguageType;
-  list: LanguageType[];
-  changeLanguage: typeof changeLanguage;
-};
+type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
 export class Language extends Component<Props> {
 
@@ -32,7 +29,7 @@ export class Language extends Component<Props> {
     const {
       currentLanguage,
       list,
-      changeLanguage
+      push
     } = this.props;
 
     const languages: Options<string> = list.map(language => {
@@ -51,7 +48,14 @@ export class Language extends Component<Props> {
                 autosize={true}
                 onChange={(option) => {
                   if (option && !Array.isArray(option) && option.value) {
-                    return changeLanguage(option.value);
+                    const currentLocation = browserHistory.getCurrentLocation();
+                    push({
+                      pathname: currentLocation.pathname,
+                      query: {
+                        ...currentLocation.query,
+                        lang: option.value
+                      }
+                    })
                   }
                 }}/>
       </div>
@@ -66,10 +70,11 @@ export function mapStateToProps(state: Pick<State, "language">) {
   };
 }
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
-    changeLanguage: bindActionCreators(changeLanguage, dispatch)
+    changeLanguage: bindActionCreators(changeLanguage, dispatch),
+    push: bindActionCreators(push, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Language);

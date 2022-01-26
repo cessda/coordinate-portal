@@ -25,12 +25,9 @@ import { CMMStudy } from '../../common/metadata';
 
 type Props = {
   bemBlocks: any;
-  index: any;
+  index: number;
   item: CMMStudy;
-  push: typeof push;
-  changeLanguage: typeof changeLanguage;
-  toggleLongAbstract: typeof toggleLongAbstract;
-};
+} & ReturnType<typeof mapDispatchToProps>;
 
 function generateCreatorElements(item: CMMStudy) {
   let creators: JSX.Element[] = [];

@@ -15,28 +15,17 @@ import React, {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
-import searchkit from '../utilities/searchkit';
 import {push} from 'react-router-redux';
 import Translate from 'react-translate-component';
-import { CMMStudy } from '../../common/metadata';
 import { Link } from 'react-router';
 
-export interface Props {
-  item: CMMStudy;
-  language: string;
-  similars: {
-    id: string;
-    title: string;
-  }[];
-  push: typeof push;
-}
+export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
 
 export class Similars extends Component<Props> {
 
   render() {
     const {
       item,
-      language,
       similars    
     } = this.props;
 

@@ -15,10 +15,11 @@
 import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
 import { Thunk } from "../types";
-import { languages, Language } from "../utilities/language";
+import { languages, Language, languageMap } from "../utilities/language";
 import getPaq from "../utilities/getPaq";
 import { push } from "react-router-redux";
 import { updateStudy } from "./search";
+import { browserHistory } from "react-router";
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";
@@ -49,15 +50,12 @@ export function initTranslations(): Thunk {
     });
 
     // Check if a language is set in the URL
-    let initialLanguage = state.routing.locationBeforeTransitions.query.lang;
+    let initialLanguage = `${state.routing.locationBeforeTransitions.query.lang}`;
 
-    if (Array.isArray(initialLanguage)) {
-      initialLanguage = initialLanguage.join();
-    }
-
-    if (initialLanguage) {
+    if (languageMap.has(initialLanguage)) {
       counterpart.setLocale(initialLanguage);
     } else {
+      initialLanguage = state.language.currentLanguage.code;
       counterpart.setLocale(state.language.currentLanguage.code);
     }
 
@@ -92,6 +90,13 @@ export function initTranslations(): Thunk {
           return undefined;
       }
     };
+
+    browserHistory.listen(listner => {
+      // If the language has changed
+      if (listner.query.lang && listner.query.lang !== state.routing.locationBeforeTransitions.query.lang) {
+        dispatch(changeLanguage(`${listner.query.lang}`));
+      }
+    })
 
     dispatch({
       type: INIT_TRANSLATIONS,
@@ -133,26 +138,20 @@ export function changeLanguage(code: string): Thunk {
 
     counterpart.setLocale(code);
 
-    const oldLocation = state.routing.locationBeforeTransitions;
 
-    // Change the language code in the URL
-    dispatch(push({
-      pathname: oldLocation.pathname,
-      query: {
-        ...oldLocation.query,
-        lang: code
-      }
-    }));
     dispatch({
       type: CHANGE_LANGUAGE,
       code,
       label
     });
+    
     if (state.search.displayed[0]) {
       dispatch(updateStudy(state.search.displayed[0].id));
     }
 
-    //searchkit.reloadSearch();
+    if (state.routing.locationBeforeTransitions.pathname === "/") {
+      searchkit.reloadSearch();
+    }
   };
 }
 
