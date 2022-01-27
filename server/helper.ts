@@ -15,9 +15,12 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express from 'express';
+import express, { Request, response } from 'express';
 import request from 'request';
 import winston from 'winston';
+import client from 'prom-client';
+import bodybuilder, { Bodybuilder } from 'bodybuilder';
+import { Client } from 'elasticsearch';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -132,6 +135,101 @@ export function getSearchkitRouter() {
   return router;
 }
 
+export function externalApi() {
+
+  const router = express.Router();
+  
+  const host = _.trimEnd(elasticsearchUrl, '/');
+
+  //Create ElasticSearch Client
+  const client = new Client({
+    host: host
+  });
+
+  router.get('/search', async (req, res) => {
+
+    const { metadataLanguage, q } = req.query;
+
+    const dataCollectionYear = req.query.dataCollectionYear as unknown as {
+      min?: number;
+      max?: number;
+    };
+    const classifications = req.query.classifications;
+    const studyAreaCountries = req.query.studyAreaCountries;
+    const publishers = req.query.publishers;
+
+    if (!metadataLanguage) {
+      res.status(400).send({ message: 'Please provide a search language'});
+    } else {
+      //Prepare body for ElasticSearch
+      const bodyQuery = bodybuilder().size(100); //up to how many results will be returned
+
+
+      //create json body for ElasticSearchClient - search query
+      if (q) {
+        bodyQuery.query('query_string', { query: q });
+      }
+      
+      //callback functions for nested post-filters
+      //Create json body for ElasticSearchClient - nested post-filters
+      if (Array.isArray(classifications)) {
+        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'classifications' }, (q: Bodybuilder) => {
+          classifications.forEach(value => {
+            q.orQuery('term', 'classifications.term', value);
+          });
+          return q;
+        }));
+      }
+      if (Array.isArray(studyAreaCountries)) {
+        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'studyAreaCountries' }, (q: Bodybuilder) => {
+          studyAreaCountries.forEach(value => {
+            q.orQuery('term', 'studyAreaCountries.searchField', value);
+          });
+          return q;
+        }));
+      }
+      if (Array.isArray(publishers)) {
+        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'publisher' }, (q: Bodybuilder) => {
+          publishers.forEach(value =>  q.orQuery('term', 'publisher.publisher', value));
+        }));
+        return q;
+      }
+      //Create json body for ElasticSearchClient - date-filters
+      if (dataCollectionYear) {
+        if (!dataCollectionYear.min) {
+          dataCollectionYear.min = 1900;
+        }
+        if (!dataCollectionYear.max) {
+          dataCollectionYear.max = new Date().getFullYear();
+        }
+        bodyQuery.orFilter('range', 'dataCollectionYear', { gte: dataCollectionYear.min, lte: dataCollectionYear.max });
+      }
+
+      //Prepare the Client
+      try {
+        const query = bodyQuery.build();
+        const body = await client.search({
+          index: `cmmstudy_${metadataLanguage}`,
+          body: query
+        });
+
+        //Send the Response
+        res.status(200).json({
+          "Results Found": body.hits.total,
+          "Results": body.hits.hits.map(obj => obj._source)
+        });
+      } catch (e) {
+        logger.error('Elasticsearch API Request failed: %s', (e as Error).message);
+        res.status(502).send({ message: (e as Error).message });
+      } finally {
+        logger.debug('Finished API Elasticsearch Request');
+      }
+    }
+  });
+  
+  return router;
+}
+
 export function jsonProxy() {
   let elasticsearchAuthorisaton: string | undefined = undefined;
 
@@ -182,7 +280,43 @@ export function jsonProxy() {
   });
 }
 
+//Metrics for api - all
+export const restResponseTimeAllHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_all',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route', 'status_code']
+})
+//Metrics for api - language
+export const restResponseTimeLangHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_language',
+  help: 'REST API response time in seconds for Language',
+  labelNames: ['method', 'route', 'lang', 'status_code']
+})
+//Metrics for api - publisher
+export const restResponseTimePublisherHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_publisher',
+  help: 'REST API response time in seconds for Publisher',
+  labelNames: ['method', 'route', 'publ', 'status_code']
+})
+
+//Endpoint used for Prometheus Metrics
+export function startMetricsListening() {
+
+  const router = express.Router();
+
+  const collectDefaultMetrics = client.collectDefaultMetrics
+
+  collectDefaultMetrics(); //general cpu, mem, etc information
+
+  router.get('/metrics', async (req, res) =>{
+    res.set("Content-Type", client.register.contentType);
+    return res.send(await client.register.metrics());
+  })
+  return router;
+}
+
 export function startListening(app: express.Express) {
+
   const port = Number(process.env.PASC_PORT || 8088);
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
