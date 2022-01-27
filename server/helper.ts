@@ -15,11 +15,12 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { response } from 'express';
+import express, { Request, response } from 'express';
 import request from 'request';
 import winston from 'winston';
-import { each } from 'jquery';
 import client from 'prom-client';
+import bodybuilder, { Bodybuilder } from 'bodybuilder';
+import { Client } from 'elasticsearch';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -134,133 +135,98 @@ export function getSearchkitRouter() {
   return router;
 }
 
-export function externalApi(){
+export function externalApi() {
 
   const router = express.Router();
   
   const host = _.trimEnd(elasticsearchUrl, '/');
 
-  router.get('/search', function (req, res) {
-    
-    let {metadataLanguage, q} = req.query;
+  //Create ElasticSearch Client
+  const client = new Client({
+    host: host
+  });
 
-    let dataCollectionYear:any | undefined = req.query.dataCollectionYear;
+  router.get('/search', async (req, res) => {
 
-    let classifications: any | undefined =req.query.classifications;
+    const { metadataLanguage, q } = req.query;
 
-    let studyAreaCountries: any | undefined =req.query.studyAreaCountries;
+    const dataCollectionYear = req.query.dataCollectionYear as unknown as {
+      min?: number;
+      max?: number;
+    };
+    const classifications = req.query.classifications;
+    const studyAreaCountries = req.query.studyAreaCountries;
+    const publishers = req.query.publishers;
 
-    let publishers: any | undefined =req.query.publishers;
-
-    if (!metadataLanguage){
-      res.status(400).send({message: 'Please provide a search language'})
-    }
-    else{
-      //Create ElasticSearch Client
-      const { Client } = require('@elastic/elasticsearch')
-      const client = new Client({
-        node: host,
-        auth: {
-          username: elasticsearchUsername,
-          password: elasticsearchPassword
-        }
-      })
+    if (!metadataLanguage) {
+      res.status(400).send({ message: 'Please provide a search language'});
+    } else {
       //Prepare body for ElasticSearch
-      let bodybuilder = require('bodybuilder')
-      let bodyQuery: any = bodybuilder().size(100) //up to how many results will be returned
+      const bodyQuery = bodybuilder().size(100); //up to how many results will be returned
+
 
       //create json body for ElasticSearchClient - search query
-      if (q !== undefined) {
-        bodyQuery = bodyQuery
-        .query('multi_match',
-          {
-            query: q,
-            fields: ['titleStudy^4', 'abstract^2', 'creators^2', 'keywords.id^1.5', '*']
-          }
-        )
-      }
-      //callback functions for nested post-filters
-      const classifQuery = (build: any) => {
-        return build
-            .orQuery('nested', { path: 'classifications'}, (q: any) => {
-              classifications.forEach(function (value: any) {
-                q.orQuery('term', 'classifications.term', value)
-              });
-              return q
-            })
-      }
-      const studyQuery = (build: any) => {
-        return build
-            .orQuery('nested', { path: 'studyAreaCountries'}, (q: any) => {
-              studyAreaCountries.forEach(function (value: any) {
-                q.orQuery('term', 'studyAreaCountries.searchField', value)
-              });
-              return q
-            })
-      }
-      const publQuery = (build: any) => {
-        return build
-            .orQuery('nested', { path: 'publisher'}, (q: any) => {
-              publishers.forEach(function (value: any) {
-                q.orQuery('term', 'publisher.publisher', value)
-              });
-              return q
-            })
-      }
-      //Create json body for ElasticSearchClient - nested post-filters
-      if(classifications !== undefined){
-        bodyQuery = bodyQuery.query('bool', classifQuery)
-      }
-      if(studyAreaCountries !== undefined){
-        bodyQuery = bodyQuery.query('bool', studyQuery)
-      }
-      if(publishers !== undefined){
-        bodyQuery = bodyQuery.query('bool', publQuery)
-      }
-      //Create json body for ElasticSearchClient - date-filters
-      if(dataCollectionYear !== undefined){
-        if (!('min' in dataCollectionYear)){
-          dataCollectionYear.min = 1900;
-        }
-        if (!('max' in dataCollectionYear)){
-          dataCollectionYear.max = new Date().getFullYear();
-        }
-        bodyQuery = bodyQuery.orFilter('range', 'dataCollectionYear', {gte: Number(dataCollectionYear.min), lte:Number(dataCollectionYear.max)})
+      if (q) {
+        bodyQuery.query('query_string', { query: q });
       }
       
-       //Prepare the Client
-      async function run () {
-        const { body } = await client.search({
-          index: 'cmmstudy_'+metadataLanguage,
-          body: bodyQuery.build()
-        })
-        //Prepare API Response
-        let resultsTotal: number = body.hits.total.value;
-        let resultsRaw: JSON = body.hits.hits.map(function(obj: any){
-          return obj._source;
-        });
-        
-        let resultsFinal = {
-          "Results Found": resultsTotal,
-          "Results": resultsRaw
+      //callback functions for nested post-filters
+      //Create json body for ElasticSearchClient - nested post-filters
+      if (Array.isArray(classifications)) {
+        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'classifications' }, (q: Bodybuilder) => {
+          classifications.forEach(value => {
+            q.orQuery('term', 'classifications.term', value);
+          });
+          return q;
+        }));
+      }
+      if (Array.isArray(studyAreaCountries)) {
+        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'studyAreaCountries' }, (q: Bodybuilder) => {
+          studyAreaCountries.forEach(value => {
+            q.orQuery('term', 'studyAreaCountries.searchField', value);
+          });
+          return q;
+        }));
+      }
+      if (Array.isArray(publishers)) {
+        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'publisher' }, (q: Bodybuilder) => {
+          publishers.forEach(value =>  q.orQuery('term', 'publisher.publisher', value));
+        }));
+        return q;
+      }
+      //Create json body for ElasticSearchClient - date-filters
+      if (dataCollectionYear) {
+        if (!dataCollectionYear.min) {
+          dataCollectionYear.min = 1900;
         }
-        //Send the Response
-        res.status(200).json(resultsFinal);
+        if (!dataCollectionYear.max) {
+          dataCollectionYear.max = new Date().getFullYear();
+        }
+        bodyQuery.orFilter('range', 'dataCollectionYear', { gte: dataCollectionYear.min, lte: dataCollectionYear.max });
       }
 
-      run().then(function() {
-        logger.debug('Succesful API Elasticsearch Request')
-      }).catch(function(e) {
-        logger.error('Elasticsearch API Request failed');
-        res.status(500).send({message: e.message})
-      })
-      .finally(() => {
+      //Prepare the Client
+      try {
+        const query = bodyQuery.build();
+        const body = await client.search({
+          index: `cmmstudy_${metadataLanguage}`,
+          body: query
+        });
+
+        //Send the Response
+        res.status(200).json({
+          "Results Found": body.hits.total,
+          "Results": body.hits.hits.map(obj => obj._source)
+        });
+      } catch (e) {
+        logger.error('Elasticsearch API Request failed: %s', (e as Error).message);
+        res.status(502).send({ message: (e as Error).message });
+      } finally {
         logger.debug('Finished API Elasticsearch Request');
-      });
-      //code to execute while waiting async function
-      logger.debug('Waiting for API Results');
+      }
     }
-  }) 
+  });
+  
   return router;
 }
 
@@ -334,7 +300,7 @@ export const restResponseTimePublisherHistogram = new client.Histogram({
 })
 
 //Endpoint used for Prometheus Metrics
-export function startMetricsListening(){
+export function startMetricsListening() {
 
   const router = express.Router();
 

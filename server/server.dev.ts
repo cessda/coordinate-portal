@@ -22,7 +22,6 @@ import config from '../webpack.dev.config.js';
 import path from 'path';
 import { checkEnvironmentVariables, getSearchkitRouter, externalApi, jsonProxy, startListening, startMetricsListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
 import responseTime from 'response-time'
-import { RequestParams } from '@elastic/elasticsearch';
 
 export function start() {
     checkEnvironmentVariables(false);
@@ -57,9 +56,6 @@ export function start() {
     app.use('/api/sk', getSearchkitRouter());
     
     //Metrics middleware for API
-    const metricsAllTimer = restResponseTimeAllHistogram.startTimer();
-    const metricsLangTimer = restResponseTimeLangHistogram.startTimer();
-    const metricsPublTimer = restResponseTimePublisherHistogram.startTimer();
     app.use('/api/data', responseTime((req:Request, res:Response, time:number)=>{
       //ALL
       if (req?.route?.path){
@@ -68,7 +64,6 @@ export function start() {
           route: req.route.path,
           status_code: res.statusCode
         }, Math.round(time*1000))
-        const secondsAll = metricsAllTimer();
       }
       //LANG
       if (req.query.metadataLanguage){
@@ -78,7 +73,6 @@ export function start() {
           lang: req.query.metadataLanguage as string,
           status_code: res.statusCode
         }, Math.round(time*1000))
-        const secondsLang = metricsLangTimer();
       }
       //PUBLISHER
       if (req.query.publishers){
@@ -91,7 +85,6 @@ export function start() {
             status_code: res.statusCode
           }, Math.round(time*1000))
         });
-        const secondsPublis =  metricsPublTimer();
       }
     }))
 

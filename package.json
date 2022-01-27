@@ -15,7 +15,6 @@
     "tsc": "tsc --build"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.16.0",
     "@js-joda/core": "5.2.0",
     "body-parser": "1.19.1",
     "bodybuilder": "^2.4.0",

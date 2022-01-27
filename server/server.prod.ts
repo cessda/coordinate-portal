@@ -15,7 +15,7 @@ import methodOverride from 'method-override';
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { checkBuildDirectory, checkEnvironmentVariables, getSearchkitRouter, jsonProxy, startListening } from './helper';
+import { checkBuildDirectory, checkEnvironmentVariables, externalApi, getSearchkitRouter, jsonProxy, startListening } from './helper';
 
 export function start () {
     checkBuildDirectory();
@@ -31,6 +31,8 @@ export function start () {
     app.use('/api/sk', getSearchkitRouter());
 
     app.use('/api/json', jsonProxy());
+
+    app.use('/api/data', externalApi());
 
     app.use('/static', express.static(path.join(__dirname, '../dist')));
 
