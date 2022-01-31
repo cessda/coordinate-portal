@@ -28,6 +28,7 @@ import { goBack } from 'react-router-redux';
 import type { State } from '../types';
 import counterpart from 'counterpart';
 import { updateStudy } from '../actions/search';
+import { CMMStudy } from '../../common/metadata';
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
 
@@ -44,7 +45,7 @@ export class DetailPage extends Component<Props> {
   componentDidUpdate() {
     const id = this.props.query;
 
-    if (id && id != this.props.item?.id) {
+    if (id && id !== this.props.item?.id) {
       this.props.updateStudy(id);
     }
 
@@ -136,11 +137,12 @@ export class DetailPage extends Component<Props> {
 }
 
 export function mapStateToProps(state: State) {
-  const item = state.search.displayed[0];
+  // Item could be undefined if no results are present.
+  const item = state.search.displayed[0] as CMMStudy | undefined;
   const query = state.routing.locationBeforeTransitions.query.q;
   return {
     loading: state.search.loading,
-    item: item ? item : undefined,
+    item: item,
     jsonLd: state.search.jsonLd,
     currentLanguage: state.language.currentLanguage,
     query: Array.isArray(query) ? query.join() : query

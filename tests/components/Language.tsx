@@ -78,7 +78,8 @@ describe('Language component', () => {
 
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps(jest.fn())).toEqual({
-      changeLanguage: expect.any(Function)
+      changeLanguage: expect.any(Function),
+      push: expect.any(Function)
     });
   });
 });

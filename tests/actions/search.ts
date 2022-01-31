@@ -50,7 +50,28 @@ const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>
 // Mock Client() in elasticsearch module.
 jest.mock('elasticsearch', () => ({
   Client: jest.fn(() => ({
-    search: () => Promise.reject("Mocked!") // Default mock.
+    search: () => {
+      return Promise.resolve({
+        aggregations: {
+          unique_id: {
+            value: 1
+          }
+        },
+        hits: {
+          hits: [
+            {
+              _source: {
+                id: 2,
+                titleStudy: 'Similar Study Title'
+              }
+            }
+          ],
+          total: 1
+        },
+        timed_out: false,
+        took: 1
+      });
+    }
   }))
 }));
 
@@ -88,35 +109,6 @@ describe('Search actions', () => {
     // Mock Matomo Analytics library (no metrics will actually be sent).
     // @ts-ignore
     global['_paq'] = [];
-
-    // Mock elasticsearch Client() to prevent http request and resolve promise.
-    // @ts-expect-error - only returns what's tested.
-    ClientMock.mockImplementation(() => {
-      return {
-        search: () => {
-          return Promise.resolve({
-            aggregations: {
-              unique_id: {
-                value: 1
-              }
-            },
-            hits: {
-              hits: [
-                {
-                  _source: {
-                    id: 2,
-                    titleStudy: 'Similar Study Title'
-                  }
-                }
-              ],
-              total: 1
-            },
-            timed_out: false,
-            took: 1
-          });
-        }
-      };
-    });
   });
 
   afterEach(() => {
@@ -528,7 +520,7 @@ describe('Search actions', () => {
   });
 
   describe('UPDATE_SIMILARS action', () => {
-    it('is created when the list of similar studies is updated', () => {
+    it('is created when the list of similar studies is updated', async () => {
       // Mock Redux store.
       // @ts-expect-error
       const store = mockStore({
@@ -545,20 +537,20 @@ describe('Search actions', () => {
         titleStudy: 'Study Title'
       })
 
-      return store.dispatch(similars).then(() => {
-          // State should contain similar studies.
-          expect(store.getActions()).toEqual([
+      await store.dispatch(similars);
+      
+      // State should contain similar studies.
+      expect(store.getActions()).toEqual([
+        {
+          type: UPDATE_SIMILARS,
+          similars: [
             {
-              type: UPDATE_SIMILARS,
-              similars: [
-                {
-                  id: 2,
-                  titleStudy: 'Similar Study Title'
-                }
-              ]
+              id: 2,
+              titleStudy: 'Similar Study Title'
             }
-          ]);
-        });
+          ]
+        }
+      ]);
     });
   });
 

@@ -29,10 +29,8 @@ export default class Detail extends React.Component<Props> {
   private static readonly formatter = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR)
     .optionalStart().appendLiteral("-").appendValue(ChronoField.MONTH_OF_YEAR)
-      .optionalStart().appendLiteral("-").appendValue(ChronoField.DAY_OF_MONTH)
-        .optionalStart().appendLiteral( "T" ).append(DateTimeFormatter.ISO_OFFSET_TIME).optionalEnd()
-      .optionalEnd()
-    .optionalEnd()
+    .optionalStart().appendLiteral("-").appendValue(ChronoField.DAY_OF_MONTH)
+    .optionalStart().appendLiteral( "T" ).append(DateTimeFormatter.ISO_OFFSET_TIME)
     .toFormatter();
 
   static readonly dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");

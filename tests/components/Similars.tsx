@@ -62,13 +62,6 @@ describe('Similars component', () => {
     expect(similars.exists()).toBe(true);
   });
 
-  it('should populate list of similar study links', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(enzymeWrapper.find('.similars a').length).toBe(
-      props.similars.length
-    );
-  });
-
   it('should show message when no similar studies found', () => {
     const { enzymeWrapper } = setup({
       similars: undefined
@@ -76,20 +69,16 @@ describe('Similars component', () => {
     expect(enzymeWrapper.find('.similars Translate').exists()).toBe(true);
   });
 
-  it('should navigate to similar study', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(props.push).not.toHaveBeenCalled();
-    enzymeWrapper
-      .find('.similars a')
-      .at(0)
-      .simulate('click');
-    expect(props.push).toHaveBeenCalled();
-  });
-
   it('should map state to props', () => {
     const { props } = setup();
     expect(
       mapStateToProps({
+        language: {
+          //@ts-expect-error
+          currentLanguage: {
+            code: "en"
+          }
+        },
         //@ts-expect-error
         search: {
           displayed: [props.item],
@@ -98,6 +87,7 @@ describe('Similars component', () => {
       })
     ).toEqual({
       item: props.item,
+      language: "en",
       similars: props.similars
     });
   });

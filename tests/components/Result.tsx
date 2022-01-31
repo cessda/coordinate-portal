@@ -20,6 +20,7 @@ import {
   Result
 } from '../../src/components/Result';
 import { CMMStudy } from '../../common/metadata';
+import { Language, languages } from '../../src/utilities/language';
 
 // Mock props and shallow render component for test.
 function setup(item?: Partial<CMMStudy> | false) {
@@ -144,7 +145,6 @@ describe('Result component', () => {
       .at(2)
       .simulate('click');
     expect(props.changeLanguage).toHaveBeenCalled();
-    expect(props.push).toHaveBeenCalled();
   });
 
   it('should map state to props', () => {
@@ -152,6 +152,10 @@ describe('Result component', () => {
     expect(
       mapStateToProps(
         {
+          language: {
+            currentLanguage: languages.find(lang => lang.code === "en") as Language,
+            list: languages
+          },
           search: {
             //@ts-ignore
             displayed: [props.item]
@@ -160,6 +164,7 @@ describe('Result component', () => {
         props
       )
     ).toEqual({
+      currentLanguage: "en",
       item: props.item
     });
   });

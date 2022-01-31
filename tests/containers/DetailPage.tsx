@@ -16,7 +16,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../src/containers/DetailPage';
 import { languages } from '../../src/utilities/language';
-import { updateStudy } from '../../src/actions/search';
 
 // Mock props and shallow render container for test.
 function setup(partialProps?: Partial<Props>) {
@@ -24,18 +23,18 @@ function setup(partialProps?: Partial<Props>) {
     {
       loading: false,
       item: {
-        id: 1,
+        id: "1",
         studyUrl: 'http://example.com'
       },
       jsonLd: {},
       currentLanguage: languages[0],
-      query: undefined,
+      query: "1",
       goBack: jest.fn(),
       updateStudy: jest.fn()
     },
     partialProps || {}
   );
-  const enzymeWrapper = shallow(<DetailPage {...props} />);
+  const enzymeWrapper = shallow<DetailPage>(<DetailPage {...props} />);
   return {
     props,
     enzymeWrapper
@@ -120,9 +119,35 @@ describe('DetailPage container', () => {
     });
   });
 
+  it('should update study on mount', () => {
+    const { props } = setup();
+    expect(props.updateStudy).toBeCalledWith(props.item.id);
+  });
+
+  it('should update if study title changes', () => {
+    const { enzymeWrapper, props } = setup();
+    enzymeWrapper.setProps({
+      ...props
+    });
+
+    // Study didn't change, so updateStudy should only be called once
+    expect(props.updateStudy).toHaveBeenCalledTimes(1);
+
+    // Update the study ID
+    enzymeWrapper.setProps({
+      ...props,
+      query: "2"
+    });
+
+    // Expect updateStudy to be called with the new study ID
+    expect(props.updateStudy).toHaveBeenCalledTimes(2);
+    expect(props.updateStudy).toBeCalledWith("2");
+  });
+
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps(i => i)).toEqual({
-      goBack: expect.any(Function)
+      goBack: expect.any(Function),
+      updateStudy: expect.any(Function)
     });
   });
 });

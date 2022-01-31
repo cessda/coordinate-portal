@@ -32,17 +32,22 @@ describe('Language reducer', () => {
   });
 
   it('should handle INIT_TRANSLATIONS', () => {
-    const list = _.map(languages, (language) => _.pick(language, ['code', 'label', 'index']));
+    const list = languages.map(language => _.pick(language, ['code', 'label', 'index']));
     expect(
       language(
-        //@ts-ignore
-        {},
+        undefined,
         {
           type: INIT_TRANSLATIONS,
-          languages: list
+          languages: list,
+          initialLanguage: "en"
         }
       )
     ).toEqual({
+      currentLanguage: {
+        code: "en",
+        index: "cmmstudy_en",
+        label: "English",
+      },
       list: list
     });
   });

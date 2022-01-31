@@ -273,14 +273,6 @@ describe('Detail component', () => {
     ).toBe('01/02/2003 - Not a date');
   });
 
-  it('should reset metadata panels state on unmount if expanded', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(props.expandMetadataPanels).toBe(true);
-    enzymeWrapper.unmount();
-    expect(props.expandMetadataPanels).toBe(false);
-    expect(props.toggleMetadataPanels).toHaveBeenCalled();
-  });
-
   it('should not reset metadata panels state on unmount if not expanded', () => {
     const { props, enzymeWrapper } = setup();
     enzymeWrapper.setProps({

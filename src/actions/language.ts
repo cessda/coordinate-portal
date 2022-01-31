@@ -17,7 +17,6 @@ import searchkit from "../utilities/searchkit";
 import { Thunk } from "../types";
 import { languages, Language, languageMap } from "../utilities/language";
 import getPaq from "../utilities/getPaq";
-import { push } from "react-router-redux";
 import { updateStudy } from "./search";
 import { browserHistory } from "react-router";
 
@@ -63,7 +62,7 @@ export function initTranslations(): Thunk {
     counterpart.setFallbackLocale('en');
 
     searchkit.translateFunction = (key: string): string | undefined => {
-      const numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
+      const numberOfResults = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
       switch (key) {
         case 'searchbox.placeholder': 
           return counterpart.translate('search');
