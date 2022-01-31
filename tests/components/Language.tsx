@@ -32,7 +32,8 @@ function setup() {
         index: 'cmmstudy_fi'
       }
     ],
-    changeLanguage: jest.fn()
+    changeLanguage: jest.fn(),
+    push: jest.fn()
   };
   const enzymeWrapper = shallow(<Language {...props} />);
   return {

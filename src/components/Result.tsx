@@ -25,6 +25,7 @@ import { CMMStudy } from '../../common/metadata';
 
 type Props = {
   bemBlocks: any;
+  currentLanguage: string;
   index: number;
   item: CMMStudy;
 } & ReturnType<typeof mapDispatchToProps>;
@@ -53,6 +54,7 @@ export class Result extends Component<Props> {
   render() {
     const {
       bemBlocks,
+      currentLanguage,
       index,
       item,
     } = this.props;
@@ -87,7 +89,8 @@ export class Result extends Component<Props> {
           <Link to={{
             pathname: "/detail",
             query: {
-             q: item.id
+             q: item.id,
+             lang: currentLanguage
             }
           }}><span dangerouslySetInnerHTML={{__html: item.titleStudyHighlight || item.titleStudy}}></span></Link>
         </h4>
@@ -157,16 +160,17 @@ export class Result extends Component<Props> {
 
 export function mapStateToProps(state: State, props: Props) {
   return {
+    currentLanguage: state.language.currentLanguage.code,
     item: state.search.displayed[props.index]
   };
 }
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     push: bindActionCreators(push, dispatch),
     changeLanguage: bindActionCreators(changeLanguage, dispatch),
     toggleLongAbstract: bindActionCreators(toggleLongAbstract, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result);

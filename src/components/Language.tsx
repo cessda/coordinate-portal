@@ -29,7 +29,8 @@ export class Language extends Component<Props> {
     const {
       currentLanguage,
       list,
-      push
+      push,
+      changeLanguage
     } = this.props;
 
     const languages: Options<string> = list.map(language => {
@@ -49,13 +50,19 @@ export class Language extends Component<Props> {
                 onChange={(option) => {
                   if (option && !Array.isArray(option) && option.value) {
                     const currentLocation = browserHistory.getCurrentLocation();
-                    push({
-                      pathname: currentLocation.pathname,
-                      query: {
-                        ...currentLocation.query,
-                        lang: option.value
-                      }
-                    })
+                    if (currentLocation.pathname === "/") {
+                      // Change language directly on the search page
+                      changeLanguage(option.value);
+                    } else {
+                      // Change the language parameter in the URL, this triggers the language change and updates the history
+                      push({
+                        pathname: currentLocation.pathname,
+                        query: {
+                          ...currentLocation.query,
+                          lang: option.value
+                        }
+                      });
+                    }
                   }
                 }}/>
       </div>
