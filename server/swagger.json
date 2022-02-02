@@ -354,7 +354,7 @@
           },
           "studyUrl": {
             "type": "string",
-            "example": "1http://doi.org/10.5255/UKDA-SN-4929-1"
+            "example": "http://doi.org/10.5255/UKDA-SN-4929-1"
           },
           "studyNumber": {
             "type": "string",

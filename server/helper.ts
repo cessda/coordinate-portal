@@ -170,9 +170,7 @@ export function externalApiV1() {
     else if (limit>"200"){
       res.status(400).send({ message: 'limit should be maximum 200'});
     }
-    else if (parseInt(offset,10) > parseInt(limit,10)){
-      res.status(400).send({ message: 'Offset cannot be higher than limit'});
-    }else {
+    else {
       //Prepare body for ElasticSearch
       const bodyQuery = bodybuilder()
       //Set limit & offset  
