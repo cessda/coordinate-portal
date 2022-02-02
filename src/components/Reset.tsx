@@ -16,12 +16,11 @@ import {connect} from 'react-redux';
 import type {State} from '../types';
 
 export type Props = {
-  pathname: string;
   bemBlock: (...args: Array<any>) => any;
   hasFilters: boolean;
   translate: (arg0: string) => string;
   resetFilters: () => void;
-};
+} & ReturnType<typeof mapStateToProps>;
 
 export class Reset extends Component<Props> {
 

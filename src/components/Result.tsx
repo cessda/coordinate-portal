@@ -25,12 +25,10 @@ import { CMMStudy } from '../../common/metadata';
 
 type Props = {
   bemBlocks: any;
-  index: any;
+  currentLanguage: string;
+  index: number;
   item: CMMStudy;
-  push: typeof push;
-  changeLanguage: typeof changeLanguage;
-  toggleLongAbstract: typeof toggleLongAbstract;
-};
+} & ReturnType<typeof mapDispatchToProps>;
 
 function generateCreatorElements(item: CMMStudy) {
   let creators: JSX.Element[] = [];
@@ -56,6 +54,7 @@ export class Result extends Component<Props> {
   render() {
     const {
       bemBlocks,
+      currentLanguage,
       index,
       item,
     } = this.props;
@@ -67,15 +66,18 @@ export class Result extends Component<Props> {
     let languages: JSX.Element[] = [];
     for (let i: number = 0; i < item.langAvailableIn.length; i++) {
       languages.push(
-        <a key={i} className="button is-small is-white" onClick={() => {
-          this.props.changeLanguage(item.langAvailableIn[i]);
-          this.props.push({
-            pathname: 'detail',
-            search: '?q="' + item.id + '"'
-          });
-        }}>
+        <Link key={i}
+              className="button is-small is-white" 
+              to={{
+                pathname: '/detail',
+                query: {
+                  q: item.id,
+                  lang: item.langAvailableIn[i].toLowerCase()
+                }
+              }} 
+              onClick={()=> this.props.changeLanguage(item.langAvailableIn[i])}>
           {item.langAvailableIn[i]}
-        </a>
+        </Link>
       );
     }
 
@@ -85,8 +87,11 @@ export class Result extends Component<Props> {
       <div className="list_hit" data-qa="hit">
         <h4 className={bemBlocks.item().mix(bemBlocks.container('hith4'))}>
           <Link to={{
-            pathname: 'detail',
-            search: '?q="' + item.id + '"'
+            pathname: "/detail",
+            query: {
+             q: item.id,
+             lang: currentLanguage
+            }
           }}><span dangerouslySetInnerHTML={{__html: item.titleStudyHighlight || item.titleStudy}}></span></Link>
         </h4>
         <div className={bemBlocks.item().mix(bemBlocks.container('meta'))}>
@@ -153,18 +158,19 @@ export class Result extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State, props: Props) => {
+export function mapStateToProps(state: State, props: Props) {
   return {
+    currentLanguage: state.language.currentLanguage.code,
     item: state.search.displayed[props.index]
   };
-};
+}
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     push: bindActionCreators(push, dispatch),
     changeLanguage: bindActionCreators(changeLanguage, dispatch),
     toggleLongAbstract: bindActionCreators(toggleLongAbstract, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result);

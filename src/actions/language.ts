@@ -15,8 +15,10 @@
 import counterpart from "counterpart";
 import searchkit from "../utilities/searchkit";
 import { Thunk } from "../types";
-import { languages, Language } from "../utilities/language";
+import { languages, Language, languageMap } from "../utilities/language";
 import getPaq from "../utilities/getPaq";
+import { updateStudy } from "./search";
+import { browserHistory } from "react-router";
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";
@@ -24,6 +26,7 @@ export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";
 export type InitTranslationsAction = {
   type: typeof INIT_TRANSLATIONS;
   languages: readonly Language[];
+  initialLanguage: string | null | undefined;
 };
 
 export function initTranslations(): Thunk {
@@ -45,13 +48,21 @@ export function initTranslations(): Thunk {
       }
     });
 
-    counterpart.setLocale(state.language.currentLanguage.code);
+    // Check if a language is set in the URL
+    let initialLanguage = `${state.routing.locationBeforeTransitions.query.lang}`;
+
+    if (languageMap.has(initialLanguage)) {
+      counterpart.setLocale(initialLanguage);
+    } else {
+      initialLanguage = state.language.currentLanguage.code;
+      counterpart.setLocale(state.language.currentLanguage.code);
+    }
 
     // Fallback to English if the locale is not available
     counterpart.setFallbackLocale('en');
 
     searchkit.translateFunction = (key: string): string | undefined => {
-      const numberOfResults: string = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
+      const numberOfResults = process.env.PASC_DEBUG_MODE === 'true' ? 'numberOfResultsWithTime' : 'numberOfResults';
       switch (key) {
         case 'searchbox.placeholder': 
           return counterpart.translate('search');
@@ -79,9 +90,17 @@ export function initTranslations(): Thunk {
       }
     };
 
+    browserHistory.listen(listner => {
+      // If the language has changed
+      if (listner.query.lang && listner.query.lang !== state.routing.locationBeforeTransitions.query.lang) {
+        dispatch(changeLanguage(`${listner.query.lang}`));
+      }
+    })
+
     dispatch({
       type: INIT_TRANSLATIONS,
-      languages
+      languages,
+      initialLanguage
     });
   };
 }
@@ -96,7 +115,9 @@ export type ChangeLanguageAction = {
 };
 
 export function changeLanguage(code: string): Thunk {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
     code = code.toLowerCase();
 
     const language = languages.find(element => element.code === code);
@@ -116,13 +137,20 @@ export function changeLanguage(code: string): Thunk {
 
     counterpart.setLocale(code);
 
+
     dispatch({
       type: CHANGE_LANGUAGE,
       code,
       label
     });
+    
+    if (state.search.displayed[0]) {
+      dispatch(updateStudy(state.search.displayed[0].id));
+    }
 
-    searchkit.reloadSearch();
+    if (state.routing.locationBeforeTransitions.pathname === "/") {
+      searchkit.reloadSearch();
+    }
   };
 }
 

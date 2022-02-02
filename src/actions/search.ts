@@ -19,7 +19,7 @@ import { CMMStudy } from "../../common/metadata";
 import getPaq from "../utilities/getPaq";
 
 // Get a new Elasticsearch Client
-function elasticsearchClient() {
+const elasticsearchClient = (() => {
   const protocol = _.trim(window.location.protocol, ':');
   return new Client({
     host: {
@@ -31,7 +31,7 @@ function elasticsearchClient() {
     // Avoid timing out searches on slow connections.
     requestTimeout: 2147483647 // Largest supported timeout.
   });
-}
+})();
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 export const INIT_SEARCHKIT = "INIT_SEARCHKIT";
@@ -103,15 +103,6 @@ export function initSearchkit(): Thunk {
     });
 
     searchkit.addResultsListener((results: SearchResponse<CMMStudy>): void => {
-      const state = getState();
-
-      // Load similar results if viewing detail page and data exists.
-      if ((_.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'detail' || _.trim(state.routing.locationBeforeTransitions.pathname, '/') === 'study/pid') &&
-        results.hits.hits.length > 0 &&
-        results.hits.hits[0]._source) {
-        dispatch(updateSimilars(results.hits.hits[0]._source));
-      }
-
       dispatch(updateDisplayed(results));
       dispatch(toggleLoading(false));
     });
@@ -243,9 +234,7 @@ export function updateQuery(query: Record<string, any>): UpdateQueryAction {
 //////////// Redux Action Creator : UPDATE_STATE
 export const UPDATE_STATE = "UPDATE_STATE";
 
-export type SearchkitState = {
-  q: string;
-};
+export type SearchkitState = any;
 
 export type UpdateStateAction = {
   type: typeof UPDATE_STATE;
@@ -256,6 +245,25 @@ export function updateState(state: SearchkitState): UpdateStateAction {
   return {
     type: UPDATE_STATE,
     state
+  };
+}
+
+export function updateStudy(id: string): Thunk<Promise<void>> {
+  return async (dispatch, getState) => {
+    const state = getState();
+
+    const response = await elasticsearchClient.search<CMMStudy>({
+      size: 1,
+      body: {
+        index: state.language.currentLanguage.index,
+        query: detailQuery(id)
+      }
+    });
+
+    dispatch(updateDisplayed(response));
+    if (response.hits.hits.length > 0) {
+      dispatch(updateSimilars(response.hits.hits[0]._source));
+    }
   };
 }
 
@@ -271,7 +279,7 @@ export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
   return async (dispatch, getState) => {
     const state = getState();
 
-    const response = await elasticsearchClient().search<CMMStudy>({
+    const response = await elasticsearchClient.search<CMMStudy>({
       size: 5,
       body: {
         index: state.language.currentLanguage.index,
@@ -316,7 +324,7 @@ export type UpdateTotalStudiesAction = {
 export function updateTotalStudies(): Thunk<Promise<void>> {
   return async (dispatch) => {
     try {
-      const response = await elasticsearchClient().search({
+      const response = await elasticsearchClient.search({
         size: 0,
         body: {
           index: "cmmstudy_*",

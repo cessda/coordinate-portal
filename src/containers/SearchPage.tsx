@@ -31,16 +31,13 @@ import $ from 'jquery';
 import type {State} from '../types';
 import counterpart from 'counterpart';
 
-export type Props = {
-  showMobileFilters: boolean;
-  filters: any;
-  results: number;
-};
+export type Props = ReturnType<typeof mapStateToProps>;
 
 export class SearchPage extends Component<Props> {
 
   componentDidMount() {
-    document.title = counterpart.translate('datacatalogue');
+    this.updateTitle();
+    searchkit.resetState();
   }
 
   componentDidUpdate(): void {
@@ -51,6 +48,10 @@ export class SearchPage extends Component<Props> {
     this.autoExpandFilter('publisher.publisher');
 
     // Set the page title
+    this.updateTitle();
+  }
+
+  updateTitle() {
     if (this.props.filters.q) {
       document.title = `${this.props.filters.q} - ${counterpart.translate('datacatalogue')}`;
     } else {
@@ -192,12 +193,12 @@ export class SearchPage extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State) => {
+export function mapStateToProps(state: State) {
   return {
     showMobileFilters: state.search.showMobileFilters,
     filters: state.search.state,
     results: state.search.displayed.length
   };
-};
+}
 
 export default connect(mapStateToProps)(SearchPage);

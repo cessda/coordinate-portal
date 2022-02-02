@@ -30,6 +30,7 @@ export default function language(state = initialState, action: Action): Language
   switch (action.type) {
     case INIT_TRANSLATIONS:
       return Object.assign({}, state, {
+        currentLanguage: languages.find(l => l.code === action.initialLanguage) || languages.find(l => l.code === "en") || languages[0],
         list: action.languages
       });
 
