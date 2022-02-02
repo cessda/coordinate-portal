@@ -13,10 +13,7 @@
 
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import {
-  Detail,
-  mapDispatchToProps,
-  mapStateToProps} from '../../src/components/Detail';
+import Detail from '../../src/components/Detail';
 import { CMMStudy } from '../../common/metadata';
 
 // Mock props and shallow render component for test.
@@ -276,14 +273,6 @@ describe('Detail component', () => {
     ).toBe('01/02/2003 - Not a date');
   });
 
-  it('should reset metadata panels state on unmount if expanded', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(props.expandMetadataPanels).toBe(true);
-    enzymeWrapper.unmount();
-    expect(props.expandMetadataPanels).toBe(false);
-    expect(props.toggleMetadataPanels).toHaveBeenCalled();
-  });
-
   it('should not reset metadata panels state on unmount if not expanded', () => {
     const { props, enzymeWrapper } = setup();
     enzymeWrapper.setProps({
@@ -291,30 +280,5 @@ describe('Detail component', () => {
     });
     enzymeWrapper.unmount();
     expect(props.toggleMetadataPanels).not.toHaveBeenCalled();
-  });
-
-  it('should map state to props', () => {
-    const { props } = setup();
-    expect(
-      mapStateToProps(
-        {
-          //@ts-expect-error
-          search: {
-            displayed: [props.item],
-            expandMetadataPanels: props.expandMetadataPanels
-          }
-        },
-        props
-      )
-    ).toEqual({
-      item: props.item,
-      expandMetadataPanels: props.expandMetadataPanels
-    });
-  });
-
-  it('should map dispatch to props', () => {
-    expect(mapDispatchToProps(a => a)).toEqual({
-      toggleMetadataPanels: expect.any(Function)
-    });
   });
 });

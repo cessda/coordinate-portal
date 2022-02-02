@@ -83,13 +83,14 @@ if (root instanceof HTMLElement) {
   if (document.documentElement instanceof HTMLElement && detect()?.name === 'ie') {
     document.documentElement.classList.add('legacy-browser');
   }
+  history.listen(listner => console.log(`${listner.action}: ${listner.pathname}${listner.search}`));
   ReactDOM.render(
     <Provider store={store}>
       <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
         <Route path="/" component={App}>
           <IndexRoute component={SearchPage} />
           <Route path="detail" component={DetailPage} />
-          <Route path="study/pid" component={DetailPage} />
+          <Route path="study/pid/:pid" component={DetailPage} />
           <Route path="about" component={AboutPage} />
           <Redirect from="*" to="/" />
         </Route>

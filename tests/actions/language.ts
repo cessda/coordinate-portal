@@ -20,8 +20,14 @@ import { Language, languages } from '../../src/utilities/language';
 import _ from 'lodash';
 import { State } from '../../src/types';
 import { AnyAction } from 'redux';
+import { hashHistory } from 'react-router';
+import { mockStudy } from '../mockdata';
 
 const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>>([thunk]);
+
+jest.mock('../../src/actions/search', () => ({
+  updateStudy: jest.fn().mockImplementation(() => () => Promise.resolve())
+}));
 
 const enLanguage: Language = {
   code: 'en',
@@ -56,7 +62,7 @@ describe('Language actions', () => {
   describe('INIT_TRANSLATIONS action', () => {
     it('is created when initialising language support', () => {
       // Mock Redux store.
-      let store = mockStore({
+      const store = mockStore({
         language: {
           currentLanguage: enLanguage,
           list: languages
@@ -64,8 +70,13 @@ describe('Language actions', () => {
         // @ts-expect-error
         search: {
           totalStudies: 0
+        },
+        routing: {
+          locationBeforeTransitions: hashHistory.createLocation("/")
         }
       });
+
+
 
       // Dispatch action.
       store.dispatch(initTranslations());
@@ -88,16 +99,15 @@ describe('Language actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: 'INIT_TRANSLATIONS',
-          languages: _.map(languages, function(language) {
-            return _.pick(language, ['code', 'label', 'index']);
-          })
+          initialLanguage: "en",
+          languages: languages.map(language => _.pick(language, ['code', 'label', 'index']))
         }
       ]);
     });
 
     it('includes debug output when debug mode is enabled', () => {
       // Mock Redux store.
-      let store = mockStore({
+      const store = mockStore({
         language: {
           currentLanguage: enLanguage,
           list: languages
@@ -105,6 +115,9 @@ describe('Language actions', () => {
         // @ts-expect-error
         search: {
           totalStudies: 0
+        },
+        routing: {
+          locationBeforeTransitions: hashHistory.createLocation("/")
         }
       });
 
@@ -127,8 +140,15 @@ describe('Language actions', () => {
   describe('CHANGE_LANGUAGE action', () => {
     it('is created when selecting a language with a registered locale', () => {
       // Mock Redux store.
-      // @ts-expect-error
-      let store = mockStore({});
+      const store = mockStore({
+        //@ts-expect-error
+        search: {
+          displayed: [mockStudy]
+        },
+        routing: {
+          locationBeforeTransitions: hashHistory.createLocation("/")
+        }
+      });
 
       // Dispatch action with registered locale.
       store.dispatch(changeLanguage(languages[0].code));
@@ -145,8 +165,15 @@ describe('Language actions', () => {
 
     it('is created when selecting a language without a registered locale', () => {
       // Mock Redux store.
-      // @ts-expect-error
-      let store = mockStore({});
+      const store = mockStore({
+        //@ts-expect-error
+        search: {
+          displayed: [mockStudy]
+        },
+        routing: {
+          locationBeforeTransitions: hashHistory.createLocation("/")
+        }
+      });
 
       // Dispatch action with unregistered locale.
       store.dispatch(changeLanguage('xyz'));
@@ -163,8 +190,15 @@ describe('Language actions', () => {
 
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
-      // @ts-expect-error
-      let store = mockStore({});
+      const store = mockStore({
+        //@ts-expect-error
+        search: {
+          displayed: [mockStudy]
+        },
+        routing: {
+          locationBeforeTransitions: hashHistory.createLocation("/")
+        }
+      });
 
       // Dispatch action with registered locale.
       store.dispatch(changeLanguage(languages[0].code));

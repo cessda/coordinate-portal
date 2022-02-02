@@ -16,30 +16,27 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { mapDispatchToProps, mapStateToProps, Props, Similars } from '../../src/components/Similars';
 import searchkit from '../../src/utilities/searchkit';
+import { mockStudy } from '../mockdata';
 
 // Mock props and shallow render component for test.
 function setup(partialProps?: Partial<Props>) {
-  const props = _.extend(
-    {
-      searchkit: searchkit,
-      item: {
-        id: 1,
-        title: 'Study Title'
+  const props = {
+    searchkit: searchkit,
+    language: 'en',
+    item: mockStudy,
+    similars: [
+      {
+        id: "1",
+        title: 'Similar Study Title 1'
       },
-      similars: [
-        {
-          id: "1",
-          title: 'Similar Study Title 1'
-        },
-        {
-          id: "2",
-          title: 'Similar Study Title 2'
-        }
-      ],
-      push: jest.fn()
-    },
-    partialProps || {}
-  );
+      {
+        id: "2",
+        title: 'Similar Study Title 2'
+      }
+    ],
+    push: jest.fn(),
+    ...partialProps 
+  };
 
   // Manually initialise searchkit history.
   searchkit.history = {
@@ -65,13 +62,6 @@ describe('Similars component', () => {
     expect(similars.exists()).toBe(true);
   });
 
-  it('should populate list of similar study links', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(enzymeWrapper.find('.similars a').length).toBe(
-      props.similars.length
-    );
-  });
-
   it('should show message when no similar studies found', () => {
     const { enzymeWrapper } = setup({
       similars: undefined
@@ -79,20 +69,16 @@ describe('Similars component', () => {
     expect(enzymeWrapper.find('.similars Translate').exists()).toBe(true);
   });
 
-  it('should navigate to similar study', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(props.push).not.toHaveBeenCalled();
-    enzymeWrapper
-      .find('.similars a')
-      .at(0)
-      .simulate('click');
-    expect(props.push).toHaveBeenCalled();
-  });
-
   it('should map state to props', () => {
     const { props } = setup();
     expect(
       mapStateToProps({
+        language: {
+          //@ts-expect-error
+          currentLanguage: {
+            code: "en"
+          }
+        },
         //@ts-expect-error
         search: {
           displayed: [props.item],
@@ -101,6 +87,7 @@ describe('Similars component', () => {
       })
     ).toEqual({
       item: props.item,
+      language: "en",
       similars: props.similars
     });
   });

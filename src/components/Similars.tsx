@@ -15,19 +15,11 @@ import React, {Component} from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {AnyAction, bindActionCreators} from 'redux';
 import type {State} from '../types';
-import searchkit from '../utilities/searchkit';
 import {push} from 'react-router-redux';
 import Translate from 'react-translate-component';
-import { CMMStudy } from '../../common/metadata';
+import { Link } from 'react-router';
 
-export interface Props {
-  item: CMMStudy;
-  similars: {
-    id: string;
-    title: string;
-  }[];
-  push: typeof push;
-}
+export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
 
 export class Similars extends Component<Props> {
 
@@ -41,14 +33,13 @@ export class Similars extends Component<Props> {
 
     if (item && similars) {
       for (let i: number = 0; i < similars.length; i++) {
-        links.push(<a key={i} onClick={() => {
-          this.props.push({
-            pathname: 'detail',
-            search: '?q="' + similars[i].id + '"'
-          });
-          searchkit.reloadSearch();
-
-        }}>{similars[i].title}</a>);
+        // Construct the similar URL
+        links.push(<Link key={i} to={{
+          pathname: '/detail',
+          query: {
+            q: similars[i].id
+          }
+        }}>{similars[i].title}</Link>);
       }
     }
 
@@ -63,17 +54,18 @@ export class Similars extends Component<Props> {
   }
 }
 
-export const mapStateToProps = (state: State) => {
+export function mapStateToProps(state: State) {
   return {
     item: state.search.displayed[0],
+    language: state.language.currentLanguage.code,
     similars: state.search.similars
   };
-};
+}
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     push: bindActionCreators(push, dispatch)
   };
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Similars);

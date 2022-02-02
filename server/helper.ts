@@ -143,8 +143,14 @@ export function externalApiV1() {
   const host = _.trimEnd(elasticsearchUrl, '/');
 
   //Create ElasticSearch Client
+  const hostUrl = url.parse(host);
   const client = new Client({
-    host: host
+    host: {
+      host: hostUrl.hostname,
+      auth: `${elasticsearchUsername}:${elasticsearchPassword}`,
+      protocol: hostUrl.protocol,
+      port: hostUrl.port
+    }
   });
 
   router.get('/search', async (req, res) => {
@@ -215,7 +221,8 @@ export function externalApiV1() {
       }
       if (Array.isArray(publishers)) {
         bodyQuery.query('bool', build => build.orQuery('nested', { path: 'publisher' }, (q: Bodybuilder) => {
-          publishers.forEach(value =>  {
+
+          publishers.forEach(value => {
             q.orQuery('term', 'publisher.publisher', value);
           });
           return q;
@@ -239,10 +246,9 @@ export function externalApiV1() {
       }
       //Prepare the Client
       try {
-        const query = bodyQuery.build();
         const body = await client.search({
           index: `cmmstudy_${metadataLanguage}`,
-          body: query
+          body: bodyQuery.build()
         });
         //Send the Response
         res.status(200).json({
