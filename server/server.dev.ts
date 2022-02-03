@@ -20,7 +20,7 @@ import bodyParser from 'body-parser';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, getSearchkitRouter, externalApi, jsonProxy, startListening, startMetricsListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
+import { checkEnvironmentVariables, getSearchkitRouter, externalApiV1, jsonProxy, startListening, startMetricsListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
 import responseTime from 'response-time'
 
 export function start() {
@@ -56,7 +56,7 @@ export function start() {
     app.use('/api/sk', getSearchkitRouter());
     
     //Metrics middleware for API
-    app.use('/api/data', responseTime((req:Request, res:Response, time:number)=>{
+    app.use('/api/DataSets', responseTime((req:Request, res:Response, time:number)=>{
       //ALL
       if (req?.route?.path){
         restResponseTimeAllHistogram.observe({
@@ -88,7 +88,7 @@ export function start() {
       }
     }))
 
-    app.use('/api/data', externalApi());
+    app.use('/api/DataSets/v1', externalApiV1());
 
     app.use('/api/mt', startMetricsListening());
 

@@ -13,7 +13,7 @@
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-import _ from 'lodash';
+import _, { isString } from 'lodash';
 import proxy from 'express-http-proxy';
 import express, { Request, response } from 'express';
 import request from 'request';
@@ -21,6 +21,7 @@ import winston from 'winston';
 import client from 'prom-client';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import { Client } from 'elasticsearch';
+import { data } from 'jquery';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -135,7 +136,7 @@ export function getSearchkitRouter() {
   return router;
 }
 
-export function externalApi() {
+export function externalApiV1() {
 
   const router = express.Router();
   
@@ -155,27 +156,37 @@ export function externalApi() {
   router.get('/search', async (req, res) => {
 
     const { metadataLanguage, q } = req.query;
-
-    const dataCollectionYear = req.query.dataCollectionYear as unknown as {
-      min?: number;
-      max?: number;
-    };
+    let dataCollectionYearMin = req.query.dataCollectionYearMin as unknown as number;
+    let dataCollectionYearMax = req.query.dataCollectionYearMax as unknown as number;
     const classifications = req.query.classifications;
     const studyAreaCountries = req.query.studyAreaCountries;
     const publishers = req.query.publishers;
+    const limit = req.query.limit as unknown as string;
+    const offset = req.query.offset as unknown as string;
 
     if (!metadataLanguage) {
       res.status(400).send({ message: 'Please provide a search language'});
-    } else {
+    }
+    else if (limit>"200"){
+      res.status(400).send({ message: 'limit should be maximum 200'});
+    }
+    else {
       //Prepare body for ElasticSearch
-      const bodyQuery = bodybuilder().size(100); //up to how many results will be returned
-
-
+      const bodyQuery = bodybuilder()
+      //Set limit & offset  
+      if (limit && offset){
+        bodyQuery.size(parseInt(limit)).from(parseInt(offset));
+      }   
+      if (!limit){
+        bodyQuery.size(200);
+      }
+      if (!offset){
+        bodyQuery.from(0);
+      }   
       //create json body for ElasticSearchClient - search query
       if (q) {
         bodyQuery.query('query_string', { query: q });
       }
-      
       //callback functions for nested post-filters
       //Create json body for ElasticSearchClient - nested post-filters
       if (Array.isArray(classifications)) {
@@ -186,6 +197,12 @@ export function externalApi() {
           return q;
         }));
       }
+      if (isString(classifications)){
+        bodyQuery.query('nested', { path: 'classifications' }, (q: Bodybuilder) => {
+          return q
+          .orQuery('term', 'classifications.term', classifications)
+        })
+      }
       if (Array.isArray(studyAreaCountries)) {
         bodyQuery.query('bool', build => build.orQuery('nested', { path: 'studyAreaCountries' }, (q: Bodybuilder) => {
           studyAreaCountries.forEach(value => {
@@ -194,35 +211,46 @@ export function externalApi() {
           return q;
         }));
       }
+      if (isString(studyAreaCountries)){
+        bodyQuery.query('nested', { path: 'studyAreaCountries' }, (q: Bodybuilder) => {
+          return q
+          .orQuery('term', 'studyAreaCountries.searchField', studyAreaCountries)
+        })
+      }
       if (Array.isArray(publishers)) {
         bodyQuery.query('bool', build => build.orQuery('nested', { path: 'publisher' }, (q: Bodybuilder) => {
+
           publishers.forEach(value => {
             q.orQuery('term', 'publisher.publisher', value);
           });
           return q;
         }));
       }
-      //Create json body for ElasticSearchClient - date-filters
-      if (dataCollectionYear) {
-        if (!dataCollectionYear.min) {
-          dataCollectionYear.min = 1900;
-        }
-        if (!dataCollectionYear.max) {
-          dataCollectionYear.max = new Date().getFullYear();
-        }
-        bodyQuery.orFilter('range', 'dataCollectionYear', { gte: dataCollectionYear.min, lte: dataCollectionYear.max });
+      if (isString(publishers)){
+        bodyQuery.query('nested', { path: 'studyArpublishereaCountries' }, (q: Bodybuilder) => {
+          return q
+          .orQuery('term', 'publisher.publisher', publishers)
+        })
       }
-
+      //Create json body for ElasticSearchClient - date-filters
+      if (dataCollectionYearMin || dataCollectionYearMax) {
+        if (!dataCollectionYearMin) {
+          dataCollectionYearMin = 1900;
+        }
+        if (!dataCollectionYearMax) {
+          dataCollectionYearMax = new Date().getFullYear();
+        }
+        bodyQuery.orFilter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
+      }
       //Prepare the Client
       try {
         const body = await client.search({
           index: `cmmstudy_${metadataLanguage}`,
           body: bodyQuery.build()
         });
-
         //Send the Response
         res.status(200).json({
-          "Results Found": body.hits.total,
+          "ResultsFound": body.hits.total,
           "Results": body.hits.hits.map(obj => obj._source)
         });
       } catch (e) {
