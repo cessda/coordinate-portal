@@ -15,13 +15,15 @@ import path from 'path';
 import url from 'url';
 import _, { isString } from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { Request, response } from 'express';
+import express, { RequestHandler } from 'express';
 import request from 'request';
 import winston from 'winston';
 import client from 'prom-client';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import { Client } from 'elasticsearch';
-import { data } from 'jquery';
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import methodOverride from 'method-override';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -89,7 +91,7 @@ export function checkEnvironmentVariables(production: boolean) {
   }
 }
 
-export function getSearchkitRouter() {
+function getSearchkitRouter() {
   const router = express.Router();
   const host = _.trimEnd(elasticsearchUrl, '/');
 
@@ -136,7 +138,7 @@ export function getSearchkitRouter() {
   return router;
 }
 
-export function externalApiV1() {
+function externalApiV1() {
 
   const router = express.Router();
   
@@ -265,7 +267,7 @@ export function externalApiV1() {
   return router;
 }
 
-export function jsonProxy() {
+function jsonProxy() {
   let elasticsearchAuthorisaton: string | undefined = undefined;
 
   // Only configure Elasticsearch authentication if both username and password are set
@@ -335,24 +337,41 @@ export const restResponseTimePublisherHistogram = new client.Histogram({
 })
 
 //Endpoint used for Prometheus Metrics
-export function startMetricsListening() {
+function startMetricsListening() {
 
   const router = express.Router();
 
-  const collectDefaultMetrics = client.collectDefaultMetrics
+  client.collectDefaultMetrics(); //general cpu, mem, etc information
 
-  collectDefaultMetrics(); //general cpu, mem, etc information
-
-  router.get('/metrics', async (req, res) =>{
+  router.get('/metrics', async (_req, res) =>{
     res.set("Content-Type", client.register.contentType);
     return res.send(await client.register.metrics());
   })
   return router;
 }
 
-export function startListening(app: express.Express) {
+/**
+ * Start listening.
+ * @param app the express instance.
+ * @param handler the request handler for the React application.
+ */
+export function startListening(app: express.Express, handler: RequestHandler) {
 
   const port = Number(process.env.PASC_PORT || 8088);
+
+  // Set up application middleware
+  app.use(compression());
+  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(bodyParser.json());
+  app.use(methodOverride());
+
+  // Set up request handlers
+  app.use('/api/sk', getSearchkitRouter());
+  app.use('/api/json', jsonProxy());
+  app.use('/api/DataSets/v1', externalApiV1());
+  app.use('/api/mt', startMetricsListening());
+
+  app.get('*', handler);
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 

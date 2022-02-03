@@ -10,17 +10,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import compression from 'compression';
-import methodOverride from 'method-override';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import express, {Request, Response} from 'express';
-import bodyParser from 'body-parser';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, getSearchkitRouter, externalApiV1, jsonProxy, startListening, startMetricsListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
+import { checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
 import responseTime from 'response-time'
 
 export function start() {
@@ -31,11 +28,6 @@ export function start() {
 
     app.set('view engine', 'ejs');
     app.set('views', path.join(__dirname, 'views'));
-
-    app.use(compression());
-    app.use(bodyParser.urlencoded({extended: false}));
-    app.use(bodyParser.json());
-    app.use(methodOverride());
 
     // @ts-expect-error - incorrect typings
     app.use(webpackMiddleware(compiler, {
@@ -52,8 +44,6 @@ export function start() {
     }));
 
     app.use(webpackHotMiddleware(compiler));
-
-    app.use('/api/sk', getSearchkitRouter());
     
     //Metrics middleware for API
     app.use('/api/DataSets', responseTime((req:Request, res:Response, time:number)=>{
@@ -88,16 +78,8 @@ export function start() {
       }
     }))
 
-    app.use('/api/DataSets/v1', externalApiV1());
-
-    app.use('/api/mt', startMetricsListening());
-
-    app.use('/api/json', jsonProxy());
-
-    app.get('*', (_req, res) => {
+    startListening(app, (_req, res) => {
       res.setHeader('Cache-Control', 'no-store');
       res.render('index');
     });
-
-    startListening(app);
 };
