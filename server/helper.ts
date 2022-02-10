@@ -15,7 +15,7 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { RequestHandler } from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import request from 'request';
 import winston from 'winston';
 import client from 'prom-client';
@@ -25,6 +25,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
+import responseTime from 'response-time';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -220,7 +221,6 @@ function externalApiV1() {
 
     //Prepare the Client
     try {
-      console.log(JSON.stringify(bodyQuery.build()));
       const body = await client.search({
         index: `cmmstudy_${metadataLanguage}`,
         body: bodyQuery.build()
@@ -343,6 +343,46 @@ function startMetricsListening() {
   return router;
 }
 
+function trackResponseTime() {
+  return responseTime((req: Request, res: Response, time: number) => {
+    //ALL
+    if (req?.route?.path) {
+      restResponseTimeAllHistogram.observe({
+        method: req.method,
+        route: req.route.path,
+        status_code: res.statusCode
+      }, Math.round(time * 1000));
+    }
+    //LANG
+    if (req.query.metadataLanguage) {
+      restResponseTimeLangHistogram.observe({
+        method: req.method,
+        route: req.route.path,
+        lang: req.query.metadataLanguage as string,
+        status_code: res.statusCode
+      }, Math.round(time * 1000));
+    }
+    //PUBLISHER
+    if (req.query.publishers) {
+      const publishers = req.query.publishers;
+      if (Array.isArray(publishers)) {
+        publishers.forEach(value => observePublisher(req, String(value), res.statusCode, time));
+      } else {
+        observePublisher(req, String(publishers), res.statusCode, time);
+      }
+    }
+  });
+}
+
+function observePublisher(req: Request, value: string, statusCode: number, time: number) {
+  return restResponseTimePublisherHistogram.observe({
+    method: req.method,
+    route: req.route.path,
+    publ: value,
+    status_code: statusCode
+  }, Math.round(time * 1000));
+}
+
 /**
  * Start listening.
  * @param app the express instance.
@@ -363,6 +403,9 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v1', externalApiV1());
   app.use('/api/mt', startMetricsListening());
+
+  //Metrics middleware for API
+  app.use('/api/DataSets', trackResponseTime());
 
   app.get('*', handler);
 
