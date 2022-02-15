@@ -17,7 +17,7 @@ import express, {Request, Response} from 'express';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
+import { checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram, restResponseTimeTotalHistogram, restResponseTimeTotalFailedHistogram, restResponseTimeTotalSuccessHistogram } from './helper';
 import responseTime from 'response-time'
 
 export function start() {
@@ -53,7 +53,11 @@ export function start() {
           method: req.method,
           route: req.route.path,
           status_code: res.statusCode
-        }, Math.round(time*1000))
+        }, time)
+        restResponseTimeTotalHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, time)
       }
       //LANG
       if (req.query.metadataLanguage){
@@ -62,7 +66,7 @@ export function start() {
           route: req.route.path,
           lang: req.query.metadataLanguage as string,
           status_code: res.statusCode
-        }, Math.round(time*1000))
+        }, time)
       }
       //PUBLISHER
       if (req.query.publishers){
@@ -73,8 +77,22 @@ export function start() {
             route: req.route.path,
             publ: value as string,
             status_code: res.statusCode
-          }, Math.round(time*1000))
+          }, time)
         });
+      }
+      //FAILED
+      if (res.statusCode >= 400){
+        restResponseTimeTotalFailedHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, time)
+      }
+      //SUCCESS
+      else{
+        restResponseTimeTotalSuccessHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, time)
       }
     }))
 

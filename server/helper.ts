@@ -13,14 +13,14 @@
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-import _, { isString } from 'lodash';
+import _, { includes, isString } from 'lodash';
 import proxy from 'express-http-proxy';
 import express, { RequestHandler } from 'express';
 import request from 'request';
 import winston from 'winston';
 import client from 'prom-client';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
-import { Client } from 'elasticsearch';
+import { Client, SearchResponse } from 'elasticsearch';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import methodOverride from 'method-override';
@@ -251,10 +251,10 @@ function externalApiV1() {
           body: bodyQuery.build()
         });
         //Send the Response
-        res.status(200).json({
-          "ResultsFound": body.hits.total,
-          "Results": body.hits.hits.map(obj => obj._source)
-        });
+          res.status(200).json({
+            "ResultsFound": body.hits.total,
+            "Results": body.hits.hits.map(obj => obj._source)
+          });
       } catch (e) {
         logger.error('Elasticsearch API Request failed: %s', (e as Error).message);
         res.status(502).send({ message: (e as Error).message });
@@ -317,10 +317,28 @@ function jsonProxy() {
   });
 }
 
+//Metrics for api - total
+export const restResponseTimeTotalHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
+//Metrics for api - total - failed
+export const restResponseTimeTotalFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total_failed',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
+//Metrics for api - total - success
+export const restResponseTimeTotalSuccessHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total_success',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
 //Metrics for api - all
 export const restResponseTimeAllHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_all',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time in seconds for all requests',
   labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - language
