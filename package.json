@@ -43,7 +43,7 @@
     "response-time": "2.3.2",
     "searchkit": "2.4.4",
     "striptags": "3.2.0",
-    "winston": "3.5.1"
+    "winston": "3.6.0"
   },
   "devDependencies": {
     "@babel/cli": "7.17.0",
