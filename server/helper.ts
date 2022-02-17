@@ -24,6 +24,8 @@ import { Client, SearchResponse } from 'elasticsearch';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import methodOverride from 'method-override';
+import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
+import { Dataset, WithContext } from 'schema-dts';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -246,15 +248,28 @@ function externalApiV1() {
       }
       //Prepare the Client
       try {
-        const body = await client.search({
+        const body: SearchResponse<CMMStudy> = await client.search({
           index: `cmmstudy_${metadataLanguage}`,
           body: bodyQuery.build()
         });
         //Send the Response
+        if (req.header('Accept')=="application/ld+json"){
+          const studyModel: CMMStudy[] = getStudyModel(body);
+          let jsonLdArray: WithContext<Dataset>[] | any = [];
+          studyModel.forEach(function (value) {
+            jsonLdArray.push(getJsonLd(value));
+          });
+          res.status(200).json({
+            "ResultsFound": body.hits.total,
+            "Results": jsonLdArray
+          });
+        }
+        else{
           res.status(200).json({
             "ResultsFound": body.hits.total,
             "Results": body.hits.hits.map(obj => obj._source)
           });
+        }
       } catch (e) {
         logger.error('Elasticsearch API Request failed: %s', (e as Error).message);
         res.status(502).send({ message: (e as Error).message });

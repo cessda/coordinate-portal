@@ -4,5 +4,8 @@
     "composite": true,
     "rootDir": ".",
     "incremental": true
-  }
+  }, 
+  "references": [
+    { "path": "../common" }
+	]
 }
