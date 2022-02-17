@@ -320,25 +320,37 @@ function jsonProxy() {
 //Metrics for api - total
 export const restResponseTimeTotalHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_total',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time total requests',
   labelNames: ['method', 'route']
 })
 //Metrics for api - total - failed
 export const restResponseTimeTotalFailedHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_total_failed',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time total failed requests',
   labelNames: ['method', 'route']
+})
+//Metrics for api - user - failed
+export const restResponseTimeUserFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_user_failed',
+  help: 'REST API response time total user failed requests',
+  labelNames: ['method', 'route', 'status_code']
+})
+//Metrics for api - system - failed
+export const restResponseTimeSystemFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_system_failed',
+  help: 'REST API response time total system failed requests',
+  labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - total - success
 export const restResponseTimeTotalSuccessHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_total_success',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time total successful requests',
   labelNames: ['method', 'route']
 })
 //Metrics for api - all
 export const restResponseTimeAllHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_all',
-  help: 'REST API response time in seconds for all requests',
+  help: 'REST API response time in ms for all requests',
   labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - language

@@ -17,7 +17,7 @@ import express, {Request, Response} from 'express';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram, restResponseTimeTotalHistogram, restResponseTimeTotalFailedHistogram, restResponseTimeTotalSuccessHistogram } from './helper';
+import { checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram, restResponseTimeTotalHistogram, restResponseTimeTotalFailedHistogram, restResponseTimeTotalSuccessHistogram, restResponseTimeSystemFailedHistogram, restResponseTimeUserFailedHistogram } from './helper';
 import responseTime from 'response-time'
 
 export function start() {
@@ -80,15 +80,32 @@ export function start() {
           }, time)
         });
       }
-      //FAILED
+      //FAILED REQUEST
       if (res.statusCode >= 400){
+		//TOTAL FAILED REQUEST COUNTER
         restResponseTimeTotalFailedHistogram.observe({
           method: req.method,
           route: req.route.path
         }, time)
+        if (res.statusCode >= 500){
+			//SYSTEM FAIL REQUEST
+			restResponseTimeSystemFailedHistogram.observe({
+            method: req.method,
+            route: req.route.path,
+            status_code: res.statusCode
+          }, time)
+		}
+		else{
+			//USER FAIL REQUEST
+			restResponseTimeUserFailedHistogram.observe({
+            method: req.method,
+            route: req.route.path,
+            status_code: res.statusCode
+          }, time)
+		}
       }
-      //SUCCESS
       else{
+		//SUCCESS REQUEST
         restResponseTimeTotalSuccessHistogram.observe({
           method: req.method,
           route: req.route.path
