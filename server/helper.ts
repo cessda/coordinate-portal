@@ -375,8 +375,13 @@ export function startListening(app: express.Express, handler: RequestHandler) {
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
+  // Set up exit handler, gracefully terminating the server on exit.
   process.on('exit', () => {
     logger.info('Shutting down');
-    server.close();
+    server.close(() => logger.info('Shut down'));
   });
+
+  // Set up signal handers
+  process.on('SIGINT', () =>  process.exit(130));
+  process.on('SIGTERM', () => process.exit(143));
 }

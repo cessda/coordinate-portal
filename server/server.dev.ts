@@ -60,20 +60,20 @@ export function start() {
         restResponseTimeLangHistogram.observe({
           method: req.method,
           route: req.route.path,
-          lang: req.query.metadataLanguage as string,
+          lang: String(req.query.metadataLanguage),
           status_code: res.statusCode
         }, Math.round(time*1000))
       }
       //PUBLISHER
-      if (req.query.publishers){
-        let publishers:any = req.query.publishers
-        publishers.forEach(function (value: any) {
+      if (Array.isArray(req.query.publishers)){
+        const publishers = req.query.publishers;
+        publishers.forEach(value => {
           restResponseTimePublisherHistogram.observe({
             method: req.method,
             route: req.route.path,
-            publ: value as string,
+            publ: String(value),
             status_code: res.statusCode
-          }, Math.round(time*1000))
+          }, Math.round(time * 1000));
         });
       }
     }))
