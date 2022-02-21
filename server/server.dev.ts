@@ -13,12 +13,11 @@
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import express, {Request, Response} from 'express';
+import express from 'express';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram } from './helper';
-import responseTime from 'response-time'
+import { checkEnvironmentVariables, startListening } from './helper';
 
 export function start() {
     checkEnvironmentVariables(false);
@@ -44,39 +43,6 @@ export function start() {
     }));
 
     app.use(webpackHotMiddleware(compiler));
-    
-    //Metrics middleware for API
-    app.use('/api/DataSets', responseTime((req:Request, res:Response, time:number)=>{
-      //ALL
-      if (req?.route?.path){
-        restResponseTimeAllHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode
-        }, Math.round(time*1000))
-      }
-      //LANG
-      if (req.query.metadataLanguage){
-        restResponseTimeLangHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          lang: String(req.query.metadataLanguage),
-          status_code: res.statusCode
-        }, Math.round(time*1000))
-      }
-      //PUBLISHER
-      if (Array.isArray(req.query.publishers)){
-        const publishers = req.query.publishers;
-        publishers.forEach(value => {
-          restResponseTimePublisherHistogram.observe({
-            method: req.method,
-            route: req.route.path,
-            publ: String(value),
-            status_code: res.statusCode
-          }, Math.round(time * 1000));
-        });
-      }
-    }))
 
     startListening(app, (_req, res) => {
       res.setHeader('Cache-Control', 'no-store');

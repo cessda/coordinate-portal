@@ -15,7 +15,7 @@ import path from 'path';
 import url from 'url';
 import _, { isString } from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { RequestHandler } from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import request from 'request';
 import winston from 'winston';
 import client from 'prom-client';
@@ -24,6 +24,7 @@ import { Client } from 'elasticsearch';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import methodOverride from 'method-override';
+import responseTime from 'response-time';
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -317,10 +318,28 @@ function jsonProxy() {
   });
 }
 
+//Metrics for api - total
+export const restResponseTimeTotalHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
+//Metrics for api - total - failed
+export const restResponseTimeTotalFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total_failed',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
+//Metrics for api - total - success
+export const restResponseTimeTotalSuccessHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total_success',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
 //Metrics for api - all
 export const restResponseTimeAllHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_all',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time in seconds for all requests',
   labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - language
@@ -350,6 +369,58 @@ function startMetricsListening() {
   return router;
 }
 
+function responseTimeHandler(req: Request, res: Response, time: number) {
+  //ALL
+  if (req?.route?.path) {
+    restResponseTimeAllHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      status_code: res.statusCode
+    }, time);
+    restResponseTimeTotalHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
+  //LANG
+  if (req.query.metadataLanguage) {
+    restResponseTimeLangHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      lang: String(req.query.metadataLanguage),
+      status_code: res.statusCode
+    }, time);
+  }
+  //PUBLISHER
+  if (Array.isArray(req.query.publishers)) {
+    const publishers = req.query.publishers;
+    publishers.forEach(value => {
+      restResponseTimePublisherHistogram.observe({
+        method: req.method,
+        route: req.route.path,
+        publ: String(value),
+        status_code: res.statusCode
+      }, time);
+    });
+  }
+  //FAILED
+  if (res.statusCode >= 400) {
+    restResponseTimeTotalFailedHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
+
+
+  //SUCCESS
+  else {
+    restResponseTimeTotalSuccessHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
+}
+
 /**
  * Start listening.
  * @param app the express instance.
@@ -370,6 +441,9 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v1', externalApiV1());
   app.use('/api/mt', startMetricsListening());
+
+  //Metrics middleware for API
+  app.use('/api/DataSets', responseTime(responseTimeHandler));
 
   app.get('*', handler);
 
