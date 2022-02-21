@@ -384,16 +384,13 @@ function responseTimeHandler(req: Request, res: Response, time: number) {
     }, time);
   }
   //PUBLISHER
-  if (Array.isArray(req.query.publishers)) {
+  if (req.query.publishers) {
     const publishers = req.query.publishers;
-    publishers.forEach(value => {
-      restResponseTimePublisherHistogram.observe({
-        method: req.method,
-        route: req.route.path,
-        publ: String(value),
-        status_code: res.statusCode
-      }, time);
-    });
+    if (Array.isArray(publishers)) {
+      publishers.forEach(value => observePublisher(req, String(value), res.statusCode, time));
+    } else {
+      observePublisher(req, String(publishers), res.statusCode, time);
+    }
   }
   //FAILED
   if (res.statusCode >= 400) {
@@ -402,8 +399,6 @@ function responseTimeHandler(req: Request, res: Response, time: number) {
       route: req.route.path
     }, time);
   }
-
-
   //SUCCESS
   else {
     restResponseTimeTotalSuccessHistogram.observe({
@@ -411,6 +406,15 @@ function responseTimeHandler(req: Request, res: Response, time: number) {
       route: req.route.path
     }, time);
   }
+}
+
+function observePublisher(req: Request, value: string, statusCode: number, time: number) {
+  return restResponseTimePublisherHistogram.observe({
+    method: req.method,
+    route: req.route.path,
+    publ: value,
+    status_code: statusCode
+  }, time * 1000);
 }
 
 /**
