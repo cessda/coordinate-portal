@@ -310,10 +310,28 @@ function jsonProxy() {
   });
 }
 
+//Metrics for api - total
+export const restResponseTimeTotalHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
+//Metrics for api - total - failed
+export const restResponseTimeTotalFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total_failed',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
+//Metrics for api - total - success
+export const restResponseTimeTotalSuccessHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_total_success',
+  help: 'REST API response time in seconds',
+  labelNames: ['method', 'route']
+})
 //Metrics for api - all
 export const restResponseTimeAllHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_all',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time in seconds for all requests',
   labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - language
@@ -343,44 +361,56 @@ function startMetricsListening() {
   return router;
 }
 
-function trackResponseTime() {
-  return responseTime((req: Request, res: Response, time: number) => {
-    //ALL
-    if (req?.route?.path) {
-      restResponseTimeAllHistogram.observe({
+function responseTimeHandler(req: Request, res: Response, time: number) {
+  //ALL
+  if (req?.route?.path) {
+    restResponseTimeAllHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      status_code: res.statusCode
+    }, time);
+    restResponseTimeTotalHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
+  //LANG
+  if (req.query.metadataLanguage) {
+    restResponseTimeLangHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      lang: String(req.query.metadataLanguage),
+      status_code: res.statusCode
+    }, time);
+  }
+  //PUBLISHER
+  if (Array.isArray(req.query.publishers)) {
+    const publishers = req.query.publishers;
+    publishers.forEach(value => {
+      restResponseTimePublisherHistogram.observe({
         method: req.method,
         route: req.route.path,
+        publ: String(value),
         status_code: res.statusCode
-      }, Math.round(time * 1000));
-    }
-    //LANG
-    if (req.query.metadataLanguage) {
-      restResponseTimeLangHistogram.observe({
-        method: req.method,
-        route: req.route.path,
-        lang: req.query.metadataLanguage as string,
-        status_code: res.statusCode
-      }, Math.round(time * 1000));
-    }
-    //PUBLISHER
-    if (req.query.publishers) {
-      const publishers = req.query.publishers;
-      if (Array.isArray(publishers)) {
-        publishers.forEach(value => observePublisher(req, String(value), res.statusCode, time));
-      } else {
-        observePublisher(req, String(publishers), res.statusCode, time);
-      }
-    }
-  });
-}
+      }, time);
+    });
+  }
+  //FAILED
+  if (res.statusCode >= 400) {
+    restResponseTimeTotalFailedHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
 
-function observePublisher(req: Request, value: string, statusCode: number, time: number) {
-  return restResponseTimePublisherHistogram.observe({
-    method: req.method,
-    route: req.route.path,
-    publ: value,
-    status_code: statusCode
-  }, Math.round(time * 1000));
+
+  //SUCCESS
+  else {
+    restResponseTimeTotalSuccessHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
 }
 
 /**
@@ -405,14 +435,19 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/mt', startMetricsListening());
 
   //Metrics middleware for API
-  app.use('/api/DataSets', trackResponseTime());
+  app.use('/api/DataSets', responseTime(responseTimeHandler));
 
   app.get('*', handler);
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
+  // Set up exit handler, gracefully terminating the server on exit.
   process.on('exit', () => {
     logger.info('Shutting down');
-    server.close();
+    server.close(() => logger.info('Shut down'));
   });
+
+  // Set up signal handers
+  process.on('SIGINT', () =>  process.exit(130));
+  process.on('SIGTERM', () => process.exit(143));
 }
