@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, {Component} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import type {State} from '../types';
 
@@ -22,28 +22,25 @@ export type Props = {
   resetFilters: () => void;
 } & ReturnType<typeof mapStateToProps>;
 
-export class Reset extends Component<Props> {
+export function Reset(props: Props) {
+  const {
+    pathname,
+    bemBlock,
+    hasFilters,
+    translate,
+    resetFilters
+  } = props;
 
-  render() {
-    const {
-      pathname,
-      bemBlock,
-      hasFilters,
-      translate,
-      resetFilters
-    } = this.props;
-
-    return (
-      <a className={bemBlock().mix('link').state({disabled: pathname !== '/' || !hasFilters})}
-         onClick={() => {
-           if (pathname === '/' && hasFilters) {
-             resetFilters();
-           }
-         }}>
-        {translate('reset.clear_all')}
-      </a>
-    );
-  }
+  return (
+    <a className={bemBlock().mix('link').state({disabled: pathname !== '/' || !hasFilters})}
+        onClick={() => {
+          if (pathname === '/' && hasFilters) {
+            resetFilters();
+          }
+        }}>
+      {translate('reset.clear_all')}
+    </a>
+  );
 }
 
 export const mapStateToProps = (state: State) => {

@@ -17,12 +17,8 @@ import TopBar from '../../src/components/Topbar';
 
 // Mock props and shallow render component for test.
 function setup() {
-  const props = {
-    code: 'en'
-  };
-  const enzymeWrapper = shallow(<TopBar {...props} />);
+  const enzymeWrapper = shallow(<TopBar/>);
   return {
-    props,
     enzymeWrapper
   };
 }
