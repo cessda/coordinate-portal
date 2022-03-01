@@ -135,13 +135,31 @@ describe('DetailPage container', () => {
 
     // Update the study ID
     enzymeWrapper.setProps({
-      ...props,
       query: "2"
     });
 
     // Expect updateStudy to be called with the new study ID
     expect(props.updateStudy).toHaveBeenCalledTimes(2);
     expect(props.updateStudy).toBeCalledWith("2");
+  });
+
+  it('should escape quotes before retrieving study', () => {
+    const value = "value";
+    const { props } = setup({ query: `"${value}"`});
+
+    // The quotes should be stripped before passing the value on.
+    expect(props.updateStudy).toBeCalledWith(value);
+  });
+
+  it('should not update study if query is empty', () => {
+    const { enzymeWrapper, props } = setup();
+
+    enzymeWrapper.setProps({
+      query: undefined
+    });
+
+    // props.updateStudy() should have only been called on initialisation
+    expect(props.updateStudy).toHaveBeenCalledTimes(1);
   });
 
   it('should map dispatch to props', () => {
