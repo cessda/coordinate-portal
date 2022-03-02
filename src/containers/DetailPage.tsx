@@ -29,26 +29,25 @@ import type { State } from '../types';
 import counterpart from 'counterpart';
 import { updateStudy } from '../actions/search';
 import { CMMStudy } from '../../common/metadata';
+import _ from 'lodash';
 
-export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
+export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
 export class DetailPage extends Component<Props> {
 
   componentDidMount() {
     const id = this.props.query;
     if (id) {
-      this.props.updateStudy(id);
+      this.props.updateStudy(_.trim(id, "\""));
     }
     this.updateTitle();
   }
 
   componentDidUpdate() {
     const id = this.props.query;
-
     if (id && id !== this.props.item?.id) {
-      this.props.updateStudy(id);
+      this.props.updateStudy(_.trim(id, "\""));
     }
-
     this.updateTitle();
   }
 

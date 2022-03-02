@@ -10,10 +10,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import express, {Request, Response} from 'express';
+import express from 'express';
 import path from 'path';
-import { checkBuildDirectory, checkEnvironmentVariables, startListening, restResponseTimeAllHistogram, restResponseTimeLangHistogram, restResponseTimePublisherHistogram, restResponseTimeTotalFailedHistogram, restResponseTimeTotalSuccessHistogram, restResponseTimeTotalHistogram } from './helper';
-import responseTime from 'response-time'
+import { checkBuildDirectory, checkEnvironmentVariables, startListening } from './helper';
 
 export function start () {
     checkBuildDirectory();
@@ -22,57 +21,6 @@ export function start () {
     const app = express();
 
     app.use('/static', express.static(path.join(__dirname, '../dist')));
-    
-    //Metrics middleware for API
-    app.use('/api/DataSets', responseTime((req:Request, res:Response, time:number)=>{
-      //ALL
-      if (req?.route?.path){
-        restResponseTimeAllHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode
-        }, time)
-        restResponseTimeTotalHistogram.observe({
-          method: req.method,
-          route: req.route.path
-        }, time)
-      }
-      //LANG
-      if (req.query.metadataLanguage){
-        restResponseTimeLangHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          lang: req.query.metadataLanguage as string,
-          status_code: res.statusCode
-        }, time)
-      }
-      //PUBLISHER
-      if (req.query.publishers){
-        let publishers:any = req.query.publishers
-        publishers.forEach(function (value: any) {
-          restResponseTimePublisherHistogram.observe({
-            method: req.method,
-            route: req.route.path,
-            publ: value as string,
-            status_code: res.statusCode
-          }, time)
-        });
-      }
-      //FAILED
-      if (res.statusCode >= 400){
-        restResponseTimeTotalFailedHistogram.observe({
-          method: req.method,
-          route: req.route.path
-        }, time)
-      }
-      //SUCCESS
-      else{
-        restResponseTimeTotalSuccessHistogram.observe({
-          method: req.method,
-          route: req.route.path
-        }, time)
-      }
-    }))
 
     const indexPath = path.join(path.join(__dirname, '../dist'), 'index.html');
 

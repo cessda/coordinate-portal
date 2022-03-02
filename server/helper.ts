@@ -13,9 +13,9 @@
 import fs from 'fs';
 import path from 'path';
 import url from 'url';
-import _, { includes, isString } from 'lodash';
+import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { RequestHandler } from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import request from 'request';
 import winston from 'winston';
 import client from 'prom-client';
@@ -24,6 +24,8 @@ import { Client, SearchResponse } from 'elasticsearch';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import methodOverride from 'method-override';
+import { ParsedQs } from 'qs';
+import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
 
@@ -160,126 +162,117 @@ function externalApiV1() {
   router.get('/search', async (req, res) => {
 
     const { metadataLanguage, q } = req.query;
-    let dataCollectionYearMin = req.query.dataCollectionYearMin as unknown as number;
-    let dataCollectionYearMax = req.query.dataCollectionYearMax as unknown as number;
-    const classifications = req.query.classifications;
-    const studyAreaCountries = req.query.studyAreaCountries;
-    const publishers = req.query.publishers;
-    const limit = req.query.limit as unknown as string;
-    const offset = req.query.offset as unknown as string;
 
     if (!metadataLanguage) {
       res.status(400).send({ message: 'Please provide a search language'});
+      return;
     }
-    else if (limit>"200"){
-      res.status(400).send({ message: 'limit should be maximum 200'});
-    }
-    else {
-      //Prepare body for ElasticSearch
-      const bodyQuery = bodybuilder()
-      //Set limit & offset  
-      if (limit && offset){
-        bodyQuery.size(parseInt(limit)).from(parseInt(offset));
-      }   
-      if (!limit){
-        bodyQuery.size(200);
-      }
-      if (!offset){
-        bodyQuery.from(0);
-      }   
-      //create json body for ElasticSearchClient - search query
-      if (q) {
-        bodyQuery.query('query_string', { query: q });
-      }
-      //callback functions for nested post-filters
-      //Create json body for ElasticSearchClient - nested post-filters
-      if (Array.isArray(classifications)) {
-        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'classifications' }, (q: Bodybuilder) => {
-          classifications.forEach(value => {
-            q.orQuery('term', 'classifications.term', value);
-          });
-          return q;
-        }));
-      }
-      if (isString(classifications)){
-        bodyQuery.query('nested', { path: 'classifications' }, (q: Bodybuilder) => {
-          return q
-          .orQuery('term', 'classifications.term', classifications)
-        })
-      }
-      if (Array.isArray(studyAreaCountries)) {
-        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'studyAreaCountries' }, (q: Bodybuilder) => {
-          studyAreaCountries.forEach(value => {
-            q.orQuery('term', 'studyAreaCountries.searchField', value);
-          });
-          return q;
-        }));
-      }
-      if (isString(studyAreaCountries)){
-        bodyQuery.query('nested', { path: 'studyAreaCountries' }, (q: Bodybuilder) => {
-          return q
-          .orQuery('term', 'studyAreaCountries.searchField', studyAreaCountries)
-        })
-      }
-      if (Array.isArray(publishers)) {
-        bodyQuery.query('bool', build => build.orQuery('nested', { path: 'publisher' }, (q: Bodybuilder) => {
 
-          publishers.forEach(value => {
-            q.orQuery('term', 'publisher.publisher', value);
-          });
-          return q;
-        }));
+    //Prepare body for ElasticSearch
+    const bodyQuery = bodybuilder();
+
+    // Validate the limit parameter
+    if (req.query.limit !== undefined) {
+      const limit = Number(req.query.limit);
+      if (!Number.isInteger(limit) || limit <= 0) {
+        res.status(400).send({ message: 'limit must be a positive integer'});
+        return;
+      } else if (limit > 200) {
+        res.status(400).send({ message: 'limit must be maximum 200'});
+        return;
+      } else {
+        bodyQuery.size(limit);
       }
-      if (isString(publishers)){
-        bodyQuery.query('nested', { path: 'studyArpublishereaCountries' }, (q: Bodybuilder) => {
-          return q
-          .orQuery('term', 'publisher.publisher', publishers)
-        })
+    } else {
+      bodyQuery.size(200);
+    }
+
+    // Validate the offset parameter
+    if (req.query.offset !== undefined) {
+      const offset = Number(req.query.offset);
+      if (req.query.offset === '' || !Number.isInteger(offset) || offset < 0) {
+        res.status(400).send({ message: 'offset must be a positive integer'});
+        return;
+      } else {
+        bodyQuery.from(offset);
       }
-      //Create json body for ElasticSearchClient - date-filters
-      if (dataCollectionYearMin || dataCollectionYearMax) {
-        if (!dataCollectionYearMin) {
-          dataCollectionYearMin = 1900;
-        }
-        if (!dataCollectionYearMax) {
-          dataCollectionYearMax = new Date().getFullYear();
-        }
-        bodyQuery.orFilter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
+    }
+
+    //create json body for ElasticSearchClient - search query
+    if (_.isString(q)) {
+      bodyQuery.query('query_string', { query: q });
+    }
+
+    //Create json body for ElasticSearchClient - nested post-filters
+    buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
+    buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
+    buildNestedFilters(bodyQuery, req.query.publishers, 'publisher', 'publisher.publisher');
+
+    //Create json body for ElasticSearchClient - date-filters
+    let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
+    let dataCollectionYearMax = req.query.dataCollectionYearMax ? Number(req.query.dataCollectionYearMax) : undefined;
+    if (dataCollectionYearMin || dataCollectionYearMax) {
+      if (!Number.isInteger(dataCollectionYearMin)) {
+        dataCollectionYearMin = undefined;
       }
-      //Prepare the Client
-      try {
-        const body: SearchResponse<CMMStudy> = await client.search({
-          index: `cmmstudy_${metadataLanguage}`,
-          body: bodyQuery.build()
+      if (!Number.isInteger(dataCollectionYearMax)) {
+        dataCollectionYearMax = undefined;
+      }
+      bodyQuery.filter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
+    }
+
+    //Prepare the Client
+    try {
+      const body: SearchResponse<CMMStudy> = await client.search({
+        index: `cmmstudy_${metadataLanguage}`,
+        body: bodyQuery.build()
+      });
+      //Send the Response
+      if (req.header('Accept')=="application/ld+json"){
+        const studyModel: CMMStudy[] = getStudyModel(body);
+        let jsonLdArray: WithContext<Dataset>[] | any = [];
+        studyModel.forEach(function (value) {
+          jsonLdArray.push(getJsonLd(value));
         });
-        //Send the Response
-        if (req.header('Accept')=="application/ld+json"){
-          const studyModel: CMMStudy[] = getStudyModel(body);
-          let jsonLdArray: WithContext<Dataset>[] | any = [];
-          studyModel.forEach(function (value) {
-            jsonLdArray.push(getJsonLd(value));
-          });
-          res.status(200).json({
-            "ResultsFound": body.hits.total,
-            "Results": jsonLdArray
-          });
-        }
-        else{
-          res.status(200).json({
-            "ResultsFound": body.hits.total,
-            "Results": body.hits.hits.map(obj => obj._source)
-          });
-        }
-      } catch (e) {
-        logger.error('Elasticsearch API Request failed: %s', (e as Error).message);
-        res.status(502).send({ message: (e as Error).message });
-      } finally {
-        logger.debug('Finished API Elasticsearch Request');
+        res.status(200).json({
+          "ResultsFound": body.hits.total,
+          "Results": jsonLdArray
+        });
       }
+      else{
+        res.status(200).json({
+          "ResultsFound": body.hits.total,
+          "Results": body.hits.hits.map(obj => obj._source)
+        });
+      }
+    } catch (e) {
+      logger.error('Elasticsearch API Request failed: %s', (e as Error));
+      res.status(502).send({ message: (e as Error).message });
+    } finally {
+      logger.debug('Finished API Elasticsearch Request');
     }
   });
   
   return router;
+}
+
+/**
+ * Build filters for nested documents. The filter uses a term query
+ * 
+ * @param bodyQuery the body query to add nested filters to.
+ * @param query the term query, expected types are string or string[].
+ * @param path the path to the nested document.
+ * @param nestedPath the path to use in the nested document
+ */
+function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | ParsedQs | ParsedQs[] | undefined, path: string, nestedPath: string) {
+  if (Array.isArray(query)) {
+    bodyQuery.query('nested', { path: path }, (q: Bodybuilder) => {
+      query.forEach(value => q.orQuery('term', nestedPath, value));
+      return q;
+    });
+  } else if (_.isString(query)) {
+    bodyQuery.query('nested', { path: path }, (q: Bodybuilder) => q.addQuery('term', nestedPath, query));
+  }
 }
 
 function jsonProxy() {
@@ -313,11 +306,14 @@ function jsonProxy() {
       logger.error('Elasticsearch Request failed: %s', err?.message);
       res.sendStatus(502);
     },
-    userResDecorator: (_proxyRes, proxyResData) => {
+    userResDecorator: (_proxyRes, proxyResData, userReq) => {
       const json = JSON.parse(proxyResData.toString('utf8'));
       let result;
       if (!_.isEmpty(json._source)) {
-        result = JSON.stringify(json._source);
+        if (userReq.header('Accept')=="application/ld+json")
+          result = getJsonLd(json._source)
+        else
+          result = JSON.stringify(json._source);
       } else {
         // When running in debug mode, return the actual response from Elasticsearch
         if (debugEnabled) {
@@ -335,25 +331,37 @@ function jsonProxy() {
 //Metrics for api - total
 export const restResponseTimeTotalHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_total',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time total requests',
   labelNames: ['method', 'route']
 })
 //Metrics for api - total - failed
 export const restResponseTimeTotalFailedHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_total_failed',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time total failed requests',
   labelNames: ['method', 'route']
+})
+//Metrics for api - user - failed
+export const restResponseTimeUserFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_user_failed',
+  help: 'REST API response time total user failed requests',
+  labelNames: ['method', 'route', 'status_code']
+})
+//Metrics for api - system - failed
+export const restResponseTimeSystemFailedHistogram = new client.Histogram({
+  name: 'rest_response_time_duration_seconds_system_failed',
+  help: 'REST API response time total system failed requests',
+  labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - total - success
 export const restResponseTimeTotalSuccessHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_total_success',
-  help: 'REST API response time in seconds',
+  help: 'REST API response time total successful requests',
   labelNames: ['method', 'route']
 })
 //Metrics for api - all
 export const restResponseTimeAllHistogram = new client.Histogram({
   name: 'rest_response_time_duration_seconds_all',
-  help: 'REST API response time in seconds for all requests',
+  help: 'REST API response time in ms for all requests',
   labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for api - language
@@ -383,6 +391,82 @@ function startMetricsListening() {
   return router;
 }
 
+function responseTimeHandler(req: Request, res: Response, time: number) {
+  //ALL
+  if (req?.route?.path) {
+    restResponseTimeAllHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      status_code: res.statusCode
+    }, time);
+    restResponseTimeTotalHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
+
+  //LANG
+  if (req.query.metadataLanguage) {
+    restResponseTimeLangHistogram.observe({
+      method: req.method,
+      route: req.route.path,
+      lang: String(req.query.metadataLanguage),
+      status_code: res.statusCode
+    }, time);
+  }
+
+  //PUBLISHER
+  if (req.query.publishers) {
+    const publishers = req.query.publishers;
+    if (Array.isArray(publishers)) {
+      publishers.forEach(value => observePublisher(req, String(value), res.statusCode, time));
+    } else {
+      observePublisher(req, String(publishers), res.statusCode, time);
+    }
+  }
+
+  if (res.statusCode >= 400) {
+    //TOTAL FAILED REQUEST COUNTER
+    restResponseTimeTotalFailedHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+
+    if (res.statusCode >= 500) {
+      //SYSTEM FAIL REQUEST
+      restResponseTimeSystemFailedHistogram.observe({
+        method: req.method,
+        route: req.route.path,
+        status_code: res.statusCode
+      }, time);
+    } else {
+      //USER FAIL REQUEST
+      restResponseTimeUserFailedHistogram.observe({
+        method: req.method,
+        route: req.route.path,
+        status_code: res.statusCode
+      }, time);
+    }
+
+  } else {
+    //SUCCESS REQUEST
+    restResponseTimeTotalSuccessHistogram.observe({
+      method: req.method,
+      route: req.route.path
+    }, time);
+  }
+}
+
+
+function observePublisher(req: Request, value: string, statusCode: number, time: number) {
+  return restResponseTimePublisherHistogram.observe({
+    method: req.method,
+    route: req.route.path,
+    publ: value,
+    status_code: statusCode
+  }, time);
+}
+
 /**
  * Start listening.
  * @param app the express instance.
@@ -402,14 +486,26 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/sk', getSearchkitRouter());
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v1', externalApiV1());
+  app.use('/swagger/api/DataSets/v1', (req, res) => {
+    const externalAPISwagger = require("./swagger.json");
+    res.json(externalAPISwagger);
+  });
   app.use('/api/mt', startMetricsListening());
+
+  //Metrics middleware for API
+  app.use('/api/DataSets', responseTime(responseTimeHandler));
 
   app.get('*', handler);
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
+  // Set up exit handler, gracefully terminating the server on exit.
   process.on('exit', () => {
     logger.info('Shutting down');
-    server.close();
+    server.close(() => logger.info('Shut down'));
   });
+
+  // Set up signal handers
+  process.on('SIGINT', () =>  process.exit(130));
+  process.on('SIGTERM', () => process.exit(143));
 }

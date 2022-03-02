@@ -1,10 +1,5 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
-  "compilerOptions": {
-    "composite": true,
-    "rootDir": ".",
-    "incremental": true
-  }, 
+  "extends": "../tsconfig.node.json",
   "references": [
     { "path": "../common" }
 	]
