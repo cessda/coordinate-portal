@@ -464,6 +464,9 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use(bodyParser.json());
   app.use(methodOverride());
 
+  //Metrics middleware for API
+  app.use('/api/DataSets', responseTime(responseTimeHandler));
+
   // Set up request handlers
   app.use('/api/sk', getSearchkitRouter());
   app.use('/api/json', jsonProxy());
@@ -473,9 +476,6 @@ export function startListening(app: express.Express, handler: RequestHandler) {
     res.json(externalAPISwagger);
   });
   app.use('/api/mt', startMetricsListening());
-
-  //Metrics middleware for API
-  app.use('/api/DataSets', responseTime(responseTimeHandler));
 
   app.get('*', handler);
 
