@@ -26,6 +26,8 @@ import compression from 'compression';
 import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
+import { URL, URLSearchParams } from 'url'
+
 
 // Defaults to localhost if unspecified
 const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -111,6 +113,28 @@ function getSearchkitRouter() {
   }
 
   router.post('/_search', (req, res) => {
+
+    //METRICS FOR UI
+    if (req.query.size === undefined){ //to exclude calls to _search?size=... etc
+      //get Language
+      const langUI = req.body.index;
+      UILanguageHistogram.observe({
+        UILang: langUI.slice(9)
+      }, 1);
+      //get Publisher
+      const urlUI = new URL(String(req.headers.referer));
+      const paramsUI = new URLSearchParams(urlUI.search);
+      if (paramsUI.has('publisher.publisher[0]')){ //searching for at least 1 publisher
+        paramsUI.forEach(function(value, key) {
+          if (key.includes("publisher")){
+            UIPublisherHistogram.observe({
+              UIPubl: value
+            }, 1);
+          }
+        });
+      }
+    }
+
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
 
     const fullUrl = host + '/' + (req.body.index || 'cmmstudy_en') + '/cmmstudy' + req.url;
@@ -354,9 +378,21 @@ export const restResponseTimeLangHistogram = new client.Histogram({
 })
 //Metrics for api - publisher
 export const restResponseTimePublisherHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_publisher',
-  help: 'REST API response time in seconds for Publisher',
+  name: 'rest_response_time_duration_seconds_publisher_api',
+  help: 'REST API response time in seconds for Publisher, External API',
   labelNames: ['method', 'route', 'publ', 'status_code']
+})
+//Metrics for UI - Publisher
+export const UIPublisherHistogram = new client.Histogram({
+  name: 'ui_publisher',
+  help: 'UI Publisher Search',
+  labelNames: ['UIPubl']
+})
+//Metrics for UI - Language
+export const UILanguageHistogram = new client.Histogram({
+  name: 'ui_language',
+  help: 'UI Language Search',
+  labelNames: ['UILang']
 })
 
 //Endpoint used for Prometheus Metrics
