@@ -18,7 +18,6 @@ import proxy from 'express-http-proxy';
 import express, { Request, RequestHandler, Response } from 'express';
 import request from 'request';
 import winston from 'winston';
-import client from 'prom-client';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import { Client } from 'elasticsearch';
 import bodyParser from 'body-parser';
@@ -26,7 +25,7 @@ import compression from 'compression';
 import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
-import { URL, URLSearchParams } from 'url'
+import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler } from './metrics';
 
 
 // Defaults to localhost if unspecified
@@ -112,28 +111,7 @@ function getSearchkitRouter() {
     };
   }
 
-  router.post('/_search', (req, res) => {
-
-    //METRICS FOR UI
-    if (req.query.size === undefined){ //to exclude calls to _search?size=... etc
-      //get Language
-      const langUI = req.body.index;
-      UILanguageHistogram.observe({
-        UILang: langUI.slice(9)
-      }, 1);
-      //get Publisher
-      const urlUI = new URL(String(req.headers.referer));
-      const paramsUI = new URLSearchParams(urlUI.search);
-      if (paramsUI.has('publisher.publisher[0]')){ //searching for at least 1 publisher
-        paramsUI.forEach(function(value, key) {
-          if (key.includes("publisher")){
-            UIPublisherHistogram.observe({
-              UIPubl: value
-            }, 1);
-          }
-        });
-      }
-    }
+  router.post('/_search', responseTime(uiResponseTimeHandler), (req, res) => {
 
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
 
@@ -143,7 +121,10 @@ function getSearchkitRouter() {
     if (_.isObject(req.body)) {
       logger.debug('Request body', { body: req.body });
     }
-
+    
+    //keep language for use in metrics
+    req.params = req.body.index
+    //delete language from body request
     delete req.body.index;
 
     requestClient.post({
@@ -334,157 +315,6 @@ function jsonProxy() {
   });
 }
 
-//Metrics for api - total
-export const restResponseTimeTotalHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_total',
-  help: 'REST API response time total requests',
-  labelNames: ['method', 'route']
-})
-//Metrics for api - total - failed
-export const restResponseTimeTotalFailedHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_total_failed',
-  help: 'REST API response time total failed requests',
-  labelNames: ['method', 'route']
-})
-//Metrics for api - user - failed
-export const restResponseTimeUserFailedHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_user_failed',
-  help: 'REST API response time total user failed requests',
-  labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for api - system - failed
-export const restResponseTimeSystemFailedHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_system_failed',
-  help: 'REST API response time total system failed requests',
-  labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for api - total - success
-export const restResponseTimeTotalSuccessHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_total_success',
-  help: 'REST API response time total successful requests',
-  labelNames: ['method', 'route']
-})
-//Metrics for api - all
-export const restResponseTimeAllHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_all',
-  help: 'REST API response time in ms for all requests',
-  labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for api - language
-export const restResponseTimeLangHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_language',
-  help: 'REST API response time in seconds for Language',
-  labelNames: ['method', 'route', 'lang', 'status_code']
-})
-//Metrics for api - publisher
-export const restResponseTimePublisherHistogram = new client.Histogram({
-  name: 'rest_response_time_duration_seconds_publisher_api',
-  help: 'REST API response time in seconds for Publisher, External API',
-  labelNames: ['method', 'route', 'publ', 'status_code']
-})
-//Metrics for UI - Publisher
-export const UIPublisherHistogram = new client.Histogram({
-  name: 'ui_publisher',
-  help: 'UI Publisher Search',
-  labelNames: ['UIPubl']
-})
-//Metrics for UI - Language
-export const UILanguageHistogram = new client.Histogram({
-  name: 'ui_language',
-  help: 'UI Language Search',
-  labelNames: ['UILang']
-})
-
-//Endpoint used for Prometheus Metrics
-function startMetricsListening() {
-
-  const router = express.Router();
-
-  client.collectDefaultMetrics(); //general cpu, mem, etc information
-
-  router.get('/metrics', async (_req, res) =>{
-    res.set("Content-Type", client.register.contentType);
-    return res.send(await client.register.metrics());
-  })
-  return router;
-}
-
-function responseTimeHandler(req: Request, res: Response, time: number) {
-  //ALL
-  if (req?.route?.path) {
-    restResponseTimeAllHistogram.observe({
-      method: req.method,
-      route: req.route.path,
-      status_code: res.statusCode
-    }, time);
-    restResponseTimeTotalHistogram.observe({
-      method: req.method,
-      route: req.route.path
-    }, time);
-  }
-
-  //LANG
-  if (req.query.metadataLanguage) {
-    restResponseTimeLangHistogram.observe({
-      method: req.method,
-      route: req.route.path,
-      lang: String(req.query.metadataLanguage),
-      status_code: res.statusCode
-    }, time);
-  }
-
-  //PUBLISHER
-  if (req.query.publishers) {
-    const publishers = req.query.publishers;
-    if (Array.isArray(publishers)) {
-      publishers.forEach(value => observePublisher(req, String(value), res.statusCode, time));
-    } else {
-      observePublisher(req, String(publishers), res.statusCode, time);
-    }
-  }
-
-  if (res.statusCode >= 400) {
-    //TOTAL FAILED REQUEST COUNTER
-    restResponseTimeTotalFailedHistogram.observe({
-      method: req.method,
-      route: req.route.path
-    }, time);
-
-    if (res.statusCode >= 500) {
-      //SYSTEM FAIL REQUEST
-      restResponseTimeSystemFailedHistogram.observe({
-        method: req.method,
-        route: req.route.path,
-        status_code: res.statusCode
-      }, time);
-    } else {
-      //USER FAIL REQUEST
-      restResponseTimeUserFailedHistogram.observe({
-        method: req.method,
-        route: req.route.path,
-        status_code: res.statusCode
-      }, time);
-    }
-
-  } else {
-    //SUCCESS REQUEST
-    restResponseTimeTotalSuccessHistogram.observe({
-      method: req.method,
-      route: req.route.path
-    }, time);
-  }
-}
-
-
-function observePublisher(req: Request, value: string, statusCode: number, time: number) {
-  return restResponseTimePublisherHistogram.observe({
-    method: req.method,
-    route: req.route.path,
-    publ: value,
-    status_code: statusCode
-  }, time);
-}
-
 /**
  * Start listening.
  * @param app the express instance.
@@ -501,7 +331,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use(methodOverride());
 
   //Metrics middleware for API
-  app.use('/api/DataSets', responseTime(responseTimeHandler));
+  app.use('/api/DataSets', responseTime(apiResponseTimeHandler));
 
   // Set up request handlers
   app.use('/api/sk', getSearchkitRouter());
