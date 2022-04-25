@@ -11,27 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import searchkit, { detailQuery, similarQuery, pidQuery, matchAllQuery, uniqueAggregation } from "../utilities/searchkit";
-import { Client, SearchResponse } from "elasticsearch";
+import searchkit, { detailQuery, pidQuery, matchAllQuery, uniqueAggregation } from "../utilities/searchkit";
+import { SearchResponse } from "elasticsearch";
 import _ from "lodash";
 import { Thunk } from "../types";
 import { CMMStudy } from "../../common/metadata";
 import getPaq from "../utilities/getPaq";
-
-// Get a new Elasticsearch Client
-const elasticsearchClient = (() => {
-  const protocol = _.trim(window.location.protocol, ':');
-  return new Client({
-    host: {
-      protocol: protocol,
-      host: window.location.hostname,
-      port: window.location.port || (protocol.endsWith('s') ? 443 : 80),
-      path: '/api/sk'
-    },
-    // Avoid timing out searches on slow connections.
-    requestTimeout: 2147483647 // Largest supported timeout.
-  });
-})();
+import elasticsearch from "../utilities/elasticsearch";
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 export const INIT_SEARCHKIT = "INIT_SEARCHKIT";
@@ -248,52 +234,6 @@ export function updateState(state: SearchkitState): UpdateStateAction {
   };
 }
 
-export function updateStudy(id: string): Thunk<Promise<void>> {
-  return async (dispatch, getState) => {
-    const state = getState();
-
-    const response = await elasticsearchClient.search<CMMStudy>({
-      size: 1,
-      body: {
-        index: state.language.currentLanguage.index,
-        query: detailQuery(id)
-      }
-    });
-
-    dispatch(updateDisplayed(response));
-    if (response.hits.hits.length > 0) {
-      dispatch(updateSimilars(response.hits.hits[0]._source));
-    }
-  };
-}
-
-//////////// Redux Action Creator : UPDATE_SIMILARS
-export const UPDATE_SIMILARS = "UPDATE_SIMILARS";
-
-export type UpdateSimilarsAction = {
-  type: typeof UPDATE_SIMILARS;
-  similars: CMMStudy[];
-};
-
-export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
-  return async (dispatch, getState) => {
-    const state = getState();
-
-    const response = await elasticsearchClient.search<CMMStudy>({
-      size: 5,
-      body: {
-        index: state.language.currentLanguage.index,
-        query: similarQuery(item.id, item.titleStudy)
-      }
-    });
-
-    dispatch({
-      type: UPDATE_SIMILARS,
-      similars: response.hits.hits.map(hit => hit._source)
-    });
-  };
-}
-
 //////////// Redux Action Creator : RESET_SEARCH
 export const RESET_SEARCH = "RESET_SEARCH";
 
@@ -324,7 +264,7 @@ export type UpdateTotalStudiesAction = {
 export function updateTotalStudies(): Thunk<Promise<void>> {
   return async (dispatch) => {
     try {
-      const response = await elasticsearchClient.search({
+      const response = await elasticsearch.search({
         size: 0,
         body: {
           index: "cmmstudy_*",
@@ -342,7 +282,6 @@ export function updateTotalStudies(): Thunk<Promise<void>> {
     }
   };
 }
-
 ////////////
 
 export type SearchAction =
@@ -356,6 +295,5 @@ export type SearchAction =
   | UpdateDisplayedAction
   | UpdateQueryAction
   | UpdateStateAction
-  | UpdateSimilarsAction
   | ResetSearchAction
   | UpdateTotalStudiesAction;

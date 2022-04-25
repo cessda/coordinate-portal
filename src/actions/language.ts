@@ -17,8 +17,9 @@ import searchkit from "../utilities/searchkit";
 import { Thunk } from "../types";
 import { languages, Language, languageMap } from "../utilities/language";
 import getPaq from "../utilities/getPaq";
-import { updateStudy } from "./search";
+import { updateStudy } from "./detail";
 import { browserHistory } from "react-router";
+
 
 //////////// Redux Action Creator : INIT_TRANSLATIONS
 export const INIT_TRANSLATIONS = "INIT_TRANSLATIONS";

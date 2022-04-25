@@ -121,10 +121,6 @@ export default class Detail extends React.Component<Props> {
   render() {
     const { item } = this.props;
 
-    if (item === undefined) {
-      return null;
-    }
-
     return (
       <article className="w-100">
       <div className="summary-header">
