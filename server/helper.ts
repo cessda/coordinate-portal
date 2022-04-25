@@ -15,16 +15,18 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { Request, RequestHandler, Response } from 'express';
+import express, { RequestHandler } from 'express';
 import request from 'request';
 import winston from 'winston';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
-import { Client } from 'elasticsearch';
+import { Client, SearchResponse } from 'elasticsearch';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
+import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
+import { Dataset, WithContext } from 'schema-dts';
 import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler } from './metrics';
 
 
@@ -226,15 +228,28 @@ function externalApiV1() {
 
     //Prepare the Client
     try {
-      const body = await client.search({
+      const body: SearchResponse<CMMStudy> = await client.search({
         index: `cmmstudy_${metadataLanguage}`,
         body: bodyQuery.build()
       });
       //Send the Response
-      res.status(200).json({
-        "ResultsFound": body.hits.total,
-        "Results": body.hits.hits.map(obj => obj._source)
-      });
+      if (req.header('Accept')=="application/ld+json"){
+        const studyModel: CMMStudy[] = getStudyModel(body);
+        let jsonLdArray: WithContext<Dataset>[] | any = [];
+        studyModel.forEach(function (value) {
+          jsonLdArray.push(getJsonLd(value));
+        });
+        res.status(200).json({
+          "ResultsFound": body.hits.total,
+          "Results": jsonLdArray
+        });
+      }
+      else{
+        res.status(200).json({
+          "ResultsFound": body.hits.total,
+          "Results": body.hits.hits.map(obj => obj._source)
+        });
+      }
     } catch (e) {
       logger.error('Elasticsearch API Request failed: %s', (e as Error));
       res.status(502).send({ message: (e as Error).message });
@@ -296,11 +311,14 @@ function jsonProxy() {
       logger.error('Elasticsearch Request failed: %s', err?.message);
       res.sendStatus(502);
     },
-    userResDecorator: (_proxyRes, proxyResData) => {
+    userResDecorator: (_proxyRes, proxyResData, userReq) => {
       const json = JSON.parse(proxyResData.toString('utf8'));
       let result;
       if (!_.isEmpty(json._source)) {
-        result = JSON.stringify(json._source);
+        if (userReq.header('Accept')=="application/ld+json")
+          result = getJsonLd(json._source)
+        else
+          result = JSON.stringify(json._source);
       } else {
         // When running in debug mode, return the actual response from Elasticsearch
         if (debugEnabled) {
