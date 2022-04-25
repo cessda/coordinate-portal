@@ -66,7 +66,7 @@
     "@types/method-override": "0.0.32",
     "@types/mini-css-extract-plugin": "1.4.3",
     "@types/prop-types": "15.7.5",
-    "@types/react-dom": "16.9.14",
+    "@types/react-dom": "16.9.15",
     "@types/react-icons": "2.2.7",
     "@types/react-redux": "5.0.24",
     "@types/react-router": "3.0.28",
