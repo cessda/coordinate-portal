@@ -93,6 +93,7 @@
     "image-webpack-loader": "8.1.0",
     "jest": "28.0.0",
     "jest-editor-support": "30.0.2",
+    "jest-environment-jsdom": "^28.0.0",
     "jest-junit": "13.2.0",
     "mini-css-extract-plugin": "1.6.2",
     "node-sass": "5.0.0",
