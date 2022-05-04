@@ -148,10 +148,10 @@ function getSearchkitRouter() {
           route: req.route.path,
           status_code: res.statusCode
       }, timeDiff);
-      uiResponseTimeTotalFailedHistogram.observe({
-        method: req.method,
-        route: req.route.path
-    }, timeDiff);
+        uiResponseTimeTotalFailedHistogram.observe({
+          method: req.method,
+          route: req.route.path
+      }, timeDiff);
     }
     }).on('response', (response) => {
       logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
@@ -160,7 +160,6 @@ function getSearchkitRouter() {
       logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
       res.sendStatus(502);
     }).pipe(res);
-
   });
 
   return router;
