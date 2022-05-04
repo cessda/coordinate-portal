@@ -27,7 +27,7 @@ import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
-import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler } from './metrics';
+import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeUserFailedHistogram, uiResponseTimeTotalFailedHistogram } from './metrics';
 
 
 // Defaults to localhost if unspecified
@@ -115,6 +115,9 @@ function getSearchkitRouter() {
 
   router.post('/_search', responseTime(uiResponseTimeHandler), (req, res) => {
 
+    //timer required for responseTime in user error histogram
+    const startTime = new Date();
+
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
 
     const fullUrl = host + '/' + (req.body.index || 'cmmstudy_en') + '/cmmstudy' + req.url;
@@ -135,6 +138,21 @@ function getSearchkitRouter() {
       json: _.isObject(req.body),
       forever: true,
       auth: authentication
+    }, function (error: any, response: any, body: any) {
+      //callback function to register metrics of zero results from elasticsearch
+      if (body.hits.total.value == 0){
+        const endTime =  new Date();
+        const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
+        uiResponseTimeUserFailedHistogram.observe({
+          method: req.method,
+          route: req.route.path,
+          status_code: res.statusCode
+      }, timeDiff);
+      uiResponseTimeTotalFailedHistogram.observe({
+        method: req.method,
+        route: req.route.path
+    }, timeDiff);
+    }
     }).on('response', (response) => {
       logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
     }).on('error', (response) => {
@@ -142,6 +160,7 @@ function getSearchkitRouter() {
       logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
       res.sendStatus(502);
     }).pipe(res);
+
   });
 
   return router;
