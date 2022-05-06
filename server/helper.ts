@@ -27,7 +27,7 @@ import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
-import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeUserFailedHistogram, uiResponseTimeTotalFailedHistogram } from './metrics';
+import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram } from './metrics';
 
 
 // Defaults to localhost if unspecified
@@ -115,7 +115,7 @@ function getSearchkitRouter() {
 
   router.post('/_search', responseTime(uiResponseTimeHandler), (req, res) => {
 
-    //timer required for responseTime in user error histogram
+    //timer required for responseTime in zero elasticsearch response
     const startTime = new Date();
 
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
@@ -138,12 +138,15 @@ function getSearchkitRouter() {
       json: _.isObject(req.body),
       forever: true,
       auth: authentication
-    }, function (error: any, response: any, body: any) {
+    }, function getElasticHits (error: any, response: any, body: any) {
       //callback function to register metrics of zero results from elasticsearch
+      const hits = body.hits.total.value;
+      exports.hits = hits;
       if (body.hits.total.value == 0){
+        //exports.hits = body.hits.total.value;
         const endTime =  new Date();
         const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-        uiResponseTimeUserFailedHistogram.observe({
+        uiResponseTimeZeroElasticResultsHistogram.observe({
           method: req.method,
           route: req.route.path,
           status_code: res.statusCode

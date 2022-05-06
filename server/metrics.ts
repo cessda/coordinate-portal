@@ -57,7 +57,7 @@ export const apiResponseTimeLangHistogram = new client.Histogram({
     help: 'REST API response time in seconds for Language',
     labelNames: ['method', 'route', 'lang', 'status_code']
 })
-//Metrics for API - publisher
+//Metrics for api - publisher
 export const apiResponseTimePublisherHistogram = new client.Histogram({
     name: 'api_response_time_duration_seconds_publisher_api',
     help: 'REST API response time in seconds for Publisher, External API',
@@ -80,6 +80,12 @@ export const uiResponseTimeTotalFailedHistogram = new client.Histogram({
 export const uiResponseTimeUserFailedHistogram = new client.Histogram({
     name: 'ui_response_time_duration_seconds_user_failed',
     help: 'User Interface response time total user failed requests',
+    labelNames: ['method', 'route', 'status_code']
+})
+//Metrics for User Interface - zero elastic results
+export const uiResponseTimeZeroElasticResultsHistogram = new client.Histogram({
+    name: 'ui_response_time_duration_seconds_zero_elastic_results',
+    help: 'User Interface response time total zero elastic results',
     labelNames: ['method', 'route', 'status_code']
 })
 //Metrics for User Interface - system - failed
@@ -129,6 +135,9 @@ export function startMetricsListening() {
 
 export function uiResponseTimeHandler (req: Request, res: Response, time: number) {
     if (req.query.size === undefined){ //to exclude calls to _search?size=... etc
+        //hits result from elastic search
+        const moduleHits = require('./helper');
+        const hits = moduleHits.hits;
         //ALL
         if (req?.route?.path) {
             uiResponseTimeAllHistogram.observe({
@@ -189,11 +198,13 @@ export function uiResponseTimeHandler (req: Request, res: Response, time: number
             }
     
         } else {
-            //SUCCESS REQUEST
-            uiResponseTimeTotalSuccessHistogram.observe({
-                method: req.method,
-                route: req.route.path
-            }, time);
+            if (hits!=0){
+                //SUCCESS REQUEST
+                uiResponseTimeTotalSuccessHistogram.observe({
+                    method: req.method,
+                    route: req.route.path
+                }, time);
+            }
         }
     }
 }
