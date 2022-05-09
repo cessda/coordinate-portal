@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2022
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -11,17 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {combineReducers} from 'redux';
-import {routerReducer} from 'react-router-redux';
-import language from './language';
-import search from './search';
-import detail from './detail';
+import { Client } from "elasticsearch";
+import _ from "lodash";
 
-const reducers = {
-  routing: routerReducer,
-  detail: detail,
-  language: language,
-  search: search
-};
+const protocol = _.trim(window.location.protocol, ':');
+const port = window.location.port || (protocol.endsWith('s') ? 443 : 80);
 
-export const rootReducer = combineReducers(reducers);
+export default new Client({
+  host: {
+    protocol: protocol,
+    host: window.location.hostname,
+    port: port,
+    path: '/api/sk'
+  },
+  // Avoid timing out searches on slow connections.
+  requestTimeout: 2147483647 // Largest supported timeout.
+});

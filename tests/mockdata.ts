@@ -1,4 +1,5 @@
 import { CMMStudy } from "../common/metadata";
+import { Language } from "../src/utilities/language";
 
 export const mockStudy: CMMStudy = {
   id: '1',
@@ -75,3 +76,9 @@ export const mockStudy: CMMStudy = {
     }
   ]
 };
+
+export const enLanguage: Language = {
+  code: 'en',
+  label: 'English',
+  index: 'cmmstudy_en'
+}

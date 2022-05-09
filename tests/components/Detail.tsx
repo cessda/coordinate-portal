@@ -129,13 +129,6 @@ describe('Detail component', () => {
     expect(detail.exists()).toBe(true);
   });
 
-  it('should not render with undefined item', () => {
-    //@ts-expect-error
-    const enzymeWrapper =  shallow(<Detail item={undefined} />);
-    const detail = enzymeWrapper.find('article.w-100');
-    expect(detail.exists()).toBe(false);
-  });
-
   it('should handle no pidStudies provided', () => {
     const { enzymeWrapper } = setup({
       pidStudies: []
