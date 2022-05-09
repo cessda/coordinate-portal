@@ -28,6 +28,8 @@ import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { Dataset, WithContext } from 'schema-dts';
 import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler } from './metrics';
+import cors from 'cors';
+import swagger from './swagger.json';
 
 
 // Defaults to localhost if unspecified
@@ -354,11 +356,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   // Set up request handlers
   app.use('/api/sk', getSearchkitRouter());
   app.use('/api/json', jsonProxy());
-  app.use('/api/DataSets/v1', externalApiV1());
-  app.use('/swagger/api/DataSets/v1', (req, res) => {
-    const externalAPISwagger = require("./swagger.json");
-    res.json(externalAPISwagger);
-  });
+  app.use('/api/DataSets/v1', cors(),  externalApiV1());
+  app.use('/swagger/api/DataSets/v1', cors(), ((_req, res) => res.json(swagger)) as express.RequestHandler);
   app.use('/api/mt', startMetricsListening());
 
   app.get('*', handler);
