@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { SearchResponse } from 'elasticsearch';
 import striptags from 'striptags';
 import { Dataset, Organization, Person, WithContext } from 'schema-dts';
 import _ from 'lodash';
+import { SearchHit } from '@elastic/elasticsearch/api/types';
 
 export interface CMMStudy {
   /** The internal ID of the study */
@@ -104,13 +104,21 @@ export interface TermVocabAttributes extends VocabAttributes {
   term: string;
 }
 
+export interface Similar {
+  id: string;
+  title: string;
+}
+
 /** 
  * Creates a model to store/display study metadata in the user interface.
  * 
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(searchResponse: Pick<SearchResponse<CMMStudy>, 'hits'>): CMMStudy[] {
-  return searchResponse.hits.hits.map(data => ({
+export function getStudyModel(data: SearchHit<CMMStudy>): CMMStudy {
+  if (typeof(data._source) !== "object") {
+    throw TypeError("_source is not an object");
+  }
+  return ({
     id: data._source.id,
     titleStudy: data._source.titleStudy,
     titleStudyHighlight: data.highlight?.titleStudy ? stripHTMLElements(data.highlight.titleStudy.join()) : '',
@@ -143,7 +151,7 @@ export function getStudyModel(searchResponse: Pick<SearchResponse<CMMStudy>, 'hi
     studyUrl: data._source.studyUrl,
     studyXmlSourceUrl: data._source.studyXmlSourceUrl,
     langAvailableIn: (data._source.langAvailableIn || []).map(i => i.toUpperCase()).sort()
-  }));
+  });
 }
 
 function truncateAbstract(string: string): string {

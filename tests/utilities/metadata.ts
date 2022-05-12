@@ -18,15 +18,10 @@ describe('Metadata utilities', () => {
     it('should return a populated study model', () => {
       expect(
         getStudyModel({
-          hits:{
-            total: 1,
-            max_score: 1,
-            hits: [
-          {
-            _index: 'cmmstudy',
-            _score: 1,
-            _id: "1",
-            _type: "cmmstudy",
+          _index: 'cmmstudy',
+          _score: 1,
+          _id: "1",
+          _type: "cmmstudy",
           _source: {
             id: "1",
             titleStudy: 'Study Title',
@@ -116,8 +111,8 @@ describe('Metadata utilities', () => {
               }
             ]
           }
-        }]}})
-      ).toEqual([{
+        })
+      ).toEqual({
         id: '1',
         titleStudy: 'Study Title',
         titleStudyHighlight: '',
@@ -206,14 +201,14 @@ describe('Metadata utilities', () => {
             vocabUri: 'http://example.com'
           }
         ]
-      }]);
+      });
     });
 
     it('should return a study model with default values', () => {
       expect(
-        //@ts-ignore
-        getStudyModel({ hits: { hits: [{_source:{}}]  } })
-      ).toEqual([{
+        // @ts-expect-error
+        getStudyModel({ _source: {}  })
+      ).toEqual({
         id: undefined,
         titleStudy: undefined,
         titleStudyHighlight: '',
@@ -246,7 +241,7 @@ describe('Metadata utilities', () => {
         typeOfSamplingProcedures: [],
         typeOfTimeMethods: [],
         unitTypes: []
-      }]);
+      });
     });
   });
 

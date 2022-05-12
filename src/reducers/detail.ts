@@ -11,16 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CMMStudy, getStudyModel } from "../../common/metadata";
+import { CMMStudy, Similar } from "../../common/metadata";
 import { Action } from "../actions";
 import { UPDATE_STUDY, UPDATE_SIMILARS } from "../actions/detail";
 
 export interface DetailState {
   study: CMMStudy | undefined;
-  similars: {
-    id: string;
-    title: string;
-  }[]
+  similars: Similar[]
 }
 
 const initialState: DetailState = {
@@ -31,21 +28,14 @@ const initialState: DetailState = {
 export default function detail(state: DetailState = initialState, action: Action): DetailState {
   switch(action.type) {
     case UPDATE_STUDY: {
-      const study = getStudyModel(action.displayed)[0];
-
       return Object.assign({}, state, {
-        study: study
+        study: action.displayed
       });
     }
 
     case UPDATE_SIMILARS: {
-      const similars = action.similars.map(s => ({
-        id: s.id,
-        title: s.titleStudy
-      }));
-
       return Object.assign({}, state, {
-        similars: similars
+        similars: action.similars
       });
     }
 

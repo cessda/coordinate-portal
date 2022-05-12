@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { languages } from '../../src/utilities/language';
+import { Language, languages } from '../../src/utilities/language';
 
 describe('Language utilities', () => {
   describe('getLanguages()', () => {
@@ -28,3 +28,9 @@ describe('Language utilities', () => {
     });
   });
 });
+
+export const enLanguage: Language = {
+  code: 'en',
+  label: 'English',
+  index: 'cmmstudy_en'
+}

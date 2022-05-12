@@ -16,7 +16,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { mapDispatchToProps, mapStateToProps, Props, Similars } from '../../src/components/Similars';
 import searchkit from '../../src/utilities/searchkit';
-import { mockStudy } from '../mockdata';
+import { mockStudy } from '../../common/tests/mockdata';
 
 // Mock props and shallow render component for test.
 function setup(partialProps?: Partial<Props>) {

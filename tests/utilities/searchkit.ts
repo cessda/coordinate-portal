@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { detailQuery, matchAllQuery, pidQuery, queryBuilder, similarQuery, uniqueAggregation } from '../../src/utilities/searchkit';
+import { detailQuery, matchAllQuery, pidQuery, queryBuilder, uniqueAggregation } from '../../src/utilities/searchkit';
 
 describe('Searchkit utilities', () => {
   describe('queryBuilder()', () => {
@@ -57,24 +57,7 @@ describe('Searchkit utilities', () => {
     });
   });
 
-  describe('similarQuery()', () => {
-    it('should return a Searchkit query used to retrieve similar studies', () => {
-      expect(similarQuery('id', 'Study Title')).toEqual({
-        bool: {
-          must: {
-            match: {
-              titleStudy: 'Study Title'
-            }
-          },
-          must_not: {
-            ids: {
-              values: ['id']
-            }
-          }
-        }
-      });
-    });
-  });
+  
 
   describe('matchAllQuery()', () => {
     it('should return a match all query', () => {

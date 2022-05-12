@@ -28,7 +28,7 @@ import { goBack } from 'react-router-redux';
 import type { State } from '../types';
 import counterpart from 'counterpart';
 import _ from 'lodash';
-import { CMMStudy, getJsonLd } from '../../common/metadata';
+import { getJsonLd } from '../../common/metadata';
 import { updateStudy } from '../actions/detail';
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;

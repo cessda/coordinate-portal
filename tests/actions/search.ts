@@ -40,40 +40,12 @@ import {
 } from '../../src/actions/search';
 import { languages } from '../../src/utilities/language';
 import _ from 'lodash';
-import { Client } from 'elasticsearch';
 import { State } from '../../src/types';
 import { AnyAction } from 'redux';
-import { enLanguage } from '../mockdata';
+import { enLanguage } from '../utilities/language';
 
 const mockStore = configureMockStore<Partial<State>, ThunkDispatch<State, any, AnyAction>>([thunk]);
 
-// Mock Client() in elasticsearch module.
-jest.mock('elasticsearch', () => ({
-  Client: jest.fn(() => ({
-    search: () => {
-      return Promise.resolve({
-        aggregations: {
-          unique_id: {
-            value: 1
-          }
-        },
-        hits: {
-          hits: [
-            {
-              _source: {
-                id: 2,
-                titleStudy: 'Similar Study Title'
-              }
-            }
-          ],
-          total: 1
-        },
-        timed_out: false,
-        took: 1
-      });
-    }
-  }))
-}));
 
 // Create a SearchkitManager with an instant timeout.
 jest.mock('../../src/utilities/searchkit', () => ({
@@ -81,8 +53,6 @@ jest.mock('../../src/utilities/searchkit', () => ({
   ...jest.requireActual('../../src/utilities/searchkit'),
   default: new (require('searchkit').SearchkitManager)('api/sk', { timeout: 0 })
 }));
-
-const ClientMock = Client as jest.MockedClass<typeof Client>;
 
 describe('Search actions', () => {
 

@@ -11,13 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import searchkit, { detailQuery, pidQuery, matchAllQuery, uniqueAggregation } from "../utilities/searchkit";
-import { SearchResponse } from "elasticsearch";
+import searchkit, { detailQuery, pidQuery } from "../utilities/searchkit";
 import _ from "lodash";
 import { Thunk } from "../types";
 import { CMMStudy } from "../../common/metadata";
 import getPaq from "../utilities/getPaq";
-import elasticsearch from "../utilities/elasticsearch";
+import { SearchResponse } from "@elastic/elasticsearch/api/types";
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 export const INIT_SEARCHKIT = "INIT_SEARCHKIT";
@@ -264,18 +263,13 @@ export type UpdateTotalStudiesAction = {
 export function updateTotalStudies(): Thunk<Promise<void>> {
   return async (dispatch) => {
     try {
-      const response = await elasticsearch.search({
-        size: 0,
-        body: {
-          index: "cmmstudy_*",
-          query: matchAllQuery(),
-          aggs: uniqueAggregation()
-        }
-      });
+      const response = await fetch(`${window.location.origin}/api/sk/_total_studies`);
+
+      const source = await response.json();
 
       dispatch({
         type: UPDATE_TOTAL_STUDIES,
-        totalStudies: response.aggregations.unique_id.value
+        totalStudies: source.totalStudies
       });
     } catch (e) {
       console.error(e);

@@ -17,35 +17,13 @@ import thunk, { ThunkDispatch } from "redux-thunk";
 import { updateSimilars, updateStudy, UPDATE_SIMILARS, UPDATE_STUDY } from "../../src/actions/detail";
 import { languages } from "../../src/utilities/language";
 import { State } from '../../src/types';
-import { enLanguage, mockStudy } from '../mockdata';
+import { mockStudy } from '../../common/tests/mockdata';
+import { enLanguage } from '../utilities/language';
+import fetch from 'jest-mock-fetch';
 
 const mockStore = configureMockStore<Partial<State>, ThunkDispatch<State, any, AnyAction>>([thunk]);
 
-// Mock Client() in elasticsearch module.
-jest.mock('elasticsearch', () => ({
-  Client: jest.fn(() => ({
-    search: () => Promise.resolve({
-      aggregations: {
-        unique_id: {
-          value: 1
-        }
-      },
-      hits: {
-        hits: [
-          {
-            _source: {
-              id: 2,
-              titleStudy: 'Similar Study Title'
-            }
-          }
-        ],
-        total: 1
-      },
-      timed_out: false,
-      took: 1
-    })
-  }))
-}));
+afterEach(() => fetch.reset());
 
 describe('Detail actions', () => {
   describe('UPDATE_SIMILARS action', () => {
@@ -58,21 +36,27 @@ describe('Detail actions', () => {
         }
       });
 
-      // Dispatch action and wait for promise.
-      const similars = updateSimilars(mockStudy);
+      const similars = [{
+        id: 2,
+        titleStudy: 'Similar Study Title'
+      }];
 
-      await store.dispatch(similars);
+      // Dispatch action and wait for promise.
+      const promise = store.dispatch( updateSimilars(mockStudy));
+
+      expect(fetch).toHaveBeenCalledWith(`${window.location.origin}/api/sk/_similars/${enLanguage.index}/?id=${encodeURIComponent(mockStudy.id)}&title=${encodeURIComponent(mockStudy.titleStudy)}`);
+
+      fetch.mockResponse({
+        json: () => similars
+      });
+
+      await promise;
       
       // State should contain similar studies.
       expect(store.getActions()).toEqual([
         {
           type: UPDATE_SIMILARS,
-          similars: [
-            {
-              id: 2,
-              titleStudy: 'Similar Study Title'
-            }
-          ]
+          similars: similars
         }
       ]);
     });
@@ -90,42 +74,31 @@ describe('Detail actions', () => {
 
       const action = updateStudy("1");
 
-      await store.dispatch(action);
+      const promise = store.dispatch(action);
+
+      expect(fetch).toHaveBeenCalledWith(`${window.location.origin}/api/sk/_get/${enLanguage.index}/${encodeURIComponent(mockStudy.id)}`);
+
+      fetch.mockResponse({
+        json: () => mockStudy
+      });
+
+      await promise;
 
       expect(store.getActions()).toEqual([
         {
           type: UPDATE_STUDY,
-          displayed: {
-            aggregations: {
-              unique_id: {
-                value: 1
-              }
-            },
-            hits: {
-              hits: [
-                {
-                  _source: {
-                    id: 2,
-                    titleStudy: 'Similar Study Title'
-                  }
-                }
-              ],
-              total: 1
-            },
-            timed_out: false,
-            took: 1
-          }
+          displayed: mockStudy
         },
         // The action should also update similars as well
-        {
-          type: UPDATE_SIMILARS,
-          similars: [
-            {
-              id: 2,
-              titleStudy: 'Similar Study Title'
-            }
-          ]
-        }
+        // {
+        //   type: UPDATE_SIMILARS,
+        //   similars: [
+        //     {
+        //       id: 2,
+        //       titleStudy: 'Similar Study Title'
+        //     }
+        //   ]
+        // }
       ]);
     });
   });

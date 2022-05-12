@@ -27,25 +27,21 @@ describe('Detail reducer', () => {
         {
           type: 'UPDATE_SIMILARS',
           similars: [
-            //@ts-expect-error
             {
               id: '1',
-              titleStudy: 'Study Title 1'
+              title: 'Study Title 1'
             },
-            //@ts-expect-error
             {
               id: '2',
-              titleStudy: 'Study Title 2'
+              title: 'Study Title 2'
             },
-            //@ts-expect-error
             {
               id: '3',
-              titleStudy: 'Study Title 3'
+              title: 'Study Title 3'
             },
-            //@ts-expect-error
             {
               id: '4',
-              titleStudy: 'Study Title 4'
+              title: 'Study Title 4'
             }
           ]
         }

@@ -1,5 +1,4 @@
-import { CMMStudy } from "../common/metadata";
-import { Language } from "../src/utilities/language";
+import { CMMStudy } from "../metadata";
 
 export const mockStudy: CMMStudy = {
   id: '1',
@@ -29,6 +28,7 @@ export const mockStudy: CMMStudy = {
   dataCollectionFreeTexts: [],
   dataCollectionPeriodEnddate: '',
   dataCollectionPeriodStartdate: '2001',
+  dataCollectionYear: 2001,
   fileLanguages: ['en'],
   keywords: [],
   langAvailableIn: ['EN'],
@@ -76,9 +76,3 @@ export const mockStudy: CMMStudy = {
     }
   ]
 };
-
-export const enLanguage: Language = {
-  code: 'en',
-  label: 'English',
-  index: 'cmmstudy_en'
-}

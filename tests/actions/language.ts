@@ -21,7 +21,7 @@ import _ from 'lodash';
 import { State } from '../../src/types';
 import { AnyAction } from 'redux';
 import { hashHistory } from 'react-router';
-import { mockStudy } from '../mockdata';
+import { mockStudy } from '../../common/tests/mockdata';
 
 const mockStore = configureMockStore<State, ThunkDispatch<State, any, AnyAction>>([thunk]);
 

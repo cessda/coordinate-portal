@@ -16,7 +16,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../src/containers/DetailPage';
 import { languages } from '../../src/utilities/language';
-import { mockStudy } from '../mockdata';
+import { mockStudy } from '../../common/tests/mockdata';
 
 // Mock props and shallow render container for test.
 function setup(partialProps?: Partial<Props>) {
