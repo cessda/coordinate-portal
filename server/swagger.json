@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "https://datacatalogue.cessda.eu/api/DataSets/v1"
+      "url": "/api/DataSets/v1"
     }
   ],
   "tags": [
