@@ -21,9 +21,6 @@ import { mockStudy } from '../mockdata';
 // Mock props and shallow render component for test.
 function setup(partialProps?: Partial<Props>) {
   const props = {
-    searchkit: searchkit,
-    language: 'en',
-    item: mockStudy,
     similars: [
       {
         id: "1",
@@ -64,7 +61,7 @@ describe('Similars component', () => {
 
   it('should show message when no similar studies found', () => {
     const { enzymeWrapper } = setup({
-      similars: undefined
+      similars: []
     });
     expect(enzymeWrapper.find('.similars Translate').exists()).toBe(true);
   });
@@ -73,21 +70,12 @@ describe('Similars component', () => {
     const { props } = setup();
     expect(
       mapStateToProps({
-        language: {
-          //@ts-expect-error
-          currentLanguage: {
-            code: "en"
-          }
-        },
-        //@ts-expect-error
-        search: {
-          displayed: [props.item],
+        detail: {
+          study: mockStudy,
           similars: props.similars
         }
       })
     ).toEqual({
-      item: props.item,
-      language: "en",
       similars: props.similars
     });
   });

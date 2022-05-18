@@ -11,10 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {CMMStudy, getJsonLd, getStudyModel} from '../../common/metadata';
+import {CMMStudy, getStudyModel} from '../../common/metadata';
 import type {Action} from '../actions';
 import _ from 'lodash';
-import { Dataset, WithContext } from 'schema-dts';
 import { 
   INIT_SEARCHKIT, 
   RESET_SEARCH, 
@@ -27,7 +26,6 @@ import {
   TOGGLE_SUMMARY, 
   UPDATE_DISPLAYED, 
   UPDATE_QUERY, 
-  UPDATE_SIMILARS, 
   UPDATE_STATE,
   UPDATE_TOTAL_STUDIES 
 } from '../actions/search';
@@ -40,11 +38,7 @@ export interface SearchState {
   showFilterSummary: boolean;
   expandMetadataPanels: boolean;
   displayed: CMMStudy[];
-  jsonLd?: WithContext<Dataset>;
-  similars: {
-    id: string;
-    title: string;
-  }[];
+  study: CMMStudy | undefined;
   query: Record<string, any>;
   state: SearchkitState;
   totalStudies: number;
@@ -55,7 +49,7 @@ const initialState: SearchState = {
   showMobileFilters: false,
   showAdvancedSearch: false,
   showFilterSummary: false,
-  similars: [],
+  study: undefined,
   expandMetadataPanels: false,
   displayed: [],
   query: {},
@@ -107,8 +101,7 @@ export default function search(state: SearchState = initialState, action: Action
       const displayed = getStudyModel(action.displayed);
 
       return Object.assign({}, state, {
-        displayed: displayed,
-        jsonLd: displayed.length === 1 ? getJsonLd(displayed[0], window.location.href) : undefined
+        displayed: displayed
       });
     }
 
@@ -121,17 +114,6 @@ export default function search(state: SearchState = initialState, action: Action
       return Object.assign({}, state, {
         state: action.state
       });
-
-    case UPDATE_SIMILARS: {
-      const similars: SearchState['similars'] = action.similars.map(s => ({
-        id: s.id,
-        title: s.titleStudy
-      }));
-
-      return Object.assign({}, state, {
-        similars: similars
-      });
-    }
 
     case RESET_SEARCH:
       return state;

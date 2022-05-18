@@ -220,25 +220,7 @@ describe('Search reducer', () => {
           typeOfSamplingProcedures: [],
           unitTypes: [],
         }
-      ],
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@type': 'Dataset',
-        creator: [],
-        dateModified: '',
-        datePublished: '',
-        description: '',
-        identifier: '',
-        keywords: [],
-        license: [],
-        measurementTechnique: '',
-        name: undefined,
-        sameAs: undefined,
-        spatialCoverage: '',
-        temporalCoverage: '',
-        url: 'http://localhost/',
-        variableMeasured: ''
-      }
+      ]
     });
 
     expect(
@@ -440,50 +422,7 @@ describe('Search reducer', () => {
             }
           ]
         }
-      ],
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@type': 'Dataset',
-        creator: [
-          {
-            '@type': 'Person',
-            name: 'Jane Doe'
-          },
-          {
-            '@type': 'Organization',
-            name: 'University of Essex'
-          },
-          {
-            '@type': 'Person',
-            affiliation: {
-              '@type': 'Organization',
-              name: 'University of Essex'
-            },
-            name: 'John Smith'
-          },
-          {
-            '@type': 'Person',
-            affiliation: {
-              '@type': 'Organization',
-              name: 'University of Essex'
-            },
-            name: 'Joe Bloggs'
-          }
-        ],
-        dateModified: '2001-01-01',
-        datePublished: '2001-01-01',
-        description: 'Abstract',
-        identifier: 'UKDS1234 (UKDS)',
-        keywords: ['Term'],
-        license: ['Data Access Free Texts'],
-        measurementTechnique: 'Term',
-        name: 'Study Title',
-        sameAs: 'http://example.com',
-        spatialCoverage: 'England',
-        temporalCoverage: '2001/',
-        url: 'http://localhost/',
-        variableMeasured: 'Term'
-      }
+      ]
     });
   });
 
@@ -534,62 +473,6 @@ describe('Search reducer', () => {
     ).toEqual({
       ...initialState,
       state: state
-    });
-  });
-
-  it('should handle UPDATE_SIMILARS', () => {
-    expect(
-      search(
-        {
-          ...initialState,
-          similars: []
-        },
-        {
-          type: 'UPDATE_SIMILARS',
-          similars: [
-            //@ts-expect-error
-            {
-              id: '1',
-              titleStudy: 'Study Title 1'
-            },
-            //@ts-expect-error
-            {
-              id: '2',
-              titleStudy: 'Study Title 2'
-            },
-            //@ts-expect-error
-            {
-              id: '3',
-              titleStudy: 'Study Title 3'
-            },
-            //@ts-expect-error
-            {
-              id: '4',
-              titleStudy: 'Study Title 4'
-            }
-          ]
-        }
-      )
-    ).toEqual({
-      ...initialState,
-      similars: [
-        {
-          id: '1',
-          title: 'Study Title 1'
-        },
-        {
-          id: '2',
-          title: 'Study Title 2'
-        },
-        {
-          id: '3',
-          title: 'Study Title 3'
-        },
-        {
-          id: '4',
-          title: 'Study Title 4'
-        }
-      ]
     });
   });
 

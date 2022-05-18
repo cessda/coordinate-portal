@@ -16,24 +16,18 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../src/containers/DetailPage';
 import { languages } from '../../src/utilities/language';
+import { mockStudy } from '../mockdata';
 
 // Mock props and shallow render container for test.
 function setup(partialProps?: Partial<Props>) {
-  const props = _.extend(
-    {
-      loading: false,
-      item: {
-        id: "1",
-        studyUrl: 'http://example.com'
-      },
-      jsonLd: {},
-      currentLanguage: languages[0],
-      query: "1",
-      goBack: jest.fn(),
-      updateStudy: jest.fn()
-    },
-    partialProps || {}
-  );
+  const props = {
+    item: mockStudy,
+    currentLanguage: languages[0],
+    query: "1",
+    goBack: jest.fn(),
+    updateStudy: jest.fn(),
+    ...partialProps
+  };
   const enzymeWrapper = shallow<DetailPage>(<DetailPage {...props} />);
   return {
     props,
@@ -71,17 +65,13 @@ describe('DetailPage container', () => {
           currentLanguage: props.currentLanguage,
           list: []
         },
-        //@ts-expect-error
-        search: {
-          loading: props.loading,
-          displayed: [props.item],
-          jsonLd: props.jsonLd
+        detail: {
+          study: props.item,
+          similars: []
         }
       })
     ).toEqual({
-      loading: props.loading,
       item: props.item,
-      jsonLd: props.jsonLd,
       currentLanguage: props.currentLanguage,
       query: props.query
     });
@@ -103,35 +93,33 @@ describe('DetailPage container', () => {
           currentLanguage: props.currentLanguage,
           list: []
         },
-        //@ts-expect-error
-        search: {
-          loading: props.loading,
-          displayed: [],
-          jsonLd: props.jsonLd
+        detail: {
+          study: undefined,
+          similars: []
         }
       })
     ).toEqual({
-      loading: props.loading,
       item: undefined,
-      jsonLd: props.jsonLd,
       currentLanguage: props.currentLanguage,
       query: props.query
     });
   });
 
   it('should update study on mount', () => {
-    const { props } = setup();
-    expect(props.updateStudy).toBeCalledWith(props.item.id);
+    const { props } = setup({ query: "2" });
+    expect(props.updateStudy).toBeCalledWith("2");
   });
 
   it('should update if study title changes', () => {
     const { enzymeWrapper, props } = setup();
+
+    // Create a new props object with the same content
     enzymeWrapper.setProps({
       ...props
     });
 
     // Study didn't change, so updateStudy should only be called once
-    expect(props.updateStudy).toHaveBeenCalledTimes(1);
+    expect(props.updateStudy).toHaveBeenCalledTimes(0);
 
     // Update the study ID
     enzymeWrapper.setProps({
@@ -139,7 +127,7 @@ describe('DetailPage container', () => {
     });
 
     // Expect updateStudy to be called with the new study ID
-    expect(props.updateStudy).toHaveBeenCalledTimes(2);
+    expect(props.updateStudy).toHaveBeenCalledTimes(1);
     expect(props.updateStudy).toBeCalledWith("2");
   });
 
@@ -159,7 +147,7 @@ describe('DetailPage container', () => {
     });
 
     // props.updateStudy() should have only been called on initialisation
-    expect(props.updateStudy).toHaveBeenCalledTimes(1);
+    expect(props.updateStudy).toHaveBeenCalledTimes(0);
   });
 
   it('should map dispatch to props', () => {
