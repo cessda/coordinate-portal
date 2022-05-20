@@ -91,10 +91,13 @@ export function initTranslations(): Thunk {
       }
     };
 
+    let previousLanguage = initialLanguage;
+
     browserHistory.listen(listner => {
       // If the language has changed
-      if (listner.query.lang && listner.query.lang !== state.routing.locationBeforeTransitions.query.lang) {
+      if (listner.query.lang && listner.query.lang !== previousLanguage) {
         dispatch(changeLanguage(`${listner.query.lang}`));
+        previousLanguage = `${listner.query.lang}`;
       }
     })
 
@@ -145,8 +148,8 @@ export function changeLanguage(code: string): Thunk {
       label
     });
     
-    if (state.search.displayed[0]) {
-      dispatch(updateStudy(state.search.displayed[0].id));
+    if (state.detail.study) {
+      dispatch(updateStudy(state.detail.study.id));
     }
 
     if (state.routing.locationBeforeTransitions.pathname === "/") {

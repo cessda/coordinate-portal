@@ -28,7 +28,7 @@ import { goBack } from 'react-router-redux';
 import type { State } from '../types';
 import counterpart from 'counterpart';
 import _ from 'lodash';
-import { CMMStudy, getJsonLd } from '../../common/metadata';
+import { getJsonLd } from '../../common/metadata';
 import { updateStudy } from '../actions/detail';
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
@@ -49,7 +49,6 @@ export class DetailPage extends Component<Props> {
     const id = this.props.query;
     if (id && id !== this.props.item?.id) {
       this.props.updateStudy(_.trim(id, "\""));
-      console.log(`updated ${id}`);
     }
     this.updateTitle();
   }
