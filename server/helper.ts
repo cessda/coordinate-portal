@@ -140,25 +140,22 @@ function getSearchkitRouter() {
       json: _.isObject(req.body),
       forever: true,
       auth: authentication
-    }, function getElasticHits (error: any, response: any, body: any) {
-      //callback function to register metrics of zero results from elasticsearch
-      const hits = body.hits.total.value;
-      exports.hits = hits;
-      if (body.hits.total.value == 0){
-        //exports.hits = body.hits.total.value;
-        const endTime =  new Date();
-        const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-        uiResponseTimeZeroElasticResultsHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode
-      }, timeDiff);
-        uiResponseTimeTotalFailedHistogram.observe({
-          method: req.method,
-          route: req.route.path
-      }, timeDiff);
-    }
-    }).on('response', (response) => {
+    }, (_error, _response, body: SearchResponse<unknown> | undefined) => {
+        //callback function to register metrics of zero results from elasticsearch
+        if (body?.hits.total === 0) {
+          const endTime = new Date();
+          const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
+          uiResponseTimeZeroElasticResultsHistogram.observe({
+            method: req.method,
+            route: req.route.path,
+            status_code: res.statusCode
+          }, timeDiff);
+          uiResponseTimeTotalFailedHistogram.observe({
+            method: req.method,
+            route: req.route.path
+          }, timeDiff);
+        }
+      }).on('response', (response) => {
       logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
     }).on('error', (response) => {
       // When a connection error occurs send a 502 error to the client.
