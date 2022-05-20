@@ -49,7 +49,6 @@ export class DetailPage extends Component<Props> {
     const id = this.props.query;
     if (id && id !== this.props.item?.id) {
       this.props.updateStudy(_.trim(id, "\""));
-      console.log(`updated ${id}`);
     }
     this.updateTitle();
   }

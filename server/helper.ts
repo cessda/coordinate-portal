@@ -16,9 +16,8 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { RequestHandler } from 'express';
-import request from 'request';
-import winston from 'winston';
+import express, { Request, RequestHandler } from 'express';
+import request, { CoreOptions } from 'request';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import bodyParser from 'body-parser';
 import compression from 'compression';
@@ -27,38 +26,26 @@ import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram } from './metrics';
-import { checkESEnvironmentVariables, client, elasticsearchAuthentication, elasticsearchUrl, getSimilars, getStudy, getTotalStudies } from './elasticsearch';
+import Elasticsearch from './elasticsearch';
 import { SearchResponse } from '@elastic/elasticsearch/api/types';
 import { ConnectionError, ResponseError } from '@elastic/elasticsearch/lib/errors';
 import { Response } from 'express-serve-static-core';
+import { logger } from './logger';
 
+// Defaults to localhost if unspecified
+export const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
+const elasticsearchUsername = process.env.SEARCHKIT_ELASTICSEARCH_USERNAME;
+const elasticsearchPassword = process.env.SEARCHKIT_ELASTICSEARCH_PASSWORD;
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
-const logLevel = process.env.SEARCHKIT_LOG_LEVEL || 'info';
-function loggerFormat() {
-  if (process.env.SEARCHKIT_USE_JSON_LOGGING === 'true') {
-    return winston.format.json();
-  } else {
-    return winston.format.printf(
-      ({ level, message, timestamp }) => `[${timestamp}][${level}] ${message}`
-    );
-  }
+
+let elasticsearch: Elasticsearch;
+
+if (elasticsearchUsername && elasticsearchPassword) {
+  elasticsearch = new Elasticsearch(elasticsearchUrl, {username: elasticsearchUsername, password: elasticsearchPassword});
+} else {
+  elasticsearch = new Elasticsearch(elasticsearchUrl);
 }
 
-// Logger
-export const logger = winston.createLogger({
-  level: logLevel,
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.splat(),
-    loggerFormat()
-  ),
-  transports: [
-    new winston.transports.Console()
-  ],
-  exceptionHandlers: [
-    new winston.transports.Console()
-  ],
-});
 
 export function checkBuildDirectory() {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
@@ -71,7 +58,14 @@ export function checkBuildDirectory() {
 }
 
 export function checkEnvironmentVariables(production: boolean) {
-  checkESEnvironmentVariables();
+  if (_.isEmpty(elasticsearchUrl)) {
+    logger.error(
+      'Unable to start Data Catalogue application. Missing environment variable PASC_ELASTICSEARCH_URL.'
+    );
+    process.exit(17);
+  } else {
+    logger.info('Using Elasticsearch instance at %s', elasticsearchUrl);
+  }
   if (production) {
     if (debugEnabled) {
       logger.warn('Debug mode is enabled. Disable for production use.');
@@ -92,10 +86,16 @@ function getSearchkitRouter() {
 
   const requestClient = request.defaults({ pool: { maxSockets: 500 } });
 
+  const esAuth: CoreOptions["auth"] = {
+    username: elasticsearchUsername,
+    password: elasticsearchPassword,
+    sendImmediately: true
+  };
+
   // Get a record directly
   router.get('/_get/:index/:id', async (req, res) => {
     try {
-      const source = await getStudy(req.params.id, req.params.index);
+      const source = await elasticsearch.getStudy(req.params.id, req.params.index);
       res.send(source);
     } catch (e) {
       elasticsearchErrorHandler(e, res);
@@ -105,7 +105,7 @@ function getSearchkitRouter() {
   // Get similar records based on a study title
   router.get('/_similars/:index/', async (req, res) => {
     try {
-      const similars = await getSimilars(String(req.query.title), String(req.query.id), req.params.index);
+      const similars = await elasticsearch.getSimilars(String(req.query.title), String(req.query.id), req.params.index);
       res.send(similars);
     } catch (e) {
       elasticsearchErrorHandler(e, res);
@@ -115,7 +115,7 @@ function getSearchkitRouter() {
   // Get the total studies stored in Elasticsearch
   router.get('/_total_studies', async (_req, res) => {
     try {
-      const totalStudies = await getTotalStudies();
+      const totalStudies = await elasticsearch.getTotalStudies();
       res.send({ totalStudies: totalStudies });
     } catch (e) {
       elasticsearchErrorHandler(e, res);
@@ -148,7 +148,7 @@ function getSearchkitRouter() {
       body: req.body,
       json: _.isObject(req.body),
       forever: true,
-      auth: elasticsearchAuthentication.authentication
+      auth: esAuth
     }, (_error, _response, body: SearchResponse | undefined) => {
       //callback function to register metrics of zero results from elasticsearch
       if (body) {
@@ -270,7 +270,7 @@ function externalApiV1() {
 
     //Prepare the Client
     try {
-      const response = await client.search<SearchResponse<CMMStudy>>({
+      const response = await elasticsearch.client.search<SearchResponse<CMMStudy>>({
         index: `cmmstudy_${metadataLanguage}`,
         body: bodyQuery.build()
       });
@@ -330,10 +330,10 @@ function jsonProxy() {
     },
     // Add Elasticsearch authorisation if configured
     proxyReqOptDecorator: (proxyReqOpts) => {
-      if (elasticsearchAuthentication.authorisationString) {
+      if (elasticsearchUsername && elasticsearchPassword) {
         proxyReqOpts.headers = {
           ...proxyReqOpts.headers,
-          authorization: elasticsearchAuthentication.authorisationString
+          authorization: `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`
         };
       }
       return proxyReqOpts;

@@ -41,11 +41,7 @@ export function initTranslations(): Thunk {
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
         const errorMessage = `Couldn't load translation for language '${language.code}'`;
-        if (e instanceof Error) {
-          console.debug(`${errorMessage}: ${e.message}`);
-        } else {
-          console.debug(`${errorMessage}: ${e}`);
-        }
+        console.debug(`${errorMessage}: ${e}`);
       }
     });
 
@@ -68,10 +64,11 @@ export function initTranslations(): Thunk {
         case 'searchbox.placeholder': 
           return counterpart.translate('search');
         case 'hitstats.results_found': 
+          const state = getState();
           return counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
-            label: getState().language.currentLanguage.label,
-            total: getState().search.totalStudies,
+            label: state.language.currentLanguage.label,
+            total: state.search.totalStudies,
             time: searchkit.getTime()
           });
         case 'NoHits.NoResultsFound': 
@@ -91,9 +88,12 @@ export function initTranslations(): Thunk {
       }
     };
 
+    let previousLanguage = initialLanguage;
+
     browserHistory.listen(listner => {
       // If the language has changed
-      if (listner.query.lang && listner.query.lang !== state.routing.locationBeforeTransitions.query.lang) {
+      if (listner.query.lang && listner.query.lang !== previousLanguage) {
+        previousLanguage = String(listner.query.lang);
         dispatch(changeLanguage(`${listner.query.lang}`));
       }
     })
@@ -121,6 +121,11 @@ export function changeLanguage(code: string): Thunk {
 
     code = code.toLowerCase();
 
+    // Only dispatch a change language action if the language has changed.
+    if (code === state.language.currentLanguage.code) {
+      return;
+    }
+
     const language = languages.find(element => element.code === code);
 
     let label: string;
@@ -145,8 +150,8 @@ export function changeLanguage(code: string): Thunk {
       label
     });
     
-    if (state.search.displayed[0]) {
-      dispatch(updateStudy(state.search.displayed[0].id));
+    if (state.detail.study) {
+      dispatch(updateStudy(state.detail.study.id));
     }
 
     if (state.routing.locationBeforeTransitions.pathname === "/") {
