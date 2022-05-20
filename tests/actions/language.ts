@@ -141,9 +141,13 @@ describe('Language actions', () => {
     it('is created when selecting a language with a registered locale', () => {
       // Mock Redux store.
       const store = mockStore({
+        language: {
+          currentLanguage: enLanguage,
+          list: languages
+        },
         //@ts-expect-error
-        search: {
-          displayed: [mockStudy]
+        detail: {
+          study: mockStudy
         },
         routing: {
           locationBeforeTransitions: hashHistory.createLocation("/")
@@ -166,9 +170,13 @@ describe('Language actions', () => {
     it('is created when selecting a language without a registered locale', () => {
       // Mock Redux store.
       const store = mockStore({
+        language: {
+          currentLanguage: enLanguage,
+          list: languages
+        },
         //@ts-expect-error
-        search: {
-          displayed: [mockStudy]
+        detail: {
+          study: mockStudy
         },
         routing: {
           locationBeforeTransitions: hashHistory.createLocation("/")
@@ -191,9 +199,13 @@ describe('Language actions', () => {
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
       const store = mockStore({
+        language: {
+          currentLanguage: enLanguage,
+          list: languages
+        },
         //@ts-expect-error
-        search: {
-          displayed: [mockStudy]
+        detail: {
+          study: mockStudy
         },
         routing: {
           locationBeforeTransitions: hashHistory.createLocation("/")
