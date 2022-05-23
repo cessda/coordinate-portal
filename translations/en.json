@@ -9,7 +9,7 @@
       "content": "It may not exist or is not available in the selected language. Choose an alternative language or start a new search."
     }
   },
-  "search": "Select a language for optimal search results",
+  "search": "Enter search term in the selected language",
   "noHits": {
     "noResultsFound": "No results found for \"%(query)s\" in the selected language.",
     "searchWithoutFilters": "Search for \"%(query)s\" without filters",
