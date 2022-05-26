@@ -225,7 +225,12 @@ function externalApiV1() {
 
     //create json body for ElasticSearchClient - search query
     if (_.isString(q)) {
-      bodyQuery.query('query_string', { query: q });
+      bodyQuery.query('query_string', {
+         query: q,
+         lenient: true,
+         default_operator: "AND",
+         fields: ['titleStudy^4', 'abstract^2', 'creators^2', 'keywords.id^1.5', '*']
+        });
     }
 
     //Create json body for ElasticSearchClient - nested post-filters
@@ -260,13 +265,13 @@ function externalApiV1() {
           jsonLdArray.push(getJsonLd(value));
         });
         res.status(200).json({
-          "ResultsFound": body.hits.total,
+          "ResultsFound": apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
           "Results": jsonLdArray
         });
       }
       else{
         res.status(200).json({
-          "ResultsFound": body.hits.total,
+          "ResultsCount": apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
           "Results": body.hits.hits.map(obj => obj._source)
         });
       }
@@ -298,6 +303,37 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
   } else if (_.isString(query)) {
     bodyQuery.query('nested', { path: path }, (q: Bodybuilder) => q.addQuery('term', nestedPath, query));
   }
+}
+
+/**
+ * Track results returned from ElasticSearch.
+ * 
+ * @param offset the offset to start results from. Defaults to 0 if not set by user
+ * @param limit the limit of results to be returned. Defaults to 200 if not set by user.
+ * @param total The total results coming from ElasticSearch.
+ */
+ function apiResultsCount(offset: any, limit: any, total: any) {
+  let from: number;
+  if (offset !== undefined)
+    from = Number(offset)
+  else
+    from = 0;
+  let max: number;
+  if (limit !== undefined)
+    max = Number(limit)
+  else
+    max = 200;
+  let to: number = from + max;
+  if (to>total.value){
+    to = total.value;     
+  }
+  const resultsCount = {
+    from: from,
+    to: to,
+    retrieved: to-from,
+    available: total.value
+ }
+ return resultsCount;
 }
 
 function jsonProxy() {
