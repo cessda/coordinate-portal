@@ -12,7 +12,7 @@
 // limitations under the License.
 import express from 'express';
 import path from 'path';
-import { checkBuildDirectory, checkEnvironmentVariables, startListening } from './helper';
+import { checkBuildDirectory, checkEnvironmentVariables, getJsonLdString, startListening } from './helper';
 
 export function start () {
     checkBuildDirectory();
@@ -20,9 +20,20 @@ export function start () {
 
     const app = express();
 
-    app.use('/static', express.static(path.join(__dirname, '../dist')));
+    app.set('view engine', 'ejs');
+    app.use('/static', express.static(path.join(__dirname, '../dist'), { fallthrough: false }));
 
-    const indexPath = path.join(path.join(__dirname, '../dist'), 'index.html');
+    const indexPath = path.join(path.join(__dirname, '../dist'), 'index.ejs');
 
-    startListening(app, (_req, res) => res.sendFile(indexPath));
+    startListening(app, async (req, res) => {
+      
+      let jsonLdString: string | undefined = undefined;
+
+      if (req.path === "/detail" && req.query.q) {
+        jsonLdString = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
+      }
+
+      res.render(indexPath, {jsonLd: jsonLdString});
+    });
 };
+
