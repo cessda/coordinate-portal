@@ -49,7 +49,7 @@ function loggerFormat() {
 }
 
 // Logger
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   level: logLevel,
   format: winston.format.combine(
     winston.format.timestamp(),
@@ -63,6 +63,18 @@ const logger = winston.createLogger({
     new winston.transports.Console()
   ],
 });
+
+//Create ElasticSearch Client
+const hostUrl = url.parse(_.trimEnd(elasticsearchUrl, '/'));
+export const client = new Client({
+  host: {
+    host: hostUrl.hostname,
+    auth: `${elasticsearchUsername}:${elasticsearchPassword}`,
+    protocol: hostUrl.protocol,
+    port: hostUrl.port
+  }
+});
+
 
 export function checkBuildDirectory() {
   if (!fs.existsSync(path.join(__dirname, '../dist'))) {
@@ -170,21 +182,16 @@ function getSearchkitRouter() {
 function externalApiV1() {
 
   const router = express.Router();
-  
-  const host = _.trimEnd(elasticsearchUrl, '/');
-
-  //Create ElasticSearch Client
-  const hostUrl = url.parse(host);
-  const client = new Client({
-    host: {
-      host: hostUrl.hostname,
-      auth: `${elasticsearchUsername}:${elasticsearchPassword}`,
-      protocol: hostUrl.protocol,
-      port: hostUrl.port
-    }
-  });
 
   router.get('/search', async (req, res) => {
+
+    const accepts = req.accepts(["json", "application/ld+json"]);
+
+    // Skip performing work if the client won't accept the response.
+    if (!accepts) {
+      res.sendStatus(406);
+      return;
+    }
 
     const { metadataLanguage, q } = req.query;
 
@@ -257,23 +264,31 @@ function externalApiV1() {
         index: `cmmstudy_${metadataLanguage}`,
         body: bodyQuery.build()
       });
-      //Send the Response
-      if (req.header('Accept')=="application/ld+json"){
-        const studyModel: CMMStudy[] = getStudyModel(body);
-        let jsonLdArray: WithContext<Dataset>[] | any = [];
-        studyModel.forEach(function (value) {
-          jsonLdArray.push(getJsonLd(value));
-        });
-        res.status(200).json({
-          "ResultsFound": apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
-          "Results": jsonLdArray
-        });
-      }
-      else{
-        res.status(200).json({
-          "ResultsCount": apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
-          "Results": body.hits.hits.map(obj => obj._source)
-        });
+
+      /* 
+       * Send the Response.
+       *
+       * We default to sending the CMMStudy model, only sending JSON-LD if specifically requested.
+       */
+      switch (accepts) {
+        case "json": 
+          res.json({
+            ResultsCount: apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
+            Results: body.hits.hits.map(obj => obj._source)
+          });
+          break;
+        case "application/ld+json":
+          const studyModels: CMMStudy[] = getStudyModel(body);
+          const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
+          res.contentType("application/ld+json").json({
+            ResultsCount: apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
+            Results: jsonLdArray
+          });
+          break;
+        default:
+          // We shouldn't end up here, but just in case respond with something.
+          res.sendStatus(500);
+          break;
       }
     } catch (e) {
       logger.error('Elasticsearch API Request failed: %s', (e as Error));
@@ -387,6 +402,27 @@ function jsonProxy() {
     },
     filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
   });
+}
+
+export async function getJsonLdString(q: string, lang: string | undefined): Promise<string | undefined> {
+  // Default to English if the language is unspecified
+  if (!lang) {
+    lang = "en";
+  }
+
+  try {
+    const study = await client.get<CMMStudy>({
+      index: `cmmstudy_${lang}`,
+      id: q,
+      type: "cmmstudy"
+    });
+
+    // @ts-ignore - typings are too strict
+    return JSON.stringify(getJsonLd(getStudyModel({ hits: { hits: [study] } })[0]));
+  } catch (e) {
+    logger.debug(`${q}: ${e}`);
+    return undefined;
+  }
 }
 
 /**

@@ -17,7 +17,7 @@ import express from 'express';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, startListening } from './helper';
+import { checkEnvironmentVariables, getJsonLdString, startListening } from './helper';
 
 export function start() {
     checkEnvironmentVariables(false);
@@ -26,8 +26,9 @@ export function start() {
     const compiler = webpack(config);
 
     app.set('view engine', 'ejs');
-    app.set('views', path.join(__dirname, 'views'));
+    app.set('views', path.join(__dirname, '../dist'));
 
+  const indexRegex = new RegExp("index.dev.ejs");
     // @ts-expect-error - incorrect typings
     app.use(webpackMiddleware(compiler, {
       publicPath: config.output.publicPath,
@@ -39,13 +40,23 @@ export function start() {
         chunks: false,
         chunkModules: false,
         modules: false
-      }
+      },
+      // Write the index.ejs file to disk so that ejs can access it
+      writeToDisk: (filePath) => indexRegex.test(filePath)
     }));
 
     app.use(webpackHotMiddleware(compiler));
 
-    startListening(app, (_req, res) => {
+    startListening(app, async (req, res) => {
+
+      let jsonLdString: string | undefined = undefined;
+
+      if (req.path === "/detail" && req.query.q) {
+        jsonLdString = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
+      }
+
       res.setHeader('Cache-Control', 'no-store');
-      res.render('index');
+      res.render('index.dev.ejs', { jsonLd: jsonLdString });
     });
 };
+
