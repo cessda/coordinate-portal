@@ -258,6 +258,19 @@ function externalApiV1() {
       bodyQuery.filter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
     }
 
+    //Meta-Info to send with response
+    const searchTerms = {
+      metadataLanguage: metadataLanguage,
+      queryTerm: q,
+      limit: req.query.limit,
+      offset: req.query.offset,
+      classifications: req.query.classifications,
+      studyAreaCountries: req.query.studyAreaCountries,
+      publishers: req.query.publishers,
+      dataCollectionYearMin: req.query.dataCollectionYearMin,
+      dataCollectionYearMax: req.query.dataCollectionYearMax,
+   }
+
     //Prepare the Client
     try {
       const body: SearchResponse<CMMStudy> = await client.search({
@@ -273,6 +286,7 @@ function externalApiV1() {
       switch (accepts) {
         case "json": 
           res.json({
+            SearchTerms: searchTerms,
             ResultsCount: apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
             Results: body.hits.hits.map(obj => obj._source)
           });
@@ -281,6 +295,7 @@ function externalApiV1() {
           const studyModels: CMMStudy[] = getStudyModel(body);
           const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
           res.contentType("application/ld+json").json({
+            SearchTerms: searchTerms,
             ResultsCount: apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
             Results: jsonLdArray
           });
@@ -339,13 +354,12 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
   else
     max = 200;
   let to: number = from + max;
-  if (to>total.value){
-    to = total.value;     
-  }
+  if (to>total.value)
+    to = total.value;
   const resultsCount = {
     from: from,
     to: to,
-    retrieved: to-from,
+    retrieved: (to-from<0 ? 0 : to-from),
     available: total.value
  }
  return resultsCount;
