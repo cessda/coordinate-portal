@@ -418,7 +418,12 @@ function jsonProxy() {
   });
 }
 
-export async function getJsonLdString(q: string, lang: string | undefined): Promise<string | undefined> {
+export interface Metadata {
+  title: string;
+  jsonLd: WithContext<Dataset>;
+}
+
+export async function getJsonLdString(q: string, lang: string | undefined): Promise<Metadata| undefined> {
   // Default to English if the language is unspecified
   if (!lang) {
     lang = "en";
@@ -431,8 +436,11 @@ export async function getJsonLdString(q: string, lang: string | undefined): Prom
       type: "cmmstudy"
     });
 
-    // @ts-ignore - typings are too strict
-    return JSON.stringify(getJsonLd(getStudyModel({ hits: { hits: [study] } })[0]));
+    return {
+      title: study._source.titleStudy,
+      // @ts-expect-error - typings are too strict
+      jsonLd: getJsonLd(getStudyModel({ hits: { hits: [study] } })[0])
+    };
   } catch (e) {
     logger.debug(`${q}: ${e}`);
     return undefined;
