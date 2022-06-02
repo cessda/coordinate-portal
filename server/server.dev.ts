@@ -48,15 +48,16 @@ export function start() {
     app.use(webpackHotMiddleware(compiler));
 
     startListening(app, async (req, res) => {
-
-      let jsonLdString: string | undefined = undefined;
-
-      if (req.path === "/detail" && req.query.q) {
-        jsonLdString = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
-      }
-
+      const ejsTemplate = 'index.dev.ejs';
+      
       res.setHeader('Cache-Control', 'no-store');
-      res.render('index.dev.ejs', { jsonLd: jsonLdString });
+
+      // If we are on the detail page and a query is set, retrive the JSON-LD metadata
+      if (req.path === "/detail" && req.query.q) {
+        res.render(ejsTemplate, { metadata: await getJsonLdString(req.query.q as string, req.query.lang as string | undefined) });
+      } else {
+        res.render(ejsTemplate, { metadata: {} });
+      }
     });
 };
 
