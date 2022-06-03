@@ -234,7 +234,7 @@ function externalApiV1() {
     if (_.isString(q)) {
       bodyQuery.query('query_string', {
          query: q,
-         lenient: true,
+         lenient: false,
          default_operator: "AND",
          fields: ['titleStudy^4', 'abstract^2', 'creators^2', 'keywords.id^1.5', '*']
         });
