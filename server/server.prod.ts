@@ -20,6 +20,9 @@ export function start () {
 
     const app = express();
 
+    // Disable X-Powered-By in production
+    app.disable('x-powered-by');
+
     app.set('view engine', 'ejs');
     app.use('/static', express.static(path.join(__dirname, '../dist'), { fallthrough: false }));
 
@@ -27,13 +30,11 @@ export function start () {
 
     startListening(app, async (req, res) => {
       
-      let jsonLdString: string | undefined = undefined;
-
       if (req.path === "/detail" && req.query.q) {
-        jsonLdString = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
+        res.render(indexPath, { metadata: await getJsonLdString(req.query.q as string, req.query.lang as string | undefined) });
+      } else {
+        res.render(indexPath, { metadata: {} });
       }
-
-      res.render(indexPath, {jsonLd: jsonLdString});
     });
 };
 
