@@ -47,7 +47,6 @@ export interface CMMStudy {
   abstractShort: string;
   abstractHighlight: string;
   abstractHighlightShort: string;
-  abstractExpanded: boolean;
   /** Study title */
   titleStudy: string;
   titleStudyHighlight: string;
@@ -121,7 +120,6 @@ export function getStudyModel(searchResponse: Pick<SearchResponse<CMMStudy>, 'hi
     abstractShort: truncateAbstract(striptags(data._source.abstract)),
     abstractHighlight: data.highlight?.abstract ? stripHTMLElements(data.highlight.abstract.join()) : '',
     abstractHighlightShort: data.highlight?.abstract ? truncateAbstract(striptags(data.highlight.abstract.join())) : '',
-    abstractExpanded: false,
     studyAreaCountries: data._source.studyAreaCountries || [],
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
     unitTypes: data._source.unitTypes || [],

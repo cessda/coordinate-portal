@@ -19,12 +19,24 @@ import Translate from "react-translate-component";
 import _ from "lodash";
 import { CMMStudy, DataCollectionFreeText } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 export interface Props {
   item: CMMStudy;
 }
 
-export default class Detail extends React.Component<Props> {
+export interface State {
+  abstractExpanded: boolean;
+}
+
+export default class Detail extends React.Component<Props, State> {
+
+  constructor(props: Props) {
+    super(props);
+    this.state = { 
+      abstractExpanded: false 
+    };
+  }
 
   private static readonly formatter = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR)
@@ -58,7 +70,7 @@ export default class Detail extends React.Component<Props> {
     }
 
     if (elements.length === 0) {
-      elements.push(<Translate key="0" content="language.notAvailable.field" />);
+      return <Translate content="language.notAvailable.field" />;
     }
 
     return elements;
@@ -167,7 +179,30 @@ Summary information
             component="h2"
             content="metadata.abstract"
           />
-          <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
+          {this.state.abstractExpanded ?
+            <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
+          :
+            <div className="data-abstract">{item.abstractShort}</div>
+          }
+          {item.abstract.length > 500 &&
+            <a className="button is-small is-white" onClick={() => {
+              this.setState(state => ({
+                abstractExpanded: !state.abstractExpanded
+              }));
+            }}>
+              {this.state.abstractExpanded ?
+              <>
+                <span className="icon is-small"><FaAngleUp/></span>
+                <Translate component="span" content="readLess"/>
+              </>
+              :
+              <>
+                <span className="icon is-small"><FaAngleDown/></span>
+                <Translate component="span" content="readMore"/>
+              </>
+              }
+            </a>
+          }
         </section>
 
         <Panel
