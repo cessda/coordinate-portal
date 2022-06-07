@@ -243,7 +243,7 @@ function externalApiV1() {
     //Create json body for ElasticSearchClient - nested post-filters
     buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
     buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
-    buildNestedFilters(bodyQuery, req.query.publishers, 'publisher', 'publisher.publisher');
+    buildNestedFilters(bodyQuery, req.query.publishers, 'publisherFilter', 'publisherFilter.publisher');
 
     //Create json body for ElasticSearchClient - date-filters
     let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
@@ -287,7 +287,7 @@ function externalApiV1() {
         case "json": 
           res.json({
             SearchTerms: searchTerms,
-            ResultsCount: apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
+            ResultsCount: apiResultsCount(Number(req.query.offset), Number(req.query.limit), body.hits.total),
             Results: body.hits.hits.map(obj => obj._source)
           });
           break;
@@ -296,7 +296,7 @@ function externalApiV1() {
           const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
           res.contentType("application/ld+json").json({
             SearchTerms: searchTerms,
-            ResultsCount: apiResultsCount(req.query.offset, req.query.limit, body.hits.total),
+            ResultsCount: apiResultsCount(Number(req.query.offset), Number(req.query.limit), body.hits.total),
             Results: jsonLdArray
           });
           break;
@@ -342,25 +342,12 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
  * @param limit the limit of results to be returned. Defaults to 200 if not set by user.
  * @param total The total results coming from ElasticSearch.
  */
- function apiResultsCount(offset: any, limit: any, total: any) {
-  let from: number;
-  if (offset !== undefined)
-    from = Number(offset)
-  else
-    from = 0;
-  let max: number;
-  if (limit !== undefined)
-    max = Number(limit)
-  else
-    max = 200;
-  let to: number = from + max;
-  if (to>total.value)
-    to = total.value;
+ function apiResultsCount(offset: number, limit: number, total: number) {
   const resultsCount = {
-    from: from,
-    to: to,
-    retrieved: (to-from<0 ? 0 : to-from),
-    available: total.value
+    from: offset,
+    to: offset + limit,
+    retrieved: (offset + limit) - offset,
+    available: total
  }
  return resultsCount;
 }
