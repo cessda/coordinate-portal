@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Additions
 
+Cut-off of long abstracts in detailed view. ([#414](https://bitbucket.org/cessda/cessda.cdc.versions/issues/414))
+
 Add CORS support to the CDC external API and the Swagger documentation. ([#426](https://bitbucket.org/cessda/cessda.cdc.versions/issues/426))
 
 Added Czech translation, completed Danish translation. ([#422](https://bitbucket.org/cessda/cessda.cdc.versions/issues/422))
