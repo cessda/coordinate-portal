@@ -112,28 +112,20 @@ describe('Result component', () => {
     );
   });
 
-  it('should show long abstract if expanded', () => {
-    const { enzymeWrapper } = setup({
-      abstractExpanded: true
-    });
-    expect(
-      enzymeWrapper.find('.sk-hits-list__desc span').length
-    ).toBeGreaterThan(0);
-  });
-
-  it('should hide long abstract if not expanded', () => {
-    const { enzymeWrapper } = setup();
-    expect(enzymeWrapper.find('.sk-hits-list__desc span.abstr').length).toBe(0);
-  });
-
   it('should toggle long abstract', () => {
-    const { props, enzymeWrapper } = setup();
-    expect(props.item?.abstractExpanded).toBe(false);
+    const { enzymeWrapper } = setup();
+
+    expect(enzymeWrapper.state('abstractExpanded')).toBe(false);
+    expect(enzymeWrapper.find('.sk-hits-list__desc span.abstr').length).toBe(0);
+
     enzymeWrapper
       .find('.button')
       .at(0)
       .simulate('click');
-    expect(props.item?.abstractExpanded).toBe(true);
+    expect(enzymeWrapper.state('abstractExpanded')).toBe(true);
+    expect(
+      enzymeWrapper.find('.sk-hits-list__desc span').length
+    ).toBeGreaterThan(0);
   });
 
   it('should change language', () => {
@@ -172,8 +164,7 @@ describe('Result component', () => {
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps(jest.fn())).toEqual({
       push: expect.any(Function),
-      changeLanguage: expect.any(Function),
-      toggleLongAbstract: expect.any(Function)
+      changeLanguage: expect.any(Function)
     });
   });
 });

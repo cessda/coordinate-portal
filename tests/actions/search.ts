@@ -21,13 +21,11 @@ import {
   RESET_SEARCH,
   toggleAdvancedSearch,
   toggleLoading,
-  toggleLongAbstract,
   toggleMetadataPanels,
   toggleMobileFilters,
   toggleSummary,
   TOGGLE_ADVANCED_SEARCH,
   TOGGLE_LOADING,
-  TOGGLE_LONG_DESCRIPTION,
   TOGGLE_METADATA_PANELS,
   TOGGLE_MOBILE_FILTERS,
   TOGGLE_SUMMARY,
@@ -407,38 +405,6 @@ describe('Search actions', () => {
       expect(toggleMetadataPanels()).toEqual({
         type: TOGGLE_METADATA_PANELS
       });
-    });
-  });
-
-  describe('TOGGLE_LONG_DESCRIPTION action', () => {
-    it('is created when long study description visibility changes', () => {
-      // Mock Redux store.
-      const store = mockStore({});
-
-      // Dispatch action.
-      store.dispatch(toggleLongAbstract('Study Title', 1));
-
-      // State should contain study index.
-      expect(store.getActions()).toEqual([
-        {
-          type: TOGGLE_LONG_DESCRIPTION,
-          index: 1
-        }
-      ]);
-    });
-
-    it('logs user metrics when analytics is enabled', () => {
-      // Mock Redux store.
-      const store = mockStore({});
-
-      // Dispatch action.
-      store.dispatch(toggleLongAbstract('Study Title', 1));
-
-      // Analytics library should have pushed event.
-      // @ts-expect-error
-      expect(global['_paq']).toEqual([
-        ['trackEvent', 'Search', 'Read more', 'Study Title']
-      ]);
     });
   });
 

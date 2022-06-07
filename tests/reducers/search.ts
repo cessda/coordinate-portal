@@ -120,33 +120,6 @@ describe('Search reducer', () => {
     });
   });
 
-  it('should handle TOGGLE_LONG_DESCRIPTION', () => {
-    expect(
-      search(
-        {
-          ...initialState,
-          displayed: [
-            // @ts-expect-error - Incomplete CMMStudy
-            {
-              abstractExpanded: false
-            }
-          ]
-        },
-        {
-          type: 'TOGGLE_LONG_DESCRIPTION',
-          index: 0
-        }
-      )
-    ).toEqual({
-      ...initialState,
-      displayed: [
-        {
-          abstractExpanded: true
-        }
-      ]
-    });
-  });
-
   it('should handle UPDATE_DISPLAYED', () => {
     expect(
       search(
@@ -191,7 +164,6 @@ describe('Search reducer', () => {
           titleStudy: undefined,
           titleStudyHighlight: '',
           abstract: '',
-          abstractExpanded: false,
           abstractShort: '',
           abstractHighlight: '',
           abstractHighlightShort: '',
@@ -243,7 +215,6 @@ describe('Search reducer', () => {
                     titleStudy: 'Study Title',
                     studyNumber: 'UKDS1234',
                     abstract: 'Abstract',
-                    abstractExpanded: false,
                     abstractShort: '',
                     abstractHighlight: '',
                     abstractHighlightShort: '',
@@ -339,7 +310,6 @@ describe('Search reducer', () => {
           titleStudy: 'Study Title',
           titleStudyHighlight: '',
           abstract: 'Abstract',
-          abstractExpanded: false,
           abstractShort: 'Abstract',
           abstractHighlight: '',
           abstractHighlightShort: '',

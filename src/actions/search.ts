@@ -166,27 +166,6 @@ export const toggleMetadataPanels = (): ToggleMetadataPanelsAction => {
   };
 };
 
-//////////// Redux Action Creator : TOGGLE_LONG_DESCRIPTION
-export const TOGGLE_LONG_DESCRIPTION = "TOGGLE_LONG_DESCRIPTION";
-
-export type ToggleLongAbstractAction = {
-  type: typeof TOGGLE_LONG_DESCRIPTION;
-  index: number;
-};
-
-export const toggleLongAbstract = (title: string, index: number): Thunk => {
-  return (dispatch) => {
-    // Notify Matomo Analytics of toggling "Read more" for a study.
-    const _paq = getPaq();
-    _paq.push(['trackEvent', 'Search', 'Read more', title]);
-
-    dispatch({
-      type: TOGGLE_LONG_DESCRIPTION,
-      index
-    });
-  };
-};
-
 //////////// Redux Action Creator : UPDATE_DISPLAYED
 export const UPDATE_DISPLAYED = "UPDATE_DISPLAYED";
 
@@ -291,7 +270,6 @@ export type SearchAction =
   | ToggleAdvancedSearchAction
   | ToggleSummaryAction
   | ToggleMetadataPanelsAction
-  | ToggleLongAbstractAction
   | UpdateDisplayedAction
   | UpdateQueryAction
   | UpdateStateAction
