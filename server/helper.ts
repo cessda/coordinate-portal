@@ -179,6 +179,8 @@ function getSearchkitRouter() {
   return router;
 }
 
+const maxApiLimit = 200; //for API max Limit
+
 function externalApiV1() {
 
   const router = express.Router();
@@ -204,24 +206,28 @@ function externalApiV1() {
     const bodyQuery = bodybuilder();
 
     // Validate the limit parameter
+    let limit: number;
     if (req.query.limit !== undefined) {
-      const limit = Number(req.query.limit);
+      limit = Number(req.query.limit);
       if (!Number.isInteger(limit) || limit <= 0) {
         res.status(400).send({ message: 'limit must be a positive integer'});
         return;
-      } else if (limit > 200) {
-        res.status(400).send({ message: 'limit must be maximum 200'});
+      } else if (limit > maxApiLimit) {
+        res.status(400).send({ message: `limit must be maximum ${maxApiLimit}`});
         return;
       } else {
         bodyQuery.size(limit);
       }
     } else {
-      bodyQuery.size(200);
+      limit = maxApiLimit;
     }
 
+    bodyQuery.size(limit);
+
     // Validate the offset parameter
+    let offset: number = 0;
     if (req.query.offset !== undefined) {
-      const offset = Number(req.query.offset);
+      offset = Number(req.query.offset);
       if (req.query.offset === '' || !Number.isInteger(offset) || offset < 0) {
         res.status(400).send({ message: 'offset must be a positive integer'});
         return;
@@ -287,7 +293,7 @@ function externalApiV1() {
         case "json": 
           res.json({
             SearchTerms: searchTerms,
-            ResultsCount: apiResultsCount(Number(req.query.offset), Number(req.query.limit), body.hits.total),
+            ResultsCount: apiResultsCount(offset, limit, body.hits.hits.length, body.hits.total),
             Results: body.hits.hits.map(obj => obj._source)
           });
           break;
@@ -296,7 +302,7 @@ function externalApiV1() {
           const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
           res.contentType("application/ld+json").json({
             SearchTerms: searchTerms,
-            ResultsCount: apiResultsCount(Number(req.query.offset), Number(req.query.limit), body.hits.total),
+            ResultsCount: apiResultsCount(offset, limit, body.hits.hits.length, body.hits.total),
             Results: jsonLdArray
           });
           break;
@@ -342,14 +348,18 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
  * @param limit the limit of results to be returned. Defaults to 200 if not set by user.
  * @param total The total results coming from ElasticSearch.
  */
- function apiResultsCount(offset: number, limit: number, total: number) {
+ function apiResultsCount(offset: number, limit: number, retrieved: number, total: number) {
+  let to: number = offset + limit;
+  if (to > total) {
+    to = total;
+  }
   const resultsCount = {
     from: offset,
-    to: offset + limit,
-    retrieved: (offset + limit) - offset,
+    to: to,
+    retrieved: retrieved,
     available: total
- }
- return resultsCount;
+  };
+  return resultsCount;
 }
 
 function jsonProxy() {
