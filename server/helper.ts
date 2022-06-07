@@ -179,6 +179,8 @@ function getSearchkitRouter() {
   return router;
 }
 
+const maxApiLimit = 200; //for API max Limit
+
 function externalApiV1() {
 
   const router = express.Router();
@@ -209,14 +211,14 @@ function externalApiV1() {
       if (!Number.isInteger(limit) || limit <= 0) {
         res.status(400).send({ message: 'limit must be a positive integer'});
         return;
-      } else if (limit > 200) {
-        res.status(400).send({ message: 'limit must be maximum 200'});
+      } else if (limit > maxApiLimit) {
+        res.status(400).send({ message: `limit must be maximum ${maxApiLimit}`});
         return;
       } else {
         bodyQuery.size(limit);
       }
     } else {
-      bodyQuery.size(200);
+      bodyQuery.size(maxApiLimit);
     }
 
     // Validate the offset parameter
@@ -342,12 +344,25 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
  * @param limit the limit of results to be returned. Defaults to 200 if not set by user.
  * @param total The total results coming from ElasticSearch.
  */
- function apiResultsCount(offset: number, limit: number, total: number) {
+ function apiResultsCount(offset: number, limit: number, total: any) {
+  let from: number;
+  if (!isNaN(offset))
+    from = Number(offset)
+  else
+    from = 0;
+  let max: number;
+  if (!isNaN(limit))
+    max = Number(limit)
+  else
+    max = maxApiLimit;
+  let to: number = from + max;
+  if (to>total.value)
+    to = total.value;
   const resultsCount = {
-    from: offset,
-    to: offset + limit,
-    retrieved: (offset + limit) - offset,
-    available: total
+    from: from,
+    to: to,
+    retrieved: (to-from<0 ? 0 : to-from),
+    available: total.value
  }
  return resultsCount;
 }
