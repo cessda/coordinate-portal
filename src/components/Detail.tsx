@@ -20,6 +20,7 @@ import _ from "lodash";
 import { CMMStudy, DataCollectionFreeText } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import striptags from "striptags";
 
 export interface Props {
   item: CMMStudy;
@@ -31,11 +32,23 @@ export interface State {
 
 export default class Detail extends React.Component<Props, State> {
 
+  private static readonly truncatedAbstractLength = 2000;
+
   constructor(props: Props) {
     super(props);
+    // Set the abstract to the expanded state if shorter than Detail.truncatedAbstractLength
     this.state = { 
-      abstractExpanded: false 
+      abstractExpanded: !(props.item.abstract.length > Detail.truncatedAbstractLength)
     };
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    // If the item has changed, reset the expanded state of the abstract
+    if (this.props.item.id !== prevProps.item.id) {
+      this.setState(() => ({
+        abstractExpanded: !(this.props.item.abstract.length > Detail.truncatedAbstractLength)
+      }));
+    }
   }
 
   private static readonly formatter = new DateTimeFormatterBuilder()
@@ -182,9 +195,9 @@ Summary information
           {this.state.abstractExpanded ?
             <div className="data-abstract" dangerouslySetInnerHTML={{ __html: item.abstract }}/>
           :
-            <div className="data-abstract">{item.abstractShort}</div>
+            <div className="data-abstract">{_.truncate(striptags(item.abstract), { length: Detail.truncatedAbstractLength })}</div>
           }
-          {item.abstract.length > 500 &&
+          {item.abstract.length > Detail.truncatedAbstractLength &&
             <a className="button is-small is-white" onClick={() => {
               this.setState(state => ({
                 abstractExpanded: !state.abstractExpanded
