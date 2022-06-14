@@ -134,7 +134,7 @@ export function startMetricsListening() {
 }
 
 export function uiResponseTimeHandler(req: Request, res: Response, time: number) {
-  if (req.query.size === undefined) { //to exclude calls to _search?size=... etc
+  if (req.query.size === undefined && req.headers.referer!==undefined) { //to exclude calls to _search?size=... etc & not log metrics from internal ES API
     //hits result from elastic search
     //FIXME: should be an import
     const moduleHits = require('./helper');
