@@ -17,7 +17,7 @@ import express from 'express';
 // @ts-ignore
 import config from '../webpack.dev.config.js';
 import path from 'path';
-import { checkEnvironmentVariables, getJsonLdString, startListening } from './helper';
+import { checkEnvironmentVariables, renderResponse, startListening } from './helper';
 
 export function start() {
     checkEnvironmentVariables(false);
@@ -49,15 +49,7 @@ export function start() {
 
     startListening(app, async (req, res) => {
       const ejsTemplate = 'index.dev.ejs';
-      
       res.setHeader('Cache-Control', 'no-store');
-
-      // If we are on the detail page and a query is set, retrive the JSON-LD metadata
-      if (req.path === "/detail" && req.query.q) {
-        res.render(ejsTemplate, { metadata: await getJsonLdString(req.query.q as string, req.query.lang as string | undefined) });
-      } else {
-        res.render(ejsTemplate, { metadata: {} });
-      }
+      await renderResponse(req, res, ejsTemplate);
     });
 };
-
