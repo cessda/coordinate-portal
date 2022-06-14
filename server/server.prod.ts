@@ -12,7 +12,7 @@
 // limitations under the License.
 import express from 'express';
 import path from 'path';
-import { checkBuildDirectory, checkEnvironmentVariables, getJsonLdString, startListening } from './helper';
+import { checkBuildDirectory, checkEnvironmentVariables, renderResponse, startListening } from './helper';
 
 export function start () {
     checkBuildDirectory();
@@ -28,13 +28,6 @@ export function start () {
 
     const indexPath = path.join(path.join(__dirname, '../dist'), 'index.ejs');
 
-    startListening(app, async (req, res) => {
-      
-      if (req.path === "/detail" && req.query.q) {
-        res.render(indexPath, { metadata: await getJsonLdString(req.query.q as string, req.query.lang as string | undefined) });
-      } else {
-        res.render(indexPath, { metadata: {} });
-      }
-    });
+    startListening(app, async (req, res) => await renderResponse(req, res, indexPath));
 };
 

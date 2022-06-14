@@ -239,11 +239,11 @@ function externalApiV1() {
     //create json body for ElasticSearchClient - search query
     if (_.isString(q)) {
       bodyQuery.query('query_string', {
-         query: q,
-         lenient: false,
-         default_operator: "AND",
-         fields: ['titleStudy^4', 'abstract^2', 'creators^2', 'keywords.id^1.5', '*']
-        });
+        query: q,
+        lenient: true,
+        default_operator: "AND",
+        fields: ['titleStudy^4', 'abstract^2', 'creators^2', 'keywords.id^1.5', '*']
+      });
     }
 
     //Create json body for ElasticSearchClient - nested post-filters
@@ -441,6 +441,16 @@ export async function getJsonLdString(q: string, lang: string | undefined): Prom
   } catch (e) {
     logger.debug(`${q}: ${e}`);
     return undefined;
+  }
+}
+
+export async function renderResponse(req: express.Request, res: express.Response, ejsTemplate: string) {
+  // If we are on the detail page and a query is set, retrive the JSON-LD metadata
+  if (req.path === "/detail" && req.query.q) {
+    const metadata = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
+    res.render(ejsTemplate, { metadata: metadata || {} });
+  } else {
+    res.render(ejsTemplate, { metadata: {} });
   }
 }
 
