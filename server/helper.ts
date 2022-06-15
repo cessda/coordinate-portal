@@ -241,8 +241,7 @@ function externalApiV1() {
       bodyQuery.query('query_string', {
         query: q,
         lenient: true,
-        default_operator: "AND",
-        fields: ['titleStudy^4', 'abstract^2', 'creators^2', 'keywords.id^1.5', '*']
+        default_operator: "AND"
       });
     }
 
