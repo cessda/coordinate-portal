@@ -444,13 +444,21 @@ export async function getJsonLdString(q: string, lang: string | undefined): Prom
 }
 
 export async function renderResponse(req: express.Request, res: express.Response, ejsTemplate: string) {
-  // If we are on the detail page and a query is set, retrive the JSON-LD metadata
+  // Default to success
+  let status: number = 200;
+
+  let metadata: Metadata | undefined = undefined;
+
   if (req.path === "/detail" && req.query.q) {
-    const metadata = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
-    res.render(ejsTemplate, { metadata: metadata || {} });
-  } else {
-    res.render(ejsTemplate, { metadata: {} });
+    // If we are on the detail page and a query is set, retrive the JSON-LD metadata
+    metadata = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
+    if (!metadata) {
+      // Set status to 404, a study was not found
+      status = 404;
+    }
   }
+  
+  res.status(status).render(ejsTemplate, { metadata: metadata || {} });
 }
 
 /**
