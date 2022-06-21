@@ -32,11 +32,7 @@ export function updateStudy(id: string): Thunk<Promise<void>> {
     if (response.status < 400) {
 
       // Get the study model from the hit.
-      const study = getStudyModel({
-        _source: (await response.json() as CMMStudy),
-        _index: state.language.currentLanguage.index,
-        _id: id
-      });
+      const study = getStudyModel({ _source: (await response.json() as CMMStudy)});
 
       // Dispatch the study for display.
       dispatch({

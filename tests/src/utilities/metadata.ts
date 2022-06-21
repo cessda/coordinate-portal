@@ -18,10 +18,6 @@ describe('Metadata utilities', () => {
     it('should return a populated study model', () => {
       expect(
         getStudyModel({
-          _index: 'cmmstudy',
-          _score: 1,
-          _id: "1",
-          _type: "cmmstudy",
           _source: {
             id: "1",
             titleStudy: 'Study Title',
