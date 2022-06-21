@@ -16,7 +16,7 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
-import express, { Request, RequestHandler } from 'express';
+import express, { RequestHandler } from 'express';
 import request, { CoreOptions } from 'request';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import bodyParser from 'body-parser';
@@ -31,6 +31,11 @@ import { SearchResponse } from '@elastic/elasticsearch/api/types';
 import { ConnectionError, ResponseError } from '@elastic/elasticsearch/lib/errors';
 import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
+import { Client } from '@elastic/elasticsearch';
+import cors from 'cors';
+import { WithContext, Dataset } from 'schema-dts';
+import swagger from './swagger.json';
+
 
 // Defaults to localhost if unspecified
 export const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
@@ -202,11 +207,21 @@ function elasticsearchErrorHandler(e: unknown, res: Response) {
   }
 }
 
+const maxApiLimit = 200;
+
 function externalApiV1() {
 
   const router = express.Router();
 
   router.get('/search', async (req, res) => {
+
+    const accepts = req.accepts(["json", "application/ld+json"]);
+
+    // Skip performing work if the client won't accept the response.
+    if (!accepts) {
+      res.sendStatus(406);
+      return;
+    }
 
     const { metadataLanguage, q } = req.query;
 
@@ -219,24 +234,28 @@ function externalApiV1() {
     const bodyQuery = bodybuilder();
 
     // Validate the limit parameter
+    let limit: number;
     if (req.query.limit !== undefined) {
-      const limit = Number(req.query.limit);
+      limit = Number(req.query.limit);
       if (!Number.isInteger(limit) || limit <= 0) {
         res.status(400).send({ message: 'limit must be a positive integer'});
         return;
-      } else if (limit > 200) {
-        res.status(400).send({ message: 'limit must be maximum 200'});
+      } else if (limit > maxApiLimit) {
+        res.status(400).send({ message: `limit must be maximum ${maxApiLimit}`});
         return;
       } else {
         bodyQuery.size(limit);
       }
     } else {
-      bodyQuery.size(200);
+      limit = 10;
     }
 
+    bodyQuery.size(limit);
+
     // Validate the offset parameter
+    let offset: number = 0;
     if (req.query.offset !== undefined) {
-      const offset = Number(req.query.offset);
+      offset = Number(req.query.offset);
       if (req.query.offset === '' || !Number.isInteger(offset) || offset < 0) {
         res.status(400).send({ message: 'offset must be a positive integer'});
         return;
@@ -247,13 +266,17 @@ function externalApiV1() {
 
     //create json body for ElasticSearchClient - search query
     if (_.isString(q)) {
-      bodyQuery.query('query_string', { query: q });
+      bodyQuery.query('query_string', {
+        query: q,
+        lenient: true,
+        default_operator: "AND"
+      });
     }
 
     //Create json body for ElasticSearchClient - nested post-filters
     buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
     buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
-    buildNestedFilters(bodyQuery, req.query.publishers, 'publisher', 'publisher.publisher');
+    buildNestedFilters(bodyQuery, req.query.publishers, 'publisherFilter', 'publisherFilter.publisher');
 
     //Create json body for ElasticSearchClient - date-filters
     let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
@@ -268,26 +291,53 @@ function externalApiV1() {
       bodyQuery.filter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
     }
 
+    //Meta-Info to send with response
+    const searchTerms = {
+      metadataLanguage: metadataLanguage,
+      queryTerm: q,
+      limit: req.query.limit,
+      offset: req.query.offset,
+      classifications: req.query.classifications,
+      studyAreaCountries: req.query.studyAreaCountries,
+      publishers: req.query.publishers,
+      dataCollectionYearMin: req.query.dataCollectionYearMin,
+      dataCollectionYearMax: req.query.dataCollectionYearMax,
+   }
+
     //Prepare the Client
     try {
       const response = await elasticsearch.client.search<SearchResponse<CMMStudy>>({
         index: `cmmstudy_${metadataLanguage}`,
         body: bodyQuery.build()
       });
-      //Send the Response
-      if (req.header('Accept')=="application/ld+json"){
-        const studyModel: CMMStudy[] = response.body.hits.hits.map(hit => getStudyModel(hit));
-        const jsonLdArray = studyModel.map(study => getJsonLd(study));
-        res.status(200).json({
-          "ResultsFound": response.body.hits.total,
-          "Results": jsonLdArray
-        });
-      }
-      else{
-        res.status(200).json({
-          "ResultsFound": response.body.hits.total,
-          "Results": response.body.hits.hits.map(obj => obj._source)
-        });
+
+      /* 
+       * Send the Response.
+       *
+       * We default to sending the CMMStudy model, only sending JSON-LD if specifically requested.
+       */
+      const resultsCount = apiResultsCount(offset, limit, response.body.hits.hits.length, Number(response.body.hits.total));
+      switch (accepts) {
+        case "json": 
+          res.json({
+            SearchTerms: searchTerms,
+            ResultsCount: resultsCount,
+            Results: response.body.hits.hits.map(obj => obj._source)
+          });
+          break;
+        case "application/ld+json":
+          const studyModels: CMMStudy[] = response.body.hits.hits.map(hit => getStudyModel(hit));
+          const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
+          res.contentType("application/ld+json").json({
+            SearchTerms: searchTerms,
+            ResultsCount: resultsCount,
+            Results: jsonLdArray
+          });
+          break;
+        default:
+          // We shouldn't end up here, but just in case respond with something.
+          res.sendStatus(500);
+          break;
       }
     } catch (e) {
       logger.error('Elasticsearch API Request failed: %s', (e as Error));
@@ -317,6 +367,27 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
   } else if (_.isString(query)) {
     bodyQuery.query('nested', { path: path }, (q: Bodybuilder) => q.addQuery('term', nestedPath, query));
   }
+}
+
+/**
+ * Track results returned from ElasticSearch.
+ * 
+ * @param offset the offset to start results from. Defaults to 0 if not set by user
+ * @param limit the limit of results to be returned. Defaults to 200 if not set by user.
+ * @param total The total results coming from ElasticSearch.
+ */
+ function apiResultsCount(offset: number, limit: number, retrieved: number, total: number) {
+  let to: number = offset + limit;
+  if (to > total) {
+    to = total;
+  }
+  const resultsCount = {
+    from: offset,
+    to: to,
+    retrieved: retrieved,
+    available: total
+  };
+  return resultsCount;
 }
 
 function jsonProxy() {
@@ -363,6 +434,44 @@ function jsonProxy() {
   });
 }
 
+export interface Metadata {
+  title: string;
+  jsonLd: WithContext<Dataset>;
+}
+
+export async function getJsonLdString(q: string, lang: string | undefined): Promise<Metadata| undefined> {
+  // Default to English if the language is unspecified
+  if (!lang) {
+    lang = "en";
+  }
+
+  try {
+    const study = await elasticsearch.getStudy(q, `cmmstudy_${lang}`);
+
+    if (study) {
+      return {
+        title: study.titleStudy,
+        jsonLd: getJsonLd(getStudyModel({ _source: study }))
+      };
+    } else {
+      return undefined;
+    }
+  } catch (e) {
+    logger.debug(`${q}: ${e}`);
+    return undefined;
+  }
+}
+
+export async function renderResponse(req: express.Request, res: express.Response, ejsTemplate: string) {
+  // If we are on the detail page and a query is set, retrive the JSON-LD metadata
+  if (req.path === "/detail" && req.query.q) {
+    const metadata = await getJsonLdString(req.query.q as string, req.query.lang as string | undefined);
+    res.render(ejsTemplate, { metadata: metadata || {} });
+  } else {
+    res.render(ejsTemplate, { metadata: {} });
+  }
+}
+
 /**
  * Start listening.
  * @param app the express instance.
@@ -384,11 +493,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   // Set up request handlers
   app.use('/api/sk', getSearchkitRouter());
   app.use('/api/json', jsonProxy());
-  app.use('/api/DataSets/v1', externalApiV1());
-  app.use('/swagger/api/DataSets/v1', (req, res) => {
-    const externalAPISwagger = require("./swagger.json");
-    res.json(externalAPISwagger);
-  });
+  app.use('/api/DataSets/v1', cors(),  externalApiV1());
+  app.use('/swagger/api/DataSets/v1', cors(), ((_req, res) => res.json(swagger)) as express.RequestHandler);
   app.use('/api/mt', startMetricsListening());
 
   app.get('*', handler);

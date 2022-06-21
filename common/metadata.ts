@@ -47,7 +47,6 @@ export interface CMMStudy {
   abstractShort: string;
   abstractHighlight: string;
   abstractHighlightShort: string;
-  abstractExpanded: boolean;
   /** Study title */
   titleStudy: string;
   titleStudyHighlight: string;
@@ -114,7 +113,7 @@ export interface Similar {
  * 
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(data: SearchHit<CMMStudy>): CMMStudy {
+export function getStudyModel(data: Pick<SearchHit<CMMStudy>, "_source" | "highlight">): CMMStudy {
   if (typeof(data._source) !== "object") {
     throw TypeError("_source is not an object");
   }
@@ -129,7 +128,6 @@ export function getStudyModel(data: SearchHit<CMMStudy>): CMMStudy {
     abstractShort: truncateAbstract(striptags(data._source.abstract)),
     abstractHighlight: data.highlight?.abstract ? stripHTMLElements(data.highlight.abstract.join()) : '',
     abstractHighlightShort: data.highlight?.abstract ? truncateAbstract(striptags(data.highlight.abstract.join())) : '',
-    abstractExpanded: false,
     studyAreaCountries: data._source.studyAreaCountries || [],
     typeOfTimeMethods: data._source.typeOfTimeMethods || [],
     unitTypes: data._source.unitTypes || [],

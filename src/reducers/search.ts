@@ -20,7 +20,6 @@ import {
   SearchkitState, 
   TOGGLE_ADVANCED_SEARCH, 
   TOGGLE_LOADING, 
-  TOGGLE_LONG_DESCRIPTION, 
   TOGGLE_METADATA_PANELS,
   TOGGLE_MOBILE_FILTERS, 
   TOGGLE_SUMMARY, 
@@ -86,16 +85,6 @@ export default function search(state: SearchState = initialState, action: Action
       return Object.assign({}, state, {
         expandMetadataPanels: !state.expandMetadataPanels
       });
-
-    case TOGGLE_LONG_DESCRIPTION: {
-      let array = _.cloneDeep(state.displayed);
-
-      array[action.index].abstractExpanded = !array[action.index].abstractExpanded;
-
-      return Object.assign({}, state, {
-        displayed: array
-      });
-    }
 
     case UPDATE_DISPLAYED: {
       const displayed = action.displayed.hits.hits.map(hit => getStudyModel(hit));

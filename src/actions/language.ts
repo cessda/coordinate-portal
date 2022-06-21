@@ -93,8 +93,8 @@ export function initTranslations(): Thunk {
     browserHistory.listen(listner => {
       // If the language has changed
       if (listner.query.lang && listner.query.lang !== previousLanguage) {
-        previousLanguage = String(listner.query.lang);
         dispatch(changeLanguage(`${listner.query.lang}`));
+        previousLanguage = `${listner.query.lang}`;
       }
     })
 

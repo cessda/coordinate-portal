@@ -154,8 +154,8 @@ describe('Language actions', () => {
           list: languages
         },
         //@ts-expect-error
-        search: {
-          displayed: [mockStudy]
+        detail: {
+          study: mockStudy
         },
         routing: {
           locationBeforeTransitions: hashHistory.createLocation("/")
@@ -183,8 +183,8 @@ describe('Language actions', () => {
           list: languages
         },
         //@ts-expect-error
-        search: {
-          displayed: [mockStudy]
+        detail: {
+          study: mockStudy
         },
         routing: {
           locationBeforeTransitions: hashHistory.createLocation("/")
@@ -212,8 +212,8 @@ describe('Language actions', () => {
           list: languages
         },
         //@ts-expect-error
-        search: {
-          displayed: [mockStudy]
+        detail: {
+          study: mockStudy
         },
         routing: {
           locationBeforeTransitions: hashHistory.createLocation("/")

@@ -6,7 +6,6 @@ export const mockStudy: CMMStudy = {
   titleStudyHighlight: '',
   abstract: 'Abstract',
   abstractHighlight: '',
-  abstractExpanded: false,
   abstractShort: 'Abstract',
   abstractHighlightShort: '',
   classifications: [
