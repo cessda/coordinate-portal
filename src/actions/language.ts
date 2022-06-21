@@ -41,11 +41,7 @@ export function initTranslations(): Thunk {
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
         const errorMessage = `Couldn't load translation for language '${language.code}'`;
-        if (e instanceof Error) {
-          console.debug(`${errorMessage}: ${e.message}`);
-        } else {
-          console.debug(`${errorMessage}: ${e}`);
-        }
+        console.debug(`${errorMessage}: ${e}`);
       }
     });
 
@@ -68,10 +64,11 @@ export function initTranslations(): Thunk {
         case 'searchbox.placeholder': 
           return counterpart.translate('search');
         case 'hitstats.results_found': 
+          const state = getState();
           return counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
-            label: getState().language.currentLanguage.label,
-            total: getState().search.totalStudies,
+            label: state.language.currentLanguage.label,
+            total: state.search.totalStudies,
             time: searchkit.getTime()
           });
         case 'NoHits.NoResultsFound': 
@@ -123,6 +120,11 @@ export function changeLanguage(code: string): Thunk {
     const state = getState();
 
     code = code.toLowerCase();
+
+    // Only dispatch a change language action if the language has changed.
+    if (code === state.language.currentLanguage.code) {
+      return;
+    }
 
     const language = languages.find(element => element.code === code);
 

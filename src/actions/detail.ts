@@ -11,45 +11,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { SearchResponse } from "elasticsearch";
 import _ from "lodash";
-import { CMMStudy } from "../../common/metadata";
+import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
 import { Thunk } from "../types";
-import elasticsearch from "../utilities/elasticsearch";
-import { detailQuery, similarQuery } from "../utilities/searchkit";
 
 //////////// Redux Action Creator : UPDATE_STUDY
 export const UPDATE_STUDY = "UPDATE_STUDY";
 
 export type UpdateStudyAction = {
   type: typeof UPDATE_STUDY;
-  displayed: Pick<SearchResponse<CMMStudy>, "hits">;
+  displayed: CMMStudy | undefined;
 };
 
 export function updateStudy(id: string): Thunk<Promise<void>> {
   return async (dispatch, getState) => {
     const state = getState();
 
-    const response = await elasticsearch.search<CMMStudy>({
-      size: 1,
-      body: {
-        index: state.language.currentLanguage.index,
-        query: detailQuery(id)
-      }
-    });
+    const response = await fetch(`${window.location.origin}/api/sk/_get/${state.language.currentLanguage.index}/${encodeURIComponent(id)}`);
 
-    dispatch({
-      type: UPDATE_STUDY,
-      displayed: response
-    });
-    
-    if (response.hits.hits.length > 0) {
-      dispatch(updateSimilars(response.hits.hits[0]._source));
+    if (response.status < 400) {
+
+      // Get the study model from the hit.
+      const study = getStudyModel({ _source: (await response.json() as CMMStudy)});
+
+      // Dispatch the study for display.
+      dispatch({
+        type: UPDATE_STUDY,
+        displayed: study
+      });
+
+      // Update similars.
+      dispatch(updateSimilars(study));
+      
     } else {
+
+      // Study not found, clear the current study from the store.
+      dispatch({
+        type: UPDATE_STUDY,
+        displayed: undefined
+      });
+
       dispatch({ 
         type: UPDATE_SIMILARS,
         similars: []
       });
+
     }
   };
 }
@@ -59,25 +65,29 @@ export const UPDATE_SIMILARS = "UPDATE_SIMILARS";
 
 export type UpdateSimilarsAction = {
   type: typeof UPDATE_SIMILARS;
-  similars: CMMStudy[];
+  similars: Similar[];
 };
 
 export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
   return async (dispatch, getState) => {
     const state = getState();
 
-    const response = await elasticsearch.search<CMMStudy>({
-      size: 5,
-      body: {
-        index: state.language.currentLanguage.index,
-        query: similarQuery(item.id, item.titleStudy)
-      }
-    });
+    const response = await fetch(`${window.location.origin}/api/sk/_similars/${state.language.currentLanguage.index}/?id=${encodeURIComponent(item.id)}&title=${encodeURIComponent(item.titleStudy)}`);
 
-    dispatch({
-      type: UPDATE_SIMILARS,
-      similars: response.hits.hits.map(hit => hit._source)
-    });
+    if (response.status < 400) {
+      // Update similars
+      dispatch({
+        type: UPDATE_SIMILARS,
+        similars: (await response.json() as Similar[])
+      });
+
+    } else {
+      // Remove existing similars
+      dispatch({
+        type: UPDATE_SIMILARS,
+        similars: []
+      });
+    }
   };
 }
 
