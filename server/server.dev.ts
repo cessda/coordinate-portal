@@ -45,6 +45,7 @@ export function start() {
       writeToDisk: (filePath) => indexRegex.test(filePath)
     }));
 
+    // @ts-expect-error - incorrect typings
     app.use(webpackHotMiddleware(compiler));
 
     startListening(app, async (req, res) => {
