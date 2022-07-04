@@ -16,7 +16,7 @@ import _ from "lodash";
 import { Thunk } from "../types";
 import { CMMStudy } from "../../common/metadata";
 import getPaq from "../utilities/getPaq";
-import { SearchResponse } from "@elastic/elasticsearch/api/types";
+import { SearchRequest, SearchResponse } from "@elastic/elasticsearch/api/types";
 
 //////////// Redux Action Creator : INIT_SEARCHKIT
 export const INIT_SEARCHKIT = "INIT_SEARCHKIT";
@@ -25,11 +25,17 @@ export type InitSearchkitAction = {
   type: typeof INIT_SEARCHKIT;
 };
 
+// Extend the search request object to include the index
+type SearchkitSearchRequest = {
+  /** Index to search in */
+  index: string;
+} & SearchRequest["body"];
+
 export function initSearchkit(): Thunk {
   return (dispatch, getState) => {
     let timer: NodeJS.Timeout;
 
-    searchkit.setQueryProcessor((query: any) => {
+    searchkit.setQueryProcessor((query: SearchkitSearchRequest) => {
       dispatch(toggleLoading(true));
 
       const state = getState();
@@ -64,6 +70,9 @@ export function initSearchkit(): Thunk {
       if (Array.isArray(pathQuery)) {
         pathQuery = pathQuery.join();
       }
+
+      // Always track total hits.
+      query.track_total_hits = true;
 
       if (path === 'detail' && pathQuery) {
         // If viewing detail page, override query to retrieve single record using its ID.

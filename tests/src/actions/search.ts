@@ -137,7 +137,8 @@ describe('Search actions', () => {
           query: {
             index: enLanguage.index,
             min_score: 0.5,
-            size: 20
+            size: 20,
+            track_total_hits: true
           }
         },
         {
@@ -153,7 +154,8 @@ describe('Search actions', () => {
           query: {
             index: enLanguage.index,
             min_score: 0.5,
-            size: 20
+            size: 20,
+            track_total_hits: true
           }
         },
         {
@@ -243,7 +245,8 @@ describe('Search actions', () => {
                 values: ['search text']
               }
             },
-            size: 20
+            size: 20,
+            track_total_hits: true
           }
         },
         {
