@@ -308,7 +308,8 @@ function externalApiV1() {
     try {
       const response = await elasticsearch.client.search<SearchResponse<CMMStudy>>({
         index: `cmmstudy_${metadataLanguage}`,
-        body: bodyQuery.build()
+        body: bodyQuery.build(),
+        track_total_hits: true
       });
 
       /* 
