@@ -46,7 +46,7 @@ module.exports = {
       }]
     }, {
       test: /\.(jpe?g|png|gif|svg)$/i,
-      loaders: ['file-loader?context=src/images&name=images/[path][name].[ext]', {
+      loaders: ['file-loader?context=src/img&name=images/[path][name].[ext]', {
         loader: 'image-webpack-loader',
         query: {
           mozjpeg: {
