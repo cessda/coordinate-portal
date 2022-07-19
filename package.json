@@ -66,7 +66,7 @@
     "@types/jest": "28.1.6",
     "@types/jquery": "3.5.14",
     "@types/method-override": "0.0.32",
-    "@types/mini-css-extract-plugin": "1.4.3",
+    "@types/mini-css-extract-plugin": "2.5.0",
     "@types/prop-types": "15.7.5",
     "@types/react-dom": "16.9.16",
     "@types/react-icons": "2.2.7",
