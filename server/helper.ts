@@ -436,7 +436,9 @@ function jsonProxy() {
 }
 
 export interface Metadata {
+  creators: string;
   description: string;
+  publisher: string;
   title: string;
   jsonLd: WithContext<Dataset>;
 }
@@ -452,8 +454,10 @@ async function getMetadata(q: string, lang: string | undefined): Promise<Metadat
 
     if (study) {
       return {
+        creators: study.creators.join('; '),
         description: study.abstractShort,
         title: study.titleStudy,
+        publisher: study.publisher.publisher,
         jsonLd: getJsonLd(getStudyModel({ _source: study }))
       };
     } else {
