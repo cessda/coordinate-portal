@@ -57,26 +57,7 @@ module.exports = {
       }]
     }, {
       test: /\.(jpe?g|png|gif|svg)$/i,
-      use: [{
-          loader: 'file-loader?context=src/img&name=images/[path][name].[ext]'
-        }, {
-        loader: 'image-webpack-loader',
-        options: {
-          mozjpeg: {
-            progressive: true
-          },
-          gifsicle: {
-            interlaced: false
-          },
-          optipng: {
-            optimizationLevel: 4
-          },
-          pngquant: {
-            quality: [0.75, 0.90],
-            speed: 3
-          }
-        }
-      }]
+      type: 'asset/resource'
     }]
   },
   plugins: [

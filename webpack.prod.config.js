@@ -29,7 +29,8 @@ module.exports = merge(common, {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[contenthash].bundle.js',
-    publicPath: '/static/'
+    publicPath: '/static/',
+    assetModuleFilename: 'img/[name][ext]'
   },
   optimization: {
     chunkIds: 'total-size',
