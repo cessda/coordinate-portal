@@ -31,7 +31,6 @@ import { SearchResponse } from '@elastic/elasticsearch/api/types';
 import { ConnectionError, ResponseError } from '@elastic/elasticsearch/lib/errors';
 import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
-import { Client } from '@elastic/elasticsearch';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
 import swagger from './swagger.json';
@@ -306,7 +305,7 @@ function externalApiV1() {
 
     //Prepare the Client
     try {
-      const response = await elasticsearch.client.search<SearchResponse<CMMStudy>>({
+      const response = await elasticsearch.client.search<CMMStudy>({
         index: `cmmstudy_${metadataLanguage}`,
         body: bodyQuery.build(),
         track_total_hits: true
@@ -435,7 +434,7 @@ function jsonProxy() {
   });
 }
 
-export interface Metadata {
+interface Metadata {
   creators: string;
   description: string;
   publisher: string;
