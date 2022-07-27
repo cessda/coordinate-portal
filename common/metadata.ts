@@ -220,7 +220,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
                    : data.pidStudies.filter(i=> i.agency==='Handle').length !==0 ? data.pidStudies.filter(i=> i.agency==='Handle').map(i => i.pid)[0]
                    : data.pidStudies.filter(i=> i.agency==='URN').length !==0 ? data.pidStudies.filter(i=> i.agency==='URN').map(i => i.pid)[0]
                    : data.pidStudies.filter(i=> i.agency==='ARK').length !==0 ? data.pidStudies.filter(i=> i.agency==='ARK').map(i => i.pid)[0]
-                   : data.pidStudies.map(i => i.pid + ' (' + i.agency + ')').join(', ');
+                   : data.pidStudies.filter(i=> i.agency).map(i => i.pid)[0];
 
   return {
     '@context': 'https://schema.org',
