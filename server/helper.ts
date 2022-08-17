@@ -436,7 +436,7 @@ function jsonProxy() {
   });
 }
 
-interface Metadata {
+export interface Metadata {
   creators: string;
   description: string;
   publisher: string;
