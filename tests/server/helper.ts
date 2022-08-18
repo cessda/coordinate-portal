@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import fs from 'fs';
+import path from 'path';
 import Elasticsearch from '../../server/elasticsearch';
 import { ApiResponse, Client } from '@elastic/elasticsearch/api/new';
 import httpMocks from 'node-mocks-http';
@@ -40,7 +42,7 @@ mockedElasticsearch.mockImplementation(() => {
 });
 
 // Import the helper
-import { Metadata, renderResponse } from '../../server/helper';
+import { checkBuildDirectory, Metadata, renderResponse } from '../../server/helper';
 
 // Reset the mock after each test
 beforeEach(() => mockedGetStudy.mockReset());
@@ -158,5 +160,36 @@ describe('helper utilities', () => {
       expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
       expect(response._getRenderData()).toEqual({ metadata: {}});
     });
+  });
+
+  describe('checkBuildDirectory()', () => {
+    // Mock out process.exit() to prevent the process from exiting
+    const mockExit = jest.spyOn(process, 'exit').mockImplementation((() => {}) as () => never);
+
+    // Reset the mock before each run
+    beforeEach(() => mockExit.mockClear());
+
+    it('should proceed if ../dist exists', () => {
+      // Ensure that the directory exists
+      fs.mkdirSync(path.join(__dirname, '../../dist'));
+
+      checkBuildDirectory();
+
+      // Expect process.exit() to have not been called
+      expect(mockExit).toBeCalledTimes(0);
+    });
+
+    it('should fail if ../dist does not exist', () => {
+      // Ensure that the directory does not exist
+      fs.rmSync(path.join(__dirname, '../../dist'), { recursive: true });
+
+      checkBuildDirectory();
+
+      // Expect the correct exit code
+      expect(mockExit).toBeCalledWith(16);
+    });
+
+    // Restore the original process.exit() function
+    afterAll(() => mockExit.mockRestore());
   });
 });
