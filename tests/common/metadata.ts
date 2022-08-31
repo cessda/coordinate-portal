@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { getJsonLd, getStudyModel } from '../../../common/metadata';
+import { getJsonLd, getStudyModel } from '../../common/metadata';
 
 describe('Metadata utilities', () => {
   describe('getStudyModel()', () => {
@@ -264,7 +264,7 @@ describe('Metadata utilities', () => {
             'Joe Bloggs, University of Essex'
           ],
           code: 'UKDS',
-          dataAccessFreeTexts: ['Data Access Free Texts'],
+          dataAccessFreeTexts: ['Data Access Free Texts', 'https://creativecommons.org/licenses/by/4.0'],
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
@@ -361,7 +361,7 @@ describe('Metadata utilities', () => {
         description: 'Abstract',
         identifier: 'UKDS1234',
         keywords: ['Term'],
-        license: ['Data Access Free Texts'],
+        license: 'https://creativecommons.org/licenses/by/4.0',
         measurementTechnique: 'Term',
         name: 'Study Title',
         sameAs: 'http://example.com',
@@ -482,7 +482,7 @@ describe('Metadata utilities', () => {
         description: 'Abstract',
         identifier: undefined,
         keywords: [],
-        license: [],
+        license: undefined,
         measurementTechnique: 'Term',
         name: 'Study Title',
         sameAs: 'http://example.com',

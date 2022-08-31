@@ -13,7 +13,7 @@
 
 import striptags from 'striptags';
 import { Dataset, Organization, Person, WithContext } from 'schema-dts';
-import _ from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { SearchHit } from '@elastic/elasticsearch/api/types';
 
 export interface CMMStudy {
@@ -154,7 +154,7 @@ export function getStudyModel(data: Pick<SearchHit<CMMStudy>, "_source" | "highl
 
 function truncateAbstract(string: string): string {
   const trimmedString = string.trim();
-  return _.truncate(trimmedString, { length: 500 } );
+  return truncate(trimmedString, { length: 500, separator: ' ' } );
 }
 
 /**
@@ -222,17 +222,32 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
                    : data.pidStudies.filter(i=> i.agency==='ARK').length !==0 ? data.pidStudies.filter(i=> i.agency==='ARK').map(i => i.pid)[0]
                    : data.pidStudies.filter(i=> i.agency).map(i => i.pid)[0];
 
+  // License
+  let license: string | undefined = undefined;
+
+  for (let i = 0; i < data.dataAccessFreeTexts.length; i++) {
+    // Attempt to parse as a URL, select the first one
+    try {
+      license = new URL(data.dataAccessFreeTexts[i]).toString();
+      break;
+    } catch (e) {
+      console.debug(`${data.dataAccessFreeTexts[i]} is not a valid URL`, e);
+    } 
+  }
+
+  
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: data.titleStudy,
-    description: data.abstract,
+    description: truncate(data.abstract, { length: 5000, separator: ' ' }),
     url: href, // Needs to generate a URL if href is undefined
     sameAs: data.studyUrl,
-    keywords: data.keywords.map(i => _.upperFirst(i.term)),
+    keywords: data.keywords.map(i => upperFirst(i.term)),
     variableMeasured: data.unitTypes.map(u => u.term).join(', '),
     measurementTechnique: data.typeOfModeOfCollections.map(t => t.term).join(', '),
-    license: data.dataAccessFreeTexts,
+    license: license,
     identifier: identifier,
     creator: creators,
     temporalCoverage: extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
