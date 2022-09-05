@@ -30,8 +30,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixes
 
-- Respond with 404 if a study does not exist ([#444](https://bitbucket.org/cessda/cessda.cdc.versions/issues/444))
 - Use lenient queries for the search API ([#440](https://bitbucket.org/cessda/cessda.cdc.versions/issues/440))
+- Fix the identifier field not being a valid persistent identifier in the JSON-LD representation ([#442](https://bitbucket.org/cessda/cessda.cdc.versions/issues/442))
+- Respond with 404 if a study does not exist ([#444](https://bitbucket.org/cessda/cessda.cdc.versions/issues/444))
 - Fix the search not returning expected results by restricting the search operators that can be used ([#453](https://bitbucket.org/cessda/cessda.cdc.versions/issues/453))
 - Ensure the license field in the JSON-LD representation is a valid URL ([#454](https://bitbucket.org/cessda/cessda.cdc.versions/issues/454))
 - Ensure the length of the description field in the JSON-LD representation does not exceed 5000 characters ([#454](https://bitbucket.org/cessda/cessda.cdc.versions/issues/454))
