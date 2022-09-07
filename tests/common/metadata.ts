@@ -200,7 +200,6 @@ describe('Metadata utilities', () => {
 
     it('should return a study model with default values', () => {
       expect(
-        // @ts-expect-error
         getStudyModel({ _source: {}  })
       ).toEqual({
         id: undefined,

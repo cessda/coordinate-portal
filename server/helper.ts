@@ -453,15 +453,16 @@ async function getMetadata(q: string, lang: string | undefined): Promise<Metadat
     lang = "en";
   }
 
-  const study = await elasticsearch.getStudy(q, `cmmstudy_${lang}`);
+  const response = await elasticsearch.getStudy(q, `cmmstudy_${lang}`);
 
-  if (study) {
+  if (response) {
+    const study = getStudyModel({ _source: response });
     return {
       creators: study.creators.join('; '),
       description: study.abstractShort,
       title: study.titleStudy,
       publisher: study.publisher.publisher,
-      jsonLd: getJsonLd(getStudyModel({ _source: study }))
+      jsonLd: getJsonLd(study)
     };
   } else {
     return undefined;

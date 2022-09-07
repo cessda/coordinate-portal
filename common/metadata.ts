@@ -113,19 +113,19 @@ export interface Similar {
  * 
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(data: Pick<SearchHit<CMMStudy>, "_source" | "highlight">): CMMStudy {
+export function getStudyModel(data: Pick<SearchHit<Partial<CMMStudy>>, "_source" | "highlight">): CMMStudy {
   if (typeof(data._source) !== "object") {
     throw TypeError("_source is not an object");
   }
   return ({
-    id: data._source.id,
-    titleStudy: data._source.titleStudy,
+    id: data._source.id as string,
+    titleStudy: data._source.titleStudy as string,
     titleStudyHighlight: data.highlight?.titleStudy ? stripHTMLElements(data.highlight.titleStudy.join()) : '',
-    code: data._source.code,
+    code: data._source.code as string,
     creators: data._source.creators || [],
     pidStudies: data._source.pidStudies || [],
-    abstract: stripHTMLElements(data._source.abstract),
-    abstractShort: truncateAbstract(striptags(data._source.abstract)),
+    abstract: stripHTMLElements(data._source.abstract as string),
+    abstractShort: truncateAbstract(striptags(data._source.abstract as string)),
     abstractHighlight: data.highlight?.abstract ? stripHTMLElements(data.highlight.abstract.join()) : '',
     abstractHighlightShort: data.highlight?.abstract ? truncateAbstract(striptags(data.highlight.abstract.join())) : '',
     studyAreaCountries: data._source.studyAreaCountries || [],
@@ -139,7 +139,7 @@ export function getStudyModel(data: Pick<SearchHit<CMMStudy>, "_source" | "highl
     dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
     dataCollectionYear: data._source.dataCollectionYear,
     fileLanguages: data._source.fileLanguages || [],
-    publisher: data._source.publisher,
+    publisher: data._source.publisher as Publisher,
     publicationYear: data._source.publicationYear || '',
     dataAccessFreeTexts: (data._source.dataAccessFreeTexts || []).map(text => stripHTMLElements(text)),
     studyNumber: data._source.studyNumber || '',
@@ -147,7 +147,7 @@ export function getStudyModel(data: Pick<SearchHit<CMMStudy>, "_source" | "highl
     keywords: data._source.keywords || [],
     lastModified: data._source.lastModified || '',
     studyUrl: data._source.studyUrl,
-    studyXmlSourceUrl: data._source.studyXmlSourceUrl,
+    studyXmlSourceUrl: data._source.studyXmlSourceUrl as string,
     langAvailableIn: (data._source.langAvailableIn || []).map(i => i.toUpperCase()).sort()
   });
 }
