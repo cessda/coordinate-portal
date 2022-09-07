@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.0.3] - 2022-09-07
+
+### Fixes
+
+- Ensure that all required fields are present before rendering the HTML ([#460](https://bitbucket.org/cessda/cessda.cdc.versions/issues/460))
+
 ## [3.0.2] - 2022-09-06
 
 ### Additions
