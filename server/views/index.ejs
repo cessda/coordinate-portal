@@ -89,7 +89,8 @@
     <script type="application/ld+json"><%- JSON.stringify(metadata.jsonLd) %></script>
   <% } %>  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <input type="button" id="zammad-feedback-form" value="Send feedback" style="float: right;">
+ 
+  <button id="zammad-feedback-form" style="position: fixed; right: 0; bottom: 0;" >Send feedback</button>
   <script id="zammad_form_script" src="https://eosc-helpdesk.eosc-portal.eu/assets/form/form.js"></script>
   <script>
     $(function() {
