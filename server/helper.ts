@@ -485,7 +485,7 @@ export async function renderResponse(req: express.Request, res: express.Response
     return;
   }
 
-  if (req.path === "/detail" && req.query.q) {
+  if (req.path === "/detail") {
     if (req.query.q) {
       // If we are on the detail page and a query is set, retrive the JSON-LD metadata
       try {
