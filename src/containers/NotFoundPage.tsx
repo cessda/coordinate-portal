@@ -18,22 +18,30 @@ import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
 import { connect } from 'react-redux';
 import Translate from 'react-translate-component';
+import { Link } from 'react-router';
 
 export class AboutPage extends Component {
 
   render() {
     return (
       <SearchkitProvider searchkit={searchkit}>
-        <Layout size="l">
+        <Layout>
           <Header/>
-          <LayoutBody className="columns">
-            <LayoutResults>
-              <article className="not-found-container">
-                <Translate component="h1" className="not-found-title" content="notFound.label"/>
-                <Translate content="notFound.content" unsafe/>
-              </article>
-            </LayoutResults>
-          </LayoutBody>
+          <div className="container">
+            <LayoutBody className="columns">
+              <LayoutResults className="not-found-layout">
+                <article className="not-found-container">
+                  <Translate component="h1" className="not-found-title" content="notFound.label" />
+                  <Translate content="notFound.content" unsafe />
+                </article>
+              </LayoutResults>
+            </LayoutBody>
+            <div className="columns not-found-links">
+              <div className="column is-full blinks">
+                <Link to="/">Return to the home page</Link> | <a href="https://www.cessda.eu">CESSDA main website</a>
+              </div>
+            </div>
+          </div>
           <Footer/>
         </Layout>
       </SearchkitProvider>
