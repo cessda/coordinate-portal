@@ -280,7 +280,11 @@ Summary information
           />
           {Detail.generateElements(item.unitTypes, 'p', unit => unit.term)}
 
-          <h3 className="data-label">Universes</h3>
+          <Translate
+            className="data-label"
+            component="h3"
+            content="metadata.universes"
+          />
           {Detail.formatUniverses(item.universes)}
 
           <Translate
