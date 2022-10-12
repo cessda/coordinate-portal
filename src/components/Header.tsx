@@ -29,6 +29,7 @@ import {
   toggleSummary,
 } from "../actions/search";
 import Translate from "react-translate-component";
+import Tooltip from "./Tooltip";
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
@@ -118,6 +119,9 @@ export class Header extends Component<Props> {
                 />
                 <Language />
               </div>
+            </div>
+            <div className="column is-narrow button-wrapper">
+              <Tooltip content={<Translate content="searchInfotip"/>} />
             </div>
           </div>
         </div>

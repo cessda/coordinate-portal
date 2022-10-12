@@ -10,6 +10,7 @@
     }
   },
   "search": "Enter search term in the selected language",
+  "searchInfotip": "The catalogue contains study descriptions in various languages. The system searches with your search terms from study descriptions available in the language you have selected. The catalogue does not have ‘All languages’ option as due to linguistic differences this would give incomplete results. See the User Guide for more detailed information.",
   "noHits": {
     "noResultsFound": "No results found for \"%(query)s\" in the selected language.",
     "searchWithoutFilters": "Search for \"%(query)s\" without filters",
