@@ -291,6 +291,7 @@ describe('Metadata utilities', () => {
             abbr: 'UKDS',
             publisher:'UK Data Service'
           },
+          relatedPublications: [],
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
@@ -413,6 +414,7 @@ describe('Metadata utilities', () => {
             abbr: 'UKDS',
             publisher: 'UK Data Service',
           },
+          relatedPublications: [],
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
