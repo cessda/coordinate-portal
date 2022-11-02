@@ -417,6 +417,7 @@ function externalApiV2() {
     buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
     buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
     buildNestedFilters(bodyQuery, req.query.publishers, 'publisherFilter', 'publisherFilter.publisher');
+    buildNestedFilters(bodyQuery, req.query.keywords, 'keywords', 'keywords.term');
 
     //Create json body for ElasticSearchClient - date-filters
     let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
@@ -442,7 +443,7 @@ function externalApiV2() {
       publishers: req.query.publishers,
       dataCollectionYearMin: req.query.dataCollectionYearMin,
       dataCollectionYearMax: req.query.dataCollectionYearMax,
-      keyword: req.query.keyword
+      keywords: req.query.keywords
    }
 
     //Prepare the Client
