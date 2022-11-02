@@ -22,21 +22,22 @@ import _ from 'lodash';
 export type Props = SearchBoxProps & ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
-//@ts-expect-error
 export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props = SearchBox.defaultProps) {
+  constructor(props = SearchBox.defaultProps as Props) {
     super(props);
     this.props = props;
   }
 
-  static defaultProps: Props = {
-    ...SearchkitSearchBox.defaultProps as SearchBoxProps, 
+  static defaultProps = {
+    ...SearchkitSearchBox.defaultProps as typeof SearchkitSearchBox.defaultProps & {
+      blurAction: "search";
+    }, 
     pathname: '',
     push,
-    query: '',
+    query: ''
   };
 
   onChange(event: any): void {
