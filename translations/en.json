@@ -142,7 +142,8 @@
     "keywords": {
       "label": "Keywords",
       "tooltip": "Many but not all metadata providers use <a href=\"https://elsst.cessda.eu/\">ELSST Thesaurus</a> for their keywords."
-    }
+    },
+    "relatedPublications": "Related publications"
   },
   "footer": {
     "followUsOn": "Follow us on",
