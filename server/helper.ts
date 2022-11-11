@@ -32,7 +32,8 @@ import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
-import swagger from './swagger.json';
+import swaggerSearchApiV1 from './swagger-searchApiV1.json';
+import swaggerSearchApiV2 from './swagger-searchApiV2.json';
 
 
 // Defaults to localhost if unspecified
@@ -706,7 +707,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v1', cors(),  externalApiV1());
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
-  app.use('/swagger/api/DataSets/v1', cors(), ((_req, res) => res.json(swagger)) as express.RequestHandler);
+  app.use('/swagger/api/DataSets/v1', cors(), ((_req, res) => res.json(swaggerSearchApiV1)) as express.RequestHandler);
+  app.use('/swagger/api/DataSets/v2', cors(), ((_req, res) => res.json(swaggerSearchApiV2)) as express.RequestHandler);
   app.use('/api/mt', startMetricsListening());
 
   app.get('*', handler);
