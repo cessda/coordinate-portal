@@ -311,12 +311,30 @@ function externalApiV1() {
         track_total_hits: true
       });
 
+      // Calculate the total hits
+      let totalHits: number;
+      switch (typeof response.body.hits.total) {
+        case "object":
+          // If SearchTotalHits object, extract from the value field
+          totalHits = response.body.hits.total.value;
+          break;
+        case "number":
+          // If number, extract directly
+          totalHits = response.body.hits.total;
+          break;
+        default:
+          // Total hits not present, set to 0
+          totalHits = 0;
+          break;
+      }
+
+      const resultsCount = apiResultsCount(offset, limit, response.body.hits.hits.length, totalHits);
+
       /* 
        * Send the Response.
        *
        * We default to sending the CMMStudy model, only sending JSON-LD if specifically requested.
        */
-      const resultsCount = apiResultsCount(offset, limit, response.body.hits.hits.length, Number(response.body.hits.total));
       switch (accepts) {
         case "json": 
           res.json({
@@ -525,13 +543,12 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
   if (to > total) {
     to = total;
   }
-  const resultsCount = {
+  return {
     from: offset,
     to: to,
     retrieved: retrieved,
     available: total
   };
-  return resultsCount;
 }
 
 function jsonProxy() {
