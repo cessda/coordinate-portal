@@ -44,7 +44,7 @@ export class SearchPage extends Component<Props> {
     // Auto expand filters if they contain selected values.
     this.autoExpandFilter('classifications.term');
     this.autoExpandFilter('dataCollectionYear');
-    this.autoExpandFilter('studyAreaCountries.country');
+    this.autoExpandFilter('studyAreaCountries.searchField');
     this.autoExpandFilter('publisher.publisher');
 
     // Set the page title
@@ -184,8 +184,7 @@ export class SearchPage extends Component<Props> {
 export function mapStateToProps(state: State) {
   return {
     showMobileFilters: state.search.showMobileFilters,
-    filters: state.search.state,
-    results: state.search.displayed.length
+    filters: state.search.state
   };
 }
 
