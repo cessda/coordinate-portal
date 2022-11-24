@@ -726,7 +726,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
   app.use('/swagger/api/DataSets/v1', cors(), ((_req, res) => res.json(swaggerSearchApiV1)) as express.RequestHandler);
   app.use('/swagger/api/DataSets/v2', cors(), ((_req, res) => res.json(swaggerSearchApiV2)) as express.RequestHandler);
-  app.use('/api/mt', startMetricsListening());
+  app.use('/metrics', startMetricsListening());
 
   app.get('*', handler);
 

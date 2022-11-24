@@ -126,7 +126,7 @@ export function startMetricsListening() {
 
     client.collectDefaultMetrics(); //general cpu, mem, etc information
 
-    router.get('/metrics', async (_req, res) => 
+    router.get('/', async (_req, res) => 
       res.type(client.register.contentType).send(await client.register.metrics())
     );
 
