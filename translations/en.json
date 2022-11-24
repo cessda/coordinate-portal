@@ -125,7 +125,7 @@
     "country": "Country",
     "timeDimension": "Time dimension",
     "analysisUnit": "Analysis unit",
-    "universes": "Universes",
+    "universe": "Universe",
     "samplingProcedure": "Sampling procedure",
     "dataCollectionMethod": "Data collection mode",
     "dataCollectionPeriod": "Data collection period",

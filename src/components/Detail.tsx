@@ -62,7 +62,7 @@ export default class Detail extends React.Component<Props, State> {
 
   static generateElements<T, R>(
     field: T[],
-    element: 'p' | 'tag',
+    element: 'div' | 'tag' | 'ul',
     callback?: (args: T) => R
   ) {
     const elements: JSX.Element[] = [];
@@ -70,14 +70,15 @@ export default class Detail extends React.Component<Props, State> {
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
         const value = callback?.(field[i]) ?? field[i];
-        if (element === 'tag') {
-          elements.push(
-            <span className="tag" key={i}>
-              {value}
-            </span>
-          );
-        } else {
-          elements.push(<div key={i}>{value}</div>);
+        switch(element) {
+          case 'tag':
+            elements.push(<span className="tag" key={i}>{value}</span>);
+            break;
+          case 'div':
+            elements.push(<div key={i}>{value}</div>);
+            break;
+          case 'ul':
+            elements.push(<li key={i}>{value}</li>)
         }
       }
     }
@@ -86,7 +87,15 @@ export default class Detail extends React.Component<Props, State> {
       return <Translate content="language.notAvailable.field" />;
     }
 
-    return elements;
+    if (element === 'ul') {
+      return (
+        <ul>
+          {elements}
+        </ul>
+      );
+    } else {
+      return elements;
+    }
   }
 
   static formatDate(
@@ -107,7 +116,7 @@ export default class Detail extends React.Component<Props, State> {
       return (
           Detail.generateElements(
             dateFallback,
-            'p',
+            'div',
             date => Detail.parseDate(date.dataCollectionFreeText, dateTimeFormatter)
           )
       );
@@ -144,25 +153,25 @@ export default class Detail extends React.Component<Props, State> {
   }
 
   /**
-   * Formats the given universes into a <p> element. The resulting element will contain
+   * Formats the given universe into a <p> element. The resulting element will contain
    * the text content "${Included universe} (excluding ${Excluded universe})"
    * 
-   * @param universes the universes to format
-   * @returns the formatted <p> element, or "Not available" if no universes are present
+   * @param universe the universe to format
+   * @returns the formatted <p> element
    */
-  private static formatUniverses(universes: Universe[]) {
-    if (universes.length === 0) {
-      return <Translate content="language.notAvailable.field" />;
+  private static formatUniverse(universe: Universe) {
+    const inclusion = <p>{universe.inclusion}</p>;
+
+    if (universe.exclusion) {
+      return (
+        <>
+          {inclusion}
+          <p>Excludes: {universe.exclusion}</p>
+        </>
+      );
+    } else {
+      return inclusion;
     }
-
-    let universeString = universes.filter(u => u.clusion === "I").map(u => u.content)[0];
-
-    const excludedUniverse = universes.filter(u => u.clusion === "E")[0];
-    if (excludedUniverse) {
-      universeString = `${universeString} (excluding ${excludedUniverse.content})`;
-    }
-
-    return <p>{universeString}</p>;
   }
 
   render() {
@@ -189,7 +198,7 @@ Summary information
             component="h2"
             content="metadata.creator"
           />
-          {Detail.generateElements(item.creators, 'p')}
+          {Detail.generateElements(item.creators, 'div')}
         </section>
 
         <section>
@@ -198,7 +207,7 @@ Summary information
             component="h2"
             content="metadata.studyPersistentIdentifier"
           />
-          {Detail.generateElements(item.pidStudies.filter(p => p.pid), 'p', pidStudy => {
+          {Detail.generateElements(item.pidStudies.filter(p => p.pid), 'div', pidStudy => {
             // The agency field is an optional attribute, only append if present
             if (pidStudy.agency) {
               return <p>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
@@ -264,35 +273,35 @@ Summary information
             component="h3"
             content="metadata.country"
           />
-          {Detail.generateElements(item.studyAreaCountries, 'p', country => country.country)}
+          {Detail.generateElements(item.studyAreaCountries, 'div', country => country.country)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.timeDimension"
           />
-          {Detail.generateElements(item.typeOfTimeMethods, 'p', time => time.term)}
+          {Detail.generateElements(item.typeOfTimeMethods, 'div', time => time.term)}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.analysisUnit"
           />
-          {Detail.generateElements(item.unitTypes, 'p', unit => unit.term)}
+          {Detail.generateElements(item.unitTypes, 'div', unit => unit.term)}
 
           <Translate
             className="data-label"
             component="h3"
-            content="metadata.universes"
+            content="metadata.universe"
           />
-          {Detail.formatUniverses(item.universes)}
+          {item.universe ? Detail.formatUniverse(item.universe) : <Translate content="language.notAvailable.field" />}
 
           <Translate
             className="data-label"
             component="h3"
             content="metadata.samplingProcedure"
           />
-          {Detail.generateElements(item.samplingProcedureFreeTexts, 'p', text => 
+          {Detail.generateElements(item.samplingProcedureFreeTexts, 'div', text => 
             <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
           )}
 
@@ -301,16 +310,7 @@ Summary information
             component="h3"
             content="metadata.dataCollectionMethod"
           />
-          {Detail.generateElements(item.typeOfModeOfCollections, 'p', method => method.term)}
-
-          {/* <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.languageOfDataFiles"
-          />
-          <div className="tags mt-10">
-            {Detail.generateElements(item.fileLanguages, 'tag', term => _.upperCase(term))}
-          </div> */}
+          {Detail.generateElements(item.typeOfModeOfCollections, 'div', method => method.term)}
         </Panel>
 
         <Panel
@@ -339,7 +339,7 @@ Summary information
             component="h3"
             content="metadata.termsOfDataAccess"
           />
-          {Detail.generateElements(item.dataAccessFreeTexts, 'p', text => 
+          {Detail.generateElements(item.dataAccessFreeTexts, 'div', text => 
             <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} />
           )}
         </Panel>
@@ -349,11 +349,11 @@ Summary information
             title={<Translate component="h2" content="metadata.relatedPublications"/>}
             collapsable={false}
         >
-          {Detail.generateElements(item.relatedPublications, 'p', relatedPublication => {
+          {Detail.generateElements(item.relatedPublications, 'ul', relatedPublication => {
             if (relatedPublication.holdings?.length > 0) {
-              return <p><a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a></p>;
+              return <a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a>;
             } else {
-              return <p>{relatedPublication.title}</p>;
+              return relatedPublication.title;
             }
           })}
         </Panel>
