@@ -28,17 +28,20 @@ export interface Props {
 
 export interface State {
   abstractExpanded: boolean;
+  keywordsExpanded: boolean;
 }
 
 export default class Detail extends React.Component<Props, State> {
 
   private static readonly truncatedAbstractLength = 2000;
+  private static readonly truncatedKeywordsLength = 12;
 
   constructor(props: Props) {
     super(props);
     // Set the abstract to the expanded state if shorter than Detail.truncatedAbstractLength
     this.state = { 
-      abstractExpanded: !(props.item.abstract.length > Detail.truncatedAbstractLength)
+      abstractExpanded: !(props.item.abstract.length > Detail.truncatedAbstractLength),
+      keywordsExpanded: !(props.item.keywords.length > Detail.truncatedKeywordsLength)
     };
   }
 
@@ -46,7 +49,8 @@ export default class Detail extends React.Component<Props, State> {
     // If the item has changed, reset the expanded state of the abstract
     if (this.props.item.id !== prevProps.item.id) {
       this.setState(() => ({
-        abstractExpanded: !(this.props.item.abstract.length > Detail.truncatedAbstractLength)
+        abstractExpanded: !(this.props.item.abstract.length > Detail.truncatedAbstractLength),
+        keywordsExpanded: !(this.props.item.keywords.length > Detail.truncatedKeywordsLength)
       }));
     }
   }
@@ -345,20 +349,6 @@ Summary information
         </Panel>
 
         <Panel
-            className="section-header"
-            title={<Translate component="h2" content="metadata.relatedPublications"/>}
-            collapsable={false}
-        >
-          {Detail.generateElements(item.relatedPublications, 'ul', relatedPublication => {
-            if (relatedPublication.holdings?.length > 0) {
-              return <a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a>;
-            } else {
-              return relatedPublication.title;
-            }
-          })}
-        </Panel>
-
-        <Panel
           className="section-header"
           title={<Translate component="h2" content='metadata.topics.label'/>}
           tooltip={<Translate content="metadata.topics.tooltip" unsafe/>}
@@ -380,10 +370,43 @@ Summary information
           collapsable={false}
         >
           <div className="tags">
-            {Detail.generateElements(item.keywords, 'tag', keywords => 
-              <Link to={`/?q="${encodeURI(keywords.term)}"`}>{upperFirst(keywords.term)}</Link>
+            {Detail.generateElements(this.state.keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), 'tag',
+              keywords => <Link to={`/?q="${encodeURI(keywords.term)}"`}>{upperFirst(keywords.term)}</Link>
             )}
           </div>
+          {item.keywords.length > Detail.truncatedKeywordsLength &&
+            <a className="button is-small is-white" onClick={() => {
+              this.setState(state => ({
+                keywordsExpanded: !state.keywordsExpanded
+              }));
+            }}>
+              {this.state.keywordsExpanded ?
+              <>
+                <span className="icon is-small"><FaAngleUp/></span>
+                <Translate component="span" content="readLess"/>
+              </>
+              :
+              <>
+                <span className="icon is-small"><FaAngleDown/></span>
+                <Translate component="span" content="readMore"/>
+              </>
+              }
+            </a>
+          }
+        </Panel>
+
+        <Panel
+          className="section-header"
+          title={<Translate component="h2" content="metadata.relatedPublications"/>}
+          collapsable={false}
+        >
+          {Detail.generateElements(item.relatedPublications, 'ul', relatedPublication => {
+            if (relatedPublication.holdings?.length > 0) {
+              return <a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a>;
+            } else {
+              return relatedPublication.title;
+            }
+          })}
         </Panel>
       </article>
     );
