@@ -371,7 +371,7 @@ Summary information
         >
           <div className="tags">
             {Detail.generateElements(this.state.keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), 'tag',
-              keywords => <Link to={`/?q="${encodeURI(keywords.term)}"`}>{upperFirst(keywords.term)}</Link>
+              keywords => <Link to={`/?keywords_term=${encodeURI(keywords.term)}`}>{upperFirst(keywords.term)}</Link>
             )}
           </div>
           {item.keywords.length > Detail.truncatedKeywordsLength &&
@@ -401,10 +401,11 @@ Summary information
           collapsable={false}
         >
           {Detail.generateElements(item.relatedPublications, 'ul', relatedPublication => {
+            const relatedPublicationTitle = striptags(relatedPublication.title);
             if (relatedPublication.holdings?.length > 0) {
-              return <a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a>;
+              return <a href={relatedPublication.holdings[0]}>{relatedPublicationTitle}</a>;
             } else {
-              return relatedPublication.title;
+              return relatedPublicationTitle;
             }
           })}
         </Panel>
