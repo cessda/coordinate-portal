@@ -13,6 +13,7 @@
 import { URL, URLSearchParams } from 'url'
 import client from 'prom-client';
 import express, { Request, Response } from 'express';
+import { getESrecordsByLanguages, getESrecordsModified } from './helper';
 
 //METRICS FOR API
 //Metrics for api - total
@@ -118,6 +119,116 @@ export const uiResponseTimePublisherHistogram = new client.Histogram({
     help: 'User Interface response time in seconds for Publisher, External API',
     labelNames: ['method', 'route', 'publ', 'status_code']
 })
+//Metrics for ES - Studies Modified
+export const gaugeStudiesModified = new client.Gauge({
+  name: 'studies_modified',
+  help: 'Gauge for Modified Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsModified();
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - EN
+export const gaugeStudiesLangEN = new client.Gauge({
+  name: 'studies_en',
+  help: 'Gauge for English Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('en');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - DE
+export const gaugeStudiesLangDE = new client.Gauge({
+  name: 'studies_de',
+  help: 'Gauge for German Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('de');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - NL
+export const gaugeStudiesLangNL = new client.Gauge({
+  name: 'studies_nl',
+  help: 'Gauge for Dutch Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('nl');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - FI
+export const gaugeStudiesLangFI = new client.Gauge({
+  name: 'studies_fi',
+  help: 'Gauge for Finnish Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('fi');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - DA
+export const gaugeStudiesLangDA = new client.Gauge({
+  name: 'studies_da',
+  help: 'Gauge for Danish Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('da');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - FR
+export const gaugeStudiesLangFR = new client.Gauge({
+  name: 'studies_fr',
+  help: 'Gauge for French Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('fr');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - SV
+export const gaugeStudiesLangSV = new client.Gauge({
+  name: 'studies_sv',
+  help: 'Gauge for Swedish Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('sv');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - EL
+export const gaugeStudiesLangEL = new client.Gauge({
+  name: 'studies_el',
+  help: 'Gauge for Greek Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('el');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - SL
+export const gaugeStudiesLangSL = new client.Gauge({
+  name: 'studies_sl',
+  help: 'Gauge for Slovenian Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('sl');
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Records By Languages - SK
+export const gaugeStudiesLangSK = new client.Gauge({
+  name: 'studies_sk',
+  help: 'Gauge for Slovakian Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsByLanguages('sk');
+    this.set(currentValue);
+  },
+});
 
 //Endpoint used for Prometheus Metrics
 export function startMetricsListening() {

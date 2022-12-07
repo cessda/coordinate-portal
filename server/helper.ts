@@ -551,6 +551,53 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
   };
 }
 
+//used by metrics.ts
+export async function getESrecordsByLanguages(lang:string): Promise<number>{
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      "aggs": {
+        "lang": {
+          "terms": {
+            "field": "langAvailableIn"
+          }
+        }
+      }
+    },
+    track_total_hits: false
+  });
+
+  const elasticAggs: any = response.body.aggregations;
+  let result:number=0;
+  for (let x of elasticAggs.lang.buckets) {
+    if (x.key==lang){
+      result = x.doc_count;
+      break;
+    }
+  }
+  return result;
+}
+
+//used by metrics.ts
+export async function getESrecordsModified(): Promise<number>{
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      "aggs": {
+        "types_count": {
+          "value_count": {
+            "field": "lastModified"
+          }
+        }
+      }
+    },
+    track_total_hits: false
+  });
+
+  const elasticAggs: any = response.body.aggregations;
+  let result:number=elasticAggs.types_count.value;
+  return result;
+}
+
+
 function jsonProxy() {
   return proxy(elasticsearchUrl, {
     parseReqBody: false,
