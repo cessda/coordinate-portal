@@ -164,13 +164,13 @@ export default class Detail extends React.Component<Props, State> {
    * @returns the formatted <p> element
    */
   private static formatUniverse(universe: Universe) {
-    const inclusion = <p>{universe.inclusion}</p>;
+    const inclusion = <p>{striptags(universe.inclusion)}</p>;
 
     if (universe.exclusion) {
       return (
         <>
           {inclusion}
-          <p>Excludes: {universe.exclusion}</p>
+          <p>Excludes: {striptags(universe.exclusion)}</p>
         </>
       );
     } else {
