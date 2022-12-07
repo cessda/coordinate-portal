@@ -401,10 +401,11 @@ Summary information
           collapsable={false}
         >
           {Detail.generateElements(item.relatedPublications, 'ul', relatedPublication => {
+            const relatedPublicationTitle = striptags(relatedPublication.title);
             if (relatedPublication.holdings?.length > 0) {
-              return <a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a>;
+              return <a href={relatedPublication.holdings[0]}>{relatedPublicationTitle}</a>;
             } else {
-              return relatedPublication.title;
+              return relatedPublicationTitle;
             }
           })}
         </Panel>
