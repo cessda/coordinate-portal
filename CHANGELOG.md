@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.2.0] - 2022-12-08
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7413641.svg)](https://doi.org/10.5281/zenodo.7413641)
+
 ### Additions
 
 - Add a "Not Found" page if a path that is not either `/`, `/about` or `/detail` is requested. ([#469](https://bitbucket.org/cessda/cessda.cdc.versions/issues/469))
@@ -34,6 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix the search API returning `undefined` for the `ResultsCount.available` field. This was due to Elasticsearch 7 changing the way the total results were returned. ([#493](https://bitbucket.org/cessda/cessda.cdc.versions/issues/493))
 
 ## [3.1.0] - 2022-09-22
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7410382.svg)](https://doi.org/10.5281/zenodo.7410382)
 
 ### Changes
 
