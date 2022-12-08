@@ -164,13 +164,13 @@ export default class Detail extends React.Component<Props, State> {
    * @returns the formatted <p> element
    */
   private static formatUniverse(universe: Universe) {
-    const inclusion = <p>{universe.inclusion}</p>;
+    const inclusion = <p>{striptags(universe.inclusion)}</p>;
 
     if (universe.exclusion) {
       return (
         <>
           {inclusion}
-          <p>Excludes: {universe.exclusion}</p>
+          <p>Excludes: {striptags(universe.exclusion)}</p>
         </>
       );
     } else {
@@ -401,10 +401,11 @@ Summary information
           collapsable={false}
         >
           {Detail.generateElements(item.relatedPublications, 'ul', relatedPublication => {
+            const relatedPublicationTitle = striptags(relatedPublication.title);
             if (relatedPublication.holdings?.length > 0) {
-              return <a href={relatedPublication.holdings[0]}>{relatedPublication.title}</a>;
+              return <a href={relatedPublication.holdings[0]}>{relatedPublicationTitle}</a>;
             } else {
-              return relatedPublication.title;
+              return relatedPublicationTitle;
             }
           })}
         </Panel>
