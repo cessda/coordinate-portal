@@ -578,6 +578,16 @@ export async function getESrecordsByLanguages(lang:string): Promise<number>{
 }
 
 //used by metrics.ts
+export async function getESindexLanguages(): Promise<Array<string>>{
+  const indices = await elasticsearch.client.cat.indices({format: 'json'})
+  const filtered: (string | undefined)[] = indices.body.map(element=>{
+    if (element?.index?.startsWith('cmmstudy'))
+      return element.index.slice(-2)
+  }).filter(element=>{ return element !== undefined; })
+  return filtered as Array<string>;
+}
+
+//used by metrics.ts
 export async function getESrecordsModified(): Promise<number>{
   const response = await elasticsearch.client.search<CMMStudy>({
     body: {

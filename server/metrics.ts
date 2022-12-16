@@ -13,7 +13,7 @@
 import { URL, URLSearchParams } from 'url'
 import client from 'prom-client';
 import express, { Request, Response } from 'express';
-import { getESrecordsByLanguages, getESrecordsModified } from './helper';
+import { getESrecordsByLanguages, getESrecordsModified, getESindexLanguages } from './helper';
 
 //METRICS FOR API
 //Metrics for api - total
@@ -229,6 +229,22 @@ export const gaugeStudiesLangSK = new client.Gauge({
     this.set(currentValue);
   },
 });
+//TEST FUNC
+export const languagesArray = async () => {
+  const results = await getESindexLanguages();
+  results.forEach((element)=>{
+    let test = new client.Gauge({
+      name: 'studies_test',
+      help: 'Gauge for test',
+      async collect() {
+        // Invoked when the registry collects its metrics' values.
+        const currentValue = await getESrecordsByLanguages(element);
+        this.set(currentValue);
+      },
+    });
+    return test;
+  })
+};
 
 //Endpoint used for Prometheus Metrics
 export function startMetricsListening() {
