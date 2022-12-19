@@ -23,7 +23,7 @@ interface Props extends ReturnType<typeof mapDispatchToProps> {
 
 export class App extends Component<Props> {
 
-  constructor(props?: Props) {
+  constructor(props: Props) {
     super(props);
     this.props.initSearchkit();
     this.props.initTranslations();
