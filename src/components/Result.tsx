@@ -55,7 +55,7 @@ function generateCreatorElements(item: CMMStudy) {
 
 export class Result extends Component<Props, ComponentState> {
 
-  constructor(props?: Props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       abstractExpanded: false

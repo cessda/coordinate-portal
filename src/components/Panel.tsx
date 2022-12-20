@@ -99,4 +99,6 @@ export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
 };
 
 // @ts-expect-error - redefines types to include JSX elements
-export default connect(mapStateToProps, mapDispatchToProps)(Panel);
+export default connect(mapStateToProps, mapDispatchToProps)(Panel) as ComponentClass<
+  Omit<Props, "expandMetadataPanels" | "toggleMetadataPanels"> & Props
+>;
