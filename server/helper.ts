@@ -625,6 +625,25 @@ export async function getESrecordsModified(): Promise<number>{
   return result;
 }
 
+//used by metrics.ts
+export async function getESrecordsByEndpoint(): Promise<{ key: string, doc_count: number }[]>{
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      "aggs": {
+        "aggregationResults": {
+          "terms": {
+            "field": "code",
+            "size": 1000,
+          }
+        }
+      }
+    },
+    track_total_hits: false
+  });
+  const elasticAggs: any | undefined = response.body.aggregations;
+  const results: { key: string, doc_count: number }[] = elasticAggs.aggregationResults.buckets;
+  return results;
+}
 
 function jsonProxy() {
   return proxy(elasticsearchUrl, {
