@@ -28,12 +28,13 @@ export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props: Props) {
-    super({
+  constructor(props?: Props) {
+    const derivedProps = {
       ...SearchBox.defaultProps,
       ...props
-    });
-    this.props = props;
+    };
+    super(derivedProps);
+    this.props = derivedProps;
   }
 
   static defaultProps = {
