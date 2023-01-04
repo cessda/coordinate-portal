@@ -35,7 +35,7 @@ export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof ma
 
 export class DetailPage extends Component<Props> {
 
-  constructor(props: Props | undefined) {
+  constructor(props: Props) {
     super(props);
     const id = this.props.query;
     if (id && id !== this.props.item?.id) {

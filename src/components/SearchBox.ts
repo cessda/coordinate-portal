@@ -19,25 +19,28 @@ import type {State} from '../types';
 import {detect} from 'detect-browser';
 import _ from 'lodash';
 
-export type Props = SearchBoxProps & ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
+type DispatchAndState = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
+
+export type Props = SearchBoxProps & DispatchAndState
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
 export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props = SearchBox.defaultProps as Props) {
-    super(props);
+  constructor(props: Props) {
+    super({
+      ...SearchBox.defaultProps,
+      ...props
+    });
     this.props = props;
   }
 
   static defaultProps = {
-    ...SearchkitSearchBox.defaultProps as typeof SearchkitSearchBox.defaultProps & {
-      blurAction: "search";
-    }, 
+    ...SearchkitSearchBox.defaultProps as typeof SearchkitSearchBox.defaultProps & { blurAction: "search"}, 
     pathname: '',
     push,
-    query: ''
+    query: '',
   };
 
   onChange(event: any): void {
