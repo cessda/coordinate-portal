@@ -1,4 +1,6 @@
-{
+import Elasticsearch from "./elasticsearch";
+
+export default async (client: Elasticsearch) => ({
   "openapi": "3.0.1",
   "info": {
     "title": "External API CESSDA",
@@ -77,15 +79,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "Afghanistan",
-                  "Albania",
-                  "Algeria",
-                  "Andorra",
-                  "Angola",
-                  "Antigua and Barbuda",
-                  "Argentina"
-                ]
+                "enum": await client.getListOfCountries()
               }
             }
           },
@@ -100,15 +94,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "Austrian Social Science Data Archive (AUSSDA)",
-                  "DANS-KNAW",
-                  "Danish National Archives (DNA)",
-                  "Finnish Social Science Data Archive (FSD)",
-                  "GESIS - Leibniz Institute for the Social Sciences",
-                  "NSD - Norwegian Centre for Research Data",
-                  "Portuguese Archive of Social Information"
-                ]
+                "enum": await client.getSourceRepositoryNames()
               }
             }
           },
@@ -160,19 +146,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "cs",
-                "da",
-                "nl",
-                "en",
-                "fi",
-                "fr",
-                "de",
-                "el",
-                "sk",
-                "sl",
-                "sv"
-              ]
+              "enum": await client.getListOfMetadataLanguages()
             }
           }
         ],
@@ -484,4 +458,4 @@
       }
     }
   }
-}
+});

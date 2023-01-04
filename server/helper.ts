@@ -33,7 +33,7 @@ import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
 import swaggerSearchApiV1 from './swagger-searchApiV1';
-import swaggerSearchApiV2 from './swagger-searchApiV2.json';
+import swaggerSearchApiV2 from './swagger-searchApiV2';
 
 
 // Defaults to localhost if unspecified
@@ -742,8 +742,22 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v1', cors(),  externalApiV1());
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
-  app.use('/swagger/api/DataSets/v1', cors(), (async (_req, res) => res.json(await swaggerSearchApiV1(elasticsearch))));
-  app.use('/swagger/api/DataSets/v2', cors(), ((_req, res) => res.json(swaggerSearchApiV2)));
+  app.use('/swagger/api/DataSets/v1', cors(), (async (_req, res) => {
+    try {
+      return res.json(await swaggerSearchApiV1(elasticsearch));
+    } catch (e) {
+      logger.error(`Cannot communicate with Elasticsearch: ${e}`);
+      return res.sendStatus(500);
+    }
+  }));
+  app.use('/swagger/api/DataSets/v2', cors(), (async (_req, res) => {
+    try {
+      return res.json(await swaggerSearchApiV2(elasticsearch));
+    } catch (e) {
+      logger.error(`Cannot communicate with Elasticsearch: ${e}`);
+      return res.sendStatus(500);
+    }
+  }));
   app.use('/api/mt', startMetricsListening());
 
   app.get('*', handler);
