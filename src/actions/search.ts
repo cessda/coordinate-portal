@@ -14,7 +14,7 @@
 import searchkit, { detailQuery, pidQuery } from "../utilities/searchkit";
 import _ from "lodash";
 import { Thunk } from "../types";
-import { CMMStudy } from "../../common/metadata";
+import { CMMStudy, getStudyModel } from "../../common/metadata";
 import getPaq from "../utilities/getPaq";
 import { SearchRequest, SearchResponse } from "@elastic/elasticsearch/api/types";
 
@@ -179,13 +179,13 @@ export const UPDATE_DISPLAYED = "UPDATE_DISPLAYED";
 
 export type UpdateDisplayedAction = {
   type: typeof UPDATE_DISPLAYED;
-  displayed: Pick<SearchResponse<CMMStudy>, "hits">;
+  displayed: CMMStudy[];
 };
 
-export function updateDisplayed(displayed: SearchResponse<CMMStudy>): UpdateDisplayedAction {
+export function updateDisplayed(displayed: SearchResponse<Partial<CMMStudy>>): UpdateDisplayedAction {
   return {
     type: UPDATE_DISPLAYED,
-    displayed
+    displayed: displayed.hits.hits.map(hit => getStudyModel(hit))
   };
 }
 
@@ -253,12 +253,13 @@ export function updateTotalStudies(): Thunk<Promise<void>> {
     try {
       const response = await fetch(`${window.location.origin}/api/sk/_total_studies`);
 
-      const source = await response.json();
-
-      dispatch({
-        type: UPDATE_TOTAL_STUDIES,
-        totalStudies: source.totalStudies
-      });
+      if (response.ok) {
+        const source = await response.json();
+        dispatch({
+          type: UPDATE_TOTAL_STUDIES,
+          totalStudies: source.totalStudies
+        });
+      }
     } catch (e) {
       console.error(e);
     }

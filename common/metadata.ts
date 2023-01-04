@@ -70,6 +70,10 @@ export interface CMMStudy {
   lastModified: string;
   langAvailableIn: string[];
   studyXmlSourceUrl: string;
+  /** Universe */
+  universe?: Universe;
+  /** Related publications */
+  relatedPublications: RelatedPublication[];
 }
 
 export interface Country {
@@ -81,6 +85,11 @@ export interface Country {
 export interface DataCollectionFreeText {
   dataCollectionFreeText: string;
   event: string;
+}
+
+export interface RelatedPublication {
+  title: string;
+  holdings: string[];
 }
 
 export interface Pid {
@@ -106,6 +115,11 @@ export interface TermVocabAttributes extends VocabAttributes {
 export interface Similar {
   id: string;
   title: string;
+}
+
+export interface Universe {
+  inclusion: string;
+  exclusion?: string;
 }
 
 /** 
@@ -148,7 +162,9 @@ export function getStudyModel(data: Pick<SearchHit<Partial<CMMStudy>>, "_source"
     lastModified: data._source.lastModified || '',
     studyUrl: data._source.studyUrl,
     studyXmlSourceUrl: data._source.studyXmlSourceUrl as string,
-    langAvailableIn: (data._source.langAvailableIn || []).map(i => i.toUpperCase()).sort()
+    langAvailableIn: (data._source.langAvailableIn || []).map(i => i.toUpperCase()).sort(),
+    universe: data._source.universe,
+    relatedPublications: data._source.relatedPublications || []
   });
 }
 

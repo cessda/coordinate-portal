@@ -157,6 +157,7 @@ describe('Metadata utilities', () => {
           abbr: 'UKDS',
           publisher: 'UK Data Service'
         },
+        relatedPublications: [],
         samplingProcedureFreeTexts: [
           'Sampling Procedure'
         ],
@@ -194,7 +195,8 @@ describe('Metadata utilities', () => {
             vocab: 'Vocab',
             vocabUri: 'http://example.com'
           }
-        ]
+        ],
+        universe: undefined
       });
     });
 
@@ -224,6 +226,7 @@ describe('Metadata utilities', () => {
         pidStudies: [],
         publicationYear: '',
         publisher: undefined,
+        relatedPublications: [],
         samplingProcedureFreeTexts: [],
         studyAreaCountries: [],
         studyNumber: '',
@@ -232,7 +235,8 @@ describe('Metadata utilities', () => {
         typeOfModeOfCollections: [],
         typeOfSamplingProcedures: [],
         typeOfTimeMethods: [],
-        unitTypes: []
+        unitTypes: [],
+        universe: undefined
       });
     });
   });
@@ -289,6 +293,7 @@ describe('Metadata utilities', () => {
             abbr: 'UKDS',
             publisher:'UK Data Service'
           },
+          relatedPublications: [],
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
@@ -324,7 +329,10 @@ describe('Metadata utilities', () => {
               vocab: 'Vocab',
               vocabUri: 'http://example.com'
             }
-          ]
+          ],
+          universe: {
+            inclusion: "Included cohort"
+          }
         })
       ).toEqual({
         '@context': 'https://schema.org',
@@ -410,6 +418,7 @@ describe('Metadata utilities', () => {
             abbr: 'UKDS',
             publisher: 'UK Data Service',
           },
+          relatedPublications: [],
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
@@ -445,7 +454,7 @@ describe('Metadata utilities', () => {
               vocab: 'Vocab',
               vocabUri: 'http://example.com'
             }
-          ]
+          ] 
         })
       ).toEqual({
         '@context': 'https://schema.org',
