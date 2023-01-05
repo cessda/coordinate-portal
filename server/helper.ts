@@ -744,7 +744,10 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
   app.use('/swagger/api/DataSets/v1', cors(), (async (_req, res) => {
     try {
-      return res.json(await swaggerSearchApiV1(elasticsearch));
+      if (!v1) {
+        v1 = await swaggerSearchApiV1(elasticsearch)
+      }
+      return res.json(v1);
     } catch (e) {
       logger.error(`Cannot communicate with Elasticsearch: ${e}`);
       return res.sendStatus(500);
@@ -752,7 +755,10 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   }));
   app.use('/swagger/api/DataSets/v2', cors(), (async (_req, res) => {
     try {
-      return res.json(await swaggerSearchApiV2(elasticsearch));
+      if (!v2) {
+        v2 = await swaggerSearchApiV2(elasticsearch)
+      }
+      return res.json(v2);
     } catch (e) {
       logger.error(`Cannot communicate with Elasticsearch: ${e}`);
       return res.sendStatus(500);
@@ -774,3 +780,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   process.on('SIGINT', () =>  process.exit(130));
   process.on('SIGTERM', () => process.exit(143));
 }
+
+// Cached Swagger JSON
+let v1: Awaited<ReturnType<typeof swaggerSearchApiV1>> | undefined = undefined;
+let v2: Awaited<ReturnType<typeof swaggerSearchApiV2>> | undefined = undefined;
