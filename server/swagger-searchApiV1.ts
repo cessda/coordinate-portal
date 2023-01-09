@@ -1,8 +1,10 @@
-{
+import Elasticsearch from "./elasticsearch"
+
+export default async (client: Elasticsearch) => ({
   "openapi": "3.0.1",
   "info": {
     "title": "External API CESSDA",
-    "description": "This is an external API for CESSDA Data Catalogue",
+    "description": "This is an external API version 1 for CESSDA Data Catalogue (CDC). The external API v1 for CDC is deprecated and will be withdrawn on or after 1 February 2023",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -15,7 +17,7 @@
   },
   "servers": [
     {
-      "url": "/api/DataSets/v2"
+      "url": "/api/DataSets/v1"
     }
   ],
   "tags": [
@@ -77,15 +79,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "Afghanistan",
-                  "Albania",
-                  "Algeria",
-                  "Andorra",
-                  "Angola",
-                  "Antigua and Barbuda",
-                  "Argentina"
-                ]
+                "enum": await client.getListOfCountries()
               }
             }
           },
@@ -100,15 +94,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "Austrian Social Science Data Archive (AUSSDA)",
-                  "DANS-KNAW",
-                  "Danish National Archives (DNA)",
-                  "Finnish Social Science Data Archive (FSD)",
-                  "GESIS - Leibniz Institute for the Social Sciences",
-                  "NSD - Norwegian Centre for Research Data",
-                  "Portuguese Archive of Social Information"
-                ]
+                "enum": await client.getSourceRepositoryNames()
               }
             }
           },
@@ -145,34 +131,13 @@
             }
           },
           {
-            "name": "keywords",
-            "in": "query",
-            "description": "keywords available in study",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "metadataLanguage",
             "in": "query",
             "description": "Language to display:\n  * `cs` - Czech\n  * `da` - Danish\n  * `nl` - Dutch\n  * `en` - English\n  * `fi` - Finish\n  * `fr` - French\n  * `de` - German\n  * `el` - Greek\n  * `sk` - Slovakian\n  * `sl` - Slovenian\n  * `sv` - Swedish\n",
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "cs",
-                "da",
-                "nl",
-                "en",
-                "fi",
-                "fr",
-                "de",
-                "el",
-                "sk",
-                "sl",
-                "sv"
-              ]
+              "enum": await client.getListOfMetadataLanguages()
             }
           }
         ],
@@ -484,4 +449,4 @@
       }
     }
   }
-}
+})
