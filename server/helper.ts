@@ -840,7 +840,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
       return res.sendStatus(500);
     }
   }));
-  app.use('/api/mt', startMetricsListening());
+  
+  app.use('/metrics', startMetricsListening());
 
   app.get('*', handler);
 

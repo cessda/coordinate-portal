@@ -130,42 +130,35 @@ export const gaugeStudiesModified = new client.Gauge({
   },
 });
 //Metrics for ES - Studies Languages
-export const languagesGauges = async () => {
+export const languageGauge = new client.Gauge({
+  name: 'studies_languages',
+  help: 'Language Gauge',
+  labelNames: ['language'],
+});
+const languageGauges = async () => {
   const results = await getESindexLanguages();
-  results.forEach((element)=>{
-    let langGauges = new client.Gauge({
-      name: 'studies_'+element,
-      help: 'Language Gauge',
-      async collect() {
-        // Invoked when the registry collects its metrics' values.
-        const currentValue = await getESrecordsByLanguages(element);
-        this.set(currentValue);
-      },
-    });
-    return langGauges;
-  })
+  for (let result of results) {
+    const currentValue = await getESrecordsByLanguages(result);
+    languageGauge.set({ language: result }, currentValue);
+  }
 };
 //Metrics for ES - Studies Endpoints
-export const endpointGauges = async () => {
+export const endpointGauge = new client.Gauge({
+  name: 'studies_endpoints',
+  help: 'Endpoint Gauge',
+  labelNames: ['endpoint'],
+});
+const endpointGauges = async () => {
   const results = await getESrecordsByEndpoint();
   results.forEach(( result: { key: string, doc_count: number } ) => {
-      let endpointGauges = new client.Gauge({
-        name: 'studies_endpoint_'+result.key,
-        help: 'Endpoint Gauge',
-        async collect() {
-          // Invoked when the registry collects its metrics' values.
-          const currentValue = result.doc_count;
-          this.set(currentValue);
-        },
-      });
-      return endpointGauges;
-  })
+    endpointGauge.set({ endpoint: result.key }, result.doc_count);
+  });
 };
 
 //Endpoint used for Prometheus Metrics
 export function startMetricsListening() {
 
-    languagesGauges();
+    languageGauges();
     endpointGauges();
 
     const router = express.Router();
