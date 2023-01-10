@@ -32,8 +32,8 @@ import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
-import swaggerSearchApiV1 from './swagger-searchApiV1.json';
-import swaggerSearchApiV2 from './swagger-searchApiV2.json';
+import swaggerSearchApiV1 from './swagger-searchApiV1';
+import swaggerSearchApiV2 from './swagger-searchApiV2';
 
 
 // Defaults to localhost if unspecified
@@ -818,9 +818,29 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v1', cors(),  externalApiV1());
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
-  app.use('/swagger/api/DataSets/v1', cors(), ((_req, res) => res.json(swaggerSearchApiV1)) as express.RequestHandler);
-  app.use('/swagger/api/DataSets/v2', cors(), ((_req, res) => res.json(swaggerSearchApiV2)) as express.RequestHandler);
-  app.use('/metrics', startMetricsListening());
+  app.use('/swagger/api/DataSets/v1', cors(), (async (_req, res) => {
+    try {
+      if (!v1) {
+        v1 = await swaggerSearchApiV1(elasticsearch)
+      }
+      return res.json(v1);
+    } catch (e) {
+      logger.error(`Cannot communicate with Elasticsearch: ${e}`);
+      return res.sendStatus(500);
+    }
+  }));
+  app.use('/swagger/api/DataSets/v2', cors(), (async (_req, res) => {
+    try {
+      if (!v2) {
+        v2 = await swaggerSearchApiV2(elasticsearch)
+      }
+      return res.json(v2);
+    } catch (e) {
+      logger.error(`Cannot communicate with Elasticsearch: ${e}`);
+      return res.sendStatus(500);
+    }
+  }));
+  app.use('/api/mt', startMetricsListening());
 
   app.get('*', handler);
 
@@ -836,3 +856,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   process.on('SIGINT', () =>  process.exit(130));
   process.on('SIGTERM', () => process.exit(143));
 }
+
+// Cached Swagger JSON
+let v1: Awaited<ReturnType<typeof swaggerSearchApiV1>> | undefined = undefined;
+let v2: Awaited<ReturnType<typeof swaggerSearchApiV2>> | undefined = undefined;
