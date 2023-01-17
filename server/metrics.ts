@@ -13,6 +13,7 @@
 import { URL, URLSearchParams } from 'url'
 import client from 'prom-client';
 import express, { Request, Response } from 'express';
+import { getESrecordsByLanguages, getESrecordsModified, getESindexLanguages, getESrecordsByEndpoint } from './helper';
 
 //METRICS FOR API
 //Metrics for api - total
@@ -118,15 +119,53 @@ export const uiResponseTimePublisherHistogram = new client.Histogram({
     help: 'User Interface response time in seconds for Publisher, External API',
     labelNames: ['method', 'route', 'publ', 'status_code']
 })
+//Metrics for ES - Studies Modified
+export const gaugeStudiesModified = new client.Gauge({
+  name: 'studies_modified',
+  help: 'Gauge for Modified Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsModified();
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Studies Languages
+export const languageGauge = new client.Gauge({
+  name: 'studies_languages',
+  help: 'Language Gauge',
+  labelNames: ['language'],
+});
+const languageGauges = async () => {
+  const results = await getESindexLanguages();
+  for (let result of results) {
+    const currentValue = await getESrecordsByLanguages(result);
+    languageGauge.set({ language: result }, currentValue);
+  }
+};
+//Metrics for ES - Studies Endpoints
+export const endpointGauge = new client.Gauge({
+  name: 'studies_endpoints',
+  help: 'Endpoint Gauge',
+  labelNames: ['endpoint'],
+});
+const endpointGauges = async () => {
+  const results = await getESrecordsByEndpoint();
+  results.forEach(( result: { key: string, doc_count: number } ) => {
+    endpointGauge.set({ endpoint: result.key }, result.doc_count);
+  });
+};
 
 //Endpoint used for Prometheus Metrics
 export function startMetricsListening() {
+
+    languageGauges();
+    endpointGauges();
 
     const router = express.Router();
 
     client.collectDefaultMetrics(); //general cpu, mem, etc information
 
-    router.get('/metrics', async (_req, res) => 
+    router.get('/', async (_req, res) => 
       res.type(client.register.contentType).send(await client.register.metrics())
     );
 

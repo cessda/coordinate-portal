@@ -569,6 +569,82 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
   };
 }
 
+//used by metrics.ts
+export async function getESrecordsByLanguages(lang:string): Promise<number>{
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      "aggs": {
+        "lang": {
+          "terms": {
+            "field": "langAvailableIn"
+          }
+        }
+      }
+    },
+    track_total_hits: false
+  });
+
+  const elasticAggs: any = response.body.aggregations;
+  let result:number=0;
+  for (let x of elasticAggs.lang.buckets) {
+    if (x.key==lang){
+      result = x.doc_count;
+      break;
+    }
+  }
+  return result;
+}
+
+//used by metrics.ts
+export async function getESindexLanguages(): Promise<Array<string>>{
+  const indices = await elasticsearch.client.cat.indices({format: 'json'})
+  const filtered: (string | undefined)[] = indices.body.map(element=>{
+    if (element?.index?.startsWith('cmmstudy'))
+      return element.index.slice(-2)
+  }).filter(element=>{ return element !== undefined; })
+  return filtered as Array<string>;
+}
+
+//used by metrics.ts
+export async function getESrecordsModified(): Promise<number>{
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      "aggs": {
+        "types_count": {
+          "value_count": {
+            "field": "lastModified"
+          }
+        }
+      }
+    },
+    track_total_hits: false
+  });
+
+  const elasticAggs: any = response.body.aggregations;
+  let result:number=elasticAggs.types_count.value;
+  return result;
+}
+
+//used by metrics.ts
+export async function getESrecordsByEndpoint(): Promise<{ key: string, doc_count: number }[]>{
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      "aggs": {
+        "aggregationResults": {
+          "terms": {
+            "field": "code",
+            "size": 1000,
+          }
+        }
+      }
+    },
+    track_total_hits: false
+  });
+  const elasticAggs: any | undefined = response.body.aggregations;
+  const results: { key: string, doc_count: number }[] = elasticAggs.aggregationResults.buckets;
+  return results;
+}
+
 function jsonProxy() {
   return proxy(elasticsearchUrl, {
     parseReqBody: false,
@@ -764,7 +840,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
       return res.sendStatus(500);
     }
   }));
-  app.use('/api/mt', startMetricsListening());
+  
+  app.use('/metrics', startMetricsListening());
 
   app.get('*', handler);
 
