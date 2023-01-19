@@ -24,6 +24,12 @@ export class AboutPage extends Component {
 
   componentDidMount() {
     document.title = `${counterpart.translate('about.label')} - ${counterpart.translate('datacatalogue')}`;
+
+    // Remove the JSON-LD representation if present
+    const jsonLDElement = document.getElementById("json-ld");
+    if (jsonLDElement) {
+      jsonLDElement.remove();
+    }
   }
 
   render() {

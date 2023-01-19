@@ -89,7 +89,7 @@
   </div>
   <div id='root'></div>
   <% if (metadata.jsonLd) { %>
-    <script type="application/ld+json"><%- JSON.stringify(metadata.jsonLd) %></script>
+    <script id="json-ld" type="application/ld+json"><%- JSON.stringify(metadata.jsonLd) %></script>
   <% } %>  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
  
