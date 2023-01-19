@@ -30,6 +30,7 @@ import counterpart from 'counterpart';
 import _ from 'lodash';
 import { getJsonLd } from '../../common/metadata';
 import { updateStudy } from '../actions/detail';
+import $ from 'jquery';
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
