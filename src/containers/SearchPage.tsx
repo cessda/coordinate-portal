@@ -38,6 +38,12 @@ export class SearchPage extends Component<Props> {
   componentDidMount() {
     this.updateTitle();
     searchkit.resetState();
+
+    // Remove the JSON-LD representation if present
+    const jsonLDElement = document.getElementById("json-ld");
+    if (jsonLDElement) {
+      jsonLDElement.remove();
+    }
   }
 
   componentDidUpdate(): void {

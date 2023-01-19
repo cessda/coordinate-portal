@@ -30,6 +30,7 @@ import counterpart from 'counterpart';
 import _ from 'lodash';
 import { getJsonLd } from '../../common/metadata';
 import { updateStudy } from '../actions/detail';
+import $ from 'jquery';
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
@@ -51,6 +52,22 @@ export class DetailPage extends Component<Props> {
       this.props.updateStudy(_.trim(id, "\""));
     }
     this.updateTitle();
+
+    // Update the JSON-LD representation
+    const jsonLDElement = document.getElementById("json-ld");
+
+    if (this.props.item) {
+      const elementString = '<script id="json-ld" type="application/ld+json">' + JSON.stringify(getJsonLd(this.props.item)) + '</script>';
+      if (jsonLDElement) {
+        $(jsonLDElement).replaceWith(elementString);
+      } else {
+        $(document.body).append(elementString);
+      }
+    } else {
+      if (jsonLDElement) {
+        jsonLDElement.remove();
+      }
+    }
   }
 
   private updateTitle() {
@@ -126,11 +143,6 @@ export class DetailPage extends Component<Props> {
             </LayoutResults>
           </LayoutBody>
           </div>
-          {item &&
-            <script type="application/ld+json">
-              {JSON.stringify(getJsonLd(item))}
-            </script>
-          }
           <Footer/>
         </Layout>
       </SearchkitProvider>
