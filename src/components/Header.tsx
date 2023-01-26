@@ -113,6 +113,7 @@ export class Header extends Component<Props> {
             <div className="column">
               <div className="search-wrapper">
                 <SearchBox
+                  //@ts-expect-error - incorrect typings
                   autofocus={true}
                   searchOnChange={true}
                   queryBuilder={queryBuilder}

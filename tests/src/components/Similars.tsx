@@ -71,6 +71,7 @@ describe('Similars component', () => {
     expect(
       mapStateToProps({
         detail: {
+          languageAvailableIn: [],
           study: mockStudy,
           similars: props.similars
         }

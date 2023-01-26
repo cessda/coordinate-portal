@@ -91,6 +91,7 @@ export default class Elasticsearch {
     });
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return (response.body.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
   }
 
@@ -171,6 +172,26 @@ export default class Elasticsearch {
     } else {
       return [];
     }
+  }
+
+  /**
+   * Queries Elasticsearch for the indices where a study ID is present
+   * @param id the study ID
+   * @returns the index names
+   */
+  async getIndicesForStudyId(id: string) {
+      const res = await this.client.search({
+        body: {
+          query: {
+            ids: {
+              values: [id]
+            }
+          }
+        },
+        _source: false
+      });
+
+      return res.body.hits.hits.map(hit => hit._index);
   }
 
   /**
