@@ -93,7 +93,7 @@ export class DetailPage extends Component<Props> {
 
     for (let i = 0; i < this.props.availableLanguages.length; i++) {
       const lang = this.props.availableLanguages[i];
-      const element = <a key={i * 2} onClick={() => {
+      const element = <a key={lang.code} onClick={() => {
         const currentLocation = browserHistory.getCurrentLocation();
         push({
           pathname: currentLocation.pathname,
@@ -105,7 +105,7 @@ export class DetailPage extends Component<Props> {
       }}>{lang.label}</a>
 
       if (i < this.props.availableLanguages.length - 1) {
-        languageLinks.push(<React.Fragment key={(i * 2) - 1}>{element}, </React.Fragment>)
+        languageLinks.push(<React.Fragment key={i}>{element}, </React.Fragment>)
       } else {
         languageLinks.push(element);
       }
@@ -161,7 +161,7 @@ export class DetailPage extends Component<Props> {
                 </p>
                 <Translate className="fs-14 mb-15" component="p" content="language.notAvailable.content"/>
                 {this.props.availableLanguages.length > 0 &&
-                  <p className="fs-14 mb-15">The study description is available in the following languages: {languageLinks}</p>
+                  <p className="fs-14 mb-15"><Translate content="language.notAvailable.alternateLanguage"/>: {languageLinks}</p>
                 }
               </div>
             }
