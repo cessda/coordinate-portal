@@ -1,18 +1,18 @@
 import Elasticsearch from "./elasticsearch";
 
 export default async (client: Elasticsearch) => ({
-  "openapi": "3.0.1",
+  "openapi": "3.0.3",
   "info": {
-    "title": "External API CESSDA",
-    "description": "This is an external API for CESSDA Data Catalogue",
+    "title": "CESSDA DC SearchAPI",
+    "description": "This is an external Search API for CESSDA Data Catalogue",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "version": "1"
+    "version": "2"
   },
   "externalDocs": {
-    "description": "Visit the CESSDA DC",
+    "description": "Visit the CESSDA Data Catalogue",
     "url": "https://datacatalogue.cessda.eu/"
   },
   "servers": [
@@ -158,16 +158,41 @@ export default async (client: Elasticsearch) => ({
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "ResultsFound": {
+                    "SearchTerms": {
                       "type": "object",
                       "properties": {
-                        "value": {
-                          "type": "number",
-                          "example": 29
-                        },
-                        "relation": {
+                        "metadataLanguage": {
                           "type": "string",
-                          "example": "eq"
+                          "example": "en"
+                        },
+                        "limit": {
+                          "type": "number",
+                          "example": 200
+                        },
+                        "offset": {
+                          "type": "number",
+                          "example": 400
+                        }
+                      }
+                    },
+                    "ResultsCount": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "number",
+                          "example": 400
+                        },
+                        "to": {
+                          "type": "number",
+                          "example": 600
+                        },
+                        "retrieved": {
+                          "type": "number",
+                          "example": 200
+                        },
+                        "available": {
+                          "type": "number",
+                          "example": 25848
                         }
                       }
                     },
@@ -201,9 +226,31 @@ export default async (client: Elasticsearch) => ({
       "DataSets": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "example": "UKDS__4929"
+          "abstract": {
+            "type": "string"
+          },
+          "classifications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "term": {
+                  "type": "string",
+                  "example": "LawCrimeAndLegalSystems.CrimeAndLawEnforcement"
+                },
+                "vocab": {
+                  "type": "string",
+                  "example": "CESSDA Topic Classification"
+                },
+                "vocabUri": {
+                  "type": "string",
+                  "example": "urn:ddi:int.cessda.cv:TopicClassification:4.1"
+                }
+              }
+            }
           },
           "code": {
             "type": "string",
@@ -216,17 +263,12 @@ export default async (client: Elasticsearch) => ({
               "example": "Fraser, R"
             }
           },
-          "dataCollectionPeriodStartdate": {
-            "type": "string",
-            "example": "1984-01-01T00:00:00Z"
-          },
-          "dataCollectionPeriodEnddate": {
-            "type": "string",
-            "example": "1985-01-01T00:00:00Z"
-          },
-          "dataCollectionYear": {
-            "type": "integer",
-            "example": 1984
+          "dataAccessFreeTexts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "The depositor has specified that registration is required and ..."
+            }
           },
           "dataCollectionFreeTexts": {
             "type": "array",
@@ -244,37 +286,31 @@ export default async (client: Elasticsearch) => ({
               }
             }
           },
-          "dataAccessFreeTexts": {
+          "dataCollectionPeriodEnddate": {
+            "type": "string",
+            "example": "1985-01-01T00:00:00Z"
+          },
+          "dataCollectionPeriodStartdate": {
+            "type": "string",
+            "example": "1984-01-01T00:00:00Z"
+          },
+          "dataCollectionYear": {
+            "type": "integer",
+            "example": 1984
+          },
+          "fileLanguages": {
             "type": "array",
             "items": {
               "type": "string",
-              "example": "The depositor has specified that registration is required and ..."
+              "example": "en"
             }
           },
-          "publicationYear": {
+          "id": {
             "type": "string",
-            "example": "2005-04-11T00:00:00Z"
+            "example": "UKDS__4929"
           },
-          "typeOfModeOfCollections": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "vocab": {
-                  "type": "string"
-                },
-                "vocabUri": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "string"
-                },
-                "term": {
-                  "type": "string",
-                  "example": "Face-to-face interview"
-                }
-              }
-            }
+          "isActive": {
+            "type": "boolean"
           },
           "keywords": {
             "type": "array",
@@ -298,78 +334,32 @@ export default async (client: Elasticsearch) => ({
               }
             }
           },
-          "samplingProcedureFreeTexts": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "example": "Purposive selection/case studies"
-            }
-          },
-          "classifications": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "vocab": {
-                  "type": "string",
-                  "example": "CESSDA Topic Classification"
-                },
-                "vocabUri": {
-                  "type": "string",
-                  "example": "urn:ddi:int.cessda.cv:TopicClassification:4.1"
-                },
-                "id": {
-                  "type": "string"
-                },
-                "term": {
-                  "type": "string",
-                  "example": "LawCrimeAndLegalSystems.CrimeAndLawEnforcement"
-                }
-              }
-            }
-          },
-          "abstract": {
-            "type": "string"
-          },
-          "titleStudy": {
-            "type": "string",
-            "example": "1968: A Student Generation in Revolt, 1945-1985"
-          },
-          "studyUrl": {
-            "type": "string",
-            "example": "http://doi.org/10.5255/UKDA-SN-4929-1"
-          },
-          "studyNumber": {
-            "type": "string",
-            "example": "4929"
-          },
-          "typeOfTimeMethods": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "vocab": {
-                  "type": "string"
-                },
-                "vocabUri": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "string"
-                },
-                "term": {
-                  "type": "string",
-                  "example": "Cross-sectional (one-time) study"
-                }
-              }
-            }
-          },
-          "fileLanguages": {
+          "langAvailableIn": {
             "type": "array",
             "items": {
               "type": "string",
               "example": "en"
             }
+          },
+          "lastModified": {
+            "type": "string",
+            "example": "2021-09-17T14:44:09Z"
+          },
+          "pidStudies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "pid": {
+                  "type": "string",
+                  "example": "APIS0066"
+                }
+              }
+            }
+          },
+          "publicationYear": {
+            "type": "string",
+            "example": "2005-04-11T00:00:00Z"
           },
           "publisher": {
             "type": "array",
@@ -385,6 +375,29 @@ export default async (client: Elasticsearch) => ({
                   "example": "UK Data Service"
                 }
               }
+            }
+          },
+          "publisherFilter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "abbr": {
+                  "type": "string",
+                  "example": "DANS"
+                },
+                "publisher": {
+                  "type": "string",
+                  "example": "DANS-KNAW"
+                }
+              }
+            }
+          },
+          "samplingProcedureFreeTexts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Purposive selection/case studies"
             }
           },
           "studyAreaCountries": {
@@ -403,6 +416,83 @@ export default async (client: Elasticsearch) => ({
                 "country": {
                   "type": "string",
                   "example": "Great Britain"
+                }
+              }
+            }
+          },
+          "studyNumber": {
+            "type": "string",
+            "example": "oai:easy.dans.knaw.nl:easy-dataset:158567"
+          },
+          "studyUrl": {
+            "type": "string",
+            "example": "http://doi.org/10.5255/UKDA-SN-4929-1"
+          },
+          "studyXmlSourceUrl": {
+            "type": "string",
+            "example": "https://easy.dans.knaw.nl/oai/?verb=GetRecord&identifier=oai%3Aeasy.dans.knaw.nl%3Aeasy-dataset%3A158567&metadataPrefix=oai_ddi25_en\""
+          },
+          "titleStudy": {
+            "type": "string",
+            "example": "1968: A Student Generation in Revolt, 1945-1985"
+          },
+          "typeOfModeOfCollections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "vocab": {
+                  "type": "string"
+                },
+                "vocabUri": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "term": {
+                  "type": "string",
+                  "example": "Face-to-face interview"
+                }
+              }
+            }
+          },
+          "typeOfSamplingProcedures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "vocab": {
+                  "type": "string",
+                  "example": "DDI Sampling Procedure"
+                },
+                "vocabUri": {
+                  "type": "string",
+                  "example": "https://vocabularies.cessda.eu/v2/vocabularies/SamplingProcedure/1.1?languageVersion=en-1.1"
+                },
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "typeOfTimeMethods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "vocab": {
+                  "type": "string"
+                },
+                "vocabUri": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "term": {
+                  "type": "string",
+                  "example": "Cross-sectional (one-time) study"
                 }
               }
             }
@@ -428,30 +518,16 @@ export default async (client: Elasticsearch) => ({
               }
             }
           },
-          "pidStudies": {
+          "universe": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "pid": {
+                "inclusion": {
                   "type": "string",
-                  "example": "APIS0066"
+                  "example": "Eligible voters"
                 }
               }
-            }
-          },
-          "lastModified": {
-            "type": "string",
-            "example": "2021-09-17T14:44:09Z"
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "langAvailableIn": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "example": "en"
             }
           }
         }
