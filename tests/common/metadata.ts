@@ -157,6 +157,7 @@ describe('Metadata utilities', () => {
           abbr: 'UKDS',
           publisher: 'UK Data Service'
         },
+        relatedPublications: [],
         samplingProcedureFreeTexts: [
           'Sampling Procedure'
         ],
@@ -195,7 +196,7 @@ describe('Metadata utilities', () => {
             vocabUri: 'http://example.com'
           }
         ],
-        universes: []
+        universe: undefined
       });
     });
 
@@ -225,6 +226,7 @@ describe('Metadata utilities', () => {
         pidStudies: [],
         publicationYear: '',
         publisher: undefined,
+        relatedPublications: [],
         samplingProcedureFreeTexts: [],
         studyAreaCountries: [],
         studyNumber: '',
@@ -234,7 +236,7 @@ describe('Metadata utilities', () => {
         typeOfSamplingProcedures: [],
         typeOfTimeMethods: [],
         unitTypes: [],
-        universes: []
+        universe: undefined
       });
     });
   });
@@ -291,6 +293,7 @@ describe('Metadata utilities', () => {
             abbr: 'UKDS',
             publisher:'UK Data Service'
           },
+          relatedPublications: [],
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
@@ -327,7 +330,9 @@ describe('Metadata utilities', () => {
               vocabUri: 'http://example.com'
             }
           ],
-          universes: []
+          universe: {
+            inclusion: "Included cohort"
+          }
         })
       ).toEqual({
         '@context': 'https://schema.org',
@@ -413,6 +418,7 @@ describe('Metadata utilities', () => {
             abbr: 'UKDS',
             publisher: 'UK Data Service',
           },
+          relatedPublications: [],
           samplingProcedureFreeTexts: [],
           studyAreaCountries: [
             {
@@ -448,8 +454,7 @@ describe('Metadata utilities', () => {
               vocab: 'Vocab',
               vocabUri: 'http://example.com'
             }
-          ],
-          universes: []
+          ] 
         })
       ).toEqual({
         '@context': 'https://schema.org',

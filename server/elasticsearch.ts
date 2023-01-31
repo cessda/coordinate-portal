@@ -13,7 +13,11 @@
 
 import { Client } from '@elastic/elasticsearch'
 import { Client as NewTypes, ClientOptions } from '@elastic/elasticsearch/api/new'
-import { AggregationsCardinalityAggregate } from "@elastic/elasticsearch/api/types";
+import { 
+  AggregationsCardinalityAggregate,
+  AggregationsNestedAggregate,
+  AggregationsSignificantStringTermsAggregate
+} from "@elastic/elasticsearch/api/types";
 import _ from "lodash";
 import { CMMStudy } from "../common/metadata";
 import { logger } from "./logger";
@@ -88,6 +92,85 @@ export default class Elasticsearch {
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
     return (response.body.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
+  }
+
+  async getListOfMetadataLanguages() {
+    const res = await this.client.indices.get({
+      allow_no_indices: true,
+      index: "*" 
+    });
+    const indices = Object.keys(res.body);
+
+    // Index names are of the form cmmstudy_${lang}, extract the ${lang} part
+    return indices.map(i => i.split("_")[1]);
+  }
+
+  async getSourceRepositoryNames() {
+    const res = await this.client.search({
+      size: 0,
+      body: {
+        aggs: {
+          publishers: {
+            nested: {
+              path: "publisherFilter"
+            },
+            aggs: {
+              publisher: {
+                terms: {
+                  field: "publisherFilter.publisher",
+                  order: { _key: "asc" },
+                  size: 30
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Unwrap the aggregations
+    const aggregation = res.body.aggregations?.publishers as AggregationsNestedAggregate;
+    const publisherBuckets = (aggregation.publisher as AggregationsSignificantStringTermsAggregate).buckets;
+    
+    if (Array.isArray(publisherBuckets)) {
+      return publisherBuckets.map(b => b.key);
+    } else {
+      return [];
+    }
+  }
+
+  async getListOfCountries() {
+    const res = await this.client.search({
+      size: 0,
+      body: {
+        aggs: {
+          studyAreaCountries: {
+            nested: {
+              path: "studyAreaCountries"
+            },
+            aggs: {
+              country: {
+                terms: {
+                  field: "studyAreaCountries.searchField",
+                  order: { _key: "asc" },
+                  size: 1000
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Unwrap the aggregations
+    const aggregation = res.body.aggregations?.studyAreaCountries as AggregationsNestedAggregate;
+    const countryBuckets = (aggregation.country as AggregationsSignificantStringTermsAggregate).buckets;
+
+    if (Array.isArray(countryBuckets)) {
+      return countryBuckets.map(b => b.key);
+    } else {
+      return [];
+    }
   }
 
   /**

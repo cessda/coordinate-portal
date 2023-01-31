@@ -163,6 +163,7 @@ export class Result extends Component<Props, ComponentState> {
                 {item.studyUrl &&
                  <a className="button is-small is-white"
                     href={item.studyUrl}
+                    rel="noreferrer"
                     target="_blank">
                    <span className="icon is-small"><FaExternalLinkAlt/></span>
                    <Translate component="span" content="goToStudy"/>
