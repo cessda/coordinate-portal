@@ -34,7 +34,7 @@ pipeline {
 		stage('Configure Node.JS environment') {
 			agent {
 				dockerfile {
-					args '-u node'
+					customWorkspace '/usr/src/app'
 					filename 'Dockerfile'
 					reuseNode true
 				}
@@ -42,23 +42,18 @@ pipeline {
 			stages {
 				stage('Lint Project') {
 					steps {
-						dir ('/usr/src/app') {
-							sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
-						}
+						sh 'cp --recursive /usr/src/app "$PWD"'
+						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
 					}
 					post {
 						always {
-							dir ('/usr/src/app') {
-								recordIssues(tools: [esLint(pattern: 'eslint/report.xml')])
-							}
+							recordIssues(tools: [esLint(pattern: 'eslint/report.xml')])
 						}
 					}
 				}
 				stage('Run Unit Tests') {
 					steps {
-						dir ('/usr/src/app') {
-							sh "npm test -- --forceExit"
-						}
+						sh "npm test -- --forceExit"
 					}
 					post {
 						always {
