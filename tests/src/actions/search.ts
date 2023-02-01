@@ -258,7 +258,7 @@ describe('Search actions', () => {
 
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
-      let store = mockStore({
+      const store = mockStore({
         routing: {
           // @ts-expect-error
           locationBeforeTransitions: {

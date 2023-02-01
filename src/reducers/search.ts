@@ -11,9 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {CMMStudy, getStudyModel} from '../../common/metadata';
+import {CMMStudy} from '../../common/metadata';
 import type {Action} from '../actions';
-import _ from 'lodash';
 import { 
   INIT_SEARCHKIT, 
   RESET_SEARCH, 

@@ -137,7 +137,7 @@ export const languageGauge = new client.Gauge({
 });
 const languageGauges = async () => {
   const results = await getESindexLanguages();
-  for (let result of results) {
+  for (const result of results) {
     const currentValue = await getESrecordsByLanguages(result);
     languageGauge.set({ language: result }, currentValue);
   }
@@ -174,10 +174,6 @@ export function startMetricsListening() {
 
 export function uiResponseTimeHandler(req: Request, res: Response, time: number) {
   if (req.query.size === undefined && req.headers.referer!==undefined) { //to exclude calls to _search?size=... etc & not log metrics from internal ES API
-    //hits result from elastic search
-    //FIXME: should be an import
-    const moduleHits = require('./helper');
-    const hits = moduleHits.hits;
 
     //ALL
     if (req?.route?.path) {
@@ -241,13 +237,11 @@ export function uiResponseTimeHandler(req: Request, res: Response, time: number)
         }
 
       } else {
-        if (hits != 0) {
-          //SUCCESS REQUEST
-          uiResponseTimeTotalSuccessHistogram.observe({
-            method: req.method,
-            route: req.route.path
-          }, time);
-        }
+        //SUCCESS REQUEST
+        uiResponseTimeTotalSuccessHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, time);
       }
     }
   }

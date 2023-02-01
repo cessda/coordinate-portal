@@ -29,5 +29,5 @@ export function start () {
     const indexPath = path.join(path.join(__dirname, '../dist'), 'index.ejs');
 
     startListening(app, async (req, res) => await renderResponse(req, res, indexPath));
-};
+}
 
