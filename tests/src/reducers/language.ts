@@ -20,7 +20,7 @@ import { RESET_SEARCH } from "../../../src/actions/search";
 describe('Language reducer', () => {
 
   it('should return the initial state', () => {
-    //@ts-ignore
+    //@ts-expect-error - providing an empty action intentionally
     expect(language(undefined, {})).toEqual({
       currentLanguage: {
         code: 'en',
@@ -55,7 +55,7 @@ describe('Language reducer', () => {
   it('should handle CHANGE_LANGUAGE', () => {
     expect(
       language(
-        //@ts-ignore
+        //@ts-expect-error - state is blank intentionally
         {},
         {
           type: CHANGE_LANGUAGE,

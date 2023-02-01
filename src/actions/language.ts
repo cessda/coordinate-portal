@@ -38,6 +38,7 @@ export function initTranslations(): Thunk {
     languages.forEach(language => {
       // Register translations from the respective JSON files
       try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
         const errorMessage = `Couldn't load translation for language '${language.code}'`;

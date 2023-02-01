@@ -50,4 +50,4 @@ export function start() {
       res.setHeader('Cache-Control', 'no-store');
       await renderResponse(req, res, ejsTemplate);
     });
-};
+}

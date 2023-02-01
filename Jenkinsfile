@@ -40,10 +40,17 @@ pipeline {
 				}
 			}
 			stages {
+				stage('Setup node_modules') {
+					steps {
+						// Copy node_modules from the Docker container to the build directory
+						sh 'cp --recursive /usr/src/app/node_modules/ "$PWD/node_modules/"'
+
+						// npm install needs to be run so that NPM scripts execute correctly
+						sh 'npm install'
+					}
+				}
 				stage('Lint Project') {
 					steps {
-						sh 'cp --recursive /usr/src/app/node_modules "$PWD/node_modules"'
-						sh 'npm install'
 						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml | true'
 					}
 					post {

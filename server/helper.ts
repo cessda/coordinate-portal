@@ -252,7 +252,7 @@ function externalApiV1() {
     bodyQuery.size(limit);
 
     // Validate the offset parameter
-    let offset: number = 0;
+    let offset = 0;
     if (req.query.offset !== undefined) {
       offset = Number(req.query.offset);
       if (req.query.offset === '' || !Number.isInteger(offset) || offset < 0) {
@@ -343,7 +343,7 @@ function externalApiV1() {
             Results: response.body.hits.hits.map(obj => obj._source)
           });
           break;
-        case "application/ld+json":
+        case "application/ld+json": {
           const studyModels: CMMStudy[] = response.body.hits.hits.map(hit => getStudyModel(hit));
           const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
           res.contentType("application/ld+json").json({
@@ -352,6 +352,7 @@ function externalApiV1() {
             Results: jsonLdArray
           });
           break;
+        }
         default:
           // We shouldn't end up here, but just in case respond with something.
           res.sendStatus(500);
@@ -412,7 +413,7 @@ function externalApiV2() {
     bodyQuery.size(limit);
 
     // Validate the offset parameter
-    let offset: number = 0;
+    let offset = 0;
     if (req.query.offset !== undefined) {
       offset = Number(req.query.offset);
       if (req.query.offset === '' || !Number.isInteger(offset) || offset < 0) {
@@ -505,7 +506,7 @@ function externalApiV2() {
             Results: response.body.hits.hits.map(obj => obj._source)
           });
           break;
-        case "application/ld+json":
+        case "application/ld+json": {
           const studyModels: CMMStudy[] = response.body.hits.hits.map(hit => getStudyModel(hit));
           const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
           res.contentType("application/ld+json").json({
@@ -514,6 +515,7 @@ function externalApiV2() {
             Results: jsonLdArray
           });
           break;
+        }
         default:
           // We shouldn't end up here, but just in case respond with something.
           res.sendStatus(500);
@@ -585,8 +587,8 @@ export async function getESrecordsByLanguages(lang:string): Promise<number>{
   });
 
   const elasticAggs: any = response.body.aggregations;
-  let result:number=0;
-  for (let x of elasticAggs.lang.buckets) {
+  let result=0;
+  for (const x of elasticAggs.lang.buckets) {
     if (x.key==lang){
       result = x.doc_count;
       break;
@@ -621,7 +623,7 @@ export async function getESrecordsModified(): Promise<number>{
   });
 
   const elasticAggs: any = response.body.aggregations;
-  let result:number=elasticAggs.types_count.value;
+  const result:number=elasticAggs.types_count.value;
   return result;
 }
 
@@ -691,7 +693,7 @@ function jsonProxy() {
         }
       }
     },
-    filter: (req) => req.method === 'GET' && req.url.match(/[\/?]/gi)?.length === 2
+    filter: (req) => req.method === 'GET' && req.url.match(/[/?]/gi)?.length === 2
   });
 }
 
@@ -729,7 +731,7 @@ async function getMetadata(q: string, lang: string | undefined): Promise<Metadat
 
 export async function renderResponse(req: express.Request, res: express.Response, ejsTemplate: string) {
   // Default to success
-  let status: number = 200;
+  let status = 200;
 
   let metadata: Metadata | undefined = undefined;
 

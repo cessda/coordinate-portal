@@ -19,7 +19,7 @@ import { initTranslations } from "../actions/language";
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   children: JSX.Element
-};
+}
 
 export class App extends Component<Props> {
 
