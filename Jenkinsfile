@@ -34,7 +34,6 @@ pipeline {
 		stage('Configure Node.JS environment') {
 			agent {
 				dockerfile {
-					customWorkspace '/usr/src/app'
 					filename 'Dockerfile'
 					reuseNode true
 				}
@@ -42,17 +41,23 @@ pipeline {
 			stages {
 				stage('Lint Project') {
 					steps {
-						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+						dir ('/usr/src/app') {
+							sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+						}
 					}
 					post {
 						always {
-							recordIssues(tools: [esLint(pattern: 'eslint/report.xml')])
+							dir ('/usr/src/app') {
+								recordIssues(tools: [esLint(pattern: 'eslint/report.xml')])
+							}
 						}
 					}
 				}
 				stage('Run Unit Tests') {
 					steps {
-						sh "npm test -- --forceExit"
+						dir ('/usr/src/app') {
+							sh "npm test -- --forceExit"
+						}
 					}
 					post {
 						always {
@@ -70,7 +75,6 @@ pipeline {
 				}
 			}
 		}
-
 		stage('Get Quality Gate Status') {
 			steps {
 				waitForQualityGate abortPipeline: true
