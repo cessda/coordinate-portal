@@ -34,7 +34,7 @@ pipeline {
 		stage('Configure Node.JS environment') {
 			agent {
 				dockerfile {
-					additionalBuildArgs '--target build-env'
+					additionalBuildArgs '--target build'
 					filename 'Dockerfile'
 					reuseNode true
 				}
