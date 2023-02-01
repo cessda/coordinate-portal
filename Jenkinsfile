@@ -34,7 +34,7 @@ pipeline {
 		stage('Configure Node.JS environment') {
 			agent {
 				dockerfile {
-					customWorkspace '/usr/src/app'
+					additionalBuildArgs '--target build-env'
 					filename 'Dockerfile'
 					reuseNode true
 				}
@@ -42,7 +42,8 @@ pipeline {
 			stages {
 				stage('Lint Project') {
 					steps {
-						sh 'cp --recursive /usr/src/app "$PWD"'
+						sh 'cp --recursive /usr/src/app/node_modules "$PWD/node_modules"'
+						sh 'npm install'
 						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
 					}
 					post {
