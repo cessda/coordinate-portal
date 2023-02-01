@@ -31,33 +31,46 @@ pipeline {
 	}
 
 	stages {
-		stage('Run Unit Tests') {
+		stage('Configure Node.JS environment') {
 			agent {
-				docker {
-					image 'node:16'
+				dockerfile {
+					customWorkspace '/usr/src/app'
+					filename 'Dockerfile'
 					reuseNode true
 				}
 			}
-			steps {
-				sh "npm ci"
-				sh "npm test -- --forceExit"
-			}
-			post {
-				always {
-					junit 'junit.xml'
-				}
-			}
-		}
-		stage('Run Sonar Scan') {
-			steps {
-				nodejs('node-16') {
-					withSonarQubeEnv('cessda-sonar') {
-						sh "${scannerHome}/bin/sonar-scanner"
+			stages {
+				stage('Lint Project') {
+					steps {
+						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+					}
+					post {
+						always {
+							recordIssues(tools: [esLint(pattern: 'eslint/report.xml')])
+						}
 					}
 				}
+				stage('Run Unit Tests') {
+					steps {
+						sh "npm test -- --forceExit"
+					}
+					post {
+						always {
+							junit 'junit.xml'
+						}
+					}
+				}
+				stage('Run Sonar Scan') {
+					steps {
+						withSonarQubeEnv('cessda-sonar') {
+							sh "${scannerHome}/bin/sonar-scanner"
+						}
+					}
+					when { branch 'master' }
+				}
 			}
-			when { branch 'master' }
 		}
+
 		stage('Get Quality Gate Status') {
 			steps {
 				waitForQualityGate abortPipeline: true
