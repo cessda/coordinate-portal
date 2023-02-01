@@ -69,15 +69,17 @@ pipeline {
 						}
 					}
 				}
-				stage('Run Sonar Scan') {
-					steps {
-						withSonarQubeEnv('cessda-sonar') {
-							sh "${scannerHome}/bin/sonar-scanner"
-						}
+			}
+		}
+        stage('Run Sonar Scan') {
+            steps {
+                nodejs('node-16') {
+                    withSonarQubeEnv('cessda-sonar') {
+                        sh "${scannerHome}/bin/sonar-scanner"
 					}
-					when { branch 'master' }
 				}
 			}
+			when { branch 'master' }
 		}
 		stage('Get Quality Gate Status') {
 			steps {
