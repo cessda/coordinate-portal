@@ -34,6 +34,7 @@ pipeline {
 		stage('Configure Node.JS environment') {
 			agent {
 				dockerfile {
+					args '-u node'
 					filename 'Dockerfile'
 					reuseNode true
 				}
