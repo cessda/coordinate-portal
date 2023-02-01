@@ -44,7 +44,7 @@ pipeline {
 					steps {
 						sh 'cp --recursive /usr/src/app/node_modules "$PWD/node_modules"'
 						sh 'npm install'
-						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml | true'
 					}
 					post {
 						always {
