@@ -21,9 +21,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Bundle app source and build webpack
-FROM node:16 AS final
-WORKDIR /usr/src/app
-COPY --from=build . .
+FROM build AS final
 COPY . .
 RUN npm run build
 
