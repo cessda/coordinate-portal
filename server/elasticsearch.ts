@@ -91,6 +91,7 @@ export default class Elasticsearch {
     });
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return (response.body.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
   }
 

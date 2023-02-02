@@ -31,28 +31,51 @@ pipeline {
 	}
 
 	stages {
-		stage('Run Unit Tests') {
+		stage('Configure Node.JS environment') {
 			agent {
-				docker {
-					image 'node:16'
+				dockerfile {
+					additionalBuildArgs '--target build'
+					filename 'Dockerfile'
 					reuseNode true
 				}
 			}
-			steps {
-				sh "npm ci"
-				sh "npm test -- --forceExit"
-			}
-			post {
-				always {
-					junit 'junit.xml'
+			stages {
+				stage('Setup node_modules') {
+					steps {
+						// Copy node_modules from the Docker container to the build directory
+						sh 'cp --recursive /usr/src/app/node_modules/ "$PWD/node_modules/"'
+
+						// npm install needs to be run so that NPM scripts execute correctly
+						sh 'npm install'
+					}
+				}
+				stage('Lint Project') {
+					steps {
+						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml | true'
+					}
+					post {
+						always {
+							recordIssues(tools: [esLint(pattern: 'eslint/report.xml')])
+						}
+					}
+				}
+				stage('Run Unit Tests') {
+					steps {
+						sh "npm test -- --forceExit"
+					}
+					post {
+						always {
+							junit 'junit.xml'
+						}
+					}
 				}
 			}
 		}
-		stage('Run Sonar Scan') {
-			steps {
-				nodejs('node-16') {
-					withSonarQubeEnv('cessda-sonar') {
-						sh "${scannerHome}/bin/sonar-scanner"
+        stage('Run Sonar Scan') {
+            steps {
+                nodejs('node-16') {
+                    withSonarQubeEnv('cessda-sonar') {
+                        sh "${scannerHome}/bin/sonar-scanner"
 					}
 				}
 			}
