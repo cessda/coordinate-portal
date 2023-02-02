@@ -32,7 +32,6 @@ import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
-import swaggerSearchApiV1 from './swagger-searchApiV1';
 import swaggerSearchApiV2 from './swagger-searchApiV2';
 
 
@@ -688,5 +687,4 @@ export function startListening(app: express.Express, handler: RequestHandler) {
 }
 
 // Cached Swagger JSON
-let v1: Awaited<ReturnType<typeof swaggerSearchApiV1>> | undefined = undefined;
 let v2: Awaited<ReturnType<typeof swaggerSearchApiV2>> | undefined = undefined;
