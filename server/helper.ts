@@ -16,7 +16,6 @@ import path from 'path';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
 import express, { RequestHandler } from 'express';
-import request, { CoreOptions } from 'request';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import bodyParser from 'body-parser';
 import compression from 'compression';
@@ -33,6 +32,8 @@ import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
 import swaggerSearchApiV2 from './swagger-searchApiV2';
+import fetch, { Request } from 'node-fetch';
+import { Agent } from 'http';
 
 
 // Defaults to localhost if unspecified
@@ -87,13 +88,9 @@ function getSearchkitRouter() {
   const router = express.Router();
   const host = _.trimEnd(elasticsearchUrl, '/');
 
-  const requestClient = request.defaults({ pool: { maxSockets: 500 } });
-
-  const esAuth: CoreOptions["auth"] = {
-    username: elasticsearchUsername,
-    password: elasticsearchPassword,
-    sendImmediately: true
-  };
+  const httpAgent = new Agent({
+    keepAlive: true
+  });
 
   // Get a record directly
   router.get('/_get/:index/:id', async (req, res) => {
@@ -127,7 +124,7 @@ function getSearchkitRouter() {
 
 
   // Proxy Searchkit requests
-  router.post('/_search', responseTime(uiResponseTimeHandler), (req, res) => {
+  router.post('/_search', responseTime(uiResponseTimeHandler), async (req, res) => {
 
     //timer required for responseTime in zero elasticsearch response
     const startTime = new Date();
@@ -146,39 +143,40 @@ function getSearchkitRouter() {
     //delete language from body request
     delete req.body.index;
 
-    requestClient.post({
-      url: fullUrl,
-      body: req.body,
-      json: _.isObject(req.body),
-      forever: true,
-      auth: esAuth
-    }, (_error, _response, body: SearchResponse | undefined) => {
-      //callback function to register metrics of zero results from elasticsearch
-      if (body) {
-        const hits = body.hits.total;
-        if (hits === 0) {
-          const endTime = new Date();
-          const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-          uiResponseTimeZeroElasticResultsHistogram.observe({
-            method: req.method,
-            route: req.route.path,
-            status_code: res.statusCode
-          }, timeDiff);
-          uiResponseTimeTotalFailedHistogram.observe({
-            method: req.method,
-            route: req.route.path
-          }, timeDiff);
-        }
+    const request = new Request(fullUrl, {
+      agent: httpAgent,
+      method: 'POST',
+      body: JSON.stringify(req.body),
+      headers: {
+        'Authorization': `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`,
+        'Content-Type': 'application/json'
       }
-    }).on('response', (response) => {
-      logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
-    }).on('error', (response) => {
-      // When a connection error occurs send a 502 error to the client.
-      logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
-      res.sendStatus(502);
-    }).pipe(res);
-  });
+    });
 
+    try {
+      const response = await fetch(request);
+      const body = await response.json() as Partial<SearchResponse>;
+      if (body.hits?.total === 0) {
+        const endTime = new Date();
+        const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
+        uiResponseTimeZeroElasticResultsHistogram.observe({
+          method: req.method,
+          route: req.route.path,
+          status_code: res.statusCode
+        }, timeDiff);
+        uiResponseTimeTotalFailedHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, timeDiff);
+      }
+      res.status(response.status).json(body);
+      logger.debug('Finished Elasticsearch Request to %s', fullUrl);
+    } catch (e) {
+      // When a connection error occurs send a 502 error to the client.
+      logger.error('Elasticsearch Request failed: %s: %s', fullUrl, e);
+      res.sendStatus(502);
+    }
+  });
   return router;
 }
 
