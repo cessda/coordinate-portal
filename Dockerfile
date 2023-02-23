@@ -1,4 +1,4 @@
-# Copyright CESSDA ERIC 2017-2021
+# Copyright CESSDA ERIC 2017-2023
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License.
@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:16
+FROM node:16 AS build
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -21,6 +21,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Bundle app source and build webpack
+FROM build AS final
 COPY . .
 RUN npm run build
 

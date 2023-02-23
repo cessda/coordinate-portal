@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -258,7 +258,7 @@ describe('Search actions', () => {
 
     it('logs user metrics when analytics is enabled', () => {
       // Mock Redux store.
-      let store = mockStore({
+      const store = mockStore({
         routing: {
           // @ts-expect-error
           locationBeforeTransitions: {

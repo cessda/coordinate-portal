@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -28,7 +28,7 @@ export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props?: Props) {
+  constructor(props: Props) {
     const derivedProps = {
       ...SearchBox.defaultProps,
       ...props
@@ -41,7 +41,7 @@ export class SearchBox extends SearchkitSearchBox {
     ...SearchkitSearchBox.defaultProps as typeof SearchkitSearchBox.defaultProps & { blurAction: "search"}, 
     pathname: '',
     push,
-    query: '',
+    query: ''
   };
 
   onChange(event: any): void {

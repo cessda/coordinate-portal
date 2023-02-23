@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -29,5 +29,5 @@ export function start () {
     const indexPath = path.join(path.join(__dirname, '../dist'), 'index.ejs');
 
     startListening(app, async (req, res) => await renderResponse(req, res, indexPath));
-};
+}
 

@@ -181,6 +181,7 @@ describe('helper utilities', () => {
 
   describe('checkBuildDirectory()', () => {
     // Mock out process.exit() to prevent the process from exiting
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const mockExit = jest.spyOn(process, 'exit').mockImplementation((() => {}) as () => never);
 
     // Reset the mock before each run

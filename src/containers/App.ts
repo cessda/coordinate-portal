@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import { initTranslations } from "../actions/language";
 
 interface Props extends ReturnType<typeof mapDispatchToProps> {
   children: JSX.Element
-};
+}
 
 export class App extends Component<Props> {
 

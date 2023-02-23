@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -16,7 +16,6 @@ import path from 'path';
 import _ from 'lodash';
 import proxy from 'express-http-proxy';
 import express, { RequestHandler } from 'express';
-import request, { CoreOptions } from 'request';
 import bodybuilder, { Bodybuilder } from 'bodybuilder';
 import bodyParser from 'body-parser';
 import compression from 'compression';
@@ -26,14 +25,15 @@ import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram } from './metrics';
 import Elasticsearch from './elasticsearch';
-import { SearchResponse } from '@elastic/elasticsearch/api/types';
+import { AggregationsValueCountAggregate, SearchResponse } from '@elastic/elasticsearch/api/types';
 import { ConnectionError, ResponseError } from '@elastic/elasticsearch/lib/errors';
 import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
-import swaggerSearchApiV1 from './swagger-searchApiV1';
 import swaggerSearchApiV2 from './swagger-searchApiV2';
+import fetch, { Request } from 'node-fetch';
+import { Agent } from 'http';
 
 
 // Defaults to localhost if unspecified
@@ -88,13 +88,9 @@ function getSearchkitRouter() {
   const router = express.Router();
   const host = _.trimEnd(elasticsearchUrl, '/');
 
-  const requestClient = request.defaults({ pool: { maxSockets: 500 } });
-
-  const esAuth: CoreOptions["auth"] = {
-    username: elasticsearchUsername,
-    password: elasticsearchPassword,
-    sendImmediately: true
-  };
+  const httpAgent = new Agent({
+    keepAlive: true
+  });
 
   // Get a record directly
   router.get('/_get/:index/:id', async (req, res) => {
@@ -149,7 +145,7 @@ function getSearchkitRouter() {
 
 
   // Proxy Searchkit requests
-  router.post('/_search', responseTime(uiResponseTimeHandler), (req, res) => {
+  router.post('/_search', responseTime(uiResponseTimeHandler), async (req, res) => {
 
     //timer required for responseTime in zero elasticsearch response
     const startTime = new Date();
@@ -168,39 +164,40 @@ function getSearchkitRouter() {
     //delete language from body request
     delete req.body.index;
 
-    requestClient.post({
-      url: fullUrl,
-      body: req.body,
-      json: _.isObject(req.body),
-      forever: true,
-      auth: esAuth
-    }, (_error, _response, body: SearchResponse | undefined) => {
-      //callback function to register metrics of zero results from elasticsearch
-      if (body) {
-        const hits = body.hits.total;
-        if (hits === 0) {
-          const endTime = new Date();
-          const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-          uiResponseTimeZeroElasticResultsHistogram.observe({
-            method: req.method,
-            route: req.route.path,
-            status_code: res.statusCode
-          }, timeDiff);
-          uiResponseTimeTotalFailedHistogram.observe({
-            method: req.method,
-            route: req.route.path
-          }, timeDiff);
-        }
+    const request = new Request(fullUrl, {
+      agent: httpAgent,
+      method: 'POST',
+      body: JSON.stringify(req.body),
+      headers: {
+        'Authorization': `Basic ${Buffer.from(`${elasticsearchUsername}:${elasticsearchPassword}`).toString('base64')}`,
+        'Content-Type': 'application/json'
       }
-    }).on('response', (response) => {
-      logger.debug('Finished Elasticsearch Request to %s', fullUrl, response.statusCode);
-    }).on('error', (response) => {
-      // When a connection error occurs send a 502 error to the client.
-      logger.error('Elasticsearch Request failed: %s: %s', fullUrl, response.message);
-      res.sendStatus(502);
-    }).pipe(res);
-  });
+    });
 
+    try {
+      const response = await fetch(request);
+      const body = await response.json() as Partial<SearchResponse>;
+      if (body.hits?.total === 0) {
+        const endTime = new Date();
+        const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
+        uiResponseTimeZeroElasticResultsHistogram.observe({
+          method: req.method,
+          route: req.route.path,
+          status_code: res.statusCode
+        }, timeDiff);
+        uiResponseTimeTotalFailedHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, timeDiff);
+      }
+      res.status(response.status).json(body);
+      logger.debug('Finished Elasticsearch Request to %s', fullUrl);
+    } catch (e) {
+      // When a connection error occurs send a 502 error to the client.
+      logger.error('Elasticsearch Request failed: %s: %s', fullUrl, e);
+      res.sendStatus(502);
+    }
+  });
   return router;
 }
 
@@ -228,167 +225,6 @@ function elasticsearchErrorHandler(e: unknown, res: Response) {
 }
 
 const maxApiLimit = 200;
-
-function externalApiV1() {
-
-  const router = express.Router();
-
-  router.get('/search', async (req, res) => {
-
-    const accepts = req.accepts(["json", "application/ld+json"]);
-
-    // Skip performing work if the client won't accept the response.
-    if (!accepts) {
-      res.sendStatus(406);
-      return;
-    }
-
-    const { metadataLanguage, q } = req.query;
-
-    if (!metadataLanguage) {
-      res.status(400).send({ message: 'Please provide a search language'});
-      return;
-    }
-
-    //Prepare body for ElasticSearch
-    const bodyQuery = bodybuilder();
-
-    // Validate the limit parameter
-    let limit: number;
-    if (req.query.limit !== undefined) {
-      limit = Number(req.query.limit);
-      if (!Number.isInteger(limit) || limit <= 0) {
-        res.status(400).send({ message: 'limit must be a positive integer'});
-        return;
-      } else if (limit > maxApiLimit) {
-        res.status(400).send({ message: `limit must be maximum ${maxApiLimit}`});
-        return;
-      } else {
-        bodyQuery.size(limit);
-      }
-    } else {
-      limit = 10;
-    }
-
-    bodyQuery.size(limit);
-
-    // Validate the offset parameter
-    let offset = 0;
-    if (req.query.offset !== undefined) {
-      offset = Number(req.query.offset);
-      if (req.query.offset === '' || !Number.isInteger(offset) || offset < 0) {
-        res.status(400).send({ message: 'offset must be a positive integer'});
-        return;
-      } else {
-        bodyQuery.from(offset);
-      }
-    }
-
-    //create json body for ElasticSearchClient - search query
-    if (_.isString(q)) {
-      bodyQuery.query('query_string', {
-        query: q,
-        lenient: true,
-        default_operator: "AND"
-      });
-    }
-
-    //Create json body for ElasticSearchClient - nested post-filters
-    buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
-    buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
-    buildNestedFilters(bodyQuery, req.query.publishers, 'publisherFilter', 'publisherFilter.publisher');
-
-    //Create json body for ElasticSearchClient - date-filters
-    let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
-    let dataCollectionYearMax = req.query.dataCollectionYearMax ? Number(req.query.dataCollectionYearMax) : undefined;
-    if (dataCollectionYearMin || dataCollectionYearMax) {
-      if (!Number.isInteger(dataCollectionYearMin)) {
-        dataCollectionYearMin = undefined;
-      }
-      if (!Number.isInteger(dataCollectionYearMax)) {
-        dataCollectionYearMax = undefined;
-      }
-      bodyQuery.filter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
-    }
-
-    //Meta-Info to send with response
-    const searchTerms = {
-      metadataLanguage: metadataLanguage,
-      queryTerm: q,
-      limit: req.query.limit,
-      offset: req.query.offset,
-      classifications: req.query.classifications,
-      studyAreaCountries: req.query.studyAreaCountries,
-      publishers: req.query.publishers,
-      dataCollectionYearMin: req.query.dataCollectionYearMin,
-      dataCollectionYearMax: req.query.dataCollectionYearMax,
-   }
-
-    //Prepare the Client
-    try {
-      const response = await elasticsearch.client.search<CMMStudy>({
-        index: `cmmstudy_${metadataLanguage}`,
-        body: bodyQuery.build(),
-        track_total_hits: true
-      });
-
-      // Calculate the total hits
-      let totalHits: number;
-      switch (typeof response.body.hits.total) {
-        case "object":
-          // If SearchTotalHits object, extract from the value field
-          totalHits = response.body.hits.total.value;
-          break;
-        case "number":
-          // If number, extract directly
-          totalHits = response.body.hits.total;
-          break;
-        default:
-          // Total hits not present, set to 0
-          totalHits = 0;
-          break;
-      }
-
-      const resultsCount = apiResultsCount(offset, limit, response.body.hits.hits.length, totalHits);
-
-      /* 
-       * Send the Response.
-       *
-       * We default to sending the CMMStudy model, only sending JSON-LD if specifically requested.
-       */
-      switch (accepts) {
-        case "json": 
-          res.json({
-            SearchTerms: searchTerms,
-            ResultsCount: resultsCount,
-            Results: response.body.hits.hits.map(obj => obj._source)
-          });
-          break;
-        case "application/ld+json": {
-          const studyModels: CMMStudy[] = response.body.hits.hits.map(hit => getStudyModel(hit));
-          const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
-          res.contentType("application/ld+json").json({
-            SearchTerms: searchTerms,
-            ResultsCount: resultsCount,
-            Results: jsonLdArray
-          });
-          break;
-        }
-        default:
-          // We shouldn't end up here, but just in case respond with something.
-          res.sendStatus(500);
-          break;
-      }
-    } catch (e) {
-      logger.error('Elasticsearch API Request failed: %s', (e as Error));
-      res.status(502).send({ message: (e as Error).message });
-    } finally {
-      logger.debug('Finished API Elasticsearch Request');
-    }
-  });
-  
-  return router;
-}
 
 function externalApiV2() {
 
@@ -643,8 +479,9 @@ export async function getESrecordsModified(): Promise<number>{
     track_total_hits: false
   });
 
-  const elasticAggs: any = response.body.aggregations;
-  return elasticAggs.types_count.value;
+  const elasticAggs = response.body.aggregations;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return (elasticAggs!.types_count as AggregationsValueCountAggregate).value || 0;
 }
 
 //used by metrics.ts
@@ -838,19 +675,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   // Set up request handlers
   app.use('/api/sk', getSearchkitRouter());
   app.use('/api/json', jsonProxy());
-  app.use('/api/DataSets/v1', cors(),  externalApiV1());
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
-  app.use('/swagger/api/DataSets/v1', cors(), (async (_req, res) => {
-    try {
-      if (!v1) {
-        v1 = await swaggerSearchApiV1(elasticsearch)
-      }
-      return res.json(v1);
-    } catch (e) {
-      logger.error(`Cannot communicate with Elasticsearch: ${e}`);
-      return res.sendStatus(500);
-    }
-  }));
   app.use('/swagger/api/DataSets/v2', cors(), (async (_req, res) => {
     try {
       if (!v2) {
@@ -881,5 +706,4 @@ export function startListening(app: express.Express, handler: RequestHandler) {
 }
 
 // Cached Swagger JSON
-let v1: Awaited<ReturnType<typeof swaggerSearchApiV1>> | undefined = undefined;
 let v2: Awaited<ReturnType<typeof swaggerSearchApiV2>> | undefined = undefined;

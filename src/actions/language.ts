@@ -1,5 +1,5 @@
 
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -38,6 +38,7 @@ export function initTranslations(): Thunk {
     languages.forEach(language => {
       // Register translations from the respective JSON files
       try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         counterpart.registerTranslations(language.code, require(`../../translations/${language.code}.json`));
       } catch (e) {
         const errorMessage = `Couldn't load translation for language '${language.code}'`;
