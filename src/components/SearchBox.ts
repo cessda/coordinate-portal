@@ -95,5 +95,4 @@ export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   };
 }
 
-//@ts-expect-error - typing conflicts
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);
