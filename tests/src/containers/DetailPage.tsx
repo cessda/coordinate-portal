@@ -11,21 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { DetailPage, mapDispatchToProps, mapStateToProps, Props } from '../../../src/containers/DetailPage';
-import { languages } from '../../../src/utilities/language';
+import { languageMap, languages } from '../../../src/utilities/language';
 import { mockStudy } from '../../common/mockdata';
 
 // Mock props and shallow render container for test.
 function setup(partialProps?: Partial<Props>) {
   const props = {
     item: mockStudy,
+    availableLanguages: [],
     currentLanguage: languages[0],
     query: "1",
     goBack: jest.fn(),
     updateStudy: jest.fn(),
+    push: jest.fn(),
     ...partialProps
   };
   const enzymeWrapper = shallow<DetailPage>(<DetailPage {...props} />);
@@ -66,6 +67,7 @@ describe('DetailPage container', () => {
           list: []
         },
         detail: {
+          languageAvailableIn: [],
           study: props.item,
           similars: []
         }
@@ -73,7 +75,8 @@ describe('DetailPage container', () => {
     ).toEqual({
       item: props.item,
       currentLanguage: props.currentLanguage,
-      query: props.query
+      query: props.query,
+      availableLanguages: []
     });
   });
 
@@ -94,6 +97,7 @@ describe('DetailPage container', () => {
           list: []
         },
         detail: {
+          languageAvailableIn: [languages[0]],
           study: undefined,
           similars: []
         }
@@ -101,7 +105,8 @@ describe('DetailPage container', () => {
     ).toEqual({
       item: undefined,
       currentLanguage: props.currentLanguage,
-      query: props.query
+      query: props.query,
+      availableLanguages: [languages[0]]
     });
   });
 
@@ -131,14 +136,6 @@ describe('DetailPage container', () => {
     expect(props.updateStudy).toBeCalledWith("2");
   });
 
-  it('should escape quotes before retrieving study', () => {
-    const value = "value";
-    const { props } = setup({ query: `"${value}"`});
-
-    // The quotes should be stripped before passing the value on.
-    expect(props.updateStudy).toBeCalledWith(value);
-  });
-
   it('should not update study if query is empty', () => {
     const { enzymeWrapper, props } = setup();
 
@@ -153,7 +150,8 @@ describe('DetailPage container', () => {
   it('should map dispatch to props', () => {
     expect(mapDispatchToProps(i => i)).toEqual({
       goBack: expect.any(Function),
-      updateStudy: expect.any(Function)
+      updateStudy: expect.any(Function),
+      push: expect.any(Function)
     });
   });
 });

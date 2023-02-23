@@ -175,6 +175,26 @@ export default class Elasticsearch {
   }
 
   /**
+   * Queries Elasticsearch for the indices where a study ID is present
+   * @param id the study ID
+   * @returns the index names
+   */
+  async getIndicesForStudyId(id: string) {
+      const res = await this.client.search({
+        body: {
+          query: {
+            ids: {
+              values: [id]
+            }
+          }
+        },
+        _source: false
+      });
+
+      return res.body.hits.hits.map(hit => hit._index);
+  }
+
+  /**
    * Query used to retrieve similar records for a specific title (for detail page).
    * @param id the document id, used to exclude the original document from the query.
    * @param title the title of the document to retrieve similar records for.

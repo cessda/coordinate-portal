@@ -14,7 +14,6 @@
 import React, { Component } from 'react';
 import { Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } from 'searchkit';
 import Header from '../components/Header';
-import Language from '../components/Language';
 import Detail from '../components/Detail';
 import Footer from '../components/Footer';
 import searchkit from '../utilities/searchkit';
@@ -24,13 +23,13 @@ import { FaAngleLeft, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
 import { AnyAction, bindActionCreators } from 'redux';
 import Translate from 'react-translate-component';
 import Similars from '../components/Similars';
-import { goBack } from 'react-router-redux';
+import { goBack, push } from 'react-router-redux';
 import type { State } from '../types';
 import counterpart from 'counterpart';
-import _ from 'lodash';
 import { getJsonLd } from '../../common/metadata';
 import { updateStudy } from '../actions/detail';
 import $ from 'jquery';
+import { browserHistory } from 'react-router';
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
@@ -40,16 +39,17 @@ export class DetailPage extends Component<Props> {
     super(props);
     const id = this.props.query;
     if (id && id !== this.props.item?.id) {
-      this.props.updateStudy(_.trim(id, "\""));
+      // If the query is set and not already in the store, retrieve it.
+      this.props.updateStudy(id);
     }
     this.updateTitle();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: Props) {
     // Check if the query has changed, if it has ask for the store to be updated.
     const id = this.props.query;
-    if (id && id !== this.props.item?.id) {
-      this.props.updateStudy(_.trim(id, "\""));
+    if (id && id !== prevProps.query) {
+      this.props.updateStudy(id);
     }
     this.updateTitle();
 
@@ -82,11 +82,34 @@ export class DetailPage extends Component<Props> {
     const {
       item,
       currentLanguage,
-      goBack
+      goBack,
+      push
     } = this.props;
 
     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
     const index = currentLanguage.index;
+
+    const languageLinks: JSX.Element[] = [];
+
+    for (let i = 0; i < this.props.availableLanguages.length; i++) {
+      const lang = this.props.availableLanguages[i];
+      const element = <a key={lang.code} onClick={() => {
+        const currentLocation = browserHistory.getCurrentLocation();
+        push({
+          pathname: currentLocation.pathname,
+          query: {
+            ...currentLocation.query,
+            lang: lang.code
+          }
+        });
+      }}>{lang.label}</a>
+
+      if (i < this.props.availableLanguages.length - 1) {
+        languageLinks.push(<React.Fragment key={i}>{element}, </React.Fragment>)
+      } else {
+        languageLinks.push(element);
+      }
+    }
 
     return (
       <SearchkitProvider searchkit={searchkit}>
@@ -136,8 +159,10 @@ export class DetailPage extends Component<Props> {
                 <p className="fs-14 mb-15">
                   <Translate component="strong" content="language.notAvailable.heading"/>
                 </p>
-                <Translate component="p" className="fs-14 mb-15" content="language.notAvailable.content"/>
-                <Language/>
+                <Translate className="fs-14 mb-15" component="p" content="language.notAvailable.content"/>
+                {this.props.availableLanguages.length > 0 &&
+                  <p className="fs-14 mb-15"><Translate content="language.notAvailable.alternateLanguage"/>: {languageLinks}</p>
+                }
               </div>
             }
             </LayoutResults>
@@ -155,6 +180,7 @@ export function mapStateToProps(state: State) {
   return {
     item: state.detail.study,
     currentLanguage: state.language.currentLanguage,
+    availableLanguages: state.detail.languageAvailableIn,
     query: Array.isArray(query) ? query.join() : query
   };
 }
@@ -162,7 +188,8 @@ export function mapStateToProps(state: State) {
 export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     goBack: bindActionCreators(goBack, dispatch),
-    updateStudy: bindActionCreators(updateStudy, dispatch)
+    updateStudy: bindActionCreators(updateStudy, dispatch),
+    push: bindActionCreators(push, dispatch)
   };
 }
 

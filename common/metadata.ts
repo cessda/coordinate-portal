@@ -247,7 +247,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
       license = new URL(data.dataAccessFreeTexts[i]).toString();
       break;
     } catch (e) {
-      console.debug(`${data.dataAccessFreeTexts[i]} is not a valid URL`, e);
+      // invalid URLs should be ignored
     } 
   }
 

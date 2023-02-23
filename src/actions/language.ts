@@ -64,7 +64,7 @@ export function initTranslations(): Thunk {
       switch (key) {
         case 'searchbox.placeholder': 
           return counterpart.translate('search');
-        case 'hitstats.results_found': 
+        case 'hitstats.results_found': {
           const state = getState();
           return counterpart.translate(numberOfResults, {
             count: searchkit.getHitsCount(),
@@ -72,6 +72,7 @@ export function initTranslations(): Thunk {
             total: state.search.totalStudies,
             time: searchkit.getTime()
           });
+        }
         case 'NoHits.NoResultsFound': 
           return counterpart.translate('noHits.noResultsFound', {
             query: searchkit.getQueryAccessor().state.value
@@ -151,8 +152,8 @@ export function changeLanguage(code: string): Thunk {
       label
     });
     
-    if (state.detail.study) {
-      dispatch(updateStudy(state.detail.study.id));
+    if (state.routing.locationBeforeTransitions.pathname === "/detail" && state.routing.locationBeforeTransitions.query.q) {
+      dispatch(updateStudy(state.routing.locationBeforeTransitions.query.q.toString()));
     }
 
     if (state.routing.locationBeforeTransitions.pathname === "/") {

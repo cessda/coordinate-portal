@@ -25,7 +25,7 @@ import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram } from './metrics';
 import Elasticsearch from './elasticsearch';
-import { SearchResponse } from '@elastic/elasticsearch/api/types';
+import { AggregationsValueCountAggregate, SearchResponse } from '@elastic/elasticsearch/api/types';
 import { ConnectionError, ResponseError } from '@elastic/elasticsearch/lib/errors';
 import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
@@ -96,8 +96,29 @@ function getSearchkitRouter() {
   router.get('/_get/:index/:id', async (req, res) => {
     try {
       const source = await elasticsearch.getStudy(req.params.id, req.params.index);
-      res.send(source);
+
+      let similars: Awaited<ReturnType<typeof elasticsearch.getSimilars>>;
+      
+      // Get similars
+      if (source?.titleStudy) {
+        similars = await elasticsearch.getSimilars(source?.titleStudy, req.params.id, req.params.index);
+      } else {
+        similars = [];
+      }
+
+      // Send the response
+      res.send({ 
+        source: source, 
+        similars: similars 
+      });
     } catch (e) {
+      if (e instanceof ResponseError && e.statusCode === 404) {
+        // Try to find if the study is available in other languages
+        const indices = await elasticsearch.getIndicesForStudyId(req.params.id);
+        res.status(404).json(indices.map(i => i.split("_")[1]));
+        return;
+      }
+
       elasticsearchErrorHandler(e, res);
     }
   });
@@ -423,9 +444,9 @@ export async function getESrecordsByLanguages(lang:string): Promise<number>{
   });
 
   const elasticAggs: any = response.body.aggregations;
-  let result=0;
+  let result = 0;
   for (const x of elasticAggs.lang.buckets) {
-    if (x.key==lang){
+    if (x.key === lang){
       result = x.doc_count;
       break;
     }
@@ -458,9 +479,9 @@ export async function getESrecordsModified(): Promise<number>{
     track_total_hits: false
   });
 
-  const elasticAggs: any = response.body.aggregations;
-  const result:number=elasticAggs.types_count.value;
-  return result;
+  const elasticAggs = response.body.aggregations;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return (elasticAggs!.types_count as AggregationsValueCountAggregate).value || 0;
 }
 
 //used by metrics.ts
