@@ -79,13 +79,13 @@ pipeline {
 					}
 				}
 			}
-			when { branch 'master' }
+			when { branch 'main' }
 		}
 		stage('Get Quality Gate Status') {
 			steps {
 				waitForQualityGate abortPipeline: true
 			}
-			when { branch 'master' }
+			when { branch 'main' }
 		}
 		stage('Build Docker image') {
 			 steps {
@@ -98,19 +98,19 @@ pipeline {
 				sh("docker push ${image_tag}")
 				sh("gcloud container images add-tag ${image_tag} ${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME}-latest")
 			}
-			when { branch 'master' }
+			when { branch 'main' }
 		}
 		stage('Check Requirements and Deployments') {
 			steps {
-				build job: 'cessda.cdc.deploy/master', parameters: [string(name: 'searchkit_image_tag', value: "${env.BRANCH_NAME}-${env.BUILD_NUMBER}")], wait: false
+				build job: 'cessda.cdc.deploy/main', parameters: [string(name: 'searchkit_image_tag', value: "${env.BRANCH_NAME}-${env.BUILD_NUMBER}")], wait: false
 			}
-			when { branch 'master' }
+			when { branch 'main' }
 		}
 	}
 	post {
 		failure {
 			script {
-				if (env.BRANCH_NAME == 'master') {
+				if (env.BRANCH_NAME == 'main') {
 					emailext body: '${DEFAULT_CONTENT}', subject: '${DEFAULT_SUBJECT}', to: 'support@cessda.eu'
 				}
 			}
