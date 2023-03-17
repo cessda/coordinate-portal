@@ -242,7 +242,7 @@ function externalApiV2() {
     }
 
     //Get Visitors Information For Prom Metrics
-    const ip: string = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress as string;
+    const ip: string = req.headers['x-forwarded-for'] as string | undefined || req.socket.remoteAddress as string;
     const ipinfoWrapper = new IPinfoWrapper(""); //token must be parsed here
     //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
     ipinfoWrapper.lookupIp(ip).then((response: IPinfo) => {
@@ -250,7 +250,6 @@ function externalApiV2() {
       searchAPIClientCountryGauge.labels({ searchAPIClientCountry: response.country}).inc();
     })
     .catch((error) => {
-      console.log(error);
       if (error instanceof ApiLimitError) {
           // handle api limit exceed error
           logger.error(`ipinfo searchAPI limit exceeded : ${error}`);
