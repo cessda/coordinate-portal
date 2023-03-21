@@ -135,6 +135,7 @@ export const languageGauge = new client.Gauge({
   help: 'Language Gauge',
   labelNames: ['language'],
 });
+//Function to get Studies Languages Metrics
 const languageGauges = async () => {
   const results = await getESindexLanguages();
   for (const result of results) {
@@ -148,12 +149,25 @@ export const endpointGauge = new client.Gauge({
   help: 'Endpoint Gauge',
   labelNames: ['endpoint'],
 });
+//Function to get Studies Endpoints Metrics
 const endpointGauges = async () => {
   const results = await getESrecordsByEndpoint();
   results.forEach(( result: { key: string, doc_count: number } ) => {
     endpointGauge.set({ endpoint: result.key }, result.doc_count);
   });
 };
+//Metrics for SearchAPI - Track Visitors IP's
+export const searchAPIClientIPGauge = new client.Gauge({
+  name: 'searchAPI_client_ip',
+  help: 'SearchAPI Client IPs',
+  labelNames: ['searchAPIClientIP'],
+});
+//Metrics for SearchAPI - Track Visitors Country
+export const searchAPIClientCountryGauge = new client.Gauge({
+  name: 'searchAPI_client_country',
+  help: 'SearchAPI Client Countries',
+  labelNames: ['searchAPIClientCountry'],
+});
 
 //Endpoint used for Prometheus Metrics
 export function startMetricsListening() {
