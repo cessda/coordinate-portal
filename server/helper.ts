@@ -23,7 +23,7 @@ import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
-import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram } from './metrics';
+import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram, searchAPIClientIPGauge, searchAPIClientCountryGauge } from './metrics';
 import Elasticsearch from './elasticsearch';
 import { AggregationsValueCountAggregate, SearchResponse } from '@elastic/elasticsearch/api/types';
 import { ConnectionError, ResponseError } from '@elastic/elasticsearch/lib/errors';
@@ -34,6 +34,7 @@ import { WithContext, Dataset } from 'schema-dts';
 import swaggerSearchApiV2 from './swagger-searchApiV2';
 import fetch, { Request } from 'node-fetch';
 import { Agent } from 'http';
+import IPinfoWrapper, { IPinfo, ApiLimitError } from "node-ipinfo";
 
 
 // Defaults to localhost if unspecified
@@ -239,6 +240,24 @@ function externalApiV2() {
       res.sendStatus(406);
       return;
     }
+
+    //Get Visitors Information For Prom Metrics
+    const ip: string = req.headers['x-forwarded-for'] as string | undefined || req.socket.remoteAddress as string;
+    const ipinfoWrapper = new IPinfoWrapper(""); //token must be parsed here
+    //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
+    ipinfoWrapper.lookupIp(ip).then((response: IPinfo) => {
+      searchAPIClientIPGauge.labels({ searchAPIClientIP: response.ip}).inc();
+      searchAPIClientCountryGauge.labels({ searchAPIClientCountry: response.country}).inc();
+    })
+    .catch((error) => {
+      if (error instanceof ApiLimitError) {
+          // handle api limit exceed error
+          logger.error(`ipinfo searchAPI limit exceeded : ${error}`);
+      } else {
+          // handle other errors
+          logger.error(`error while getting searchAPI client's ip / country : ${error}`);
+      }
+    });
 
     const { metadataLanguage, q } = req.query;
 
