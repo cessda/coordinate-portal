@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.2.1] - 2023-03-28
+
+### Additions
+
+- Get information about the users of the Search API using HTTP headers ([#530](https://github.com/cessda/cessda.cdc.versions/issues/530))
+- Show alternate languages when a study is not found in the selected language ([#375](https://github.com/cessda/cessda.cdc.versions/issues/375))
+
 ## [3.2.0] - 2022-12-08
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7413641.svg)](https://doi.org/10.5281/zenodo.7413641)
