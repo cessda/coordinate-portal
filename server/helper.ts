@@ -259,7 +259,7 @@ function externalApiV2() {
       }
     });
 
-    const { metadataLanguage, q } = req.query;
+    const { metadataLanguage, q, sortBy } = req.query;
 
     if (!metadataLanguage) {
       res.status(400).send({ message: 'Please provide a search language'});
@@ -268,6 +268,26 @@ function externalApiV2() {
 
     //Prepare body for ElasticSearch
     const bodyQuery = bodybuilder();
+
+    //Implementing Sorting Options
+    if (sortBy){
+      if (sortBy=="titleASC")
+        bodyQuery.sort('titleStudy.raw', 'asc');
+      else if (sortBy=="titleDESC")
+        bodyQuery.sort('titleStudy.raw', 'desc');
+      else if (sortBy=="dateOfCollectionOldest")
+        bodyQuery.sort('dataCollectionPeriodEnddate', 'asc');
+      else if (sortBy=="dateOfCollectionNewest")
+        bodyQuery.sort('dataCollectionPeriodEnddate', 'desc');
+      else if (sortBy=="dateOfPublicationNewest")
+        bodyQuery.sort('publicationYear', 'desc');
+      else{
+        res.status(400).send({ message: 'Please provide a proper sorting option. Available: titleASC, titleDESC, dateOfCollectionOldest, dateOfCollectionNewest, dateOfPublicationNewest'});
+        return;
+      }
+    }
+    else //if no sorting option is provided, sort by default Relevance - as UI
+    bodyQuery.sort('_score', 'desc');
 
     // Validate the limit parameter
     let limit: number;
@@ -339,7 +359,8 @@ function externalApiV2() {
       publishers: req.query.publishers,
       dataCollectionYearMin: req.query.dataCollectionYearMin,
       dataCollectionYearMax: req.query.dataCollectionYearMax,
-      keywords: req.query.keywords
+      keywords: req.query.keywords,
+      sortBy: req.query.sortBy
    }
 
     //Prepare the Client
