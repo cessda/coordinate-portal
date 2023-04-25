@@ -102,8 +102,11 @@ export default class Elasticsearch {
     });
     const indices = Object.keys(res.body);
 
-    // Index names are of the form cmmstudy_${lang}, extract the ${lang} part
-    return indices.map(i => i.split("_")[1]);
+    // Index names are of the form cmmstudy_${lang}, extract the ${lang} part and filter out not needed indexes
+    return indices.map(i => {
+      if (i.startsWith('cmmstudy_'))
+        return i.replace('cmmstudy_','');
+    }).filter(j => j);
   }
 
   async getSourceRepositoryNames() {
