@@ -1,7 +1,7 @@
 
 [![SQA badge](https://api.eu.badgr.io/public/assertions/EpifO6QnSO22gjW0A1mFAg/image)](https://api.eu.badgr.io/public/badges/IDUsZJpNQPuiJpPwmJ8iJw)
 
-[![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=cessda.cdc.searchkit%2Fmaster)](https://jenkins.cessda.eu/job/cessda.cdc.searchkit/job/master/)
+[![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=cessda.cdc.searchkit%2Fmain)](https://jenkins.cessda.eu/job/cessda.cdc.searchkit/job/main/)
 [![Quality Gate Status](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=alert_status)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Coverage](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=coverage)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Maintainability Rating](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=sqale_rating)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
@@ -182,7 +182,7 @@ All queries performed against Elasticsearch are defined in one file for easy mod
 
 > Google documentation on supported dataset JSON-LD properties can be found at <https://developers.google.com/search/docs/data-types/dataset>
 
-See [cessda.cdc.versions README](https://bitbucket.org/cessda/cessda.cdc.versions/src/master/README.md) for more details regarding adding UI languages, indexes etc.
+See [cessda.cdc.versions README](https://github.com/cessda/cessda.cdc.versions/src/main/README.md) for more details regarding adding UI languages, indexes etc.
 
 ## Contributing
 

@@ -1,5 +1,5 @@
 
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -22,7 +22,7 @@ export interface LanguageState {
 }
 
 const initialState: LanguageState = {
-  currentLanguage: languages.find(l => l.code === "en") || languages[0],
+  currentLanguage: languages.find(l => l.code === "en") as Language,
   list: []
 };
 
@@ -30,13 +30,13 @@ export default function language(state = initialState, action: Action): Language
   switch (action.type) {
     case INIT_TRANSLATIONS:
       return Object.assign({}, state, {
-        currentLanguage: languages.find(l => l.code === action.initialLanguage) || languages.find(l => l.code === "en") || languages[0],
+        currentLanguage: languages.find(l => l.code === action.initialLanguage) || initialState.currentLanguage,
         list: action.languages
       });
 
     case CHANGE_LANGUAGE:
       return Object.assign({}, state, {
-        currentLanguage: languages.find(l => l.code === action.code) || languages[0],
+        currentLanguage: languages.find(l => l.code === action.code) || initialState.currentLanguage,
         label: action.label
       });
 

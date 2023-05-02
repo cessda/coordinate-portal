@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -12,12 +12,13 @@
 // limitations under the License.
 
 import detail from "../../../src/reducers/detail";
+import { mockStudy } from "../../common/mockdata";
 
 // @ts-expect-error
 const initialState = detail(undefined, {});
 
 describe('Detail reducer', () => {
-  it('should handle UPDATE_SIMILARS', () => {
+  it('should handle UPDATE_STUDY', () => {
     expect(
       detail(
         {
@@ -25,7 +26,8 @@ describe('Detail reducer', () => {
           similars: []
         },
         {
-          type: 'UPDATE_SIMILARS',
+          type: 'UPDATE_STUDY',
+          displayed: mockStudy,
           similars: [
             {
               id: '1',
@@ -48,6 +50,8 @@ describe('Detail reducer', () => {
       )
     ).toEqual({
       ...initialState,
+      languageAvailableIn: [],
+      study: mockStudy,
       similars: [
         {
           id: '1',
@@ -71,7 +75,7 @@ describe('Detail reducer', () => {
 
   it('should handle unknown action type', () => {
     const state = initialState;
-    // @ts-expect-error
+    // @ts-expect-error - testing empty action
     expect(detail(state, {})).toEqual(state);
   });
 });

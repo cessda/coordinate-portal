@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -14,56 +14,21 @@
 import configureMockStore from 'redux-mock-store';
 import { AnyAction } from "redux";
 import thunk, { ThunkDispatch } from "redux-thunk";
-import { updateSimilars, updateStudy, UPDATE_SIMILARS, UPDATE_STUDY } from "../../../src/actions/detail";
-import { languages } from "../../../src/utilities/language";
+import { updateStudy, UPDATE_STUDY } from "../../../src/actions/detail";
+import { Language, languageMap, languages } from "../../../src/utilities/language";
 import { State } from '../../../src/types';
 import { mockStudy } from '../../common/mockdata';
-import { enLanguage } from '../utilities/language';
 import fetch from 'jest-mock-fetch';
 
-const mockStore = configureMockStore<Partial<State>, ThunkDispatch<State, any, AnyAction>>([thunk]);
+const mockStore = configureMockStore<Partial<State>, ThunkDispatch<State, never, AnyAction>>([thunk]);
 
 afterEach(() => fetch.reset());
 
 describe('Detail actions', () => {
-  describe('UPDATE_SIMILARS action', () => {
-    it('is created when the list of similar studies is updated', async () => {
-      // Mock Redux store.
-      const store = mockStore({
-        language: {
-          currentLanguage: enLanguage,
-          list: languages
-        }
-      });
-
-      const similars = [{
-        id: 2,
-        titleStudy: 'Similar Study Title'
-      }];
-
-      // Dispatch action and wait for promise.
-      const promise = store.dispatch( updateSimilars(mockStudy));
-
-      expect(fetch).toHaveBeenCalledWith(`${window.location.origin}/api/sk/_similars/${enLanguage.index}/?id=${encodeURIComponent(mockStudy.id)}&title=${encodeURIComponent(mockStudy.titleStudy)}`);
-
-      fetch.mockResponse({
-        json: () => similars
-      });
-
-      await promise;
-      
-      // State should contain similar studies.
-      expect(store.getActions()).toEqual([
-        {
-          type: UPDATE_SIMILARS,
-          similars: similars
-        }
-      ]);
-    });
-  });
-
   describe('UPDATE_STUDY action', () => {
     it('is created when the displayed study is requested', async () => {
+      const enLanguage = languageMap.get("en") as Language;
+
       // Mock Redux store.
       const store = mockStore({
         language: {
@@ -79,7 +44,13 @@ describe('Detail actions', () => {
       expect(fetch).toHaveBeenCalledWith(`${window.location.origin}/api/sk/_get/${enLanguage.index}/${encodeURIComponent(mockStudy.id)}`);
 
       fetch.mockResponse({
-        json: () => mockStudy
+        json: () => ({
+          source: mockStudy,
+          similars: [{
+            id: 2,
+            titleStudy: 'Similar Study Title'
+          }]
+        })
       });
 
       await promise;
@@ -87,18 +58,14 @@ describe('Detail actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: UPDATE_STUDY,
-          displayed: mockStudy
-        },
-        // The action should also update similars as well
-        // {
-        //   type: UPDATE_SIMILARS,
-        //   similars: [
-        //     {
-        //       id: 2,
-        //       titleStudy: 'Similar Study Title'
-        //     }
-        //   ]
-        // }
+          displayed: mockStudy,
+          similars: [
+            {
+              id: 2,
+              titleStudy: 'Similar Study Title'
+            }
+          ]
+        }
       ]);
     });
   });

@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import {
   toggleSummary,
 } from "../actions/search";
 import Translate from "react-translate-component";
+import Tooltip from "./Tooltip";
 
 export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
 
@@ -119,6 +120,9 @@ export class Header extends Component<Props> {
                 <Language />
               </div>
             </div>
+            <div className="column is-narrow button-wrapper">
+              <Tooltip content={<Translate content="searchInfotip"/>} />
+            </div>
           </div>
         </div>
         <div id="bluestripe">
@@ -153,8 +157,8 @@ export class Header extends Component<Props> {
               </div>
               <div className="column has-text-right-tablet has-text-left-mobile is-narrow-touch">
                 <Translate component={Link} to="/about" className="sk-reset-filters link is-hidden-mobile" content="about.label"/>
-                <Translate component="a" href="/documentation" className="sk-reset-filters link" content="documentation.label"/>
-                <Translate component="a" href="https://api.tech.cessda.eu/" className="sk-reset-filters link" content="api.label"/>
+                <Translate component="a" href="/documentation" className="sk-reset-filters link is-hidden-mobile" content="documentation.label"/>
+                <Translate component="a" href="https://api.tech.cessda.eu/" className="sk-reset-filters link is-hidden-mobile" content="api.label"/>
               </div>
             </div>
           </div>

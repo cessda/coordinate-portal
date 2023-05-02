@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -13,7 +13,11 @@
 
 import { Client } from '@elastic/elasticsearch'
 import { Client as NewTypes, ClientOptions } from '@elastic/elasticsearch/api/new'
-import { AggregationsCardinalityAggregate } from "@elastic/elasticsearch/api/types";
+import { 
+  AggregationsCardinalityAggregate,
+  AggregationsNestedAggregate,
+  AggregationsSignificantStringTermsAggregate
+} from "@elastic/elasticsearch/api/types";
 import _ from "lodash";
 import { CMMStudy } from "../common/metadata";
 import { logger } from "./logger";
@@ -87,7 +91,107 @@ export default class Elasticsearch {
     });
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return (response.body.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
+  }
+
+  async getListOfMetadataLanguages() {
+    const res = await this.client.indices.get({
+      allow_no_indices: true,
+      index: "*" 
+    });
+    const indices = Object.keys(res.body);
+
+    // Index names are of the form cmmstudy_${lang}, extract the ${lang} part and filter out not needed indexes
+    return indices.filter(i => i.startsWith("cmmstudy_")).map(i => i.split("_")[1]);
+  }
+
+  async getSourceRepositoryNames() {
+    const res = await this.client.search({
+      size: 0,
+      body: {
+        aggs: {
+          publishers: {
+            nested: {
+              path: "publisherFilter"
+            },
+            aggs: {
+              publisher: {
+                terms: {
+                  field: "publisherFilter.publisher",
+                  order: { _key: "asc" },
+                  size: 30
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Unwrap the aggregations
+    const aggregation = res.body.aggregations?.publishers as AggregationsNestedAggregate;
+    const publisherBuckets = (aggregation.publisher as AggregationsSignificantStringTermsAggregate).buckets;
+    
+    if (Array.isArray(publisherBuckets)) {
+      return publisherBuckets.map(b => b.key);
+    } else {
+      return [];
+    }
+  }
+
+  async getListOfCountries() {
+    const res = await this.client.search({
+      size: 0,
+      body: {
+        aggs: {
+          studyAreaCountries: {
+            nested: {
+              path: "studyAreaCountries"
+            },
+            aggs: {
+              country: {
+                terms: {
+                  field: "studyAreaCountries.searchField",
+                  order: { _key: "asc" },
+                  size: 1000
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Unwrap the aggregations
+    const aggregation = res.body.aggregations?.studyAreaCountries as AggregationsNestedAggregate;
+    const countryBuckets = (aggregation.country as AggregationsSignificantStringTermsAggregate).buckets;
+
+    if (Array.isArray(countryBuckets)) {
+      return countryBuckets.map(b => b.key);
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Queries Elasticsearch for the indices where a study ID is present
+   * @param id the study ID
+   * @returns the index names
+   */
+  async getIndicesForStudyId(id: string) {
+      const res = await this.client.search({
+        body: {
+          query: {
+            ids: {
+              values: [id]
+            }
+          }
+        },
+        _source: false
+      });
+
+      return res.body.hits.hits.map(hit => hit._index);
   }
 
   /**

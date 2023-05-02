@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 import { URL, URLSearchParams } from 'url'
 import client from 'prom-client';
 import express, { Request, Response } from 'express';
+import { getESrecordsByLanguages, getESrecordsModified, getESindexLanguages, getESrecordsByEndpoint } from './helper';
 
 //METRICS FOR API
 //Metrics for api - total
@@ -118,15 +119,67 @@ export const uiResponseTimePublisherHistogram = new client.Histogram({
     help: 'User Interface response time in seconds for Publisher, External API',
     labelNames: ['method', 'route', 'publ', 'status_code']
 })
+//Metrics for ES - Studies Modified
+export const gaugeStudiesModified = new client.Gauge({
+  name: 'studies_modified',
+  help: 'Gauge for Modified Studies',
+  async collect() {
+    // Invoked when the registry collects its metrics' values.
+    const currentValue = await getESrecordsModified();
+    this.set(currentValue);
+  },
+});
+//Metrics for ES - Studies Languages
+export const languageGauge = new client.Gauge({
+  name: 'studies_languages',
+  help: 'Language Gauge',
+  labelNames: ['language'],
+});
+//Function to get Studies Languages Metrics
+const languageGauges = async () => {
+  const results = await getESindexLanguages();
+  for (const result of results) {
+    const currentValue = await getESrecordsByLanguages(result);
+    languageGauge.set({ language: result }, currentValue);
+  }
+};
+//Metrics for ES - Studies Endpoints
+export const endpointGauge = new client.Gauge({
+  name: 'studies_endpoints',
+  help: 'Endpoint Gauge',
+  labelNames: ['endpoint'],
+});
+//Function to get Studies Endpoints Metrics
+const endpointGauges = async () => {
+  const results = await getESrecordsByEndpoint();
+  results.forEach(( result: { key: string, doc_count: number } ) => {
+    endpointGauge.set({ endpoint: result.key }, result.doc_count);
+  });
+};
+//Metrics for SearchAPI - Track Visitors IP's
+export const searchAPIClientIPGauge = new client.Gauge({
+  name: 'searchAPI_client_ip',
+  help: 'SearchAPI Client IPs',
+  labelNames: ['searchAPIClientIP'],
+});
+//Metrics for SearchAPI - Track Visitors Country
+export const searchAPIClientCountryGauge = new client.Gauge({
+  name: 'searchAPI_client_country',
+  help: 'SearchAPI Client Countries',
+  labelNames: ['searchAPIClientCountry'],
+});
 
 //Endpoint used for Prometheus Metrics
 export function startMetricsListening() {
+
+    languageGauges();
+    endpointGauges();
 
     const router = express.Router();
 
     client.collectDefaultMetrics(); //general cpu, mem, etc information
 
-    router.get('/metrics', async (_req, res) => 
+    router.get('/', async (_req, res) => 
       res.type(client.register.contentType).send(await client.register.metrics())
     );
 
@@ -135,10 +188,6 @@ export function startMetricsListening() {
 
 export function uiResponseTimeHandler(req: Request, res: Response, time: number) {
   if (req.query.size === undefined && req.headers.referer!==undefined) { //to exclude calls to _search?size=... etc & not log metrics from internal ES API
-    //hits result from elastic search
-    //FIXME: should be an import
-    const moduleHits = require('./helper');
-    const hits = moduleHits.hits;
 
     //ALL
     if (req?.route?.path) {
@@ -202,13 +251,11 @@ export function uiResponseTimeHandler(req: Request, res: Response, time: number)
         }
 
       } else {
-        if (hits != 0) {
-          //SUCCESS REQUEST
-          uiResponseTimeTotalSuccessHistogram.observe({
-            method: req.method,
-            route: req.route.path
-          }, time);
-        }
+        //SUCCESS REQUEST
+        uiResponseTimeTotalSuccessHistogram.observe({
+          method: req.method,
+          route: req.route.path
+        }, time);
       }
     }
   }

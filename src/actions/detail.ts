@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from "lodash";
 import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
 import { Thunk } from "../types";
+import { Language, languageMap } from "../utilities/language";
 
 //////////// Redux Action Creator : UPDATE_STUDY
 export const UPDATE_STUDY = "UPDATE_STUDY";
@@ -21,6 +21,16 @@ export const UPDATE_STUDY = "UPDATE_STUDY";
 export type UpdateStudyAction = {
   type: typeof UPDATE_STUDY;
   displayed: CMMStudy | undefined;
+  similars: Similar[]
+};
+
+
+//////////// Redux Action Creator : CLEAR_STUDY
+export const CLEAR_STUDY = "CLEAR_STUDY";
+
+export type ClearStudyAction = {
+  type: typeof CLEAR_STUDY;
+  languageAvailableIn: Language[];
 };
 
 export function updateStudy(id: string): Thunk<Promise<void>> {
@@ -32,61 +42,44 @@ export function updateStudy(id: string): Thunk<Promise<void>> {
     if (response.ok) {
 
       // Get the study model from the hit.
-      const study = getStudyModel({ _source: (await response.json() as CMMStudy)});
+      const json = await response.json() as { source: CMMStudy, similars: Similar[] };
+      const study = getStudyModel({ _source: json.source });
 
       // Dispatch the study for display.
       dispatch({
         type: UPDATE_STUDY,
-        displayed: study
+        displayed: study,
+        similars: json.similars
       });
-
-      // Update similars.
-      dispatch(updateSimilars(study));
       
     } else {
 
-      // Study not found, clear the current study from the store.
-      dispatch({
-        type: UPDATE_STUDY,
-        displayed: undefined
-      });
+      if(response.status === 404) {
+        // If 404, get the languages that the study is available in
+        const languageCodes = await response.json() as string[];
 
-      dispatch({ 
-        type: UPDATE_SIMILARS,
-        similars: []
-      });
+        const languagesArray: Language[] = []; 
 
-    }
-  };
-}
+        for (const code of languageCodes) {
+          const lang = languageMap.get(code);
+          if (lang) {
+            languagesArray.push(lang);
+          }
+        }
 
-//////////// Redux Action Creator : UPDATE_SIMILARS
-export const UPDATE_SIMILARS = "UPDATE_SIMILARS";
-
-export type UpdateSimilarsAction = {
-  type: typeof UPDATE_SIMILARS;
-  similars: Similar[];
-};
-
-export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
-  return async (dispatch, getState) => {
-    const state = getState();
-
-    const response = await fetch(`${window.location.origin}/api/sk/_similars/${state.language.currentLanguage.index}/?id=${encodeURIComponent(item.id)}&title=${encodeURIComponent(item.titleStudy)}`);
-
-    if (response.ok) {
-      // Update similars
-      dispatch({
-        type: UPDATE_SIMILARS,
-        similars: (await response.json() as Similar[])
-      });
-
-    } else {
-      // Remove existing similars
-      dispatch({
-        type: UPDATE_SIMILARS,
-        similars: []
-      });
+        // Study not found, clear the current study from the store.
+        dispatch({
+          type: CLEAR_STUDY,
+          languageAvailableIn: languagesArray
+        });
+      } else {
+        // Server issues
+        dispatch({
+          type: CLEAR_STUDY,
+          languageAvailableIn: []
+        });
+        return;
+      }
     }
   };
 }
@@ -94,5 +87,5 @@ export function updateSimilars(item: CMMStudy): Thunk<Promise<void>> {
 ////////////
 
 export type DetailAction = 
-  | UpdateStudyAction
-  | UpdateSimilarsAction;
+  | ClearStudyAction
+  | UpdateStudyAction;

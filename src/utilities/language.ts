@@ -1,5 +1,5 @@
 
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -67,7 +67,7 @@ export const languages: readonly Language[] =
     index: 'cmmstudy_sv'
   }];
 
-export const languageMap: ReadonlyMap<string, {label: string, index: string}> = new Map(languages.map(l => [l.code, {label: l.label, index: l.index}]));
+export const languageMap: ReadonlyMap<string, Language> = new Map(languages.map(l => [l.code, l]));
 
 export type Language = {
   /** The ISO code of the language */

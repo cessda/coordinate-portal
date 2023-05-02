@@ -1,5 +1,5 @@
 
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -99,4 +99,6 @@ export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
 };
 
 // @ts-expect-error - redefines types to include JSX elements
-export default connect(mapStateToProps, mapDispatchToProps)(Panel);
+export default connect(mapStateToProps, mapDispatchToProps)(Panel) as ComponentClass<
+  Omit<Props, "expandMetadataPanels" | "toggleMetadataPanels"> & Props
+>;

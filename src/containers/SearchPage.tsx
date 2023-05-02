@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -38,6 +38,12 @@ export class SearchPage extends Component<Props> {
   componentDidMount() {
     this.updateTitle();
     searchkit.resetState();
+
+    // Remove the JSON-LD representation if present
+    const jsonLDElement = document.getElementById("json-ld");
+    if (jsonLDElement) {
+      jsonLDElement.remove();
+    }
   }
 
   componentDidUpdate(): void {

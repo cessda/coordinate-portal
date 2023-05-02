@@ -1,5 +1,5 @@
 /** @jest-environment node */
-// Copyright CESSDA ERIC 2017-2022
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -32,6 +32,7 @@ const requestParameters = {
 jest.mock('../../server/elasticsearch');
 const mockedElasticsearch = Elasticsearch as jest.MockedClass<typeof Elasticsearch>;
 const mockedGetStudy = jest.fn<ReturnType<InstanceType<typeof Elasticsearch>["getStudy"]>, never>();
+//@ts-expect-error
 mockedElasticsearch.mockImplementation(() => {
   return {
     client: jest.fn() as unknown as Client,
@@ -180,6 +181,7 @@ describe('helper utilities', () => {
 
   describe('checkBuildDirectory()', () => {
     // Mock out process.exit() to prevent the process from exiting
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const mockExit = jest.spyOn(process, 'exit').mockImplementation((() => {}) as () => never);
 
     // Reset the mock before each run

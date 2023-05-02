@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -153,9 +153,4 @@ describe('SearchBox component', () => {
       push: expect.any(Function)
     });
   });
-
-  it('should construct without props', () => {
-    const enzymeWrapper = new SearchBox();
-    expect(enzymeWrapper.render()).toBeFalsy();
-  })
 });

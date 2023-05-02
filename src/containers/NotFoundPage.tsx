@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -19,8 +19,19 @@ import searchkit from '../utilities/searchkit';
 import { connect } from 'react-redux';
 import Translate from 'react-translate-component';
 import { Link } from 'react-router';
+import counterpart from 'counterpart';
 
 export class AboutPage extends Component {
+
+  componentDidMount() {
+    document.title = `${counterpart.translate('notFound.label')} - ${counterpart.translate('datacatalogue')}`
+
+    // Remove the JSON-LD representation if present
+    const jsonLDElement = document.getElementById("json-ld");
+    if (jsonLDElement) {
+      jsonLDElement.remove();
+    }
+  }
 
   render() {
     return (

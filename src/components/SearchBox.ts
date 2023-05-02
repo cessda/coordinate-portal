@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -19,24 +19,29 @@ import type {State} from '../types';
 import {detect} from 'detect-browser';
 import _ from 'lodash';
 
-export type Props = SearchBoxProps & ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
+type DispatchAndState = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
+
+export type Props = SearchBoxProps & DispatchAndState
 
 // Extend the Searchkit SearchBox component to limit maximum characters and provide redirection.
-//@ts-expect-error
 export class SearchBox extends SearchkitSearchBox {
   
   props: Props;
 
-  constructor(props = SearchBox.defaultProps) {
-    super(props);
-    this.props = props;
+  constructor(props: Props) {
+    const derivedProps = {
+      ...SearchBox.defaultProps,
+      ...props
+    };
+    super(derivedProps);
+    this.props = derivedProps;
   }
 
-  static defaultProps: Props = {
-    ...SearchkitSearchBox.defaultProps as SearchBoxProps, 
+  static defaultProps = {
+    ...SearchkitSearchBox.defaultProps as typeof SearchkitSearchBox.defaultProps & { blurAction: "search"}, 
     pathname: '',
     push,
-    query: '',
+    query: ''
   };
 
   onChange(event: any): void {

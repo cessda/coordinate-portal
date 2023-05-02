@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2021
+// Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -247,7 +247,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
       license = new URL(data.dataAccessFreeTexts[i]).toString();
       break;
     } catch (e) {
-      console.debug(`${data.dataAccessFreeTexts[i]} is not a valid URL`, e);
+      // invalid URLs should be ignored
     } 
   }
 
