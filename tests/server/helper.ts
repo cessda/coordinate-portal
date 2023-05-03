@@ -15,11 +15,10 @@
 import fs from 'fs';
 import path from 'path';
 import Elasticsearch from '../../server/elasticsearch';
-import { ApiResponse, Client } from '@elastic/elasticsearch/api/new';
+import { Client, errors } from '@elastic/elasticsearch';
 import httpMocks from 'node-mocks-http';
 import { mockStudy } from '../common/mockdata';
 import { getJsonLd, getStudyModel } from '../../common/metadata';
-import { ResponseError } from '@elastic/elasticsearch/lib/errors';
 
 // Constants
 const ejsTemplate = "server/views/index.ejs";
@@ -113,7 +112,7 @@ describe('helper utilities', () => {
           description: mockStudy.abstractShort,
           title: mockStudy.titleStudy,
           publisher: mockStudy.publisher.publisher,
-          jsonLd: getJsonLd(getStudyModel({ _source: mockStudy })),
+          jsonLd: getJsonLd(getStudyModel(mockStudy)),
           id: mockStudy.id
         }
       });
@@ -124,7 +123,8 @@ describe('helper utilities', () => {
       const response = httpMocks.createResponse();
 
       // Simulate Elasticsearch returning 500
-      mockedGetStudy.mockRejectedValue(new ResponseError({ statusCode: 500 } as ApiResponse));
+      // @ts-expect-error - minimal typings
+      mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 500 }));
 
       await renderResponse(request, response, ejsTemplate);
 
@@ -140,7 +140,8 @@ describe('helper utilities', () => {
       const response = httpMocks.createResponse();
 
       // Simulate Elasticsearch returning 500
-      mockedGetStudy.mockRejectedValue(new ResponseError({ statusCode: 404 } as ApiResponse));
+      // @ts-expect-error - minimal typings
+      mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 404 }));
 
       await renderResponse(request, response, ejsTemplate);
 
