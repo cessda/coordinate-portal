@@ -18,7 +18,7 @@ import Elasticsearch from '../../server/elasticsearch';
 import { Client, errors } from '@elastic/elasticsearch';
 import httpMocks from 'node-mocks-http';
 import { mockStudy } from '../common/mockdata';
-import { getJsonLd, getStudyModel } from '../../common/metadata';
+import { CMMStudy, getJsonLd, getStudyModel } from '../../common/metadata';
 
 // Constants
 const ejsTemplate = "server/views/index.ejs";
@@ -31,7 +31,7 @@ const requestParameters = {
 jest.mock('../../server/elasticsearch');
 const mockedElasticsearch = Elasticsearch as jest.MockedClass<typeof Elasticsearch>;
 const mockedGetStudy = jest.fn<ReturnType<InstanceType<typeof Elasticsearch>["getStudy"]>, never>();
-//@ts-expect-error
+//@ts-expect-error - partial implementation only
 mockedElasticsearch.mockImplementation(() => {
   return {
     client: jest.fn() as unknown as Client,
@@ -109,11 +109,42 @@ describe('helper utilities', () => {
       expect(renderData).toEqual({
         metadata: {
           creators: mockStudy.creators.join('; '),
-          description: mockStudy.abstractShort,
+          description: mockStudy.abstract,
           title: mockStudy.titleStudy,
           publisher: mockStudy.publisher.publisher,
           jsonLd: getJsonLd(getStudyModel(mockStudy)),
           id: mockStudy.id
+        }
+      });
+    });
+
+    it('should request metadata without JSON-LD if the abstract is less than 50 characters', async () => {
+      const request = httpMocks.createRequest(requestParameters);
+      const response = httpMocks.createResponse();
+
+      const mockStudyWithTruncatedAbstract: CMMStudy = {
+        ...mockStudy,
+        // Create a new abstract with less than 50 characters, then trim it
+        abstract: mockStudy.abstract.substring(0,49).trim()
+      }
+
+      mockedGetStudy.mockResolvedValue(mockStudyWithTruncatedAbstract);
+      await renderResponse(request, response, ejsTemplate);
+
+      // Status code should be 200
+      expect(response.statusCode).toBe(200);
+      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
+      
+      // Assert fields of renderData are as expected
+      const renderData = response._getRenderData() as Metadata;
+      expect(renderData).toEqual({
+        metadata: {
+          creators: mockStudyWithTruncatedAbstract.creators.join('; '),
+          description: mockStudyWithTruncatedAbstract.abstract,
+          title: mockStudyWithTruncatedAbstract.titleStudy,
+          publisher: mockStudyWithTruncatedAbstract.publisher.publisher,
+          jsonLd: undefined,
+          id: mockStudyWithTruncatedAbstract.id
         }
       });
     });
