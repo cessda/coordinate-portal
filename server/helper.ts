@@ -299,10 +299,9 @@ function externalApiV2() {
       } else if (limit > maxApiLimit) {
         res.status(400).send({ message: `limit must be maximum ${maxApiLimit}`});
         return;
-      } else {
-        bodyQuery.size(limit);
       }
     } else {
+      // Default limit if not provided
       limit = 10;
     }
 
@@ -573,8 +572,10 @@ function jsonProxy() {
       if (!_.isEmpty(json._source)) {
         // If the client requests JSON-LD, return it
         switch (userReq.accepts(["json", "application/ld+json"])) {
-          case "application/ld+json":
-            return getJsonLd(json._source);
+          case "application/ld+json": {
+            const cmmstudy = getStudyModel(json._source,);
+            return getJsonLd(cmmstudy);
+          }
           case "json":
             return json._source;
           default:
@@ -599,7 +600,7 @@ export interface Metadata {
   description: string;
   publisher: string;
   title: string;
-  jsonLd: WithContext<Dataset>;
+  jsonLd: WithContext<Dataset> | undefined;
   id: string;
 }
 
@@ -618,7 +619,7 @@ async function getMetadata(q: string, lang: string | undefined): Promise<Metadat
       description: study.abstractShort,
       title: study.titleStudy,
       publisher: study.publisher.publisher,
-      jsonLd: getJsonLd(study),
+      jsonLd: study.abstract.length >= 50 ? getJsonLd(study) : undefined,
       id: study.id
     };
   } else {
