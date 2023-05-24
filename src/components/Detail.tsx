@@ -104,6 +104,20 @@ export default class Detail extends React.Component<Props, State> {
     }
   }
 
+  /**
+   * Joins the values extracted from objects in an array of objects by the given separator
+   *
+   * @param arr the array of objects
+   * @param extractor the function to retrieve the value from each object
+   * @param separator the character(s) used for joining the field values
+   * @returns <div> element that contains the values separated by the separator
+   */
+  static joinValuesBySeparator<T>(arr: Array<T>, extractor: (object: T) => string, separator: string) {
+    return (
+      <div>{arr.map(element => extractor(element)).filter(value => value && value.trim() !== '').join(separator)}</div>
+    )
+  }
+
   static formatDate(
     dateTimeFormatter: DateTimeFormatter,
     date1?: string,
@@ -281,7 +295,7 @@ Summary information
             component="h3"
             content="metadata.country"
           />
-          {Detail.generateElements(item.studyAreaCountries, 'div', country => country.country)}
+          {Detail.joinValuesBySeparator(item.studyAreaCountries, c => c.country, ", ")}
 
           <Translate
             className="data-label"
