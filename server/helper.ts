@@ -321,10 +321,18 @@ function externalApiV2() {
 
     //create json body for ElasticSearchClient - search query
     if (_.isString(q)) {
-      bodyQuery.query('query_string', {
+      bodyQuery.query('simple_query_string', {
         query: q,
         lenient: true,
-        default_operator: "AND"
+        default_operator: "AND",
+        fields: [
+          "titleStudy^4",
+          "abstract^2",
+          "creators^2",
+          "keywords.term^1.5",
+          "*"
+        ],
+        flags: "AND|OR|NOT|PHRASE|PRECEDENCE|PREFIX"
       });
     }
 
