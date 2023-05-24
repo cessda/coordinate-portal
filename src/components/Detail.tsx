@@ -14,6 +14,7 @@
 
 import React from "react";
 import { Link } from "react-router";
+import Tooltip from './Tooltip';
 import Panel from "./Panel";
 import Translate from "react-translate-component";
 import { truncate, upperFirst } from "lodash";
@@ -21,6 +22,7 @@ import { CMMStudy, DataCollectionFreeText, Universe } from "../../common/metadat
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import striptags from "striptags";
+import counterpart from "counterpart";
 
 export interface Props {
   item: CMMStudy;
@@ -100,6 +102,20 @@ export default class Detail extends React.Component<Props, State> {
     } else {
       return elements;
     }
+  }
+
+  /**
+   * Joins the values extracted from objects in an array of objects by the given separator
+   *
+   * @param arr the array of objects
+   * @param extractor the function to retrieve the value from each object
+   * @param separator the character(s) used for joining the field values
+   * @returns <div> element that contains the values separated by the separator
+   */
+  static joinValuesBySeparator<T>(arr: Array<T>, extractor: (object: T) => string, separator: string) {
+    return (
+      <div>{arr.map(element => extractor(element)).filter(value => value && value.trim() !== '').join(separator)}</div>
+    )
   }
 
   static formatDate(
@@ -256,7 +272,9 @@ Summary information
         <Panel
           className="section-header"
           title={<Translate component="h2" content="metadata.methodology.label"/>}
-          tooltip={<Translate content="metadata.methodology.tooltip" unsafe/>}
+          tooltip={<Tooltip id="metadata-methodology-tooltip"
+                            content={<Translate content='metadata.methodology.tooltip.content' unsafe/>}
+                            ariaLabel={counterpart.translate("metadata.methodology.tooltip.ariaLabel")}/>}
           collapsable={false}
           defaultCollapsed={false}
         >
@@ -277,7 +295,7 @@ Summary information
             component="h3"
             content="metadata.country"
           />
-          {Detail.generateElements(item.studyAreaCountries, 'div', country => country.country)}
+          {Detail.joinValuesBySeparator(item.studyAreaCountries, c => c.country, ", ")}
 
           <Translate
             className="data-label"
@@ -351,7 +369,9 @@ Summary information
         <Panel
           className="section-header"
           title={<Translate component="h2" content='metadata.topics.label'/>}
-          tooltip={<Translate content="metadata.topics.tooltip" unsafe/>}
+          tooltip={<Tooltip id="metadata-topics-tooltip"
+                            content={<Translate content='metadata.topics.tooltip.content' unsafe/>}
+                            ariaLabel={counterpart.translate("metadata.topics.tooltip.ariaLabel")}/>}
           collapsable={false}
         >
           <div className="tags">
@@ -366,12 +386,14 @@ Summary information
         <Panel
           className="section-header"
           title={<Translate component="h2" content='metadata.keywords.label'/>}
-          tooltip={<Translate content="metadata.keywords.tooltip" unsafe/>}
+          tooltip={<Tooltip id="metadata-keywords-tooltip"
+                            content={<Translate content='metadata.keywords.tooltip.content' unsafe/>}
+                            ariaLabel={counterpart.translate("metadata.keywords.tooltip.ariaLabel")}/>}
           collapsable={false}
         >
           <div className="tags">
             {Detail.generateElements(this.state.keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), 'tag',
-              keywords => <Link to={`/?q="${encodeURI(keywords.term)}"`}>{upperFirst(keywords.term)}</Link>
+              keywords => <Link to={`/?keywords_term=${encodeURI(keywords.term)}`}>{upperFirst(keywords.term)}</Link>
             )}
           </div>
           {item.keywords.length > Detail.truncatedKeywordsLength &&

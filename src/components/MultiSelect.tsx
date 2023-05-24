@@ -14,11 +14,21 @@
 
 import React from 'react';
 import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
-import {AbstractItemList, ItemListProps} from 'searchkit';
+import {AbstractItemList, FacetAccessor, ItemListProps} from 'searchkit';
 
 export interface Props extends ItemListProps {
   placeholder: string | JSX.Element | undefined;
   clearable?: boolean;
+  ariaLabel?: string;
+}
+
+interface Item {
+  missing?: boolean;
+  selected?: boolean;
+  doc_count?: number;
+  title?: string;
+  label?: string;
+  key: string;
 }
 
 export default class MultiSelect extends AbstractItemList {
@@ -48,7 +58,7 @@ export default class MultiSelect extends AbstractItemList {
 
   renderValue(value: Option<OptionValues>): HandlerRendererResult {
     if (value.label) {
-      return <span>{value.label.replace('undefined', '0')}</span>;
+      return <span>{value.label}</span>;
     } else {
       return null;
     }
@@ -61,12 +71,13 @@ export default class MultiSelect extends AbstractItemList {
       items,
       selectedItems = [],
       disabled,
-      showCount
+      showCount,
+      ariaLabel
     } = this.props;
 
-    const options: Options<OptionValues> = items.map((option): Option<OptionValues> => {
+    const options: Options<OptionValues> = items.map((option: Item): Option<OptionValues> => {
       let label = option.title || option.label || option.key;
-      if (showCount) {
+      if (showCount && option.doc_count) {
         label += ` (${option.doc_count})`;
       }
       return {value: option.key, label};
@@ -80,7 +91,8 @@ export default class MultiSelect extends AbstractItemList {
               options={options}
               valueRenderer={this.renderValue}
               clearable={clearable}
-              onChange={this.handleChange}/>
+              onChange={this.handleChange}
+              aria-label={ariaLabel}/>
     );
   }
 }
