@@ -19,6 +19,7 @@ import {AbstractItemList, FacetAccessor, ItemListProps} from 'searchkit';
 export interface Props extends ItemListProps {
   placeholder: string | JSX.Element | undefined;
   clearable?: boolean;
+  ariaLabel?: string;
 }
 
 interface Item {
@@ -70,7 +71,8 @@ export default class MultiSelect extends AbstractItemList {
       items,
       selectedItems = [],
       disabled,
-      showCount
+      showCount,
+      ariaLabel
     } = this.props;
 
     const options: Options<OptionValues> = items.map((option: Item): Option<OptionValues> => {
@@ -89,7 +91,8 @@ export default class MultiSelect extends AbstractItemList {
               options={options}
               valueRenderer={this.renderValue}
               clearable={clearable}
-              onChange={this.handleChange}/>
+              onChange={this.handleChange}
+              aria-label={ariaLabel}/>
     );
   }
 }
