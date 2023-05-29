@@ -271,9 +271,9 @@ function externalApiV2() {
 
     //Implementing Sorting Options
     if (sortBy){
-      if (sortBy=="titleASC")
+      if (sortBy=="titleAscending")
         bodyQuery.sort('titleStudy.raw', 'asc');
-      else if (sortBy=="titleDESC")
+      else if (sortBy=="titleDescending")
         bodyQuery.sort('titleStudy.raw', 'desc');
       else if (sortBy=="dateOfCollectionOldest")
         bodyQuery.sort('dataCollectionPeriodEnddate', 'asc');
@@ -282,7 +282,7 @@ function externalApiV2() {
       else if (sortBy=="dateOfPublicationNewest")
         bodyQuery.sort('publicationYear', 'desc');
       else{
-        res.status(400).send({ message: 'Please provide a proper sorting option. Available: titleASC, titleDESC, dateOfCollectionOldest, dateOfCollectionNewest, dateOfPublicationNewest'});
+        res.status(400).send({ message: 'Please provide a proper sorting option. Available: titleAscending, titleDescending, dateOfCollectionOldest, dateOfCollectionNewest, dateOfPublicationNewest'});
         return;
       }
     }
