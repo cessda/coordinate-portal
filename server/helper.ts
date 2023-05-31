@@ -270,24 +270,29 @@ function externalApiV2() {
     const bodyQuery = bodybuilder();
 
     //Implementing Sorting Options
-    if (sortBy){
-      if (sortBy=="titleAscending")
+    switch (sortBy) {
+      case undefined: //if no sorting option is provided, sort by default Relevance - as UI
+        bodyQuery.sort('_score', 'desc');
+        break;
+      case "titleAscending":
         bodyQuery.sort('titleStudy.raw', 'asc');
-      else if (sortBy=="titleDescending")
+        break;
+      case "titleDescending":
         bodyQuery.sort('titleStudy.raw', 'desc');
-      else if (sortBy=="dateOfCollectionOldest")
+        break;
+      case "dateOfCollectionOldest":
         bodyQuery.sort('dataCollectionPeriodEnddate', 'asc');
-      else if (sortBy=="dateOfCollectionNewest")
+        break;
+      case "dateOfCollectionNewest":
         bodyQuery.sort('dataCollectionPeriodEnddate', 'desc');
-      else if (sortBy=="dateOfPublicationNewest")
+        break;
+      case "dateOfPublicationNewest":
         bodyQuery.sort('publicationYear', 'desc');
-      else{
+        break;
+      default:
         res.status(400).send({ message: 'Please provide a proper sorting option. Available: titleAscending, titleDescending, dateOfCollectionOldest, dateOfCollectionNewest, dateOfPublicationNewest'});
         return;
-      }
     }
-    else //if no sorting option is provided, sort by default Relevance - as UI
-    bodyQuery.sort('_score', 'desc');
 
     // Validate the limit parameter
     let limit: number;
