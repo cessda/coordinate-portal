@@ -140,6 +140,22 @@ export default async (client: Elasticsearch) => ({
             }
           },
           {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sorting Options Provided: (Default by Relevance)\n  * `titleAscending` - Title (A - Z)\n  * `titleDescending` - Title (Z - A)\n  * `dateOfCollectionOldest` - Date of collection (oldest)\n  * `dateOfCollectionNewest` - Date of collection (newest)\n  * `dateOfPublicationNewest` - Date of publication (newest)\n",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "titleAscending",
+                "titleDescending",
+                "dateOfCollectionOldest",
+                "dateOfCollectionNewest",
+                "dateOfPublicationNewest"
+              ]
+            }
+          },
+          {
             "name": "metadataLanguage",
             "in": "query",
             "description": "Language to display:\n  * `cs` - Czech\n  * `da` - Danish\n  * `nl` - Dutch\n  * `en` - English\n  * `fi` - Finish\n  * `fr` - French\n  * `de` - German\n  * `el` - Greek\n  * `sk` - Slovakian\n  * `sl` - Slovenian\n  * `sv` - Swedish\n",
