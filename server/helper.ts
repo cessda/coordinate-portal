@@ -259,7 +259,7 @@ function externalApiV2() {
       }
     });
 
-    const { metadataLanguage, q } = req.query;
+    const { metadataLanguage, q, sortBy } = req.query;
 
     if (!metadataLanguage) {
       res.status(400).send({ message: 'Please provide a search language'});
@@ -268,6 +268,31 @@ function externalApiV2() {
 
     //Prepare body for ElasticSearch
     const bodyQuery = bodybuilder();
+
+    //Implementing Sorting Options
+    switch (sortBy) {
+      case undefined: //if no sorting option is provided, sort by default Relevance - as UI
+        bodyQuery.sort('_score', 'desc');
+        break;
+      case "titleAscending":
+        bodyQuery.sort('titleStudy.raw', 'asc');
+        break;
+      case "titleDescending":
+        bodyQuery.sort('titleStudy.raw', 'desc');
+        break;
+      case "dateOfCollectionOldest":
+        bodyQuery.sort('dataCollectionPeriodEnddate', 'asc');
+        break;
+      case "dateOfCollectionNewest":
+        bodyQuery.sort('dataCollectionPeriodEnddate', 'desc');
+        break;
+      case "dateOfPublicationNewest":
+        bodyQuery.sort('publicationYear', 'desc');
+        break;
+      default:
+        res.status(400).send({ message: 'Please provide a proper sorting option. Available: titleAscending, titleDescending, dateOfCollectionOldest, dateOfCollectionNewest, dateOfPublicationNewest'});
+        return;
+    }
 
     // Validate the limit parameter
     let limit: number;
@@ -301,10 +326,18 @@ function externalApiV2() {
 
     //create json body for ElasticSearchClient - search query
     if (_.isString(q)) {
-      bodyQuery.query('query_string', {
+      bodyQuery.query('simple_query_string', {
         query: q,
         lenient: true,
-        default_operator: "AND"
+        default_operator: "AND",
+        fields: [
+          "titleStudy^4",
+          "abstract^2",
+          "creators^2",
+          "keywords.term^1.5",
+          "*"
+        ],
+        flags: "AND|OR|NOT|PHRASE|PRECEDENCE|PREFIX"
       });
     }
 
@@ -338,7 +371,8 @@ function externalApiV2() {
       publishers: req.query.publishers,
       dataCollectionYearMin: req.query.dataCollectionYearMin,
       dataCollectionYearMax: req.query.dataCollectionYearMax,
-      keywords: req.query.keywords
+      keywords: req.query.keywords,
+      sortBy: req.query.sortBy
    }
 
     //Prepare the Client
