@@ -56,15 +56,7 @@ export default async (client: Elasticsearch) => ({
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": [
-                  "(In-job) training",
-                  "Accidents and injuries",
-                  "Accidents and injuries - Health",
-                  "Administrative history - History",
-                  "Advertising",
-                  "Agricultural Science",
-                  "Agricultural and Veterinary sciences"
-                ]
+                "enum": await client.getListOfTopics()
               }
             }
           },

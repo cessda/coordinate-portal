@@ -165,6 +165,39 @@ export default class Elasticsearch {
     }
   }
 
+  //used for API documentation
+  async getListOfTopics() {
+    const res = await this.client.search({
+      size: 0,
+      aggs: {
+        classifications: {
+          nested: {
+            path: "classifications"
+          },
+          aggs: {
+            term: {
+              terms: {
+                field: "classifications.term",
+                order: { _key: "asc" },
+                size: 1000
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Unwrap the aggregations
+    const aggregation = res.aggregations?.classifications as AggregationsNestedAggregate;
+    const topicBuckets = (aggregation.term as AggregationsSignificantStringTermsAggregate).buckets;
+
+    if (Array.isArray(topicBuckets)) {
+      return topicBuckets.map(b => b.key);
+    } else {
+      return [];
+    }
+  }
+
   /**
    * Queries Elasticsearch for the indices where a study ID is present
    * @param id the study ID
