@@ -260,21 +260,6 @@ function externalApiV2() {
     });
 
     const { metadataLanguage, q, sortBy, keywords } = req.query;
-    let keywordsField:string | ParsedQs | string[] | ParsedQs[] | undefined
-    //console.log(typeof(req.query.keywords));
-    //console.log(req.query.keywords);
-    switch (typeof(req.query.keywords)) {
-      case "string":
-        keywordsField = req.query.keywords.toLowerCase();
-        break;
-      case "object":
-        if (keywords && Array.isArray(keywords))
-          keywordsField = keywords.map( (element: any) => { return element.toLowerCase() });
-        break;
-      case "undefined":
-         //;
-        break;
-    }
 
     if (!metadataLanguage) {
       res.status(400).send({ message: 'Please provide a search language'});
@@ -356,12 +341,31 @@ function externalApiV2() {
       });
     }
 
+    //implementing keywords search
+    /*let keywordsField:string | ParsedQs | string[] | ParsedQs[] | undefined
+    //console.log(typeof(req.query.keywords));
+    //console.log(req.query.keywords);
+    switch (typeof(req.query.keywords)) {
+      case "string":
+        keywordsField = req.query.keywords.toLowerCase();
+        break;
+      case "object":
+        if (Array.isArray(keywords))
+          keywordsField = keywords.map( (element: any) => { return element.toLowerCase() });
+        break;
+      case "undefined":
+         //;
+        break;
+    }*/
+
     //Create json body for ElasticSearchClient - nested post-filters
     buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
     buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
     buildNestedFilters(bodyQuery, req.query.publishers, 'publisherFilter', 'publisherFilter.publisher');
     //buildNestedFilters(bodyQuery, req.query.keywords, 'keywords', 'keywords.term');
-    buildNestedFilters(bodyQuery, keywordsField, 'keywords', 'keywords.term');
+    //buildNestedFilters(bodyQuery, keywordsField, 'keywords', 'keywords.term');
+    //bodyQuery.query('term', 'keywordsSearchField', 'covid\\-19');
+    bodyQuery.query('simple_query_string', { query: req.query.keywords, fields: ["keywordsSearchField"] });
 
     //Create json body for ElasticSearchClient - date-filters
     let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
