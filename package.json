@@ -57,7 +57,7 @@
     "@babel/preset-env": "7.22.4",
     "@babel/preset-react": "7.22.3",
     "@babel/preset-typescript": "7.22.5",
-    "@tsconfig/node16": "1.0.3",
+    "@tsconfig/node16": "16.1.0",
     "@types/body-parser": "1.19.2",
     "@types/compression": "1.7.2",
     "@types/cors": "2.8.13",
