@@ -18,7 +18,7 @@ import Footer from '../components/Footer';
 import TopBar from '../components/Topbar';
 import Pagination from '../components/Pagination';
 import {
-  Hits, InputFilter, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination, RangeFilter, RangeSliderInput,
+  Hits, Layout, LayoutBody, LayoutResults, NoHits, Pagination as SearchkitPagination, RangeFilter, RangeSliderInput,
   RefinementListFilter, SearchkitProvider, SideBar
 } from 'searchkit';
 import Translate from 'react-translate-component';
@@ -49,10 +49,9 @@ export class SearchPage extends Component<Props> {
 
   componentDidUpdate(): void {
     // Auto expand filters if they contain selected values.
-    this.autoExpandFilter('classifications.term');
-    this.autoExpandFilter('dataCollectionYear');
-    this.autoExpandFilter('studyAreaCountries.searchField');
-    this.autoExpandFilter('publisher.publisher');
+    for (let filterName in this.props.filters) {
+      this.autoExpandFilter(filterName);
+    }
 
     // Set the page title
     this.updateTitle();
@@ -68,8 +67,15 @@ export class SearchPage extends Component<Props> {
 
   autoExpandFilter(filterName: string): void {
     const filter = $(`.filter--${filterName.replace('.', '\\.')} > .is-collapsed`);
-    if (!filter.data('expanded') && !_.isEmpty(this.props.filters[filterName])) {
-      filter.data('expanded', true).trigger("click");
+    const filterValue = this.props.filters[filterName];
+    if (typeof filterValue === 'string'){
+      if (!filter.data('expanded') && typeof filterValue !== 'undefined' && filterValue.trim() !== "") {
+        filter.data('expanded', true).trigger("click");
+      }
+    } else {
+      if (!filter.data('expanded') && !_.isEmpty(filterValue)) {
+        filter.data('expanded', true).trigger("click");
+      }
     }
   }
 
@@ -77,6 +83,7 @@ export class SearchPage extends Component<Props> {
     const {
       showMobileFilters
     } = this.props;
+
     return (
       <SearchkitProvider searchkit={searchkit}>
         <Layout className={showMobileFilters ? 'show-mobile-filters' : ''}>
@@ -95,43 +102,39 @@ export class SearchPage extends Component<Props> {
                                       orderKey="_count"
                                       orderDirection="desc"
                                       operator="OR"
-                                      containerComponent={<Panel title={<Translate content='filters.topic.label'/>}
-                                                                tooltip={<Tooltip id="filters-topic-tooltip"
-                                                                                  content={<Translate content='filters.topic.tooltip.content' unsafe/>}
-                                                                                  ariaLabel={counterpart.translate("filters.topic.tooltip.ariaLabel")}/>}
-                                                                className="classifications"
-                                                                collapsable={true}
-                                                                defaultCollapsed={true}/>}
+                                      containerComponent={<Panel
+                                        title={<Translate content='filters.topic.label'/>}
+                                        tooltip={<Tooltip id="filters-topic-tooltip"
+                                                          content={<Translate content='filters.topic.tooltip.content' unsafe/>}
+                                                          ariaLabel={counterpart.translate("filters.topic.tooltip.ariaLabel")}/>}
+                                        className="classifications"
+                                        collapsable={true}
+                                        defaultCollapsed={true}/>
+                                      }
                                       listComponent={<MultiSelect placeholder={<Translate content='filters.topic.placeholder'/>}
                                                                   ariaLabel={counterpart.translate('filters.topic.label')}/>}
-                                      size={100}/>
+                                      size={2000}
+                                      showMore={false}/>
 
-                {/* <RefinementListFilter id="keywords.term"
-                                      title={counterpart.translate('filters.topic.label')}
-                                      field={'keywordsSearchField'}
-                                      orderKey="_key"
-                                      orderDirection="asc"
+                <RefinementListFilter id="keywords.term"
+                                      title={counterpart.translate('filters.keywords.label')}
+                                      field={'keywordsKeywordField'}
+                                      orderKey="_count"
+                                      orderDirection="desc"
                                       operator="OR"
-                                      containerComponent={<Panel title={<Translate content='filters.topic.label'/>}
-                                                                tooltip={<Translate content="filters.topic.tooltip" unsafe/>}
-                                                                className="keywords"
-                                                                collapsable={true}
-                                                                defaultCollapsed={true}/>}
-                                      listComponent={<MultiSelect placeholder={<Translate content='filters.topic.placeholder'/>}/>}
-                                      size={2700}/> */}
-
-                <InputFilter id="keywords.term"
-                              title={counterpart.translate('filters.keywords.label')}
-                              searchOnChange={false}
-                              placeholder={counterpart.translate('filters.keywords.placeholder')}
-                              containerComponent={<Panel title={<Translate content='filters.keywords.label'/>}
-                                                        tooltip={<Tooltip id="filters-keywords-tooltip"
-                                                                          content={<Translate content='filters.keywords.tooltip.content' unsafe/>}
-                                                                          ariaLabel={counterpart.translate("filters.keywords.tooltip.ariaLabel")}/>}
-                                                        className="keywords"
-                                                        collapsable={true}
-                                                        defaultCollapsed={true}/>}
-                              queryFields={["keywordsSearchField"]}/>
+                                      containerComponent={<Panel
+                                        title={<Translate content='filters.keywords.label'/>}
+                                        tooltip={<Tooltip id="filters-keywords-tooltip"
+                                                          content={<Translate content='filters.keywords.tooltip.content' size='2000' unsafe/>}
+                                                          ariaLabel={counterpart.translate("filters.keywords.tooltip.ariaLabel")}/>}
+                                        className="keywords"
+                                        collapsable={true}
+                                        defaultCollapsed={true}/>
+                                      }
+                                      listComponent={<MultiSelect placeholder={<Translate content='filters.keywords.placeholder'/>}
+                                                                  ariaLabel={counterpart.translate('filters.keywords.label')}/>}
+                                      size={2000}
+                                      showMore={false}/>
 
                 <RangeFilter min={1900}
                             max={new Date().getFullYear()}
@@ -139,13 +142,15 @@ export class SearchPage extends Component<Props> {
                             id="dataCollectionYear"
                             title={counterpart.translate('filters.collectionDates.label')}
                             rangeComponent={RangeSliderInput}
-                            containerComponent={<Panel title={<Translate content='filters.collectionDates.label'/>}
-                                                        tooltip={<Tooltip id="filters-collectiondates-tooltip"
-                                                                          content={counterpart.translate("filters.collectionDates.tooltip.content")}
-                                                                          ariaLabel={counterpart.translate("filters.collectionDates.tooltip.ariaLabel")}/>}
-                                                        className="dataCollectionYear"
-                                                        collapsable={true}
-                                                        defaultCollapsed={true}/>}/>
+                            containerComponent={<Panel
+                              title={<Translate content='filters.collectionDates.label'/>}
+                              tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                                                content={counterpart.translate("filters.collectionDates.tooltip.content")}
+                                                ariaLabel={counterpart.translate("filters.collectionDates.tooltip.ariaLabel")}/>}
+                              className="dataCollectionYear"
+                              collapsable={true}
+                              defaultCollapsed={true}/>
+                            }/>
 
                 <RefinementListFilter id="studyAreaCountries.searchField"
                                       title={counterpart.translate('filters.country.label')}
@@ -157,16 +162,19 @@ export class SearchPage extends Component<Props> {
                                       orderKey="_key"
                                       orderDirection="asc"
                                       operator="OR"
-                                      containerComponent={<Panel title={<Translate content='filters.country.label'/>}
-                                                                tooltip={<Tooltip id="filters-country-tooltip"
-                                                                                  content={counterpart.translate("filters.country.tooltip.content")}
-                                                                                  ariaLabel={counterpart.translate("filters.country.tooltip.ariaLabel")}/>}
-                                                                className="studyAreaCountries"
-                                                                collapsable={true}
-                                                                defaultCollapsed={true}/>}
+                                      containerComponent={<Panel
+                                        title={<Translate content='filters.country.label'/>}
+                                        tooltip={<Tooltip id="filters-country-tooltip"
+                                                          content={counterpart.translate("filters.country.tooltip.content")}
+                                                          ariaLabel={counterpart.translate("filters.country.tooltip.ariaLabel")}/>}
+                                        className="studyAreaCountries"
+                                        collapsable={true}
+                                        defaultCollapsed={true}/>
+                                      }
                                       listComponent={<MultiSelect placeholder={<Translate content='filters.country.placeholder'/>}
                                                                   ariaLabel={counterpart.translate('filters.country.label')}/>}
-                                      size={500}/>
+                                      size={500}
+                                      showMore={false}/>
 
                 <RefinementListFilter id="publisher.publisher"
                                       title={counterpart.translate('filters.publisher.label')}
@@ -178,16 +186,19 @@ export class SearchPage extends Component<Props> {
                                       orderKey="_key"
                                       orderDirection="asc"
                                       operator="OR"
-                                      containerComponent={<Panel title={<Translate content='filters.publisher.label'/>}
-                                                                tooltip={<Tooltip id="filters-publisher-tooltip"
-                                                                                  content={counterpart.translate("filters.publisher.tooltip.content")}
-                                                                                  ariaLabel={counterpart.translate("filters.publisher.tooltip.ariaLabel")}/>}
-                                                                className="publisher"
-                                                                collapsable={true}
-                                                                defaultCollapsed={true}/>}
+                                      containerComponent={<Panel
+                                        title={<Translate content='filters.publisher.label'/>}
+                                        tooltip={<Tooltip id="filters-publisher-tooltip"
+                                                          content={counterpart.translate("filters.publisher.tooltip.content")}
+                                                          ariaLabel={counterpart.translate("filters.publisher.tooltip.ariaLabel")}/>}
+                                        className="publisher"
+                                        collapsable={true}
+                                        defaultCollapsed={true}/>
+                                      }
                                       listComponent={<MultiSelect placeholder={<Translate content='filters.publisher.placeholder'/>}
                                                                   ariaLabel={counterpart.translate('filters.publisher.label')}/>}
-                                      size={500}/>
+                                      size={500}
+                                      showMore={false}/>
               </div>
             </SideBar>
             <LayoutResults className="column is-8">

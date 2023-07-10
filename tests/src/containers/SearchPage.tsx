@@ -43,7 +43,8 @@ describe('SearchPage container', () => {
     const { enzymeWrapper } = setup();
     enzymeWrapper.setProps({
       filters: {
-        'classifications.term': ['Term']
+        'classifications.term': ['Term'],
+        'keywords_term': 'keyword'
       }
     });
     const searchPage = enzymeWrapper.find('SearchkitProvider');
