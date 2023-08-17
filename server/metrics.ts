@@ -136,13 +136,13 @@ export const languageGauge = new client.Gauge({
   labelNames: ['language'],
 });
 //Function to get Studies Languages Metrics
-const languageGauges = async () => {
+async function languageGauges() {
   const results = await getESindexLanguages();
   for (const result of results) {
     const currentValue = await getESrecordsByLanguages(result);
     languageGauge.set({ language: result }, currentValue);
   }
-};
+}
 //Metrics for ES - Studies Endpoints
 export const endpointGauge = new client.Gauge({
   name: 'studies_endpoints',
@@ -150,12 +150,10 @@ export const endpointGauge = new client.Gauge({
   labelNames: ['endpoint'],
 });
 //Function to get Studies Endpoints Metrics
-const endpointGauges = async () => {
+async function endpointGauges() {
   const results = await getESrecordsByEndpoint();
-  results.forEach(( result: { key: string, doc_count: number } ) => {
-    endpointGauge.set({ endpoint: result.key }, result.doc_count);
-  });
-};
+  results.forEach(result => endpointGauge.set({ endpoint: result.key }, result.doc_count));
+}
 //Metrics for SearchAPI - Track Visitors IP's
 export const searchAPIClientIPGauge = new client.Gauge({
   name: 'searchAPI_client_ip',
@@ -179,9 +177,10 @@ export function startMetricsListening() {
 
     client.collectDefaultMetrics(); //general cpu, mem, etc information
 
-    router.get('/', async (_req, res) => 
-      res.type(client.register.contentType).send(await client.register.metrics())
-    );
+    router.get('/', async (_req, res) => {
+      const metrics = await client.register.metrics();
+      res.type(client.register.contentType).send(metrics);
+    });
 
     return router;
 }
@@ -212,7 +211,7 @@ export function uiResponseTimeHandler(req: Request, res: Response, time: number)
       }, time);
 
       //PUBLISHER
-      const urlUI = new URL(String(req.headers.referer));
+      const urlUI = new URL(req.headers.referer);
       const paramsUI = new URLSearchParams(urlUI.search);
       if (paramsUI.has('publisher.publisher[0]')) { //searching for at least 1 publisher
         paramsUI.forEach(function (value, key) {

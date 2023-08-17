@@ -341,11 +341,14 @@ function externalApiV2() {
       });
     }
 
-    //Create json body for ElasticSearchClient - nested post-filters
+    // Create json body for ElasticSearchClient - nested post-filters
     buildNestedFilters(bodyQuery, req.query.classifications, 'classifications', 'classifications.term');
     buildNestedFilters(bodyQuery, req.query.studyAreaCountries, 'studyAreaCountries', 'studyAreaCountries.searchField');
     buildNestedFilters(bodyQuery, req.query.publishers, 'publisherFilter', 'publisherFilter.publisher');
-    bodyQuery.query('simple_query_string', { query: req.query.keywords, fields: ["keywordsSearchField"] });
+
+    if (req.query.keywords) {
+      bodyQuery.query('simple_query_string', { query: req.query.keywords, fields: ["keywordsSearchField"] });
+    }
 
     //Create json body for ElasticSearchClient - date-filters
     let dataCollectionYearMin = req.query.dataCollectionYearMin ? Number(req.query.dataCollectionYearMin) : undefined;
@@ -360,20 +363,7 @@ function externalApiV2() {
       bodyQuery.filter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
     }
 
-    //Meta-Info to send with response
-    const searchTerms = {
-      metadataLanguage: metadataLanguage,
-      queryTerm: q,
-      limit: req.query.limit,
-      offset: req.query.offset,
-      classifications: req.query.classifications,
-      studyAreaCountries: req.query.studyAreaCountries,
-      publishers: req.query.publishers,
-      dataCollectionYearMin: req.query.dataCollectionYearMin,
-      dataCollectionYearMax: req.query.dataCollectionYearMax,
-      keywords: req.query.keywords,
-      sortBy: req.query.sortBy
-   }
+    
 
     //Prepare the Client
     try {
@@ -401,6 +391,21 @@ function externalApiV2() {
       }
 
       const resultsCount = apiResultsCount(offset, limit, response.hits.hits.length, totalHits);
+
+      //Meta-Info to send with response
+      const searchTerms = {
+        metadataLanguage: metadataLanguage,
+        queryTerm: q,
+        limit: req.query.limit,
+        offset: req.query.offset,
+        classifications: req.query.classifications,
+        studyAreaCountries: req.query.studyAreaCountries,
+        publishers: req.query.publishers,
+        dataCollectionYearMin: req.query.dataCollectionYearMin,
+        dataCollectionYearMax: req.query.dataCollectionYearMax,
+        keywords: req.query.keywords,
+        sortBy: req.query.sortBy
+      }
 
       /* 
        * Send the Response.
