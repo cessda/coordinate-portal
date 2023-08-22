@@ -14,6 +14,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.4.0] - 2023-08-29
+
+### Additions
+
+- Add keyword search filter ([#488](https://github.com/cessda/cessda.cdc.versions/issues/488)/[#532](https://github.com/cessda/cessda.cdc.versions/issues/488))
+- Add and fix accessible names, improve tooltip accessibility and add keywords filter tooltip texts ([#537](https://github.com/cessda/cessda.cdc.versions/issues/537))
+- Add `lang` attributes to the top level HTML element and elements on the detail page ([#543](https://github.com/cessda/cessda.cdc.versions/issues/543))
+- Add user interface sorting options to the search API ([#532](https://github.com/cessda/cessda.cdc.versions/issues/532))
+- Add `main` landmark regions ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
+- Add link to the front page on the main `nav` for screen readers ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
+- Add styles for feedback button and form
+
+### Changes
+
+- Update the Elasticsearch client to major version 8 ([#540](https://github.com/cessda/cessda.cdc.versions/issues/540))
+- Update the CDC Search API documentation ([#550](https://github.com/cessda/cessda.cdc.versions/issues/550))
+- Only create embedded JSON-LD representations when the abstract is longer than 50 characters ([#544](https://github.com/cessda/cessda.cdc.versions/issues/544))
+- Change countries to be separated by commas on detail page ([#542](https://github.com/cessda/cessda.cdc.versions/issues/542))
+- Move topic and keyword terms in study view ([#353](https://github.com/cessda/cessda.cdc.versions/issues/353))
+- Update Topic filter tooltip text ([#117](https://github.com/cessda/cessda.cdc.versions/issues/117))
+- Move search tooltip button on mobile ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
+- Remove placeholder texts from feedback form
+
+### Fixes
+
+- Fix buttons in results overflowing with multiple languages or low resolution ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
+- Fix missing topic classifications in the search API documentation ([#555](https://github.com/cessda/cessda.cdc.versions/issues/555))
+- Fix keywords search misbehaving when included as part of a search API call ([#556](https://github.com/cessda/cessda.cdc.versions/issues/556))
+- Only add a keywords query if keywords are being sent to the API
+
+### Security
+
+- Override Searchkit's dependency of `qs` with a non-vulnerable version ([PR-33](https://github.com/cessda/cessda.cdc.searchkit/pull/33))
+
 ## [3.2.1] - 2023-03-28
 
 ### Additions
@@ -277,3 +311,17 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 ### Security
 
 - N/A
+
+[3.4.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.0
+[3.2.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.1
+[3.2.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.0
+[3.1.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.1.0
+[3.0.3]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.0.3
+[3.0.2]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.0.2
+[3.0.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.0.0
+[2.5.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/2.5.0
+[2.4.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/2.4.0
+[2.3.2]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/2.3.2
+[2.3.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/2.3.1
+[2.3.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/2.3.0
+[2.2.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/2.2.1

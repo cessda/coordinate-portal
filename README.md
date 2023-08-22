@@ -1,7 +1,5 @@
-
 [![SQAaaS badge](https://github.com/EOSC-synergy/SQAaaS/raw/master/badges/badges_150x116/badge_software_silver.png)](https://api.eu.badgr.io/public/assertions/Y8Jg2pBdTO67PRm0ujqdEQ "SQAaaS silver badge achieved")
 [![SQAaaS badge shields.io](https://img.shields.io/badge/sqaaas%20software-silver-lightgrey)](https://api.eu.badgr.io/public/assertions/Y8Jg2pBdTO67PRm0ujqdEQ "SQAaaS silver badge achieved")
-
 [![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=cessda.cdc.searchkit%2Fmain)](https://jenkins.cessda.eu/job/cessda.cdc.searchkit/job/main/)
 [![Quality Gate Status](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=alert_status)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
 [![Coverage](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=coverage)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
@@ -47,15 +45,15 @@ Please be aware of *Known Issues* (see bottom) before running.
 
 The application can be configured using the following environment variables.
 
-| Variable                     | Default Value | Description
-| ---------------------------- | ------------- | -----------
-| `PASC_DEBUG_MODE`            | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
-| `PASC_PORT`                  | `8088`        | The port number which will be used to access this web application.
-| `PASC_ELASTICSEARCH_URL`     | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
-| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined` | The username to use when accessing a secured Elasticsearch cluster.
-| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined` | The password to use when accessing a secured Elasticsearch cluster.
-| `SEARCHKIT_LOG_LEVEL`        | `info`        | The logging level used for server side events.
-| `SEARCHKIT_USE_JSON_LOGGING` | `false`       | Whether to log using JSON rather than plain text.
+| Environment Variable               | Default Value            | Description
+| ---------------------------------- | ------------------------ | -----------
+| `PASC_DEBUG_MODE`                  | `false`                  | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
+| `PASC_PORT`                        | `8088`                   | The port number which will be used to access this web application.
+| `PASC_ELASTICSEARCH_URL`           | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
+| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined`              | The username to use when accessing a secured Elasticsearch cluster.
+| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined`              | The password to use when accessing a secured Elasticsearch cluster.
+| `SEARCHKIT_LOG_LEVEL`              | `info`                   | The logging level used for server side events.
+| `SEARCHKIT_USE_JSON_LOGGING`       | `false`                  | Whether to log using JSON rather than plain text.
 
 Set environment variables using the following syntax.
 

@@ -49,7 +49,7 @@ export class SearchPage extends Component<Props> {
 
   componentDidUpdate(): void {
     // Auto expand filters if they contain selected values.
-    for (let filterName in this.props.filters) {
+    for (const filterName in this.props.filters) {
       this.autoExpandFilter(filterName);
     }
 
