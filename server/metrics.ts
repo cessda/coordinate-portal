@@ -12,196 +12,121 @@
 // limitations under the License.
 import { URL, URLSearchParams } from 'url'
 import client from 'prom-client';
-import express, { Request, Response } from 'express';
-import { getESrecordsByLanguages, getESrecordsModified, getESindexLanguages, getESrecordsByEndpoint } from './helper';
+import { Request, RequestHandler, Response } from 'express';
+import Elasticsearch from './elasticsearch';
+import { IPinfo } from 'node-ipinfo';
 
-//METRICS FOR API
-//Metrics for api - total
-export const apiResponseTimeTotalHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_total',
-    help: 'REST API response time total requests',
-    labelNames: ['method', 'route']
-})
-//Metrics for api - total - failed
-export const apiResponseTimeTotalFailedHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_total_failed',
-    help: 'REST API response time total failed requests',
-    labelNames: ['method', 'route']
-})
-//Metrics for api - user - failed
-export const apiResponseTimeUserFailedHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_user_failed',
-    help: 'REST API response time total user failed requests',
-    labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for api - system - failed
-export const apiResponseTimeSystemFailedHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_system_failed',
-    help: 'REST API response time total system failed requests',
-    labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for api - total - success
-export const apiResponseTimeTotalSuccessHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_total_success',
-    help: 'REST API response time total successful requests',
-    labelNames: ['method', 'route']
-})
-//Metrics for api - all
-export const apiResponseTimeAllHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_all',
-    help: 'REST API response time in ms for all requests',
-    labelNames: ['method', 'route', 'status_code']
-})
+//Metrics for api
+const apiResponseTimeHistogram = new client.Histogram({
+  name: 'api_response_time_duration_seconds_all',
+  help: 'REST API response time in ms for all requests',
+  labelNames: ['method', 'route', 'status_code']
+});
 //Metrics for api - language
-export const apiResponseTimeLangHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_language',
-    help: 'REST API response time in seconds for Language',
-    labelNames: ['method', 'route', 'lang', 'status_code']
-})
+const apiResponseTimeLangHistogram = new client.Histogram({
+  name: 'api_response_time_duration_seconds_language',
+  help: 'REST API response time in seconds for Language',
+  labelNames: ['method', 'route', 'lang', 'status_code']
+});
 //Metrics for api - publisher
-export const apiResponseTimePublisherHistogram = new client.Histogram({
-    name: 'api_response_time_duration_seconds_publisher_api',
-    help: 'REST API response time in seconds for Publisher, External API',
-    labelNames: ['method', 'route', 'publ', 'status_code']
-})
-//METRICS FOR UI
-//Metrics for User Interface - total
-export const uiResponseTimeTotalHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_total',
-    help: 'User Interface response time total requests',
-    labelNames: ['method', 'route']
-})
-//Metrics for User Interface - total - failed
-export const uiResponseTimeTotalFailedHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_total_failed',
-    help: 'User Interface response time total failed requests',
-    labelNames: ['method', 'route']
-})
-//Metrics for User Interface - user - failed
-export const uiResponseTimeUserFailedHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_user_failed',
-    help: 'User Interface response time total user failed requests',
-    labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for User Interface - zero elastic results
-export const uiResponseTimeZeroElasticResultsHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_zero_elastic_results',
-    help: 'User Interface response time total zero elastic results',
-    labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for User Interface - system - failed
-export const uiResponseTimeSystemFailedHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_system_failed',
-    help: 'User Interface response time total system failed requests',
-    labelNames: ['method', 'route', 'status_code']
-})
-//Metrics for User Interface - total - success
-export const uiResponseTimeTotalSuccessHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_total_success',
-    help: 'User Interface response time total successful requests',
-    labelNames: ['method', 'route']
-})
+const apiResponseTimePublisherHistogram = new client.Histogram({
+  name: 'api_response_time_duration_seconds_publisher_api',
+  help: 'REST API response time in seconds for Publisher, External API',
+  labelNames: ['method', 'route', 'publ', 'status_code']
+});
 //Metrics for User Interface - all
-export const uiResponseTimeAllHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_all',
-    help: 'User Interface response time in ms for all requests',
-    labelNames: ['method', 'route', 'status_code']
-})
+const uiResponseTimeHistogram = new client.Histogram({
+  name: 'ui_response_time_duration_seconds_all',
+  help: 'User Interface response time in ms for all requests',
+  labelNames: ['method', 'route', 'status_code']
+});
 //Metrics for User Interface - language
-export const uiResponseTimeLangHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_language',
-    help: 'User Interface response time in seconds for Language',
-    labelNames: ['method', 'route', 'lang', 'status_code']
-})
+const uiResponseTimeLangHistogram = new client.Histogram({
+  name: 'ui_response_time_duration_seconds_language',
+  help: 'User Interface response time in seconds per language.',
+  labelNames: ['method', 'route', 'lang', 'status_code']
+});
 //Metrics for User Interface - publisher
-export const uiResponseTimePublisherHistogram = new client.Histogram({
-    name: 'ui_response_time_duration_seconds_publisher_api',
-    help: 'User Interface response time in seconds for Publisher, External API',
-    labelNames: ['method', 'route', 'publ', 'status_code']
-})
-//Metrics for ES - Studies Modified
-export const gaugeStudiesModified = new client.Gauge({
-  name: 'studies_modified',
-  help: 'Gauge for Modified Studies',
-  async collect() {
-    // Invoked when the registry collects its metrics' values.
-    const currentValue = await getESrecordsModified();
-    this.set(currentValue);
-  },
+const uiResponseTimePublisherHistogram = new client.Histogram({
+  name: 'ui_response_time_duration_seconds_publisher_api',
+  help: 'User Interface response time in seconds per publisher.',
+  labelNames: ['method', 'route', 'publ', 'status_code']
 });
 //Metrics for ES - Studies Languages
-export const languageGauge = new client.Gauge({
+const languageGauge = new client.Gauge({
   name: 'studies_languages',
-  help: 'Language Gauge',
+  help: 'Amount of records per language',
   labelNames: ['language'],
 });
-//Function to get Studies Languages Metrics
-async function languageGauges() {
-  const results = await getESindexLanguages();
-  for (const result of results) {
-    const currentValue = await getESrecordsByLanguages(result);
-    languageGauge.set({ language: result }, currentValue);
-  }
-}
 //Metrics for ES - Studies Endpoints
-export const endpointGauge = new client.Gauge({
+const endpointGauge = new client.Gauge({
   name: 'studies_endpoints',
-  help: 'Endpoint Gauge',
+  help: 'Amount of records per endpoint',
   labelNames: ['endpoint'],
 });
-//Function to get Studies Endpoints Metrics
-async function endpointGauges() {
-  const results = await getESrecordsByEndpoint();
-  results.forEach(result => endpointGauge.set({ endpoint: result.key }, result.doc_count));
-}
+
 //Metrics for SearchAPI - Track Visitors IP's
-export const searchAPIClientIPGauge = new client.Gauge({
+const searchAPIClientIPGauge = new client.Gauge({
   name: 'searchAPI_client_ip',
   help: 'SearchAPI Client IPs',
   labelNames: ['searchAPIClientIP'],
 });
+
 //Metrics for SearchAPI - Track Visitors Country
-export const searchAPIClientCountryGauge = new client.Gauge({
+const searchAPIClientCountryGauge = new client.Gauge({
   name: 'searchAPI_client_country',
   help: 'SearchAPI Client Countries',
   labelNames: ['searchAPIClientCountry'],
 });
 
-//Endpoint used for Prometheus Metrics
-export function startMetricsListening() {
+/**
+ * Initialise Prometheus metrics
+ */
+export function initialiseMetrics(esClient: Elasticsearch) {
+  client.collectDefaultMetrics(); //general cpu, mem, etc information
 
-    languageGauges();
-    endpointGauges();
+  // Initialise language and endpoint gauges from Elasticsearch
+  languageGauges(esClient);
+  endpointGauges(esClient);
+}
 
-    const router = express.Router();
+/**
+ * Initialise the language gauge by quering Elasticsearch for the amount of studies in each language
+ */
+async function languageGauges(esClient: Elasticsearch) {
+  const languages = await esClient.getListOfMetadataLanguages();
+  for (const result of languages) {
+    const currentValue = await esClient.getRecordCountByLanguage(result) || 0;
+    languageGauge.set({ language: result }, currentValue);
+  }
+}
 
-    client.collectDefaultMetrics(); //general cpu, mem, etc information
-
-    router.get('/', async (_req, res) => {
-      const metrics = await client.register.metrics();
-      res.type(client.register.contentType).send(metrics);
-    });
-
-    return router;
+/**
+ * Initialise the endpoint gauge by querying Elasticsearch for the amount of studies per OAI-PMH endpoint
+ */
+async function endpointGauges(esClient: Elasticsearch) {
+  const endpoints = await esClient.getEndpoints();
+  for (const result of endpoints) {
+    endpointGauge.set({ endpoint: result.key }, result.doc_count);
+  }
 }
 
 export function uiResponseTimeHandler(req: Request, res: Response, time: number) {
-  if (req.query.size === undefined && req.headers.referer!==undefined) { //to exclude calls to _search?size=... etc & not log metrics from internal ES API
+  // Convert milliseconds into seconds
+  time = time / 1000;
+
+  if (req.query.size === undefined && req.headers.referer !== undefined) { //to exclude calls to _search?size=... etc & not log metrics from internal ES API
 
     //ALL
     if (req?.route?.path) {
-      uiResponseTimeAllHistogram.observe({
+      uiResponseTimeHistogram.observe({
         method: req.method,
         route: req.route.path,
         status_code: res.statusCode
       }, time);
-      uiResponseTimeTotalHistogram.observe({
-        method: req.method,
-        route: req.route.path
-      }, time);
 
       //LANG
-      const langUI: any = req.params;
+      const langUI = req.params as unknown as string;
       const lang = langUI.slice(9);
       uiResponseTimeLangHistogram.observe({
         method: req.method,
@@ -214,7 +139,7 @@ export function uiResponseTimeHandler(req: Request, res: Response, time: number)
       const urlUI = new URL(req.headers.referer);
       const paramsUI = new URLSearchParams(urlUI.search);
       if (paramsUI.has('publisher.publisher[0]')) { //searching for at least 1 publisher
-        paramsUI.forEach(function (value, key) {
+        paramsUI.forEach((value, key) => {
           if (key.includes("publisher")) {
             uiResponseTimePublisherHistogram.observe({
               method: req.method,
@@ -225,52 +150,20 @@ export function uiResponseTimeHandler(req: Request, res: Response, time: number)
           }
         });
       }
-
-      if (res.statusCode >= 400) {
-        //TOTAL FAILED REQUEST COUNTER
-        uiResponseTimeTotalFailedHistogram.observe({
-          method: req.method,
-          route: req.route.path
-        }, time);
-
-        if (res.statusCode >= 500) {
-          //SYSTEM FAIL REQUEST
-          uiResponseTimeSystemFailedHistogram.observe({
-            method: req.method,
-            route: req.route.path,
-            status_code: res.statusCode
-          }, time);
-        } else {
-          //USER FAIL REQUEST
-          uiResponseTimeUserFailedHistogram.observe({
-            method: req.method,
-            route: req.route.path,
-            status_code: res.statusCode
-          }, time);
-        }
-
-      } else {
-        //SUCCESS REQUEST
-        uiResponseTimeTotalSuccessHistogram.observe({
-          method: req.method,
-          route: req.route.path
-        }, time);
-      }
     }
   }
 }
 
 export function apiResponseTimeHandler(req: Request, res: Response, time: number) {
+  // Convert milliseconds into seconds
+  time = time / 1000;
+
   //ALL
   if (req?.route?.path) {
-    apiResponseTimeAllHistogram.observe({
+    apiResponseTimeHistogram.observe({
       method: req.method,
       route: req.route.path,
       status_code: res.statusCode
-    }, time);
-    apiResponseTimeTotalHistogram.observe({
-      method: req.method,
-      route: req.route.path
     }, time);
     //LANG
     if (req.query.metadataLanguage) {
@@ -290,43 +183,29 @@ export function apiResponseTimeHandler(req: Request, res: Response, time: number
         observePublisher(req, String(publishers), res.statusCode, time);
       }
     }
-    if (res.statusCode >= 400) {
-      //TOTAL FAILED REQUEST COUNTER
-      apiResponseTimeTotalFailedHistogram.observe({
-        method: req.method,
-        route: req.route.path
-      }, time);
+  }
+}
 
-      if (res.statusCode >= 500) {
-        //SYSTEM FAIL REQUEST
-        apiResponseTimeSystemFailedHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode
-        }, time);
-      } else {
-        //USER FAIL REQUEST
-        apiResponseTimeUserFailedHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode
-        }, time);
-      }
-    } else {
-      //SUCCESS REQUEST
-      apiResponseTimeTotalSuccessHistogram.observe({
-        method: req.method,
-        route: req.route.path
-      }, time);
-    }
+export function observeAPIClientIP(ip: string, ipinfo?: IPinfo) {
+  searchAPIClientIPGauge.labels({ searchAPIClientIP: ip }).inc();
+  if (ipinfo) {
+    searchAPIClientCountryGauge.labels({ searchAPIClientCountry: ipinfo.country }).inc()
   }
 }
 
 function observePublisher(req: Request, value: string, statusCode: number, time: number) {
-    return apiResponseTimePublisherHistogram.observe({
-        method: req.method,
-        route: req.route.path,
-        publ: value,
-        status_code: statusCode
-    }, time);
+  apiResponseTimePublisherHistogram.observe({
+    method: req.method,
+    route: req.route.path,
+    publ: value,
+    status_code: statusCode
+  }, time);
+}
+
+/**
+ *  Endpoint used for Prometheus Metrics
+ */
+export const metricsRequestHandler: RequestHandler = async (_req, res) => {
+  const metrics = await client.register.metrics();
+  res.type(client.register.contentType).send(metrics);
 }

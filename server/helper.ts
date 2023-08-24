@@ -23,9 +23,8 @@ import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
-import { startMetricsListening, apiResponseTimeHandler, uiResponseTimeHandler, uiResponseTimeTotalFailedHistogram, uiResponseTimeZeroElasticResultsHistogram, searchAPIClientIPGauge, searchAPIClientCountryGauge } from './metrics';
+import { apiResponseTimeHandler, initialiseMetrics, metricsRequestHandler, observeAPIClientIP, uiResponseTimeHandler } from './metrics';
 import Elasticsearch from './elasticsearch';
-import { AggregationsValueCountAggregate, SearchResponse } from '@elastic/elasticsearch/lib/api/types';
 import { errors } from '@elastic/elasticsearch';
 import { Response } from 'express-serve-static-core';
 import { logger } from './logger';
@@ -34,7 +33,7 @@ import { WithContext, Dataset } from 'schema-dts';
 import swaggerSearchApiV2 from './swagger-searchApiV2';
 import fetch, { Request } from 'node-fetch';
 import { Agent } from 'http';
-import IPinfoWrapper, { IPinfo, ApiLimitError } from "node-ipinfo";
+import IPinfoWrapper, { ApiLimitError } from "node-ipinfo";
 
 
 // Defaults to localhost if unspecified
@@ -42,6 +41,7 @@ export const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://lo
 const elasticsearchUsername = process.env.SEARCHKIT_ELASTICSEARCH_USERNAME;
 const elasticsearchPassword = process.env.SEARCHKIT_ELASTICSEARCH_PASSWORD;
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
+const ipinfoAPIKey = process.env.SEARCHKIT_IPINFO_API_KEY;
 
 let elasticsearch: Elasticsearch;
 
@@ -50,6 +50,9 @@ if (elasticsearchUsername && elasticsearchPassword) {
 } else {
   elasticsearch = new Elasticsearch(elasticsearchUrl);
 }
+
+// Metrics
+initialiseMetrics(elasticsearch);
 
 
 export function checkBuildDirectory() {
@@ -148,9 +151,6 @@ function getSearchkitRouter() {
   // Proxy Searchkit requests
   router.post('/_search', responseTime(uiResponseTimeHandler), async (req, res) => {
 
-    //timer required for responseTime in zero elasticsearch response
-    const startTime = new Date();
-
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
 
     const fullUrl = `${host}/${req.body.index || 'cmmstudy_en'}${req.url}`;
@@ -177,21 +177,13 @@ function getSearchkitRouter() {
 
     try {
       const response = await fetch(request);
-      const body = await response.json() as Partial<SearchResponse>;
-      if (body.hits?.total === 0) {
-        const endTime = new Date();
-        const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-        uiResponseTimeZeroElasticResultsHistogram.observe({
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode
-        }, timeDiff);
-        uiResponseTimeTotalFailedHistogram.observe({
-          method: req.method,
-          route: req.route.path
-        }, timeDiff);
-      }
-      res.status(response.status).json(body);
+
+      // Set headers, forward Elasticsearch status
+      res.status(response.status).setHeader('Content-Type', 'application/json');
+
+      // Stream the response to the client
+      response.body.pipe(res);
+
       logger.debug('Finished Elasticsearch Request to %s', fullUrl);
     } catch (e) {
       // When a connection error occurs send a 502 error to the client.
@@ -241,23 +233,34 @@ function externalApiV2() {
       return;
     }
 
-    //Get Visitors Information For Prom Metrics
-    const ip: string = req.headers['x-forwarded-for'] as string | undefined || req.socket.remoteAddress as string;
-    const ipinfoWrapper = new IPinfoWrapper(""); //token must be parsed here
-    //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
-    ipinfoWrapper.lookupIp(ip).then((response: IPinfo) => {
-      searchAPIClientIPGauge.labels({ searchAPIClientIP: response.ip}).inc();
-      searchAPIClientCountryGauge.labels({ searchAPIClientCountry: response.country}).inc();
-    })
-    .catch((error) => {
-      if (error instanceof ApiLimitError) {
-          // handle api limit exceed error
-          logger.error(`ipinfo searchAPI limit exceeded : ${error}`);
+    // Get Visitors Information For Prom Metrics
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (ip) {
+      const ipString = String(ip);
+    
+      if (ipinfoAPIKey) {
+      
+        //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
+        const ipinfoWrapper = new IPinfoWrapper(ipinfoAPIKey); //token must be parsed here
+        ipinfoWrapper.lookupIp(ipString)
+          .then(info => observeAPIClientIP(ipString, info))
+          .catch((error) => {
+            if (error instanceof ApiLimitError) {
+                // handle api limit exceed error
+                logger.warn(`ipinfo searchAPI limit exceeded : ${error}`);
+            } else {
+                // handle other errors
+                logger.error(`error while getting searchAPI client's ip / country : ${error}`);
+            }
+
+            // Observe the IP without country information
+            observeAPIClientIP(ipString);
+          });
       } else {
-          // handle other errors
-          logger.error(`error while getting searchAPI client's ip / country : ${error}`);
+        observeAPIClientIP(ipString);
       }
-    });
+    }
 
     const { metadataLanguage, q, sortBy } = req.query;
 
@@ -374,22 +377,7 @@ function externalApiV2() {
       });
 
       // Calculate the total hits
-      let totalHits: number;
-      switch (typeof response.hits.total) {
-        case "object":
-          // If SearchTotalHits object, extract from the value field
-          totalHits = response.hits.total.value;
-          break;
-        case "number":
-          // If number, extract directly
-          totalHits = response.hits.total;
-          break;
-        default:
-          // Total hits not present, set to 0
-          totalHits = 0;
-          break;
-      }
-
+      const totalHits = Elasticsearch.parseTotalHits(response.hits.total) || 0;
       const resultsCount = apiResultsCount(offset, limit, response.hits.hits.length, totalHits);
 
       //Meta-Info to send with response
@@ -412,29 +400,25 @@ function externalApiV2() {
        *
        * We default to sending the CMMStudy model, only sending JSON-LD if specifically requested.
        */
-      switch (accepts) {
-        case "json": 
+      res.format({
+
+        json: () => res.json({
+          SearchTerms: searchTerms,
+          ResultsCount: resultsCount,
+          Results: response.hits.hits.map(obj => obj._source)
+        }),
+
+        // Respond with JSON-LD if specified by the client
+        "application/ld+json": () => {
+          const studyModels = response.hits.hits.map(hit => getStudyModel(hit._source));
+          const jsonLdArray = studyModels.map((value) => getJsonLd(value));
           res.json({
-            SearchTerms: searchTerms,
-            ResultsCount: resultsCount,
-            Results: response.hits.hits.map(obj => obj._source)
-          });
-          break;
-        case "application/ld+json": {
-          const studyModels: CMMStudy[] = response.hits.hits.map(hit => getStudyModel(hit._source));
-          const jsonLdArray: WithContext<Dataset>[] = studyModels.map((value) => getJsonLd(value));
-          res.contentType("application/ld+json").json({
             SearchTerms: searchTerms,
             ResultsCount: resultsCount,
             Results: jsonLdArray
           });
-          break;
         }
-        default:
-          // We shouldn't end up here, but just in case respond with something.
-          res.sendStatus(500);
-          break;
-      }
+      });
     } catch (e) {
       logger.error('Elasticsearch API Request failed: %s', (e as Error));
       res.status(502).send({ message: (e as Error).message });
@@ -473,93 +457,17 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
  * @param total The total results coming from ElasticSearch.
  */
  function apiResultsCount(offset: number, limit: number, retrieved: number, total: number) {
-  let to: number = offset + limit;
-  if (to > total) {
-    to = total;
-  }
+  
+  // Calculate the position of the final result
+  const to: number = Math.min(offset + limit, total);
+
   return {
     from: offset,
     to: to,
     retrieved: retrieved,
     available: total
   };
-}
-
-//used by metrics.ts
-export async function getESrecordsByLanguages(lang:string): Promise<number>{
-  const response = await elasticsearch.client.search<CMMStudy>({
-    body: {
-      "aggs": {
-        "lang": {
-          "terms": {
-            "field": "langAvailableIn"
-          }
-        }
-      }
-    },
-    track_total_hits: false
-  });
-
-  const elasticAggs: any = response.aggregations;
-  let result = 0;
-  for (const x of elasticAggs.lang.buckets) {
-    if (x.key === lang){
-      result = x.doc_count;
-      break;
-    }
-  }
-  return result;
-}
-
-//used by metrics.ts
-export async function getESindexLanguages(): Promise<Array<string>>{
-  const indices = await elasticsearch.client.cat.indices({format: 'json'})
-  const filtered: (string | undefined)[] = indices.map(element=>{
-    if (element?.index?.startsWith('cmmstudy'))
-      return element.index.slice(-2)
-  }).filter(element=>{ return element !== undefined; })
-  return filtered as Array<string>;
-}
-
-//used by metrics.ts
-export async function getESrecordsModified(): Promise<number>{
-  const response = await elasticsearch.client.search<CMMStudy>({
-    body: {
-      "aggs": {
-        "types_count": {
-          "value_count": {
-            "field": "lastModified"
-          }
-        }
-      }
-    },
-    track_total_hits: false
-  });
-
-  const elasticAggs = response.aggregations;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return (elasticAggs!.types_count as AggregationsValueCountAggregate).value || 0;
-}
-
-//used by metrics.ts
-export async function getESrecordsByEndpoint(): Promise<{ key: string, doc_count: number }[]>{
-  const response = await elasticsearch.client.search<CMMStudy>({
-    body: {
-      "aggs": {
-        "aggregationResults": {
-          "terms": {
-            "field": "code",
-            "size": 1000,
-          }
-        }
-      }
-    },
-    track_total_hits: false
-  });
-  const elasticAggs: any | undefined = response.aggregations;
-  const results: { key: string, doc_count: number }[] = elasticAggs.aggregationResults.buckets;
-  return results;
-}
+ }
 
 function jsonProxy() {
   return proxy(elasticsearchUrl, {
@@ -585,21 +493,26 @@ function jsonProxy() {
       logger.error('Elasticsearch Request failed: %s', err?.message);
       res.sendStatus(502);
     },
-    userResDecorator: (_proxyRes, proxyResData, userReq, userRes) => {
-      const json = JSON.parse(proxyResData.toString('utf8'));
-      if (!_.isEmpty(json._source)) {
+    userResDecorator: (proxyRes, proxyResData, userReq) => {
+
+      // Only parse the Elasticsearch response if a success status code is returned
+      if (proxyRes.statusCode && proxyRes.statusCode < 400) {
+
+        // Parse the response
+        const json = JSON.parse(proxyResData.toString('utf8'));
+
         // If the client requests JSON-LD, return it
         switch (userReq.accepts(["json", "application/ld+json"])) {
+
           case "application/ld+json": {
-            const cmmstudy = getStudyModel(json._source,);
+            const cmmstudy = getStudyModel(json._source);
             return getJsonLd(cmmstudy);
           }
+          
           case "json":
             return json._source;
-          default:
-            userRes.sendStatus(406);
-            return;
         }
+
       } else {
         // When running in debug mode, return the actual response from Elasticsearch
         if (debugEnabled) {
@@ -738,6 +651,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use('/swagger/api/DataSets/v2', cors(), (async (_req, res) => {
     try {
       if (!v2) {
+        // Initialise the API documentation
         v2 = await swaggerSearchApiV2(elasticsearch)
       }
       return res.json(v2);
@@ -747,7 +661,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
     }
   }));
   
-  app.use('/metrics', startMetricsListening());
+  // Handle requests to /metrics
+  app.get('/metrics', metricsRequestHandler);
 
   app.get('*', handler);
 

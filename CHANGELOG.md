@@ -24,7 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add user interface sorting options to the search API ([#532](https://github.com/cessda/cessda.cdc.versions/issues/532))
 - Add `main` landmark regions ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
 - Add link to the front page on the main `nav` for screen readers ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
-- Add styles for feedback button and form
+- Add styles for feedback button and form ([PR-148](https://github.com/cessda/cessda.cdc.searchkit/pull/148))
+- Add skip to main content ([#562](https://github.com/cessda/cessda.cdc.searchkit/pull/153))
 
 ### Changes
 
@@ -35,7 +36,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Move topic and keyword terms in study view ([#353](https://github.com/cessda/cessda.cdc.versions/issues/353))
 - Update Topic filter tooltip text ([#117](https://github.com/cessda/cessda.cdc.versions/issues/117))
 - Move search tooltip button on mobile ([#563](https://github.com/cessda/cessda.cdc.versions/issues/563))
-- Remove placeholder texts from feedback form
+- Remove placeholder texts from feedback form ([PR-148](https://github.com/cessda/cessda.cdc.searchkit/pull/148))
+- Improve keyboard navigation, focus order and visible focus ([#562](https://github.com/cessda/cessda.cdc.versions/issues/562))
 
 ### Fixes
 
