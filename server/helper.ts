@@ -23,7 +23,7 @@ import methodOverride from 'method-override';
 import { ParsedQs } from 'qs';
 import responseTime from 'response-time';
 import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
-import { apiResponseTimeHandler, initialiseMetrics, metricsRequestHandler, observeAPIClientIP, uiResponseTimeHandler } from './metrics';
+import { apiResponseTimeHandler, metricsRequestHandler, observeAPIClientIP, uiResponseTimeHandler } from './metrics';
 import Elasticsearch from './elasticsearch';
 import { errors } from '@elastic/elasticsearch';
 import { Response } from 'express-serve-static-core';
@@ -37,7 +37,7 @@ import IPinfoWrapper, { ApiLimitError } from "node-ipinfo";
 
 
 // Defaults to localhost if unspecified
-export const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
+const elasticsearchUrl = process.env.PASC_ELASTICSEARCH_URL || "http://localhost:9200/";
 const elasticsearchUsername = process.env.SEARCHKIT_ELASTICSEARCH_USERNAME;
 const elasticsearchPassword = process.env.SEARCHKIT_ELASTICSEARCH_PASSWORD;
 const debugEnabled = process.env.PASC_DEBUG_MODE === 'true';
@@ -50,9 +50,6 @@ if (elasticsearchUsername && elasticsearchPassword) {
 } else {
   elasticsearch = new Elasticsearch(elasticsearchUrl);
 }
-
-// Metrics
-initialiseMetrics(elasticsearch);
 
 
 export function checkBuildDirectory() {
@@ -660,9 +657,12 @@ export function startListening(app: express.Express, handler: RequestHandler) {
       return res.sendStatus(500);
     }
   }));
+
+  // Metrics
+  
   
   // Handle requests to /metrics
-  app.get('/metrics', metricsRequestHandler);
+  app.get('/metrics', metricsRequestHandler(elasticsearch));
 
   app.get('*', handler);
 

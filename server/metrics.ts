@@ -82,7 +82,7 @@ const searchAPIClientCountryGauge = new client.Gauge({
 /**
  * Initialise Prometheus metrics
  */
-export function initialiseMetrics(esClient: Elasticsearch) {
+function initialiseMetrics(esClient: Elasticsearch) {
   client.collectDefaultMetrics(); //general cpu, mem, etc information
 
   // Initialise language and endpoint gauges from Elasticsearch
@@ -205,7 +205,10 @@ function observePublisher(req: Request, value: string, statusCode: number, time:
 /**
  *  Endpoint used for Prometheus Metrics
  */
-export const metricsRequestHandler: RequestHandler = async (_req, res) => {
-  const metrics = await client.register.metrics();
-  res.type(client.register.contentType).send(metrics);
+export function metricsRequestHandler(esClient: Elasticsearch): RequestHandler {
+  initialiseMetrics(esClient);
+  return async (_req, res) => {
+    const metrics = await client.register.metrics();
+    res.type(client.register.contentType).send(metrics);
+  };
 }
