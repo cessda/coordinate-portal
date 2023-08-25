@@ -37,9 +37,14 @@ mockedElasticsearch.mockImplementation(() => {
     client: jest.fn() as unknown as Client,
     getStudy: mockedGetStudy,
     getSimilars: jest.fn(),
-    getTotalStudies: jest.fn()
+    getTotalStudies: jest.fn(),
+    getListOfMetadataLanguages: jest.fn(),
+    getListOfCountries: jest.fn(),
+    getEndpoints: jest.fn()
   }
 });
+
+jest.mock('../../server/metrics');
 
 // Import the helper
 import { checkBuildDirectory, Metadata, renderResponse } from '../../server/helper';

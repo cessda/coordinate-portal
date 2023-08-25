@@ -15,7 +15,8 @@ import { Client, ClientOptions } from '@elastic/elasticsearch'
 import { 
   AggregationsCardinalityAggregate,
   AggregationsNestedAggregate,
-  AggregationsSignificantStringTermsAggregate
+  AggregationsStringTermsAggregate,
+  SearchHitsMetadata
 } from "@elastic/elasticsearch/lib/api/types";
 import _ from "lodash";
 import { CMMStudy } from "../common/metadata";
@@ -23,6 +24,8 @@ import { logger } from "./logger";
 
 
 export default class Elasticsearch {
+  private readonly indexName = "cmmstudy";
+
   public readonly client: Client;
 
   constructor(url: string, authentication?: ClientOptions["auth"]) {
@@ -74,7 +77,7 @@ export default class Elasticsearch {
   async getTotalStudies() {
     const response = await this.client.search({
       size: 0,
-      index: "cmmstudy_*",
+      index: `${this.indexName}_*`,
       query: { match_all: {} },
       aggs: { 
         unique_id: {
@@ -93,12 +96,12 @@ export default class Elasticsearch {
   async getListOfMetadataLanguages() {
     const res = await this.client.indices.get({
       allow_no_indices: true,
-      index: "*" 
+      index: `${this.indexName}_*` 
     });
     const indices = Object.keys(res);
 
     // Index names are of the form cmmstudy_${lang}, extract the ${lang} part and filter out not needed indexes
-    return indices.filter(i => i.startsWith("cmmstudy_")).map(i => i.split("_")[1]);
+    return indices.map(i => i.split("_")[1]);
   }
 
   async getSourceRepositoryNames() {
@@ -124,7 +127,7 @@ export default class Elasticsearch {
 
     // Unwrap the aggregations
     const aggregation = res.aggregations?.publishers as AggregationsNestedAggregate;
-    const publisherBuckets = (aggregation.publisher as AggregationsSignificantStringTermsAggregate).buckets;
+    const publisherBuckets = (aggregation.publisher as AggregationsStringTermsAggregate).buckets;
     
     if (Array.isArray(publisherBuckets)) {
       return publisherBuckets.map(b => b.key);
@@ -156,7 +159,7 @@ export default class Elasticsearch {
 
     // Unwrap the aggregations
     const aggregation = res.aggregations?.studyAreaCountries as AggregationsNestedAggregate;
-    const countryBuckets = (aggregation.country as AggregationsSignificantStringTermsAggregate).buckets;
+    const countryBuckets = (aggregation.country as AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(countryBuckets)) {
       return countryBuckets.map(b => b.key);
@@ -189,7 +192,7 @@ export default class Elasticsearch {
 
     // Unwrap the aggregations
     const aggregation = res.aggregations?.classifications as AggregationsNestedAggregate;
-    const topicBuckets = (aggregation.term as AggregationsSignificantStringTermsAggregate).buckets;
+    const topicBuckets = (aggregation.term as AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(topicBuckets)) {
       return topicBuckets.map(b => b.key);
@@ -214,6 +217,61 @@ export default class Elasticsearch {
       });
 
       return res.hits.hits.map(hit => hit._index);
+  }
+
+  /**
+   * Get the amount of records per OAI-PMH endpoint from Elasticsearch.
+   */
+  async getEndpoints() {
+    const res = await this.client.search<unknown>({
+      aggs: {
+        aggregationResults: {
+          terms: {
+            field: "code",
+            size: 100
+          }
+        }
+      },
+      track_total_hits: false
+    });
+    const elasticAggs = res.aggregations?.aggregationResults as AggregationsStringTermsAggregate;
+    const buckets = elasticAggs.buckets;
+    if (Array.isArray(buckets)) {
+      return buckets;
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Get the amount of records in the specified language from Elasticsearch.
+   * @param lang the language of the records.
+   */
+  async getRecordCountByLanguage(lang: string): Promise<number | undefined>{
+    const response = await this.client.search({ 
+      index: `cmmstudy_${lang}`,
+      track_total_hits: true 
+    });
+    return Elasticsearch.parseTotalHits(response.hits.total);
+  }
+
+  /**
+   * Extract the total hits from the hits metadata.
+   * @returns the total hits, or undefined if not present.
+   */
+  static parseTotalHits(totalHits: SearchHitsMetadata["total"]) {
+    // Calculate the total hits
+    switch (typeof totalHits) {
+      case "object":
+        // If SearchTotalHits object, extract from the value field
+        return totalHits.value;
+      case "number":
+        // If number, extract directly
+        return totalHits;
+      default:
+        // Total hits not present, return undefined
+        return undefined;
+    }
   }
 
   /**
