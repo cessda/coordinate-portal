@@ -126,7 +126,7 @@ export class DetailPage extends Component<Props> {
               </Panel>
             </SideBar>
             <LayoutResults className="column is-8">
-            {item ? 
+            {item ?
               <>
                 <div className="panel">
                   {item.studyUrl &&
@@ -137,8 +137,18 @@ export class DetailPage extends Component<Props> {
                     <span className="icon is-small"><FaExternalLinkAlt/></span>
                     <Translate content="goToStudy"/>
                   </a>
-                  } 
-        
+                  }
+
+                  {item.dataAccessUrl &&
+                  <a className="button is-small is-white is-pulled-left mr-3 focus-visible"
+                      href={item.dataAccessUrl}
+                      rel="noreferrer"
+                      target="_blank">
+                    <span className="icon is-small"><FaExternalLinkAlt/></span>
+                    <Translate content="goToData"/>
+                  </a>
+                  }
+
                   <a className="button is-small is-white is-pulled-left focus-visible"
                     href={`/api/json/${index}/${encodeURIComponent(item.id)}`}
                     rel="noreferrer"
@@ -150,7 +160,7 @@ export class DetailPage extends Component<Props> {
                   <a className="button is-small is-white is-pulled-right focus-visible" onClick={goBack} tabIndex={0}>
                     <FaAngleLeft/><Translate className="ml-5" content="back"/>
                   </a>
-        
+
                   <div className="is-clearfix"/>
                 </div>
                 <Detail item={item} lang={currentLanguage.code}/>

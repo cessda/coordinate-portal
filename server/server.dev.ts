@@ -14,7 +14,7 @@ import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import express from 'express';
-import config from '../webpack.dev.config.js';
+import config from '../webpack.dev.config';
 import path from 'path';
 import { checkEnvironmentVariables, renderResponse, startListening } from './helper';
 

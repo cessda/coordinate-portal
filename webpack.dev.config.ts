@@ -12,15 +12,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const common = require('./webpack.common');
-const path = require('path');
-const { merge } = require('webpack-merge');
-const webpack = require('webpack');
+import common from './webpack.common';
+import { join } from 'path';
+import { merge } from 'webpack-merge';
+import { HotModuleReplacementPlugin, EnvironmentPlugin } from 'webpack';
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-/** @type webpack.Configuration */
-module.exports = merge(common, {
+export default merge(common, {
   mode: 'development',
   devtool: 'source-map',
   entry: [
@@ -29,17 +28,17 @@ module.exports = merge(common, {
     './src/index.tsx'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    new HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: '!!html-loader!server/views/index.ejs',
       filename: 'index.dev.ejs'
     }),
-    new webpack.EnvironmentPlugin({
+    new EnvironmentPlugin({
       PASC_DEBUG_MODE: false,
       PASC_PORT: 8088,
       PASC_ELASTICSEARCH_URL: null
