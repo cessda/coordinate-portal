@@ -460,7 +460,7 @@ describe('Metadata utilities', () => {
               vocab: 'Vocab',
               vocabUri: 'http://example.com'
             }
-          ] 
+          ]
         })
       ).toEqual({
         '@context': 'https://schema.org',

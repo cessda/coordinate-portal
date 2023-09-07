@@ -106,7 +106,7 @@ export class DetailPage extends Component<Props> {
       }}>{lang.label}</a>
 
       if (i < this.props.availableLanguages.length - 1) {
-        languageLinks.push(<React.Fragment key={i}>{element}, </React.Fragment>)
+        languageLinks.push(<React.Fragment key={lang.code}>{element}, </React.Fragment>)
       } else {
         languageLinks.push(element);
       }
