@@ -11,23 +11,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const common = require('./webpack.common');
-const path = require('path');
-const { merge } = require('webpack-merge');
-const webpack = require('webpack');
+import common from './webpack.common';
+import { join } from 'path';
+import { merge } from 'webpack-merge';
+import { optimize, DefinePlugin, EnvironmentPlugin } from 'webpack';
 
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-/** @type webpack.Configuration */
-module.exports = merge(common, {
+export default merge(common, {
   mode: 'production',
   entry: [
     './src/index.tsx'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: join(__dirname, 'dist'),
     filename: '[name].[contenthash].bundle.js',
     publicPath: '/static/',
     assetModuleFilename: 'img/[name][ext]'
@@ -40,7 +39,7 @@ module.exports = merge(common, {
     },
   },
   plugins: [
-    new webpack.optimize.AggressiveMergingPlugin(),
+    new optimize.AggressiveMergingPlugin(),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
@@ -51,10 +50,10 @@ module.exports = merge(common, {
         collapseWhitespace: true
       }
     }),
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
-    new webpack.EnvironmentPlugin({
+    new EnvironmentPlugin({
       PASC_DEBUG_MODE: false,
       PASC_PORT: 8088,
       PASC_ELASTICSEARCH_URL: null

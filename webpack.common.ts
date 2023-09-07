@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const webpack = require('webpack');
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import { Configuration, ProvidePlugin } from 'webpack';
+import path from 'path';
+import { loader } from 'mini-css-extract-plugin';
 
-/** @type webpack.Configuration */
-module.exports = {
+const config: Configuration = {
   context: path.join(__dirname),
   resolve: {
     alias: {
@@ -45,7 +44,7 @@ module.exports = {
       }
     }, {
       test: /\.css$/i,
-      use: [MiniCssExtractPlugin.loader, 'css-loader']
+      use: [loader, 'css-loader']
     }, {
       test: /\.(scss|sass)$/,
       use: [{
@@ -61,8 +60,10 @@ module.exports = {
     }]
   },
   plugins: [
-    new webpack.ProvidePlugin({
+    new ProvidePlugin({
       process: 'process/browser',
     })
   ]
-};
+} 
+
+export default config;

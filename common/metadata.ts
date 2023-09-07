@@ -32,6 +32,8 @@ export interface CMMStudy {
   dataCollectionFreeTexts: DataCollectionFreeText[];
   /** Terms of data access */
   dataAccessFreeTexts: string[];
+  /** Data access url */
+  dataAccessUrl?: string;
   /** Publication year */
   publicationYear: string;
   /** Data collection mode */
@@ -122,9 +124,9 @@ export interface Universe {
   exclusion?: string;
 }
 
-/** 
+/**
  * Creates a model to store/display study metadata in the user interface.
- * 
+ *
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
 export function getStudyModel(source: Partial<CMMStudy> | undefined, highlight?: SearchHit["highlight"]): CMMStudy {
@@ -156,6 +158,7 @@ export function getStudyModel(source: Partial<CMMStudy> | undefined, highlight?:
     publisher: source.publisher as Publisher,
     publicationYear: source.publicationYear || '',
     dataAccessFreeTexts: (source.dataAccessFreeTexts || []).map(text => stripHTMLElements(text)),
+    dataAccessUrl: source.dataAccessUrl,
     studyNumber: source.studyNumber || '',
     classifications: source.classifications || [],
     keywords: source.keywords || [],
@@ -175,7 +178,7 @@ function truncateAbstract(string: string): string {
 
 /**
  * Strip non-styling HTML tags from the given HTML string.
- * @param {string} html the HTML to strip. 
+ * @param {string} html the HTML to strip.
  */
 function stripHTMLElements(html: string) {
   const strippedHTML = striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
@@ -214,7 +217,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
         }
       };
     }
-    
+
     const creatorLower = creator.toLowerCase();
     // Assume organisation if it contains any of the following words.
     return {
@@ -248,10 +251,10 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
       break;
     } catch (e) {
       // invalid URLs should be ignored
-    } 
+    }
   }
 
-  
+
 
   return {
     '@context': 'https://schema.org',
