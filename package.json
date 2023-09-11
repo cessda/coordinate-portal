@@ -94,7 +94,7 @@
     "ejs": "3.1.9",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.7",
-    "eslint": "8.48.0",
+    "eslint": "8.49.0",
     "eslint-plugin-react": "7.33.0",
     "event-source-polyfill": "1.0.31",
     "html-loader": "4.2.0",
