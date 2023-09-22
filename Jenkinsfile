@@ -31,7 +31,14 @@ pipeline {
 	}
 
 	stages {
-		stage('Configure Node.JS environment') {
+		stage('Install NPM dependencies') {
+			steps {
+				configFileProvider([configFile(fileId: 'be684558-5540-4ad6-a155-7c1b4278abc0', targetLocation: '.npmrc')]) {
+					sh 'docker build --target build .'
+				}
+			}
+		}
+		stage('Configure Node.JS test environment') {
 			agent {
 				dockerfile {
 					additionalBuildArgs '--target build'
