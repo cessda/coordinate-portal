@@ -15,6 +15,7 @@ FROM node:20 AS build
 
 # Create app directory
 WORKDIR /usr/src/app
+COPY .npmrc ./
 COPY package*.json ./
 
 # NodeJS Install
