@@ -14,6 +14,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.4.1] - 2023-09-26
+
+### Additions
+
+- Add a link to access the data of the study ([#606](https://github.com/cessda/cessda.cdc.versions/issues/606))
+
+### Changes
+
+- Use a normalised field for the "Topic and Keywords" filter ([#609](https://github.com/cessda/cessda.cdc.versions/issues/609))
+
+### Fixes
+
+- Fix Panel elements incorrectly collapsing when a space character is entered ([#610](https://github.com/cessda/cessda.cdc.versions/issues/610))
+
 ## [3.4.0] - 2023-08-29
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8277027.svg)](https://doi.org/10.5281/zenodo.8277027)
@@ -316,6 +330,7 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.4.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.1
 [3.4.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.0
 [3.2.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.1
 [3.2.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.0
