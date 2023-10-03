@@ -15,18 +15,29 @@ FROM node:20 AS build
 
 # Create app directory
 WORKDIR /usr/src/app
-COPY .npmrc ./
-COPY package*.json ./
+COPY .npmrc* package*.json ./
 
-# NodeJS Install
+# Install NPM dependencies
 RUN npm ci
 
 # Bundle app source and build webpack
-FROM build AS final
+FROM build AS webpack
 COPY . .
 RUN npm run build
 
+# Remove development dependencies
+RUN npm prune --omit=dev
+
+# Create a separate image with the build layers removed
+FROM node:20 AS final
+COPY --from=webpack /usr/src/app/node_modules/ /usr/src/app/node_modules/
+COPY --from=webpack /usr/src/app/common/*.js /usr/src/app/common/
+COPY --from=webpack /usr/src/app/server/*.js /usr/src/app/server/
+COPY --from=webpack /usr/src/app/dist/ /usr/src/app/dist/
+COPY --from=webpack /usr/src/app/startprod.js /usr/src/app/
+
 # Configure application startup
+WORKDIR /usr/src/app
 USER node
 EXPOSE 8088
 CMD [ "node", "startprod.js" ]
