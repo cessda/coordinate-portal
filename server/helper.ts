@@ -26,7 +26,7 @@ import { CMMStudy, getJsonLd, getStudyModel } from '../common/metadata';
 import { apiResponseTimeHandler, metricsRequestHandler, observeAPIClientIP, uiResponseTimeHandler } from './metrics';
 import Elasticsearch from './elasticsearch';
 import { errors } from '@elastic/elasticsearch';
-import { Response } from 'express-serve-static-core';
+import { Response } from 'express';
 import { logger } from './logger';
 import cors from 'cors';
 import { WithContext, Dataset } from 'schema-dts';
@@ -99,7 +99,7 @@ function getSearchkitRouter() {
       const source = await elasticsearch.getStudy(req.params.id, req.params.index);
 
       let similars: Awaited<ReturnType<typeof elasticsearch.getSimilars>>;
-      
+
       // Get similars
       if (source?.titleStudy) {
         similars = await elasticsearch.getSimilars(source?.titleStudy, req.params.id, req.params.index);
@@ -108,9 +108,9 @@ function getSearchkitRouter() {
       }
 
       // Send the response
-      res.send({ 
-        source: source, 
-        similars: similars 
+      res.send({
+        source: source,
+        similars: similars
       });
     } catch (e) {
       if (e instanceof errors.ResponseError && e.statusCode === 404) {
@@ -156,7 +156,7 @@ function getSearchkitRouter() {
     if (_.isObject(req.body)) {
       logger.debug('Request body', { body: req.body });
     }
-    
+
     //keep language for use in metrics
     req.params = req.body.index
     //delete language from body request
@@ -206,7 +206,7 @@ function elasticsearchErrorHandler(e: unknown, res: Response) {
     // Elasticsearch returned an error.
     logger.warn('Elasticsearch returned error: %s', e);
     res.sendStatus(e.statusCode || 503);
-    
+
   } else {
     // An unknown error occured.
     logger.error('Error occured when handling Elasticsearch request: %s', e);
@@ -235,9 +235,9 @@ function externalApiV2() {
 
     if (ip) {
       const ipString = String(ip);
-    
+
       if (ipinfoAPIKey) {
-      
+
         //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
         const ipinfoWrapper = new IPinfoWrapper(ipinfoAPIKey); //token must be parsed here
         ipinfoWrapper.lookupIp(ipString)
@@ -363,7 +363,7 @@ function externalApiV2() {
       bodyQuery.filter('range', 'dataCollectionYear', { gte: dataCollectionYearMin, lte: dataCollectionYearMax });
     }
 
-    
+
 
     //Prepare the Client
     try {
@@ -392,7 +392,7 @@ function externalApiV2() {
         sortBy: req.query.sortBy
       }
 
-      /* 
+      /*
        * Send the Response.
        *
        * We default to sending the CMMStudy model, only sending JSON-LD if specifically requested.
@@ -423,13 +423,13 @@ function externalApiV2() {
       logger.debug('Finished API Elasticsearch Request');
     }
   });
-  
+
   return router;
 }
 
 /**
  * Build filters for nested documents. The filter uses a term query
- * 
+ *
  * @param bodyQuery the body query to add nested filters to.
  * @param query the term query, expected types are string or string[].
  * @param path the path to the nested document.
@@ -448,13 +448,13 @@ function buildNestedFilters(bodyQuery: Bodybuilder, query: string | string[] | P
 
 /**
  * Track results returned from ElasticSearch.
- * 
+ *
  * @param offset the offset to start results from. Defaults to 0 if not set by user
  * @param limit the limit of results to be returned. Defaults to 200 if not set by user.
  * @param total The total results coming from ElasticSearch.
  */
  function apiResultsCount(offset: number, limit: number, retrieved: number, total: number) {
-  
+
   // Calculate the position of the final result
   const to: number = Math.min(offset + limit, total);
 
@@ -505,7 +505,7 @@ function jsonProxy() {
             const cmmstudy = getStudyModel(json._source);
             return getJsonLd(cmmstudy);
           }
-          
+
           case "json":
             return json._source;
         }
@@ -610,12 +610,12 @@ export async function renderResponse(req: express.Request, res: express.Response
       // Render the HTML template
       res.status(status).render(ejsTemplate, { metadata: metadata || {} });
       break;
-    
+
     case "application/ld+json":
       // Send a JSON-LD response
       res.status(status).json(metadata?.jsonLd);
       break;
-  
+
     default:
       // Unknown content type, return server error
       res.sendStatus(500);
@@ -659,8 +659,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   }));
 
   // Metrics
-  
-  
+
+
   // Handle requests to /metrics
   app.get('/metrics', metricsRequestHandler(elasticsearch));
 

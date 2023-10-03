@@ -4,8 +4,13 @@
 .git
 .gitattributes
 .gitignore
+.github
+.vs
+.vscode
 coverage
+dist
 docs
+Dockerfile
 flow-typed
 node_modules
 tests
