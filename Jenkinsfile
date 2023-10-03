@@ -13,12 +13,6 @@
 # limitations under the License.
 */
 pipeline {
-	options {
-		ansiColor('xterm')
-		buildDiscarder logRotator(artifactNumToKeepStr: '5', numToKeepStr: '20')
-		timeout(time: 1, unit: 'HOURS') // Abort a stalled build
-	}
-
 	environment {
 		product_name = "cdc"
 		module_name = "searchkit"
@@ -78,26 +72,21 @@ pipeline {
 				}
 			}
 		}
-        stage('Run Sonar Scan') {
-            steps {
-                nodejs('node-16') {
-                    withSonarQubeEnv('cessda-sonar') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-					}
-				}
-			}
-			when { branch 'main' }
-		}
-		stage('Get Quality Gate Status') {
-			steps {
-				waitForQualityGate abortPipeline: true
-			}
-			when { branch 'main' }
-		}
 		stage('Build Docker image') {
 			 steps {
 				sh("docker build -t ${image_tag} .")
 			}
+		}
+		stage('Run Sonar Scan') {
+			steps {
+				nodejs('node-16') {
+					withSonarQubeEnv('cessda-sonar') {
+						sh "${scannerHome}/bin/sonar-scanner"
+					}
+				}
+				waitForQualityGate abortPipeline: true
+			}
+			when { branch 'main' }
 		}
 		stage('Push Docker image') {
 			steps {

@@ -26,15 +26,16 @@ COPY . .
 RUN npm run build
 
 # Remove development dependencies
+FROM webpack AS pre-final
 RUN npm prune --omit=dev
 
 # Create a separate image with the build layers removed
 FROM node:20 AS final
-COPY --from=webpack /usr/src/app/node_modules/ /usr/src/app/node_modules/
-COPY --from=webpack /usr/src/app/common/*.js /usr/src/app/common/
-COPY --from=webpack /usr/src/app/server/*.js /usr/src/app/server/
-COPY --from=webpack /usr/src/app/dist/ /usr/src/app/dist/
-COPY --from=webpack /usr/src/app/startprod.js /usr/src/app/
+COPY --from=pre-final /usr/src/app/node_modules/ /usr/src/app/node_modules/
+COPY --from=pre-final /usr/src/app/common/*.js /usr/src/app/common/
+COPY --from=pre-final /usr/src/app/server/*.js /usr/src/app/server/
+COPY --from=pre-final /usr/src/app/dist/ /usr/src/app/dist/
+COPY --from=pre-final /usr/src/app/startprod.js /usr/src/app/
 
 # Configure application startup
 WORKDIR /usr/src/app
