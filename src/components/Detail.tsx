@@ -23,6 +23,7 @@ import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-jo
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import striptags from "striptags";
 import counterpart from "counterpart";
+import { Keywords } from "./Keywords";
 
 export interface Props {
   item: CMMStudy;
@@ -31,20 +32,17 @@ export interface Props {
 
 export interface State {
   abstractExpanded: boolean;
-  keywordsExpanded: boolean;
 }
 
 export default class Detail extends React.Component<Props, State> {
 
   private static readonly truncatedAbstractLength = 2000;
-  private static readonly truncatedKeywordsLength = 12;
 
   constructor(props: Props) {
     super(props);
     // Set the abstract to the expanded state if shorter than Detail.truncatedAbstractLength
-    this.state = { 
+    this.state = {
       abstractExpanded: !(props.item.abstract.length > Detail.truncatedAbstractLength),
-      keywordsExpanded: !(props.item.keywords.length > Detail.truncatedKeywordsLength)
     };
   }
 
@@ -52,8 +50,7 @@ export default class Detail extends React.Component<Props, State> {
     // If the item has changed, reset the expanded state of the abstract
     if (this.props.item.id !== prevProps.item.id) {
       this.setState(() => ({
-        abstractExpanded: !(this.props.item.abstract.length > Detail.truncatedAbstractLength),
-        keywordsExpanded: !(this.props.item.keywords.length > Detail.truncatedKeywordsLength)
+        abstractExpanded: !(this.props.item.abstract.length > Detail.truncatedAbstractLength)
       }));
     }
   }
@@ -158,7 +155,7 @@ export default class Detail extends React.Component<Props, State> {
 
   /**
    * Attempt to format the given date string.
-   * 
+   *
    * @param dateString the date string to parse.
    * @param dateTimeFormatter the formatter to use.
    * @returns a formatted date, or the original string if an error occured when formatting.
@@ -178,7 +175,7 @@ export default class Detail extends React.Component<Props, State> {
   /**
    * Formats the given universe into a <p> element. The resulting element will contain
    * the text content "${Included universe} (excluding ${Excluded universe})"
-   * 
+   *
    * @param universe the universe to format
    * @returns the formatted <p> element
    */
@@ -297,30 +294,7 @@ Summary information
                             ariaLabel={counterpart.translate("metadata.keywords.tooltip.ariaLabel")}/>}
           collapsable={false}
         >
-          <div className="tags">
-            {this.generateElements(this.state.keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), 'tag',
-              keywords => <Link to={`/?keywords.term[0]=${encodeURI(keywords.term)}`}>{upperFirst(keywords.term)}</Link>
-            )}
-          </div>
-          {item.keywords.length > Detail.truncatedKeywordsLength &&
-            <a className="button is-small is-white" onClick={() => {
-              this.setState(state => ({
-                keywordsExpanded: !state.keywordsExpanded
-              }));
-            }}>
-              {this.state.keywordsExpanded ?
-              <>
-                <span className="icon is-small"><FaAngleUp/></span>
-                <Translate component="span" content="readLess"/>
-              </>
-              :
-              <>
-                <span className="icon is-small"><FaAngleDown/></span>
-                <Translate component="span" content="readMore"/>
-              </>
-              }
-            </a>
-          }
+          <Keywords keywords={item.keywords} lang={this.props.lang}/>
         </Panel>
 
         <Panel
