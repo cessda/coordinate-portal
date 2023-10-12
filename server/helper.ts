@@ -34,6 +34,7 @@ import swaggerSearchApiV2 from './swagger-searchApiV2';
 import fetch, { Request } from 'node-fetch';
 import { Agent } from 'http';
 import IPinfoWrapper, { ApiLimitError } from "node-ipinfo";
+import { getELSSTRouter } from './elsst';
 
 
 // Defaults to localhost if unspecified
@@ -643,6 +644,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
 
   // Set up request handlers
   app.use('/api/sk', getSearchkitRouter());
+  app.use('/api/elsst', getELSSTRouter());
   app.use('/api/json', jsonProxy());
   app.use('/api/DataSets/v2', cors(),  externalApiV2());
   app.use('/swagger/api/DataSets/v2', cors(), (async (_req, res) => {

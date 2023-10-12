@@ -84,62 +84,6 @@ export function updateStudy(id: string): Thunk<Promise<void>> {
   };
 }
 
-const elsstURI = "https://thesauri.cessda.eu/rest/v1/elsst-4";
-
-interface SkosLookupResponse {
-  result: {
-    uri: string;
-  }[];
-}
-
-export interface TermURIResult extends Record<string, string> {}
-
-export async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResult> {
-
-  // Request term from ELSST, the label is encoded
-  const termUris = labels.map(async label => {
-    const response = await fetch(`${elsstURI}/lookup?label=${encodeURIComponent(label)}&lang=${lang}`);
-
-    // Match potentially found - try to extract the URI
-    if (response.ok) {
-      const results = await response.json() as SkosLookupResponse;
-      if (results.result.length > 0) {
-        return {
-          label: label,
-          uri: results.result[0].uri
-        };
-      }
-    }
-
-    // Match not found
-    return {
-      label: label,
-      uri: undefined
-    };
-  });
-
-
-  const destObject: TermURIResult = {}
-
-  // Copy each result into the destination object, awaiting each in turn
-  for (const promise of termUris) {
-    const termResult = await promise;
-    if (termResult.uri) {
-      destObject[termResult.label] = termResult.uri;
-    }
-  }
-
-  return destObject;
-}
-
-// TO BE SENT TO THE SERVER
-// {
-//    "lang": "${lang}",
-//    "labels": [${label1}, ${label2}, ...]
-// }
-
-////////////
-
 export type DetailAction =
   | ClearStudyAction
   | UpdateStudyAction;
