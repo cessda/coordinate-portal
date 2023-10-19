@@ -23,7 +23,7 @@ import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-jo
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import striptags from "striptags";
 import counterpart from "counterpart";
-import { Keywords } from "./Keywords";
+import Keywords from "./Keywords";
 
 export interface Props {
   item: CMMStudy;

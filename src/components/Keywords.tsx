@@ -29,7 +29,7 @@ interface State {
   elsstURLs: TermURIResult;
 }
 
-export class Keywords extends React.Component<Props, State> {
+export default class Keywords extends React.Component<Props, State> {
 
   private static readonly truncatedKeywordsLength = 12;
 
@@ -87,7 +87,7 @@ export class Keywords extends React.Component<Props, State> {
             // If the term is a valid ELSST term, link to ELSST
             const keywordTerm = upperFirst(keywords.term);
             if (this.state.elsstURLs[keywords.term]) {
-              return <a href={this.state.elsstURLs[keywords.term]}>{keywordTerm}</a>
+              return <a href={this.state.elsstURLs[keywords.term]}>{keywordTerm}</a>;
             } else {
               return <Link to={`/?keywords.term[0]=${encodeURI(keywords.term)}`}>{keywordTerm}</Link>;
             }
