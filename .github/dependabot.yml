@@ -16,3 +16,8 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
+    groups:
+      # Group @typescript-eslint dependencies together
+      typescript-eslint:
+        patterns:
+        - "@typescript-eslint"
