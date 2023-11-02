@@ -14,6 +14,10 @@
 export interface TermURIResult extends Record<string, string> {}
 
 export async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResult> {
+  // Only send a request if the list of labels is not empty
+  if (labels.length === 0) {
+    return {};
+  }
 
   const body = {
     lang: lang,
