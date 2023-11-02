@@ -1,4 +1,3 @@
-
 // Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,81 +11,94 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/fa';
-import {AbstractItemList, ItemListProps} from 'searchkit';
-import counterpart from 'counterpart';
+import React from "react";
+import { Pagination as InstantsearchPagination } from "react-instantsearch-hooks-web";
 
-export interface Props extends ItemListProps {
-  ariaLabel: string;
-}
+const Pagination = () => {
+  return (
+    <InstantsearchPagination
+      showLast
+      translations={{
+        previousPageItemText: '‹',
+        nextPageItemText: '›',
+        firstPageItemText: '«',
+        lastPageItemText: '»',
+        // pageItemText: ({ currentPage, nbPages }) => `Page ${currentPage}/${nbPages}`,
+        pageItemText: ({ currentPage, nbPages }) => `${currentPage}/${nbPages}`,
+        firstPageItemAriaLabel: 'Go to first page',
+        previousPageItemAriaLabel: 'Go to previous page',
+        nextPageItemAriaLabel: 'Go to next page',
+        lastPageItemAriaLabel: 'Go to last page',
+        pageItemAriaLabel: ({ currentPage, nbPages }) => `Go to page ${currentPage} of ${nbPages}`,
+      }}
+      classNames={{
+        root: 'mb-4',
+      }}
+    />
+  );
+};
 
-export default class Pagination extends AbstractItemList {
-  props: Props;
+export default Pagination;
 
-  constructor(props: Props) {
-    super(props);
-    this.props = props;
-  }
+// import React from 'react';
+// import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/fa';
+// import {AbstractItemList} from 'searchkit';
 
-  render() {
-    const {items, selectedItems, setItems, ariaLabel} = this.props;
-    const links = [];
+// export default class Pagination extends AbstractItemList {
 
-    for (let i = 0; i < items.length; i++) {
-      if (i === 0 || i === items.length - 1) {
-        continue;
-      }
-      if (items[i].label === '...') {
-        links.push(
-          <li key={items[i].key}>
-            <span className="pagination-ellipsis"><FaEllipsisH/></span>
-          </li>
-        );
-      } else {
-        const current = items[i].page === selectedItems[0] ? ' is-current' : '';
-        links.push(
-          <li key={items[i].key}>
-            <a className={'pagination-link focus-visible' + current}
-               href={'/?p=' + items[i].page}
-               aria-label={counterpart.translate('pagination.page') + items[i].page}
-               onClick={(e) => {
-                 e.preventDefault(); 
-                 setItems([items[i].page]);
-                }}>
-              {items[i].label}
-            </a>
-          </li>
-        );
-      }
-    }
+//   render() {
+//     const {items, selectedItems, setItems} = this.props;
+//     const links = [];
 
-    return (
-      <nav className="pagination is-centered is-small" role="navigation"
-           aria-label={ariaLabel + selectedItems[0]}>
-        <a className="pagination-previous focus-visible"
-           href={'/?p=' + items[0].page}
-           aria-label={counterpart.translate('pagination.previous') + items[0].page}
-           onClick={(e) => {
-             e.preventDefault(); 
-             setItems([items[0].page]);
-            }}>
-          <FaChevronLeft/>
-        </a>
-        <ul className="pagination-list">
-          {links}
-        </ul>
-        <a className="pagination-next focus-visible"
-           href={'/?p=' + items[items.length - 1].page}
-           aria-label={counterpart.translate('pagination.next') + items[items.length - 1].page}
-           onClick={(e) => {
-             e.preventDefault(); 
-             setItems([items[items.length - 1].page]);
-            }}>
-          <FaChevronRight/>
-        </a>
-      </nav>
-    );
-  }
-}
+//     for (let i = 0; i < items.length; i++) {
+//       if (i === 0 || i === items.length - 1) {
+//         continue;
+//       }
+//       if (items[i].label === '...') {
+//         links.push(
+//           <li key={items[i].key}>
+//             <span className="pagination-ellipsis"><FaEllipsisH/></span>
+//           </li>
+//         );
+//       } else {
+//         const current = items[i].page === selectedItems[0] ? ' is-current' : '';
+//         links.push(
+//           <li key={items[i].key}>
+//             <a className={'pagination-link' + current}
+//                href={'/?p=' + items[i].page}
+//                onClick={(e) => {
+//                  e.preventDefault();
+//                  setItems([items[i].page]);
+//                 }}>
+//               {items[i].label}
+//             </a>
+//           </li>
+//         );
+//       }
+//     }
 
+//     return (
+//       <nav className="pagination is-centered is-small" role="navigation" aria-label="pagination">
+//         <a className="pagination-previous"
+//            href={'/?p=' + items[0].page}
+//            onClick={(e) => {
+//              e.preventDefault();
+//              setItems([items[0].page]);
+//             }}>
+//           <FaChevronLeft/>
+//         </a>
+//         <a className="pagination-next"
+//            href={'/?p=' + items[items.length - 1].page}
+//            onClick={(e) => {
+//              e.preventDefault();
+//              setItems([items[items.length - 1].page]);
+//             }}>
+//           <FaChevronRight/>
+//         </a>
+//         <ul className="pagination-list">
+//           {links}
+//         </ul>
+//       </nav>
+//     );
+//   }
+// }

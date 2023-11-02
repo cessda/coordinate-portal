@@ -1,0 +1,285 @@
+{
+  "cessda": "Consortium of European Social Science Data Archives",
+  "language": {
+    "label": "Study description available in",
+    "notAvailable": {
+      "title": "Not found",
+      "field": "Not available",
+      "heading": "The requested data was not found.",
+      "content": "It may not exist or is not available in the selected language. Choose an alternative language or start a new search.",
+      "alternateLanguage": "The study description is available in the following languages"
+    }
+  },
+  "search": {
+    "title": "Search results for",
+    "label": "Search",
+    "reset": "Reset",
+    "placeholder": "Enter search term in the selected language",
+    "tooltip": {
+      "content": "The catalogue contains study descriptions in various languages. The system searches with your search terms from study descriptions available in the language you have selected. The catalogue does not have 'All languages' option as due to linguistic differences this would give incomplete results. See the User Guide for more detailed information.",
+      "ariaLabel":"Tooltip button for search and search language"
+    },
+    "languageSelect": "Select search language"
+  },
+  "noHits": {
+    "noResultsFound": "No results found for \"%(query)s\" in the selected language.",
+    "searchWithoutFilters": "Search for \"%(query)s\" without filters",
+    "error": "We're sorry, an issue occurred when fetching your results. Please try again.",
+    "resetSearch": "Reset Search"
+  },
+  "filters": {
+    "view": {
+      "more": "Add %(facetsPerPage)s more %(name)s to searchable %(name)s list",
+      "less": "Keep only %(defaultSize)s most common %(name)s in searchable %(name)s list",
+      "all": "Add all %(name)s to searchable %(name)s list"
+    },
+    "topic": {
+      "label": "Topic",
+      "placeholder": "Search topics",
+      "tooltip": {
+        "content": "Topic terms serve to identify the general topics, subjects or themes of a study. Many but not all metadata providers use <a href=\"https://vocabularies.cessda.eu/vocabulary/TopicClassification?lang=en\">CESSDA Topic Classification</a> for their topic terms.",
+        "ariaLabel": "Tooltip button for Topic filter"
+      }
+    },
+    "keywords": {
+      "label": "Keywords",
+      "placeholder": "Search keywords",
+      "tooltip": {
+        "content": "Keywords which describe the content of the data. Many but not all metadata providers use <a href=\"https://elsst.cessda.eu/\">ELSST Thesaurus</a> for their keywords. Searchable list contains a maximum of %(size)s most common keywords.",
+        "ariaLabel": "Tooltip button for Keywords filter"
+      }
+    },
+    "collectionDates": {
+      "label": "Collection years",
+      "placeholder": "Search years",
+      "tooltip": {
+        "content": "The year(s) in which the data for the study were collected.",
+        "ariaLabel": "Tooltip button for Collection years filter"
+      }
+    },
+    "languageOfDataFiles": {
+      "label": "Language of data files",
+      "placeholder": "Search language of data files",
+      "tooltip": {
+        "content": "Language of the research dataset, i.e. the language of the variable names/labels or interview transcriptions etc.",
+        "ariaLabel": "Tooltip button for language of data files"
+      }
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Search countries",
+      "tooltip": {
+        "content": "The country which the data cover. Note: the filter only includes those studies where the metadata provide an ISO 3166-1 country code. Use an additional free-text search with country name for more results.",
+        "ariaLabel":"Tooltip button for Country filter"
+      }
+    },
+    "langAvailableIn": {
+      "label": "Search language(s)",
+      "placeholder": "Search language(s)",
+      "tooltip": {
+        "content": "Language of study titles and abstract / description.",
+        "ariaLabel": "Tooltip button for search language"
+      }
+    },
+    "publisher": {
+      "label": "Publisher",
+      "placeholder": "Search publishers",
+      "tooltip": {
+        "content": "Name of the institution providing the information on the study.",
+        "ariaLabel": "Tooltip button for Publisher filter"
+      }
+    },
+    "summary": {
+      "label": "Filter summary",
+      "introduction": "The following filters have been applied to your search.",
+      "remove": "Click on <strong>x</strong> to the right of the filter to remove it from this search.",
+      "noFilters": "No additional filters have been applied to your search.",
+      "close": "Select <strong>Close</strong> to dismiss this window."
+    }
+  },
+  "numberOfResults": {
+    "zero": "%(count)s studies found in %(label)s from a total of %(total)s",
+    "one": "%(count)s study found in %(label)s from a total of %(total)s",
+    "other": "%(count)s studies found in %(label)s from a total of %(total)s"
+  },
+  "numberOfResultsWithTime": {
+    "zero": "%(count)s studies found in %(time)sms",
+    "one": "%(count)s study found in %(time)sms",
+    "other": "%(count)s studies found in %(time)sms"
+  },
+  "sorting": {
+    "relevance": "Relevance",
+    "titleAscending": "Title (A - Z)",
+    "titleDescending": "Title (Z - A)",
+    "dateAscending": "Date of collection (oldest)",
+    "dateDescending": "Date of collection (newest)",
+    "publicationDateAscending": "Date of publication (oldest)",
+    "publicationDateDescending": "Date of publication (newest)"
+  },
+  "pagination": {
+    "page": "Page ",
+    "navTop": "Top pagination, current page ",
+    "navBottom": "Bottom pagination, current page ",
+    "previous": "Previous page, page ",
+    "next": "Next page, page "
+  },
+  "advancedSearch": {
+    "label": "Search help",
+    "introduction": "The following special characters can be used to perform advanced search queries:",
+    "and": "<span class=\"%(className)s\">+</span> signifies <strong>AND</strong> operation.",
+    "or": "<span class=\"%(className)s\">|</span> signifies <strong>OR</strong> operation.",
+    "negates": "<span class=\"%(className)s\">-</span> <strong>negates</strong> a single token.",
+    "phrase": "<span class=\"%(className)s\">\"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.",
+    "prefix": "<span class=\"%(className)s\">*</span> at the end of a term signifies a <strong>prefix</strong> query.",
+    "precedence": "<span class=\"%(className)s\">(</span> and <span class=\"%(className)s\">)</span> signify <strong>precedence</strong>.",
+    "distance": "<span class=\"%(className)s\">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).",
+    "slop": "<span class=\"%(className)s\">~N</span> after a phrase signifies <strong>slop</strong> amount.",
+    "escaping": {
+      "heading": "Escaping",
+      "content": "The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class=\"%(className)s\">\\</span>."
+    },
+    "defaultOperator": {
+      "heading": "Default operator",
+      "content": "The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class=\"%(className)s\">Social Science</em>, this will be interpreted as <em class=\"%(className)s\">Social</em> <strong>OR</strong> <em class=\"%(className)s\">Science</em>."
+    }
+  },
+  "reset": {
+    "query": "Clear search",
+    "filters": "Reset filters"
+  },
+  "similarResults": {
+    "heading": "Similar results",
+    "notAvailable": "No similar results found."
+  },
+  "export": "Export",
+  "exportMetadata": "Export metadata",
+  "exportCitation": "Export citation",
+  "resultsPerPage": "Results per page",
+  "showAbstract": "Show abstract",
+  "sortBy": "Sort by",
+  "showFilters": "Show filters",
+  "hideFilters": "Hide filters",
+  "readMore": "Read more",
+  "readLess": "Read less",
+  "viewJson": "View JSON",
+  "goToStudy": "Access data",
+  "forthcoming": "Forthcoming",
+  "back": "Back",
+  "backToSearch": "Back to search",
+  "close": "Close",
+  "metadata": {
+    "summaryInformation": "Summary information",
+    "studyTitle": "Study title",
+    "creator": "Creator",
+    "studyPersistentIdentifier": "Study number / PID",
+    "abstract": "Abstract",
+    "methodology": {
+      "label": "Methodology",
+      "tooltip": {
+        "content": "Terminology used is generally based on DDI controlled vocabularies: Time Method, Analysis Unit, Sampling Procedure and Mode of Collection, available at <a href=\"https://vocabularies.cessda.eu/\" target=\"_blank\">CESSDA Vocabulary Service<a/>.",
+        "ariaLabel": "Tooltip button for Methodology"
+      }
+    },
+    "timeMethod": "Time method",
+    "timeMethodCV": "Time method (CV)",
+    "country": "Country",
+    "timeDimension": "Time dimension",
+    "analysisUnit": "Analysis unit",
+    "universe": "Universe",
+    "samplingProcedure": "Sampling procedure",
+    "collectionYear": "Collection year",
+    "dataCollectionMethod": "Data collection mode",
+    "dataCollectionPeriod": "Data collection period",
+    "languageOfDataFiles": "Language of data files",
+    "access": "Access",
+    "publisher": "Publisher",
+    "yearOfPublication": "Publication year",
+    "termsOfDataAccess": "Terms of data access",
+    "studyNumber": "Study number",
+    "topics": {
+      "label": "Topics",
+      "tooltip": {
+        "content": "Many but not all metadata providers use <a href=\"https://vocabularies.cessda.eu/vocabulary/TopicClassification?lang=en\" target=\"_blank\">CESSDA Topic Classification</a> for their topic terms.",
+        "ariaLabel": "Tooltip button for Topics"
+      }
+    },
+    "keywords": {
+      "label": "Keywords",
+      "tooltip": {
+        "content": "Many but not all metadata providers use <a href=\"https://elsst.cessda.eu/\" target=\"_blank\">ELSST Thesaurus</a> for their keywords.",
+        "ariaLabel": "Tooltip button for Keywords"
+      }
+    },
+    "relatedPublications": "Related publications"
+  },
+  "header": {
+    "frontPage": "Front/search page",
+    "demoText": {
+      "label": "Demo/dev version",
+      "tooltip": {
+        "content": "Portal is still a work in progress. Only this early demo version will be hosted on this domain so the address will change when the final version is released. Site may occasionally be down so try again later (usually up again in less than 10 minutes).",
+        "ariaLabel": "Tooltip button for demo explanation"
+      }
+    },
+    "portalDescription": "COORDINATE Portal: Child and Youth Wellbeing Thematic View",
+    "skipToMain": "Skip to main content"
+  },
+  "footer": {
+    "mainWebsite": "Main website of CESSDA",
+    "followUsOn": "Follow us on",
+    "documentation": "Documentation",
+    "privacy": "Privacy Policy",
+    "aup": "Acceptable Use Policy",
+    "tools": "CESSDA Tools & Services",
+    "accessibility": "Accessibility Statement",
+    "poweredBy": "Powered by CESSDA"
+  },
+  "about": {
+    "label": "About",
+    "title": "COORDINATE",
+    "content": "<p>The aim of the COORDINATE project is to mobilise the community of researchers and organisations that will drive forwards the coordinated development of comparative birth cohort panel and associated survey research in Europe which focus on children&lsquo;s wellbeing.</p><p>The infrastructural community network brought together by COORDINATE will promote the harmonisation of and improve access to international survey data, in particular panel survey data, in the study of children and young people&lsquo;s wellbeing as they grow up.</p><p>The research that COORDINATE will complete, using a child-centric approach, continues the research initiated in the <a href=\"https://cordis.europa.eu/project/id/613368\" target=\"_blank\" rel=\"noreferrer\">&lsquo;Measuring Youth Well-Being&lsquo; (MyWEB)</a> and the <a href=\"https://cordis.europa.eu/project/id/777449\" target=\"_blank\" rel=\"noreferrer\">&lsquo;European Cohort Development Project&lsquo; (ECDP)</a> projects, which will support elements of the preparatory phase of Europe&lsquo;s first cross-national accelerated birth cohort survey of child well-being: - Growing Up in Digital Europe (GUIDE).</p><br /><p>COORDINATE Portal has partly been built using <a href=\"https://datacatalogue.cessda.eu\" target=\"_blank\" rel=\"noreferrer\">CESSDA Data Catalogue</a> codebases, namely <a href=\"https://github.com/cessda/cessda.cdc.searchkit\" target=\"_blank\" rel=\"noreferrer\">cessda.cdc.searchkit</a>, <a href=\"https://github.com/cessda/cessda.metadata.harvester\" target=\"_blank\" rel=\"noreferrer\">cessda.metadata.harvester</a> and <a href=\"https://github.com/cessda/cessda.cdc.osmh-indexer.cmm\" target=\"_blank\" rel=\"noreferrer\">cessda.cdc.osmh-indexer.cmm</a>. They are licensed with <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" rel=\"noreferrer\">Apache License 2.0</a>.<br /><p>This portal is still a work in progress. Only this early demo version will be hosted on this domain so the address will change when the final version is released.</p><p>Some features haven't been implemented yet and any implemented features or looks are subject to change.</p><p>Non-exhaustive list of things still being worked on:</p><ul><li>User Guide</li><li>Display data access (open or restricted)</li><li>Improved filtering of relevant datasets</li><li>Improved accessibility</li><li>Metadata export in more formats</li><li>Citation export</li><li>Improved responsiveness</li><li>More search facets</li></ul>",
+    "funding": "This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 101008589",
+    "horizonLogo": "European Union's Horizon 2020 logo",
+    "cessdaLogo": "CESSDA logo",
+    "metrics": {
+      "studies": "Studies",
+      "creators": "Creators",
+      "countries": "Countries"
+    }
+  },
+  "accessibility": {
+    "label": "Accessibility Statement for CESSDA Data Catalogue",
+    "heading": {
+      "conformance": "Conformance status",
+      "nonAccessible": "Non-Accessible Content",
+      "feedback": "Feedback",
+      "compatibility": "Compatibility with browsers and assistive technology",
+      "assessment": "Assessment approach",
+      "about": "About the accessibility statement"
+    },
+    "content": {
+      "opening": "CESSDA is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone, and applying the relevant accessibility standards.",
+      "conformance": "The <a href=\"https://www.w3.org/WAI/standards-guidelines/wcag/\" target=\"_blank\">Web Content Accessibility Guidelines (WCAG)</a> defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA. CDC is partially conformant with WCAG 2.1 level AA. Partially conformant means that some parts of the content do not fully conform to the accessibility standard. The identified shortcomings in the accessibility of CDC are described below.",
+      "nonAccessible": {
+        "paragraph": "We acknowledge that despite our diligent efforts, some areas of our website may not be fully accessible. The primary reason for non-accessible content lies in the complexity of upgrading specific third-party libraries. The versions of these libraries do not allow for the necessary accessibility enhancements without substantial modifications, which would be a significant undertaking.",
+        "subheading": "The non-accessible areas include:",
+        "list": "<li>Language select does not have ARIA relationship with select options (1.3.1 Info and Relationships)</li><li>Feedback form does not have autocomplete attributes (1.3.5 Identify Input Purpose)</li><li>Placeholder texts of search filters have low contrast (1.4.3 Contrast)</li><li>Applied filter options cannot be selected by keyboard (2.1.1: Keyboard)</li><li>Dropdown elements confirm selection on down-event (2.5.2: Pointer Cancellation)</li><li>Some metadata might not have lang attribute despite being different than default (en) (3.1.2: Language of Parts)</li><li>Labels missing from a few elements in third-party library components (4.1.2: Name, Role, Value)</li><li>Status messages are missing status roles (4.1.3: Status Messages)</li>"
+      },
+      "feedback": "For additional assistance or inquiries related to accessibility, please utilise our feedback form.",
+      "compatibility": "CDC's accessibility features are currently undergoing testing primarily on Firefox and Chrome browsers. Screen reader mainly used in testing is NVDA. Other major browsers and screen readers should also be compatible but some aspects of the website may not display optimally, especially if using older versions.",
+      "assessment": "CESSDA assessed the accessibility of CDC by self-evaluation.",
+      "about": "The accessibility statement was first created on August 23rd 2023."
+    }
+  },
+  "notFound": {
+    "label": "Page Not Found",
+    "content": "The page you are trying to access cannot be found."
+  },
+  "documentation": {
+    "label": "User Guide"
+  },
+  "api": {
+    "label": "REST API"
+  },
+  "datacatalogue": "COORDINATE Portal"
+}

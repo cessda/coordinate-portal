@@ -11,56 +11,105 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, {Component} from 'react';
-import {connect, Dispatch} from 'react-redux';
-import {AnyAction, bindActionCreators} from 'redux';
-import type {State} from '../types';
-import {push} from 'react-router-redux';
-import Translate from 'react-translate-component';
-import { Link } from 'react-router';
+import React from "react";
+import { AnyAction, bindActionCreators } from "redux";
+//import type { State } from "../types";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../hooks";
 
-export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>
+const Similars = () => {
+  const { t, i18n } = useTranslation();
+  const similars = useAppSelector((state) => state.detail.similars);
 
-export class Similars extends Component<Props> {
+  const links: JSX.Element[] = [];
 
-  render() {
-    const {
-      similars,
-      currentLanguage
-    } = this.props;
-
-    const links: JSX.Element[] = [];
-
-    for (let i = 0; i < similars.length; i++) {
-      // Construct the similar URL
-      links.push(<p key={similars[i].id} lang={currentLanguage}><Link to={{
-        pathname: '/detail',
-        query: { q: similars[i].id }
-      }}>{similars[i].title}</Link></p>);
-    }
-
-    return (
-      <div className="similars">
-        {links}
-        {links.length === 0 &&
-         <Translate component="p" content="similarResults.notAvailable"/>
-        }
-      </div>
+  for (let i = 0; i < similars.length; i++) {
+    // Construct the similar URL
+    links.push(
+      <Link key={i} to={"/detail?q=" + similars[i].id}>
+        {similars[i].title}
+      </Link>
     );
   }
-}
 
-export function mapStateToProps(state: Pick<State, "detail" | "language">) {
-  return {
-    similars: state.detail.similars,
-    currentLanguage: state.language.currentLanguage.code
-  };
-}
+  return (
+    <div className="similars">
+      {links}
+      {links.length === 0 && <p>{t("similarResults.notAvailable")}</p>}
+    </div>
+  );
+};
 
-export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
-  return {
-    push: bindActionCreators(push, dispatch)
-  };
-}
+export default Similars;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Similars);
+// export function mapStateToProps(state: Pick<State, "detail">) {
+//   return {
+//     similars: state.detail.similars,
+//   };
+// }
+
+// export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+//   return {
+//     push: bindActionCreators(push, dispatch),
+//   };
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Similars);
+
+// import React, { Component } from "react";
+// import { connect, Dispatch } from "react-redux";
+// import { AnyAction, bindActionCreators } from "redux";
+// import type { State } from "../types";
+// import { push } from "react-router-redux";
+// import { Link } from "react-router-dom";
+// import { useTranslation } from "react-i18next";
+
+// export type Props = ReturnType<typeof mapDispatchToProps> &
+//   ReturnType<typeof mapStateToProps>;
+
+// export class Similars extends Component<Props> {
+//   render() {
+//     const { similars } = this.props;
+
+//     const { t, i18n } = useTranslation();
+
+//     const links: JSX.Element[] = [];
+
+//     for (let i = 0; i < similars.length; i++) {
+//       // Construct the similar URL
+//       links.push(
+//         <Link
+//           key={i}
+//           to={{
+//             pathname: "/detail",
+//             query: { q: similars[i].id },
+//           }}
+//         >
+//           {similars[i].title}
+//         </Link>
+//       );
+//     }
+
+//     return (
+//       <div className="similars">
+//         {links}
+//         {links.length === 0 && <p>{t("similarResults.notAvailable")}</p>}
+//       </div>
+//     );
+//   }
+// }
+
+// export function mapStateToProps(state: Pick<State, "detail">) {
+//   return {
+//     similars: state.detail.similars,
+//   };
+// }
+
+// export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
+//   return {
+//     push: bindActionCreators(push, dispatch),
+//   };
+// }
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Similars);

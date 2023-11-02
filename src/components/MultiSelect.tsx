@@ -1,4 +1,3 @@
-
 // Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,87 +11,83 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
-import {AbstractItemList, FacetAccessor, ItemListProps} from 'searchkit';
+import React from "react";
 
-export interface Props extends ItemListProps {
-  placeholder: string | JSX.Element | undefined;
-  clearable?: boolean;
-  ariaLabel?: string;
-}
+const MultiSelect = () => {
+  return <div>MultiSelect TBA</div>;
+};
 
-interface Item {
-  missing?: boolean;
-  selected?: boolean;
-  doc_count?: number;
-  title?: string;
-  label?: string;
-  key: string;
-}
+export default MultiSelect;
 
-export default class MultiSelect extends AbstractItemList {
-  props: Props;
+// import React from 'react';
+// import Select, { HandlerRendererResult, OptionValues, Option, Options } from 'react-select';
+// import {AbstractItemList, ItemListProps} from 'searchkit';
 
-  constructor(props: Props) {
-    super(props);
-    this.props = props;
-    this.handleChange = this.handleChange.bind(this);
-  }
+// export interface Props extends ItemListProps {
+//   placeholder: string | JSX.Element | undefined;
+//   clearable?: boolean;
+// }
 
-  handleChange(selectedOptions: Option<OptionValues> | Options<OptionValues> | null) {
-    if (Array.isArray(selectedOptions)) {
-      const items: string[] = [];
-      selectedOptions.forEach(el => {
-        if (el.value) {
-          items.push(el.value.toString());
-        } else {
-          items.push('');
-        }
-      });
-      this.props.setItems(items);
-    } else if (selectedOptions?.value) {
-      this.props.setItems([selectedOptions.value.toString()])
-    }
-  }
+// export default class MultiSelect extends AbstractItemList {
+//   props: Props;
 
-  renderValue(value: Option<OptionValues>): HandlerRendererResult {
-    if (value.label) {
-      return <span>{value.label}</span>;
-    } else {
-      return null;
-    }
-  }
+//   constructor(props: Props) {
+//     super(props);
+//     this.props = props;
+//     this.handleChange = this.handleChange.bind(this);
+//   }
 
-  render() {
-    const {
-      placeholder,
-      clearable = true,
-      items,
-      selectedItems = [],
-      disabled,
-      showCount,
-      ariaLabel
-    } = this.props;
+//   handleChange(selectedOptions: Option<OptionValues> | Options<OptionValues> | null) {
+//     if (Array.isArray(selectedOptions)) {
+//       const items: string[] = [];
+//       selectedOptions.forEach(el => {
+//         if (el.value) {
+//           items.push(el.value.toString());
+//         } else {
+//           items.push('');
+//         }
+//       });
+//       this.props.setItems(items);
+//     } else if (selectedOptions?.value) {
+//       this.props.setItems([selectedOptions.value.toString()])
+//     }
+//   }
 
-    const options: Options<OptionValues> = items.map((option: Item): Option<OptionValues> => {
-      let label = option.title || option.label || option.key;
-      if (showCount && option.doc_count) {
-        label += ` (${option.doc_count})`;
-      }
-      return {value: option.key, label};
-    });
+//   renderValue(value: Option<OptionValues>): HandlerRendererResult {
+//     if (value.label) {
+//       return <span>{value.label.replace('undefined', '0')}</span>;
+//     } else {
+//       return null;
+//     }
+//   }
 
-    return (
-      <Select multi
-              disabled={disabled}
-              value={selectedItems}
-              placeholder={placeholder}
-              options={options}
-              valueRenderer={this.renderValue}
-              clearable={clearable}
-              onChange={this.handleChange}
-              aria-label={ariaLabel}/>
-    );
-  }
-}
+//   render() {
+//     const {
+//       placeholder,
+//       clearable = true,
+//       items,
+//       selectedItems = [],
+//       disabled,
+//       showCount
+//     } = this.props;
+
+//     const options: Options<OptionValues> = items.map((option): Option<OptionValues> => {
+//       let label = option.title || option.label || option.key;
+//       if (showCount) {
+//         label += ` (${option.doc_count})`;
+//       }
+//       return {value: option.key, label};
+//     });
+
+//     return (
+//       <Select multi
+//               disabled={disabled}
+//               value={selectedItems}
+//               placeholder={placeholder}
+//               options={options}
+//               valueRenderer={this.renderValue}
+//               clearable={clearable}
+//               onChange={this.handleChange}/>
+//     );
+//   }
+//}

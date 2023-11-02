@@ -56,7 +56,15 @@ export default async (client: Elasticsearch) => ({
               "type": "array",
               "items": {
                 "type": "string",
-                "enum": await client.getListOfTopics()
+                "enum": [
+                  "(In-job) training",
+                  "Accidents and injuries",
+                  "Accidents and injuries - Health",
+                  "Administrative history - History",
+                  "Advertising",
+                  "Agricultural Science",
+                  "Agricultural and Veterinary sciences"
+                ]
               }
             }
           },
@@ -129,22 +137,6 @@ export default async (client: Elasticsearch) => ({
             "required": false,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "sortBy",
-            "in": "query",
-            "description": "Sorting Options Provided: (Default by Relevance)\n  * `titleAscending` - Title (A - Z)\n  * `titleDescending` - Title (Z - A)\n  * `dateOfCollectionOldest` - Date of collection (oldest)\n  * `dateOfCollectionNewest` - Date of collection (newest)\n  * `dateOfPublicationNewest` - Date of publication (newest)\n",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "titleAscending",
-                "titleDescending",
-                "dateOfCollectionOldest",
-                "dateOfCollectionNewest",
-                "dateOfPublicationNewest"
-              ]
             }
           },
           {

@@ -88,13 +88,13 @@ function setup(item?: Partial<CMMStudy> | false) {
 describe('Result component', () => {
   it('should render with supplied item', () => {
     const { enzymeWrapper } = setup();
-    const result = enzymeWrapper.find('.list_hit');
+    const result = enzymeWrapper.find('.list-hit');
     expect(result.exists()).toBe(true);
   });
 
   it('should not render with undefined item', () => {
     const { enzymeWrapper } = setup(false);
-    const result = enzymeWrapper.find('.list_hit');
+    const result = enzymeWrapper.find('.list-hit');
     expect(result.exists()).toBe(false);
   });
 
@@ -126,19 +126,6 @@ describe('Result component', () => {
     expect(
       enzymeWrapper.find('.sk-hits-list__desc span').length
     ).toBeGreaterThan(0);
-  });
-
-  it('should toggle abstract when pressing enter or space', () => {
-    const { enzymeWrapper } = setup();
-    const handleAbstractExpansionSpy = jest.spyOn((enzymeWrapper.instance() as Result), 'handleAbstractExpansion')
-    enzymeWrapper.find('.button').first().simulate('keydown', { preventDefault(){}, stopPropagation(){},
-                                                                key: 'Enter', keyCode: 13, which: 13 },
-                                                              'Study title')
-    enzymeWrapper.find('.button').first().simulate('keydown', { preventDefault(){}, stopPropagation(){},
-                                                                key: ' ', keyCode: 32, which: 32 },
-                                                              'Study title')
-    expect(handleAbstractExpansionSpy).toBeCalledTimes(2);
-    handleAbstractExpansionSpy.mockRestore();
   });
 
   it('should change language', () => {

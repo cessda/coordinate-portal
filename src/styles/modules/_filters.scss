@@ -1,4 +1,4 @@
-.sk-layout__filters {
+.filters, .side-column {
   position: relative;
 
   .float {
@@ -7,38 +7,36 @@
     z-index: 1;
   }
 
+  .filter-buttons {
+    display: flex;
+    justify-content: flex-start;
+  }
+
   .sk-select {
     &.is-disabled {
       display: block;
     }
   }
 
-  .sk-panel {
+  .panel-container {
     background-color: #f8f8f8;
-    padding: 15px;
+    // padding: 15px;
     border-radius: 3px;
 
-    & input {
-      padding-left: 10px;
-      color: #c3c3c3;
-    }
+    // & input {
+    //   padding-left: 10px;
+    //   color: #c3c3c3;
+    // }
 
-    .sk-panel__header {
+    .panel-header {
+      padding: 15px;
       margin-bottom: 0;
     }
 
-    .sk-panel__content {
-      margin: 10px;
+    .panel-content {
+      // margin: 10px;
 
-      .sk-input-filter {
-        background-color: #fff;
-      }
-
-      .sk-input-filter__text {
-        color: #000;
-      }
-
-      .Select-control, .Select-menu-outer, .sk-range-input__input, .sk-input-filter, button {
+      .Select-control, .Select-menu-outer, .sk-range-input__input, button {
     
         border: 2px solid #eaeae8;
         border-radius: 3px;

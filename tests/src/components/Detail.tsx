@@ -11,203 +11,190 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import { mount, shallow } from 'enzyme';
-import Detail, { Props } from '../../../src/components/Detail';
-import { CMMStudy } from '../../../common/metadata';
-import { mockStudy } from '../../common/mockdata';
+import React from "react";
+import { mount, shallow } from "enzyme";
+import Detail, { Props } from "../../../src/components/Detail";
+import { CMMStudy } from "../../../common/metadata";
+import { mockStudy } from "../../common/mockdata";
 
 // Mock props and shallow render component for test.
 function setup(item?: Partial<CMMStudy>) {
   const props: Props = {
     item: {
       ...mockStudy,
-      ...item
+      ...item,
     },
-    lang: "en"
   };
 
   const enzymeWrapper = shallow(<Detail {...props} />);
-  const detailInstance = enzymeWrapper.instance() as Detail;
   return {
     props,
     enzymeWrapper,
-    detailInstance
   };
 }
 
-describe('Detail component', () => {
-  it('should render with supplied item', () => {
+describe("Detail component", () => {
+  it("should render with supplied item", () => {
     const { enzymeWrapper } = setup();
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
   });
 
-  it('should handle no pidStudies provided', () => {
+  it("should handle no pidStudies provided", () => {
     const { enzymeWrapper } = setup({
-      pidStudies: []
+      pidStudies: [],
     });
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
   });
 
-  it('should handle a pidStudy with no agency', () => {
+  it("should handle a pidStudy with no agency", () => {
     const { enzymeWrapper } = setup({
-      pidStudies: [{
-        pid: "TestPid",
-        agency: "TestAgency"
-      }]
+      pidStudies: [
+        {
+          pid: "TestPid",
+          agency: "TestAgency",
+        },
+      ],
     });
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
   });
 
-  it('should handle no title provided', () => {
+  it("should handle no title provided", () => {
     const { enzymeWrapper } = setup({
-      titleStudy: undefined
+      titleStudy: undefined,
     });
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
   });
 
-  it('should handle no publisher provided', () => {
+  it("should handle no publisher provided", () => {
     const { enzymeWrapper } = setup({
-      publisher: undefined
+      publisher: undefined,
     });
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
   });
 
-  it('should handle no study number provided', () => {
+  it("should handle no study number provided", () => {
     const { enzymeWrapper } = setup({
-      studyNumber: undefined
+      studyNumber: undefined,
     });
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
   });
 
-  it('should handle generating elements with no value', () => {
-    const { detailInstance } = setup();
+  it("should handle generating elements with no value", () => {
     // "" is a falsy value, so should be dropped.
     expect(
-      mount(<>{detailInstance.generateElements([""], "div", e => e)}</>).html()
-    ).toContain('notAvailable');
+      mount(<>{Detail.generateElements([""], "div", (e) => e)}</>).html()
+    ).toContain("notAvailable");
   });
 
-  it('should handle joining values and returning them in div even if some have no value', () => {
-    const { detailInstance } = setup();
+  it("should handle formatting dates with missing data", () => {
     expect(
-      mount(<>{detailInstance.joinValuesBySeparator([{"country": "Finland"}, {"country": ""},
-                                             {"country": "Norway"}, {"country": "Sweden"},
-                                             {"country": " "}],
-                                             c => c.country, ", ")}</>).html()
-    ).toContain('<div lang="en">Finland, Norway, Sweden</div>');
+      mount(<>{Detail.formatDate(Detail.dateFormatter)}</>).html()
+    ).toContain("notAvailable");
   });
 
-  it('should handle formatting dates with missing data', () => {
-    const { detailInstance } = setup();
+  it("should handle special case where array items are a start/end date range", () => {
     expect(
-      mount(<>{detailInstance.formatDate(Detail.dateFormatter)}</>).html()
-    ).toContain('notAvailable');
-  });
-
-  it('should handle special case where array items are a start/end date range', () => {
-    const { detailInstance } = setup();
-    expect(
-      mount(<>{
-        detailInstance.formatDate(
-          Detail.dateFormatter,
-          undefined,
-          undefined,
-          [
+      mount(
+        <>
+          {Detail.formatDate(Detail.dateFormatter, undefined, undefined, [
             {
-              dataCollectionFreeText: '2003-02-01',
-              event: 'start'
+              dataCollectionFreeText: "2003-02-01",
+              event: "start",
             },
             {
-              dataCollectionFreeText: '2006-05-04',
-              event: 'end'
-            }
-          ]
-        )}</>
+              dataCollectionFreeText: "2006-05-04",
+              event: "end",
+            },
+          ])}
+        </>
       )
-        .find('p')
+        .find("p")
         .text()
-    ).toBe('01/02/2003 - 04/05/2006');
+    ).toBe("01/02/2003 - 04/05/2006");
   });
 
-  it('should handle formatting dates with fallback array containing date range', () => {
-    const { detailInstance } = setup();
+  it("should handle formatting dates with fallback array containing date range", () => {
     expect(
-      mount(<>{
-        detailInstance.formatDate(
-          Detail.dateFormatter,
-          undefined,
-          undefined,
-          [
+      mount(
+        <>
+          {Detail.formatDate(Detail.dateFormatter, undefined, undefined, [
             {
-              dataCollectionFreeText: '2003-02-01',
-              event: ''
+              dataCollectionFreeText: "2003-02-01",
+              event: "",
             },
             {
-              dataCollectionFreeText: '2006-05-04',
-              event: ''
-            }
-          ]
-        )}</>
+              dataCollectionFreeText: "2006-05-04",
+              event: "",
+            },
+          ])}
+        </>
       )
-        .find('div')
+        .find("div")
         .first()
         .text()
-    ).toBe('01/02/2003');
+    ).toBe("01/02/2003");
   });
 
-  it('should handle formatting dates with invalid first date', () => {
-    const { detailInstance } = setup();
+  it("should handle formatting dates with invalid first date", () => {
     expect(
-      mount(<>{detailInstance.formatDate(Detail.dateFormatter, 'Not a date')}</>)
-        .find('p')
+      mount(<>{Detail.formatDate(Detail.dateFormatter, "Not a date")}</>)
+        .find("p")
         .text()
-    ).toBe('Not a date');
+    ).toBe("Not a date");
   });
 
-  it('should handle formatting dates as a range with invalid first date', () => {
-    const { detailInstance } = setup();
+  it("should handle formatting dates as a range with invalid first date", () => {
     expect(
-      mount(<>{detailInstance.formatDate(Detail.dateFormatter, 'Not a date', '2006-05-04')}</>)
-        .find('p')
+      mount(
+        <>
+          {Detail.formatDate(Detail.dateFormatter, "Not a date", "2006-05-04")}
+        </>
+      )
+        .find("p")
         .text()
-    ).toBe('Not a date - 04/05/2006');
+    ).toBe("Not a date - 04/05/2006");
   });
 
-  it('should handle formatting dates as a range with valid second date', () => {
-    const { detailInstance } = setup();
+  it("should handle formatting dates as a range with valid second date", () => {
     expect(
-      mount(<>{detailInstance.formatDate(Detail.dateFormatter, '2003-02-01', '2006-05-04')}</>)
-        .find('p')
+      mount(
+        <>
+          {Detail.formatDate(Detail.dateFormatter, "2003-02-01", "2006-05-04")}
+        </>
+      )
+        .find("p")
         .text()
-    ).toBe('01/02/2003 - 04/05/2006');
+    ).toBe("01/02/2003 - 04/05/2006");
   });
 
-  it('should handle formatting dates as a range with invalid second date', () => {
-    const { detailInstance } = setup();
+  it("should handle formatting dates as a range with invalid second date", () => {
     expect(
-      mount(<>{detailInstance.formatDate(Detail.dateFormatter, '2003-02-01', 'Not a date')}</>)
-        .find('p')
+      mount(
+        <>
+          {Detail.formatDate(Detail.dateFormatter, "2003-02-01", "Not a date")}
+        </>
+      )
+        .find("p")
         .text()
-    ).toBe('01/02/2003 - Not a date');
+    ).toBe("01/02/2003 - Not a date");
   });
 
-  it('should handle a related publication with no holdings', () => {
-    const { enzymeWrapper } = setup({ 
+  it("should handle a related publication with no holdings", () => {
+    const { enzymeWrapper } = setup({
       relatedPublications: [
         {
           title: "Related publications title",
-          holdings: []
-        }
-      ]
+          holdings: [],
+        },
+      ],
     });
-    const detail = enzymeWrapper.find('article.w-100');
+    const detail = enzymeWrapper.find("article.w-100");
     expect(detail.exists()).toBe(true);
-  })
+  });
 });

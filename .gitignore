@@ -114,11 +114,10 @@ target/
 /dist/
 /common/*.js
 /common/*.d.ts
+/common/*.map
 /server/*.js
 /server/*.d.ts
-webpack.*.js
-*.js.map
-*.ts.map
+/server/*.map
 *.tsbuildinfo
 
 ### Test Coverage files #

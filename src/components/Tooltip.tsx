@@ -16,12 +16,13 @@ import React, {useState, useRef} from 'react';
 import {FaQuestionCircle} from 'react-icons/fa';
 
 interface TooltipProps {
-  content: JSX.Element | string;
-  id: string;
+  content: string;
+  id?: string;
+  classNames?: {container?: string, button?: string, content?: string, item?: string};
   ariaLabel?: string;
 }
 
-export default ({ content, id, ariaLabel }: TooltipProps) => {
+export default ({ content, id, classNames, ariaLabel }: TooltipProps) => {
   const [isActive, setIsActive] = useState(false);
   const tooltipButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -48,12 +49,12 @@ export default ({ content, id, ariaLabel }: TooltipProps) => {
   // Hover to open tooltip
   // Unfocus, Unhover or Escape to close tooltip
   return (
-    <div className={`dropdown is-right${isActive ? ' is-active' : ''}`}
+    <div className={`dropdown is-right ${classNames?.container}${isActive ? ' is-active' : ''}`}
          onBlur={() => setIsActive(false)}
          onMouseEnter={() => setIsActive(true)}
          onMouseLeave={() => setIsActive(false)}>
       <div className="dropdown-trigger">
-        <button ref={tooltipButtonRef} className="button focus-visible" aria-haspopup="true"
+        <button ref={tooltipButtonRef} className={`button focus-visible ${classNames?.button}`} aria-haspopup="true"
                 {...(isActive ? {'aria-describedby': id} : {'aria-label': ariaLabel})}
                 onClick={(e) => handleClick(e)}
                 onKeyDown={(e) => handleKeyDown(e)}>
@@ -61,10 +62,10 @@ export default ({ content, id, ariaLabel }: TooltipProps) => {
         </button>
       </div>
       <div className="dropdown-menu">
-        <div className="dropdown-content">
-          <div id={id} className="dropdown-item" role="tooltip"
+        <div className={`dropdown-content ${classNames?.content}`}>
+          <div id={id} className={`dropdown-item ${classNames?.item}`} role="tooltip"
                aria-hidden={isActive ? 'false' : 'true'}>
-            <p>{content}</p>
+            <p dangerouslySetInnerHTML={{ __html: content }} />
           </div>
         </div>
       </div>

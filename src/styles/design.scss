@@ -1,7 +1,10 @@
 /* Import third party styles from node packages */
 @import '~bulma/bulma.sass';
-@import '~searchkit/theming/theme.scss';
-@import '~react-select/scss/default.scss';
+@import '~bulma-switch/src/sass/index.sass';
+// @import '~searchkit/theming/theme.scss';
+@import '~instantsearch.css/themes/satellite.css';
+@import 'modules/_instantsearch.scss';
+// @import '~react-select/scss/default.scss';
 
 /* Import styles from modules */
 @import 'modules/_variables.scss';
@@ -17,7 +20,6 @@
 @import 'modules/_branding.scss';
 @import 'modules/_warnings.scss';
 @import 'modules/_utility.scss';
-@import 'modules/_feedback.scss';
 
 /* Import font faces */
 @import url('https://fonts.googleapis.com/css?family=Kanit');

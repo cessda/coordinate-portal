@@ -24,6 +24,14 @@ footer {
       }
     }
   }
+
+  .columns {
+    min-height: 30px;
+
+    .column {
+      padding: 0;
+    }
+  }
 }
 
  @media screen and (max-width: 768px){

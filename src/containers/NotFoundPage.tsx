@@ -11,53 +11,71 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { Component } from 'react';
-import { Layout, LayoutBody, LayoutResults, SearchkitProvider } from 'searchkit';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import searchkit from '../utilities/searchkit';
-import { connect } from 'react-redux';
-import Translate from 'react-translate-component';
-import { Link } from 'react-router';
-import counterpart from 'counterpart';
+import React from "react";
 
-export class AboutPage extends Component {
+const NotFoundPage = () => {
+  return (
+    <div>
+      <h1>404 Not found</h1>
+    </div>
+  );
+};
 
-  componentDidMount() {
-    document.title = `${counterpart.translate('notFound.label')} - ${counterpart.translate('datacatalogue')}`
+export default NotFoundPage;
 
-    // Remove the JSON-LD representation if present
-    const jsonLDElement = document.getElementById("json-ld");
-    if (jsonLDElement) {
-      jsonLDElement.remove();
-    }
-  }
+// import React, { Component } from "react";
+// import {
+//   Layout,
+//   LayoutBody,
+//   LayoutResults,
+//   SearchkitProvider,
+// } from "searchkit";
+// import Header from "../components/Header";
+// import Footer from "../components/Footer";
+// import searchkit from "../utilities/searchkit";
+// import { connect } from "react-redux";
+// import { Link } from "react-router";
+// import { useTranslation } from "react-i18next";
 
-  render() {
-    return (
-      <SearchkitProvider searchkit={searchkit}>
-        <Layout>
-          <Header/>
-          <main id="main" className="container">
-            <LayoutBody className="columns">
-              <LayoutResults className="not-found-layout">
-                <article className="not-found-container">
-                  <Translate component="h1" className="not-found-title" content="notFound.label" />
-                  <Translate content="notFound.content" unsafe />
-                </article>
-              </LayoutResults>
-            </LayoutBody>
-            <div className="columns not-found-links">
-              <div className="column is-full blinks">
-                <Link to="/">Return to the home page</Link> | <a href="https://www.cessda.eu">CESSDA main website</a>
-              </div>
-            </div>
-          </main>
-          <Footer/>
-        </Layout>
-      </SearchkitProvider>
-    );
-  }
-}
+// export class AboutPage extends Component {
 
-export default connect()(AboutPage);
+//   componentDidMount() {
+//     const { t, i18n } = useTranslation();
+//     document.title = `${t('notFound.label')} - ${t('datacatalogue')}`
+
+//     // Remove the JSON-LD representation if present
+//     const jsonLDElement = document.getElementById("json-ld");
+//     if (jsonLDElement) {
+//       jsonLDElement.remove();
+//     }
+//   }
+
+//   render() {
+//     const { t, i18n } = useTranslation();
+//     return (
+//       <SearchkitProvider searchkit={searchkit}>
+//         <Layout>
+//           <Header/>
+//           <div className="container">
+//             <LayoutBody className="columns">
+//               <LayoutResults className="not-found-layout">
+//                 <article className="not-found-container">
+//                   <h1 className="not-found-title">{t("notFound.label")}</h1>
+//                   {t("notFound.content")}
+//                 </article>
+//               </LayoutResults>
+//             </LayoutBody>
+//             <div className="columns not-found-links">
+//               <div className="column is-full blinks">
+//                 <Link to="/">Return to the home page</Link> | <a href="https://www.cessda.eu">CESSDA main website</a>
+//               </div>
+//             </div>
+//           </div>
+//           <Footer/>
+//         </Layout>
+//       </SearchkitProvider>
+//     );
+//   }
+// }
+
+// export default connect()(AboutPage);

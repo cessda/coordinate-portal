@@ -11,13 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CMMStudy, Similar } from "../../common/metadata";
-import { Action } from "../actions";
-import { CLEAR_STUDY, UPDATE_STUDY } from "../actions/detail";
-import { Language } from "../utilities/language";
+import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
+import { createSlice, PayloadAction, current, createAsyncThunk } from "@reduxjs/toolkit";
+import { Language, languageMap } from "../utilities/language";
+import { LanguageState } from "./language";
 
 export interface DetailState {
-  languageAvailableIn: Language[],
+  languageAvailableIn: Language[];
   study: CMMStudy | undefined;
   similars: Similar[];
 }
@@ -25,28 +25,104 @@ export interface DetailState {
 const initialState: DetailState = {
   languageAvailableIn: [],
   study: undefined,
-  similars: []
-}
+  similars: [],
+};
 
-export default function detail(state: DetailState = initialState, action: Action): DetailState {
-  switch(action.type) {
-    case CLEAR_STUDY: {
-      return Object.assign({}, state, {
-        languageAvailableIn: action.languageAvailableIn,
-        study: undefined,
-        similars: []
-      });
+export const updateStudy = createAsyncThunk('search/updateStudy', async (id: string, { getState }) => {
+    const { language } = getState() as { language: LanguageState };
+    let study = undefined;
+
+    const response = await fetch(`${window.location.origin}/api/sk/_get/${language.currentLanguage.index}/${encodeURIComponent(id)}`);
+    //console.log(response);
+    if (response.ok) {
+
+      // Get the study model from the hit.
+      const json = await response.json() as { source: CMMStudy, similars: Similar[] };
+      study = getStudyModel({ _source: json.source });
+
+    } else {
+
+      if(response.status === 404) {
+        // If 404, get the languages that the study is available in
+        const languageCodes = await response.json() as string[];
+
+        const languagesArray: Language[] = [];
+
+        for (const code of languageCodes) {
+          const lang = languageMap.get(code);
+          if (lang) {
+            languagesArray.push(lang);
+          }
+        }
+      }
     }
-
-    case UPDATE_STUDY: {
-      return Object.assign({}, state, {
-        languageAvailableIn: [],
-        study: action.displayed,
-        similars: action.similars
-      });
-    }
-
-    default:
-      return state;
+    return study;
   }
-}
+);
+
+const detailSlice = createSlice({
+  name: "detail",
+  initialState: initialState,
+  reducers: {
+    clearStudy(state: DetailState, action: PayloadAction<boolean>) {
+      //state.languageAvailableIn = ;
+      state.study = undefined;
+      state.similars = [];
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateStudy.fulfilled, (state, action) => {
+      state.study = action.payload;
+    });
+  },
+});
+
+export const { clearStudy } = detailSlice.actions;
+
+// Other code such as selectors can use the imported `RootState` type
+// export const selectShowAdvancedSearch = (state: RootState) =>
+//   state.showAdvancedSearch;
+
+export default detailSlice.reducer;
+
+// import { CMMStudy, Similar } from "../../common/metadata";
+// import { Action } from "../actions";
+// import { CLEAR_STUDY, UPDATE_STUDY } from "../actions/detail";
+// import { Language } from "../utilities/language";
+
+// export interface DetailState {
+//   languageAvailableIn: Language[],
+//   study: CMMStudy | undefined;
+//   similars: Similar[];
+// }
+
+// const initialState: DetailState = {
+//   languageAvailableIn: [],
+//   study: undefined,
+//   similars: []
+// }
+
+// const detailReducer = (state: DetailState =  initialState, action: Action) => {
+//   switch(action.type) {
+//     case CLEAR_STUDY: {
+//       return Object.assign({}, state, {
+//         languageAvailableIn: action.languageAvailableIn,
+//         study: undefined,
+//         similars: []
+//       });
+//     }
+
+//     case UPDATE_STUDY: {
+//       return Object.assign({}, state, {
+//         languageAvailableIn: [],
+//         study: action.displayed,
+//         similars: action.similars
+//       });
+//     }
+
+//     default:
+//       return state;
+//   }
+// }
+
+// export default detailReducer;

@@ -1,4 +1,3 @@
-
 // Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,110 +11,63 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import { Panel as SearchkitPanel, PanelProps } from 'searchkit';
-import PropTypes from 'prop-types';
-import { connect, Dispatch } from 'react-redux';
-import type { State } from '../types';
-import { AnyAction, bindActionCreators } from 'redux';
-import { toggleMetadataPanels, ToggleMetadataPanelsAction } from '../actions/search';
+import React, { useState } from "react";
 
-// @ts-expect-error - redefines types to include JSX elements
-export interface Props extends PanelProps {
-  title? : JSX.Element | string;
+export interface Props {
+  children: JSX.Element | JSX.Element[];
+  title?: JSX.Element | string;
   tooltip?: JSX.Element | string;
-  linkCollapsedState?: boolean;
-  expandMetadataPanels: boolean;
-  toggleMetadataPanels: () => ToggleMetadataPanelsAction;
+  //linkCollapsedState?: boolean;
+  expandMetadataPanels?: boolean;
+  //toggleMetadataPanels: () => ToggleMetadataPanelsAction;
+  key?: any,
+  mod?: string,
+  disabled?: boolean,
+  className?: string,
+  collapsable?: boolean,
+  defaultCollapsed?: boolean,
 }
 
 // Extend the Searchkit Panel component to support tooltips and translations.
-export class Panel extends SearchkitPanel {
-  // @ts-expect-error - redefines types to include JSX elements
-  props: Props;
+const Panel = (props: Props) => {
+  const [expandMetadataPanels, setExpandMetadataPanels] = useState(props.expandMetadataPanels ? props.expandMetadataPanels : false);
+  const [collapsed, setCollapsed] = useState(props.defaultCollapsed ? props.defaultCollapsed : false);
 
-  static readonly defaultProps = {
-    ...SearchkitPanel.defaultProps, 
-    expandMetadataPanels: false,
-    toggleMetadataPanels
-  };
+  const { title, mod, className, disabled, children, collapsable, tooltip } = props;
 
-  constructor(props: Props = Panel.defaultProps) {
-    super(props);
-    this.props = props;
-  }
-
-  // @ts-expect-error - redefines types to include JSX elements
-  componentDidUpdate(prevProps: Props): void {
-    if (this.props.linkCollapsedState &&
-        this.props.expandMetadataPanels !== prevProps.expandMetadataPanels &&
-        this.state.collapsed !== !this.props.expandMetadataPanels) {
-      this.toggleCollapsed();
-    }
-  }
-
-  toggleCollapsed(): void {
-    super.toggleCollapsed();
-    if (this.props.linkCollapsedState &&
-        this.state.collapsed !== this.props.expandMetadataPanels) {
-      this.props.toggleMetadataPanels();
-    }
-  }
-
-  handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    const contentElements = document.querySelectorAll('.sk-panel__content')
-    const isTargetInContent = Array.from(contentElements).some((contentElement) =>
-      contentElement.contains(event.target as HTMLElement)
-    );
-
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     // If panels contain elements that shouldn't toggle collapse for the container, they need to be excluded here (like 'a' and 'button')
-    // Not needed for elements in content part since they are excluded anyway
-    if ((event.key === 'Enter' || event.key === ' ') && !isTargetInContent &&
-        !['a', 'button'].includes((event.target as HTMLElement).tagName.toLowerCase())) {
+    if ((event.key === 'Enter' || event.key === ' ') &&
+        !['a', 'button', 'ul', 'li', 'input'].includes((event.target as HTMLElement).tagName.toLowerCase())) {
       event.preventDefault();
       event.stopPropagation();
-      this.toggleCollapsed();
+      setCollapsed(!collapsed);
     }
   };
 
-  render() {
-    const {
-      tooltip
-    } = this.props;
+  // let titleNode
+  // if (collapsable) {
+  //   titleNode = (
+  //     <div onClick={() => { setCollapsed(collapsed => !collapsed) }}>
+  //       {title}
+  //     </div>
+  //   )
+  // } else {
+  //   titleNode = <div>{title}</div>
+  // }
 
-    return (
-      <section className={'sk-panel__container' + (this.state.collapsed ? ' sk-panel__collapsed' : '')}
-               tabIndex={this.props.collapsable ? 0 : -1}
-               onKeyDown={this.props.collapsable ? (e) => this.handleKeyDown(e) : undefined }>
-        {tooltip}
-        {super.render()}
-      </section>
-    );
-  }
+  return (
+    <section className={'panel-container' + (collapsable ? ' collapsable' : '')}
+            tabIndex={collapsable ? 0 : -1}
+            onKeyDown={collapsable ? (e) => handleKeyDown(e) : undefined }>
+      {tooltip}
+      <div className={'panel-header' + (collapsable ? ' collapsable' : '') + (collapsed ? ' collapsed' : '')}
+          onClick={collapsable ? () => setCollapsed(collapsed => !collapsed) : undefined }>
+        <div className="panel-title">{title}</div>
+      </div>
+      <div className={'panel-content' + (collapsable ? ' collapsable' : '') + (collapsed ? ' collapsed' : '')}>{children}</div>
+    </section>
+  );
 }
 
-// Override Panel type checking to avoid errors.
-Panel.propTypes = Object.assign(SearchkitPanel.propTypes, {
-  title: PropTypes.any,
-  tooltip: PropTypes.any,
-  linkCollapsedState: PropTypes.bool,
-  expandMetadataPanels: PropTypes.bool,
-  toggleMetadataPanels: PropTypes.func
-});
-
-export const mapStateToProps = (state: State) => {
-  return {
-    expandMetadataPanels: state.search.expandMetadataPanels
-  };
-};
-
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-  return {
-    toggleMetadataPanels: bindActionCreators(toggleMetadataPanels, dispatch)
-  };
-};
-
-// @ts-expect-error - redefines types to include JSX elements
-export default connect(mapStateToProps, mapDispatchToProps)(Panel) as ComponentClass<
-  Omit<Props, "expandMetadataPanels" | "toggleMetadataPanels"> & Props
->;
+export default Panel;

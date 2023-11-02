@@ -1,123 +1,144 @@
+.skip-link-wrapper:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.skip-link-wrapper {
+  position: relative;
+}
+
 /* ==========================================================================
      Navigation bar
  ========================================================================== */
 
 header {
-  background-color: $cessda_blueish;
+  // background-color: $cessda_blueish;
+  // background-color: white;
 
-
+  // .reset-search {
+  //   position: relative;
+  //   text-align: left;
+  //   z-index: 1;
+  //   padding: 6px 0;
+  // }
 
   .navbar {
-    margin: 0 auto;
-    max-width: 1280px;
-    background: none;
+    // margin-right: 25px;
+    background-color: transparent;
   }
 
-  .navbar-start .nav-item {
-    text-align: center;
-    padding: 4px 0 8px 40px;
-  }
+  // .navbar {
+  //   margin: 0 auto;
+  //   max-width: 1280px;
+  //   background: none;
+  // }
 
-  .navbar-end .nav-item {
-    text-align: center;
-    padding: 4px 0 8px 0;
-  }
+  // .navbar-start .nav-item {
+  //   text-align: center;
+  //   padding: 4px 0 8px 40px;
+  // }
 
-  .nav-item {
-    display: block;
-    white-space: initial;
+  // .navbar-end .nav-item {
+  //   text-align: center;
+  //   padding: 4px 0 8px 0;
+  // }
 
-    & .cessda a {
-      font-family: cessda, sans-serif !important;
-      font-size: 3.5rem;
-      color: $white;
-      text-decoration: none;
-    }
-  }
+  // .nav-item {
+  //   display: block;
+  //   white-space: initial;
 
-  & .nav-toggle {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    color: $white;
+  //   & .cessda a {
+  //     font-family: cessda, sans-serif !important;
+  //     font-size: 3.5rem;
+  //     color: $white;
+  //     text-decoration: none;
+  //   }
+  // }
 
-    &:hover {
-      background-color: $cessda_blueish;
-    }
-    &:focus {
-      background-color: $cessda_blueish;
-    }
-  }
+  // & .nav-toggle {
+  //   align-items: center;
+  //   display: flex;
+  //   justify-content: center;
+  //   color: $white;
 
-  & .nav-start {
-    justify-content: center;
-    overflow-x: hidden;
+  //   &:hover {
+  //     background-color: $cessda_blueish;
+  //   }
+  //   &:focus {
+  //     background-color: $cessda_blueish;
+  //   }
+  // }
 
-    & a {
-      width: 50%;
-      height: auto;
+  // & .nav-start {
+  //   justify-content: center;
+  //   overflow-x: hidden;
 
-      & img {
-        max-height: 3rem;
-      }
-    }
-  }
+  //   & a {
+  //     width: 50%;
+  //     height: auto;
 
-  & .nav-end {
-    padding: 10px;
-    justify-content: center;
+  //     & img {
+  //       max-height: 3rem;
+  //     }
+  //   }
+  // }
 
-    & .nav-item {
-      position: relative;
-    }
-  }
+  // & .nav-end {
+  //   padding: 10px;
+  //   justify-content: center;
 
-  .header__searchbox {
-    position: relative;
-  }
+  //   & .nav-item {
+  //     position: relative;
+  //   }
+  // }
 
-  .sk-search-box {
-    background-color: $white;
-    border: 1px solid $dark_grey;
-    border-radius: 25px;
-    color: $light_grey;
-    height: 45px;
-    max-width: 600px;
-    margin: 0 15px 0 0;
-    z-index: 1;
+  // .header__searchbox {
+  //   position: relative;
+  // }
 
-    &.is-focused {
-      background-color: $white;
-    }
+  // .ais-SearchBox {
+  //   background-color: $white;
+  //   border: 1px solid $dark_grey;
+  //   border-radius: 25px;
+  //   color: $light_grey;
+  //   height: 45px;
+  //   max-width: 600px;
+  //   margin: 0 auto;
+  //   z-index: 1;
 
-    .sk-search-box__text {
-      color: $greyish-brown;
-    }
+  //   &.is-focused {
+  //     background-color: $white;
+  //   }
 
-    ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-      color: $greyish-brown !important;
-    }
+  //   .sk-search-box__text {
+  //     color: $greyish-brown;
+  //   }
 
-    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-      color: $greyish-brown !important;
-      opacity: 1;
-    }
+  //   ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  //     color: $greyish-brown !important;
+  //   }
 
-    ::-moz-placeholder { /* Mozilla Firefox 19+ */
-      color: $greyish-brown !important;
-      opacity: 1;
-    }
+  //   :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  //     color: $greyish-brown !important;
+  //     opacity: 1;
+  //   }
 
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
-      color: $greyish-brown !important;
-    }
+  //   ::-moz-placeholder { /* Mozilla Firefox 19+ */
+  //     color: $greyish-brown !important;
+  //     opacity: 1;
+  //   }
 
-    ::-ms-input-placeholder { /* Microsoft Edge */
-      color: $greyish-brown !important;
-    }
+  //   :-ms-input-placeholder { /* Internet Explorer 10-11 */
+  //     color: $greyish-brown !important;
+  //   }
 
-    @media screen and (max-width: 768px) {
-      margin: 18px auto;
-    }
-  }
+  //   ::-ms-input-placeholder { /* Microsoft Edge */
+  //     color: $greyish-brown !important;
+  //   }
+
+  //   @media screen and (max-width: 768px) {
+  //     margin: 18px auto;
+  //   }
+  // }
 }

@@ -17,7 +17,6 @@ import { shallow } from 'enzyme';
 import { mapDispatchToProps, mapStateToProps, Props, Similars } from '../../../src/components/Similars';
 import searchkit from '../../../src/utilities/searchkit';
 import { mockStudy } from '../../common/mockdata';
-import { Language, languages } from '../../../src/utilities/language';
 
 // Mock props and shallow render component for test.
 function setup(partialProps?: Partial<Props>) {
@@ -32,7 +31,6 @@ function setup(partialProps?: Partial<Props>) {
         title: 'Similar Study Title 2'
       }
     ],
-    currentLanguage: "en",
     push: jest.fn(),
     ...partialProps 
   };
@@ -75,16 +73,11 @@ describe('Similars component', () => {
         detail: {
           languageAvailableIn: [],
           study: mockStudy,
-          similars: props.similars,
-        },
-        language: {
-          currentLanguage: languages.find(lang => lang.code === props.currentLanguage) as Language,
-          list: languages
-        },
+          similars: props.similars
+        }
       })
     ).toEqual({
-      similars: props.similars,
-      currentLanguage: props.currentLanguage
+      similars: props.similars
     });
   });
 

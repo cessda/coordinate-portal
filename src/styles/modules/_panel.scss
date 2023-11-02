@@ -1,15 +1,15 @@
-.panel {
+.panel-container {
   margin: 0 0 15px 0 !important;
-  padding: 12px 15px;
+  // padding: 12px 15px;
   border: 0;
   border-radius: 3px;
   background-color: #f8f8f8;
   box-shadow: none;
 }
 
-.sk-panel {
+.panel-container {
   &.section-header {
-    .sk-panel__header {
+    .panel-header {
       padding: 15px 15px 0 0;
       margin: 15px 0 0 0;
       border-top: 1px solid #eeeeee;
@@ -19,4 +19,30 @@
       }
     }
   }
+}
+
+.panel-header {
+  padding: 15px 15px 0 15px;
+}
+
+.panel-header.collapsable .panel-title {
+  position: absolute;
+  margin: -22px 0 0 15px;
+}
+
+.panel-container .panel-header.collapsable:before {
+  content:'▼';
+}
+
+.panel-container .panel-header.collapsable.collapsed:before {
+  content:'▶';
+}
+
+.panel-container .panel-content.collapsable.collapsed {
+  display: none;
+}
+
+.panel-content {
+  margin: 0 10px 10px 10px;
+  padding-bottom: 15px;
 }

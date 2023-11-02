@@ -1,4 +1,3 @@
-
 // Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,21 +11,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from "react";
-import { Link } from "react-router";
-import Tooltip from './Tooltip';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Panel from "./Panel";
-import Translate from "react-translate-component";
 import { truncate, upperFirst } from "lodash";
-import { CMMStudy, DataCollectionFreeText, Universe } from "../../common/metadata";
-import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import {
+  CMMStudy,
+  DataCollectionFreeText,
+  getDDI,
+  Universe,
+} from "../../common/metadata";
+import {
+  ChronoField,
+  DateTimeFormatter,
+  DateTimeFormatterBuilder,
+} from "@js-joda/core";
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
 import striptags from "striptags";
-import counterpart from "counterpart";
+import { useTranslation } from "react-i18next";
+import Tooltip from "./Tooltip";
+import { HeadingEntry } from "../containers/DetailPage";
+import Select from 'react-select';
+import { useAppSelector } from "../hooks";
 
 export interface Props {
   item: CMMStudy;
-  lang: string;
+  headings: HeadingEntry[];
+  // lang: string;
 }
 
 export interface State {
@@ -34,66 +45,82 @@ export interface State {
   keywordsExpanded: boolean;
 }
 
-export default class Detail extends React.Component<Props, State> {
+interface Option {
+  value: string;
+  label: string;
+}
 
-  private static readonly truncatedAbstractLength = 2000;
-  private static readonly truncatedKeywordsLength = 12;
+const Detail = (props: Props) => {
+  const { t, i18n } = useTranslation();
+  const language = useAppSelector((state) => state.language);
 
-  constructor(props: Props) {
-    super(props);
-    // Set the abstract to the expanded state if shorter than Detail.truncatedAbstractLength
-    this.state = { 
-      abstractExpanded: !(props.item.abstract.length > Detail.truncatedAbstractLength),
-      keywordsExpanded: !(props.item.keywords.length > Detail.truncatedKeywordsLength)
-    };
-  }
+  const item = props.item;
+  const headings = props.headings;
+  const truncatedAbstractLength = 2000;
+  const truncatedKeywordsLength = 12;
 
-  componentDidUpdate(prevProps: Props) {
-    // If the item has changed, reset the expanded state of the abstract
-    if (this.props.item.id !== prevProps.item.id) {
-      this.setState(() => ({
-        abstractExpanded: !(this.props.item.abstract.length > Detail.truncatedAbstractLength),
-        keywordsExpanded: !(this.props.item.keywords.length > Detail.truncatedKeywordsLength)
-      }));
-    }
-  }
+  const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length > truncatedAbstractLength);
+  const [keywordsExpanded, setKeywordsExpanded] = useState(props.item.abstract.length > truncatedKeywordsLength);
+  const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
+  const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
-  private static readonly formatter = new DateTimeFormatterBuilder()
+  // componentDidUpdate(prevProps: Props) {
+  //   // If the item has changed, reset the expanded state of the abstract
+  //   if (this.props.item.id !== prevProps.item.id) {
+  //     this.setState(() => ({
+  //       abstractExpanded: !(
+  //         this.props.item.abstract.length > Detail.truncatedAbstractLength
+  //       ),
+  //       keywordsExpanded: !(
+  //         this.props.item.keywords.length > Detail.truncatedKeywordsLength
+  //       ),
+  //     }));
+  //   }
+  // }
+
+  const formatter = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR)
-    .optionalStart().appendLiteral("-").appendValue(ChronoField.MONTH_OF_YEAR)
-    .optionalStart().appendLiteral("-").appendValue(ChronoField.DAY_OF_MONTH)
-    .optionalStart().appendLiteral( "T" ).append(DateTimeFormatter.ISO_OFFSET_TIME)
+    .optionalStart()
+    .appendLiteral("-")
+    .appendValue(ChronoField.MONTH_OF_YEAR)
+    .optionalStart()
+    .appendLiteral("-")
+    .appendValue(ChronoField.DAY_OF_MONTH)
+    .optionalStart()
+    .appendLiteral("T")
+    .append(DateTimeFormatter.ISO_OFFSET_TIME)
     .toFormatter();
 
-  static readonly dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");
+  const dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");
 
-  generateElements<T, R>(
+  function generateElements<T, R>(
     field: T[],
     element: 'div' | 'tag' | 'ul',
-    callback?: (args: T) => R,
+    callback?: (args: T) => React.ReactNode,
     omitLang?: boolean
   ) {
     const elements: JSX.Element[] = [];
-    const lang = this.props.lang;
+    // const lang = props.lang;
+    const lang = 'en';
 
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
         const value = callback?.(field[i]) ?? field[i];
         switch(element) {
           case 'tag':
-            elements.push(<span className="tag" lang={omitLang ? undefined : lang} key={i}>{value}</span>);
+            elements.push(<span className="tag" lang={omitLang ? undefined : lang} key={i}>{value as React.ReactNode}</span>);
             break;
           case 'div':
-            elements.push(<div lang={omitLang ? undefined : lang} key={i}>{value}</div>);
+            elements.push(<div lang={omitLang ? undefined : lang} key={i}>{value as React.ReactNode}</div>);
             break;
           case 'ul':
-            elements.push(<li key={i}>{value}</li>)
+            elements.push(<li key={i}>{value as React.ReactNode}</li>)
         }
       }
     }
 
     if (elements.length === 0) {
-      return <Translate content="language.notAvailable.field" lang={lang} />;
+      <span>{t("language.notAvailable.field")}</span>;
     }
 
     if (element === 'ul') {
@@ -107,66 +134,65 @@ export default class Detail extends React.Component<Props, State> {
     }
   }
 
-  /**
-   * Joins the values extracted from objects in an array of objects by the given separator
-   *
-   * @param arr the array of objects
-   * @param extractor the function to retrieve the value from each object
-   * @param separator the character(s) used for joining the field values
-   * @returns <div> element that contains the values separated by the separator
-   */
-  joinValuesBySeparator<T>(arr: Array<T>, extractor: (object: T) => string, separator: string) {
-    return (
-      <div lang={this.props.lang}>{arr.map(element => extractor(element)).filter(value => value && value.trim() !== '').join(separator)}</div>
-    )
-  }
-
-  formatDate(
+  function formatDate(
     dateTimeFormatter: DateTimeFormatter,
     date1?: string,
     date2?: string,
     dateFallback?: DataCollectionFreeText[]
   ): JSX.Element | JSX.Element[] {
+    const { t, i18n } = useTranslation();
     if (!date1 && !date2 && !dateFallback) {
-      return <Translate content="language.notAvailable.field" lang={this.props.lang} />;
+      return <span>{t("language.notAvailable.field")}</span>;
     }
     if (!date1 && !date2 && dateFallback) {
-      if (dateFallback.length === 2 && dateFallback[0].event === 'start' && dateFallback[1].event === 'end') {
+      if (
+        dateFallback.length === 2 &&
+        dateFallback[0].event === "start" &&
+        dateFallback[1].event === "end"
+      ) {
         // Handle special case where array items are a start/end date range.
-        return this.formatDate(dateTimeFormatter, dateFallback[0].dataCollectionFreeText, dateFallback[1].dataCollectionFreeText);
+        return formatDate(
+          dateTimeFormatter,
+          dateFallback[0].dataCollectionFreeText,
+          dateFallback[1].dataCollectionFreeText
+        );
       }
       // Generate elements for each date in the array.
-      return (
-          this.generateElements(
-            dateFallback,
-            'div',
-            date => Detail.parseDate(date.dataCollectionFreeText, dateTimeFormatter)
-          )
+      return generateElements(dateFallback, "div", (date) =>
+        parseDate(date.dataCollectionFreeText, dateTimeFormatter)
       );
     }
 
     if (date1) {
       if (!date2) {
-        return <p>{Detail.parseDate(date1, dateTimeFormatter)}</p>;
+        return <p>{parseDate(date1, dateTimeFormatter)}</p>;
       } else {
-        return <p>{Detail.parseDate(date1, dateTimeFormatter)} - {Detail.parseDate(date2, dateTimeFormatter)}</p>
+        return (
+          <p>
+            {parseDate(date1, dateTimeFormatter)} -{" "}
+            {parseDate(date2, dateTimeFormatter)}
+          </p>
+        );
       }
     } else {
-      return <Translate content="language.notAvailable.field" lang={this.props.lang} />;
+      return <span>{t("language.notAvailable.field")}</span>;
     }
   }
 
   /**
    * Attempt to format the given date string.
-   * 
+   *
    * @param dateString the date string to parse.
    * @param dateTimeFormatter the formatter to use.
    * @returns a formatted date, or the original string if an error occured when formatting.
    */
-  private static parseDate(dateString: string, dateTimeFormatter: DateTimeFormatter): string {
+  function parseDate(
+    dateString: string,
+    dateTimeFormatter: DateTimeFormatter
+  ): string {
     // Format array item as date if possible.
     try {
-      const temporalAccessor = Detail.formatter.parse(dateString);
+      const temporalAccessor = formatter.parse(dateString);
       return dateTimeFormatter.format(temporalAccessor);
     } catch (e) {
       // Handle unparsable strings by returning the given value.
@@ -178,18 +204,18 @@ export default class Detail extends React.Component<Props, State> {
   /**
    * Formats the given universe into a <p> element. The resulting element will contain
    * the text content "${Included universe} (excluding ${Excluded universe})"
-   * 
+   *
    * @param universe the universe to format
    * @returns the formatted <p> element
    */
-  private formatUniverse(universe: Universe) {
-    const inclusion = <p lang={this.props.lang}>{striptags(universe.inclusion)}</p>;
+  function formatUniverse(universe: Universe) {
+    const inclusion = <p>{striptags(universe.inclusion)}</p>;
 
     if (universe.exclusion) {
       return (
         <>
           {inclusion}
-          <p lang={this.props.lang}>Excludes: {striptags(universe.exclusion)}</p>
+          <p>Excludes: {striptags(universe.exclusion)}</p>
         </>
       );
     } else {
@@ -197,244 +223,471 @@ export default class Detail extends React.Component<Props, State> {
     }
   }
 
-  render() {
-    const { item, lang } = this.props;
-
+  function generateHeading(headingKey: string, classNames?: string, overrideId?: string) {
+    // Find the heading object with the specified key
+    const headingObj = headings.find((entry) => entry[headingKey]);
+  
+    if (!headingObj) {
+      return null; // Handle the case where the heading key doesn't exist
+    }
+  
+    const { translation, level } = headingObj[headingKey];
+    const id = overrideId ? overrideId : headingObj[headingKey].id;
+    const Element = level === 'main' ? 'h1' : (level === 'title' ? 'h2' : 'h3');
+  
     return (
-      <article className="w-100">
-      <div className="summary-header">
-Summary information
-      </div>
-        <Translate
-          className="data-label mt-5"
-          component="h1"
-          content="metadata.studyTitle"
-        />
-
-        <p lang={lang}>
-          {item.titleStudy || <Translate content="language.notAvailable.field"/>}
-        </p>
-
-        <section>
-          <Translate
-            className="data-label"
-            component="h2"
-            content="metadata.creator"
-          />
-          {this.generateElements(item.creators, 'div')}
-        </section>
-
-        <section>
-          <Translate
-            className="data-label"
-            component="h2"
-            content="metadata.studyPersistentIdentifier"
-          />
-          {this.generateElements(item.pidStudies.filter(p => p.pid), 'div', pidStudy => {
-            // The agency field is an optional attribute, only append if present
-            if (pidStudy.agency) {
-              return <p>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
-            }
-
-            return <p>{pidStudy.pid}</p>;
-          }, true)}
-        </section>
-
-        <section>
-          <Translate
-            className="data-label"
-            component="h2"
-            content="metadata.abstract"
-          />
-          {this.state.abstractExpanded ?
-            <div className="data-abstract" lang={lang} dangerouslySetInnerHTML={{ __html: item.abstract }}/>
-          :
-            <div className="data-abstract" lang={lang}>{truncate(striptags(item.abstract), { length: Detail.truncatedAbstractLength, separator: ' ' })}</div>
-          }
-          {item.abstract.length > Detail.truncatedAbstractLength &&
-            <a className="button is-small is-white" onClick={() => {
-              this.setState(state => ({
-                abstractExpanded: !state.abstractExpanded
-              }));
-            }}>
-              {this.state.abstractExpanded ?
-              <>
-                <span className="icon is-small"><FaAngleUp/></span>
-                <Translate component="span" content="readLess"/>
-              </>
-              :
-              <>
-                <span className="icon is-small"><FaAngleDown/></span>
-                <Translate component="span" content="readMore"/>
-              </>
-              }
-            </a>
-          }
-        </section>
-
-        <Panel
-          className="section-header"
-          title={<Translate component="h2" content='metadata.topics.label'/>}
-          tooltip={<Tooltip id="metadata-topics-tooltip"
-                            content={<Translate content='metadata.topics.tooltip.content' unsafe/>}
-                            ariaLabel={counterpart.translate("metadata.topics.tooltip.ariaLabel")}/>}
-          collapsable={false}
-        >
-          <div className="tags">
-            {this.generateElements(
-              item.classifications,
-              'tag',
-              classifications => <Link to={"/?classifications.term[0]=" + encodeURI(classifications.term)}>{upperFirst(classifications.term)}</Link>
-            )}
-          </div>
-        </Panel>
-
-        <Panel
-          className="section-header"
-          title={<Translate component="h2" content='metadata.keywords.label'/>}
-          tooltip={<Tooltip id="metadata-keywords-tooltip"
-                            content={<Translate content='metadata.keywords.tooltip.content' unsafe/>}
-                            ariaLabel={counterpart.translate("metadata.keywords.tooltip.ariaLabel")}/>}
-          collapsable={false}
-        >
-          <div className="tags">
-            {this.generateElements(this.state.keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), 'tag',
-              keywords => <Link to={`/?keywords.term[0]=${encodeURI(keywords.term)}`}>{upperFirst(keywords.term)}</Link>
-            )}
-          </div>
-          {item.keywords.length > Detail.truncatedKeywordsLength &&
-            <a className="button is-small is-white" onClick={() => {
-              this.setState(state => ({
-                keywordsExpanded: !state.keywordsExpanded
-              }));
-            }}>
-              {this.state.keywordsExpanded ?
-              <>
-                <span className="icon is-small"><FaAngleUp/></span>
-                <Translate component="span" content="readLess"/>
-              </>
-              :
-              <>
-                <span className="icon is-small"><FaAngleDown/></span>
-                <Translate component="span" content="readMore"/>
-              </>
-              }
-            </a>
-          }
-        </Panel>
-
-        <Panel
-          className="section-header"
-          title={<Translate component="h2" content="metadata.methodology.label"/>}
-          tooltip={<Tooltip id="metadata-methodology-tooltip"
-                            content={<Translate content='metadata.methodology.tooltip.content' unsafe/>}
-                            ariaLabel={counterpart.translate("metadata.methodology.tooltip.ariaLabel")}/>}
-          collapsable={false}
-          defaultCollapsed={false}
-        >
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.dataCollectionPeriod"
-          />
-          {this.formatDate(
-            Detail.dateFormatter,
-            item.dataCollectionPeriodStartdate,
-            item.dataCollectionPeriodEnddate,
-            item.dataCollectionFreeTexts
-          )}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.country"
-          />
-          {this.joinValuesBySeparator(item.studyAreaCountries, c => c.country, ", ")}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.timeDimension"
-          />
-          {this.generateElements(item.typeOfTimeMethods, 'div', time => time.term)}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.analysisUnit"
-          />
-          {this.generateElements(item.unitTypes, 'div', unit => unit.term)}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.universe"
-          />
-          {item.universe ? this.formatUniverse(item.universe) : <Translate content="language.notAvailable.field" lang={lang} />}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.samplingProcedure"
-          />
-          {this.generateElements(item.samplingProcedureFreeTexts, 'div', text =>
-            <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
-          )}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.dataCollectionMethod"
-          />
-          {this.generateElements(item.typeOfModeOfCollections, 'div', method => method.term)}
-        </Panel>
-
-        <Panel
-          className="section-header"
-          title={<Translate component="h2" content='metadata.access'/>}
-          collapsable={false}
-        >
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.publisher"
-          />
-          <p lang={lang}>
-            {item.publisher ? item.publisher.publisher : <Translate content="language.notAvailable.field" />}
-          </p>
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.yearOfPublication"
-          />
-          {this.formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
-
-          <Translate
-            className="data-label"
-            component="h3"
-            content="metadata.termsOfDataAccess"
-          />
-          {this.generateElements(item.dataAccessFreeTexts, 'div', text =>
-            <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} />
-          )}
-        </Panel>
-
-        <Panel
-          className="section-header"
-          title={<Translate component="h2" content="metadata.relatedPublications"/>}
-          collapsable={false}
-        >
-          {this.generateElements(item.relatedPublications, 'ul', relatedPublication => {
-            const relatedPublicationTitle = striptags(relatedPublication.title);
-            if (relatedPublication.holdings?.length > 0) {
-              return <a href={relatedPublication.holdings[0]}>{relatedPublicationTitle}</a>;
-            } else {
-              return relatedPublicationTitle;
-            }
-          }, true)}
-        </Panel>
-      </article>
+      <Element id={id} className={`metadata-${level} ${classNames ?? ''}`}>
+        {translation}
+      </Element>
     );
   }
+
+  const exportMetadataOptions: Option[] = [
+    { value: 'json', label: 'JSON' },
+    // { value: 'ddi25', label: 'DDI 2.5' },
+  ]
+
+  const handleExportMetadataChange = (selectedOption: Option | null) => {
+    setSelectedExportMetadataOption(selectedOption);
+  };
+
+  const handleExportMetadata = async () => {
+    if (selectedExportMetadataOption?.value) {
+      let exportData;
+      let fileName;
+      let mimeType;
+      const sanitizedTitle = item.titleStudy.toLowerCase().replace(/ /g, '_');
+
+      switch (selectedExportMetadataOption.value) {
+        case 'json':
+          // Fetch the JSON data from the API
+          const jsonResponse = await fetch(`${window.location.origin}/api/json/${language.currentLanguage.index}/${encodeURIComponent(item.id)}`);
+
+          if (jsonResponse.ok) {
+            exportData = JSON.stringify(await jsonResponse.json(), null, 2)
+            fileName = `${sanitizedTitle}.json`;
+            mimeType = 'application/json';
+          } else {
+            console.error('Failed to fetch JSON data');
+            return;
+          }
+          break;
+
+        case 'ddi25':
+          // Set exportData for DDI export
+          exportData = getDDI(item);
+          fileName = `${sanitizedTitle}.xml`;
+          mimeType = 'application/xml';
+          break;
+
+        default:
+          break;
+      }
+
+      if (exportData && fileName && mimeType) {
+        // Create a Blob containing the export data
+        const blob = new Blob([exportData], { type: mimeType });
+        // Create a URL for the Blob
+        const url = window.URL.createObjectURL(blob);
+        // Create an <a> element to trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        // Trigger a click event on the <a> element to prompt the download
+        a.click();
+        // Release the Blob URL
+        window.URL.revokeObjectURL(url);
+      }
+    }
+  }
+
+  const exportCitationOptions = [
+    { value: 'bibtext', label: 'BibTeX' },
+    { value: 'ris', label: 'RIS' },
+    { value: 'endnote', label: 'EndNote' },
+  ]
+
+  const handleExportCitationChange = (selected: Option | null) => {
+    setSelectedExportCitationOption(selected);
+  };
+
+  const handleExportCitation = () => {
+    if (selectedExportCitationOption?.value) {
+      // Implement the export logic based on the selectedOption.value
+      switch (selectedExportCitationOption.value) {
+        case 'bibtext':
+          // Implement BibTeX export logic here
+          console.log('Exporting as BibTeX');
+          break;
+        case 'ris':
+          // Implement RIS export logic here
+          console.log('Exporting as RIS');
+          break;
+        case 'endnote':
+          // Implement EndNote export logic here
+          console.log('Exporting as EndNote');
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  return (
+    <>
+    <div className="columns is-vcentered">
+      <div className="column is-5">
+        <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
+          <div className="column is-flex is-flex-grow-0 is-narrow">
+            <span className="is-inline-flex">{t("exportMetadata")}</span>
+            {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
+                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                    classNames={{container: 'ml-1'}}/> */}
+          </div>
+          <div className="column is-flex is-flex-grow-0 is-narrow px-0">
+            <Select options={exportMetadataOptions}
+                    defaultValue={{ value: '', label: ''}}
+                    onChange={handleExportMetadataChange}
+                    className="export-select"/>
+          </div>
+          <div className="column is-flex is-flex-grow-0 is-narrow pl-0">
+            <button className="button is-info is-light" onClick={handleExportMetadata}
+                    disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
+              {t("export")}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="column is-5">
+        <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
+          <div className="column is-flex is-flex-grow-0 is-narrow">
+            <span className="is-inline-flex">{t("exportCitation")}</span>
+            {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
+                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                    classNames={{container: 'ml-1'}}/> */}
+          </div>
+          <div className="column is-flex is-flex-grow-0 is-narrow px-0">
+            <Select options={exportCitationOptions}
+                    defaultValue={{ value: '', label: ''}}
+                    onChange={handleExportCitationChange}
+                    className="export-select"/>
+          </div>
+          <div className="column is-flex is-flex-grow-0 is-narrow pl-0">
+            <button className="button is-info is-light"
+                    onClick={() => alert("Not yet implemented")}
+                    // onClick={handleExportCitation}
+                    disabled={!selectedExportCitationOption || selectedExportCitationOption.value.trim() === ''}>
+              {t("export")}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="column is-2">
+        {item.studyUrl && (
+          <a // className="button is-small is-white"
+            className="is-inline-flex"
+            href={item.studyUrl}
+            rel="noreferrer"
+            target="_blank">
+            <span className="icon is-small mt-1 mr-1">
+              <FaExternalLinkAlt />
+            </span>
+            <span>{t("goToStudy")}</span>
+          </a>
+        )}
+      </div>
+    </div>
+    <div className="metadata-container">
+      <div className="info-box is-hidden-touch">
+        <section>
+          {generateHeading('topics', 'is-inline-flex', 'info-box-topics')}
+          <Tooltip content={t("metadata.topics.tooltip.content")}
+                  ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
+                  classNames={{container: 'mt-3 ml-1'}}/>
+          <div className="tags mt-2">
+            {generateElements(item.classifications, "tag",
+              (classifications) => (
+                <Link to={`/?topics%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`} reloadDocument>
+                  {upperFirst(classifications.term)}
+                </Link>
+              )
+            )}
+          </div>
+        </section>
+        <section>
+          {generateHeading('keywords', 'is-inline-flex', 'info-box-keywords')}
+          <Tooltip content={t("metadata.keywords.tooltip.content")}
+                  ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                  classNames={{container: 'mt-3 ml-1'}}/>
+          <div className="tags mt-2">
+            {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
+              (keywords) => (
+                <Link to={`/?keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`} reloadDocument>
+                  {upperFirst(keywords.term)}
+                </Link>
+              )
+            )}
+          </div>
+          {item.keywords.length > truncatedKeywordsLength && (
+            <a className="button is-small is-white"
+              onClick={() => {
+                setKeywordsExpanded(keywordsExpanded => !keywordsExpanded)
+              }}>
+              {keywordsExpanded ? (
+                <>
+                  <span className="icon is-small">
+                    <FaAngleUp />
+                  </span>
+                  <span>{t("readLess")}</span>
+                </>
+              ) : (
+                  <>
+                    <span className="icon is-small">
+                      <FaAngleDown />
+                    </span>
+                    <span>{t("readMore")}</span>
+                  </>
+                )}
+            </a>
+          )}
+        </section>
+      </div>
+      <div className="main-content">
+        <article className="w-100 mb-2">
+          {generateHeading('summary', 'summary-header')}
+          <section>
+            {generateHeading('title', 'mt-5')}
+
+            <p>{item.titleStudy || t("language.notAvailable.field")}</p>
+          </section>
+
+          <section>
+            {generateHeading('creator')}
+            {generateElements(item.creators, "div")}
+          </section>
+
+          <section>
+            {generateHeading('pid')}
+            {generateElements(item.pidStudies.filter((p) => p.pid), "div",
+              (pidStudy) => {
+                // The agency field is an optional attribute, only append if present
+                if (pidStudy.agency) {
+                  return <p key={pidStudy.pid}>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
+                }
+                return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
+              }
+            )}
+          </section>
+
+          <section>
+            {generateHeading('abstract')}
+            {abstractExpanded ? (
+              <div
+                className="data-abstract"
+                dangerouslySetInnerHTML={{ __html: item.abstract }}
+              />
+            ) : (
+              <div className="data-abstract">
+                {truncate(striptags(item.abstract), {
+                  length: truncatedAbstractLength,
+                  separator: " ",
+                })}
+              </div>
+            )}
+            {item.abstract.length > truncatedAbstractLength && (
+              <a className="button is-small is-white"
+                onClick={() => {
+                  setAbstractExpanded(abstractExpanded => !abstractExpanded)
+                }}>
+                {abstractExpanded ? (
+                  <>
+                    <span className="icon is-small">
+                      <FaAngleUp />
+                    </span>
+                    <span>{t("readLess")}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="icon is-small">
+                      <FaAngleDown />
+                    </span>
+                    <span>{t("readMore")}</span>
+                  </>
+                )}
+              </a>
+            )}
+          </section>
+
+          <section>
+            {generateHeading('methodology', 'is-inline-flex')}
+            <Tooltip content={t("metadata.methodology.tooltip.content")}
+                    ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
+                    classNames={{container: 'mt-3 ml-1'}}/>
+            {/* <Panel title={<h2>{t("metadata.methodology.label")}</h2>}
+                  tooltip={<Tooltip content={<>{t("metadata.methodology.tooltip.content")}</>}
+                                    ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}/>}
+                  className="classifications"
+                  collapsable={false}> */}
+            {generateHeading('collPeriod')}
+            <>
+              {formatDate(
+                dateFormatter,
+                item.dataCollectionPeriodStartdate,
+                item.dataCollectionPeriodEnddate,
+                item.dataCollectionFreeTexts
+              )}
+            </>
+
+            {generateHeading('country')}
+            {generateElements(item.studyAreaCountries, "div", (country) => country.country)}
+
+            {generateHeading('timeDimension')}
+            {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
+
+            {generateHeading('analysisUnit')}
+            {generateElements(item.unitTypes, "div", (unit) => unit.term)}
+
+            {generateHeading('universe')}
+            {item.universe ? formatUniverse(item.universe) : t("language.notAvailable.field")}
+
+            {generateHeading('sampProc')}
+            {generateElements(item.samplingProcedureFreeTexts, "div",
+              (text) => (
+                <div
+                  className="data-abstract"
+                  dangerouslySetInnerHTML={{ __html: text }}
+                />
+              )
+            )}
+
+            {generateHeading('collMode')}
+            {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
+          </section>
+          {/* </Panel> */}
+
+          {/* <Panel
+            className="section-header"
+            title={<h2>{t("metadata.access")}</h2>}
+            collapsable={false}
+          > */}
+          <section>
+            {generateHeading('access')}
+            {generateHeading('publisher')}
+            <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
+
+            {generateHeading('publicationYear')}
+            {formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
+
+            {generateHeading('accessTerms')}
+            {generateElements(item.dataAccessFreeTexts, "div",
+              (text) => (
+                <div
+                  className="data-abstract"
+                  dangerouslySetInnerHTML={{ __html: text }}
+                />
+              )
+            )}
+          </section>
+          {/* </Panel> */}
+
+          {/* <Panel title={<h2>{t("metadata.topics.label")}</h2>}
+                  tooltip={<Tooltip content={t("metadata.topics.tooltip.content")}
+                                    ariaLabel={t("metadata.topics.tooltip.ariaLabel")}/>}
+                  className="classifications"
+                  collapsable={false}> */}
+          <section>
+            {generateHeading('topics', 'is-inline-flex')}
+            <Tooltip content={t("metadata.topics.tooltip.content")}
+                    ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
+                    classNames={{container: 'mt-3 ml-1'}}/>
+            <div className="tags mt-2">
+              {generateElements(item.classifications, "tag",
+                (classifications) => (
+                  <Link to={`/?topics%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`} reloadDocument>
+                    {upperFirst(classifications.term)}
+                  </Link>
+                )
+              )}
+            </div>
+          </section>
+          {/* </Panel> */}
+
+          {/* <Panel title={<h2>{t("metadata.keywords.label")}</h2>}
+                  tooltip={<Tooltip content={t("metadata.keywords.tooltip.content")}
+                                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}/>}
+                  className="keywords"
+                  collapsable={false}> */}
+          <section>
+            {generateHeading('keywords', 'is-inline-flex')}
+            <Tooltip content={t("metadata.keywords.tooltip.content")}
+                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                    classNames={{container: 'mt-3 ml-1'}}/>
+            <div className="tags mt-2">
+              {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
+                (keywords) => (
+                  <Link to={`/?keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`} reloadDocument>
+                    {upperFirst(keywords.term)}
+                  </Link>
+                )
+              )}
+            </div>
+            {item.keywords.length > truncatedKeywordsLength && (
+              <a className="button is-small is-white"
+                onClick={() => {
+                  setKeywordsExpanded(keywordsExpanded => !keywordsExpanded)
+                }}>
+                {keywordsExpanded ? (
+                  <>
+                    <span className="icon is-small">
+                      <FaAngleUp />
+                    </span>
+                    <span>{t("readLess")}</span>
+                  </>
+                ) : (
+                    <>
+                      <span className="icon is-small">
+                        <FaAngleDown />
+                      </span>
+                      <span>{t("readMore")}</span>
+                    </>
+                  )}
+              </a>
+            )}
+          </section>
+          {/* </Panel> */}
+
+          {/* <Panel
+            className="section-header"
+            title={<h2>{t("metadata.relatedPublications")}</h2>}
+            collapsable={false}
+          > */}
+          <section>
+            {generateHeading('relPub')}
+            {generateElements(
+              item.relatedPublications,
+              "ul",
+              (relatedPublication) => {
+                const relatedPublicationTitle = striptags(
+                  relatedPublication.title
+                );
+                if (relatedPublication.holdings?.length > 0) {
+                  return (
+                    <a href={relatedPublication.holdings[0]}>
+                      {relatedPublicationTitle}
+                    </a>
+                  );
+                } else {
+                  return relatedPublicationTitle;
+                }
+              }
+            )}
+          </section>
+          {/* </Panel> */}
+        </article>
+      </div>
+    </div>
+    </>
+  );
 }
+
+export default Detail;

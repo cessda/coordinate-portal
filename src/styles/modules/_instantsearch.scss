@@ -1,0 +1,67 @@
+.ais-Pagination-list {
+  justify-content: center;
+}
+
+// .ais-ClearRefinements {
+//     width: 120px;
+//     margin: 0.75rem 0.75rem 0.25rem 0.75rem;
+// }
+
+.ais-Pagination-list {
+  flex-wrap: wrap;
+}
+
+.ais-CurrentRefinements-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ais-CurrentRefinements-item {
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.ais-Hits-item .list-hit h2 .button {
+  white-space: normal;
+}
+
+.ais-ClearRefinements-button.button, .ais-ClearRefinements-button.button:disabled {
+  background-image: none;
+  color: white;
+}
+
+.ais-Panel {
+  margin-bottom: 0;
+}
+
+.ais-Stats {
+  display: flex;
+  justify-content: center;
+}
+
+// .ais-Pagination-link {
+//     margin: -1px;
+// }
+
+.ais-CustomRefinementList {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  // justify-content: space-between;
+  // overflow-y: scroll;
+  overflow-x: scroll;
+  max-height: 500px;
+  
+  .ais-RefinementList-item {
+    margin: 0 5px 2px 0;
+  }
+}
+
+// .ais-RefinementList-item {
+//   line-height: 1.5rem;
+// }
+
+.ais-RangeInput-input,
+.ais-SearchBox-input {
+  outline-offset: 1px;
+}

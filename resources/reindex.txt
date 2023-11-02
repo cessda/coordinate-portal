@@ -1,0 +1,50 @@
+curl -X POST -u elastic:password -H 'Content-Type: application/json' "http://localhost:9200/_reindex" -d '
+{
+  "source": {
+    "index": "cmmstudy_en",
+    "query": {
+      "bool": {
+        "should": [
+          {
+            "multi_match": {
+              "query": "children",
+              "fields": [
+                "classifications^6",
+                "keywordsSearchField^4",
+                "titleStudy^2"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "youth",
+              "fields": [
+                "classifications^6",
+                "keywordsSearchField^4",
+                "titleStudy^2"
+              ],
+              "type": "best_fields"
+            }
+          }
+        ],
+        "must_not": [
+          {
+            "match": {
+              "titleStudy": {
+                "query": "childless",
+                "fuzziness": "auto",
+                "prefix_length": 9
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "dest": {
+      "index": "coordinate_en"
+  }
+}'

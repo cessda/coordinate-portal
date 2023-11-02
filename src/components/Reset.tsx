@@ -11,43 +11,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import {connect} from 'react-redux';
-import type {State} from '../types';
+// import React from 'react';
+// import {connect} from 'react-redux';
+// import type {State} from '../types';
 
-export type Props = {
-  bemBlock: (...args: Array<any>) => any;
-  hasFilters: boolean;
-  translate: (arg0: string) => string;
-  resetFilters: () => void;
-} & ReturnType<typeof mapStateToProps>;
+// export type Props = {
+//   bemBlock: (...args: Array<any>) => any;
+//   hasFilters: boolean;
+//   translate: (arg0: string) => string;
+//   resetFilters: () => void;
+// } & ReturnType<typeof mapStateToProps>;
 
-export function Reset(props: Props) {
-  const {
-    pathname,
-    bemBlock,
-    hasFilters,
-    translate,
-    resetFilters
-  } = props;
+// export function Reset(props: Props) {
+//   const {
+//     pathname,
+//     bemBlock,
+//     hasFilters,
+//     translate,
+//     resetFilters
+//   } = props;
 
-  return (
-    <a className={bemBlock().mix('link').state({disabled: pathname !== '/' || !hasFilters})}
-        onClick={() => {
-          if (pathname === '/' && hasFilters) {
-            resetFilters();
-          }
-        }}
-        tabIndex={0}>
-      {translate('reset.clear_all')}
-    </a>
-  );
-}
+//   return (
+//     <a className={bemBlock().mix('link').state({disabled: pathname !== '/' || !hasFilters})}
+//         onClick={() => {
+//           if (pathname === '/' && hasFilters) {
+//             resetFilters();
+//           }
+//         }}>
+//       {translate('reset.clear_all')}
+//     </a>
+//   );
+// }
 
-export const mapStateToProps = (state: State) => {
-  return {
-    pathname: state.routing.locationBeforeTransitions.pathname
-  };
-};
+// export const mapStateToProps = (state: State) => {
+//   return {
+//     pathname: state.routing.locationBeforeTransitions.pathname
+//   };
+// };
 
-export default connect(mapStateToProps)(Reset);
+// export default connect(mapStateToProps)(Reset);

@@ -1,30 +1,26 @@
-.sk-panel__container {
+.panel-container {
   position: relative;
 
   & > .dropdown {
     position: absolute;
-    top: 8px;
+    top: 1px;
     right: 15px;
-
-    .dropdown-trigger {
-      z-index: 1;
-
-      button {
-        padding: 0;
-        background: none;
-        border: none;
-      }
-      button:focus-visible {
-        box-shadow: none;
-      }
-    }
-
-    .dropdown-menu {
-      min-width: 14rem;
-    }
   }
 }
 
-.tooltip-icon {
-  pointer-events: none;
+.dropdown {
+
+  .dropdown-trigger {
+    // z-index: 1;
+
+    button {
+      padding: 0;
+      background: none;
+      border: none;
+    }
+  }
+
+  .dropdown-menu {
+    min-width: 14rem;
+  }
 }

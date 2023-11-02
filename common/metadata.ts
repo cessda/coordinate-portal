@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import striptags from 'striptags';
-import { Dataset, Organization, Person, WithContext } from 'schema-dts';
-import { truncate, upperFirst } from 'lodash';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import striptags from "striptags";
+import { Dataset, Organization, Person, WithContext } from "schema-dts";
+import { truncate, upperFirst } from "lodash";
+import { SearchHit } from "@elastic/elasticsearch/lib/api/types";
 
 export interface CMMStudy {
   /** The internal ID of the study */
@@ -32,8 +32,6 @@ export interface CMMStudy {
   dataCollectionFreeTexts: DataCollectionFreeText[];
   /** Terms of data access */
   dataAccessFreeTexts: string[];
-  /** Data access url */
-  dataAccessUrl?: string;
   /** Publication year */
   publicationYear: string;
   /** Data collection mode */
@@ -129,51 +127,65 @@ export interface Universe {
  *
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(source: Partial<CMMStudy> | undefined, highlight?: SearchHit["highlight"]): CMMStudy {
-  if (typeof(source) !== "object") {
+export function getStudyModel(
+  data: Pick<SearchHit<Partial<CMMStudy>>, "_source" | "highlight">
+): CMMStudy {
+  if (typeof data._source !== "object") {
     throw TypeError("_source is not an object");
   }
-  return ({
-    id: source.id as string,
-    titleStudy: source.titleStudy as string,
-    titleStudyHighlight: highlight?.titleStudy ? stripHTMLElements(highlight.titleStudy.join()) : '',
-    code: source.code as string,
-    creators: source.creators || [],
-    pidStudies: source.pidStudies || [],
-    abstract: stripHTMLElements(source.abstract as string),
-    abstractShort: truncateAbstract(striptags(source.abstract as string)),
-    abstractHighlight: highlight?.abstract ? stripHTMLElements(highlight.abstract.join()) : '',
-    abstractHighlightShort: highlight?.abstract ? truncateAbstract(striptags(highlight.abstract.join())) : '',
-    studyAreaCountries: source.studyAreaCountries || [],
-    typeOfTimeMethods: source.typeOfTimeMethods || [],
-    unitTypes: source.unitTypes || [],
-    typeOfSamplingProcedures: source.typeOfSamplingProcedures || [],
-    samplingProcedureFreeTexts: (source.samplingProcedureFreeTexts || []).map(text => stripHTMLElements(text)),
-    typeOfModeOfCollections: source.typeOfModeOfCollections || [],
-    dataCollectionPeriodStartdate: source.dataCollectionPeriodStartdate || '',
-    dataCollectionPeriodEnddate: source.dataCollectionPeriodEnddate || '',
-    dataCollectionFreeTexts: source.dataCollectionFreeTexts || [],
-    dataCollectionYear: source.dataCollectionYear,
-    fileLanguages: source.fileLanguages || [],
-    publisher: source.publisher as Publisher,
-    publicationYear: source.publicationYear || '',
-    dataAccessFreeTexts: (source.dataAccessFreeTexts || []).map(text => stripHTMLElements(text)),
-    dataAccessUrl: source.dataAccessUrl,
-    studyNumber: source.studyNumber || '',
-    classifications: source.classifications || [],
-    keywords: source.keywords || [],
-    lastModified: source.lastModified || '',
-    studyUrl: source.studyUrl,
-    studyXmlSourceUrl: source.studyXmlSourceUrl as string,
-    langAvailableIn: (source.langAvailableIn || []).map(i => i.toUpperCase()).sort(),
-    universe: source.universe,
-    relatedPublications: source.relatedPublications || []
-  });
+  return {
+    id: data._source.id as string,
+    titleStudy: data._source.titleStudy as string,
+    titleStudyHighlight: data.highlight?.titleStudy
+      ? stripHTMLElements(data.highlight.titleStudy.join())
+      : "",
+    code: data._source.code as string,
+    creators: data._source.creators || [],
+    pidStudies: data._source.pidStudies || [],
+    abstract: stripHTMLElements(data._source.abstract as string),
+    abstractShort: truncateAbstract(striptags(data._source.abstract as string)),
+    abstractHighlight: data.highlight?.abstract
+      ? stripHTMLElements(data.highlight.abstract.join())
+      : "",
+    abstractHighlightShort: data.highlight?.abstract
+      ? truncateAbstract(striptags(data.highlight.abstract.join()))
+      : "",
+    studyAreaCountries: data._source.studyAreaCountries || [],
+    typeOfTimeMethods: data._source.typeOfTimeMethods || [],
+    unitTypes: data._source.unitTypes || [],
+    typeOfSamplingProcedures: data._source.typeOfSamplingProcedures || [],
+    samplingProcedureFreeTexts: (
+      data._source.samplingProcedureFreeTexts || []
+    ).map((text) => stripHTMLElements(text)),
+    typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
+    dataCollectionPeriodStartdate:
+      data._source.dataCollectionPeriodStartdate || "",
+    dataCollectionPeriodEnddate: data._source.dataCollectionPeriodEnddate || "",
+    dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
+    dataCollectionYear: data._source.dataCollectionYear,
+    fileLanguages: data._source.fileLanguages || [],
+    publisher: data._source.publisher as Publisher,
+    publicationYear: data._source.publicationYear || "",
+    dataAccessFreeTexts: (data._source.dataAccessFreeTexts || []).map((text) =>
+      stripHTMLElements(text)
+    ),
+    studyNumber: data._source.studyNumber || "",
+    classifications: data._source.classifications || [],
+    keywords: data._source.keywords || [],
+    lastModified: data._source.lastModified || "",
+    studyUrl: data._source.studyUrl,
+    studyXmlSourceUrl: data._source.studyXmlSourceUrl as string,
+    langAvailableIn: (data._source.langAvailableIn || [])
+      .map((i) => i.toUpperCase())
+      .sort(),
+    universe: data._source.universe,
+    relatedPublications: data._source.relatedPublications || [],
+  };
 }
 
 function truncateAbstract(string: string): string {
   const trimmedString = string.trim();
-  return truncate(trimmedString, { length: 500, separator: ' ' } );
+  return truncate(trimmedString, { length: 500, separator: " " });
 }
 
 /**
@@ -181,7 +193,24 @@ function truncateAbstract(string: string): string {
  * @param {string} html the HTML to strip.
  */
 function stripHTMLElements(html: string) {
-  const strippedHTML = striptags(html, ['p', 'strong', 'br', 'em', 'i', 's', 'ol', 'ul', 'li', 'b', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+  const strippedHTML = striptags(html, [
+    "p",
+    "strong",
+    "br",
+    "em",
+    "i",
+    "s",
+    "ol",
+    "ul",
+    "li",
+    "b",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+  ]);
   return strippedHTML.trim();
 }
 
@@ -193,53 +222,65 @@ const commaRegex = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi;
 // Generates study JSON-LD for Google indexing.
 export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
   // Attempt to split people from organisations in the creator field.
-  const creators: Array<Organization | Person> = data.creators.map(creator => {
-    const bracketMatches = bracketRegex.exec(creator);
-    if (bracketMatches) {
+  const creators: Array<Organization | Person> = data.creators.map(
+    (creator) => {
+      const bracketMatches = bracketRegex.exec(creator);
+      if (bracketMatches) {
+        return {
+          "@type": "Person",
+          name: bracketMatches[1].trim(),
+          affiliation: {
+            "@type": "Organization",
+            name: bracketMatches[2].trim(),
+          },
+        };
+      }
+
+      const commaMatches = commaRegex.exec(creator);
+      if (commaMatches) {
+        return {
+          "@type": "Person",
+          name: commaMatches[1].trim(),
+          affiliation: {
+            "@type": "Organization",
+            name: commaMatches[2].trim(),
+          },
+        };
+      }
+
+      const creatorLower = creator.toLowerCase();
+      // Assume organisation if it contains any of the following words.
       return {
-        '@type': 'Person',
-        name: bracketMatches[1].trim(),
-        affiliation: {
-          '@type': 'Organization',
-          name: bracketMatches[2].trim()
-        }
+        "@type":
+          creatorLower.includes("university") ||
+          creatorLower.includes("institute") ||
+          creatorLower.includes("polytechnic") ||
+          creatorLower.includes("government") ||
+          creatorLower.includes("department") ||
+          creatorLower.includes("faculty") ||
+          creatorLower.includes("division") ||
+          creatorLower.includes("agency") ||
+          creatorLower.includes("unit")
+            ? "Organization"
+            : "Person",
+        name: creator.trim(),
       };
     }
-
-    const commaMatches = commaRegex.exec(creator);
-    if (commaMatches) {
-      return {
-        '@type': 'Person',
-        name: commaMatches[1].trim(),
-        affiliation: {
-          '@type': 'Organization',
-          name: commaMatches[2].trim()
-        }
-      };
-    }
-
-    const creatorLower = creator.toLowerCase();
-    // Assume organisation if it contains any of the following words.
-    return {
-      '@type': creatorLower.includes('university') ||
-               creatorLower.includes('institute') ||
-               creatorLower.includes('polytechnic') ||
-               creatorLower.includes('government') ||
-               creatorLower.includes('department') ||
-               creatorLower.includes('faculty') ||
-               creatorLower.includes('division') ||
-               creatorLower.includes('agency') ||
-               creatorLower.includes('unit') ? 'Organization' : 'Person',
-      name: creator.trim()
-    }
-  });
+  );
 
   //Prioritize identifier
-  const identifier = data.pidStudies.filter(i=> i.agency==='DOI').length !==0 ? data.pidStudies.filter(i=> i.agency==='DOI').map(i => i.pid)[0]
-                   : data.pidStudies.filter(i=> i.agency==='Handle').length !==0 ? data.pidStudies.filter(i=> i.agency==='Handle').map(i => i.pid)[0]
-                   : data.pidStudies.filter(i=> i.agency==='URN').length !==0 ? data.pidStudies.filter(i=> i.agency==='URN').map(i => i.pid)[0]
-                   : data.pidStudies.filter(i=> i.agency==='ARK').length !==0 ? data.pidStudies.filter(i=> i.agency==='ARK').map(i => i.pid)[0]
-                   : data.pidStudies.filter(i=> i.agency).map(i => i.pid)[0];
+  const identifier =
+    data.pidStudies.filter((i) => i.agency === "DOI").length !== 0
+      ? data.pidStudies.filter((i) => i.agency === "DOI").map((i) => i.pid)[0]
+      : data.pidStudies.filter((i) => i.agency === "Handle").length !== 0
+      ? data.pidStudies
+          .filter((i) => i.agency === "Handle")
+          .map((i) => i.pid)[0]
+      : data.pidStudies.filter((i) => i.agency === "URN").length !== 0
+      ? data.pidStudies.filter((i) => i.agency === "URN").map((i) => i.pid)[0]
+      : data.pidStudies.filter((i) => i.agency === "ARK").length !== 0
+      ? data.pidStudies.filter((i) => i.agency === "ARK").map((i) => i.pid)[0]
+      : data.pidStudies.filter((i) => i.agency).map((i) => i.pid)[0];
 
   // License
   let license: string | undefined = undefined;
@@ -254,35 +295,40 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
     }
   }
 
-
-
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Dataset',
+    "@context": "https://schema.org",
+    "@type": "Dataset",
     name: data.titleStudy,
-    description: truncate(data.abstract, { length: 5000, separator: ' ' }),
+    description: truncate(data.abstract, { length: 5000, separator: " " }),
     url: href, // Needs to generate a URL if href is undefined
     sameAs: data.studyUrl,
-    keywords: data.keywords.map(i => upperFirst(i.term)),
-    variableMeasured: data.unitTypes.map(u => u.term).join(', '),
-    measurementTechnique: data.typeOfModeOfCollections.map(t => t.term).join(', '),
+    keywords: data.keywords.map((i) => upperFirst(i.term)),
+    variableMeasured: data.unitTypes.map((u) => u.term).join(", "),
+    measurementTechnique: data.typeOfModeOfCollections
+      .map((t) => t.term)
+      .join(", "),
     license: license,
     identifier: identifier,
     creator: creators,
-    temporalCoverage: extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
-    spatialCoverage: data.studyAreaCountries.map(s => s.country).join(', '),
+    temporalCoverage: extractDataCollectionPeriod(
+      data.dataCollectionPeriodStartdate,
+      data.dataCollectionPeriodEnddate
+    ),
+    spatialCoverage: data.studyAreaCountries.map((s) => s.country).join(", "),
     datePublished: data.publicationYear.substring(0, 10),
-    dateModified: data.lastModified.substring(0, 10)
+    dateModified: data.lastModified.substring(0, 10),
   };
 }
 
-function extractDataCollectionPeriod(dataCollectionPeriodStartdate: string | undefined, dataCollectionPeriodEnddate: string | undefined) {
-
+function extractDataCollectionPeriod(
+  dataCollectionPeriodStartdate: string | undefined,
+  dataCollectionPeriodEnddate: string | undefined
+) {
   if (!dataCollectionPeriodStartdate) {
-    return '';
+    return "";
   }
 
-  const startDate = dataCollectionPeriodStartdate.substring(0, 10) + '/';
+  const startDate = dataCollectionPeriodStartdate.substring(0, 10) + "/";
 
   if (!dataCollectionPeriodEnddate) {
     return startDate;
@@ -291,3 +337,148 @@ function extractDataCollectionPeriod(dataCollectionPeriodStartdate: string | und
   return startDate + dataCollectionPeriodEnddate.substring(0, 10);
 }
 
+export function getDDI(metadata: CMMStudy) {
+  const {
+    titleStudy,
+    creators,
+    dataCollectionPeriodStartdate,
+    dataCollectionPeriodEnddate,
+    dataCollectionYear,
+    dataAccessFreeTexts,
+    pidStudies,
+    studyAreaCountries,
+    typeOfModeOfCollections,
+    typeOfTimeMethods,
+    typeOfSamplingProcedures,
+    universe,
+    keywords,
+    classifications,
+    publicationYear,
+    publisher,
+    relatedPublications,
+    abstract,
+  } = metadata;
+
+  const creatorXML = creators.map((creator) => `<producer>${creator}</producer>`).join('\n');
+  const modeXML = typeOfModeOfCollections.map((mode) => `<collMode>${mode}</collMode>`).join('\n');
+  const timeMethodXML = typeOfTimeMethods.map((timeMethod) => `<timeMeth>${timeMethod}</timeMeth>`).join('\n');
+  const samplingProcedureXML = typeOfSamplingProcedures.map((samplingProcedure) => `<sampProc>${samplingProcedure}</sampProc>`).join('\n');
+  const nationXML = studyAreaCountries.map((country) => `<nation abbr="${country.abbr}">${country.country}</nation>`).join('\n');
+  const geogCoverXML = studyAreaCountries.map((country) => `<geogCover abbr="${country.abbr}">${country.country}</geogCover>`).join('\n');
+  const keywordXML = keywords.map((keyword) => `<keyword vocab="${keyword.vocab}" vocabURI="${keyword.vocabUri}" ID="${keyword.id}">${keyword.term}</keyword>`).join('\n');
+  const classificationXML = classifications.map((cls) => `<topcClas vocab="${cls.vocab}" vocabURI="${cls.vocabUri}" ID="${cls.id}">${cls.term}</topcClas>`).join('\n');
+  const pidXML = pidStudies.map((pid) => `<holdings URI="${pid.agency}:${pid.pid}"/>`).join('\n');
+  const relatedPublicationXML = relatedPublications.map((pub) => `
+    <citation>
+      <titlStmt>
+        <titl>${pub.title}</titl>
+      </titlStmt>
+      ${pub.holdings.map((holding) => `
+        <holdings URI="${holding}"/>
+      `).join('\n')}
+    </citation>
+  `).join('\n');
+
+  const ddiXML = `<?xml version="1.0" encoding="UTF-8"?>
+<codeBook xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd">
+  <docDscr>
+    <citation>
+      <titlStmt>
+        <titl>${titleStudy}</titl>
+      </titlStmt>
+      <prodStmt>
+        ${creatorXML}
+      </prodStmt>
+    </citation>
+  </docDscr>
+  <stdyDscr>
+    <citation>
+      <titlStmt>
+        <titl>${titleStudy}</titl>
+      </titlStmt>
+    </citation>
+    <stdyInfo>
+      ${modeXML}
+      ${timeMethodXML}
+      ${samplingProcedureXML}
+      ${universe && universe.inclusion ? `<universe>${universe.inclusion}</universe>` : ''}
+    </stdyInfo>
+    ${abstract ? `<abstract>${abstract}</abstract>` : ''}
+    ${dataCollectionPeriodStartdate && dataCollectionPeriodEnddate ? `<sumDscr><collDate date="${dataCollectionPeriodStartdate}" event="start"></collDate><collDate date="${dataCollectionPeriodEnddate}" event="end"></collDate></sumDscr>` : ''}
+    ${dataCollectionYear ? `<sumDscr><collDate date="${dataCollectionYear}" event="start"></collDate><collDate date="${dataCollectionYear}" event="end"></collDate></sumDscr>` : ''}
+    ${dataAccessFreeTexts.length ? `<sumDscr><dataAccs>${dataAccessFreeTexts.map((text) => `<useStmt><biblCit>${text}</biblCit></useStmt>`).join('')}</dataAccs></sumDscr>` : ''}
+    <sumDscr>
+      <dataAccs>
+        <setAvail>
+          <setAvailPlac>
+            ${nationXML}
+            ${geogCoverXML}
+          </setAvailPlac>
+        </setAvail>
+        ${pidXML}
+      </dataAccs>
+    </sumDscr>
+    ${keywordXML ? `<subject>${keywordXML}</subject>` : ''}
+    ${classificationXML ? `<subject>${classificationXML}</subject>` : ''}
+    ${publicationYear ? `<distStmt><distDate date="${publicationYear}"/></distStmt>` : ''}
+    ${publisher ? `<distStmt><distrbtr abbr="${publisher.abbr}">${publisher.publisher}</distrbtr></distStmt>` : ''}
+    ${relatedPublicationXML ? `<relPubl xml:lang="en">${relatedPublicationXML}</relPubl>` : ''}
+  </stdyDscr>
+</codeBook>`;
+
+  return formatXML(ddiXML);
+}
+
+function formatXML(xml: string) {
+  const PADDING = ' '.repeat(2); // Adjust the padding as needed
+  let formatted = '';
+  let reg = /(>)(<)(\/*)/g;
+  xml = xml.replace(reg, '$1\n$2$3');
+  let pad = 0;
+
+  xml.split('\n').forEach((node) => {
+    let indent = 0;
+    if (node.match(/<\/\w[^>]*>$/)) {
+      indent = 0;
+    } else if (node.match(/^<\w/)) {
+      indent = 1;
+    } else {
+      indent = 0;
+    }
+
+    const parts = node.match(/<[^>]*>|[^<]+/g); // Split the node into parts: tags and text content
+    let formattedNode = '';
+    parts!.forEach((part) => {
+      if (part.startsWith('<')) {
+        formattedNode += part; // Preserve XML tags
+      } else {
+        formattedNode += escapeTextInXml(part); // Escape text content
+      }
+    });
+
+    formatted += PADDING.repeat(pad) + formattedNode + '\n';
+    pad += indent;
+  });
+
+  return formatted.trim(); // Remove trailing whitespace
+}
+
+// Function to escape special characters within XML text content
+function escapeTextInXml(text: string) {
+  return text.replace(/[<>&"']/g, (match) => {
+    switch (match) {
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '&':
+        return '&amp;';
+      case '"':
+        return '&quot;';
+      case "'":
+        return '&apos;';
+      default:
+        return match;
+    }
+  });
+}

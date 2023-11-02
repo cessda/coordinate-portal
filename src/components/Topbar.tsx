@@ -11,67 +11,75 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import { ActionBar, ActionBarRow } from 'searchkit';
-import counterpart from 'counterpart';
-import SortingSelector from './SortingSelector';
-import PageSizeSelector from './PageSizeSelector';
+import React from "react";
 
-export default () => (
-  <ActionBar>
-    <ActionBarRow>
-      <div className="level is-mobile">
-        <div className="level-left">
-          <label className="level-item">
-            {counterpart.translate('resultsPerPage')}
-            <PageSizeSelector className="level-item" options={[10, 30, 50, 150]} />
-          </label>
-        </div>
+const Topbar = () => {
+  return <div>Topbar TBA</div>;
+};
 
-        <div className="level-right">
-          <label className="level-item">
-            {counterpart.translate('sortBy')}
-            <SortingSelector className="level-item" options={[{
-              label: counterpart.translate('sorting.relevance'),
-              key: 'relevance',
-              field: '_score',
-              order: 'desc',
-              defaultOption: true
-            }, {
-              label: counterpart.translate('sorting.titleAscending'),
-              key: 'title-ascending',
-              field: 'titleStudy.raw',
-              order: 'asc',
-              defaultOption: false
-            }, {
-              label: counterpart.translate('sorting.titleDescending'),
-              key: 'title-descending',
-              field: 'titleStudy.raw',
-              order: 'desc',
-              defaultOption: false
-            }, {
-              label: counterpart.translate('sorting.dateAscending'),
-              key: 'date-ascending',
-              field: 'dataCollectionPeriodEnddate',
-              order: 'asc',
-              defaultOption: false
-            }, {
-              label: counterpart.translate('sorting.dateDescending'),
-              key: 'date-descending',
-              field: 'dataCollectionPeriodEnddate',
-              order: 'desc',
-              defaultOption: false
-            }, {
-              label: counterpart.translate('sorting.publicationDateDescending'),
-              key: 'publication-date-descending',
-              field: 'publicationYear',
-              order: 'desc',
-              defaultOption: false
-            }]} />
-          </label>
-        </div>
-      </div>
-    </ActionBarRow>
-  </ActionBar>
-);
+export default Topbar;
 
+// import React from 'react';
+// import { ActionBar, ActionBarRow } from 'searchkit';
+// import SortingSelector from './SortingSelector';
+// import PageSizeSelector from './PageSizeSelector';
+// import { useTranslation } from 'react-i18next';
+
+// export default () => {
+//   const { t, i18n } = useTranslation();
+//   return (
+//     <ActionBar>
+//       <ActionBarRow>
+//         <div className="level is-mobile">
+//           <div className="level-left">
+//             <label className="level-item">{t("resultsPerPage")}</label>
+
+//             <PageSizeSelector className="level-item" options={[10, 30, 50, 150]} />
+//           </div>
+
+//           <div className="level-right">
+//             <label className="level-item">{t("sortBy")}</label>
+
+//             <SortingSelector className="level-item" options={[{
+//               label: t('sorting.relevance'),
+//               key: 'relevance',
+//               field: '_score',
+//               order: 'desc',
+//               defaultOption: true
+//             }, {
+//               label: t('sorting.titleAscending'),
+//               key: 'title-ascending',
+//               field: 'titleStudy.raw',
+//               order: 'asc',
+//               defaultOption: false
+//             }, {
+//               label: t('sorting.titleDescending'),
+//               key: 'title-descending',
+//               field: 'titleStudy.raw',
+//               order: 'desc',
+//               defaultOption: false
+//             }, {
+//               label: t('sorting.dateAscending'),
+//               key: 'date-ascending',
+//               field: 'dataCollectionPeriodEnddate',
+//               order: 'asc',
+//               defaultOption: false
+//             }, {
+//               label: t('sorting.dateDescending'),
+//               key: 'date-descending',
+//               field: 'dataCollectionPeriodEnddate',
+//               order: 'desc',
+//               defaultOption: false
+//             }, {
+//               label: t('sorting.publicationDateDescending'),
+//               key: 'publication-date-descending',
+//               field: 'publicationYear',
+//               order: 'desc',
+//               defaultOption: false
+//             }]} />
+//           </div>
+//         </div>
+//       </ActionBarRow>
+//     </ActionBar>
+//   )
+// }

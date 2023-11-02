@@ -14,18 +14,18 @@ import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import express from 'express';
-import config from '../webpack.dev.config';
+import config from '../webpack.dev.config.js';
 import path from 'path';
 import { checkEnvironmentVariables, renderResponse, startListening } from './helper';
 
 export function start() {
-    checkEnvironmentVariables(false);
+  checkEnvironmentVariables(false);
 
-    const app = express();
-    const compiler = webpack(config);
+  const app = express();
+  const compiler = webpack(config);
 
-    app.set('view engine', 'ejs');
-    app.set('views', path.join(__dirname, '../dist'));
+  app.set('view engine', 'ejs');
+  app.set('views', path.join(__dirname, '../dist'));
 
   const indexRegex = new RegExp("index.dev.ejs");
     app.use(webpackMiddleware(compiler, {
@@ -45,6 +45,29 @@ export function start() {
 
     app.use(webpackHotMiddleware(compiler));
 
+    app.use('*', async (req, res, next) => {
+      // If the request is for the API, skip the fallback and proceed to the next middleware
+      if (req.originalUrl.startsWith('/api')) {
+        return next(); // Pass control to the next middleware in the chain
+      }
+
+      const ejsTemplate = 'index.dev.ejs';
+      res.setHeader('Cache-Control', 'no-store');
+      await renderResponse(req, res, ejsTemplate);
+    });
+
+    // app.use('*', async (req, res) => {
+    //   const ejsTemplate = 'index.dev.ejs';
+    //   res.setHeader('Cache-Control', 'no-store');
+    //   await renderResponse(req, res, ejsTemplate);
+    // });
+    
+    // // For the "/api" route, skip SSR and proceed to the next middleware
+    // app.use('/api', (req, res, next) => {
+    //   return next();
+    // });
+    
+    // Start listening
     startListening(app, async (req, res) => {
       const ejsTemplate = 'index.dev.ejs';
       res.setHeader('Cache-Control', 'no-store');

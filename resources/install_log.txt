@@ -1,0 +1,201 @@
+Apache
+
+sudo apt-get install apache2
+
+sudo nano /etc/apache2/apache2.conf
+ServerTokens Prod
+ServerSignature Off
+
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod rewrite
+sudo a2enmod ssl
+sudo a2enmod headers
+sudo systemctl restart apache2
+
+sudo nano /etc/apache2/sites-available/coordinate.conf
+<VirtualHost *:80>
+    ServerName coordinate.fsd.tuni.fi
+
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo nano /etc/apache2/sites-available/coordinate-ssl.conf
+<VirtualHost *:443>
+    ServerAdmin markus.tuominen@tuni.fi
+    ServerName coordinate.fsd.tuni.fi
+
+    Header always set Cache-Control "max-age=3600" env=limitcache
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header set Content-Security-Policy "default-src 'none';"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "no-referrer-when-downgrade"
+    Header set Content-Security-Policy "default-src 'none'; script-src 'self' https://coordinate.fsd.tuni.fi https://code.jquery.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://coordinate.fsd.tuni.fi; font-src 'self' https://fonts.gstatic.com;"
+
+
+    ProxyPass / http://localhost:8088/
+    ProxyPassReverse / http://localhost:8088/
+
+    SSLEngine on
+    SSLProtocol all -TLSv1.1 -TLSv1 -SSLv3
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!RC4:!SEED-SHA:!DHE-RSA-SEED-SHA:!EDH-RSA-DES-CBC3-SHA:!3DES
+    SSLHonorCipherOrder on
+    SSLCertificateFile /etc/ssl/certs/sectigo_coordinate.fsd.tuni.fi.fullchain.pem
+    SSLCertificateKeyFile /etc/ssl/private/sectigo_coordinate.fsd.tuni.fi.privkey.pem
+    SSLCertificateChainFile /etc/ssl/certs/sectigo_coordinate.fsd.tuni.fi.fullchain.pem
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo a2dissite 000-default.conf
+sudo a2ensite coordinate
+sudo a2ensite coordinate-ssl
+sudo systemctl restart apache2
+
+
+Elasticsearch
+
+sudo add-apt-repository "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
+sudo apt update
+sudo apt install elasticsearch
+# Take note of the generated password (or reset it later):
+    The generated password for the elastic built-in superuser is :
+sudo systemctl enable elasticsearch
+sudo nano /usr/lib/systemd/system/elasticsearch.service
+[Unit]
+# Limit number of restarts
+StartLimitBurst=5
+StartLimitIntervalSec=33
+
+[Service]
+# Restart automatically
+Restart=always
+RestartSec=5
+
+sudo systemctl daemon-reload
+sudo systemctl start elasticsearch
+
+
+sudo su
+nano /etc/elasticsearch/elasticsearch.yml
+discovery.type: single-node
+xpack.security.http.ssl:
+  enabled: false
+# cluster.initial_master_nodes:
+http.host: 127.0.0.1
+
+nano /etc/elasticsearch/jvm.options.d/custom.yml
+es.enforce.bootstrap.checks: true
+
+systemctl restart elasticsearch
+
+# Reset password if needed
+cd /usr/share/elasticsearch/bin
+./elasticsearch-reset-password -u elastic
+
+
+Node.js
+
+sudo apt install software-properties-common
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/nodesource-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/nodesource-archive-keyring.gpg] https://deb.nodesource.com/node_18.x focal main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+sudo apt update
+sudo apt install nodejs
+node -v
+npm -v
+
+
+Apps user
+
+sudo groupadd apps
+sudo useradd -m -g apps -s /bin/bash apps
+sudo passwd apps
+
+
+Harvesting
+
+sudo apt install openjdk-17-jdk-headless
+sudo apt install maven
+sudo su apps
+cd
+git clone https://github.com/cessda/cessda.metadata.harvester
+# copy content from resources/harvest_endpoints.txt or directly from the source:
+# https://github.com/cessda/cessda.cdc.aggregator.deploy/blob/main/charts/harvester/config/config.yaml
+cd ~/cessda.metadata.harvester
+# replace file content with the copied content
+nano src/main/resources/application.yml
+./mvnw verify
+cd ~/cessda.metadata.harvester/target
+java -jar oaiharvester.jar --harvester.dir=/home/apps/data
+
+
+Indexing
+
+cd
+git clone https://github.com/cessda/cessda.cdc.osmh-indexer.cmm
+cd ~/cessda.cdc.osmh-indexer.cmm
+nano src/main/resources/application.yml
+baseDirectory: /home/apps/data
+elasticsearch:
+    host: localhost
+    username: elastic
+    password:
+
+./mvnw clean package
+./mvnw spring-boot:run
+
+
+App
+
+sudo npm install -g pm2
+sudo su apps
+cd
+nano coordinate-portal.config.js
+module.exports = {
+  apps: [{
+    name: "coordinate-portal",
+    script: "./coordinate-portal/startprod.js",
+    env: {
+      NODE_ENV: "production",
+      SEARCHKIT_ELASTICSEARCH_USERNAME: "elastic",
+      SEARCHKIT_ELASTICSEARCH_PASSWORD: ""
+    },
+    log_type : 'json'
+  }]
+}
+
+# Git clone/transfer coordinate-portal
+cd ~/coordinate-portal
+npm install
+npm run build
+
+sh -c 'cd /home/apps && pm2 start coordinate-portal.config.js'
+crontab -e
+    @reboot sh -c 'cd /home/apps && pm2 start coordinate-portal.config.js'
+
+
+Maintenance
+
+sudo su apps
+# Logs
+cd ~/.pm2/logs
+less coordinate-portal-error.log
+less coordinate-portal-out.log
+# Check app
+pm2 ls
+pm2 env 0
+# Stop
+pm2 stop coordinate-portal
+# Delete app
+pm2 delete coordinate-portal
+# Restart/reload
+pm2 restart coordinate-portal.config.js
+pm2 reload coordinate-portal.config.js

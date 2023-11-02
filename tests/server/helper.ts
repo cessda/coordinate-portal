@@ -15,10 +15,12 @@
 import fs from 'fs';
 import path from 'path';
 import Elasticsearch from '../../server/elasticsearch';
-import { Client, errors } from '@elastic/elasticsearch';
+import { ApiResponse, Client } from '@elastic/elasticsearch'
 import httpMocks from 'node-mocks-http';
 import { mockStudy } from '../common/mockdata';
-import { CMMStudy, getJsonLd, getStudyModel } from '../../common/metadata';
+import { getJsonLd, getStudyModel } from '../../common/metadata';
+//import { ResponseError } from '@elastic/elasticsearch/lib/errors';
+import { estypes } from '@elastic/elasticsearch'
 
 // Constants
 const ejsTemplate = "server/views/index.ejs";
@@ -31,20 +33,15 @@ const requestParameters = {
 jest.mock('../../server/elasticsearch');
 const mockedElasticsearch = Elasticsearch as jest.MockedClass<typeof Elasticsearch>;
 const mockedGetStudy = jest.fn<ReturnType<InstanceType<typeof Elasticsearch>["getStudy"]>, never>();
-//@ts-expect-error - partial implementation only
+//@ts-expect-error
 mockedElasticsearch.mockImplementation(() => {
   return {
     client: jest.fn() as unknown as Client,
     getStudy: mockedGetStudy,
     getSimilars: jest.fn(),
-    getTotalStudies: jest.fn(),
-    getListOfMetadataLanguages: jest.fn(),
-    getListOfCountries: jest.fn(),
-    getEndpoints: jest.fn()
+    getTotalStudies: jest.fn()
   }
 });
-
-jest.mock('../../server/metrics');
 
 // Import the helper
 import { checkBuildDirectory, Metadata, renderResponse } from '../../server/helper';
@@ -114,42 +111,11 @@ describe('helper utilities', () => {
       expect(renderData).toEqual({
         metadata: {
           creators: mockStudy.creators.join('; '),
-          description: mockStudy.abstract,
+          description: mockStudy.abstractShort,
           title: mockStudy.titleStudy,
           publisher: mockStudy.publisher.publisher,
-          jsonLd: getJsonLd(getStudyModel(mockStudy)),
+          jsonLd: getJsonLd(getStudyModel({ _source: mockStudy })),
           id: mockStudy.id
-        }
-      });
-    });
-
-    it('should request metadata without JSON-LD if the abstract is less than 50 characters', async () => {
-      const request = httpMocks.createRequest(requestParameters);
-      const response = httpMocks.createResponse();
-
-      const mockStudyWithTruncatedAbstract: CMMStudy = {
-        ...mockStudy,
-        // Create a new abstract with less than 50 characters, then trim it
-        abstract: mockStudy.abstract.substring(0,49).trim()
-      }
-
-      mockedGetStudy.mockResolvedValue(mockStudyWithTruncatedAbstract);
-      await renderResponse(request, response, ejsTemplate);
-
-      // Status code should be 200
-      expect(response.statusCode).toBe(200);
-      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
-      
-      // Assert fields of renderData are as expected
-      const renderData = response._getRenderData() as Metadata;
-      expect(renderData).toEqual({
-        metadata: {
-          creators: mockStudyWithTruncatedAbstract.creators.join('; '),
-          description: mockStudyWithTruncatedAbstract.abstract,
-          title: mockStudyWithTruncatedAbstract.titleStudy,
-          publisher: mockStudyWithTruncatedAbstract.publisher.publisher,
-          jsonLd: undefined,
-          id: mockStudyWithTruncatedAbstract.id
         }
       });
     });
@@ -159,8 +125,7 @@ describe('helper utilities', () => {
       const response = httpMocks.createResponse();
 
       // Simulate Elasticsearch returning 500
-      // @ts-expect-error - minimal typings
-      mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 500 }));
+      mockedGetStudy.mockRejectedValue(new ResponseError({ statusCode: 500 } as ApiResponse));
 
       await renderResponse(request, response, ejsTemplate);
 
@@ -176,8 +141,7 @@ describe('helper utilities', () => {
       const response = httpMocks.createResponse();
 
       // Simulate Elasticsearch returning 500
-      // @ts-expect-error - minimal typings
-      mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 404 }));
+      mockedGetStudy.mockRejectedValue(new ResponseError({ statusCode: 404 } as ApiResponse));
 
       await renderResponse(request, response, ejsTemplate);
 

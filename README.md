@@ -1,28 +1,16 @@
-[![SQAaaS badge](https://github.com/EOSC-synergy/SQAaaS/raw/master/badges/badges_150x116/badge_software_silver.png)](https://api.eu.badgr.io/public/assertions/Y8Jg2pBdTO67PRm0ujqdEQ "SQAaaS silver badge achieved")
-[![SQAaaS badge shields.io](https://img.shields.io/badge/sqaaas%20software-silver-lightgrey)](https://api.eu.badgr.io/public/assertions/Y8Jg2pBdTO67PRm0ujqdEQ "SQAaaS silver badge achieved")
-[![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=cessda.cdc.searchkit%2Fmain)](https://jenkins.cessda.eu/job/cessda.cdc.searchkit/job/main/)
-[![Quality Gate Status](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=alert_status)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
-[![Coverage](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=coverage)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
-[![Maintainability Rating](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=sqale_rating)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
-[![Reliability Rating](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=reliability_rating)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
-[![Security Rating](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=security_rating)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
-[![Lines of Code](https://sonarqube.cessda.eu/api/project_badges/measure?project=eu.cessda.pasc%3Apasc-searchkit&metric=ncloc)](https://sonarqube.cessda.eu/dashboard?id=eu.cessda.pasc%3Apasc-searchkit)
+# COORDINATE Portal
 
-# CESSDA.CDC.SEARCHKIT
+This repository contains all source code for the COORDINATE Portal web application.
 
-This repository contains all source code for the CESSDA Data Catalogue web application.
-
-Separate repositories are provided for backend architecture; harvester, indexer and Elasticsearch instance.
-
-## Quality - Software Maturity Level
-
-The overall Software Maturity Level for this product and the individual scores for each attribute can be found in the [SML](SML.md) file.
+CESSDA's repositories are used for harvesting and indexing with very minimal changes to Elasticsearch mappings:
+[cessda.metadata.harvester](https://github.com/cessda/cessda.metadata.harvester)
+[cessda.cdc.osmh-indexer.cmm](https://github.com/cessda/cessda.cdc.osmh-indexer.cmm)
 
 ## Prerequisites
 
-[Node.js](https://nodejs.org/) version 16 (LTS) is required to install and run this application.
+[Node.js](https://nodejs.org/) version 18 (LTS) is required to install and run this application.
 
-You will need an existing local or remote Elasticsearch instance setup and running.
+You will need an existing local or remote Elasticsearch version 8 instance setup and running.
 
 ## Quick Start
 
@@ -45,15 +33,15 @@ Please be aware of *Known Issues* (see bottom) before running.
 
 The application can be configured using the following environment variables.
 
-| Environment Variable               | Default Value            | Description
-| ---------------------------------- | ------------------------ | -----------
-| `PASC_DEBUG_MODE`                  | `false`                  | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
-| `PASC_PORT`                        | `8088`                   | The port number which will be used to access this web application.
-| `PASC_ELASTICSEARCH_URL`           | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
-| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined`              | The username to use when accessing a secured Elasticsearch cluster.
-| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined`              | The password to use when accessing a secured Elasticsearch cluster.
-| `SEARCHKIT_LOG_LEVEL`              | `info`                   | The logging level used for server side events.
-| `SEARCHKIT_USE_JSON_LOGGING`       | `false`                  | Whether to log using JSON rather than plain text.
+| Variable                     | Default Value | Description
+| ---------------------------- | ------------- | -----------
+| `PASC_DEBUG_MODE`            | `false`       | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
+| `PASC_PORT`                  | `8088`        | The port number which will be used to access this web application.
+| `PASC_ELASTICSEARCH_URL`     | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
+| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined` | The username to use when accessing a secured Elasticsearch cluster.
+| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined` | The password to use when accessing a secured Elasticsearch cluster.
+| `SEARCHKIT_LOG_LEVEL`        | `info`        | The logging level used for server side events.
+| `SEARCHKIT_USE_JSON_LOGGING` | `false`       | Whether to log using JSON rather than plain text.
 
 Set environment variables using the following syntax.
 
@@ -65,25 +53,25 @@ If running in a development environment using JetBrains WebStorm (see *Tooling* 
 
 ## Project Structure
 
-This project follows a best practice structure for React+Redux applications. See the Redux documentation for an explanation on [actions](https://redux.js.org/basics/actions) and [reducers](https://redux.js.org/basics/reducers).
+This project follows a best practice structure for React+Redux applications. [Redux Toolkit](https://redux-toolkit.js.org/) is used for simplified store setup and usage.
 
 ```bash
 <ROOT>
 ├── coverage            # The output directory for the code coverage report using the test command.
 ├── dist                # The output directory for compilation using the build command.
 ├── node_modules        # Third party packages and dependencies.
-├── server              # Common source code, shared between the client and the server.
+├── common              # Common source code, shared between the client and the server.
 ├── server              # Markup and source code for the Searchkit server.
 └── src                 # Contains all source code and assets for the client.
     ├── actions         # Redux actions and action creators for state container.
     ├── components      # React user interface components.
     ├── containers      # React page container components.
+    ├── i18n            # Language translations.
     ├── img             # Image assets.
     ├── reducers        # Redux reducers for state container.
     ├── styles          # SASS files for styling.
     └── utilities       # Miscellaneous scripts and helpers.
-├── tests               # Jest unit tests.
-└── translations        # Language translations.
+└── tests               # Jest unit tests.
 ```
 
 ## Technology Stack
@@ -104,7 +92,7 @@ The primary programming language is Flow and JSX in ECMAScript 6. See *Tooling* 
 | [Sass](http://sass-lang.com/)                        | CSS extension language.                                  |
 | [Bulma](https://bulma.io/)                           | CSS framework based on Flexbox.                          |
 | [Jest](https://jestjs.io/)                           | JavaScript testing framework.                            |
-| [Enzyme](https://airbnb.io/enzyme/)                  | JavaScript testing utility for React Components.         |
+| [React Testing Library](https://testing-library.com/)| JavaScript testing utility for React Components.         |
 | [Winston](https://github.com/winstonjs/winston)      | JavaScript logging framework.                            |
 
 See [`package.json`](package.json) in the root directory for a full list of third party libraries used.
@@ -121,7 +109,7 @@ For development, the following software tools are recommended and have full supp
 
 ### Add a new language
 
-1. Create a new language file in the `/translations` directory, using the 2 letter language ISO code for the file name. It is recommended to copy the English file `en.json` and use that as a template/starting point.
+1. Create a new language file in the `/src/i18n/` directory, using the 2 letter language ISO code for the directory name. It is recommended to copy the English file `en/translation.json` and use that as a template/starting point.
 2. Add your translations to the new file. Basic HTML mark-up is supported but its use should be limited. Some strings use variables which are defined as `%(VARIABLE)s`. Do not modify the JSON structure or object keys.
 3. Notify the application about this new file by adding it to the languages array defined in `/src/utilities/language.js`. It is expected that each language will have its own Elasticsearch index. Use the following syntax:
 
@@ -133,7 +121,7 @@ For development, the following software tools are recommended and have full supp
 }
 ```
 
-> Translations can be displayed in mark-up using `<Translate content="filters.topic.label"/>` where the `content` attribute is the JSON path to the specific string required.
+> Translations can be displayed in mark-up using `const { t, i18n } = useTranslation();` and `t("filters.summary.label")` where `t` takes the JSON path to the specific string required.
 
 ### Add a new field
 
@@ -145,55 +133,48 @@ For development, the following software tools are recommended and have full supp
 
 ### Modify search filters
 
-All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`.
+All search filters are created in `/src/containers/SearchPage.jsx` and their Elasticsearch configuration is in `/server/helper.ts`.
 
-1. Configure Elasticsearch CMMStudy fields to filter on:
-   * The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields.
-   * Add additional mark-up for new filters as necessary.
-2. Configure the number of items returned in the filters:
+Example of [RefinementList](https://www.algolia.com/doc/api-reference/widgets/refinement-list/react/) from InstantSearch:
 
-By changing the following field (Generally we have set these to 500):
-
-```jsx
-<SideBar>
-  <NameOfTypeOfFilter
-      id="ItsGivenID-toMatchElasticField"
-      size={500}  // < -- Change number Here
-  />
-  ...
-</SideBar>
+```json
+{
+  attribute: "country",
+  field: "searchField",
+  type: "string",
+  nestedPath: "studyAreaCountries"
+}
 ```
 
-> The Searchkit UI framework provides several filter controls and documentation can be found at <https://searchkit.github.io/searchkit/v2.0.0/>
+```jsx
+<RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible',
+                  list: 'ais-CustomRefinementList'
+                }}/>
+```
+
+High `limit` can be used here because of the `ais-CustomRefinementList` class that makes the values horizontally scrollable. Usually lower `limit`, e.g. 16, is recommended, along with `showMore` set to false. Setting searchable is always recommended for any filter that supports it.
 
 ### Modify sorting fields
 
-The list of available fields for sorting can be modified in the `options` attribute in `/src/components/Topbar.jsx` lines `35-61`.
+The list of available fields for sorting can be modified in the `/server/helper.ts` and then set in `/src/containers/SearchPage.jsx`.
 
 ### Modify Elasticsearch queries
 
-All queries performed against Elasticsearch are defined in one file for easy modification. See `/src/utilities/searchkit.js`.
+Queries performed against Elasticsearch are defined in `/server/helper.ts` and `/server/elasticsearch.ts`. Client being used is set in `/src/utilities/searchkit.js` but also defined in `/server/helper.ts` like most of the queries.
 
 ### Modify Schema.org JSON-LD (used by Google Dataset search)
 
-1. General organisation information and social media links are generated for every page. JSON-LD can be modified in `/src/components/Footer.jsx` on lines `70-83`.
+1. General organisation information and social media links are generated for every page. JSON-LD can be modified in `/src/components/Footer.jsx`.
 2. Dataset metadata is generated on the detail page for a single study record. JSON-LD can be modified in `/src/utilities/metadata.js` using method `getJsonLd()`. This method takes a study returned from `getStudyModel()` as its input.
 
 > Google documentation on supported dataset JSON-LD properties can be found at <https://developers.google.com/search/docs/data-types/dataset>
 
-See [cessda.cdc.versions README](https://github.com/cessda/cessda.cdc.versions/src/main/README.md) for more details regarding adding UI languages, indexes etc.
-
-## Contributing
-
-Please read [CONTRIBUTING](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
 ## Versioning
 
 See [Semantic Versioning](https://semver.org/) for guidance.
-
-## Contributors
-
-You can find the list of contributors in the [CONTRIBUTORS](CONTRIBUTORS.md) file.
 
 ## License
 

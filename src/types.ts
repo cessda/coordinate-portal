@@ -1,4 +1,3 @@
-
 // Copyright CESSDA ERIC 2017-2023
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,15 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// import { Dispatch as ReduxDispatch } from "redux";
+// import { ThunkAction } from "redux-thunk";
+// import { Action } from "./actions";
+// import { rootReducer } from "./reducers";
 
+// export type State = ReturnType<typeof rootReducer>;
 
-import { Dispatch as ReduxDispatch } from "redux";
-import { ThunkAction } from "redux-thunk";
-import { Action } from "./actions";
-import { rootReducer } from "./reducers";
+// export type Dispatch = ReduxDispatch<Action>;
 
-export type State = ReturnType<typeof rootReducer>;
-
-export type Dispatch = ReduxDispatch<Action>;
-
-export type Thunk<Return=void, ExtraArgument=undefined> = ThunkAction<Return, State, ExtraArgument, Action>;
+// export type Thunk<Return = void, ExtraArgument = undefined> = ThunkAction<
+//   Return,
+//   State,
+//   ExtraArgument,
+//   Action
+// >;

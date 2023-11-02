@@ -2,22 +2,22 @@
   max-width: 1280px;
 }
 
-.sk-layout__filters, .sk-layout__results {
+.ais-RefinementList, .ais-Hits {
   margin: 0;
   padding: 0.75rem 0.75rem;
   @extend .column;
 }
 
-.sk-action-bar {
-  margin: 0 0 15px 0;
-}
+// .sk-action-bar {
+//   margin: 0 0 15px 0;
+// }
 
 
 
-.Select--multi .Select-multi-value-wrapper {
-  width: 100%;
-}
+// .Select--multi .Select-multi-value-wrapper {
+//   width: 100%;
+// }
 
-.sk-hits-grid-hit {
-  max-width: none;
-}
+// .sk-hits-grid-hit {
+//   max-width: none;
+// }

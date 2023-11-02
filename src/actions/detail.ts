@@ -11,81 +11,80 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
-import { Thunk } from "../types";
-import { Language, languageMap } from "../utilities/language";
+// import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
+// import { Thunk } from "../types";
+// import { Language, languageMap } from "../utilities/language";
 
-//////////// Redux Action Creator : UPDATE_STUDY
-export const UPDATE_STUDY = "UPDATE_STUDY";
+// //////////// Redux Action Creator : UPDATE_STUDY
+// export const UPDATE_STUDY = "UPDATE_STUDY";
 
-export type UpdateStudyAction = {
-  type: typeof UPDATE_STUDY;
-  displayed: CMMStudy | undefined;
-  similars: Similar[]
-};
+// export type UpdateStudyAction = {
+//   type: typeof UPDATE_STUDY;
+//   displayed: CMMStudy | undefined;
+//   similars: Similar[]
+// };
 
+// //////////// Redux Action Creator : CLEAR_STUDY
+// export const CLEAR_STUDY = "CLEAR_STUDY";
 
-//////////// Redux Action Creator : CLEAR_STUDY
-export const CLEAR_STUDY = "CLEAR_STUDY";
+// export type ClearStudyAction = {
+//   type: typeof CLEAR_STUDY;
+//   languageAvailableIn: Language[];
+// };
 
-export type ClearStudyAction = {
-  type: typeof CLEAR_STUDY;
-  languageAvailableIn: Language[];
-};
+// export function updateStudy(id: string): Thunk<Promise<void>> {
+//   return async (dispatch, getState) => {
+//     const state = getState();
 
-export function updateStudy(id: string): Thunk<Promise<void>> {
-  return async (dispatch, getState) => {
-    const state = getState();
+//     const response = await fetch(`${window.location.origin}/api/sk/_get/${state.language.currentLanguage.index}/${encodeURIComponent(id)}`);
 
-    const response = await fetch(`${window.location.origin}/api/sk/_get/${state.language.currentLanguage.index}/${encodeURIComponent(id)}`);
+//     if (response.ok) {
 
-    if (response.ok) {
+//       // Get the study model from the hit.
+//       const json = await response.json() as { source: CMMStudy, similars: Similar[] };
+//       const study = getStudyModel({ _source: json.source });
 
-      // Get the study model from the hit.
-      const json = await response.json() as { source: CMMStudy, similars: Similar[] };
-      const study = getStudyModel(json.source);
+//       // Dispatch the study for display.
+//       dispatch({
+//         type: UPDATE_STUDY,
+//         displayed: study,
+//         similars: json.similars
+//       });
 
-      // Dispatch the study for display.
-      dispatch({
-        type: UPDATE_STUDY,
-        displayed: study,
-        similars: json.similars
-      });
-      
-    } else {
+//     } else {
 
-      if(response.status === 404) {
-        // If 404, get the languages that the study is available in
-        const languageCodes = await response.json() as string[];
+//       if(response.status === 404) {
+//         // If 404, get the languages that the study is available in
+//         const languageCodes = await response.json() as string[];
 
-        const languagesArray: Language[] = []; 
+//         const languagesArray: Language[] = [];
 
-        for (const code of languageCodes) {
-          const lang = languageMap.get(code);
-          if (lang) {
-            languagesArray.push(lang);
-          }
-        }
+//         for (const code of languageCodes) {
+//           const lang = languageMap.get(code);
+//           if (lang) {
+//             languagesArray.push(lang);
+//           }
+//         }
 
-        // Study not found, clear the current study from the store.
-        dispatch({
-          type: CLEAR_STUDY,
-          languageAvailableIn: languagesArray
-        });
-      } else {
-        // Server issues
-        dispatch({
-          type: CLEAR_STUDY,
-          languageAvailableIn: []
-        });
-        return;
-      }
-    }
-  };
-}
+//         // Study not found, clear the current study from the store.
+//         dispatch({
+//           type: CLEAR_STUDY,
+//           languageAvailableIn: languagesArray
+//         });
+//       } else {
+//         // Server issues
+//         dispatch({
+//           type: CLEAR_STUDY,
+//           languageAvailableIn: []
+//         });
+//         return;
+//       }
+//     }
+//   };
+// }
 
-////////////
+// ////////////
 
-export type DetailAction = 
-  | ClearStudyAction
-  | UpdateStudyAction;
+// export type DetailAction =
+//   | ClearStudyAction
+//   | UpdateStudyAction;
