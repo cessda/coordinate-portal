@@ -92,14 +92,20 @@ describe('Keywords component', () => {
   });
 
   it('should link ELSST terms', async () => {
+    const linkELSST = "https://elsst.cessda.eu/test/";
+
     let promise: Promise<TermURIResult> = Promise.resolve({});
 
     // Mock implementation of getELSSTTerm()
     (getELSSTTerm as jest.MockedFn<typeof getELSSTTerm>).mockImplementation((labels) => {
       const destObject: TermURIResult = {};
 
-      // Provide an ELSST link for each term
-      labels.forEach(l => destObject[l] = `https://elsst.cessda.eu/test/${l}`);
+      // Provide an ELSST link for each term, except when l is 3 to test term not having a link
+      labels.forEach(l => {
+        if (l !== "3") {
+          destObject[l] = `${linkELSST}${l}`;
+        }
+      });
 
       // The test needs to wait for the promise to be resolved
       promise = Promise.resolve(destObject);
@@ -113,14 +119,38 @@ describe('Keywords component', () => {
       keywords: keywords.map(t => getKeyword(t))
     });
 
-    // Wait for the sta
+    // Wait for the promise to be resolved
     await promise;
 
     // When rendering the component should have requested ELSST terms for the keywords
     expect(getELSSTTerm).toHaveBeenCalledWith(keywords, props.lang);
 
-    // The terms should link to ELSST
-    const tagChildren = enzymeWrapper.find(".tag").children();
-    expect((tagChildren.get(0).props.href as string).includes("https://elsst.cessda.eu/test/")).toEqual(true);
+    // The terms with ELSST link provided should link to ELSST
+    const tagsELSSTFound = enzymeWrapper.find(".tag").map((tagElement) => {
+      // Find link to ELLST by it opening in a new tab/window
+      const linkELSSTElement = tagElement.find("a").find({ target: '_blank' });
+      if (linkELSSTElement.exists() && (linkELSSTElement.prop('href') as string).includes(linkELSST)) {
+        return true;
+      }
+      return false;
+    });
+    expect(tagsELSSTFound).toEqual([true, true, false, true]);
+  });
+
+  it('should toggle between showing limited number of keywords and showing all keywords', () => {
+    const keywords = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
+
+    const { enzymeWrapper, props } = setup({
+      keywords: keywords.map(t => getKeyword(t))
+    });
+
+    // There should be limited number of keywords when not expanded
+    expect(enzymeWrapper.state('isExpanded')).toBe(false);
+    expect(enzymeWrapper.find(".tag")).toHaveLength(12);
+
+    // All keywords should be shown when expanded
+    enzymeWrapper.find('.button').at(0).simulate('click');
+    expect(enzymeWrapper.state('isExpanded')).toBe(true);
+    expect(enzymeWrapper.find(".tag")).toHaveLength(15);
   });
 });

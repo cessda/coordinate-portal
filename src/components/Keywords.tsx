@@ -16,7 +16,7 @@ import { Link } from "react-router";
 import { TermVocabAttributes } from "../../common/metadata";
 import { upperFirst } from "lodash";
 import Translate from "react-translate-component";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
 import { TermURIResult, getELSSTTerm } from "../utilities/elsst";
 
 export interface Props {
@@ -84,13 +84,19 @@ export default class Keywords extends React.Component<Props, State> {
       <div className="tags">
         {this.generateElements(this.state.isExpanded ? this.props.keywords : this.props.keywords.slice(0, 12),
           keywords => {
-            // If the term is a valid ELSST term, link to ELSST
+            // If the term is a valid ELSST term, also link to ELSST
             const keywordTerm = upperFirst(keywords.term);
-            if (this.state.elsstURLs[keywords.term]) {
-              return <a href={this.state.elsstURLs[keywords.term]}>{keywordTerm}</a>;
-            } else {
-              return <Link to={`/?keywords.term[0]=${encodeURI(keywords.term)}`}>{keywordTerm}</Link>;
-            }
+            return (<>
+              <Link to={`/?keywords.term[0]=${encodeURI(keywords.term)}`}>{keywordTerm}</Link>
+              {this.state.elsstURLs[keywords.term] &&
+                <span className="is-inline-flex is-align-items-center">&nbsp;(
+                  <a href={this.state.elsstURLs[keywords.term]} rel="noreferrer" target="_blank"
+                    className="is-inline-flex is-align-items-center">
+                    <span className="icon"><FaExternalLinkAlt/></span>ELSST
+                  </a>)
+                </span>
+              }
+            </>)
           }
         )}
       </div>
