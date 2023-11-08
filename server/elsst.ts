@@ -33,7 +33,7 @@ const termCache = new Map<string, string | undefined>();
 
 async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResult> {
 
-  // Request term from ELSST, the label is encoded
+
   const termUris = labels.map(async originalLabel => {
     // Normalise the label by converting it to upper case
     const normalisedLabel = originalLabel.toUpperCase();
@@ -46,6 +46,7 @@ async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResu
       };
     }
 
+    // Request term from ELSST, the label is encoded
     const response = await fetch(`${SKOSMOS_URL}/rest/v1/${ELSST_VOCABULARY}/lookup?label=${encodeURIComponent(normalisedLabel)}&lang=${lang}`);
 
     // Match potentially found - try to extract the URI
