@@ -45,15 +45,17 @@ Please be aware of *Known Issues* (see bottom) before running.
 
 The application can be configured using the following environment variables.
 
-| Environment Variable               | Default Value            | Description
-| ---------------------------------- | ------------------------ | -----------
-| `PASC_DEBUG_MODE`                  | `false`                  | Enables debug mode which outputs additional debugging information in the user interface and web browser console.
-| `PASC_PORT`                        | `8088`                   | The port number which will be used to access this web application.
-| `PASC_ELASTICSEARCH_URL`           | `http://localhost:9200/` | The web address of the Elasticsearch instance which powers all searches.
-| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined`              | The username to use when accessing a secured Elasticsearch cluster.
-| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined`              | The password to use when accessing a secured Elasticsearch cluster.
-| `SEARCHKIT_LOG_LEVEL`              | `info`                   | The logging level used for server side events.
-| `SEARCHKIT_USE_JSON_LOGGING`       | `false`                  | Whether to log using JSON rather than plain text.
+| Environment Variable               | Default Value                 | Description
+| ---------------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `PASC_DEBUG_MODE`                  | `false`                       | Enables debug mode which outputs additional debugging information in the user interface and web browser console. |
+| `PASC_PORT`                        | `8088`                        | The port number which will be used to access this web application.                                               |
+| `PASC_ELASTICSEARCH_URL`           | `http://localhost:9200/`      | The web address of the Elasticsearch instance which powers all searches.                                         |
+| `SEARCHKIT_ELASTICSEARCH_USERNAME` | `undefined`                   | The username to use when accessing a secured Elasticsearch cluster.                                              |
+| `SEARCHKIT_ELASTICSEARCH_PASSWORD` | `undefined`                   | The password to use when accessing a secured Elasticsearch cluster.                                              |
+| `SEARCHKIT_LOG_LEVEL`              | `info`                        | The logging level used for server side events.                                                                   |
+| `SEARCHKIT_SKOSMOS_URL`            | `https://thesauri.cessda.eu/` | The URL of the Skosmos instance that hosts ELSST.                                                                |
+| `SEARCHKIT_ELSST_VOCABULARY`       | `elsst-4`                     | The name of the ELSST vocabulary within Skosmos.                                                                 |
+| `SEARCHKIT_USE_JSON_LOGGING`       | `false`                       | Whether to log using JSON rather than plain text.                                                                |
 
 Set environment variables using the following syntax.
 
@@ -72,7 +74,7 @@ This project follows a best practice structure for React+Redux applications. See
 ├── coverage            # The output directory for the code coverage report using the test command.
 ├── dist                # The output directory for compilation using the build command.
 ├── node_modules        # Third party packages and dependencies.
-├── server              # Common source code, shared between the client and the server.
+├── common              # Common source code, shared between the client and the server.
 ├── server              # Markup and source code for the Searchkit server.
 └── src                 # Contains all source code and assets for the client.
     ├── actions         # Redux actions and action creators for state container.
@@ -90,11 +92,11 @@ This project follows a best practice structure for React+Redux applications. See
 
 Several frameworks are used in this application.
 
-The primary programming language is Flow and JSX in ECMAScript 6. See *Tooling* (below) for compatible IDEs.
+The primary programming language is TypeScript, with TSX extensions used for React component source code. See *Tooling* (below) for compatible IDEs.
 
 | Framework/Technology                                 | Description                                              |
 | ---------------------------------------------------- | -------------------------------------------------------- |
-| JavaScript/[JSX](https://facebook.github.io/jsx/)    | ECMAScript with XML-like syntax extensions.              |
+| [JSX](https://facebook.github.io/jsx/)               | ECMAScript with XML-like syntax extensions.              |
 | [React](https://reactjs.org/)                        | JavaScript library for building web applications.        |
 | [Redux](https://redux.js.org/)                       | Predictable state container for JavaScript applications. |
 | [Searchkit](http://www.searchkit.co/)                | React component library for Elasticsearch.               |
@@ -114,7 +116,6 @@ See [`package.json`](package.json) in the root directory for a full list of thir
 For development, the following software tools are recommended and have full support for the technologies/languages used in this project.
 
 * [JetBrains WebStorm](https://www.jetbrains.com/webstorm/)
-* [Atom](https://atom.io/) with [Nuclide](https://nuclide.io/) (EOL Announced) package
 * [Visual Studio Code](https://code.visualstudio.com/)
 
 ## How To
@@ -123,7 +124,7 @@ For development, the following software tools are recommended and have full supp
 
 1. Create a new language file in the `/translations` directory, using the 2 letter language ISO code for the file name. It is recommended to copy the English file `en.json` and use that as a template/starting point.
 2. Add your translations to the new file. Basic HTML mark-up is supported but its use should be limited. Some strings use variables which are defined as `%(VARIABLE)s`. Do not modify the JSON structure or object keys.
-3. Notify the application about this new file by adding it to the languages array defined in `/src/utilities/language.js`. It is expected that each language will have its own Elasticsearch index. Use the following syntax:
+3. Notify the application about this new file by adding it to the languages array defined in [`/src/utilities/language.ts`](/src/utilities/language.ts). It is expected that each language will have its own Elasticsearch index. Use the following syntax:
 
 ```javascript
 {
@@ -137,22 +138,20 @@ For development, the following software tools are recommended and have full supp
 
 ### Add a new field
 
-1. Each study retrieved from Elasticsearch is first routed through the `getStudyModel()` method located in `/src/utilities/metadata.js`. This cleans the data and applies type restrictions. Add the new field to the object returned from this method. Like other fields, it should be provided from Elasticsearch as a child property of the `data._source` object.
-2. If the field should be displayed on the search page for each result, modify the `/src/components/Result.jsx` component. Add additional HTML mark-up as necessary and the new field will be available as a child property of the `item` object. For example `<p>{item.newField}</p>`.
-3. If the field should be displayed on the study detail page, modify the `/src/components/Detail.jsx` component. Add additional HTML mark-up as necessary and the new field will be available as a child property of the `item` object. For example `<p>{item.newField}</p>`.
+1. Each study retrieved from Elasticsearch is first routed through the `getStudyModel()` function located in [`/common/metadata.ts`](/common/metadata.ts). This cleans the data and applies type restrictions. Add the new field to the object returned from this method. Like other fields, it should be provided from Elasticsearch as a child property of the `data._source` object.
+2. If the field should be displayed on the search page for each result, modify the [`/src/components/Result.tsx`](/src/components/Result.tsx) component. Add additional HTML mark-up as necessary and the new field will be available as a child property of the `item` object. For example `<p>{item.newField}</p>`.
+3. If the field should be displayed on the study detail page, modify the [`/src/components/Detail.tsx`](/src/components/Detail.tsx) component. Add additional HTML mark-up as necessary and the new field will be available as a child property of the `item` object. For example `<p>{item.newField}</p>`.
 4. Remember to add new strings to the translations located in `/src/locales` if necessary (i.e. for the new field label etc.)
-5. Remember to modify the `getJsonLd()` method if you want the new field to be available in the JSON-LD Schema (see how to *Modify Schema.org JSON-LD* below).
+5. Remember to modify the `getJsonLd()` function if you want the new field to be available in the JSON-LD Schema (see how to *Modify Schema.org JSON-LD* below).
 
 ### Modify search filters
 
-All search filters are located in `/src/containers/SearchPage.jsx` lines `78-162`.
+All search filters are located in [`/src/containers/SearchPage.tsx`](/src/containers/SearchPage.tsx).
 
 1. Configure Elasticsearch CMMStudy fields to filter on:
    * The `field` and `fieldOptions` attributes are used to map to Elasticsearch fields.
    * Add additional mark-up for new filters as necessary.
-2. Configure the number of items returned in the filters:
-
-By changing the following field (Generally we have set these to 500):
+2. Configure the number of items returned in the filters by changing the following field (Generally we have set these to 500):
 
 ```jsx
 <SideBar>
@@ -164,20 +163,20 @@ By changing the following field (Generally we have set these to 500):
 </SideBar>
 ```
 
-> The Searchkit UI framework provides several filter controls and documentation can be found at <https://searchkit.github.io/searchkit/v2.0.0/>
+> The Searchkit UI framework provides several filter controls and documentation can be found at <https://searchkit.github.io/searchkit/v2.0.0/>.
 
 ### Modify sorting fields
 
-The list of available fields for sorting can be modified in the `options` attribute in `/src/components/Topbar.jsx` lines `35-61`.
+The list of available fields for sorting can be modified in the `options` attribute in [`/src/components/Topbar.tsx`](/src/components/Topbar.tsx).
 
 ### Modify Elasticsearch queries
 
-All queries performed against Elasticsearch are defined in one file for easy modification. See `/src/utilities/searchkit.js`.
+All queries performed against Elasticsearch are defined in one file for easy modification. See [`/src/utilities/searchkit.ts`](/src/utilities/searchkit.ts).
 
 ### Modify Schema.org JSON-LD (used by Google Dataset search)
 
-1. General organisation information and social media links are generated for every page. JSON-LD can be modified in `/src/components/Footer.jsx` on lines `70-83`.
-2. Dataset metadata is generated on the detail page for a single study record. JSON-LD can be modified in `/src/utilities/metadata.js` using method `getJsonLd()`. This method takes a study returned from `getStudyModel()` as its input.
+1. General organisation information and social media links are generated for every page. JSON-LD can be modified in [`/src/components/Footer.tsx`](/src/components/Footer.tsx).
+2. Dataset metadata is generated on the detail page for a single study record. JSON-LD can be modified in [`/common/metadata.ts`](/common/metadata.ts) using method `getJsonLd()`. This method takes a study returned from `getStudyModel()` as its input.
 
 > Google documentation on supported dataset JSON-LD properties can be found at <https://developers.google.com/search/docs/data-types/dataset>
 

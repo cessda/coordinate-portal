@@ -51,14 +51,14 @@ export function updateStudy(id: string): Thunk<Promise<void>> {
         displayed: study,
         similars: json.similars
       });
-      
+
     } else {
 
       if(response.status === 404) {
         // If 404, get the languages that the study is available in
         const languageCodes = await response.json() as string[];
 
-        const languagesArray: Language[] = []; 
+        const languagesArray: Language[] = [];
 
         for (const code of languageCodes) {
           const lang = languageMap.get(code);
@@ -84,8 +84,6 @@ export function updateStudy(id: string): Thunk<Promise<void>> {
   };
 }
 
-////////////
-
-export type DetailAction = 
+export type DetailAction =
   | ClearStudyAction
   | UpdateStudyAction;

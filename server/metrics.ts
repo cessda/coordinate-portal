@@ -94,10 +94,15 @@ function initialiseMetrics(esClient: Elasticsearch) {
  * Initialise the language gauge by quering Elasticsearch for the amount of studies in each language
  */
 async function languageGauges(esClient: Elasticsearch) {
-  const languages = await esClient.getListOfMetadataLanguages();
-  for (const result of languages) {
-    const currentValue = await esClient.getRecordCountByLanguage(result) || 0;
-    languageGauge.set({ language: result }, currentValue);
+  try {
+    const languages = await esClient.getListOfMetadataLanguages();
+    for (const result of languages) {
+      const currentValue = await esClient.getRecordCountByLanguage(result) || 0;
+      languageGauge.set({ language: result }, currentValue);
+    }
+  } catch(e) {
+    // retry after 5 seconds if ES is not available
+    setTimeout(() => languageGauges(esClient), 5000);
   }
 }
 
@@ -105,9 +110,14 @@ async function languageGauges(esClient: Elasticsearch) {
  * Initialise the endpoint gauge by querying Elasticsearch for the amount of studies per OAI-PMH endpoint
  */
 async function endpointGauges(esClient: Elasticsearch) {
-  const endpoints = await esClient.getEndpoints();
-  for (const result of endpoints) {
-    endpointGauge.set({ endpoint: result.key }, result.doc_count);
+  try {
+    const endpoints = await esClient.getEndpoints();
+    for (const result of endpoints) {
+      endpointGauge.set({ endpoint: result.key }, result.doc_count);
+    }
+  } catch(e) {
+    // retry after 5 seconds if ES is not available
+    setTimeout(() => endpointGauges(esClient), 5000);
   }
 }
 
