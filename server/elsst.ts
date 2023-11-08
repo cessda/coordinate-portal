@@ -26,6 +26,9 @@ interface SkosmosLookupResponse {
 
 export interface TermURIResult extends Record<string, string> {}
 
+/**
+ * Cache for ELSST terms
+ */
 const termCache = new Map<string, string | undefined>();
 
 async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResult> {
@@ -35,6 +38,7 @@ async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResu
     // Normalise the label by converting it to upper case
     const normalisedLabel = originalLabel.toUpperCase();
 
+    // Because the cache can store 'undefined' as a value, we can't use `if(termCache.get(term))` to test for cache presence
     if(termCache.has(normalisedLabel)) {
       return {
         label: originalLabel, // UI expects the original label
