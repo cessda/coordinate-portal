@@ -20,4 +20,4 @@ updates:
       # Group @typescript-eslint dependencies together
       typescript-eslint:
         patterns:
-        - "@typescript-eslint"
+        - "@typescript-eslint/*"
