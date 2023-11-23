@@ -16,7 +16,7 @@ pipeline {
 	environment {
 		product_name = "cdc"
 		module_name = "searchkit"
-		image_tag = "${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME.toLowerCase().replaceAll('[^a-z0-9\\.\\_\\-]', '-')}-${env.BUILD_NUMBER}"
+		image_tag = "${DOCKER_ARTIFACT_REGISTRY}/${product_name}-${module_name}:${env.BRANCH_NAME.toLowerCase().replaceAll('[^a-z0-9\\.\\_\\-]', '-')}-${env.BUILD_NUMBER}"
 		scannerHome = tool 'sonar-scanner'
 	}
 
@@ -90,9 +90,9 @@ pipeline {
 		}
 		stage('Push Docker image') {
 			steps {
-				sh("gcloud auth configure-docker")
+				sh("gcloud auth configure-docker ${ARTIFACT_REGISTRY_HOST}")
 				sh("docker push ${image_tag}")
-				sh("gcloud container images add-tag ${image_tag} ${docker_repo}/${product_name}-${module_name}:${env.BRANCH_NAME}-latest")
+				sh("gcloud container images add-tag ${image_tag} ${DOCKER_ARTIFACT_REGISTRY}/${product_name}-${module_name}:${env.BRANCH_NAME}-latest")
 			}
 			when { branch 'main' }
 		}
