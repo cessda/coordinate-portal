@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { Client, ClientOptions } from '@elastic/elasticsearch'
-import { 
+import {
   AggregationsCardinalityAggregate,
   AggregationsNestedAggregate,
   AggregationsStringTermsAggregate,
@@ -79,7 +79,7 @@ export default class Elasticsearch {
       size: 0,
       index: `${this.indexName}_*`,
       query: { match_all: {} },
-      aggs: { 
+      aggs: {
         unique_id: {
           cardinality: {
             field: "id"
@@ -96,7 +96,7 @@ export default class Elasticsearch {
   async getListOfMetadataLanguages() {
     const res = await this.client.indices.get({
       allow_no_indices: true,
-      index: `${this.indexName}_*` 
+      index: `${this.indexName}_*`
     });
     const indices = Object.keys(res);
 
@@ -128,7 +128,7 @@ export default class Elasticsearch {
     // Unwrap the aggregations
     const aggregation = res.aggregations?.publishers as AggregationsNestedAggregate;
     const publisherBuckets = (aggregation.publisher as AggregationsStringTermsAggregate).buckets;
-    
+
     if (Array.isArray(publisherBuckets)) {
       return publisherBuckets.map(b => b.key);
     } else {
@@ -248,9 +248,9 @@ export default class Elasticsearch {
    * @param lang the language of the records.
    */
   async getRecordCountByLanguage(lang: string): Promise<number | undefined>{
-    const response = await this.client.search({ 
+    const response = await this.client.search({
       index: `cmmstudy_${lang}`,
-      track_total_hits: true 
+      track_total_hits: true
     });
     return Elasticsearch.parseTotalHits(response.hits.total);
   }

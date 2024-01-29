@@ -108,7 +108,7 @@ describe('helper utilities', () => {
       // Status code should be 200
       expect(response.statusCode).toBe(200);
       expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
-      
+
       // Assert fields of renderData are as expected
       const renderData = response._getRenderData() as Metadata;
       expect(renderData).toEqual({
@@ -139,7 +139,7 @@ describe('helper utilities', () => {
       // Status code should be 200
       expect(response.statusCode).toBe(200);
       expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
-      
+
       // Assert fields of renderData are as expected
       const renderData = response._getRenderData() as Metadata;
       expect(renderData).toEqual({

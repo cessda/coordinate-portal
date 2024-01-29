@@ -56,16 +56,16 @@ describe('elasticsearch utilities', () => {
     it('should return an array of similars', async () => {
       const es = new Elasticsearch("test");
       await expect(es.getSimilars(mockStudy.titleStudy, mockStudy.id, "cmmstudy_en"))
-        .resolves.toStrictEqual([{ 
-          id: mockStudy.id, 
+        .resolves.toStrictEqual([{
+          id: mockStudy.id,
           title: mockStudy.titleStudy
         }]);
-      
+
       // Expect the correct call to have beem made
       expect(es.client.search).toBeCalledWith({
         size: 5,
         index: "cmmstudy_en",
-        query: { 
+        query: {
           bool: {
             must: {
               match: {
