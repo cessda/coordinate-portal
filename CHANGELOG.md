@@ -14,19 +14,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
-## [3.4.1] - 2023-09-26
+## [3.5.0] - 2024-01-29
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10580658.svg)](https://doi.org/10.5281/zenodo.10580658)
 
 ### Additions
 
-- Add a link to access the data of the study ([#606](https://github.com/cessda/cessda.cdc.versions/issues/606))
+- Added a link to access the data of the study ([#606](https://github.com/cessda/cessda.cdc.versions/issues/606))
+- Added randomly chosen keywords below each result in the results list ([#415](https://github.com/cessda/cessda.cdc.versions/issues/415))
+- Implement CDC -> ELSST integration ([#617](https://github.com/cessda/cessda.cdc.versions/issues/617))
+- Modify ELSST link if it contains known prefix to add clang parameter ([#617](https://github.com/cessda/cessda.cdc.versions/issues/617))
 
 ### Changes
 
 - Use a normalised field for the "Topic and Keywords" filter ([#609](https://github.com/cessda/cessda.cdc.versions/issues/609))
+- Optimised the final Docker image by only including assets required by the production server ([PR-183](https://github.com/cessda/cessda.cdc.searchkit/pull/183))
+- Shortened the abstract in the results list ([#415](https://github.com/cessda/cessda.cdc.versions/issues/415))
+- Adjusted responsive placement of buttons on results in the results page ([#611](https://github.com/cessda/cessda.cdc.versions/issues/611)
+- Check that keywords exist for result before adding an element for them ([#611](https://github.com/cessda/cessda.cdc.searchkit/pull/611))
 
 ### Fixes
 
-- Fix Panel elements incorrectly collapsing when a space character is entered ([#610](https://github.com/cessda/cessda.cdc.versions/issues/610))
+- Fixed Panel elements incorrectly collapsing when a space character is entered ([#610](https://github.com/cessda/cessda.cdc.versions/issues/610))
+- Fixed overflow and underflow issues ([#611](https://github.com/cessda/cessda.cdc.versions/issues/611))
 
 ## [3.4.0] - 2023-08-29
 
@@ -330,6 +340,7 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.5.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.5.0
 [3.4.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.1
 [3.4.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.0
 [3.2.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.1
