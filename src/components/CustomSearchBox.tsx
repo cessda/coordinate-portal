@@ -17,7 +17,7 @@ import {
   useInstantSearch,
   useSearchBox,
   UseSearchBoxProps
-} from 'react-instantsearch-hooks-web';
+} from 'react-instantsearch';
 import { useNavigate } from 'react-router-dom';
 
 const CustomSearchBox = (props: UseSearchBoxProps) => {

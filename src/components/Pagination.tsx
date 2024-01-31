@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React from "react";
-import { Pagination as InstantsearchPagination } from "react-instantsearch-hooks-web";
+import { Pagination as InstantsearchPagination } from "react-instantsearch";
 
 const Pagination = () => {
   return (

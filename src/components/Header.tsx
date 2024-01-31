@@ -32,7 +32,7 @@ import {
 import coordinateLogo from '../img/coordinate-logo.png';
 import CustomSearchBox from "./CustomSearchBox";
 import { useLocation } from 'react-router-dom';
-import { UseSearchBoxProps, useClearRefinements, useHitsPerPage, usePagination, useSearchBox, useSortBy } from "react-instantsearch-hooks-web";
+import { UseSearchBoxProps, useClearRefinements, useHitsPerPage, usePagination, useSearchBox, useSortBy } from "react-instantsearch";
 import { hitsPerPageItems, getSortByItems } from "../containers/SearchPage";
 import Tooltip from "./Tooltip";
 

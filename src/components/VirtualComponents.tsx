@@ -11,8 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from 'react';
-import { useRange, UseRangeProps, useRefinementList, UseRefinementListProps } from 'react-instantsearch-hooks-web';
+import { useRange, UseRangeProps, useRefinementList, UseRefinementListProps } from 'react-instantsearch';
 
 function VirtualRefinementList(props: UseRefinementListProps) {
   useRefinementList(props);

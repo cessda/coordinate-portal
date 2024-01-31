@@ -7,12 +7,12 @@ import UserGuidePage from "./containers/UserGuidePage";
 import AccessibilityStatementPage from "./containers/AccessibilityStatementPage";
 import NotFoundPage from "./containers/NotFoundPage";
 import ErrorPage from "./containers/ErrorPage";
-import { InstantSearch } from "react-instantsearch-hooks-web";
+import { InstantSearch } from "react-instantsearch";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { VirtualRefinementList, VirtualRangeInput } from "./components/VirtualComponents";
 import searchClient from "./utilities/searchkit";
-import { history } from 'instantsearch.js/es/lib/routers';
+import { history } from "instantsearch.js/es/lib/routers";
 import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
 

@@ -11,16 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React from "react";
-import ReactDOM from "react-dom";
+// import React from "react";
+// import ReactDOM from "react-dom";
 import Client from "@searchkit/instantsearch-client";
-import Searchkit from "searchkit";
-import {
-  InstantSearch,
-  SearchBox,
-  Hits,
-  RefinementList,
-} from "react-instantsearch-hooks-web";
+// import Searchkit from "searchkit";
+// import {
+//   InstantSearch,
+//   SearchBox,
+//   Hits,
+//   RefinementList,
+// } from "react-instantsearch";
 
 // Create a Searchkit client
 // This is the configuration for Searchkit, specifying the fields to attributes used for search, facets, etc.

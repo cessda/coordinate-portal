@@ -22,7 +22,7 @@ import {
   CurrentRefinements,
   useCurrentRefinements,
   RangeInput,
-} from "react-instantsearch-hooks-web";
+} from "react-instantsearch";
 import Result from "../components/Result";
 import Pagination from "../components/Pagination";
 import _ from "lodash";

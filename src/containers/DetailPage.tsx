@@ -12,10 +12,10 @@
 // limitations under the License.
 
 import React, { useEffect } from "react";
-import { InstantSearch } from "react-instantsearch-hooks-web";
-import searchClient from "../utilities/searchkit";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+// import { InstantSearch } from "react-instantsearch";
+// import searchClient from "../utilities/searchkit";
+// import Footer from "../components/Footer";
+// import Header from "../components/Header";
 import Detail from "../components/Detail"
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
