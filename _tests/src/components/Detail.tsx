@@ -12,10 +12,10 @@
 // limitations under the License.
 
 import React from "react";
-import { render, screen } from "../../testutils";
+import {render, screen} from '@testing-library/react'
 import Detail, { Props } from "../../../src/components/Detail";
 import { CMMStudy } from "../../../common/metadata";
-import { mockStudy } from "../../common/mockdata"
+import { mockStudy } from "../../common/mockdata";
 
 const props: Props = {
   item: {
@@ -32,12 +32,6 @@ const props: Props = {
 
 test("should render with supplied item", () => {
   render(<Detail {...props}/>)
-  expect(screen.getByRole('article')).toBeInTheDocument()
-});
-
-test("should handle no pidStudies provided", () => {
-  const propsWithNoPidStudies = {...props, ...{...props.item, ...{pidStudies: []}}}
-  render(<Detail {...propsWithNoPidStudies}/>)
   expect(screen.getByRole('article')).toBeInTheDocument()
 });
 

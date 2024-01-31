@@ -19,23 +19,27 @@ import { mockStudy } from "../common/mockdata"
 jest.mock('@elastic/elasticsearch', () => ({
   Client: jest.fn(() => ({
     get: jest.fn(() => Promise.resolve({
-      _source: mockStudy
+      body: {
+        _source: mockStudy
+      }
     })),
     search: jest.fn(() => Promise.resolve({
-      aggregations: {
-        unique_id: {
-          value: 1
-        }
-      },
-      hits: {
-        hits: [
-          {
-            _source: mockStudy
-          },
-          {
-            _source: undefined
+      body: {
+        aggregations: {
+          unique_id: {
+            value: 1
           }
-        ]
+        },
+        hits: {
+          hits: [
+            {
+              _source: mockStudy
+            },
+            {
+              _source: undefined
+            }
+          ]
+        }
       }
     }))
   }))
@@ -63,8 +67,10 @@ describe('elasticsearch utilities', () => {
       
       // Expect the correct call to have beem made
       expect(es.client.search).toBeCalledWith({
+        size: 5,
+        index: "cmmstudy_en",
         body: {
-          query: {
+          query: { 
             bool: {
               must: {
                 match: {
@@ -76,11 +82,9 @@ describe('elasticsearch utilities', () => {
                   values: ['1']
                 }
               }
-            },
-          },
-        },
-        index: "cmmstudy_en",
-        size: 5,
+            }
+          }
+        }
       });
     });
   });

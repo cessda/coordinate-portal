@@ -44,6 +44,9 @@ mockedElasticsearch.mockImplementation(() => {
 
 // Import the helper
 import { checkBuildDirectory, Metadata, renderResponse } from '../../server/helper';
+import { ErrorResponseBase } from '@elastic/elasticsearch/lib/api/types';
+import { errors } from '@elastic/elasticsearch';
+import { DiagnosticResult } from '@elastic/elasticsearch';
 
 // Reset the mock after each test
 beforeEach(() => mockedGetStudy.mockReset());
@@ -119,40 +122,38 @@ describe('helper utilities', () => {
       });
     });
 
-    // Don't know how to mock ResponseError with ES8
-    // it('should return 503 on Elasticsearch error', async () => {
-    //   const request = httpMocks.createRequest(requestParameters);
-    //   const response = httpMocks.createResponse();
+    it('should return 503 on Elasticsearch error', async () => {
+      const request = httpMocks.createRequest(requestParameters);
+      const response = httpMocks.createResponse();
 
-    //   // Simulate Elasticsearch returning 500
-    //   // @ts-expect-error - minimal typings
-    //   mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 500 }));
+      // Simulate Elasticsearch returning 500
+      // @ts-expect-error - minimal typings
+      mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 500 }));
 
-    //   await renderResponse(request, response, ejsTemplate);
+      await renderResponse(request, response, ejsTemplate);
 
-    //   // Status code should be 503
-    //   expect(response.statusCode).toBe(503);
-    //   expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
-    //   expect(response._getRenderData()).toEqual({ metadata: {}});
-    // });
+      // Status code should be 503
+      expect(response.statusCode).toBe(503);
+      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
+      expect(response._getRenderData()).toEqual({ metadata: {}});
+    });
 
-    // Don't know how to mock ResponseError with ES8
-    // it('should return 404 when Elasticsearch returns 404', async () => {
+    it('should return 404 when Elasticsearch returns 404', async () => {
 
-    //   const request = httpMocks.createRequest(requestParameters);
-    //   const response = httpMocks.createResponse();
+      const request = httpMocks.createRequest(requestParameters);
+      const response = httpMocks.createResponse();
 
-    //   // Simulate Elasticsearch returning 404
-    //   // @ts-expect-error - minimal typings
-    //   mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 404 }));
+      // Simulate Elasticsearch returning 404
+      // @ts-expect-error - minimal typings
+      mockedGetStudy.mockRejectedValue(new errors.ResponseError({ statusCode: 404 }));
 
-    //   await renderResponse(request, response, ejsTemplate);
+      await renderResponse(request, response, ejsTemplate);
 
-    //   // Status code should be 404
-    //   expect(response.statusCode).toBe(404);
-    //   expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
-    //   expect(response._getRenderData()).toEqual({ metadata: {}});
-    // });
+      // Status code should be 404
+      expect(response.statusCode).toBe(404);
+      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
+      expect(response._getRenderData()).toEqual({ metadata: {}});
+    });
 
     it('should return 404 when Elasticsearch returns nothing', async () => {
       const request = httpMocks.createRequest(requestParameters);

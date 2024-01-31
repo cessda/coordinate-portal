@@ -400,10 +400,10 @@ const Detail = (props: Props) => {
     <div className="metadata-container">
       <div className="info-box is-hidden-touch">
         <section>
-          {generateHeading('topics', 'is-inline-flex', 'info-box-topics')}
+          {generateHeading('topics', 'is-inline-flex mt-0', 'info-box-topics')}
           <Tooltip content={t("metadata.topics.tooltip.content")}
                   ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
-                  classNames={{container: 'mt-3 ml-1'}}/>
+                  classNames={{container: 'mt-10-negative ml-1'}}/>
           <div className="tags mt-2">
             {generateElements(item.classifications, "tag",
               (classifications) => (
