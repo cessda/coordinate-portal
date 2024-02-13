@@ -17,7 +17,7 @@ import { Link } from "react-router";
 import Tooltip from './Tooltip';
 import Panel from "./Panel";
 import Translate from "react-translate-component";
-import { truncate, upperFirst } from "lodash";
+import { upperFirst } from "lodash";
 import { CMMStudy, DataCollectionFreeText, Universe } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
