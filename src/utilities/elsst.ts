@@ -41,7 +41,7 @@ export async function getELSSTTerm(labels: string[], lang: string, signal: Abort
     }
   } catch (error) {
     // Log error on debug level if it was because the fetch got aborted
-    if (error instanceof DOMException && error.message === 'The user aborted a request.'){
+    if (signal.aborted){
       console.debug(`ELSST term fetching was aborted (${error})`);
     } else {
       console.log(`Error while fetching ELSST terms: ${error}`);
