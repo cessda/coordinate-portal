@@ -8,7 +8,9 @@ import { store } from '../src/store';
 
 const Wrapper: React.FC<any> = ({ children }) => (<MemoryRouter><Provider store={store}>{children}</Provider></MemoryRouter>);
 
-const customRender = (ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) => render(ui, { wrapper: Wrapper, ...options });
+function customRender(ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) {
+  return render(ui, { wrapper: Wrapper, ...options });
+}
 
 // re-export everything
 export * from '@testing-library/react';

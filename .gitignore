@@ -114,10 +114,9 @@ target/
 /dist/
 /common/*.js
 /common/*.d.ts
-/common/*.map
 /server/*.js
 /server/*.d.ts
-/server/*.map
+*.js.map
 *.tsbuildinfo
 
 ### Test Coverage files #
