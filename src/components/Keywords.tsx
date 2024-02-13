@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { createRef } from "react";
+import React from "react";
 import { Link, browserHistory } from "react-router";
 import { TermVocabAttributes } from "../../common/metadata";
 import { upperFirst } from "lodash";
@@ -33,7 +33,7 @@ interface State {
 
 export default class Keywords extends React.Component<Props, State> {
 
-  private controllerRef = createRef<AbortController>();
+  private abortController = new AbortController();
 
   constructor(props: Props) {
     super(props);
@@ -44,20 +44,25 @@ export default class Keywords extends React.Component<Props, State> {
   }
 
   componentDidMount(): void {
+    // Reset the abort controller when remounted if triggered
+    if (this.abortController.signal.aborted) {
+      this.abortController = new AbortController();
+    }
     this.getELSSTURLs(this.props.keywords);
   }
 
   componentDidUpdate(prevProps: Readonly<Props>): void {
     if (this.props.keywords !== prevProps.keywords) {
       this.setState({
-        isExpanded: !(this.props.keywords.length > this.props.keywordLimit),
+        isExpanded: this.props.keywords.length <= this.props.keywordLimit,
       });
       this.getELSSTURLs(this.props.keywords);
     }
   }
 
   componentWillUnmount(): void {
-    this.controllerRef.current && this.controllerRef.current.abort();
+    // Cancel ongoing fetch requests
+    this.abortController.abort();
   }
 
   private generateElements<T> (
@@ -80,12 +85,11 @@ export default class Keywords extends React.Component<Props, State> {
   }
 
   private async getELSSTURLs(keywords: TermVocabAttributes[]) {
-    (this.controllerRef as React.MutableRefObject<AbortController>).current = new AbortController();
     // Only get ELSST terms for shown keywords if expanding is disabled
     const elsstTerms = this.props.isExpandDisabled ? keywords.slice(0, this.props.keywordLimit).map(k => k.term) : keywords.map(k => k.term);
-    const elsstURLs = await getELSSTTerm(elsstTerms, this.props.lang, this.controllerRef.current!.signal);
+    const elsstURLs = await getELSSTTerm(elsstTerms, this.props.lang, this.abortController.signal);
 
-    !this.controllerRef.current!.signal.aborted && this.setState({
+    this.setState({
       elsstURLs: elsstURLs
     });
   }

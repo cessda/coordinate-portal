@@ -19,20 +19,26 @@ import { getELSSTTerm } from '../../../src/utilities/elsst';
 import { TermURIResult } from '../../../server/elsst';
 import { Link, browserHistory } from 'react-router';
 
+const promise = Promise.resolve({});
+
 // Mock out the module that sends requests to the server
 jest.mock('../../../src/utilities/elsst.ts', () => {
   return {
     __esModule: true,
-    getELSSTTerm: jest.fn(() => Promise.resolve({}))
+    getELSSTTerm: jest.fn(() => promise)
   }
 });
+
+const initialProps: Props = {
+  keywords: [],
+  lang: "en",
+  keywordLimit: 12
+}
 
 // Mock props and shallow render component for test.
 function setup(providedProps: Partial<Props> = {}) {
   const props: Props = {
-    keywords: [],
-    lang: "en",
-    keywordLimit: 12,
+    ...initialProps,
     ...providedProps
   };
   const enzymeWrapper = shallow(<Keywords {...props} />);
@@ -147,7 +153,7 @@ describe('Keywords component', () => {
   it('should toggle between showing limited number of keywords and showing all keywords', () => {
     const keywords = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
 
-    const { enzymeWrapper, props } = setup({
+    const { enzymeWrapper } = setup({
       keywords: keywords.map(t => getKeyword(t))
     });
 
@@ -161,18 +167,27 @@ describe('Keywords component', () => {
     expect(enzymeWrapper.find(".tag")).toHaveLength(15);
   });
 
-  it('should abort ELSST term fetch when unmounting', () => {
+  it('should abort ELSST term fetch when unmounting', async () => {
     const keywords = ["1", "2", "3", "4"];
-
-    const { enzymeWrapper, props } = setup({
-      keywords: keywords.map(t => getKeyword(t))
-    });
 
     const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
 
+    const { enzymeWrapper } = setup({
+      keywords: keywords.map(t => getKeyword(t))
+    });
+
+    expect(abortSpy).toBeCalledTimes(0);
+
+    // Await the promise - needed because otherwise setState() could be called on the unmounted component
+    // See https://github.com/enzymejs/enzyme/issues/2278 for a description of the issue
+    await promise;
+
+    // Unmount the component
     enzymeWrapper.unmount();
 
     expect(abortSpy).toBeCalledTimes(1);
+
+    // Restore the original implementation
     abortSpy.mockRestore();
   });
 
