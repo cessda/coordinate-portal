@@ -31,6 +31,7 @@ const initialState: DetailState = {
 export const updateStudy = createAsyncThunk('search/updateStudy', async (id: string, { getState }) => {
     const { language } = getState() as { language: LanguageState };
     let study = undefined;
+    let similars: Similar[] = [];
 
     const response = await fetch(`${window.location.origin}/api/sk/_get/${language.currentLanguage.index}/${encodeURIComponent(id)}`);
     //console.log(response);
@@ -39,9 +40,9 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
       // Get the study model from the hit.
       const json = await response.json() as { source: CMMStudy, similars: Similar[] };
       study = getStudyModel({ _source: json.source });
+      similars = json.similars
 
     } else {
-
       if(response.status === 404) {
         // If 404, get the languages that the study is available in
         const languageCodes = await response.json() as string[];
@@ -56,7 +57,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
         }
       }
     }
-    return study;
+    return {study: study, similars: similars};
   }
 );
 
@@ -72,7 +73,8 @@ const detailSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateStudy.fulfilled, (state, action) => {
-      state.study = action.payload;
+      state.study = action.payload.study;
+      state.similars = action.payload.similars;
     });
   },
 });

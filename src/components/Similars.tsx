@@ -12,22 +12,24 @@
 // limitations under the License.
 
 import React from "react";
-import { AnyAction, bindActionCreators } from "redux";
-//import type { State } from "../types";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "../hooks";
+import { Similar } from "../../common/metadata";
 
-const Similars = () => {
-  const { t, i18n } = useTranslation();
-  const similars = useAppSelector((state) => state.detail.similars);
+export interface Props {
+  similars: Similar[];
+}
+
+const Similars = (props: Props) => {
+  const { t } = useTranslation();
+  const similars = props.similars;
 
   const links: JSX.Element[] = [];
 
   for (let i = 0; i < similars.length; i++) {
     // Construct the similar URL
     links.push(
-      <Link key={i} to={"/detail?q=" + similars[i].id}>
+      <Link key={i} to={"/detail/" + similars[i].id} className="subtitle">
         {similars[i].title}
       </Link>
     );
@@ -35,81 +37,20 @@ const Similars = () => {
 
   return (
     <div className="similars">
-      {links}
-      {links.length === 0 && <p>{t("similarResults.notAvailable")}</p>}
+      <h2 className="main mb-2">{t("similarResults.heading")}</h2>
+      {links.length > 0 ? (
+        <ul className="mb-4">
+          {links.map((link, index) => (
+            <li key={index} className="mb-1">
+              {link}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>{t("similarResults.notAvailable")}</p>
+      )}
     </div>
   );
 };
 
 export default Similars;
-
-// export function mapStateToProps(state: Pick<State, "detail">) {
-//   return {
-//     similars: state.detail.similars,
-//   };
-// }
-
-// export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
-//   return {
-//     push: bindActionCreators(push, dispatch),
-//   };
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Similars);
-
-// import React, { Component } from "react";
-// import { connect, Dispatch } from "react-redux";
-// import { AnyAction, bindActionCreators } from "redux";
-// import type { State } from "../types";
-// import { push } from "react-router-redux";
-// import { Link } from "react-router-dom";
-// import { useTranslation } from "react-i18next";
-
-// export type Props = ReturnType<typeof mapDispatchToProps> &
-//   ReturnType<typeof mapStateToProps>;
-
-// export class Similars extends Component<Props> {
-//   render() {
-//     const { similars } = this.props;
-
-//     const { t, i18n } = useTranslation();
-
-//     const links: JSX.Element[] = [];
-
-//     for (let i = 0; i < similars.length; i++) {
-//       // Construct the similar URL
-//       links.push(
-//         <Link
-//           key={i}
-//           to={{
-//             pathname: "/detail",
-//             query: { q: similars[i].id },
-//           }}
-//         >
-//           {similars[i].title}
-//         </Link>
-//       );
-//     }
-
-//     return (
-//       <div className="similars">
-//         {links}
-//         {links.length === 0 && <p>{t("similarResults.notAvailable")}</p>}
-//       </div>
-//     );
-//   }
-// }
-
-// export function mapStateToProps(state: Pick<State, "detail">) {
-//   return {
-//     similars: state.detail.similars,
-//   };
-// }
-
-// export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
-//   return {
-//     push: bindActionCreators(push, dispatch),
-//   };
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Similars);

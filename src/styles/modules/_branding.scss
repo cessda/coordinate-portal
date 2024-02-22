@@ -30,7 +30,12 @@ $dark_grey: #4e4d56;
   display: inline-block;
   margin-top:5px;
 }
-.side-column .index {
+.side-column .index, .side-column .similars {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .main {
     font-size: 1.25rem;
     font-weight: 700;

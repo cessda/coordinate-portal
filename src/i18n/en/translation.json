@@ -151,6 +151,7 @@
     "heading": "Similar results",
     "notAvailable": "No similar results found."
   },
+  "index": "Index",
   "export": "Export",
   "exportMetadata": "Export metadata",
   "exportCitation": "Export citation",
@@ -280,6 +281,11 @@
   },
   "api": {
     "label": "REST API"
+  },
+  "loader": {
+    "loading": "Loading data...",
+    "error": "Error loading data",
+    "noMetadata": "No study metadata found with given ID"
   },
   "datacatalogue": "COORDINATE Portal"
 }

@@ -58,6 +58,9 @@ const Root = () => {
           return `${origin}${pathname}?${queryString}`;
         }        
       },
+      // Whether the URL is cleaned up from active refinements when the router is disposed of
+      cleanUrlOnDispose: true,
+      // Number of milliseconds the router waits before writing the new URL to the browser
       writeDelay: 400
     }),
     stateMapping: {
@@ -103,10 +106,17 @@ const Root = () => {
     },
   };
 
+  const future = {
+    // If false, each widget unmounting will also remove its state, even if multiple widgets read that UI state
+    // If true, each widget unmounting will only remove its state if it's the last of its type
+    preserveSharedStateOnUnmount: true
+  }
+
   return (
     <InstantSearch searchClient={searchClient}
                   indexName={index}
                   routing={routing}
+                  future={future}
                   // initialUiState={{
                   //   [index]: {
                   //     query: '',

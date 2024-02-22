@@ -13,51 +13,18 @@
 
 import React from "react";
 import { HeadingEntry } from "../containers/DetailPage";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaAngleLeft } from "react-icons/fa";
 
 export interface Props {
   headings: HeadingEntry[];
 }
 
-// Extend the Searchkit Panel component to support tooltips and translations.
 const DetailIndex = ({ headings }: Props) => {
-  // let titleNode
-  // if (collapsable) {
-  //   titleNode = (
-  //     <div onClick={() => { setCollapsed(collapsed => !collapsed) }}>
-  //       {title}
-  //     </div>
-  //   )
-  // } else {
-  //   titleNode = <div>{title}</div>
-  // }
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  function handleKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      event.stopPropagation();
-      navigate(-1);
-    }
-  };
+  const { t } = useTranslation();
 
   return (
     <div className="float index">
-      {location.state?.from === "/" &&
-        <a className="button no-border focus-visible pl-0 mb-2"
-          tabIndex={0}
-          onClick={() => navigate(-1)}
-          onKeyDown={(e) => handleKeyDown(e)}>
-          <span className="icon is-small">
-            <FaAngleLeft />
-          </span>
-          <span>{t("backToSearch")}</span>
-        </a>
-      }
+      <h2 className="main mb-2">{t("index")}</h2>
       <ul>
         {headings.map((entry) => {
           const key = Object.keys(entry)[0]; // Get the key of the current entry
@@ -66,7 +33,6 @@ const DetailIndex = ({ headings }: Props) => {
 
           return (
             <li key={id} className={classNames}>
-              {/* {level === 'title' ? <h2>{translation}</h2> : <h3>{translation}</h3>} */}
               <a href={`#${id}`} className={level}>{translation}</a>
             </li>
           );

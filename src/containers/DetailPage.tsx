@@ -20,10 +20,12 @@ import Detail from "../components/Detail"
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { updateStudy } from "../reducers/detail";
-import { Await, LoaderFunction, useLoaderData } from "react-router-dom";
+import { Await, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { store } from "../store";
 import DetailIndex from "../components/DetailIndex";
 import { getJsonLd } from '../../common/metadata';
+import Similars from "../components/Similars";
+import { FaAngleLeft } from "react-icons/fa";
 
 type Heading = {
   id: string;
@@ -36,22 +38,24 @@ export type HeadingEntry = {
 };
 
 export const studyLoader: LoaderFunction = async ({ params }) => {
-  const study = await store.dispatch(updateStudy(`${params.id}`));
-  return { study };
+  const data = await store.dispatch(updateStudy(`${params.id}`));
+  return { data };
 };
 
 const DetailPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   //const dispatch = useAppDispatch();
-  const { study } = useLoaderData() as ReturnType<typeof studyLoader>;
+  const { data } = useLoaderData() as ReturnType<typeof studyLoader>;
   // const totalStudies = useAppSelector((state) => state.search.totalStudies);
 
   useEffect(() => {
     // Update the JSON-LD representation
     const jsonLDElement = document.getElementById("json-ld");
 
-    if (study.payload) {
-      const elementString = '<script id="json-ld" type="application/ld+json">' + JSON.stringify(getJsonLd(study.payload)) + '</script>';
+    if (data.payload.study) {
+      const elementString = '<script id="json-ld" type="application/ld+json">' + JSON.stringify(getJsonLd(data.payload.study)) + '</script>';
       if (jsonLDElement) {
         $(jsonLDElement).replaceWith(elementString);
       } else {
@@ -64,9 +68,17 @@ const DetailPage = () => {
     }
   }, []);
 
+  function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      event.stopPropagation();
+      navigate(-1);
+    }
+  };
+
   // Determines the order for index in left side column but not for the actual content
   const headings: HeadingEntry[] = [
-    {summary: {id: 'summary-information', level: 'main', translation: t("metadata.summaryInformation")}},
+    {summary: {id: 'summary-information', level: 'title', translation: t("metadata.summaryInformation")}},
     {title: {id: 'title', level: 'subtitle', translation: t("metadata.studyTitle")}},
     {creator: {id: 'creator', level: 'subtitle', translation: t("metadata.creator")}},
     {pid: {id: 'pid', level: 'subtitle', translation: t("metadata.studyPersistentIdentifier")}},
@@ -91,17 +103,35 @@ const DetailPage = () => {
   return(
     <div className="columns">
       <div className="column is-3 side-column">
+        {location.state?.from === "/" &&
+          <a className="button no-border focus-visible pl-0 mb-2"
+            tabIndex={0}
+            onClick={() => navigate(-1)}
+            onKeyDown={(e) => handleKeyDown(e)}>
+            <span className="icon is-small">
+              <FaAngleLeft />
+            </span>
+            <span>{t("backToSearch")}</span>
+          </a>
+        }
+        <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
+          <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
+            {(data) => {
+              return <Similars similars={data.payload.similars ? data.payload.similars : []}/>
+            }}
+          </Await>
+        </React.Suspense>
         <DetailIndex headings={headings}/>
       </div>
       <div className="column is-9">
-        <React.Suspense fallback={<p>Loading data...</p>}>
-          <Await resolve={study} errorElement={<p>Error loading data</p>}>
-            {(study) => {
-              if(study.payload){
-                return <Detail item={study.payload} headings={headings}/>
+        <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
+          <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
+            {(data) => {
+              if(data.payload.study){
+                return <Detail item={data.payload.study} headings={headings}/>
               }
               else {
-                return <p>No study metadata found with given ID</p>
+                return <p>{t("loader.noMetadata")}</p>
               }
             }}
           </Await>
