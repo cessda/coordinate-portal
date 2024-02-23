@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -13,7 +13,6 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Panel from "./Panel";
 import { truncate, upperFirst } from "lodash";
 import {
   CMMStudy,
@@ -51,7 +50,7 @@ interface Option {
 }
 
 const Detail = (props: Props) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const language = useAppSelector((state) => state.language);
 
   const item = props.item;
@@ -63,20 +62,6 @@ const Detail = (props: Props) => {
   const [keywordsExpanded, setKeywordsExpanded] = useState(props.item.abstract.length > truncatedKeywordsLength);
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
-
-  // componentDidUpdate(prevProps: Props) {
-  //   // If the item has changed, reset the expanded state of the abstract
-  //   if (this.props.item.id !== prevProps.item.id) {
-  //     this.setState(() => ({
-  //       abstractExpanded: !(
-  //         this.props.item.abstract.length > Detail.truncatedAbstractLength
-  //       ),
-  //       keywordsExpanded: !(
-  //         this.props.item.keywords.length > Detail.truncatedKeywordsLength
-  //       ),
-  //     }));
-  //   }
-  // }
 
   const formatter = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR)
@@ -523,11 +508,6 @@ const Detail = (props: Props) => {
             <Tooltip content={t("metadata.methodology.tooltip.content")}
                     ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
                     classNames={{container: 'mt-3 ml-1'}}/>
-            {/* <Panel title={<h2>{t("metadata.methodology.label")}</h2>}
-                  tooltip={<Tooltip content={<>{t("metadata.methodology.tooltip.content")}</>}
-                                    ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}/>}
-                  className="classifications"
-                  collapsable={false}> */}
             {generateHeading('collPeriod')}
             <>
               {formatDate(
@@ -563,13 +543,7 @@ const Detail = (props: Props) => {
             {generateHeading('collMode')}
             {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
           </section>
-          {/* </Panel> */}
 
-          {/* <Panel
-            className="section-header"
-            title={<h2>{t("metadata.access")}</h2>}
-            collapsable={false}
-          > */}
           <section>
             {generateHeading('access')}
             {generateHeading('publisher')}
@@ -588,13 +562,7 @@ const Detail = (props: Props) => {
               )
             )}
           </section>
-          {/* </Panel> */}
 
-          {/* <Panel title={<h2>{t("metadata.topics.label")}</h2>}
-                  tooltip={<Tooltip content={t("metadata.topics.tooltip.content")}
-                                    ariaLabel={t("metadata.topics.tooltip.ariaLabel")}/>}
-                  className="classifications"
-                  collapsable={false}> */}
           <section>
             {generateHeading('topics', 'is-inline-flex')}
             <Tooltip content={t("metadata.topics.tooltip.content")}
@@ -610,13 +578,7 @@ const Detail = (props: Props) => {
               )}
             </div>
           </section>
-          {/* </Panel> */}
 
-          {/* <Panel title={<h2>{t("metadata.keywords.label")}</h2>}
-                  tooltip={<Tooltip content={t("metadata.keywords.tooltip.content")}
-                                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}/>}
-                  className="keywords"
-                  collapsable={false}> */}
           <section>
             {generateHeading('keywords', 'is-inline-flex')}
             <Tooltip content={t("metadata.keywords.tooltip.content")}
@@ -654,13 +616,7 @@ const Detail = (props: Props) => {
               </a>
             )}
           </section>
-          {/* </Panel> */}
 
-          {/* <Panel
-            className="section-header"
-            title={<h2>{t("metadata.relatedPublications")}</h2>}
-            collapsable={false}
-          > */}
           <section>
             {generateHeading('relPub')}
             {generateElements(
@@ -682,7 +638,6 @@ const Detail = (props: Props) => {
               }
             )}
           </section>
-          {/* </Panel> */}
         </article>
       </div>
     </div>

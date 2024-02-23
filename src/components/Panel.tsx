@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -17,23 +17,16 @@ export interface Props {
   children: JSX.Element | JSX.Element[];
   title?: JSX.Element | string;
   tooltip?: JSX.Element | string;
-  //linkCollapsedState?: boolean;
-  expandMetadataPanels?: boolean;
-  //toggleMetadataPanels: () => ToggleMetadataPanelsAction;
-  key?: any,
-  mod?: string,
-  disabled?: boolean,
+  // disabled?: boolean,
   className?: string,
   collapsable?: boolean,
   defaultCollapsed?: boolean,
 }
 
-// Extend the Searchkit Panel component to support tooltips and translations.
 const Panel = (props: Props) => {
-  const [expandMetadataPanels, setExpandMetadataPanels] = useState(props.expandMetadataPanels ? props.expandMetadataPanels : false);
   const [collapsed, setCollapsed] = useState(props.defaultCollapsed ? props.defaultCollapsed : false);
 
-  const { title, mod, className, disabled, children, collapsable, tooltip } = props;
+  const { title, children, collapsable, tooltip } = props;
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     // If panels contain elements that shouldn't toggle collapse for the container, they need to be excluded here (like 'a' and 'button')
@@ -44,17 +37,6 @@ const Panel = (props: Props) => {
       setCollapsed(!collapsed);
     }
   };
-
-  // let titleNode
-  // if (collapsable) {
-  //   titleNode = (
-  //     <div onClick={() => { setCollapsed(collapsed => !collapsed) }}>
-  //       {title}
-  //     </div>
-  //   )
-  // } else {
-  //   titleNode = <div>{title}</div>
-  // }
 
   return (
     <section className={'panel-container' + (collapsable ? ' collapsable' : '')}

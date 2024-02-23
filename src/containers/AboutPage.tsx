@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -25,10 +25,8 @@ export const metricsLoader: LoaderFunction = async () => {
 };
 
 const AboutPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { metrics } = useLoaderData() as ReturnType<typeof metricsLoader>;
-
-  console.log()
 
   type MetricsCircleProps = {
     amount: number;
@@ -49,8 +47,8 @@ const AboutPage = () => {
   return (
     <div className="columns is-flex is-flex-direction-column is-vcentered">
       <div className="column is-flex is-flex-wrap-wrap is-justify-content-space-around is-8">
-        <React.Suspense fallback={<p>Loading metrics...</p>}>
-          <Await resolve={metrics} errorElement={<p>Error loading metrics</p>}>
+        <React.Suspense fallback={<></>}>
+          <Await resolve={metrics} errorElement={<></>}>
             {(metrics) => {
               if(metrics.payload){
                 return (
@@ -62,7 +60,7 @@ const AboutPage = () => {
                 );
               }
               else {
-                return <p>Unable to retrieve metrics, try again later</p>
+                return <></>
               }
             }}
           </Await>
@@ -88,49 +86,3 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
-
-// import React, { Component } from 'react';
-// import { Layout, LayoutBody, LayoutResults, SearchkitProvider } from 'searchkit';
-// import Header from '../components/Header';
-// import Footer from '../components/Footer';
-// import searchkit from '../utilities/searchkit';
-// import { connect } from 'react-redux';
-// import { useTranslation } from 'react-i18next';
-
-// export class AboutPage extends Component {
-
-//   componentDidMount() {
-//     const { t, i18n } = useTranslation();
-//     document.title = `${t('about.label')} - ${t('datacatalogue')}`;
-
-//     // Remove the JSON-LD representation if present
-//     const jsonLDElement = document.getElementById("json-ld");
-//     if (jsonLDElement) {
-//       jsonLDElement.remove();
-//     }
-//   }
-
-//   render() {
-//     const { t, i18n } = useTranslation();
-//     return (
-//       <SearchkitProvider searchkit={searchkit}>
-//         <Layout>
-//           <Header/>
-//           <div className="container">
-//           <LayoutBody className="columns">
-//             <LayoutResults>
-//               <article className="about-container">
-//                 <h1 className="about-title">{t("about.label")}</h1>
-//                 {t("about.content")}
-//               </article>
-//             </LayoutResults>
-//           </LayoutBody>
-//           </div>
-//           <Footer/>
-//         </Layout>
-//       </SearchkitProvider>
-//     );
-//   }
-// }
-
-// export default connect()(AboutPage);

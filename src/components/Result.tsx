@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import {
   FaAngleDown,
   FaAngleUp,
-  FaExternalLinkAlt,
+  // FaExternalLinkAlt,
   FaLanguage,
 } from "react-icons/fa";
 // import { connect, Dispatch } from "react-redux";
@@ -25,7 +25,7 @@ import { Link, useLocation } from "react-router-dom";
 // import { changeLanguage } from "../actions/language";
 // import { push } from "react-router-redux";
 import { CMMStudy } from "../../common/metadata";
-import getPaq from "../utilities/getPaq";
+// import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
 
@@ -85,12 +85,12 @@ interface ResultProps {
 }
 
 const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const location = useLocation();
 
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage.code);
   // const item = useAppSelector((state) => state.search.displayed[hit.__position]);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   //console.log(hit);
 

@@ -73,8 +73,8 @@ const SearchPage = () => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
-      if (event.target instanceof HTMLElement) {
-        event.target.click();
+      if (event.currentTarget instanceof HTMLElement) {
+        event.currentTarget.click();
       }
     }
   };

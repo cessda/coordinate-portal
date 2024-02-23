@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -39,66 +39,3 @@ const Pagination = () => {
 };
 
 export default Pagination;
-
-// import React from 'react';
-// import {FaChevronLeft, FaChevronRight, FaEllipsisH} from 'react-icons/fa';
-// import {AbstractItemList} from 'searchkit';
-
-// export default class Pagination extends AbstractItemList {
-
-//   render() {
-//     const {items, selectedItems, setItems} = this.props;
-//     const links = [];
-
-//     for (let i = 0; i < items.length; i++) {
-//       if (i === 0 || i === items.length - 1) {
-//         continue;
-//       }
-//       if (items[i].label === '...') {
-//         links.push(
-//           <li key={items[i].key}>
-//             <span className="pagination-ellipsis"><FaEllipsisH/></span>
-//           </li>
-//         );
-//       } else {
-//         const current = items[i].page === selectedItems[0] ? ' is-current' : '';
-//         links.push(
-//           <li key={items[i].key}>
-//             <a className={'pagination-link' + current}
-//                href={'/?p=' + items[i].page}
-//                onClick={(e) => {
-//                  e.preventDefault();
-//                  setItems([items[i].page]);
-//                 }}>
-//               {items[i].label}
-//             </a>
-//           </li>
-//         );
-//       }
-//     }
-
-//     return (
-//       <nav className="pagination is-centered is-small" role="navigation" aria-label="pagination">
-//         <a className="pagination-previous"
-//            href={'/?p=' + items[0].page}
-//            onClick={(e) => {
-//              e.preventDefault();
-//              setItems([items[0].page]);
-//             }}>
-//           <FaChevronLeft/>
-//         </a>
-//         <a className="pagination-next"
-//            href={'/?p=' + items[items.length - 1].page}
-//            onClick={(e) => {
-//              e.preventDefault();
-//              setItems([items[items.length - 1].page]);
-//             }}>
-//           <FaChevronRight/>
-//         </a>
-//         <ul className="pagination-list">
-//           {links}
-//         </ul>
-//       </nav>
-//     );
-//   }
-// }

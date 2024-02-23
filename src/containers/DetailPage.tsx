@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -12,10 +12,6 @@
 // limitations under the License.
 
 import React, { useEffect } from "react";
-// import { InstantSearch } from "react-instantsearch";
-// import searchClient from "../utilities/searchkit";
-// import Footer from "../components/Footer";
-// import Header from "../components/Header";
 import Detail from "../components/Detail"
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
@@ -46,9 +42,7 @@ const DetailPage = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  //const dispatch = useAppDispatch();
   const { data } = useLoaderData() as ReturnType<typeof studyLoader>;
-  // const totalStudies = useAppSelector((state) => state.search.totalStudies);
 
   useEffect(() => {
     // Update the JSON-LD representation

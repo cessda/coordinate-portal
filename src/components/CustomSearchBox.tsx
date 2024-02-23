@@ -13,23 +13,11 @@
 
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useInstantSearch,
-  useSearchBox,
-  UseSearchBoxProps
-} from 'react-instantsearch';
+import { useInstantSearch, useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import { useNavigate } from 'react-router-dom';
 
 const CustomSearchBox = (props: UseSearchBoxProps) => {
-  const { t, i18n } = useTranslation();
-  // const stateQuery = useAppSelector((state) => state.search.query);
-  // const index = useAppSelector((state) => state.search.index);
-
-  // const location = useLocation();
-  // const queryParams = new URLSearchParams(location.search);
-  // const queryParamValue = queryParams.get(`${index}[query]`);
-
-  // const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { query, refine } = useSearchBox(props);
   const { status } = useInstantSearch();
@@ -38,15 +26,6 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
 
   const isSearchStalled = status === 'stalled';
 
-  // useEffect(() => {
-  //   if (queryParamValue) {
-  //     setNewQuery(queryParamValue);
-  //   }
-  //   else {
-  //     setNewQuery('');
-  //   }
-  // }, [queryParamValue]);
-
   function setNewQuery(newQuery: string) {
     if (location.pathname !== "/") {
       navigate("/");
@@ -54,8 +33,8 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
     refine(newQuery);
   }
 
-  const handleChange = (event: { target: { value: string; }; }) => {
-    setInputValue(event.target.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.currentTarget.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

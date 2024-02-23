@@ -1,9 +1,9 @@
 {
-  "name": "COORDINATE Portal",
+  "name": "coordinate-portal",
   "version": "3.2.0",
   "description": "COORDINATE Portal: Child and Youth Wellbeing Thematic View",
   "license": "Apache-2.0",
-  "repository": "bitbucket:cessda/cessda.cdc.searchkit",
+  "repository": "bitbucket:tietoarkisto/coordinate-portal",
   "private": true,
   "scripts": {
     "startdev": "npm run tsc && node startdev.js",
