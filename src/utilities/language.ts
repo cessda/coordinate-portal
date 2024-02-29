@@ -22,17 +22,17 @@ export const languages: readonly Language[] = [
   {
     code: "cs",
     label: "Czech",
-    index: "cmmstudy_cs",
+    index: "coordinate_cs",
   },
   {
     code: "da",
     label: "Danish",
-    index: "cmmstudy_da",
+    index: "coordinate_da",
   },
   {
     code: "nl",
     label: "Dutch",
-    index: "cmmstudy_nl",
+    index: "coordinate_nl",
   },
   {
     code: "en",
@@ -42,37 +42,37 @@ export const languages: readonly Language[] = [
   {
     code: "fi",
     label: "Finnish",
-    index: "cmmstudy_fi",
+    index: "coordinate_fi",
   },
   {
     code: "fr",
     label: "French",
-    index: "cmmstudy_fr",
+    index: "coordinate_fr",
   },
   {
     code: "de",
     label: "German",
-    index: "cmmstudy_de",
+    index: "coordinate_de",
   },
   {
     code: "el",
     label: "Greek",
-    index: "cmmstudy_el",
+    index: "coordinate_el",
   },
   {
     code: "sk",
     label: "Slovakian",
-    index: "cmmstudy_sk",
+    index: "coordinate_sk",
   },
   {
     code: "sl",
     label: "Slovenian",
-    index: "cmmstudy_sl",
+    index: "coordinate_sl",
   },
   {
     code: "sv",
     label: "Swedish",
-    index: "cmmstudy_sv",
+    index: "coordinate_sv",
   },
 ];
 

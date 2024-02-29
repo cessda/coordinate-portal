@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration } from "react-router-dom";
 import SearchPage from "./containers/SearchPage";
 import DetailPage, {studyLoader} from "./containers/DetailPage";
@@ -15,6 +15,7 @@ import searchClient from "./utilities/searchkit";
 import { history } from "instantsearch.js/es/lib/routers";
 import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
+import { languages } from './utilities/language';
 
 // Use simple router to easily check keys for various instantsearch components
 // import { simple } from 'instantsearch.js/es/lib/stateMappings';
@@ -24,12 +25,22 @@ import { useTranslation } from "react-i18next";
 // };
 
 const Root = () => {
-  const { t, i18n } = useTranslation();
-  const index = useAppSelector((state) => state.search.index);
-  const location = useLocation();
+  const { t } = useTranslation();
+  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const locationHook = useLocation();
+  const indices: string[] = languages.map(language => language.index);
+  const onUpdateRef = useRef(() => {});
+
+  useEffect(() => {
+    onUpdateRef.current();
+  }, [locationHook.search]);
 
   const routing = {
     router: history({
+      // Synchronize InstantSearch’s router with changes to query params in react-router (location.search)
+      start(onUpdate) {
+        onUpdateRef.current = onUpdate;
+      },
       parseURL({ qsModule, location }) {
         return qsModule.parse(location.search.slice(1));
       },
@@ -40,23 +51,52 @@ const Root = () => {
       },
       createURL({ qsModule, location, routeState }) {
         const { origin, pathname, hash } = location;
-        // const indexState = routeState['instant_search'] || {};
-        const queryString = qsModule.stringify(routeState);
-  
-        // if (!indexState.query) {
-        //   return `${origin}${pathname}${hash}`;
-        // }
-  
-        // return `${origin}${pathname}?${queryString}${hash}`;
+        // Get query params from URL
+        let queriesFromUrl = qsModule.parse(location.search.slice(1));
+        let queryParams = { ...routeState };
 
-        // Don't add query params in the address if not on front/search page
-        // and don't add ? on front/search page either when there are no actual query params
-        if (pathname !== "/" || queryString === '') {
-          return `${origin}${pathname}`;
+        // Remove sortBy if its value is just index (which means default sort)
+        // Otherwise just get values from InstantSearch state
+        // Not needed if using key param with InstantSearch element
+        if(routeState.sortBy && indices.includes(routeState.sortBy as string)){
+          const { sortBy, ...rest } = queryParams;
+          queryParams = { ...rest };
         }
-        else {
-          return `${origin}${pathname}?${queryString}`;
-        }        
+        // Not sure why it doesn't really handle this correctly by default
+        // e.g. entering keywords=lapset%20(ik%C3%A4ryhm%C3%A4) will not work
+        // but it will still automatically change keywords[0]=lapset%20(ik%C3%A4ryhm%C3%A4)
+        // into it after correctly loading
+        if(routeState.keywords && Array.isArray(routeState.keywords)){
+          routeState.keywords.forEach((keyword, i) => {
+              queryParams[`keywords[${i}]`] = keyword;
+          });
+          delete queryParams.keywords; // Remove the original keywords parameter
+        }
+        // Same issue with classifications / topics as there is with keywords above
+        if(routeState.topics && Array.isArray(routeState.topics)){
+          routeState.topics.forEach((topic, i) => {
+              queryParams[`topics[${i}]`] = topic;
+          });
+          delete queryParams.topics; // Remove the original topics parameter
+        }
+        // Only keep specific query parameters, e.g. lang, from react-router query parameters
+        queriesFromUrl = Object.fromEntries(Object.entries(queriesFromUrl).filter(([key]) =>
+          !Object.keys(routeState).includes(key) && key.startsWith('lang'))
+        );
+
+        // Create query string with InstantSearch state and other query parameters
+        const queryString = qsModule.stringify(
+          {
+            ...queryParams,
+            ...queriesFromUrl,
+          },
+          {
+            addQueryPrefix: true,
+            arrayFormat: 'repeat',
+          }
+        );
+
+        return `${origin}${pathname}${queryString}${hash}`
       },
       // Whether the URL is cleaned up from active refinements when the router is disposed of
       cleanUrlOnDispose: true,
@@ -65,10 +105,9 @@ const Root = () => {
     }),
     stateMapping: {
       stateToRoute(uiState: any) {
-        const indexUiState = uiState[index];
+        const indexUiState = uiState[currentLanguage.index] || {};
         return {
           q: indexUiState.query,
-          // categories: indexUiState.menu?.categories,
           topics: indexUiState.refinementList?.classifications,
           keywords: indexUiState.refinementList?.keywords,
           publisher: indexUiState.refinementList?.publisher,
@@ -77,16 +116,16 @@ const Root = () => {
           timeMethod: indexUiState.refinementList?.timeMethod,
           resultsPerPage: indexUiState.hitsPerPage,
           page: indexUiState.page,
-          sortBy: indexUiState.sortBy,
+          // Could remove the common part of index name but would need to think of a good way to handle it elsewhere
+          // e.g. currentRefinement check on the searchPage since that's where sortBy is used
+          // and the check here in createURL to see if sortBy query param should be shown or not
+          sortBy: indexUiState.sortBy // && indexUiState.sortBy.replace('coordinate_', '')
         };
       },
       routeToState(routeState: any) {
         return {
-          [index]: {
+          [currentLanguage.index]: {
             query: routeState.q,
-            // menu: {
-            //   categories: routeState.categories,
-            // },
             refinementList: {
               classifications: routeState.topics,
               keywords: routeState.keywords,
@@ -99,48 +138,34 @@ const Root = () => {
             },
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
-            sortBy: routeState.sortBy,
+            // Could remove the common part of index name but would need to think of a good way to handle it elsewhere
+            // Currently just the currentRefinement check on the searchPage since that's where sortBy is used
+            // and the check here in createURL to see if sortBy query param should be shown or not
+            sortBy: routeState.sortBy // && routeState.sortBy.replace('coordinate_', '')
           },
         };
-      },
+      }
     },
   };
 
-  const future = {
-    // If false, each widget unmounting will also remove its state, even if multiple widgets read that UI state
-    // If true, each widget unmounting will only remove its state if it's the last of its type
-    preserveSharedStateOnUnmount: true
-  }
-
   return (
     <InstantSearch searchClient={searchClient}
-                  indexName={index}
+                  indexName={currentLanguage.index}
+                  // routing can't use updated values from redux store when key is null
+                  // Could use index as key to make sure everything is always perfect and store values could be used but
+                  // then it re-renders even when not really needed (like switching language on detail page)
+                  //key={key}
                   routing={routing}
-                  future={future}
-                  // initialUiState={{
-                  //   [index]: {
-                  //     query: '',
-                  //     refinementList: {
-                  //       classifications: [],
-                  //       keywords: [],
-                  //       publisher: [],
-                  //       country: [],
-                  //       timeMethod: [],
-                  //     },
-                  //     range: {
-                  //       collectionYear: null,
-                  //     },
-                  //     hitsPerPage: 30,
-                  //     page: 1,
-                  //     sortBy: index,
-                  //   },
-                  // }}
-                  >
+                  future={{
+                    // If false, each widget unmounting will also remove its state, even if multiple widgets read that UI state
+                    // If true, each widget unmounting will only remove its state if it's the last of its type
+                    preserveSharedStateOnUnmount: true
+                  }}>
       <Header />
       <div id="stripe" />
       <main id="main" className="container">
         <ScrollRestoration />
-        {location.pathname !== '/' &&
+        {locationHook.pathname !== '/' &&
           <>
             <VirtualRefinementList attribute="virtual" />
             <VirtualRangeInput attribute="virtual" />
@@ -180,40 +205,3 @@ const App = () => {
 };
 
 export default App;
-
-// import { Component } from "react";
-// import { AnyAction, bindActionCreators } from "redux";
-// import { connect, Dispatch } from "react-redux";
-// import { initSearchkit, updateTotalStudies } from "../actions/search";
-// import { initTranslations } from "../actions/language";
-// import { initThemes } from "../actions/theme";
-
-// interface Props extends ReturnType<typeof mapDispatchToProps> {
-//   children: JSX.Element
-// }
-
-// export class App extends Component<Props> {
-
-//   constructor(props: Props) {
-//     super(props);
-//     this.props.initSearchkit();
-//     this.props.initTranslations();
-//     this.props.initThemes();
-//     this.props.updateTotalStudies();
-//   }
-
-//   render() {
-//     return this.props.children;
-//   }
-// }
-
-// export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
-//   return {
-//     initSearchkit: bindActionCreators(initSearchkit, dispatch),
-//     initTranslations: bindActionCreators(initTranslations, dispatch),
-//     initThemes: bindActionCreators(initThemes, dispatch),
-//     updateTotalStudies: bindActionCreators(updateTotalStudies, dispatch)
-//   };
-// }
-
-// export default connect(null, mapDispatchToProps)(App);

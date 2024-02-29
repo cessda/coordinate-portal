@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { FocusEvent } from "react";
-// import LanguageSelector from "./LanguageSelector";
+import LanguageSelector from "./LanguageSelector";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks";
@@ -25,8 +25,7 @@ import Tooltip from "./Tooltip";
 
 const Header = () => {
   const { t } = useTranslation();
-  const index = useAppSelector((state) => state.search.index);
-
+  const index = useAppSelector((state) => state.language.currentLanguage.index);
   const sortByItems = getSortByItems(index);
 
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ const Header = () => {
     e.target.classList.toggle(className);
   }
 
-  const { refine: refineQuery } = useSearchBox();
+  const { clear: clearQuery } = useSearchBox();
   const { refine: refineFilters } = useClearRefinements();
   const { refine: refinePagination } = usePagination();
   const { refine: refineResultsPerPage } = useHitsPerPage({ items: hitsPerPageItems });
@@ -61,14 +60,15 @@ const Header = () => {
             <img src={ coordinateLogo } alt={t("header.frontPage")}
                 className="cursor-pointer"
                 onClick={() => {
-                  navigate("/");
-                  refineQuery('');
+                  clearQuery();
                   // Root path requires more resets
                   if (location.pathname === "/") {
                     refineFilters();
                     refinePagination(1);
                     refineResultsPerPage(30);
                     refineSortBy(index);
+                  } else {
+                    navigate("/");
                   }
                 }}/>
           </div>
@@ -83,7 +83,7 @@ const Header = () => {
               <span className="header-description" dangerouslySetInnerHTML={{ __html: t("header.portalDescription") }}></span>
             </div>
             <div className="column">
-              <div className="container columns is-vcentered is-flex is-flex-direction-row">
+              <div className="container columns is-variable is-1-mobile is-vcentered is-flex is-flex-direction-row">
                 <div className="column is-narrow skip-link-wrapper is-hidden-mobile">
                       <a href="#main" id="skip-to-main" className="link is-sr-only"
                         onFocus={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
@@ -91,17 +91,19 @@ const Header = () => {
                         {t("header.skipToMain")}
                       </a>
                     </div>
-                <div className="column is-narrow is-flex is-flex-grow-0"></div>
+                <div className="column is-narrow is-flex is-flex-grow-0 is-hidden-mobile"></div>
                 <div className="column">
                   <CustomSearchBox />
-                  {/* <LanguageSelector /> */}
                 </div>
-                <nav className="column is-4 navbar" aria-label="Main">
+                <div className="column is-2">
+                  <LanguageSelector />
+                </div>
+                <nav className="column is-3 navbar" aria-label="Main">
                   <div className="buttons is-right">
                     <Link to="/"
                           onClick={() => {
-                            refineQuery('');
-                            // Only need to reset on the root path
+                            clearQuery();
+                            // Root path requires more resets
                             if (location.pathname === "/") {
                               refineFilters();
                               refinePagination(1);

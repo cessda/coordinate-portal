@@ -32,6 +32,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
     const { language } = getState() as { language: LanguageState };
     let study = undefined;
     let similars: Similar[] = [];
+    let availableLanguages: Language[] = [];
 
     const response = await fetch(`${window.location.origin}/api/sk/_get/${language.currentLanguage.index}/${encodeURIComponent(id)}`);
     //console.log(response);
@@ -47,17 +48,16 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
         // If 404, get the languages that the study is available in
         const languageCodes = await response.json() as string[];
 
-        const languagesArray: Language[] = [];
-
         for (const code of languageCodes) {
           const lang = languageMap.get(code);
           if (lang) {
-            languagesArray.push(lang);
+            availableLanguages.push(lang);
           }
         }
       }
     }
-    return {study: study, similars: similars};
+
+    return {study: study, similars: similars, availableLanguages: availableLanguages};
   }
 );
 

@@ -22,6 +22,7 @@ import {
   CurrentRefinements,
   useCurrentRefinements,
   RangeInput,
+  useSortBy,
 } from "react-instantsearch";
 import Result from "../components/Result";
 import Pagination from "../components/Pagination";
@@ -50,17 +51,23 @@ const getSortByItems = (index: string) => {
 };
 
 const SearchPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
   const toggleSummaryRef = React.createRef() as React.RefObject<HTMLButtonElement>;
   const [showAbstract, setShowAbstract] = useState(true);
 
   // const totalStudies = useAppSelector((state) => state.search.totalStudies);
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
-  const index = useAppSelector((state) => state.search.index);
 
-  const sortByItems = getSortByItems(index);
+  const sortByItems = getSortByItems(currentLanguage.index);
+  const { currentRefinement, refine: refineSortBy } = useSortBy({items: sortByItems});
+
+  // Check if language has changed so sortBy needs to be refined again
+  if(!currentRefinement.includes(currentLanguage.index)){
+    refineSortBy(currentLanguage.index)
+  }
 
   // useEffect(() => {
   //   dispatch(updateTotalStudies());

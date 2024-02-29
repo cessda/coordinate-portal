@@ -36,7 +36,6 @@ import { useAppSelector } from "../hooks";
 export interface Props {
   item: CMMStudy;
   headings: HeadingEntry[];
-  // lang: string;
 }
 
 export interface State {
@@ -51,7 +50,7 @@ interface Option {
 
 const Detail = (props: Props) => {
   const { t } = useTranslation();
-  const language = useAppSelector((state) => state.language);
+  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
 
   const item = props.item;
   const headings = props.headings;
@@ -85,8 +84,7 @@ const Detail = (props: Props) => {
     omitLang?: boolean
   ) {
     const elements: JSX.Element[] = [];
-    // const lang = props.lang;
-    const lang = 'en';
+    const lang = currentLanguage.code;
 
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
@@ -246,7 +244,7 @@ const Detail = (props: Props) => {
       switch (selectedExportMetadataOption.value) {
         case 'json':
           // Fetch the JSON data from the API
-          const jsonResponse = await fetch(`${window.location.origin}/api/json/${language.currentLanguage.index}/${encodeURIComponent(item.id)}`);
+          const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`);
 
           if (jsonResponse.ok) {
             exportData = JSON.stringify(await jsonResponse.json(), null, 2)
@@ -392,7 +390,7 @@ const Detail = (props: Props) => {
           <div className="tags mt-2">
             {generateElements(item.classifications, "tag",
               (classifications) => (
-                <Link to={`/?topics%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`} reloadDocument>
+                <Link to={`/?topics%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                   {upperFirst(classifications.term)}
                 </Link>
               )
@@ -407,7 +405,7 @@ const Detail = (props: Props) => {
           <div className="tags mt-2">
             {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
               (keywords) => (
-                <Link to={`/?keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`} reloadDocument>
+                <Link to={`/?keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
                   {upperFirst(keywords.term)}
                 </Link>
               )
@@ -571,7 +569,7 @@ const Detail = (props: Props) => {
             <div className="tags mt-2">
               {generateElements(item.classifications, "tag",
                 (classifications) => (
-                  <Link to={`/?topics%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`} reloadDocument>
+                  <Link to={`/?topics%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                     {upperFirst(classifications.term)}
                   </Link>
                 )
@@ -587,7 +585,7 @@ const Detail = (props: Props) => {
             <div className="tags mt-2">
               {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
                 (keywords) => (
-                  <Link to={`/?keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`} reloadDocument>
+                  <Link to={`/?keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
                     {upperFirst(keywords.term)}
                   </Link>
                 )

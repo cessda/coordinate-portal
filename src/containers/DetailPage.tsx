@@ -16,12 +16,13 @@ import Detail from "../components/Detail"
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { updateStudy } from "../reducers/detail";
-import { Await, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { store } from "../store";
 import DetailIndex from "../components/DetailIndex";
 import { getJsonLd } from '../../common/metadata';
 import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
+import { updateLanguage } from "../reducers/language";
 
 type Heading = {
   id: string;
@@ -33,7 +34,12 @@ export type HeadingEntry = {
   [key: string]: Heading
 };
 
-export const studyLoader: LoaderFunction = async ({ params }) => {
+export const studyLoader: LoaderFunction = async ({ request, params }) => {
+  const url = new URL(request.url);
+  const lang = url.searchParams.get("lang");
+  if(lang){
+    store.dispatch(updateLanguage(lang));
+  }
   const data = await store.dispatch(updateStudy(`${params.id}`));
   return { data };
 };
@@ -43,6 +49,9 @@ const DetailPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { data } = useLoaderData() as ReturnType<typeof studyLoader>;
+
+  // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
+  // const index = useAppSelector((state) => state.language.currentLanguage.index);
 
   useEffect(() => {
     // Update the JSON-LD representation
@@ -125,7 +134,40 @@ const DetailPage = () => {
                 return <Detail item={data.payload.study} headings={headings}/>
               }
               else {
-                return <p>{t("loader.noMetadata")}</p>
+                const languageLinks: JSX.Element[] = [];
+                const uniqueLanguageCodes = new Set();
+
+                for (let i = 0; i < data.payload.availableLanguages.length; i++) {
+                  const lang = data.payload.availableLanguages[i];
+                  // Check if the language code is already in the set
+                  if (!uniqueLanguageCodes.has(lang.code)) {
+                    uniqueLanguageCodes.add(lang.code);
+                    languageLinks.push(
+                      <Link key={lang.code} to={`${location.pathname}?lang=${lang.code}`}>
+                        {lang.label}
+                      </Link>
+                    );
+                  }
+                }
+
+                return (
+                  <div className="pt-15">
+                    <p className="fs-14 mb-15">
+                      <strong>{t("language.notAvailable.heading")}</strong>
+                    </p>
+                    <p className="fs-14 mb-15">{t("language.notAvailable.content")}</p>
+                    {data.payload.availableLanguages.length > 0 &&
+                      <p className="fs-14 mb-15">{t("language.notAvailable.alternateLanguage")}:{" "}
+                      {languageLinks.map((link, index) => (
+                        <React.Fragment key={index}>
+                          {link}
+                          {index < languageLinks.length - 1 && ", "}
+                        </React.Fragment>
+                      ))}
+                      </p>
+                    }
+                  </div>
+                )
               }
             }}
           </Await>

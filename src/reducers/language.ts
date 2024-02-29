@@ -11,8 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { Language, languages } from "../utilities/language";
+import i18n from "../i18n/config";
 
 export interface LanguageState {
   currentLanguage: Language;
@@ -25,24 +26,34 @@ const initialState: LanguageState = {
 };
 
 const languageSlice = createSlice({
-  name: "search",
+  name: "language",
   initialState: initialState,
   reducers: {
-    changeLanguage(state: LanguageState, action: PayloadAction<string>) {
-      let code = action.payload.toLowerCase();
-      // Only dispatch a change language action if the language has changed.
-      if (code === state.currentLanguage.code) {
-        return;
+    updateLanguage: (state, action) => {
+      let code = action.payload;
+      const language = languages.find(element => element.code === code);
+      let label: string;
+      let index: string;
+
+      if (!language) {
+        code = "en";
+        label = languages.find(element => element.code === code)?.label || '';
+        index = languages.find(element => element.code === code)?.index || '';
+      } else {
+        // Notify Matomo Analytics of language change.
+        // const _paq = getPaq();
+        // _paq.push(['trackEvent', 'Language', 'Change Language', code.toUpperCase()]);
+
+        label = language.label;
+        index = language.index;
       }
-      const language = languages.find((l) => l.code === code);
-      state.currentLanguage = language
-        ? language
-        : languages.find((l) => l.code === "en")!;
+      i18n.changeLanguage(code);
+      state.currentLanguage = {code: code, label: label, index: index};
     },
-  },
+  }
 });
 
-export const { changeLanguage } = languageSlice.actions;
+export const { updateLanguage } = languageSlice.actions;
 
 export default languageSlice.reducer;
 

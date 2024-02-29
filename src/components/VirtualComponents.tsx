@@ -11,7 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useRange, UseRangeProps, useRefinementList, UseRefinementListProps } from 'react-instantsearch';
+import {
+  useRange,
+  UseRangeProps,
+  useRefinementList,
+  UseRefinementListProps,
+  useSortBy,
+  UseSortByProps
+} from 'react-instantsearch';
 
 function VirtualRefinementList(props: UseRefinementListProps) {
   useRefinementList(props);
@@ -25,4 +32,10 @@ function VirtualRangeInput(props: UseRangeProps) {
   return null;
 }
 
-export { VirtualRefinementList, VirtualRangeInput };
+function VirtualSortBy(props: UseSortByProps) {
+  useSortBy(props);
+
+  return null;
+}
+
+export { VirtualRefinementList, VirtualRangeInput, VirtualSortBy };

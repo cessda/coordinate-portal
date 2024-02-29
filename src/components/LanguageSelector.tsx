@@ -12,10 +12,12 @@
 // limitations under the License.
 
 import React from "react";
-import { changeLanguage } from "../reducers/language"
+import { updateLanguage } from "../reducers/language"
 import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { Language } from "../utilities/language";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { useClearRefinements } from "react-instantsearch";
 
 type LanguageOption = {
   label: string;
@@ -23,52 +25,44 @@ type LanguageOption = {
 };
 
 const LanguageSelector = () => {
-  const currentLanguage = useAppSelector(
-    (state) => state.language.currentLanguage
-  );
-  const list = useAppSelector((state) => state.language.list);
+  const language = useAppSelector((state) => state.language);
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  let [searchParams, setSearchParams] = useSearchParams();
+  const { refine: refineFilters } = useClearRefinements({
+    includedAttributes: ['classifications', 'keywords', 'timeMethod']
+  });
 
-  // const languageOptions: LanguageOption[] = list.map((language: Language) => {
-  //   return {
-  //     label: language.label,
-  //     value: language.code
-  //   };
-  // });
-
-  const languageOptions: LanguageOption[] = list.map((lang: Language) => ({
+  const languageOptions: LanguageOption[] = language.list.map((lang: Language) => ({
     label: lang.label,
     value: lang.code,
   }));
 
-  // const languageOptions = [
-  //   {label: "fi", value: "fi"},
-  //   {label: "en", value: "en"}
-  // ]
+  const changeLanguage = (value: string) => {
+    dispatch(updateLanguage(value));
+    const detailRouteRegex = /^\/detail\//;
+    if(location.pathname === '/'){
+      // Reset filters that don't work in another language
+      refineFilters();
+    } else if(detailRouteRegex.test(location.pathname)){
+      // Add lang to query params if on detail page (also triggers navigation)
+      setSearchParams(searchParams => {
+        searchParams.set("lang", value);
+        return searchParams;
+      });
+    }
+  }
 
   return (
     <div className="language-picker">
       <Select
-        // value={currentLanguage.code}
+        value={{ value: language.currentLanguage.code, label: language.currentLanguage.label}}
         options={languageOptions}
         isSearchable={false}
         isClearable={false}
         onChange={(option) => {
           if (option && !Array.isArray(option) && option.valueOf()) {
-            // const currentLocation = browserHistory.getCurrentLocation();
-            // if (currentLocation.pathname === "/") {
-            // Change language directly on the search page
-            dispatch(changeLanguage(option.value));
-            // } else {
-            //   // Change the language parameter in the URL, this triggers the language change and updates the history
-            //   push({
-            //     pathname: currentLocation.pathname,
-            //     query: {
-            //       ...currentLocation.query,
-            //       lang: option.value,
-            //     },
-            //   });
-            // }
+            changeLanguage(option.value);
           }
         }}
       />

@@ -97,19 +97,20 @@ body {
   }
 
   .language-picker {
-    height: 42px;
-    padding-top: 0;
-    padding-right: 15px;
-    font-size: 14px;
-    font-weight: 500;
-    z-index: 2;
+    max-width: 140px;
+    // height: 42px;
+    // padding-top: 0;
+    // padding-right: 15px;
+    // font-size: 14px;
+    // font-weight: 500;
+    // z-index: 2;
 
     @at-root header .language-picker {
-      position: absolute;
-      top: 1px;
-      right: 1px;
+      // position: absolute;
+      // top: 1px;
+      // right: 1px;
       background:#fff;
-      padding-left: 15px;
+      // padding-left: 15px;
       color: #555;
       
      
@@ -117,7 +118,7 @@ body {
       .Select {
         .Select-control {
           .Select-value {
-            line-height: 42px;
+            // line-height: 42px;
 
             .Select-value-label {
               color: #000 !important;

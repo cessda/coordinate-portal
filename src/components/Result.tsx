@@ -88,7 +88,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage.code);
+  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
   // const item = useAppSelector((state) => state.search.displayed[hit.__position]);
   // const dispatch = useAppDispatch();
 
@@ -179,7 +179,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     <div className="list-hit" data-qa="hit">
       <h2 className="title is-6">
         <Link className="focus-visible"
-              to={`detail/${hit.objectID}`}
+              to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
               state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.titleStudy.value || hit.titleStudy }}></span>
         </Link>
@@ -188,7 +188,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
             pathname: "/detail",
             query: {
               q: item.id,
-              lang: currentLanguage,
+              lang: currentLanguage.code,
             },
           }}
         > */}
