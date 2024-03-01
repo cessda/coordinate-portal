@@ -70,7 +70,7 @@ const SearchPage = () => {
 
   // Check if language needs to be changed according to URL query param
   useEffect(() => {
-    if(searchParams.get('lang') && searchParams.get('lang') !== index.substring(index.length - 2)){
+    if(searchParams.get('lang') && searchParams.get('lang') !== currentLanguage.code){
       dispatch(updateLanguage(searchParams.get('lang')));
     }
   });
