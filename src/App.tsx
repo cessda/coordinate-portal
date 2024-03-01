@@ -51,44 +51,34 @@ const Root = () => {
       },
       createURL({ qsModule, location, routeState }) {
         const { origin, pathname, hash } = location;
-        // Get query params from URL
-        let queriesFromUrl = qsModule.parse(location.search.slice(1));
-        let queryParams = { ...routeState };
+        // Combine query params from location and route state while giving preference to route state
+        const combinedQueryParams = { ...qsModule.parse(location.search.slice(1)), ...routeState };
 
         // Remove sortBy if its value is just index (which means default sort)
         // Otherwise just get values from InstantSearch state
         // Not needed if using key param with InstantSearch element
-        if(routeState.sortBy && indices.includes(routeState.sortBy as string)){
-          const { sortBy, ...rest } = queryParams;
-          queryParams = { ...rest };
+        if(combinedQueryParams.sortBy && indices.includes(combinedQueryParams.sortBy as string)){
+          delete combinedQueryParams.sortBy;
         }
         // Not sure why it doesn't really handle this correctly by default
-        // e.g. entering keywords=lapset%20(ik%C3%A4ryhm%C3%A4) will not work
-        // but it will still automatically change keywords[0]=lapset%20(ik%C3%A4ryhm%C3%A4)
-        // into it after correctly loading
-        if(routeState.keywords && Array.isArray(routeState.keywords)){
-          routeState.keywords.forEach((keyword, i) => {
-              queryParams[`keywords[${i}]`] = keyword;
-          });
-          delete queryParams.keywords; // Remove the original keywords parameter
-        }
-        // Same issue with classifications / topics as there is with keywords above
-        if(routeState.topics && Array.isArray(routeState.topics)){
-          routeState.topics.forEach((topic, i) => {
-              queryParams[`topics[${i}]`] = topic;
-          });
-          delete queryParams.topics; // Remove the original topics parameter
-        }
-        // Only keep specific query parameters, e.g. lang, from react-router query parameters
-        queriesFromUrl = Object.fromEntries(Object.entries(queriesFromUrl).filter(([key]) =>
-          !Object.keys(routeState).includes(key) && key.startsWith('lang'))
-        );
+        // e.g. entering a link with ?keywords=youth will not work
+        // but it will still automatically change ?keywords[0]=youth into ?keywords=youth and work just fine
+        // Add brackets to all values that are in an array
+        Object.keys(combinedQueryParams).forEach((key) => {
+          const attribute = key as keyof typeof combinedQueryParams;
+          const attributeValues = combinedQueryParams[key];
+          if (Array.isArray(attributeValues)) {
+            attributeValues.forEach((value, i) => {
+              combinedQueryParams[`${attribute}[${i}]`] = value;
+            });
+            delete combinedQueryParams[attribute];
+          }
+        });
 
         // Create query string with InstantSearch state and other query parameters
         const queryString = qsModule.stringify(
           {
-            ...queryParams,
-            ...queriesFromUrl,
+            ...combinedQueryParams,
           },
           {
             addQueryPrefix: true,
@@ -107,13 +97,14 @@ const Root = () => {
       stateToRoute(uiState: any) {
         const indexUiState = uiState[currentLanguage.index] || {};
         return {
-          q: indexUiState.query,
-          topics: indexUiState.refinementList?.classifications,
+          query: indexUiState.query,
+          classifications: indexUiState.refinementList?.classifications,
           keywords: indexUiState.refinementList?.keywords,
           publisher: indexUiState.refinementList?.publisher,
           collectionYear: indexUiState.range?.collectionYear,
           country: indexUiState.refinementList?.country,
           timeMethod: indexUiState.refinementList?.timeMethod,
+          timeMethodCV: indexUiState.refinementList?.timeMethodCV,
           resultsPerPage: indexUiState.hitsPerPage,
           page: indexUiState.page,
           // Could remove the common part of index name but would need to think of a good way to handle it elsewhere
@@ -125,13 +116,14 @@ const Root = () => {
       routeToState(routeState: any) {
         return {
           [currentLanguage.index]: {
-            query: routeState.q,
+            query: routeState.query,
             refinementList: {
-              classifications: routeState.topics,
+              classifications: routeState.classifications,
               keywords: routeState.keywords,
               publisher: routeState.publisher,
               country: routeState.country,
               timeMethod: routeState.timeMethod,
+              timeMethodCV: routeState.timeMethodCV
             },
             range: {
               collectionYear: routeState.collectionYear,

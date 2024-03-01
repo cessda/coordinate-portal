@@ -29,8 +29,9 @@ const LanguageSelector = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   let [searchParams, setSearchParams] = useSearchParams();
+  const resetAttributes = ['classifications', 'keywords', 'timeMethod'];
   const { refine: refineFilters } = useClearRefinements({
-    includedAttributes: ['classifications', 'keywords', 'timeMethod']
+    includedAttributes: resetAttributes
   });
 
   const languageOptions: LanguageOption[] = language.list.map((lang: Language) => ({
@@ -40,12 +41,33 @@ const LanguageSelector = () => {
 
   const changeLanguage = (value: string) => {
     dispatch(updateLanguage(value));
-    const detailRouteRegex = /^\/detail\//;
-    if(location.pathname === '/'){
+    if (location.pathname === '/') {
       // Reset filters that don't work in another language
       refineFilters();
-    } else if(detailRouteRegex.test(location.pathname)){
-      // Add lang to query params if on detail page (also triggers navigation)
+
+      // Make sure location.search is also reset
+      setSearchParams(searchParams => {
+        const queryParamsObject: { [key: string]: string } = {};
+        searchParams.forEach((value, key) => {
+          queryParamsObject[key] = value;
+        });
+
+        // Remove attributes with indexes (e.g., keywords[0], keywords[1], timeMethod[0], etc.)
+        Object.keys(queryParamsObject).forEach(key => {
+          resetAttributes.forEach(attribute => {
+            if (key.startsWith(`${attribute}[`)) {
+              delete queryParamsObject[key];
+            }
+          });
+        });
+
+        // Convert the modified object back to URLSearchParams
+        const newSearchParams = new URLSearchParams(queryParamsObject);
+
+        newSearchParams.set("lang", value);
+        return newSearchParams;
+      });
+    } else {
       setSearchParams(searchParams => {
         searchParams.set("lang", value);
         return searchParams;

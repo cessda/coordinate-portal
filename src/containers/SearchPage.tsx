@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Hits,
   RefinementList,
@@ -32,6 +32,8 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { toggleMobileFilters, toggleSummary } from "../reducers/search";
 import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
+import { useSearchParams } from "react-router-dom";
+import { updateLanguage } from "../reducers/language";
 
 const hitsPerPageItems = [
   { value: 10, label: 'Show 10 studies' },
@@ -53,7 +55,9 @@ const getSortByItems = (index: string) => {
 const SearchPage = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  let [searchParams, setSearchParams] = useSearchParams();
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const index = currentLanguage.index;
   const toggleSummaryRef = React.createRef() as React.RefObject<HTMLButtonElement>;
   const [showAbstract, setShowAbstract] = useState(true);
 
@@ -61,12 +65,20 @@ const SearchPage = () => {
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
 
-  const sortByItems = getSortByItems(currentLanguage.index);
+  const sortByItems = getSortByItems(index);
   const { currentRefinement, refine: refineSortBy } = useSortBy({items: sortByItems});
 
+  // Check if language needs to be changed according to URL query param
+  useEffect(() => {
+    if(searchParams.get('lang') && searchParams.get('lang') !== index.substring(index.length - 2)){
+      dispatch(updateLanguage(searchParams.get('lang')));
+    }
+  });
+
   // Check if language has changed so sortBy needs to be refined again
-  if(!currentRefinement.includes(currentLanguage.index)){
-    refineSortBy(currentLanguage.index)
+  // Assumes that the index name from sortBy has language tag as the second part when split by underscore
+  if(currentRefinement && currentRefinement.split('_')[1] !== currentLanguage.code){
+    refineSortBy(index);
   }
 
   // useEffect(() => {
