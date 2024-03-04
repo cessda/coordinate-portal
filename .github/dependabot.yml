@@ -23,6 +23,10 @@ updates:
       - dependency-name: "redux-thunk"
         update-types: ["version-update:semver-major"]
     groups:
+      # Group Babel dependencies together
+      babel:
+        patterns:
+        - "@babel/*"
       # Group @typescript-eslint dependencies together
       typescript-eslint:
         patterns:
