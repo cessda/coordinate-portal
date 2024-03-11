@@ -14,6 +14,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [0.2.0] - 2024-04-30
+
+### Additions
+
+- Similar results in Detail view
+- Language select
+
+### Fixes
+
+- Width of input fields for Collection year filter
+- Style of InstantSearch dropdowns when they have :focus-visible pseudo-class
+
+
 ## [0.1.0] - 2023-16-10
 
 ### Additions

@@ -26,6 +26,7 @@ export interface SearchState {
   showMobileFilters: boolean;
   showAdvancedSearch: boolean;
   showFilterSummary: boolean;
+  showAbstract: boolean;
   expandMetadataPanels: boolean;
   displayed: CMMStudy[];
   study: CMMStudy | undefined;
@@ -38,6 +39,7 @@ const initialState: SearchState = {
   showMobileFilters: false,
   showAdvancedSearch: false,
   showFilterSummary: false,
+  showAbstract: true,
   study: undefined,
   expandMetadataPanels: false,
   displayed: [],
@@ -105,6 +107,9 @@ export const searchSlice = createSlice({
     toggleMobileFilters: (state: SearchState, action: PayloadAction<boolean>) => {
       state.showMobileFilters = !action.payload;
     },
+    toggleAbstract: (state: SearchState, action: PayloadAction<boolean>) => {
+      state.showAbstract = !action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateMetrics.fulfilled, (state, action) => {
@@ -116,7 +121,7 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters } =
+export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract } =
   searchSlice.actions;
 
 export default searchSlice.reducer;

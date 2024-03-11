@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Hits,
   RefinementList,
@@ -22,14 +22,13 @@ import {
   CurrentRefinements,
   useCurrentRefinements,
   RangeInput,
-  useSortBy,
 } from "react-instantsearch";
 import Result from "../components/Result";
 import Pagination from "../components/Pagination";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { toggleMobileFilters, toggleSummary } from "../reducers/search";
+import { toggleMobileFilters, toggleSummary, toggleAbstract } from "../reducers/search";
 import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
 import { useSearchParams } from "react-router-dom";
@@ -55,31 +54,28 @@ const getSortByItems = (index: string) => {
 const SearchPage = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  let [searchParams, setSearchParams] = useSearchParams();
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
-  const index = currentLanguage.index;
+  const language = useAppSelector((state) => state.language);
+  const index = language.currentLanguage.index;
   const toggleSummaryRef = React.createRef() as React.RefObject<HTMLButtonElement>;
-  const [showAbstract, setShowAbstract] = useState(true);
-
   // const totalStudies = useAppSelector((state) => state.search.totalStudies);
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
-
+  const showAbstract = useAppSelector((state) => state.search.showAbstract);
   const sortByItems = getSortByItems(index);
-  const { currentRefinement, refine: refineSortBy } = useSortBy({items: sortByItems});
 
-  // Check if language needs to be changed according to URL query param
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortByParam = searchParams.get('sortBy');
   useEffect(() => {
-    if(searchParams.get('lang') && searchParams.get('lang') !== currentLanguage.code){
-      dispatch(updateLanguage(searchParams.get('lang')));
+    // Check if language needs to be updated
+    // Assumes that the index name from sortBy has language tag as the second part when split by underscore
+    if(sortByParam && sortByParam !== index){
+      const sortByParamLangCode = sortByParam?.split('_')[1]
+      dispatch(updateLanguage(sortByParamLangCode));
     }
-  });
-
-  // Check if language has changed so sortBy needs to be refined again
-  // Assumes that the index name from sortBy has language tag as the second part when split by underscore
-  if(currentRefinement && currentRefinement.split('_')[1] !== currentLanguage.code){
-    refineSortBy(index);
-  }
+  }, [sortByParam]);
+  // TODO Gives off a warning when changing language through sortBy query parameter, e.g. clicking on keyword/topic on Detail page
+  // "[InstantSearch.js]: The index named "coordinate_en" is not listed in the `items` of `sortBy`."
+  // Fixed Similar warning on pages that are not the search page ("/") by adding a virtualSortBy with all the possible options
 
   // useEffect(() => {
   //   dispatch(updateTotalStudies());
@@ -239,6 +235,10 @@ const SearchPage = () => {
                         classNames={{
                           input: 'focus-visible',
                           submit: 'focus-visible'
+                        }}
+                        translations={{
+                          separatorElementText: `${t("filters.collectionYear.separator")}`,
+                          submitButtonText: `${t("filters.collectionYear.submitButton")}`,
                         }}/>
                         {/* Shows up in filter summary if set */}
                         {/* min={1900}/> */}
@@ -253,10 +253,16 @@ const SearchPage = () => {
           <div className="column is-half">
             <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
               <div className="column is-half">
-                <HitsPerPage items={hitsPerPageItems}/>
+                <HitsPerPage items={hitsPerPageItems}
+                            classNames={{
+                              select: 'focus-visible'
+                            }}/>
               </div>
               <div className="column is-half">
-                <SortBy items={sortByItems}/>
+                <SortBy items={sortByItems}
+                        classNames={{
+                          select: 'focus-visible'
+                        }}/>
               </div>
             </div>
           </div>
@@ -264,7 +270,7 @@ const SearchPage = () => {
         <Pagination />
         <div className="field show-abstract">
           <input id="switchRoundedInfo" type="checkbox" name="switchRoundedInfo" className="switch is-rounded is-info"
-                checked={showAbstract} onChange={() => (setShowAbstract(!showAbstract))}/>
+                checked={showAbstract} onChange={() => dispatch(toggleAbstract(showAbstract))}/>
           <label htmlFor="switchRoundedInfo">{t("showAbstract")}</label>
         </div>
         <Hits hitComponent={(({ hit }) => ( <Result hit={hit} showAbstract={showAbstract} /> ))} />

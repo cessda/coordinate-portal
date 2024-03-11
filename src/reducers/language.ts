@@ -22,7 +22,7 @@ export interface LanguageState {
 
 const initialState: LanguageState = {
   currentLanguage: languages.find((l) => l.code === "en") as Language,
-  list: languages,
+  list: languages
 };
 
 const languageSlice = createSlice({

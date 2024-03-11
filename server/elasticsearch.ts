@@ -282,7 +282,7 @@ export default class Elasticsearch {
    * @param id the study ID
    * @returns the index names
    */
-  async getIndicesForStudyId(id: string) {
+  async getIndicesForStudyId(id: string, indexPrefix?: string) {
     const res = await this.client.search({
       body: {
         query: {
@@ -294,7 +294,13 @@ export default class Elasticsearch {
       _source: false,
     });
 
-    return res.hits.hits.map((hit: SearchHit) => hit._index);
+    // Filter out indices that do not share the common prefix with the provided index
+    if(indexPrefix){
+      const indices = res.hits.hits.map((hit: SearchHit) => hit._index);
+      return indices.filter((index: string) => index.startsWith(indexPrefix));
+    } else {
+      return res.hits.hits.map((hit: SearchHit) => hit._index);
+    }
   }
 
   /**

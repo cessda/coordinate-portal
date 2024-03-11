@@ -18,8 +18,14 @@ import { updateMetrics } from "../reducers/search";
 import { useTranslation } from "react-i18next";
 import horizonLogo from '../img/horizon-logo.png';
 import cessdaLogo from '../img/cessda-logo.png';
+import { updateLanguage } from "../reducers/language";
 
-export const metricsLoader: LoaderFunction = async () => {
+export const metricsLoader: LoaderFunction = async ({ request, params }) => {
+  const url = new URL(request.url);
+  const lang = url.searchParams.get("lang");
+  if(lang){
+    store.dispatch(updateLanguage(lang));
+  }
   const metrics = await store.dispatch(updateMetrics());
   return { metrics };
 };

@@ -237,7 +237,8 @@ function getSearchkitRouter() {
       const u = e as ElasticError;
       if (u instanceof ResponseError && u.statusCode === 404) {
         // Try to find if the study is available in other languages
-        const indices = await elasticsearch.getIndicesForStudyId(req.params.id);
+        // Assumes that index name can be split by "_" to get common part as [0] and language as [1]
+        const indices = await elasticsearch.getIndicesForStudyId(req.params.id, req.params.index.split("_")[0]);
         res.status(404).json(indices.map((i: string) => i.split("_")[1]));
         return;
       }

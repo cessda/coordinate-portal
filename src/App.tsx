@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration } from "react-router-dom";
-import SearchPage from "./containers/SearchPage";
+import SearchPage, { getSortByItems } from "./containers/SearchPage";
 import DetailPage, {studyLoader} from "./containers/DetailPage";
 import AboutPage, {metricsLoader} from "./containers/AboutPage";
 import UserGuidePage from "./containers/UserGuidePage";
@@ -10,12 +10,12 @@ import ErrorPage from "./containers/ErrorPage";
 import { InstantSearch } from "react-instantsearch";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import { VirtualRefinementList, VirtualRangeInput } from "./components/VirtualComponents";
+import { VirtualRefinementList, VirtualRangeInput, VirtualSortBy } from "./components/VirtualComponents";
 import searchClient from "./utilities/searchkit";
 import { history } from "instantsearch.js/es/lib/routers";
 import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
-import { languages } from './utilities/language';
+import { languages } from "./utilities/language";
 
 // Use simple router to easily check keys for various instantsearch components
 // import { simple } from 'instantsearch.js/es/lib/stateMappings';
@@ -28,7 +28,14 @@ const Root = () => {
   const { t } = useTranslation();
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
   const locationHook = useLocation();
-  const indices: string[] = languages.map(language => language.index);
+
+  // Create an array of all the sortBy options for all the languages
+  let virtualSortByItems: { value: string, label: string }[] = [];
+  languages.forEach(language => {
+    const sortByItems = getSortByItems(language.index);
+    virtualSortByItems = virtualSortByItems.concat(sortByItems);
+  });
+
   const onUpdateRef = useRef(() => {});
 
   useEffect(() => {
@@ -54,12 +61,6 @@ const Root = () => {
         // Combine query params from location and route state while giving preference to route state
         const combinedQueryParams = { ...qsModule.parse(location.search.slice(1)), ...routeState };
 
-        // Remove sortBy if its value is just index (which means default sort)
-        // Otherwise just get values from InstantSearch state
-        // Not needed if using key param with InstantSearch element
-        if(combinedQueryParams.sortBy && indices.includes(combinedQueryParams.sortBy as string)){
-          delete combinedQueryParams.sortBy;
-        }
         // Not sure why it doesn't really handle this correctly by default
         // e.g. entering a link with ?keywords=youth will not work
         // but it will still automatically change ?keywords[0]=youth into ?keywords=youth and work just fine
@@ -107,9 +108,8 @@ const Root = () => {
           timeMethodCV: indexUiState.refinementList?.timeMethodCV,
           resultsPerPage: indexUiState.hitsPerPage,
           page: indexUiState.page,
-          // Could remove the common part of index name but would need to think of a good way to handle it elsewhere
-          // e.g. currentRefinement check on the searchPage since that's where sortBy is used
-          // and the check here in createURL to see if sortBy query param should be shown or not
+          // Could remove the common part of index name but would need to check what else needs to be changed
+          // elsewhere, e.g. Header, LanguageSelector, DetailPage, SearchPage, and how it works
           sortBy: indexUiState.sortBy // && indexUiState.sortBy.replace('coordinate_', '')
         };
       },
@@ -130,9 +130,8 @@ const Root = () => {
             },
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
-            // Could remove the common part of index name but would need to think of a good way to handle it elsewhere
-            // Currently just the currentRefinement check on the searchPage since that's where sortBy is used
-            // and the check here in createURL to see if sortBy query param should be shown or not
+            // Could remove the common part of index name but would need to check what else needs to be changed
+            // elsewhere, e.g. Header, LanguageSelector, DetailPage, SearchPage, and how it works
             sortBy: routeState.sortBy // && routeState.sortBy.replace('coordinate_', '')
           },
         };
@@ -161,12 +160,7 @@ const Root = () => {
           <>
             <VirtualRefinementList attribute="virtual" />
             <VirtualRangeInput attribute="virtual" />
-            {/* <VirtualRefinementList attribute="classifications" />
-            <VirtualRefinementList attribute="keywords" />
-            <VirtualRefinementList attribute="publisher" />
-            <VirtualRefinementList attribute="country" />
-            <VirtualRefinementList attribute="timeMethod" />
-            <VirtualRangeInput attribute="collectionYear" /> */}
+            <VirtualSortBy items={virtualSortByItems} />
           </>
         }
         <Outlet />

@@ -13,7 +13,7 @@
 
 import React, { FocusEvent } from "react";
 import LanguageSelector from "./LanguageSelector";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks";
 import coordinateLogo from '../img/coordinate-logo.png';
@@ -26,12 +26,10 @@ import Tooltip from "./Tooltip";
 const Header = () => {
   const { t } = useTranslation();
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
-  const index = currentLanguage.index;
-  const sortByItems = getSortByItems(index);
+  const sortByItems = getSortByItems(currentLanguage.index);
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
     e.target.classList.toggle(className);
@@ -43,19 +41,15 @@ const Header = () => {
   const { refine: refineResultsPerPage } = useHitsPerPage({ items: hitsPerPageItems });
   const { refine: refineSortBy } = useSortBy({ items: sortByItems });
 
-  // Check whether lang query param should be added to the link or not
-  const addQueryParamLang = () => {
-    if(searchParams.get("lang") && (searchParams.get("lang") !== currentLanguage.code || searchParams.get("lang") !== 'en')){
-      return true
+  const resetQueries = () => {
+    clearQuery();
+    // Root path requires more resets
+    if (location.pathname === "/") {
+      refineFilters();
+      refinePagination(1);
+      refineResultsPerPage(30);
+      refineSortBy(currentLanguage.index);
     }
-    return false;
-  }
-
-  const resetFilters = () => {
-    refineFilters();
-    refinePagination(1);
-    refineResultsPerPage(30);
-    refineSortBy(index);
   }
 
   return (
@@ -77,12 +71,8 @@ const Header = () => {
             <img src={ coordinateLogo } alt={t("header.frontPage")}
                 className="cursor-pointer"
                 onClick={() => {
-                  clearQuery();
-                  // Root path requires more resets
-                  if (location.pathname === "/") {
-                    resetFilters();
-                  }
-                  navigate(addQueryParamLang() ? `/?lang=${currentLanguage.code}` : "/");
+                  resetQueries();
+                  navigate(currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/");
                 }}/>
           </div>
         </div>
@@ -113,13 +103,9 @@ const Header = () => {
                 </div>
                 <nav className="column is-3 navbar" aria-label="Main">
                   <div className="buttons is-right">
-                    <Link to={addQueryParamLang() ? `/?lang=${currentLanguage.code}` : "/"}
+                    <Link to={currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/"}
                           onClick={() => {
-                            clearQuery();
-                            // Root path requires more resets
-                            if (location.pathname === "/") {
-                              resetFilters();
-                            }
+                            resetQueries();
                           }}
                           onFocus={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
                           onBlur={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}

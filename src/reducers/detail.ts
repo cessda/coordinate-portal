@@ -43,16 +43,14 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
       study = getStudyModel({ _source: json.source });
       similars = json.similars
 
-    } else {
-      if(response.status === 404) {
-        // If 404, get the languages that the study is available in
-        const languageCodes = await response.json() as string[];
+    } else if(response.status === 404) {
+      // If 404, get the languages that the study is available in
+      const languageCodes = await response.json() as string[];
 
-        for (const code of languageCodes) {
-          const lang = languageMap.get(code);
-          if (lang) {
-            availableLanguages.push(lang);
-          }
+      for (const code of languageCodes) {
+        const lang = languageMap.get(code);
+        if (lang) {
+          availableLanguages.push(lang);
         }
       }
     }

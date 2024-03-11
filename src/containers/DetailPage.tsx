@@ -135,19 +135,14 @@ const DetailPage = () => {
               }
               else {
                 const languageLinks: JSX.Element[] = [];
-                const uniqueLanguageCodes = new Set();
 
                 for (let i = 0; i < data.payload.availableLanguages.length; i++) {
                   const lang = data.payload.availableLanguages[i];
-                  // Check if the language code is already in the set
-                  if (!uniqueLanguageCodes.has(lang.code)) {
-                    uniqueLanguageCodes.add(lang.code);
-                    languageLinks.push(
-                      <Link key={lang.code} to={`${location.pathname}?lang=${lang.code}`}>
-                        {lang.label}
-                      </Link>
-                    );
-                  }
+                  languageLinks.push(
+                    <Link key={lang.code} to={`${location.pathname}?lang=${lang.code}`}>
+                      {lang.label}
+                    </Link>
+                  );
                 }
 
                 return (

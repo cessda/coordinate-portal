@@ -14,6 +14,7 @@
 import React from "react";
 import { HeadingEntry } from "../containers/DetailPage";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export interface Props {
   headings: HeadingEntry[];
@@ -33,7 +34,7 @@ const DetailIndex = ({ headings }: Props) => {
 
           return (
             <li key={id} className={classNames}>
-              <a href={`#${id}`} className={level}>{translation}</a>
+              <Link to={`#${id}`} className={level} preventScrollReset={true}>{translation}</Link>
             </li>
           );
         })}

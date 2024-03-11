@@ -65,3 +65,11 @@
 .ais-SearchBox-input {
   outline-offset: 1px;
 }
+
+.ais-RangeInput-input {
+  max-width: 100px;
+}
+
+.ais-HitsPerPage-select:focus-visible, .ais-SortBy-select:focus-visible {
+  color: #23263b;
+}

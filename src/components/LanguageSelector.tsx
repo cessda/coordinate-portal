@@ -28,9 +28,9 @@ const LanguageSelector = () => {
   const language = useAppSelector((state) => state.language);
   const dispatch = useAppDispatch();
   const location = useLocation();
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const resetAttributes = ['classifications', 'keywords', 'timeMethod'];
-  const { refine: refineFilters } = useClearRefinements({
+  const { refine: resetFiltersFromArray } = useClearRefinements({
     includedAttributes: resetAttributes
   });
 
@@ -40,39 +40,16 @@ const LanguageSelector = () => {
   }));
 
   const changeLanguage = (value: string) => {
-    dispatch(updateLanguage(value));
     if (location.pathname === '/') {
       // Reset filters that don't work in another language
-      refineFilters();
-
-      // Make sure location.search is also reset
-      setSearchParams(searchParams => {
-        const queryParamsObject: { [key: string]: string } = {};
-        searchParams.forEach((value, key) => {
-          queryParamsObject[key] = value;
-        });
-
-        // Remove attributes with indexes (e.g., keywords[0], keywords[1], timeMethod[0], etc.)
-        Object.keys(queryParamsObject).forEach(key => {
-          resetAttributes.forEach(attribute => {
-            if (key.startsWith(`${attribute}[`)) {
-              delete queryParamsObject[key];
-            }
-          });
-        });
-
-        // Convert the modified object back to URLSearchParams
-        const newSearchParams = new URLSearchParams(queryParamsObject);
-
-        newSearchParams.set("lang", value);
-        return newSearchParams;
-      });
+      resetFiltersFromArray();
     } else {
       setSearchParams(searchParams => {
         searchParams.set("lang", value);
         return searchParams;
       });
     }
+    dispatch(updateLanguage(value));
   }
 
   return (
@@ -83,7 +60,7 @@ const LanguageSelector = () => {
         isSearchable={false}
         isClearable={false}
         onChange={(option) => {
-          if (option && !Array.isArray(option) && option.valueOf()) {
+          if (option) {
             changeLanguage(option.value);
           }
         }}

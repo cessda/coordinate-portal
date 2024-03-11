@@ -390,7 +390,7 @@ const Detail = (props: Props) => {
           <div className="tags mt-2">
             {generateElements(item.classifications, "tag",
               (classifications) => (
-                <Link to={`/?lang=${currentLanguage.code}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                <Link to={`/?sortBy=${currentLanguage.index}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                   {upperFirst(classifications.term)}
                 </Link>
               )
@@ -405,7 +405,7 @@ const Detail = (props: Props) => {
           <div className="tags mt-2">
             {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
               (keywords) => (
-                <Link to={`/?lang=${currentLanguage.code}&keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
+                <Link to={`/?sortBy=${currentLanguage.index}&keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
                   {upperFirst(keywords.term)}
                 </Link>
               )
@@ -569,7 +569,7 @@ const Detail = (props: Props) => {
             <div className="tags mt-2">
               {generateElements(item.classifications, "tag",
                 (classifications) => (
-                  <Link to={`/?lang=${currentLanguage.code}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                  <Link to={`/?sortBy=${currentLanguage.index}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                     {upperFirst(classifications.term)}
                   </Link>
                 )
@@ -585,7 +585,7 @@ const Detail = (props: Props) => {
             <div className="tags mt-2">
               {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
                 (keywords) => (
-                  <Link to={`/?lang=${currentLanguage.code}&keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
+                  <Link to={`/?sortBy=${currentLanguage.index}&keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
                     {upperFirst(keywords.term)}
                   </Link>
                 )

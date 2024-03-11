@@ -47,7 +47,11 @@ const Similars = (props: Props) => {
           ))}
         </ul>
       ) : (
-        <p>{t("similarResults.notAvailable")}</p>
+        <ul className="mb-4">
+          <li>
+            <p>{t("similarResults.notAvailable")}</p>
+          </li>
+        </ul>
       )}
     </div>
   );

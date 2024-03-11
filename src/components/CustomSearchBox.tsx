@@ -14,7 +14,7 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInstantSearch, useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const CustomSearchBox = (props: UseSearchBoxProps) => {
   const { t } = useTranslation();
@@ -23,6 +23,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   const { status } = useInstantSearch();
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const isSearchStalled = status === 'stalled';
 
@@ -65,6 +66,17 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
 
             setInputValue('');
             setNewQuery('');
+
+            // Make sure location.search.query is also reset
+            setSearchParams(searchParams => {
+              const queryParamsObject: { [key: string]: string } = {};
+              searchParams.forEach((value, key) => {
+                queryParamsObject[key] = value;
+              });
+              delete queryParamsObject['query'];
+              const newSearchParams = new URLSearchParams(queryParamsObject);
+              return newSearchParams;
+            });
 
             if (inputRef.current) {
               inputRef.current.focus();

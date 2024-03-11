@@ -95,6 +95,10 @@
       "remove": "Click on <strong>x</strong> to the right of the filter to remove it from this search.",
       "noFilters": "No additional filters have been applied to your search.",
       "close": "Select <strong>Close</strong> to dismiss this window."
+    },
+    "collectionYear": {
+      "separator": "to",
+      "submitButton": "Apply"
     }
   },
   "numberOfResults": {
