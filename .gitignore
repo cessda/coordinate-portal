@@ -117,6 +117,7 @@ target/
 /server/*.js
 /server/*.d.ts
 *.js.map
+*.ts.map
 *.tsbuildinfo
 
 ### Test Coverage files #
