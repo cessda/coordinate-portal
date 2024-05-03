@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.node.json",
   "compilerOptions": {
-    // This project is used as a dependency
     "composite": true,
     "declarationMap": true
   }

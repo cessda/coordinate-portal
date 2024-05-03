@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.node.json",
   "compilerOptions": {
-    // Allows JSON to be loaded as a module
     "resolveJsonModule": true
   },
   "include": ["**/*", "**/*.json"],
