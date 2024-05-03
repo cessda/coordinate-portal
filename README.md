@@ -1,5 +1,10 @@
 # COORDINATE Portal
 
+[![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=coordinate-portal%2Fmain)](https://jenkins.cessda.eu/job/coordinate-portal/job/main/)
+[![Quality Gate Status](https://sonarqube.cessda.eu/api/project_badges/measure?project=coordinate-portal&metric=alert_status)](https://sonarqube.cessda.eu/dashboard?id=coordinate-portal)
+[![Coverage](https://sonarqube.cessda.eu/api/project_badges/measure?project=coordinate-portal&metric=coverage)](https://sonarqube.cessda.eu/dashboard?id=coordinate-portal)
+[![SQAaaS badge shields.io](https://img.shields.io/badge/sqaaas%20software-bronze-e6ae77)](https://api.eu.badgr.io/public/assertions/CeKfNy5qR-CD4OqJuTUt8w "SQAaaS bronze badge achieved")
+
 This repository contains all source code for the COORDINATE Portal web application.
 
 CESSDA's repositories are used for harvesting and indexing with very minimal changes to Elasticsearch mappings:
