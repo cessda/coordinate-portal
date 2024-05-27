@@ -74,6 +74,56 @@ export default class Elasticsearch {
     }));
   }
 
+  /**
+   * Gets related publications from all indices (except excluded) for one study.
+   * @param id the identifier of the study.
+   * @param sizeMax max number of related publications.
+   * @param excludeIndex optionally exclude results from an index.
+   */
+  async getRelatedPublications(id: string, sizeMax: number, excludeIndex?: string) {
+    const query: any = {
+      size: sizeMax,
+      _source: ['relatedPublications'],
+      index: `${this.indexName}_*`,
+      query: {
+        bool: {
+          must: [
+            {
+              match: {
+                _id: id
+              }
+            }
+          ]
+        }
+      }
+    };
+
+    if (excludeIndex) {
+      query.query.bool.must_not = [
+        {
+          term: {
+            _index: excludeIndex
+          }
+        }
+      ];
+    }
+
+    const response = await this.client.search<CMMStudy>(query);
+
+    if (!response.hits.hits) {
+        return [];
+    }
+
+    return response.hits.hits.flatMap(hit => {
+        return (hit._source?.relatedPublications || []).map(publication => ({
+            title: publication.title,
+            holdings: publication.holdings,
+            // Add lang according to the language part of index name
+            lang: hit._index.split('_')[1]
+        }));
+    });
+  }
+
   async getTotalStudies() {
     const response = await this.client.search({
       size: 0,
@@ -249,7 +299,7 @@ export default class Elasticsearch {
    */
   async getRecordCountByLanguage(lang: string): Promise<number | undefined>{
     const response = await this.client.search({
-      index: `cmmstudy_${lang}`,
+      index: `${this.indexName}_${lang}`,
       track_total_hits: true
     });
     return Elasticsearch.parseTotalHits(response.hits.total);

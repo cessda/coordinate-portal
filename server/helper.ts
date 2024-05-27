@@ -107,6 +107,29 @@ function getSearchkitRouter() {
         similars = [];
       }
 
+      if(source){
+        let otherLangPublications: Awaited<ReturnType<typeof elasticsearch.getRelatedPublications>> = [];
+        try {
+          // Get related publications from all other indices
+          otherLangPublications = await elasticsearch.getRelatedPublications(req.params.id, 1000, req.params.index);
+        } catch (e) {
+          elasticsearchErrorHandler(e, res);
+        }
+
+        const selectedLang = req.params.index.split('_')[1];
+        if(source.relatedPublications){
+          // Add lang to the related publications of selected language
+          source.relatedPublications.forEach(publication => {
+            publication.lang = selectedLang;
+          });
+          // Add related publications in other languages
+          source.relatedPublications.push(...otherLangPublications);
+        } else {
+          // Replace original relatedPublications with related publications found in other languages
+          source.relatedPublications = otherLangPublications;
+        }
+      }
+
       // Send the response
       res.send({
         source: source,

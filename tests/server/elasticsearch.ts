@@ -19,7 +19,8 @@ import { mockStudy } from "../common/mockdata"
 jest.mock('@elastic/elasticsearch', () => ({
   Client: jest.fn(() => ({
     get: jest.fn(() => Promise.resolve({
-      _source: mockStudy
+      _source: mockStudy,
+      _index: 'cmmstudy_en'
     })),
     search: jest.fn(() => Promise.resolve({
       aggregations: {
@@ -30,7 +31,8 @@ jest.mock('@elastic/elasticsearch', () => ({
       hits: {
         hits: [
           {
-            _source: mockStudy
+            _source: mockStudy,
+            _index: 'cmmstudy_en'
           },
           {
             _source: undefined
@@ -80,6 +82,22 @@ describe('elasticsearch utilities', () => {
           }
         }
       });
+    });
+  });
+
+  describe('getRelatedPublications()', () => {
+    it('should return related publications along with lang added according to index', async () => {
+      const es = new Elasticsearch("test");
+      await expect(es.getRelatedPublications(mockStudy.id, 1000))
+        .resolves.toStrictEqual([
+          {
+            title: "Related Publication 1",
+            holdings: [
+              "First Holding"
+            ],
+            lang: "en"
+          }
+        ]);
     });
   });
 
