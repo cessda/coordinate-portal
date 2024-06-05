@@ -81,7 +81,7 @@ function setup(item?: Partial<CMMStudy> | false) {
     }
   });
 
-  //@ts-ignore
+  //@ts-expect-error - missing props not used
   const enzymeWrapper = shallow(<Result {...props} />);
   return {
     props,
@@ -105,10 +105,10 @@ describe('Result component', () => {
   it('should truncate number of creators displayed', () => {
     const { enzymeWrapper } = setup({
       creators: [
-        'Jane Doe',
-        'University of Essex',
-        'John Smith (University of Essex)',
-        'Joe Bloggs, University of Essex'
+        { name: 'Jane Doe' },
+        { name: 'University of Essex' },
+        { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+        { name: 'Joe Bloggs, University of Essex' }
       ]
     });
     expect(enzymeWrapper.find('.sk-hits-list__meta').text()).toContain(
@@ -184,7 +184,7 @@ describe('Result component', () => {
             list: languages
           },
           search: {
-            //@ts-ignore
+            //@ts-expect-error - missing props not used
             displayed: [props.item]
           }
         },

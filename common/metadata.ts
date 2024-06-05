@@ -21,7 +21,7 @@ export interface CMMStudy {
   id: string;
   code: string;
   /** Creator */
-  creators: string[];
+  creators: Creator[];
   /** Data collection start data */
   dataCollectionPeriodStartdate?: string;
   /** Data collection end date */
@@ -78,6 +78,18 @@ export interface CMMStudy {
   universe?: Universe;
   /** Related publications */
   relatedPublications: RelatedPublication[];
+}
+
+export interface Creator {
+  name: string;
+  affiliation?: string;
+  identifier?: Identifier;
+}
+
+export interface Identifier {
+  id: string;
+  type?: string;
+  uri?: string;
 }
 
 export interface Country {
@@ -190,28 +202,24 @@ function stripHTMLElements(html: string) {
   return strippedHTML.trim();
 }
 
-/** Format: "Name (Organisation)" */
-const bracketRegex = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi;
-/** Format: "Name, Organisation" */
-const commaRegex = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi;
-
 // Generates study JSON-LD for Google indexing.
 export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
   // Attempt to split people from organisations in the creator field.
   const creators: Array<Organization | Person> = data.creators.map(creator => {
-    const bracketMatches = bracketRegex.exec(creator);
-    if (bracketMatches) {
+    // Explicitly stated affiliation
+    if (creator.affiliation) {
       return {
         '@type': 'Person',
-        name: bracketMatches[1].trim(),
+        name: creator.name,
         affiliation: {
           '@type': 'Organization',
-          name: bracketMatches[2].trim()
+          name: creator.affiliation
         }
       };
     }
 
-    const commaMatches = commaRegex.exec(creator);
+    // Format: "Name, Organisation"
+    const commaMatches = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi.exec(creator.name);
     if (commaMatches) {
       return {
         '@type': 'Person',
@@ -223,7 +231,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
       };
     }
 
-    const creatorLower = creator.toLowerCase();
+    const creatorLower = creator.name.toLowerCase();
     // Assume organisation if it contains any of the following words.
     return {
       '@type': creatorLower.includes('university') ||
@@ -235,7 +243,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
                creatorLower.includes('division') ||
                creatorLower.includes('agency') ||
                creatorLower.includes('unit') ? 'Organization' : 'Person',
-      name: creator.trim()
+      name: creator.name
     }
   });
 

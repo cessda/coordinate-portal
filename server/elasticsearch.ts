@@ -16,6 +16,7 @@ import {
   AggregationsCardinalityAggregate,
   AggregationsNestedAggregate,
   AggregationsStringTermsAggregate,
+  QueryDslBoolQuery,
   SearchHitsMetadata
 } from "@elastic/elasticsearch/lib/api/types";
 import _ from "lodash";
@@ -81,25 +82,18 @@ export default class Elasticsearch {
    * @param excludeIndex optionally exclude results from an index.
    */
   async getRelatedPublications(id: string, sizeMax: number, excludeIndex?: string) {
-    const query: any = {
-      size: sizeMax,
-      _source: ['relatedPublications'],
-      index: `${this.indexName}_*`,
-      query: {
-        bool: {
-          must: [
-            {
-              match: {
-                _id: id
-              }
-            }
-          ]
+    const boolQuery: QueryDslBoolQuery = {
+      must: [
+        {
+          match: {
+            _id: id
+          }
         }
-      }
-    };
+      ]
+    }
 
     if (excludeIndex) {
-      query.query.bool.must_not = [
+      boolQuery.must_not = [
         {
           term: {
             _index: excludeIndex
@@ -108,7 +102,14 @@ export default class Elasticsearch {
       ];
     }
 
-    const response = await this.client.search<CMMStudy>(query);
+    const response = await this.client.search<CMMStudy>({
+      size: sizeMax,
+      _source: ['relatedPublications'],
+      index: `${this.indexName}_*`,
+      query: {
+        bool: boolQuery
+      }
+    });
 
     if (!response.hits.hits) {
         return [];

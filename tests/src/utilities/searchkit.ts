@@ -23,7 +23,7 @@ describe('Searchkit utilities', () => {
           fields: [
             "titleStudy^4",
             "abstract^2",
-            "creators^2",
+            "creators.name^2",
             "keywords.term^1.5",
             "*",
           ],
