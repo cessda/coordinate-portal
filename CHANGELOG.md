@@ -14,6 +14,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.6.0] - 2024-06-18
+
+### Added
+
+- Add related publications from all languages to the study description ([#502](https://github.com/cessda/cessda.cdc.versions/issues/502))
+
+### Changed
+
+- Simplified the handling of the `AbortController` in the `Keywords` component ([PR-250](https://github.com/cessda/cessda.cdc.searchkit/pull/250))
+- Removed the "bodybuilder" NPM dependency and construct Elasticsearch requests directly ([PR-288](https://github.com/cessda/cessda.cdc.searchkit/pull/288))
+- Update SQAAaS badge ([#661](https://github.com/cessda/cessda.cdc.versions/issues/661))
+
+### Removed
+
+- Removed Matomo "on-prem" tracking configuration ([#642](https://github.com/cessda/cessda.cdc.versions/issues/642))
+
+### Fixed
+
+- Fixed searchbox input being reset to the start after redirection to the search page ([#632](https://github.com/cessda/cessda.cdc.versions/issues/632))
+
 ## [3.5.0] - 2024-01-29
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10580658.svg)](https://doi.org/10.5281/zenodo.10580658)
@@ -340,8 +360,8 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.6.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.0
 [3.5.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.5.0
-[3.4.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.1
 [3.4.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.0
 [3.2.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.1
 [3.2.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.2.0
