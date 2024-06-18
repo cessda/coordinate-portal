@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.6.0] - 2024-06-18
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12073161.svg)](https://doi.org/10.5281/zenodo.12073161)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12090472.svg)](https://doi.org/10.5281/zenodo.12090472)
 
 ### Added
 
