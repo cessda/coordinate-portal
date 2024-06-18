@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.6.0] - 2024-06-18
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12073161.svg)](https://doi.org/10.5281/zenodo.12073161)
+
 ### Added
 
 - Add related publications from all languages to the study description ([#502](https://github.com/cessda/cessda.cdc.versions/issues/502))
