@@ -36,18 +36,27 @@ interface ComponentState {
   shuffledKeywords: TermVocabAttributes[];
 }
 
+// How many creators should be shown
+const creatorsLength = 3;
+
 function generateCreatorElements(item: CMMStudy) {
   const creators: JSX.Element[] = [];
 
   for (let i = 0; i < item.creators.length; i++) {
+    const creator = item.creators[i];
+    let creatorsString = creator.name;
+    if (creator.affiliation) {
+      creatorsString += ` (${creator.affiliation})`
+    }
+
     creators.push(
       <span key={i}>
-        {item.creators[i]}{i < item.creators.length - 1 ? '; ' : ''}
+        {creatorsString}{i < item.creators.length - 1 ? '; ' : ''}
       </span>
     );
 
-    if (i === 2 && item.creators.length > 3) {
-      creators.push(<span key={3}>({item.creators.length - 3} more)</span>);
+    if (i === 2 && item.creators.length > creatorsLength) {
+      creators.push(<span key={3}>({item.creators.length - creatorsLength} more)</span>);
       break;
     }
   }
@@ -84,7 +93,7 @@ export class Result extends Component<Props, ComponentState> {
       event.stopPropagation();
       this.handleAbstractExpansion(titleStudy);
     }
-  };
+  }
 
   handleAbstractExpansion(titleStudy: string) {
     // Notify Matomo Analytics of toggling "Read more" for a study.

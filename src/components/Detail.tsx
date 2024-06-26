@@ -219,7 +219,13 @@ Summary information
             component="h2"
             content="metadata.creator"
           />
-          {this.generateElements(item.creators, 'div')}
+          {this.generateElements(item.creators, 'div', creator => {
+            if (creator.affiliation) {
+              return `${creator.name} (${creator.affiliation})`;
+            } else {
+              return creator.name;
+            }
+          })}
         </section>
 
         <section>
