@@ -8,11 +8,83 @@
   position: relative;
 }
 
-/* ==========================================================================
-     Navigation bar
- ========================================================================== */
-
 header {
+  .navbar {
+    background-color: transparent;
+
+    .buttons {
+      height: 2.5em;
+    }
+
+    .buttons:last-child {
+      margin-bottom: 0;
+    }
+
+    @media screen and (min-width: 1280px) {
+      // Same as .is-narrow but it can't be always applied or .is-right won't work when we need it to
+      flex: none;
+      width: unset;
+    }
+  }
+
+  .searchbox {
+    min-width: 200px;
+  }
+
+  .language-picker {
+    min-width: 120px;
+    max-width: 140px;
+
+    @at-root header .language-picker {
+      background:#fff;
+      color: #555;
+
+      .react-select__control {
+        height: 2.5em;
+      }
+
+      // .Select {
+      //   .Select-control {
+      //     .Select-value {
+      //       .Select-value-label {
+      //         color: #000 !important;
+      //         cursor: pointer;
+      //       }
+      //     }
+
+      //     .Select-arrow {
+      //       border-color: #555 transparent transparent !important;
+      //     }
+      //   }
+      // }
+    }
+
+    label:after {
+      content: ':';
+    }
+
+    .Select {
+      display: inline-block;
+      width: 100px;
+      vertical-align: middle;
+
+      .Select-control {
+      height: 42px;
+      line-height:42px;
+        border: 0;
+
+        .Select-arrow {
+          top: 0 !important;
+          border-width: 5px 5px 2.5px !important;
+        }
+      }
+
+      .Select-menu-outer {
+        border-radius: 3px;
+      }
+    }
+  }
+
   // background-color: $cessda_blueish;
   // background-color: white;
 
@@ -22,11 +94,6 @@ header {
   //   z-index: 1;
   //   padding: 6px 0;
   // }
-
-  .navbar {
-    // margin-right: 25px;
-    background-color: transparent;
-  }
 
   // .navbar {
   //   margin: 0 auto;
@@ -91,10 +158,6 @@ header {
   //   & .nav-item {
   //     position: relative;
   //   }
-  // }
-
-  // .header__searchbox {
-  //   position: relative;
   // }
 
   // .ais-SearchBox {

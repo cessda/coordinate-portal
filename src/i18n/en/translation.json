@@ -73,6 +73,22 @@
         "ariaLabel":"Tooltip button for Country filter"
       }
     },
+    "timeMethod": {
+      "label": "Time Method",
+      "placeholder": "Search time method",
+      "tooltip": {
+        "content": "Describes the time dimension of the data collection.",
+        "ariaLabel":"Tooltip button for Time method filter"
+      }
+    },
+    "timeMethodCV": {
+      "label": "Time Method (CV)",
+      "placeholder": "Search time method (CV)",
+      "tooltip": {
+        "content": "Describes the time dimension of the data collection. Based on the vocabulary developed by the DDI Alliance. The classification and its translations are available at <a href=\"https://vocabularies.cessda.eu/urn/urn:ddi:int.ddi.cv:TypeOfInstrument:1.1\">CESSDA Vocabulary Service: DDI Alliance Controlled Vocabulary for Time Method</a>.",
+        "ariaLabel":"Tooltip button for Time method (CV) filter"
+      }
+    },
     "langAvailableIn": {
       "label": "Search language(s)",
       "placeholder": "Search language(s)",
@@ -284,7 +300,8 @@
     "label": "User Guide"
   },
   "api": {
-    "label": "REST API"
+    "label": "REST API",
+    "content": "<p>Details about the API endpoint are documented in <a href=\"swagger/api/DataSets/v2\">Swagger JSON</a>.</p><br /><p>Example link for searching datasets in English with the keyword 'smoking' from API:</p>"
   },
   "loader": {
     "loading": "Loading data...",

@@ -85,7 +85,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
     >
       <div className="columns is-gapless">
         <div className="column">
-          <input className="input"
+          <input className="input searchbox"
                 ref={inputRef}
                 autoComplete="off"
                 autoCorrect="off"

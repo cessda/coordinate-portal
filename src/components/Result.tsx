@@ -15,19 +15,15 @@ import React, { useState } from "react";
 import {
   FaAngleDown,
   FaAngleUp,
-  // FaExternalLinkAlt,
+  FaExternalLinkAlt,
   FaLanguage,
 } from "react-icons/fa";
-// import { connect, Dispatch } from "react-redux";
-// import { AnyAction, bindActionCreators } from "redux";
 import { Link, useLocation } from "react-router-dom";
-// import type { State } from "../types";
-// import { changeLanguage } from "../actions/language";
-// import { push } from "react-router-redux";
 import { CMMStudy } from "../../common/metadata";
 // import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
+import { updateLanguage } from "../reducers/language";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: JSX.Element[] = [];
@@ -51,34 +47,6 @@ function generateCreatorElements(item: CMMStudy) {
   return creators;
 }
 
-// interface Hit extends CMMStudy {
-//   objectID: string;
-//   __position: number;
-//   _highlightResult: {
-//     abstract: {
-//       matchLevel: string;
-//       matchedWords: [];
-//       value: string;
-//     },
-//     titleStudy: {
-//       matchLevel: string;
-//       matchedWords: [];
-//       value: string;
-//     }
-//   };
-//   _snippetResult: {
-//     abstract: {
-//       matchLevel: string;
-//       matchedWords: [];
-//       value: string;
-//     }
-//   };
-// }
-
-// export interface CMMStudyHit {
-//   hit: Hit;
-// }
-
 interface ResultProps {
   hit: any;
   showAbstract: boolean;
@@ -89,36 +57,23 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   const location = useLocation();
 
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
-  // const item = useAppSelector((state) => state.search.displayed[hit.__position]);
-  // const dispatch = useAppDispatch();
-
-  //console.log(hit);
+  const dispatch = useAppDispatch();
 
   const [abstractExpanded, setAbstractExpanded] = useState(false);
 
-  // if (item === undefined) {
-  //   return null;
-  // }  
-
   const languages: JSX.Element[] = [];
-  // for (let i = 0; i < hit.langAvailableIn.length; i++) {
-  //   languages.push(
-  //     // <Link
-  //     //   key={i}
-  //     //   className="button is-small is-white"
-  //     //   to={{
-  //     //     pathname: "/detail",
-  //     //     query: {
-  //     //       q: item.id,
-  //     //       lang: item.langAvailableIn[i].toLowerCase(),
-  //     //     },
-  //     //   }}
-  //     //   onClick={() => dispatch(changeLanguage(item.langAvailableIn[i]))}
-  //     // >
-  //     //   {item.langAvailableIn[i]}
-  //     // </Link>
-  //   );
-  // }
+  for (let i = 0; i < hit.langAvailableIn.length; i++) {
+    languages.push(
+      <Link
+        key={i}
+        className="button is-small is-white"
+        to={`/detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
+        onClick={() => dispatch(updateLanguage(hit.langAvailableIn[i]))}
+      >
+        {hit.langAvailableIn[i]}
+      </Link>
+    );
+  }
 
   function handleKeyDown(event: React.KeyboardEvent, titleStudy: string) {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -149,7 +104,6 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
 
   // TODO Might have to remove all HTML Entities when abstract is not expanded
   const renderAbstract = () => {
-    //console.log(hit);
     let abstract = normalizeAndDecodeHTML(hit.abstract);
     let matchedWords = hit._highlightResult.abstract.matchedWords;
     if(matchedWords.length > 0) {
@@ -183,44 +137,11 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
               state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.titleStudy.value || hit.titleStudy }}></span>
         </Link>
-        {/* <Link
-          to={{
-            pathname: "/detail",
-            query: {
-              q: item.id,
-              lang: currentLanguage.code,
-            },
-          }}
-        > */}
-          {/* <span
-            dangerouslySetInnerHTML={{
-              __html: hit._highlightResult.titleStudy.value || hit.titleStudy,
-            }}
-          ></span> */}
-        {/* </Link> */}
       </h2>
       <div className="subtitle is-6">{creators}</div>
-      {/* <div className="desc">
-        {abstractExpanded ? (
-          <span className="abstr"
-                dangerouslySetInnerHTML={{
-                __html: hit._highlightResult.abstract.value || hit.abstract }} />
-        ) : (
-          <span dangerouslySetInnerHTML={{
-                __html: `${hit._highlightResult.abstract.value.substring(0, 500)}...` || `${hit.abstract.substring(0, 500)}...` }} />
-        )}
-      </div> */}
       {showAbstract && (
         <div className="abstract">
           <div dangerouslySetInnerHTML={{ __html: renderAbstract() }} />
-          {/* {abstractExpanded ? (
-            <div dangerouslySetInnerHTML={{ __html: decodeHTMLEntities(renderAbstract()) }} />
-          ) : (
-            <div>
-              {decodeHTMLEntities(renderAbstract())}
-              {!abstractExpanded && hit.abstract.length > 500 && '...'}
-            </div>
-          )} */}
         </div>
       )}
       <span className="level mt-10 result-actions">
@@ -268,10 +189,10 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
               </div>
             )}
             <div className="control">
-              {/* {item.studyUrl && (
+              {hit.studyUrl && (
                 <a
                   className="button is-small is-white"
-                  href={item.studyUrl}
+                  href={hit.studyUrl}
                   rel="noreferrer"
                   target="_blank"
                 >
@@ -280,7 +201,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
                   </span>
                   <span>{t("goToStudy")}</span>
                 </a>
-              )} */}
+              )}
             </div>
           </div>
         </span>

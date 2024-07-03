@@ -55,6 +55,7 @@ const LanguageSelector = () => {
   return (
     <div className="language-picker">
       <Select
+        classNamePrefix="react-select"
         value={{ value: language.currentLanguage.code, label: language.currentLanguage.label}}
         options={languageOptions}
         isSearchable={false}

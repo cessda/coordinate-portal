@@ -33,6 +33,7 @@ import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
 import { useSearchParams } from "react-router-dom";
 import { updateLanguage } from "../reducers/language";
+import { TFunction } from "i18next";
 
 const hitsPerPageItems = [
   { value: 10, label: 'Show 10 studies' },
@@ -41,13 +42,15 @@ const hitsPerPageItems = [
   { value: 150, label: 'Show 150 studies' },
 ]
 
-const getSortByItems = (index: string) => {
+const getSortByItems = (index: string, t: TFunction<"translation", undefined, "translation">) => {
   return [
-    { value: `${index}`, label: 'Relevance' },
-    { value: `${index}_title_asc`, label: 'Title (A-Z)' },
-    { value: `${index}_title_desc`, label: 'Title (Z-A)' },
-    { value: `${index}_collection_date_desc`, label: 'Coll Date (New-Old)' },
-    { value: `${index}_collection_date_asc`, label: 'Coll Date (Old-New)' },
+    { value: `${index}`, label: t("sorting.relevance") },
+    { value: `${index}_title_asc`, label: t("sorting.titleAscending") },
+    { value: `${index}_title_desc`, label: t("sorting.titleDescending") },
+    { value: `${index}_collection_date_desc`, label: t("sorting.dateDescending") },
+    { value: `${index}_collection_date_asc`, label: t("sorting.dateAscending") },
+    { value: `${index}_publication_year_desc`, label: t("sorting.publicationDateDescending") },
+    { value: `${index}_publication_year_asc`, label: t("sorting.publicationDateAscending") },
   ];
 };
 
@@ -61,7 +64,7 @@ const SearchPage = () => {
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
   const showAbstract = useAppSelector((state) => state.search.showAbstract);
-  const sortByItems = getSortByItems(index);
+  const sortByItems = getSortByItems(index, t);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const sortByParam = searchParams.get('sortBy');
@@ -69,8 +72,10 @@ const SearchPage = () => {
     // Check if language needs to be updated
     // Assumes that the index name from sortBy has language tag as the second part when split by underscore
     if(sortByParam && sortByParam !== index){
-      const sortByParamLangCode = sortByParam?.split('_')[1]
-      dispatch(updateLanguage(sortByParamLangCode));
+      dispatch(updateLanguage(sortByParam?.split('_')[1]));
+    } else if(!sortByParam && index.split('_')[1] !== 'en'){
+      // Update language if sortBy is false but language is still something other than default (en)
+      dispatch(updateLanguage('en'));
     }
   }, [sortByParam]);
   // TODO Gives off a warning when changing language through sortBy query parameter, e.g. clicking on keyword/topic on Detail page
@@ -165,10 +170,10 @@ const SearchPage = () => {
                                 }} />
             </div>
           </div>
-          <Panel title={<h2>{t("metadata.topics.label")}</h2>}
+          <Panel title={<h2>{t("filters.topic.label")}</h2>}
                 tooltip={<Tooltip id="filters-topic-tooltip"
-                                  content={t("metadata.topics.tooltip.content")}
-                                  ariaLabel={t("metadata.topics.tooltip.ariaLabel")}/>}
+                                  content={t("filters.topic.tooltip.content")}
+                                  ariaLabel={t("filters.topic.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RefinementList attribute="classifications" searchable limit={15}
@@ -177,10 +182,10 @@ const SearchPage = () => {
                               checkbox: 'focus-visible'
                             }}/>
           </Panel>
-          <Panel title={<h2>{t("metadata.keywords.label")}</h2>}
+          <Panel title={<h2>{t("filters.keywords.label")}</h2>}
                 tooltip={<Tooltip id="filters-keywords-tooltip"
-                                  content={t("metadata.keywords.tooltip.content")}
-                                  ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}/>}
+                                  content={t("filters.keywords.tooltip.content")}
+                                  ariaLabel={t("filters.keywords.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RefinementList attribute="keywords" searchable limit={15}
@@ -190,6 +195,9 @@ const SearchPage = () => {
                             }}/>
           </Panel>
           <Panel title={<h2>{t("metadata.publisher")}</h2>}
+                tooltip={<Tooltip id="filters-publisher-tooltip"
+                                  content={t("filters.publisher.tooltip.content")}
+                                  ariaLabel={t("filters.publisher.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
@@ -199,6 +207,9 @@ const SearchPage = () => {
                             }}/>
           </Panel>
           <Panel title={<h2>{t("metadata.country")}</h2>}
+                tooltip={<Tooltip id="filters-country-tooltip"
+                                  content={t("filters.country.tooltip.content")}
+                                  ariaLabel={t("filters.country.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
@@ -210,6 +221,9 @@ const SearchPage = () => {
           </Panel>
           {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
           <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
+                tooltip={<Tooltip id="filters-timemethod-tooltip"
+                content={t("filters.timeMethod.tooltip.content")}
+                ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
@@ -220,6 +234,9 @@ const SearchPage = () => {
                             }}/>
           </Panel>
           <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
+                tooltip={<Tooltip id="filters-timemethodcv-tooltip"
+                                  content={t("filters.timeMethodCV.tooltip.content")}
+                                  ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RefinementList attribute="timeMethodCV" searchable limit={16}
@@ -229,6 +246,9 @@ const SearchPage = () => {
                             }}/>
           </Panel>
           <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
+                tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                                  content={t("filters.collectionDates.tooltip.content")}
+                                  ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")}/>}
                 collapsable={true}
                 defaultCollapsed={true}>
             <RangeInput attribute="collectionYear"
@@ -247,18 +267,18 @@ const SearchPage = () => {
       </div>
       <div className="column is-8">
         <div className="columns is-vcentered ais-Stats-Dropdowns">
-          <div className="column is-half">
+          <div className="column is-5">
             <Stats />
           </div>
-          <div className="column is-half">
+          <div className="column is-7">
             <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
-              <div className="column is-half">
+              <div className="column is-5">
                 <HitsPerPage items={hitsPerPageItems}
                             classNames={{
                               select: 'focus-visible'
                             }}/>
               </div>
-              <div className="column is-half">
+              <div className="column is-7">
                 <SortBy items={sortByItems}
                         classNames={{
                           select: 'focus-visible'

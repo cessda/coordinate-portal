@@ -12,18 +12,18 @@
 // limitations under the License.
 
 import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
-import { createSlice, PayloadAction, current, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Language, languageMap } from "../utilities/language";
 import { LanguageState } from "./language";
 
 export interface DetailState {
-  languageAvailableIn: Language[];
+  availableLanguages: Language[];
   study: CMMStudy | undefined;
   similars: Similar[];
 }
 
 const initialState: DetailState = {
-  languageAvailableIn: [],
+  availableLanguages: [],
   study: undefined,
   similars: [],
 };

@@ -26,7 +26,7 @@ import Tooltip from "./Tooltip";
 const Header = () => {
   const { t } = useTranslation();
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
-  const sortByItems = getSortByItems(currentLanguage.index);
+  const sortByItems = getSortByItems(currentLanguage.index, t);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,32 +77,34 @@ const Header = () => {
           </div>
         </div>
         <div className="column p-0">
-          <div className="container columns is-flex is-flex-direction-column">
-            <div className="column pt-1 pb-0 has-text-centered-mobile">
-              <span className="header-description demo-text" dangerouslySetInnerHTML={{ __html: t("header.demoText.label") }}></span>
-              <Tooltip content={t("header.demoText.tooltip.content")}
-                      ariaLabel={t("header.demoText.tooltip.ariaLabel")}
-                      classNames={{container: 'demo-text-tooltip'}}/>&nbsp;
-              <span className="header-description" dangerouslySetInnerHTML={{ __html: t("header.portalDescription") }}></span>
+          <div className="container columns is-flex is-flex-direction-column is-flex-wrap-wrap">
+            <div className="columns is-flex-direction-row is-vcentered mb-0">
+              <div className="column is-narrow skip-link-wrapper is-hidden-mobile pb-0">
+                <a href="#main" id="skip-to-main" className="link is-sr-only"
+                  onFocus={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
+                  onBlur={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}>
+                  {t("header.skipToMain")}
+                </a>
+              </div>
+              <div className="column is-narrow is-flex is-flex-grow-0 is-hidden-mobile p-0"></div>
+              <div className="column pb-0 has-text-centered-mobile pb-0">
+                <span className="header-description demo-text" dangerouslySetInnerHTML={{ __html: t("header.demoText.label") }}></span>
+                <Tooltip content={t("header.demoText.tooltip.content")}
+                        ariaLabel={t("header.demoText.tooltip.ariaLabel")}
+                        classNames={{container: 'demo-text-tooltip'}}/>&nbsp;
+                <span className="header-description" dangerouslySetInnerHTML={{ __html: t("header.portalDescription") }}></span>
+              </div>
             </div>
-            <div className="column">
-              <div className="container columns is-variable is-1-mobile is-vcentered is-flex is-flex-direction-row">
-                <div className="column is-narrow skip-link-wrapper is-hidden-mobile">
-                      <a href="#main" id="skip-to-main" className="link is-sr-only"
-                        onFocus={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
-                        onBlur={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}>
-                        {t("header.skipToMain")}
-                      </a>
-                    </div>
-                <div className="column is-narrow is-flex is-flex-grow-0 is-hidden-mobile"></div>
+            <div className="column ml-2">
+              <div className="container columns is-variable is-1-mobile is-flex is-flex-direction-row is-flex-wrap-wrap">
                 <div className="column">
                   <CustomSearchBox />
                 </div>
-                <div className="column is-2">
+                <div className="column is-narrow">
                   <LanguageSelector />
                 </div>
-                <nav className="column is-3 navbar" aria-label="Main">
-                  <div className="buttons is-right">
+                <nav className="column navbar" aria-label="Main">
+                  <div className="buttons is-flex-wrap-nowrap is-right">
                     <Link to={currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/"}
                           onClick={() => {
                             resetQueries();
@@ -119,6 +121,10 @@ const Header = () => {
                     <Link to="/about"
                           className="link-button link">
                       {t("about.label")}
+                    </Link>
+                    <Link to="/rest-api"
+                          className="link-button link">
+                      {t("api.label")}
                     </Link>
                   </div>
                 </nav>

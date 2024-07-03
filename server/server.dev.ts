@@ -47,7 +47,9 @@ export function start() {
 
     app.use('*', async (req, res, next) => {
       // If the request is for the API, skip the fallback and proceed to the next middleware
-      if (req.originalUrl.startsWith('/api')) {
+      if (req.originalUrl.startsWith('/api') ||
+          req.originalUrl.startsWith('/swagger') ||
+          req.originalUrl.startsWith('/metrics')) {
         return next(); // Pass control to the next middleware in the chain
       }
 
@@ -55,17 +57,6 @@ export function start() {
       res.setHeader('Cache-Control', 'no-store');
       await renderResponse(req, res, ejsTemplate);
     });
-
-    // app.use('*', async (req, res) => {
-    //   const ejsTemplate = 'index.dev.ejs';
-    //   res.setHeader('Cache-Control', 'no-store');
-    //   await renderResponse(req, res, ejsTemplate);
-    // });
-    
-    // // For the "/api" route, skip SSR and proceed to the next middleware
-    // app.use('/api', (req, res, next) => {
-    //   return next();
-    // });
     
     // Start listening
     startListening(app, async (req, res) => {

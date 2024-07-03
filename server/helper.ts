@@ -18,19 +18,30 @@ import proxy from "express-http-proxy";
 import express, { RequestHandler } from "express";
 import bodyParser from "body-parser";
 import compression from "compression";
+import methodOverride from "method-override";
+import responseTime from "response-time";
 import { CMMStudy, getJsonLd, getStudyModel } from "../common/metadata";
+import {
+  startMetricsListening,
+  apiResponseTimeHandler,
+  uiResponseTimeTotalFailedHistogram,
+  uiResponseTimeZeroElasticResultsHistogram,
+} from "./metrics";
 import Elasticsearch from "./elasticsearch";
 import {
+  AggregationsValueCountAggregate,
   QueryDslBoolQuery,
   QueryDslNestedQuery,
   QueryDslQueryContainer,
-  Sort,
+  Sort
 } from "@elastic/elasticsearch/lib/api/types";
 import { errors } from "@elastic/transport";
 import { Response } from "express-serve-static-core";
 import { logger } from "./logger";
 import cors from "cors";
 import { WithContext, Dataset } from "schema-dts";
+import swaggerSearchApiV2 from "./swagger-searchApiV2";
+import { Agent } from "http";
 import Client, { SearchkitConfig } from "@searchkit/api";
 import 'isomorphic-unfetch';
 
@@ -64,7 +75,7 @@ const config: SearchkitConfig = {
     host: _.trimEnd(elasticsearchUrl, "/"),
     // if you are authenticating with api key
     // https://www.searchkit.co/docs/guides/setup-elasticsearch#connecting-with-api-key
-    //apiKey: 'TkloUm1IOEJBRWt6U1AtZVBYRWg6OWlXRko3ZExURzJyZTdsRWl2MnNYUQ=='
+    //apiKey: ''
     // if you are authenticating with username/password
     // https://www.searchkit.co/docs/guides/setup-elasticsearch#connecting-with-usernamepassword
     auth: {
@@ -81,7 +92,7 @@ const config: SearchkitConfig = {
       { field: "creators", weight: 2 },
       { field: "keywords", weight: 1.5 },
     ],
-    result_attributes: ["titleStudy", "abstract", "creators", "keywords", "classifications"],
+    result_attributes: ["titleStudy", "abstract", "creators", "keywords", "classifications", "studyUrl", "langAvailableIn"],
     facet_attributes: [
       {
         attribute: "keywords",
@@ -145,7 +156,15 @@ const config: SearchkitConfig = {
       _collection_date_asc: {
         field: 'dataCollectionYear',
         order: 'asc'
-      }
+      },
+      _publication_year_desc: {
+        field: 'publicationYear',
+        order: 'desc'
+      },
+      _publication_year_asc: {
+        field: 'publicationYear',
+        order: 'asc'
+      },
     }
   },
 }
@@ -188,6 +207,11 @@ export function checkEnvironmentVariables(production: boolean) {
 
 function getSearchkitRouter() {
   const router = express.Router();
+  const host = _.trimEnd(elasticsearchUrl, "/");
+
+  const httpAgent = new Agent({
+    keepAlive: true,
+  });
 
   // Get a record directly
   router.get("/_get/:index/:id", async (req, res) => {
@@ -256,7 +280,6 @@ function getSearchkitRouter() {
   // Get the total studies stored in Elasticsearch
   router.get("/_about_metrics/:index/", async (req, res) => {
     try {
-      // const aboutMetrics = await elasticsearch.getAboutMetrics("coordinate_en");
       const aboutMetrics = await elasticsearch.getAboutMetrics(req.params.index);
       res.send(aboutMetrics);
     } catch (e) {
@@ -266,6 +289,22 @@ function getSearchkitRouter() {
 
   // Proxy Searchkit requests
   router.post("/_search", async (req, res) => {
+    //timer required for responseTime in zero elasticsearch response
+    const startTime = new Date();
+
+    res.setHeader("Cache-Control", "no-cache, max-age=0");
+
+    const fullUrl = `${host}/${req.body.index || "cmmstudy_en"}${req.url}`;
+    logger.debug("Start Elasticsearch Request: %s", fullUrl);
+
+    if (_.isObject(req.body)) {
+      logger.debug("Request body", { body: req.body });
+    }
+
+    //keep language for use in metrics
+    req.params = req.body.index;
+
+    try {
       const response = await apiClient.handleRequest(req.body, {
         hooks: {
           // Hook to edit search request before it is executed
@@ -283,68 +322,32 @@ function getSearchkitRouter() {
           }
         }
       });
+      const endTime = new Date();
+      const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
+      uiResponseTimeZeroElasticResultsHistogram.observe(
+        {
+          method: req.method,
+          route: req.route.path,
+          status_code: res.statusCode,
+        },
+        timeDiff
+      );
+      uiResponseTimeTotalFailedHistogram.observe(
+        {
+          method: req.method,
+          route: req.route.path,
+        },
+        timeDiff
+      );
       res.send(response);
-      //timer required for responseTime in zero elasticsearch response
-      // const startTime = new Date();
-
-      // res.setHeader("Cache-Control", "no-cache, max-age=0");
-
-      // const fullUrl = `${host}/${req.body.index || "cmmstudy_en"}${req.url}`;
-      // logger.debug("Start Elasticsearch Request: %s", fullUrl);
-
-      // if (_.isObject(req.body)) {
-      //   logger.debug("Request body", { body: req.body });
-      // }
-
-      // //keep language for use in metrics
-      // req.params = req.body.index;
-      // //delete language from body request
-      // delete req.body.index;
-
-      // const request = new Request(fullUrl, {
-      //   // agent: httpAgent,
-      //   method: "POST",
-      //   body: JSON.stringify(req.body),
-      //   headers: {
-      //     Authorization: `Basic ${Buffer.from(
-      //       `${elasticsearchUsername}:${elasticsearchPassword}`
-      //     ).toString("base64")}`,
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-
-      // try {
-      //   const response = await fetch(request);
-      //   const body = (await response.json()) as Partial<SearchResponse>;
-      //   // if (body.hits?.total === 0) {
-      //   //   const endTime = new Date();
-      //   //   const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-      //   //   uiResponseTimeZeroElasticResultsHistogram.observe(
-      //   //     {
-      //   //       method: req.method,
-      //   //       route: req.route.path,
-      //   //       status_code: res.statusCode,
-      //   //     },
-      //   //     timeDiff
-      //   //   );
-      //   //   uiResponseTimeTotalFailedHistogram.observe(
-      //   //     {
-      //   //       method: req.method,
-      //   //       route: req.route.path,
-      //   //     },
-      //   //     timeDiff
-      //   //   );
-      //   // }
-      //   res.status(response.status).json(body);
-      //   logger.debug("Finished Elasticsearch Request to %s", fullUrl);
-      // } catch (e: unknown) {
-      //   const u = e as ElasticError;
-      //   // When a connection error occurs send a 502 error to the client.
-      //   logger.error("Elasticsearch Request failed: %s: %s", fullUrl, e);
-      //   res.sendStatus(502);
-      // }
+      logger.debug("Finished Elasticsearch Request to %s", fullUrl);
+    } catch (e: unknown) {
+      const u = e as ElasticError;
+      // When a connection error occurs send a 502 error to the client.
+      logger.error("Elasticsearch Request failed: %s: %s", fullUrl, e);
+      res.sendStatus(502);
     }
-  );
+  });
 
   
   return router;
@@ -674,89 +677,89 @@ function apiResultsCount(
 }
 
 //used by metrics.ts
-// export async function getESrecordsByLanguages(lang: string): Promise<number> {
-//   const response = await elasticsearch.client.search<CMMStudy>({
-//     body: {
-//       aggs: {
-//         lang: {
-//           terms: {
-//             field: "langAvailableIn",
-//           },
-//         },
-//       },
-//     },
-//     track_total_hits: false,
-//   });
+export async function getESrecordsByLanguages(lang: string): Promise<number> {
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      aggs: {
+        lang: {
+          terms: {
+            field: "langAvailableIn",
+          },
+        },
+      },
+    },
+    track_total_hits: false,
+  });
 
-//   const elasticAggs: any = response.aggregations;
-//   let result = 0;
-//   for (const x of elasticAggs.lang.buckets) {
-//     if (x.key === lang) {
-//       result = x.doc_count;
-//       break;
-//     }
-//   }
-//   return result;
-// }
+  const elasticAggs: any = response.aggregations;
+  let result = 0;
+  for (const x of elasticAggs.lang.buckets) {
+    if (x.key === lang) {
+      result = x.doc_count;
+      break;
+    }
+  }
+  return result;
+}
 
-// //used by metrics.ts
-// export async function getESindexLanguages(): Promise<Array<string>> {
-//   const indices = await elasticsearch.client.cat.indices({ format: "json" });
-//   const filtered: (string | undefined)[] = indices
-//     .map((element: { index?: string }) => {
-//       if (element?.index?.startsWith("cmmstudy"))
-//         return element.index.slice(-2);
-//     })
-//     .filter((element: string | undefined) => {
-//       return element !== undefined;
-//     });
-//   return filtered as Array<string>;
-// }
+//used by metrics.ts
+export async function getESindexLanguages(): Promise<Array<string>> {
+  const indices = await elasticsearch.client.cat.indices({ format: "json" });
+  const filtered: (string | undefined)[] = indices
+    .map((element: { index?: string }) => {
+      if (element?.index?.startsWith("cmmstudy"))
+        return element.index.slice(-2);
+    })
+    .filter((element: string | undefined) => {
+      return element !== undefined;
+    });
+  return filtered as Array<string>;
+}
 
-// //used by metrics.ts
-// export async function getESrecordsModified(): Promise<number> {
-//   const response = await elasticsearch.client.search<CMMStudy>({
-//     body: {
-//       aggs: {
-//         types_count: {
-//           value_count: {
-//             field: "lastModified",
-//           },
-//         },
-//       },
-//     },
-//     track_total_hits: false,
-//   });
+//used by metrics.ts
+export async function getESrecordsModified(): Promise<number> {
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      aggs: {
+        types_count: {
+          value_count: {
+            field: "lastModified",
+          },
+        },
+      },
+    },
+    track_total_hits: false,
+  });
 
-//   const elasticAggs = response.aggregations;
-//   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//   return (
-//     (elasticAggs!.types_count as AggregationsValueCountAggregate).value || 0
-//   );
-// }
+  const elasticAggs = response.aggregations;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return (
+    (elasticAggs!.types_count as AggregationsValueCountAggregate).value || 0
+  );
+}
 
-// //used by metrics.ts
-// export async function getESrecordsByEndpoint(): Promise<
-//   { key: string; doc_count: number }[]
-// > {
-//   const response = await elasticsearch.client.search<CMMStudy>({
-//     body: {
-//       aggs: {
-//         aggregationResults: {
-//           terms: {
-//             field: "code",
-//             size: 1000,
-//           },
-//         },
-//       },
-//     },
-//     track_total_hits: false,
-//   });
-//   const elasticAggs: any | undefined = response.aggregations;
-//   const results: { key: string; doc_count: number }[] =
-//     elasticAggs.aggregationResults.buckets;
-//   return results;
-// }
+//used by metrics.ts
+export async function getESrecordsByEndpoint(): Promise<
+  { key: string; doc_count: number }[]
+> {
+  const response = await elasticsearch.client.search<CMMStudy>({
+    body: {
+      aggs: {
+        aggregationResults: {
+          terms: {
+            field: "code",
+            size: 1000,
+          },
+        },
+      },
+    },
+    track_total_hits: false,
+  });
+  const elasticAggs: any | undefined = response.aggregations;
+  const results: { key: string; doc_count: number }[] =
+    elasticAggs.aggregationResults.buckets;
+  return results;
+}
 
 function jsonProxy() {
   return proxy(elasticsearchUrl, {
@@ -940,32 +943,32 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   app.use(compression());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  //app.use(methodOverride());
+  app.use(methodOverride());
 
   //Metrics middleware for API
-  // app.use("/api/DataSets", responseTime(apiResponseTimeHandler));
+  app.use("/api/DataSets", responseTime(apiResponseTimeHandler));
 
   // Set up request handlers
   app.use("/api/sk", getSearchkitRouter());
-  // app.post("/api/search", async function (req, res) {
-  //   const response = await apiClient.handleRequest(req.body);
-  //   res.send(response);
-  // });
+  app.post("/api/search", async function (req, res) {
+    const response = await apiClient.handleRequest(req.body);
+    res.send(response);
+  });
   app.use("/api/json", jsonProxy());
   app.use("/api/DataSets/v2", cors(), externalApiV2());
-  // app.use("/swagger/api/DataSets/v2", cors(), async (_req, res) => {
-  //   try {
-  //     if (!v2) {
-  //       v2 = await swaggerSearchApiV2(elasticsearch);
-  //     }
-  //     return res.json(v2);
-  //   } catch (e) {
-  //     logger.error(`Cannot communicate with Elasticsearch: ${e}`);
-  //     return res.sendStatus(500);
-  //   }
-  // });
+  app.use("/swagger/api/DataSets/v2", cors(), async (_req, res) => {
+    try {
+      if (!v2) {
+        v2 = await swaggerSearchApiV2(elasticsearch);
+      }
+      return res.json(v2);
+    } catch (e) {
+      logger.error(`Cannot communicate with Elasticsearch: ${e}`);
+      return res.sendStatus(500);
+    }
+  });
 
-  // app.use("/metrics", startMetricsListening());
+  app.use("/metrics", startMetricsListening());
 
   app.get("*", handler);
 
@@ -983,3 +986,6 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   process.on("SIGINT", () => process.exit(130));
   process.on("SIGTERM", () => process.exit(143));
 }
+
+// Cached Swagger JSON
+let v2: Awaited<ReturnType<typeof swaggerSearchApiV2>> | undefined = undefined;
