@@ -65,6 +65,9 @@ const LanguageSelector = () => {
             changeLanguage(option.value);
           }
         }}
+        classNames={{
+          menu: () => 'mt-0'
+        }}
       />
     </div>
   );
