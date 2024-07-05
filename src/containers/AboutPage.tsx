@@ -74,7 +74,7 @@ const AboutPage = () => {
       </div>
       <div className="column is-12">
         <h1 className="main-title mb-4">{t("about.title")}</h1>
-        <div className="about-container" dangerouslySetInnerHTML={{ __html: t("about.content") }}/>
+        <div className="text-container" dangerouslySetInnerHTML={{ __html: t("about.content") }}/>
       </div>
       <div className="column is-12">
         <div className="columns is-vcentered">

@@ -3,6 +3,7 @@ import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestora
 import SearchPage, { getSortByItems } from "./containers/SearchPage";
 import DetailPage, {studyLoader} from "./containers/DetailPage";
 import AboutPage, {metricsLoader} from "./containers/AboutPage";
+import RestApiPage from "./containers/RestApiPage";
 import UserGuidePage from "./containers/UserGuidePage";
 import AccessibilityStatementPage from "./containers/AccessibilityStatementPage";
 import NotFoundPage from "./containers/NotFoundPage";
@@ -32,7 +33,7 @@ const Root = () => {
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
   languages.forEach(language => {
-    const sortByItems = getSortByItems(language.index);
+    const sortByItems = getSortByItems(language.index, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
 
@@ -180,6 +181,7 @@ const router = createBrowserRouter([
       { path: "about", element: <AboutPage />, loader: metricsLoader },
       { path: "detail/:id", element: <DetailPage />, loader: studyLoader},
       { path: "documentation", element: <UserGuidePage /> },
+      { path: "rest-api", element: <RestApiPage /> },
       { path: "accessibility-statement", element: <AccessibilityStatementPage /> },
       { path: "*", element: <NotFoundPage />}
     ],

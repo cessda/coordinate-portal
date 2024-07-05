@@ -25,7 +25,7 @@ import {
   DateTimeFormatter,
   DateTimeFormatterBuilder,
 } from "@js-joda/core";
-import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaCode, FaExternalLinkAlt } from "react-icons/fa";
 import striptags from "striptags";
 import { useTranslation } from "react-i18next";
 import Tooltip from "./Tooltip";
@@ -103,7 +103,7 @@ const Detail = (props: Props) => {
     }
 
     if (elements.length === 0) {
-      <span>{t("language.notAvailable.field")}</span>;
+      return <span>{t("language.notAvailable.field")}</span>;
     }
 
     if (element === 'ul') {
@@ -319,21 +319,47 @@ const Detail = (props: Props) => {
   return (
     <>
     <div className="columns is-vcentered">
-      <div className="column is-5">
+      <div className="column is-2 px-1 py-3">
+        <div className="columns is-flex-direction-column">
+          <div className="column px-0 pt-0 pb-1">
+            {item.studyUrl && (
+              <a className="is-inline-flex"
+                href={item.studyUrl}
+                rel="noreferrer"
+                target="_blank">
+                <span className="icon mt-1 mr-1">
+                  <FaExternalLinkAlt />
+                </span>
+                <span className="large-text">{t("goToStudy")}</span>
+              </a>
+            )}
+          </div>
+          <div className="column px-0 pt-1 pb-0">
+            <a className="is-inline-flex"
+              href={`/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`}
+              rel="noreferrer"
+              target="_blank">
+              <span className="icon is-small ml-1 mt-1 mr-1"><FaCode/></span>
+              <span>{t("viewJson")}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className="column is-5 px-1 py-3">
         <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
-          <div className="column is-flex is-flex-grow-0 is-narrow">
+          <div className="column is-flex is-flex-grow-0 is-narrow py-0 pl-0 pr-1">
             <span className="is-inline-flex">{t("exportMetadata")}</span>
             {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
                     ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                     classNames={{container: 'ml-1'}}/> */}
           </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow px-0">
+          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
             <Select options={exportMetadataOptions}
                     defaultValue={{ value: '', label: ''}}
                     onChange={handleExportMetadataChange}
                     className="export-select"/>
           </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow pl-0">
+          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
             <button className="button is-info is-light" onClick={handleExportMetadata}
                     disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
               {t("export")}
@@ -341,21 +367,21 @@ const Detail = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="column is-5">
+      <div className="column is-5 px-1 py-3">
         <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
-          <div className="column is-flex is-flex-grow-0 is-narrow">
+          <div className="column is-flex is-flex-grow-0 is-narrow py-0 pl-0 pr-1">
             <span className="is-inline-flex">{t("exportCitation")}</span>
             {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
                     ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                     classNames={{container: 'ml-1'}}/> */}
           </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow px-0">
+          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
             <Select options={exportCitationOptions}
                     defaultValue={{ value: '', label: ''}}
                     onChange={handleExportCitationChange}
                     className="export-select"/>
           </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow pl-0">
+          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
             <button className="button is-info is-light"
                     onClick={() => alert("Not yet implemented")}
                     // onClick={handleExportCitation}
@@ -364,20 +390,6 @@ const Detail = (props: Props) => {
             </button>
           </div>
         </div>
-      </div>
-      <div className="column is-2">
-        {item.studyUrl && (
-          <a // className="button is-small is-white"
-            className="is-inline-flex"
-            href={item.studyUrl}
-            rel="noreferrer"
-            target="_blank">
-            <span className="icon is-small mt-1 mr-1">
-              <FaExternalLinkAlt />
-            </span>
-            <span>{t("goToStudy")}</span>
-          </a>
-        )}
       </div>
     </div>
     <div className="metadata-container">
@@ -397,7 +409,7 @@ const Detail = (props: Props) => {
             )}
           </div>
         </section>
-        <section>
+        <section className="info-box-keywords">
           {generateHeading('keywords', 'is-inline-flex', 'info-box-keywords')}
           <Tooltip content={t("metadata.keywords.tooltip.content")}
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
@@ -526,7 +538,7 @@ const Detail = (props: Props) => {
             {generateElements(item.unitTypes, "div", (unit) => unit.term)}
 
             {generateHeading('universe')}
-            {item.universe ? formatUniverse(item.universe) : t("language.notAvailable.field")}
+            {item.universe ? formatUniverse(item.universe) : <span>{t("language.notAvailable.field")}</span>}
 
             {generateHeading('sampProc')}
             {generateElements(item.samplingProcedureFreeTexts, "div",

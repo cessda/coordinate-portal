@@ -55,6 +55,7 @@ const LanguageSelector = () => {
   return (
     <div className="language-picker">
       <Select
+        classNamePrefix="react-select"
         value={{ value: language.currentLanguage.code, label: language.currentLanguage.label}}
         options={languageOptions}
         isSearchable={false}
@@ -63,6 +64,9 @@ const LanguageSelector = () => {
           if (option) {
             changeLanguage(option.value);
           }
+        }}
+        classNames={{
+          menu: () => 'mt-0'
         }}
       />
     </div>

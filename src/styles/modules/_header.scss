@@ -8,137 +8,40 @@
   position: relative;
 }
 
-/* ==========================================================================
-     Navigation bar
- ========================================================================== */
-
 header {
-  // background-color: $cessda_blueish;
-  // background-color: white;
-
-  // .reset-search {
-  //   position: relative;
-  //   text-align: left;
-  //   z-index: 1;
-  //   padding: 6px 0;
-  // }
-
   .navbar {
-    // margin-right: 25px;
     background-color: transparent;
+
+    .buttons {
+      height: 2.5em;
+    }
+
+    .buttons:last-child {
+      margin-bottom: 0;
+    }
+
+    @media screen and (min-width: 1280px) {
+      // Same as .is-narrow but it can't be always applied or .is-right won't work when we need it to
+      flex: none;
+      width: unset;
+    }
   }
 
-  // .navbar {
-  //   margin: 0 auto;
-  //   max-width: 1280px;
-  //   background: none;
-  // }
+  .searchbox {
+    min-width: 200px;
+  }
 
-  // .navbar-start .nav-item {
-  //   text-align: center;
-  //   padding: 4px 0 8px 40px;
-  // }
+  .language-picker {
+    min-width: 120px;
+    max-width: 140px;
 
-  // .navbar-end .nav-item {
-  //   text-align: center;
-  //   padding: 4px 0 8px 0;
-  // }
+    @at-root header .language-picker {
+      background:#fff;
+      color: #555;
 
-  // .nav-item {
-  //   display: block;
-  //   white-space: initial;
-
-  //   & .cessda a {
-  //     font-family: cessda, sans-serif !important;
-  //     font-size: 3.5rem;
-  //     color: $white;
-  //     text-decoration: none;
-  //   }
-  // }
-
-  // & .nav-toggle {
-  //   align-items: center;
-  //   display: flex;
-  //   justify-content: center;
-  //   color: $white;
-
-  //   &:hover {
-  //     background-color: $cessda_blueish;
-  //   }
-  //   &:focus {
-  //     background-color: $cessda_blueish;
-  //   }
-  // }
-
-  // & .nav-start {
-  //   justify-content: center;
-  //   overflow-x: hidden;
-
-  //   & a {
-  //     width: 50%;
-  //     height: auto;
-
-  //     & img {
-  //       max-height: 3rem;
-  //     }
-  //   }
-  // }
-
-  // & .nav-end {
-  //   padding: 10px;
-  //   justify-content: center;
-
-  //   & .nav-item {
-  //     position: relative;
-  //   }
-  // }
-
-  // .header__searchbox {
-  //   position: relative;
-  // }
-
-  // .ais-SearchBox {
-  //   background-color: $white;
-  //   border: 1px solid $dark_grey;
-  //   border-radius: 25px;
-  //   color: $light_grey;
-  //   height: 45px;
-  //   max-width: 600px;
-  //   margin: 0 auto;
-  //   z-index: 1;
-
-  //   &.is-focused {
-  //     background-color: $white;
-  //   }
-
-  //   .sk-search-box__text {
-  //     color: $greyish-brown;
-  //   }
-
-  //   ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-  //     color: $greyish-brown !important;
-  //   }
-
-  //   :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-  //     color: $greyish-brown !important;
-  //     opacity: 1;
-  //   }
-
-  //   ::-moz-placeholder { /* Mozilla Firefox 19+ */
-  //     color: $greyish-brown !important;
-  //     opacity: 1;
-  //   }
-
-  //   :-ms-input-placeholder { /* Internet Explorer 10-11 */
-  //     color: $greyish-brown !important;
-  //   }
-
-  //   ::-ms-input-placeholder { /* Microsoft Edge */
-  //     color: $greyish-brown !important;
-  //   }
-
-  //   @media screen and (max-width: 768px) {
-  //     margin: 18px auto;
-  //   }
-  // }
+      .react-select__control {
+        height: 2.5em;
+      }
+    }
+  }
 }

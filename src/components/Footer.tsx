@@ -31,7 +31,7 @@ const organizationCoordinateJSON = JSON.stringify(organizationCoordinate);
 const organizationCessdaJSON = JSON.stringify(organizationCessda);
 
 const Footer = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
 
   return (
@@ -67,24 +67,17 @@ const Footer = () => {
             </a> */}
             <Link to="/documentation/" className="is-inline-block">{t("documentation.label")}</Link> | {" "}
             <Link to="/about/" className="is-inline-block">{t("about.label")}</Link> | {" "}
+            <a href="https://www.cessda.eu/Privacy-policy" target="_blank" rel="noreferrer" className="is-inline-block">{t("footer.privacy")}</a> |  {" "}
+            <a href="https://www.cessda.eu/Acceptable-Use-Policy" target="_blank" rel="noreferrer" className="is-inline-block">{t("footer.aup")}</a> | {" "}
             <Link to="/accessibility-statement/" className="is-inline-block">{t("footer.accessibility")}</Link>
-            {/* <a href="/privacy-policy/" className="is-inline-block">
-              {t("footer.privacy")}
-            </a>{" "}
-            |{" "} */}
-            {/* <a href="https://www.cessda.eu/Acceptable-Use-Policy"
-              target="_blank"
-              rel="noreferrer">
-              {t("footer.aup")}
-            </a> */}
           </div>
 
           <div className="column is-2">
           </div>
         </div>
       </div>
-    <script type="application/ld+json">{organizationCoordinateJSON}</script>
-    {/* <script type="application/ld+json">{organizationCessdaJSON}</script> */}
+      <script type="application/ld+json">{organizationCoordinateJSON}</script>
+      <script type="application/ld+json">{organizationCessdaJSON}</script>
     </footer>
   )
 }

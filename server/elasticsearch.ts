@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -11,16 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Client } from "@elastic/elasticsearch";
+import { Client, ClientOptions } from '@elastic/elasticsearch'
 import {
-  SearchHit,
   AggregationsCardinalityAggregate,
   AggregationsNestedAggregate,
-  AggregationsSignificantStringTermsAggregate,
+  AggregationsStringTermsAggregate,
+  SearchHit,
+  SearchHitsMetadata
 } from "@elastic/elasticsearch/lib/api/types";
 import _ from "lodash";
 import { CMMStudy } from "../common/metadata";
 import { logger } from "./logger";
+
 
 interface Source {
   id: string;
@@ -40,19 +42,18 @@ interface AggregationsResponse {
 }
 
 export default class Elasticsearch {
+  private readonly indexName = "coordinate";
+
   public readonly client: Client;
 
-  constructor(
-    url: string,
-    authentication?: { username: string; password: string }
-  ) {
+  constructor(url: string, authentication?: ClientOptions["auth"]) {
     //Create ElasticSearch Client
     this.client = new Client({
       node: url,
-      auth: authentication,
+      auth: authentication
     });
 
-    logger.info("Elasticsearch client configured");
+    logger.info('Elasticsearch client configured');
   }
 
   /**
@@ -96,24 +97,20 @@ export default class Elasticsearch {
   async getTotalStudies() {
     const response = await this.client.search({
       size: 0,
-      index: "cmmstudy_*",
-      body: {
-        query: { match_all: {} },
-        aggs: {
-          unique_id: {
-            cardinality: {
-              field: "id",
-            },
-          },
-        },
-      },
+      index: `${this.indexName}_*`,
+      query: { match_all: {} },
+      aggs: {
+        unique_id: {
+          cardinality: {
+            field: "id"
+          }
+        }
+      }
     });
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return (
-      response.aggregations!.unique_id as AggregationsCardinalityAggregate
-    ).value;
+    return (response.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
   }
 
   /**
@@ -195,46 +192,41 @@ export default class Elasticsearch {
   async getListOfMetadataLanguages() {
     const res = await this.client.indices.get({
       allow_no_indices: true,
-      index: "*",
+      index: `${this.indexName}_*`
     });
-    const indices = Object.keys(res.body);
+    const indices = Object.keys(res);
 
-    // Index names are of the form cmmstudy_${lang}, extract the ${lang} part
-    return indices.map((i) => i.split("_")[1]);
+    // Index names are of the form name_${lang}, extract the ${lang} part
+    return indices.map(i => i.split("_")[1]);
   }
 
   async getSourceRepositoryNames() {
     const res = await this.client.search({
       size: 0,
-      body: {
-        aggs: {
-          publishers: {
-            nested: {
-              path: "publisherFilter",
-            },
-            aggs: {
-              publisher: {
-                terms: {
-                  field: "publisherFilter.publisher",
-                  order: { _key: "asc" },
-                  size: 30,
-                },
-              },
-            },
+      aggs: {
+        publishers: {
+          nested: {
+            path: "publisherFilter"
           },
-        },
-      },
+          aggs: {
+            publisher: {
+              terms: {
+                field: "publisherFilter.publisher",
+                order: { _key: "asc" },
+                size: 30
+              }
+            }
+          }
+        }
+      }
     });
 
     // Unwrap the aggregations
-    const aggregation = res.aggregations
-      ?.publishers as AggregationsNestedAggregate;
-    const publisherBuckets = (
-      aggregation.publisher as AggregationsSignificantStringTermsAggregate
-    ).buckets;
+    const aggregation = res.aggregations?.publishers as AggregationsNestedAggregate;
+    const publisherBuckets = (aggregation.publisher as AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(publisherBuckets)) {
-      return publisherBuckets.map((b) => b.key);
+      return publisherBuckets.map(b => b.key);
     } else {
       return [];
     }
@@ -243,35 +235,63 @@ export default class Elasticsearch {
   async getListOfCountries() {
     const res = await this.client.search({
       size: 0,
-      body: {
-        aggs: {
-          studyAreaCountries: {
-            nested: {
-              path: "studyAreaCountries",
-            },
-            aggs: {
-              country: {
-                terms: {
-                  field: "studyAreaCountries.searchField",
-                  order: { _key: "asc" },
-                  size: 1000,
-                },
-              },
-            },
+      aggs: {
+        studyAreaCountries: {
+          nested: {
+            path: "studyAreaCountries"
           },
-        },
-      },
+          aggs: {
+            country: {
+              terms: {
+                field: "studyAreaCountries.searchField",
+                order: { _key: "asc" },
+                size: 1000
+              }
+            }
+          }
+        }
+      }
     });
 
     // Unwrap the aggregations
-    const aggregation = res.aggregations
-      ?.studyAreaCountries as AggregationsNestedAggregate;
-    const countryBuckets = (
-      aggregation.country as AggregationsSignificantStringTermsAggregate
-    ).buckets;
+    const aggregation = res.aggregations?.studyAreaCountries as AggregationsNestedAggregate;
+    const countryBuckets = (aggregation.country as AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(countryBuckets)) {
-      return countryBuckets.map((b) => b.key);
+      return countryBuckets.map(b => b.key);
+    } else {
+      return [];
+    }
+  }
+
+  //used for API documentation
+  async getListOfTopics() {
+    const res = await this.client.search({
+      size: 0,
+      aggs: {
+        classifications: {
+          nested: {
+            path: "classifications"
+          },
+          aggs: {
+            term: {
+              terms: {
+                field: "classifications.term",
+                order: { _key: "asc" },
+                size: 1000
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Unwrap the aggregations
+    const aggregation = res.aggregations?.classifications as AggregationsNestedAggregate;
+    const topicBuckets = (aggregation.term as AggregationsStringTermsAggregate).buckets;
+
+    if (Array.isArray(topicBuckets)) {
+      return topicBuckets.map(b => b.key);
     } else {
       return [];
     }
@@ -304,6 +324,61 @@ export default class Elasticsearch {
   }
 
   /**
+   * Get the amount of records per OAI-PMH endpoint from Elasticsearch.
+   */
+  async getEndpoints() {
+    const res = await this.client.search<unknown>({
+      aggs: {
+        aggregationResults: {
+          terms: {
+            field: "code",
+            size: 100
+          }
+        }
+      },
+      track_total_hits: false
+    });
+    const elasticAggs = res.aggregations?.aggregationResults as AggregationsStringTermsAggregate;
+    const buckets = elasticAggs.buckets;
+    if (Array.isArray(buckets)) {
+      return buckets;
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Get the amount of records in the specified language from Elasticsearch.
+   * @param lang the language of the records.
+   */
+  async getRecordCountByLanguage(lang: string): Promise<number | undefined>{
+    const response = await this.client.search({
+      index: `cmmstudy_${lang}`,
+      track_total_hits: true
+    });
+    return Elasticsearch.parseTotalHits(response.hits.total);
+  }
+
+  /**
+   * Extract the total hits from the hits metadata.
+   * @returns the total hits, or undefined if not present.
+   */
+  static parseTotalHits(totalHits: SearchHitsMetadata["total"]) {
+    // Calculate the total hits
+    switch (typeof totalHits) {
+      case "object":
+        // If SearchTotalHits object, extract from the value field
+        return totalHits.value;
+      case "number":
+        // If number, extract directly
+        return totalHits;
+      default:
+        // Total hits not present, return undefined
+        return undefined;
+    }
+  }
+
+  /**
    * Query used to retrieve similar records for a specific title (for detail page).
    * @param id the document id, used to exclude the original document from the query.
    * @param title the title of the document to retrieve similar records for.
@@ -313,15 +388,15 @@ export default class Elasticsearch {
       bool: {
         must: {
           match: {
-            titleStudy: title,
-          },
+            titleStudy: title
+          }
         },
         must_not: {
           ids: {
-            values: [id],
-          },
-        },
-      },
+            values: [id]
+          }
+        }
+      }
     };
   }
 }
