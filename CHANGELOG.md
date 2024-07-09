@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.6.1] - 2024-07-09
+
+### Changed
+
+- Update about page for version 3.6.1 ([#668](https://github.com/cessda/cessda.cdc.versions/issues/668))
+
 ## [3.6.0] - 2024-06-18
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12090472.svg)](https://doi.org/10.5281/zenodo.12090472)
@@ -362,6 +368,7 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.6.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.1
 [3.6.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.0
 [3.5.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.5.0
 [3.4.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.4.0
