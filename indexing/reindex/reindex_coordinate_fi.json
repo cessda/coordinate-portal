@@ -1,0 +1,64 @@
+{
+  "source": {
+    "index": "cmmstudy_fi",
+    "query": {
+      "bool": {
+        "should": [
+          {
+            "multi_match": {
+              "query": "lapset",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 4
+            }
+          },
+          {
+            "multi_match": {
+              "query": "nuoret",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 4
+            }
+          },
+          {
+            "multi_match": {
+              "query": "children",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "youths",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          }
+        ]
+      }
+    }
+  },
+  "dest": {
+      "index": "coordinate_fi"
+  }
+}

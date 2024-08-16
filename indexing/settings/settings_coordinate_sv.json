@@ -1,5 +1,3 @@
-# Create new index with proper settings and mappings
-curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Content-Type: application/json'  -d'
 {
   "settings": {
     "number_of_shards": "2",
@@ -12,7 +10,8 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
           "filter": [
             "lowercase",
             "asciifolding",
-            "english_stop"
+            "swedish_stop",
+            "scandinavian_normalization"
           ]
         },
         "pasc_index_autocomplete_analyzer": {
@@ -21,7 +20,8 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
           "filter": [
             "lowercase",
             "asciifolding",
-            "english_stop",
+            "swedish_stop",
+            "scandinavian_normalization",
             "autocomplete_filter"
           ]
         }
@@ -30,11 +30,11 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
         "autocomplete_filter": {
           "type": "edge_ngram",
           "min_gram": 1,
-          "max_gram": 20
+          "max_gram": 30
         },
-        "english_stop": {
+        "swedish_stop": {
           "type": "stop",
-          "stopwords": "_english_"
+          "stopwords": "_swedish_"
         }
       },
       "normalizer": {
@@ -42,8 +42,7 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
           "type": "custom",
           "char_filter": [],
           "filter": [
-            "lowercase",
-            "asciifolding"
+            "lowercase"
           ]
         }
       }
@@ -89,6 +88,19 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
         "type": "text",
         "analyzer": "pasc_standard_analyzer",
         "term_vector": "with_positions_offsets"
+      },
+      "funding": {
+        "type": "nested",
+        "properties": {
+          "agency": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "grantNumber": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
       },
       "dataCollectionFreeTexts": {
         "type": "nested",
@@ -263,7 +275,10 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
             "analyzer": "pasc_index_autocomplete_analyzer",
             "search_analyzer": "pasc_standard_analyzer",
             "term_vector": "with_positions_offsets",
-            "copy_to": [ "keywordsSearchField", "keywordsKeywordField" ],
+            "copy_to": [
+              "keywordsSearchField",
+              "keywordsKeywordField"
+            ],
             "fields": {
               "normalized": {
                 "type": "keyword",
@@ -494,4 +509,4 @@ curl -X PUT -u elastic:password "localhost:9200/coordinate_en?pretty" -H 'Conten
       }
     }
   }
-}'
+}
