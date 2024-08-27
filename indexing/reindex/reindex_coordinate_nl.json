@@ -6,7 +6,7 @@
         "should": [
           {
             "multi_match": {
-              "query": "kinderen",
+              "query": "kind",
               "fields": [
                 "titleStudy^3",
                 "classifications^2",
@@ -14,7 +14,7 @@
               ],
               "type": "best_fields",
               "fuzziness": "auto",
-              "prefix_length": 6
+              "prefix_length": 4
             }
           },
           {
@@ -32,10 +32,11 @@
           },
           {
             "multi_match": {
-              "query": "children",
+              "query": "jeugd",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",
@@ -44,10 +45,24 @@
           },
           {
             "multi_match": {
-              "query": "youths",
+              "query": "child",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "youth",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",

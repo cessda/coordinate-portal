@@ -27,12 +27,71 @@
               "fuzziness": "auto",
               "prefix_length": 5
             }
+          },
+          {
+            "bool": {
+              "must": [
+                {
+                  "multi_match": {
+                    "query": "child",
+                    "fields": [
+                      "keywordsSearchField"
+                    ],
+                    "fuzziness": "auto",
+                    "prefix_length": 5
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "bool": {
+                    "should": [
+                      {
+                        "match_phrase": {
+                          "publisherSearchField": "UK Data Service"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "bool": {
+              "must": [
+                {
+                  "multi_match": {
+                    "query": "youth",
+                    "fields": [
+                      "keywordsSearchField"
+                    ],
+                    "fuzziness": "auto",
+                    "prefix_length": 5
+                  }
+                }
+              ],
+              "must_not": [
+                {
+                  "bool": {
+                    "should": [
+                      {
+                        "match_phrase": {
+                          "publisherSearchField": "UK Data Service"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
           }
-        ]
+        ],
+        "minimum_should_match": 1
       }
     }
   },
   "dest": {
-      "index": "coordinate_en"
+    "index": "coordinate_en"
   }
 }

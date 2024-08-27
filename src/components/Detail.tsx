@@ -458,7 +458,13 @@ const Detail = (props: Props) => {
 
           <section>
             {generateHeading('creator')}
-            {generateElements(item.creators, "div")}
+            {generateElements(item.creators, 'div', creator => {
+              if (creator.affiliation) {
+                return `${creator.name} (${creator.affiliation})`;
+              } else {
+                return creator.name;
+              }
+            })}
           </section>
 
           <section>

@@ -14,6 +14,16 @@ This repository contains a Python script and two bash scripts to help manage Ela
 - Elasticsearch running and accessible
 - Curl (for the bash scripts)
 
+## Mapping changes from original CDC mappings
+
+While in a directory that contains both cessda.cdc.osmh-indexer and coordinate-portal repositories:
+
+```bash
+diff cessda.cdc.osmh-indexer/src/main/resources/elasticsearch/mappings/mappings_cmmstudy.json coordinate-portal/indexing/mappings_coordinate.json
+```
+
+Basically added more normalized fields and also renamed it from raw to normalized.
+
 ## Usage
 
 ### Step 1: Update Settings Files
@@ -67,4 +77,3 @@ Use the `reindex.sh` script to add documents from existing indices according to 
     curl -X GET -H 'Content-Type: application/json' -H "Authorization: ApiKey replacethiswithyourapikey"  "localhost:9200/coordinate_nl"
     curl -X GET -H 'Content-Type: application/json' -H "Authorization: ApiKey replacethiswithyourapikey"  "localhost:9200/coordinate_sl"
     ```
-

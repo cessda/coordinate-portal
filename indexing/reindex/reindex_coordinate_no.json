@@ -19,7 +19,7 @@
           },
           {
             "multi_match": {
-              "query": "ungdommer",
+              "query": "ungdom",
               "fields": [
                 "titleStudy^3",
                 "classifications^2",
@@ -35,7 +35,8 @@
               "query": "children",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",
@@ -47,7 +48,8 @@
               "query": "youths",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",

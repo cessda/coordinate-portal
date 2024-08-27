@@ -64,11 +64,11 @@ export const languages: readonly Language[] = [
   //   label: "Slovakian",
   //   index: "coordinate_sk",
   // },
-  {
-    code: "sl",
-    label: "Slovenian",
-    index: "coordinate_sl",
-  },
+  // {
+  //   code: "sl",
+  //   label: "Slovenian",
+  //   index: "coordinate_sl",
+  // },
   {
     code: "sv",
     label: "Swedish",

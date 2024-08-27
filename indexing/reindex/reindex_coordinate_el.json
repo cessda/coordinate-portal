@@ -32,10 +32,11 @@
           },
           {
             "multi_match": {
-              "query": "children",
+              "query": "child",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",
@@ -44,10 +45,11 @@
           },
           {
             "multi_match": {
-              "query": "youths",
+              "query": "youth",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",

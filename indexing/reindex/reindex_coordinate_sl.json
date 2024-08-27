@@ -19,7 +19,7 @@
           },
           {
             "multi_match": {
-              "query": "mladostnik",
+              "query": "mladina",
               "fields": [
                 "titleStudy^3",
                 "classifications^2",
@@ -27,15 +27,29 @@
               ],
               "type": "best_fields",
               "fuzziness": "auto",
-              "prefix_length": 10
+              "prefix_length": 4
             }
           },
           {
             "multi_match": {
-              "query": "children",
+              "query": "mladost",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 4
+            }
+          },
+          {
+            "multi_match": {
+              "query": "child",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",
@@ -44,10 +58,11 @@
           },
           {
             "multi_match": {
-              "query": "youths",
+              "query": "youth",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classifications^2",
+                "keywordsSearchField"
               ],
               "type": "best_fields",
               "fuzziness": "auto",

@@ -24,13 +24,40 @@
       "ignore_above": 256
     },
     "creators": {
-      "type": "text",
-      "analyzer": "pasc_standard_analyzer",
-      "term_vector": "with_positions_offsets",
-      "fields": {
-        "normalized": {
-          "type": "keyword",
-          "normalizer": "case_insensitive_normalizer"
+      "type": "nested",
+      "properties": {
+        "name": {
+          "type": "text",
+          "analyzer": "pasc_standard_analyzer",
+          "term_vector": "with_positions_offsets",
+          "fields": {
+            "normalized": {
+              "type": "keyword",
+              "normalizer": "case_insensitive_normalizer"
+            }
+          }
+        },
+        "affiliation": {
+          "type": "text",
+          "analyzer": "pasc_standard_analyzer",
+          "term_vector": "with_positions_offsets"
+        },
+        "identifier": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "type": {
+              "type": "keyword",
+              "ignore_above": 256
+            },
+            "uri": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
         }
       }
     },
@@ -39,18 +66,9 @@
       "analyzer": "pasc_standard_analyzer",
       "term_vector": "with_positions_offsets"
     },
-    "funding": {
-      "type": "nested",
-      "properties": {
-        "agency": {
-          "type": "keyword",
-          "ignore_above": 256
-        },
-        "grantNumber": {
-          "type": "keyword",
-          "ignore_above": 256
-        }
-      }
+    "dataAccessUrl": {
+      "type": "keyword",
+      "ignore_above": 512
     },
     "dataCollectionFreeTexts": {
       "type": "nested",
@@ -88,6 +106,19 @@
     "fileLanguages": {
       "type": "keyword",
       "ignore_above": 256
+    },
+    "funding": {
+      "type": "nested",
+      "properties": {
+        "agency": {
+          "type": "keyword",
+          "ignore_above": 256
+        },
+        "grantNumber": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
     },
     "id": {
       "type": "keyword",

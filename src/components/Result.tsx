@@ -27,18 +27,24 @@ import { updateLanguage } from "../reducers/language";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: JSX.Element[] = [];
+  // How many creators should be shown
+  const creatorsLength = 3;
 
   if(item.creators){
     for (let i = 0; i < item.creators.length; i++) {
       creators.push(
         <span key={i}>
-          {item.creators[i]}
+          {item.creators[i].affiliation ? (
+            `${item.creators[i].name} (${item.creators[i].affiliation})`
+          ) : (
+            item.creators[i].name
+          )}
           {i < item.creators.length - 1 ? "; " : ""}
         </span>
       );
 
-      if (i === 2 && item.creators.length > 3) {
-        creators.push(<span key={3}>({item.creators.length - 3} more)</span>);
+      if (i === 2 && item.creators.length > creatorsLength) {
+        creators.push(<span key={3}>({item.creators.length - creatorsLength} more)</span>);
         break;
       }
     }

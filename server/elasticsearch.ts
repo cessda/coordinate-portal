@@ -151,7 +151,7 @@ export default class Elasticsearch {
           unique_creators: {
             scripted_metric: {
               init_script: "state.creators = []",
-              map_script: "if (doc.containsKey('creators.normalized') && doc['creators.normalized'].size() > 0) { def creator = doc['creators.normalized'].value; state.creators.add(creator) }",
+              map_script: "if (doc.containsKey('creators.name.normalized') && doc['creators.name.normalized'].size() > 0) { def creator = doc['creators.name.normalized'].value; state.creators.add(creator) }",
               combine_script: "return state.creators.size()",
               reduce_script: "return states.sum()"
             }
