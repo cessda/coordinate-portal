@@ -394,7 +394,7 @@ const Detail = (props: Props) => {
     </div>
     <div className="metadata-container">
       <div className="info-box is-hidden-touch">
-        <section>
+        <section className="info-box-topics">
           {generateHeading('topics', 'is-inline-flex mt-0', 'info-box-topics')}
           <Tooltip content={t("metadata.topics.tooltip.content")}
                   ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
