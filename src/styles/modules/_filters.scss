@@ -9,11 +9,14 @@
     .filter-buttons {
       display: flex;
       justify-content: flex-start;
+      margin-bottom: 4px;
+      height: 4vh;
     }
 
     .filter-panels {
       overflow-y: scroll;
-      max-height: 100vh;
+      min-height: calc(96vh - 20px);
+      max-height: calc(96vh - 20px);
       padding: 1px;
     }
   }

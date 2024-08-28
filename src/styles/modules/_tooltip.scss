@@ -23,4 +23,9 @@
   .dropdown-menu {
     min-width: 14rem;
   }
+
+  .tooltip-above {
+    bottom: 100%;
+    top: unset;
+  }
 }
