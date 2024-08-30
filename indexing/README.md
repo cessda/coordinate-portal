@@ -22,7 +22,7 @@ While in a directory that contains both cessda.cdc.osmh-indexer and coordinate-p
 diff cessda.cdc.osmh-indexer/src/main/resources/elasticsearch/mappings/mappings_cmmstudy.json coordinate-portal/indexing/mappings_coordinate.json
 ```
 
-Basically added more normalized fields and also renamed it from raw to normalized.
+Basically added more normalized fields and also renamed them from raw to normalized.
 
 ## Usage
 
