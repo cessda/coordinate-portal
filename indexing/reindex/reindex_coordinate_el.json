@@ -1,0 +1,66 @@
+{
+  "source": {
+    "index": "cmmstudy_el",
+    "query": {
+      "bool": {
+        "should": [
+          {
+            "multi_match": {
+              "query": "ΠΑΙΔΙΑ",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "ΕΦΗΒΟΙ",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "child",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "youth",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          }
+        ]
+      }
+    }
+  },
+  "dest": {
+      "index": "coordinate_el"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "source": {
+    "index": "cmmstudy_sk",
+    "query": {
+      "bool": {
+        "should": [
+          {
+            "multi_match": {
+              "query": "deti",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 4
+            }
+          },
+          {
+            "multi_match": {
+              "query": "dieťa",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "mládež",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 4
+            }
+          },
+          {
+            "multi_match": {
+              "query": "child",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          },
+          {
+            "multi_match": {
+              "query": "youth",
+              "fields": [
+                "titleStudy^3",
+                "classifications^2",
+                "keywordsSearchField"
+              ],
+              "type": "best_fields",
+              "fuzziness": "auto",
+              "prefix_length": 5
+            }
+          }
+        ]
+      }
+    }
+  },
+  "dest": {
+      "index": "coordinate_sk"
+  }
+}
