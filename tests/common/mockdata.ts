@@ -4,10 +4,12 @@ export const mockStudy: CMMStudy = {
   id: '1',
   titleStudy: 'Study Title',
   titleStudyHighlight: '',
-  abstract: 'Abstract',
+  abstract: 'This is a mock abstract describing a mock study.\n\nThe key results of this mock study is providing mock data that can be used to validate proper functionality of the application.',
   abstractHighlight: '',
   abstractShort: 'Abstract',
+  abstractLong: 'Abstract',
   abstractHighlightShort: '',
+  abstractHighlightLong: '',
   classifications: [
     {
       id: 'UKDS1234',
@@ -20,7 +22,9 @@ export const mockStudy: CMMStudy = {
     { name: 'Jane Doe' },
     { name: 'University of Essex' },
     { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
-    { name: 'Joe Bloggs, University of Essex' }
+    { name: 'Joe Bloggs, University of Essex' },
+    { name: 'Matti Meikäläinen', identifier: { id: "", type: "ORCID", uri: "http://localhost/0" } },
+    { name: 'Maija Meikäläinen', affiliation: 'Tampere University', identifier: { id: "1" } }
   ],
   code: 'UKDS',
   dataAccessFreeTexts: [
@@ -35,7 +39,27 @@ export const mockStudy: CMMStudy = {
   dataCollectionPeriodEnddate: '',
   dataCollectionPeriodStartdate: '2001',
   dataCollectionYear: 2001,
+  dataKindFreeTexts: [
+    { dataKindFreeText: "Software", },
+    { dataKindFreeText: "Text", type: "Quantitative" },
+    { dataKindFreeText: "Other" },
+    { type: "Numeric" }
+  ],
   fileLanguages: ['en'],
+  funding: [
+    {
+      grantNumber: '123456',
+      agency: 'Some Agency'
+    }
+  ],
+  generalDataFormats: [
+    {
+      id: '',
+      term: 'Numeric',
+      vocab: 'GeneralDataFormat',
+      vocabUri: 'urn:ddi:int.ddi.cv:GeneralDataFormat:2.0.3'
+    }
+  ],
   keywords: [
     {
       id: '',
@@ -110,7 +134,7 @@ export const mockStudy: CMMStudy = {
       vocabUri: 'http://example.com'
     }
   ],
-  universe: { 
+  universe: {
     inclusion: "Exampled studied cohort",
     exclusion: "Excluded cohort",
   }

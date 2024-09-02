@@ -209,10 +209,6 @@ function getSearchkitRouter() {
   const router = express.Router();
   const host = _.trimEnd(elasticsearchUrl, "/");
 
-  const httpAgent = new Agent({
-    keepAlive: true,
-  });
-
   // Get a record directly
   router.get("/_get/:index/:id", async (req, res) => {
     try {
@@ -240,16 +236,15 @@ function getSearchkitRouter() {
         similars: similars,
       });
     } catch (e) {
-      const u = e as ElasticError;
-      if (u instanceof ResponseError && u.statusCode === 404) {
+      if (e instanceof ResponseError && e.statusCode === 404) {
         // Try to find if the study is available in other languages
         // Assumes that index name can be split by "_" to get common part as [0] and language as [1]
         const indices = await elasticsearch.getIndicesForStudyId(req.params.id, req.params.index.split("_")[0]);
-        res.status(404).json(indices.map((i: string) => i.split("_")[1]));
+        res.status(404).json(indices.map(i=> i.split("_")[1]));
         return;
       }
 
-      elasticsearchErrorHandler(u, res);
+      elasticsearchErrorHandler(e, res);
     }
   });
 
@@ -342,7 +337,6 @@ function getSearchkitRouter() {
       res.send(response);
       logger.debug("Finished Elasticsearch Request to %s", fullUrl);
     } catch (e: unknown) {
-      const u = e as ElasticError;
       // When a connection error occurs send a 502 error to the client.
       logger.error("Elasticsearch Request failed: %s: %s", fullUrl, e);
       res.sendStatus(502);
@@ -388,6 +382,35 @@ function externalApiV2() {
     if (!accepts) {
       res.sendStatus(406);
       return;
+    }
+
+    // Get Visitors Information For Prom Metrics
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+    if (ip) {
+      const ipString = String(ip);
+
+      if (ipinfoAPIKey) {
+
+        //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
+        const ipinfoWrapper = new IPinfoWrapper(ipinfoAPIKey); //token must be parsed here
+        ipinfoWrapper.lookupIp(ipString)
+          .then(info => observeAPIClientIP(ipString, info))
+          .catch((error) => {
+            if (error instanceof ApiLimitError) {
+                // handle api limit exceed error
+                logger.warn(`ipinfo searchAPI limit exceeded : ${error}`);
+            } else {
+                // handle other errors
+                logger.error(`error while getting searchAPI client's ip / country : ${error}`);
+            }
+
+            // Observe the IP without country information
+            observeAPIClientIP(ipString);
+          });
+      } else {
+        observeAPIClientIP(ipString);
+      }
     }
 
     const { metadataLanguage, q, sortBy } = req.query;
@@ -551,22 +574,7 @@ function externalApiV2() {
       });
 
       // Calculate the total hits
-      let totalHits: number;
-      switch (typeof response.hits.total) {
-        case "object":
-          // If SearchTotalHits object, extract from the value field
-          totalHits = response.hits.total.value;
-          break;
-        case "number":
-          // If number, extract directly
-          totalHits = response.hits.total;
-          break;
-        default:
-          // Total hits not present, set to 0
-          totalHits = 0;
-          break;
-      }
-
+      const totalHits = Elasticsearch.parseTotalHits(response.hits.total) || 0;
       const resultsCount = apiResultsCount(offset, limit, response.hits.hits.length, totalHits);
 
       //Meta-Info to send with response
@@ -599,7 +607,7 @@ function externalApiV2() {
 
         // Respond with JSON-LD if specified by the client
         "application/ld+json": () => {
-          const studyModels = response.hits.hits.map(hit => getStudyModel(hit));
+          const studyModels = response.hits.hits.map(hit => getStudyModel(hit._source));
           const jsonLdArray = studyModels.map((value) => getJsonLd(value));
           res.json({
             SearchTerms: searchTerms,
@@ -615,9 +623,6 @@ function externalApiV2() {
       logger.debug('Finished API Elasticsearch Request');
     }
   });
-
-  return router;
-}
 
 /**
  * Build filters for nested documents. The filter uses a term query
@@ -838,7 +843,7 @@ async function getMetadata(
   const response = await elasticsearch.getStudy(q, `cmmstudy_${lang}`);
 
   if (response) {
-    const study = getStudyModel({ _source: response });
+    const study = getStudyModel(response);
     return {
       creators: study.creators.join("; "),
       description: study.abstractShort,

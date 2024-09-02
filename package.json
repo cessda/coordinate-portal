@@ -6,6 +6,7 @@
   "repository": "bitbucket:tietoarkisto/coordinate-portal",
   "private": true,
   "scripts": {
+    "start": "npm run startdev",
     "startdev": "npm run tsc && node startdev.js",
     "startprod": "node startprod.js",
     "build": "npm run tsc && webpack --config webpack.prod.config.js",
@@ -122,8 +123,8 @@
     "webpack-merge": "5.8.0"
   },
   "engines": {
-    "node": "^18.15.0",
-    "npm": "^9.5.0"
+    "node": ">=18.15.0",
+    "npm": ">=9.5.0"
   },
   "resolutions": {
     "**/fsevents": "2.3.2"

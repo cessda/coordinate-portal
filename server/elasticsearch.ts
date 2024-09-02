@@ -42,7 +42,7 @@ interface AggregationsResponse {
 }
 
 export default class Elasticsearch {
-  private readonly indexName = "coordinate";
+  private readonly indexName = "cmmstudy";
 
   public readonly client: Client;
 

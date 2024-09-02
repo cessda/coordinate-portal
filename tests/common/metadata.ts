@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -18,94 +18,113 @@ describe('Metadata utilities', () => {
     it('should return a populated study model', () => {
       expect(
         getStudyModel({
-          _source: {
-            id: "1",
-            titleStudy: 'Study Title',
-            titleStudyHighlight: 'Study Title',
-            abstract: 'Abstract',
-            abstractShort: 'Abstract',
-            abstractHighlight: 'Abstract',
-            abstractHighlightShort: 'Abstract',
-            classifications: [
-              {
-                id: 'UKDS1234',
-                term: 'Term',
-                vocab: 'Vocab',
-                vocabUri: 'http://example.com'
-              }
-            ],
-            creators: [
-              { name: 'Jane Doe' },
-              { name: 'University of Essex' },
-              { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
-              { name: 'Joe Bloggs, University of Essex' }
-            ],
-            code: 'UKDS',
-            dataAccessFreeTexts: ['Data Access Free Texts'],
-            dataCollectionFreeTexts: [],
-            dataCollectionPeriodEnddate: '',
-            dataCollectionPeriodStartdate: '2001',
-            fileLanguages: ['en'],
-            keywords: [
-              {
-                id: 'UKDS1234',
-                term: 'Term',
-                vocab: 'Vocab',
-                vocabUri: 'http://example.com'
-              }
-            ],
-            langAvailableIn: ['EN'],
-            lastModified: '2001-01-01T12:00:00Z',
-            pidStudies: [
-              {
-                agency: 'UKDS',
-                pid: 'UKDS1234'
-              }
-            ],
-            publicationYear: '2001-01-01',
-            publisher: {
-              abbr: "UKDS",
-              publisher: 'UK Data Service'
-            },
-            samplingProcedureFreeTexts: [
-              'Sampling Procedure<script></script>'
-            ],
-            studyAreaCountries: [
-              {
-                abbr: 'EN',
-                country: 'England',
-                searchField: 'England'
-              }
-            ],
-            studyNumber: 'UKDS1234',
-            studyUrl: 'http://example.com',
-            studyXmlSourceUrl: 'http://example.com',
-            typeOfModeOfCollections: [
-              {
-                id: 'UKDS1234',
-                term: 'Term',
-                vocab: 'Vocab',
-                vocabUri: 'http://example.com'
-              }
-            ],
-            typeOfTimeMethods: [
-              {
-                id: 'UKDS1234',
-                term: 'Term',
-                vocab: 'Vocab',
-                vocabUri: 'http://example.com'
-              }
-            ],
-            typeOfSamplingProcedures: [],
-            unitTypes: [
-              {
-                id: 'UKDS1234',
-                term: 'Term',
-                vocab: 'Vocab',
-                vocabUri: 'http://example.com'
-              }
-            ]
-          }
+          id: "1",
+          titleStudy: 'Study Title',
+          titleStudyHighlight: 'Study Title',
+          abstract: 'Abstract',
+          abstractShort: 'Abstract',
+          abstractLong: 'Abstract',
+          abstractHighlight: 'Abstract',
+          abstractHighlightShort: 'Abstract',
+          abstractHighlightLong: 'Abstract',
+          classifications: [
+            {
+              id: 'UKDS1234',
+              term: 'Term',
+              vocab: 'Vocab',
+              vocabUri: 'http://example.com'
+            }
+          ],
+          creators: [
+            { name: 'Jane Doe' },
+            { name: 'University of Essex' },
+            { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+            { name: 'Joe Bloggs, University of Essex' }
+          ],
+          code: 'UKDS',
+          dataAccessFreeTexts: ['Data Access Free Texts'],
+          dataCollectionFreeTexts: [],
+          dataCollectionPeriodEnddate: '',
+          dataCollectionPeriodStartdate: '2001',
+          dataKindFreeTexts: [
+            { dataKindFreeText: "Numeric", type: "Quantitative" },
+            { dataKindFreeText: "Text", type: "Quantitative" },
+            { dataKindFreeText: "Other" },
+          ],
+          fileLanguages: ['en'],
+          funding: [
+            {
+              grantNumber: '123456',
+              agency: 'Some Agency'
+            }
+          ],
+          generalDataFormats: [
+            {
+              id: '',
+              term: 'Numeric',
+              vocab: 'GeneralDataFormat',
+              vocabUri: 'urn:ddi:int.ddi.cv:GeneralDataFormat:2.0.3'
+            }
+          ],
+          keywords: [
+            {
+              id: 'UKDS1234',
+              term: 'Term',
+              vocab: 'Vocab',
+              vocabUri: 'http://example.com'
+            }
+          ],
+          langAvailableIn: ['EN'],
+          lastModified: '2001-01-01T12:00:00Z',
+          pidStudies: [
+            {
+              agency: 'UKDS',
+              pid: 'UKDS1234'
+            }
+          ],
+          publicationYear: '2001-01-01',
+          publisher: {
+            abbr: "UKDS",
+            publisher: 'UK Data Service'
+          },
+          samplingProcedureFreeTexts: [
+            'Sampling Procedure<script></script>'
+          ],
+          studyAreaCountries: [
+            {
+              abbr: 'EN',
+              country: 'England',
+              searchField: 'England'
+            }
+          ],
+          studyNumber: 'UKDS1234',
+          studyUrl: 'http://example.com',
+          studyXmlSourceUrl: 'http://example.com',
+          typeOfModeOfCollections: [
+            {
+              id: 'UKDS1234',
+              term: 'Term',
+              vocab: 'Vocab',
+              vocabUri: 'http://example.com'
+            }
+          ],
+          typeOfTimeMethods: [
+            {
+              id: 'UKDS1234',
+              term: 'Term',
+              vocab: 'Vocab',
+              vocabUri: 'http://example.com'
+            }
+          ],
+          typeOfSamplingProcedures: [],
+          unitTypes: [
+            {
+              id: 'UKDS1234',
+              term: 'Term',
+              vocab: 'Vocab',
+              vocabUri: 'http://example.com'
+            }
+          ]
         })
       ).toEqual({
         id: '1',
@@ -113,8 +132,10 @@ describe('Metadata utilities', () => {
         titleStudyHighlight: '',
         abstract: 'Abstract',
         abstractShort: 'Abstract',
+        abstractLong: 'Abstract',
         abstractHighlight: '',
         abstractHighlightShort: '',
+        abstractHighlightLong: '',
         classifications: [
           {
             id: 'UKDS1234',
@@ -135,7 +156,26 @@ describe('Metadata utilities', () => {
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '2001',
         dataCollectionYear: undefined,
+        dataKindFreeTexts: [
+          { dataKindFreeText: "Numeric", type: "Quantitative" },
+          { dataKindFreeText: "Text", type: "Quantitative" },
+          { dataKindFreeText: "Other" },
+        ],
         fileLanguages: ['en'],
+        funding: [
+          {
+            grantNumber: '123456',
+            agency: 'Some Agency'
+          }
+        ],
+        generalDataFormats: [
+          {
+            id: '',
+            term: 'Numeric',
+            vocab: 'GeneralDataFormat',
+            vocabUri: 'urn:ddi:int.ddi.cv:GeneralDataFormat:2.0.3'
+          }
+        ],
         keywords: [
           {
             id: 'UKDS1234',
@@ -202,15 +242,17 @@ describe('Metadata utilities', () => {
 
     it('should return a study model with default values', () => {
       expect(
-        getStudyModel({ _source: {}  })
+        getStudyModel({})
       ).toEqual({
         id: undefined,
         titleStudy: undefined,
         titleStudyHighlight: '',
         abstract: '',
         abstractShort: '',
+        abstractLong: '',
         abstractHighlight: '',
         abstractHighlightShort: '',
+        abstractHighlightLong: '',
         classifications: [],
         code: undefined,
         creators: [],
@@ -219,7 +261,10 @@ describe('Metadata utilities', () => {
         dataCollectionPeriodEnddate: '',
         dataCollectionPeriodStartdate: '',
         dataCollectionYear: undefined,
+        dataKindFreeTexts: [],
         fileLanguages: [],
+        funding: [],
+        generalDataFormats: [],
         keywords: [],
         langAvailableIn: [],
         lastModified: '',
@@ -241,6 +286,14 @@ describe('Metadata utilities', () => {
     });
   });
 
+  it('should throw if an incorrect type is given', () => {
+    expect(() => {
+      getStudyModel(undefined)
+    }).toThrow(
+      TypeError
+    );
+  });
+
   describe('getJsonLd()', () => {
     it('should return generated JSON-LD schema with valid data', () => {
       expect(
@@ -252,6 +305,8 @@ describe('Metadata utilities', () => {
           abstractHighlight: '',
           abstractShort: 'Abstract',
           abstractHighlightShort: '',
+          abstractLong: 'Abstract',
+          abstractHighlightLong: '',
           classifications: [
             {
               id: 'UKDS1234',
@@ -271,7 +326,10 @@ describe('Metadata utilities', () => {
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
+          dataKindFreeTexts: [],
           fileLanguages: ['en'],
+          funding: [],
+          generalDataFormats: [],
           keywords: [
             {
               id: 'UKDS1234',
@@ -389,6 +447,8 @@ describe('Metadata utilities', () => {
           abstractHighlight: '',
           abstractShort: 'Abstract',
           abstractHighlightShort: '',
+          abstractLong: 'Abstract',
+          abstractHighlightLong: '',
           classifications: [
             {
               id: 'UKDS1234',
@@ -408,7 +468,10 @@ describe('Metadata utilities', () => {
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
           dataCollectionPeriodStartdate: '2001',
+          dataKindFreeTexts: [],
           fileLanguages: ['en'],
+          funding: [],
+          generalDataFormats: [],
           keywords: [],
           langAvailableIn: ['EN'],
           lastModified: '2001-01-01T12:00:00Z',
@@ -454,7 +517,7 @@ describe('Metadata utilities', () => {
               vocab: 'Vocab',
               vocabUri: 'http://example.com'
             }
-          ] 
+          ]
         })
       ).toEqual({
         '@context': 'https://schema.org',

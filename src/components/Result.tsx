@@ -87,7 +87,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
       event.stopPropagation();
       handleAbstractExpansion(titleStudy);
     }
-  };
+  }
 
   function handleAbstractExpansion(titleStudy: string) {
     // Notify Matomo Analytics of toggling "Read more" for a study.
@@ -103,7 +103,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
       return match.toLowerCase();
     });
     text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    var element = document.createElement('div');
+    const element = document.createElement('div');
     element.innerHTML = text;
     return element.textContent || element.innerText;
   }
@@ -111,7 +111,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   // TODO Might have to remove all HTML Entities when abstract is not expanded
   const renderAbstract = () => {
     let abstract = normalizeAndDecodeHTML(hit.abstract);
-    let matchedWords = hit._highlightResult.abstract.matchedWords;
+    const matchedWords = hit._highlightResult.abstract.matchedWords;
     if(matchedWords.length > 0) {
       if(abstractExpanded) {
         // Create a regular expression that matches any of the highlighted texts

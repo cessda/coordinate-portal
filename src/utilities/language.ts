@@ -37,7 +37,7 @@ export const languages: readonly Language[] = [
   {
     code: "en",
     label: "English",
-    index: "coordinate_en",
+    index: "cmmstudy_en",
   },
   {
     code: "fi",
