@@ -35,10 +35,10 @@ describe('Metadata utilities', () => {
               }
             ],
             creators: [
-              'Jane Doe',
-              'University of Essex',
-              'John Smith (University of Essex)',
-              'Joe Bloggs, University of Essex'
+              { name: 'Jane Doe' },
+              { name: 'University of Essex' },
+              { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+              { name: 'Joe Bloggs, University of Essex' }
             ],
             code: 'UKDS',
             dataAccessFreeTexts: ['Data Access Free Texts'],
@@ -125,10 +125,10 @@ describe('Metadata utilities', () => {
         ],
         code: 'UKDS',
         creators: [
-          'Jane Doe',
-          'University of Essex',
-          'John Smith (University of Essex)',
-          'Joe Bloggs, University of Essex'
+          { name: 'Jane Doe' },
+          { name: 'University of Essex' },
+          { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+          { name: 'Joe Bloggs, University of Essex' }
         ],
         dataAccessFreeTexts: ['Data Access Free Texts'],
         dataCollectionFreeTexts: [],
@@ -261,10 +261,10 @@ describe('Metadata utilities', () => {
             }
           ],
           creators: [
-            'Jane Doe',
-            'University of Essex',
-            'John Smith (University of Essex)',
-            'Joe Bloggs, University of Essex'
+            { name: 'Jane Doe' },
+            { name: 'University of Essex' },
+            { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+            { name: 'Joe Bloggs, University of Essex' }
           ],
           code: 'UKDS',
           dataAccessFreeTexts: ['Data Access Free Texts', 'https://creativecommons.org/licenses/by/4.0'],
@@ -398,10 +398,10 @@ describe('Metadata utilities', () => {
             }
           ],
           creators: [
-            'Jane Doe',
-            'University of Essex',
-            'John Smith (University of Essex)',
-            'Joe Bloggs, University of Essex'
+            { name: 'Jane Doe' },
+            { name: 'University of Essex' },
+            { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+            { name: 'Joe Bloggs, University of Essex' }
           ],
           code: 'UKDS',
           dataAccessFreeTexts: [],

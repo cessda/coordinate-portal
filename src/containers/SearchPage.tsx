@@ -170,99 +170,101 @@ const SearchPage = () => {
                                 }} />
             </div>
           </div>
-          <Panel title={<h2>{t("filters.topic.label")}</h2>}
-                tooltip={<Tooltip id="filters-topic-tooltip"
-                                  content={t("filters.topic.tooltip.content")}
-                                  ariaLabel={t("filters.topic.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RefinementList attribute="classifications" searchable limit={15}
-                            classNames={{
-                              searchBox: 'focus-visible',
-                              checkbox: 'focus-visible'
-                            }}/>
-          </Panel>
-          <Panel title={<h2>{t("filters.keywords.label")}</h2>}
-                tooltip={<Tooltip id="filters-keywords-tooltip"
-                                  content={t("filters.keywords.tooltip.content")}
-                                  ariaLabel={t("filters.keywords.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RefinementList attribute="keywords" searchable limit={15}
-                            classNames={{
-                              searchBox: 'focus-visible',
-                              checkbox: 'focus-visible'
-                            }}/>
-          </Panel>
-          <Panel title={<h2>{t("metadata.publisher")}</h2>}
-                tooltip={<Tooltip id="filters-publisher-tooltip"
-                                  content={t("filters.publisher.tooltip.content")}
-                                  ariaLabel={t("filters.publisher.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
-                            classNames={{
-                              searchBox: 'focus-visible',
-                              checkbox: 'focus-visible'
-                            }}/>
-          </Panel>
-          <Panel title={<h2>{t("metadata.country")}</h2>}
-                tooltip={<Tooltip id="filters-country-tooltip"
-                                  content={t("filters.country.tooltip.content")}
-                                  ariaLabel={t("filters.country.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
-                            classNames={{
-                              searchBox: 'focus-visible',
-                              checkbox: 'focus-visible',
-                              list: 'ais-CustomRefinementList'
-                            }}/>
-          </Panel>
-          {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
-          <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
-                tooltip={<Tooltip id="filters-timemethod-tooltip"
-                content={t("filters.timeMethod.tooltip.content")}
-                ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
-                            classNames={{
-                              searchBox: 'focus-visible',
-                              checkbox: 'focus-visible',
-                              list: 'ais-CustomRefinementList'
-                            }}/>
-          </Panel>
-          <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
-                tooltip={<Tooltip id="filters-timemethodcv-tooltip"
-                                  content={t("filters.timeMethodCV.tooltip.content")}
-                                  ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RefinementList attribute="timeMethodCV" searchable limit={16}
-                            classNames={{
-                              searchBox: 'focus-visible',
-                              checkbox: 'focus-visible'
-                            }}/>
-          </Panel>
-          <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
-                tooltip={<Tooltip id="filters-collectiondates-tooltip"
-                                  content={t("filters.collectionDates.tooltip.content")}
-                                  ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")}/>}
-                collapsable={true}
-                defaultCollapsed={true}>
-            <RangeInput attribute="collectionYear"
-                        classNames={{
-                          input: 'focus-visible',
-                          submit: 'focus-visible'
-                        }}
-                        translations={{
-                          separatorElementText: `${t("filters.collectionYear.separator")}`,
-                          submitButtonText: `${t("filters.collectionYear.submitButton")}`,
-                        }}/>
-                        {/* Shows up in filter summary if set */}
-                        {/* min={1900}/> */}
-          </Panel>
+          <div className="filter-panels">
+            <Panel title={<h2>{t("filters.topic.label")}</h2>}
+                  tooltip={<Tooltip id="filters-topic-tooltip"
+                                    content={t("filters.topic.tooltip.content")}
+                                    ariaLabel={t("filters.topic.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RefinementList attribute="classifications" searchable limit={15}
+                              classNames={{
+                                searchBox: 'focus-visible',
+                                checkbox: 'focus-visible'
+                              }}/>
+            </Panel>
+            <Panel title={<h2>{t("filters.keywords.label")}</h2>}
+                  tooltip={<Tooltip id="filters-keywords-tooltip"
+                                    content={t("filters.keywords.tooltip.content")}
+                                    ariaLabel={t("filters.keywords.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RefinementList attribute="keywords" searchable limit={15}
+                              classNames={{
+                                searchBox: 'focus-visible',
+                                checkbox: 'focus-visible'
+                              }}/>
+            </Panel>
+            <Panel title={<h2>{t("metadata.publisher")}</h2>}
+                  tooltip={<Tooltip id="filters-publisher-tooltip"
+                                    content={t("filters.publisher.tooltip.content")}
+                                    ariaLabel={t("filters.publisher.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
+                              classNames={{
+                                searchBox: 'focus-visible',
+                                checkbox: 'focus-visible'
+                              }}/>
+            </Panel>
+            <Panel title={<h2>{t("metadata.country")}</h2>}
+                  tooltip={<Tooltip id="filters-country-tooltip"
+                                    content={t("filters.country.tooltip.content")}
+                                    ariaLabel={t("filters.country.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
+                              classNames={{
+                                searchBox: 'focus-visible',
+                                checkbox: 'focus-visible',
+                                list: 'ais-CustomRefinementList'
+                              }}/>
+            </Panel>
+            {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
+            <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
+                  tooltip={<Tooltip id="filters-timemethod-tooltip"
+                  content={t("filters.timeMethod.tooltip.content")}
+                  ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
+                              classNames={{
+                                searchBox: 'focus-visible',
+                                checkbox: 'focus-visible',
+                                list: 'ais-CustomRefinementList'
+                              }}/>
+            </Panel>
+            <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
+                  tooltip={<Tooltip id="filters-timemethodcv-tooltip"
+                                    content={t("filters.timeMethodCV.tooltip.content")}
+                                    ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RefinementList attribute="timeMethodCV" searchable limit={16}
+                              classNames={{
+                                searchBox: 'focus-visible',
+                                checkbox: 'focus-visible'
+                              }}/>
+            </Panel>
+            <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
+                  tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                                    content={t("filters.collectionDates.tooltip.content")}
+                                    ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")}/>}
+                  collapsable={true}
+                  defaultCollapsed={true}>
+              <RangeInput attribute="collectionYear"
+                          classNames={{
+                            input: 'focus-visible',
+                            submit: 'focus-visible'
+                          }}
+                          translations={{
+                            separatorElementText: `${t("filters.collectionYear.separator")}`,
+                            submitButtonText: `${t("filters.collectionYear.submitButton")}`,
+                          }}/>
+                          {/* Shows up in filter summary if set */}
+                          {/* min={1900}/> */}
+            </Panel>
+          </div>
         </div>
       </div>
       <div className="column is-8">

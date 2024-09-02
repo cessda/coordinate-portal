@@ -144,13 +144,14 @@ export default class Elasticsearch {
   }
 
   /**
-   * Gets metrics for About page.
+   * Gets metrics for About page. Index not currently used but could be used
+   * to get metrics just for the selected index.
    * @param index the index to retrieve the metrics from.
    */
   async getAboutMetrics(index: string) {
     const studiesResponse = await this.client.search({
       size: 0,
-      index: index,
+      index: `${this.indexName}_*`,
       body: {
         query: { match_all: {} },
         aggs: {
@@ -167,34 +168,30 @@ export default class Elasticsearch {
 
     const creatorsResponse = await this.client.search({
       size: 0,
-      index: index,
+      index: `${this.indexName}_*`,
       body: {
-        query: { match_all: {} },
-        // aggs: {
-        //   unique_creators: {
-        //     cardinality: {
-        //       field: "creators.normalized",
-        //     },
-        //   },
-        // },
         aggs: {
-          unique_creators: {
-            scripted_metric: {
-              init_script: "state.creators = []",
-              map_script: "if (doc.containsKey('creators.normalized') && doc['creators.normalized'].size() > 0) { def creator = doc['creators.normalized'].value; state.creators.add(creator) }",
-              combine_script: "return state.creators.size()",
-              reduce_script: "return states.sum()"
+          total_creators: {
+            nested: {
+              path: 'creators'
+            },
+            aggs: {
+              unique_creators: {
+                cardinality: {
+                  field: 'creators.name.normalized'
+                }
+              }
             }
           }
         }
-      },
+      }
     });
 
     const totalCreators = (creatorsResponse.aggregations?.unique_creators as AggregationsCardinalityAggregate).value;
 
     const countriesResponse = await this.client.search({
       size: 0,
-      index: index,
+      index: `${this.indexName}_*`,
       body: {
         query: { match_all: {} },
         aggs: {

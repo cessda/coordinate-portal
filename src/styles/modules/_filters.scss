@@ -5,11 +5,20 @@
     position: sticky;
     top: 15px;
     z-index: 1;
-  }
 
-  .filter-buttons {
-    display: flex;
-    justify-content: flex-start;
+    .filter-buttons {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 4px;
+      height: 4vh;
+    }
+
+    .filter-panels {
+      overflow-y: scroll;
+      min-height: calc(96vh - 20px);
+      max-height: calc(96vh - 20px);
+      padding: 1px;
+    }
   }
 
   .sk-select {

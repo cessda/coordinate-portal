@@ -21,7 +21,7 @@ export interface CMMStudy {
   id: string;
   code: string;
   /** Creator */
-  creators: string[];
+  creators: Creator[];
   /** Data collection start data */
   dataCollectionPeriodStartdate?: string;
   /** Data collection end date */
@@ -74,6 +74,18 @@ export interface CMMStudy {
   universe?: Universe;
   /** Related publications */
   relatedPublications: RelatedPublication[];
+}
+
+export interface Creator {
+  name: string;
+  affiliation?: string;
+  identifier?: Identifier;
+}
+
+export interface Identifier {
+  id: string;
+  type?: string;
+  uri?: string;
 }
 
 export interface Country {
@@ -222,65 +234,54 @@ const commaRegex = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi;
 // Generates study JSON-LD for Google indexing.
 export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
   // Attempt to split people from organisations in the creator field.
-  const creators: Array<Organization | Person> = data.creators.map(
-    (creator) => {
-      const bracketMatches = bracketRegex.exec(creator);
-      if (bracketMatches) {
-        return {
-          "@type": "Person",
-          name: bracketMatches[1].trim(),
-          affiliation: {
-            "@type": "Organization",
-            name: bracketMatches[2].trim(),
-          },
-        };
-      }
-
-      const commaMatches = commaRegex.exec(creator);
-      if (commaMatches) {
-        return {
-          "@type": "Person",
-          name: commaMatches[1].trim(),
-          affiliation: {
-            "@type": "Organization",
-            name: commaMatches[2].trim(),
-          },
-        };
-      }
-
-      const creatorLower = creator.toLowerCase();
-      // Assume organisation if it contains any of the following words.
+  const creators: Array<Organization | Person> = data.creators.map(creator => {
+    // Explicitly stated affiliation
+    if (creator.affiliation) {
       return {
-        "@type":
-          creatorLower.includes("university") ||
-          creatorLower.includes("institute") ||
-          creatorLower.includes("polytechnic") ||
-          creatorLower.includes("government") ||
-          creatorLower.includes("department") ||
-          creatorLower.includes("faculty") ||
-          creatorLower.includes("division") ||
-          creatorLower.includes("agency") ||
-          creatorLower.includes("unit")
-            ? "Organization"
-            : "Person",
-        name: creator.trim(),
+        '@type': 'Person',
+        name: creator.name,
+        affiliation: {
+          '@type': 'Organization',
+          name: creator.affiliation
+        }
       };
     }
-  );
+
+    // Format: "Name, Organisation"
+    const commaMatches = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi.exec(creator.name);
+    if (commaMatches) {
+      return {
+        '@type': 'Person',
+        name: commaMatches[1].trim(),
+        affiliation: {
+          '@type': 'Organization',
+          name: commaMatches[2].trim()
+        }
+      };
+    }
+
+    const creatorLower = creator.name.toLowerCase();
+    // Assume organisation if it contains any of the following words.
+    return {
+      '@type': creatorLower.includes('university') ||
+               creatorLower.includes('institute') ||
+               creatorLower.includes('polytechnic') ||
+               creatorLower.includes('government') ||
+               creatorLower.includes('department') ||
+               creatorLower.includes('faculty') ||
+               creatorLower.includes('division') ||
+               creatorLower.includes('agency') ||
+               creatorLower.includes('unit') ? 'Organization' : 'Person',
+      name: creator.name
+    }
+  });
 
   //Prioritize identifier
-  const identifier =
-    data.pidStudies.filter((i) => i.agency === "DOI").length !== 0
-      ? data.pidStudies.filter((i) => i.agency === "DOI").map((i) => i.pid)[0]
-      : data.pidStudies.filter((i) => i.agency === "Handle").length !== 0
-      ? data.pidStudies
-          .filter((i) => i.agency === "Handle")
-          .map((i) => i.pid)[0]
-      : data.pidStudies.filter((i) => i.agency === "URN").length !== 0
-      ? data.pidStudies.filter((i) => i.agency === "URN").map((i) => i.pid)[0]
-      : data.pidStudies.filter((i) => i.agency === "ARK").length !== 0
-      ? data.pidStudies.filter((i) => i.agency === "ARK").map((i) => i.pid)[0]
-      : data.pidStudies.filter((i) => i.agency).map((i) => i.pid)[0];
+  const identifier = data.pidStudies.filter(i=> i.agency==='DOI').length !==0 ? data.pidStudies.filter(i=> i.agency==='DOI').map(i => i.pid)[0]
+                   : data.pidStudies.filter(i=> i.agency==='Handle').length !==0 ? data.pidStudies.filter(i=> i.agency==='Handle').map(i => i.pid)[0]
+                   : data.pidStudies.filter(i=> i.agency==='URN').length !==0 ? data.pidStudies.filter(i=> i.agency==='URN').map(i => i.pid)[0]
+                   : data.pidStudies.filter(i=> i.agency==='ARK').length !==0 ? data.pidStudies.filter(i=> i.agency==='ARK').map(i => i.pid)[0]
+                   : data.pidStudies.filter(i=> i.agency).map(i => i.pid)[0];
 
   // License
   let license: string | undefined = undefined;
@@ -295,28 +296,25 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
     }
   }
 
+
+
   return {
-    "@context": "https://schema.org",
-    "@type": "Dataset",
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
     name: data.titleStudy,
-    description: truncate(data.abstract, { length: 5000, separator: " " }),
+    description: truncate(data.abstract, { length: 5000, separator: ' ' }),
     url: href, // Needs to generate a URL if href is undefined
     sameAs: data.studyUrl,
-    keywords: data.keywords.map((i) => upperFirst(i.term)),
-    variableMeasured: data.unitTypes.map((u) => u.term).join(", "),
-    measurementTechnique: data.typeOfModeOfCollections
-      .map((t) => t.term)
-      .join(", "),
+    keywords: data.keywords.map(i => upperFirst(i.term)),
+    variableMeasured: data.unitTypes.map(u => u.term).join(', '),
+    measurementTechnique: data.typeOfModeOfCollections.map(t => t.term).join(', '),
     license: license,
     identifier: identifier,
     creator: creators,
-    temporalCoverage: extractDataCollectionPeriod(
-      data.dataCollectionPeriodStartdate,
-      data.dataCollectionPeriodEnddate
-    ),
-    spatialCoverage: data.studyAreaCountries.map((s) => s.country).join(", "),
+    temporalCoverage: extractDataCollectionPeriod(data.dataCollectionPeriodStartdate, data.dataCollectionPeriodEnddate),
+    spatialCoverage: data.studyAreaCountries.map(s => s.country).join(', '),
     datePublished: data.publicationYear.substring(0, 10),
-    dateModified: data.lastModified.substring(0, 10),
+    dateModified: data.lastModified.substring(0, 10)
   };
 }
 

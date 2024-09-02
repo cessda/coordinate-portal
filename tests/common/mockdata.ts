@@ -17,10 +17,10 @@ export const mockStudy: CMMStudy = {
     }
   ],
   creators: [
-    'Jane Doe',
-    'University of Essex',
-    'John Smith (University of Essex)',
-    'Joe Bloggs, University of Essex'
+    { name: 'Jane Doe' },
+    { name: 'University of Essex' },
+    { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
+    { name: 'Joe Bloggs, University of Essex' }
   ],
   code: 'UKDS',
   dataAccessFreeTexts: [

@@ -1,0 +1,50 @@
+{
+  "settings": {
+    "number_of_shards": "2",
+    "number_of_replicas": "0",
+    "analysis": {
+      "analyzer": {
+        "pasc_standard_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "french_stop"
+          ]
+        },
+        "pasc_index_autocomplete_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "french_stop",
+            "autocomplete_filter"
+          ]
+        }
+      },
+      "filter": {
+        "autocomplete_filter": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 30
+        },
+        "french_stop": {
+          "type": "stop",
+          "stopwords": "_french_"
+        }
+      },
+      "normalizer": {
+        "case_insensitive_normalizer": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": [
+            "lowercase"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {}
+}

@@ -14,6 +14,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [0.3.0] - 2024-XX-XX
+
+### Additions
+
+- Reindexing settings, mappings and scripts along with readme on how to use them
+- Scrollbar for filters on search page
+
+### Changes
+
+- Creators can include research identifiers
+- Calculate tooltip position before activating it and place above if not enough space below
+
+### Fixes
+
+- About page metrics to show correct total for all languages
+- Info box overflow with long topics and keywords
+
 ## [0.2.0] - 2024-05-03
 
 ### Additions
