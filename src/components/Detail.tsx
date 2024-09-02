@@ -18,7 +18,7 @@ import Tooltip from './Tooltip';
 import Panel from "./Panel";
 import Translate from "react-translate-component";
 import { upperFirst } from "lodash";
-import { CMMStudy, DataCollectionFreeText, Universe } from "../../common/metadata";
+import { CMMStudy, DataCollectionFreeText, DataKindFreeText, TermVocabAttributes, Universe } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import striptags from "striptags";
@@ -195,6 +195,27 @@ export default class Detail extends React.Component<Props, State> {
     }
   }
 
+  /**
+   * Formats the given dataKindFreeTexts and generalDataFormats into the same array
+   * with all free texts, types and formats combined while removing duplicates.
+   * Array contains types first, general data formats second and free texts last.
+   *
+   * @param dataKindFreeTexts the data kind free texts and types to format
+   * @param generalDataFormats the general data formats to format
+   * @returns the formatted data kind free texts, types and formats in one array
+   */
+  formatDataKind(dataKindFreeTexts: DataKindFreeText[], generalDataFormats: TermVocabAttributes[]): string[] {
+    const uniqueValues = new Set<string>();
+    dataKindFreeTexts.forEach(({ type }) => {
+      if (type) uniqueValues.add(type);
+    });
+    generalDataFormats.forEach(item => uniqueValues.add(item.term));
+    dataKindFreeTexts.forEach(({ dataKindFreeText }) => {
+      if (dataKindFreeText) uniqueValues.add(dataKindFreeText);
+    });
+    return Array.from(uniqueValues);
+  }
+
   render() {
     const { item, lang } = this.props;
 
@@ -361,6 +382,15 @@ Summary information
           {this.generateElements(item.samplingProcedureFreeTexts, 'div', text =>
             <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
           )}
+
+          <Translate
+            className="data-label"
+            component="h3"
+            content="metadata.dataKind"
+          />
+          {item.dataKindFreeTexts || item.generalDataFormats ? this.generateElements(this.formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
+            <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
+          ) : <Translate content="language.notAvailable.field" lang={lang} /> }
 
           <Translate
             className="data-label"
