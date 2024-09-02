@@ -18,9 +18,9 @@ import Tooltip from './Tooltip';
 import Panel from "./Panel";
 import Translate from "react-translate-component";
 import { upperFirst } from "lodash";
-import { CMMStudy, DataCollectionFreeText, DataKindFreeText, TermVocabAttributes, Universe } from "../../common/metadata";
+import { CMMStudy, Creator, DataCollectionFreeText, DataKindFreeText, TermVocabAttributes, Universe } from "../../common/metadata";
 import { ChronoField, DateTimeFormatter, DateTimeFormatterBuilder } from "@js-joda/core";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
 import striptags from "striptags";
 import counterpart from "counterpart";
 import Keywords from "./Keywords";
@@ -60,7 +60,7 @@ export default class Detail extends React.Component<Props, State> {
     .appendValue(ChronoField.YEAR)
     .optionalStart().appendLiteral("-").appendValue(ChronoField.MONTH_OF_YEAR)
     .optionalStart().appendLiteral("-").appendValue(ChronoField.DAY_OF_MONTH)
-    .optionalStart().appendLiteral( "T" ).append(DateTimeFormatter.ISO_OFFSET_TIME)
+    .optionalStart().appendLiteral("T").append(DateTimeFormatter.ISO_OFFSET_TIME)
     .toFormatter();
 
   static readonly dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");
@@ -77,7 +77,7 @@ export default class Detail extends React.Component<Props, State> {
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
         const value = callback?.(field[i]) ?? field[i];
-        switch(element) {
+        switch (element) {
           case 'tag':
             elements.push(<span className="tag" lang={omitLang ? undefined : lang} key={i}>{value}</span>);
             break;
@@ -135,11 +135,11 @@ export default class Detail extends React.Component<Props, State> {
       }
       // Generate elements for each date in the array.
       return (
-          this.generateElements(
-            dateFallback,
-            'div',
-            date => Detail.parseDate(date.dataCollectionFreeText, dateTimeFormatter)
-          )
+        this.generateElements(
+          dateFallback,
+          'div',
+          date => Detail.parseDate(date.dataCollectionFreeText, dateTimeFormatter)
+        )
       );
     }
 
@@ -196,6 +196,40 @@ export default class Detail extends React.Component<Props, State> {
   }
 
   /**
+   * Formats the given creator inside span element with as much information as possible, preferably
+   * creator name, creator affiliation and research identifier. Research identifier will also include
+   * the specific type and hyperlink for uri when they available. Hyperlink text is usually id but can
+   * be uri if id is empty but uri still exists. Minimum value for creator is the creator name.
+   *
+   * @param creator the creator to format
+   * @returns formatted creator in span element
+   */
+  formatCreator(creator: Creator) {
+    const creatorFormatted = (
+      <span>
+        {creator.name}
+        {creator.affiliation && ` (${creator.affiliation})`}
+        {creator.identifier && (
+          <>
+            {" - "}
+            {creator.identifier.type ? creator.identifier.type : "Research Identifier"}
+            {": "}
+            {creator.identifier.uri ? (
+              <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
+                <span className="icon"><FaExternalLinkAlt /></span>
+                {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
+              </a>
+            ) : (
+              creator.identifier.id
+            )}
+          </>
+        )}
+      </span>
+    );
+    return creatorFormatted;
+  }
+
+  /**
    * Formats the given dataKindFreeTexts and generalDataFormats into the same array
    * with all free texts, types and formats combined while removing duplicates.
    * Array contains types first, general data formats second and free texts last.
@@ -221,9 +255,9 @@ export default class Detail extends React.Component<Props, State> {
 
     return (
       <article className="w-100">
-      <div className="summary-header">
-Summary information
-      </div>
+        <div className="summary-header">
+          Summary information
+        </div>
         <Translate
           className="data-label mt-5"
           component="h1"
@@ -231,7 +265,7 @@ Summary information
         />
 
         <p lang={lang}>
-          {item.titleStudy || <Translate content="language.notAvailable.field"/>}
+          {item.titleStudy || <Translate content="language.notAvailable.field" />}
         </p>
 
         <section>
@@ -241,11 +275,7 @@ Summary information
             content="metadata.creator"
           />
           {this.generateElements(item.creators, 'div', creator => {
-            if (creator.affiliation) {
-              return `${creator.name} (${creator.affiliation})`;
-            } else {
-              return creator.name;
-            }
+            return this.formatCreator(creator);
           })}
         </section>
 
@@ -272,9 +302,9 @@ Summary information
             content="metadata.abstract"
           />
           {this.state.abstractExpanded ?
-            <div className="data-abstract" lang={lang} dangerouslySetInnerHTML={{ __html: item.abstract }}/>
-          :
-            <div className="data-abstract" lang={lang} dangerouslySetInnerHTML={{ __html: item.abstractLong }}/>
+            <div className="data-abstract" lang={lang} dangerouslySetInnerHTML={{ __html: item.abstract }} />
+            :
+            <div className="data-abstract" lang={lang} dangerouslySetInnerHTML={{ __html: item.abstractLong }} />
           }
           {item.abstract.length > Detail.truncatedAbstractLength &&
             <a className="button is-small is-white" onClick={() => {
@@ -283,15 +313,15 @@ Summary information
               }));
             }}>
               {this.state.abstractExpanded ?
-              <>
-                <span className="icon is-small"><FaAngleUp/></span>
-                <Translate component="span" content="readLess"/>
-              </>
-              :
-              <>
-                <span className="icon is-small"><FaAngleDown/></span>
-                <Translate component="span" content="readMore"/>
-              </>
+                <>
+                  <span className="icon is-small"><FaAngleUp /></span>
+                  <Translate component="span" content="readLess" />
+                </>
+                :
+                <>
+                  <span className="icon is-small"><FaAngleDown /></span>
+                  <Translate component="span" content="readMore" />
+                </>
               }
             </a>
           }
@@ -299,10 +329,10 @@ Summary information
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content='metadata.topics.label'/>}
+          title={<Translate component="h2" content='metadata.topics.label' />}
           tooltip={<Tooltip id="metadata-topics-tooltip"
-                            content={<Translate content='metadata.topics.tooltip.content' unsafe/>}
-                            ariaLabel={counterpart.translate("metadata.topics.tooltip.ariaLabel")}/>}
+            content={<Translate content='metadata.topics.tooltip.content' unsafe />}
+            ariaLabel={counterpart.translate("metadata.topics.tooltip.ariaLabel")} />}
           collapsable={false}
         >
           <div className="tags">
@@ -316,21 +346,21 @@ Summary information
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content='metadata.keywords.label'/>}
+          title={<Translate component="h2" content='metadata.keywords.label' />}
           tooltip={<Tooltip id="metadata-keywords-tooltip"
-                            content={<Translate content='metadata.keywords.tooltip.content' unsafe/>}
-                            ariaLabel={counterpart.translate("metadata.keywords.tooltip.ariaLabel")}/>}
+            content={<Translate content='metadata.keywords.tooltip.content' unsafe />}
+            ariaLabel={counterpart.translate("metadata.keywords.tooltip.ariaLabel")} />}
           collapsable={false}
         >
-          <Keywords keywords={item.keywords} keywordLimit={Detail.truncatedKeywordsLength} lang={this.props.lang}/>
+          <Keywords keywords={item.keywords} keywordLimit={Detail.truncatedKeywordsLength} lang={this.props.lang} />
         </Panel>
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content="metadata.methodology.label"/>}
+          title={<Translate component="h2" content="metadata.methodology.label" />}
           tooltip={<Tooltip id="metadata-methodology-tooltip"
-                            content={<Translate content='metadata.methodology.tooltip.content' unsafe/>}
-                            ariaLabel={counterpart.translate("metadata.methodology.tooltip.ariaLabel")}/>}
+            content={<Translate content='metadata.methodology.tooltip.content' unsafe />}
+            ariaLabel={counterpart.translate("metadata.methodology.tooltip.ariaLabel")} />}
           collapsable={false}
           defaultCollapsed={false}
         >
@@ -380,7 +410,7 @@ Summary information
             content="metadata.samplingProcedure"
           />
           {this.generateElements(item.samplingProcedureFreeTexts, 'div', text =>
-            <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
+            <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} />
           )}
 
           <Translate
@@ -389,8 +419,8 @@ Summary information
             content="metadata.dataKind"
           />
           {item.dataKindFreeTexts || item.generalDataFormats ? this.generateElements(this.formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
-            <div className="data-abstract" dangerouslySetInnerHTML={{__html: text}}/>
-          ) : <Translate content="language.notAvailable.field" lang={lang} /> }
+            <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} />
+          ) : <Translate content="language.notAvailable.field" lang={lang} />}
 
           <Translate
             className="data-label"
@@ -404,7 +434,7 @@ Summary information
           <Panel
             id="funding-information"
             className="section-header"
-            title={<Translate component="h2" content='metadata.funding'/>}
+            title={<Translate component="h2" content='metadata.funding' />}
             collapsable={false}
           >
             {item.funding.map(funding => (
@@ -440,7 +470,7 @@ Summary information
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content='metadata.access'/>}
+          title={<Translate component="h2" content='metadata.access' />}
           collapsable={false}
         >
           <Translate
@@ -471,7 +501,7 @@ Summary information
 
         <Panel
           className="section-header"
-          title={<Translate component="h2" content="metadata.relatedPublications"/>}
+          title={<Translate component="h2" content="metadata.relatedPublications" />}
           collapsable={false}
         >
           {this.generateElements(item.relatedPublications, 'ul', relatedPublication => {
