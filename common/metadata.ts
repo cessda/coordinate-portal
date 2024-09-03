@@ -98,18 +98,6 @@ export interface Identifier {
   uri?: string;
 }
 
-export interface Creator {
-  name: string;
-  affiliation?: string;
-  identifier?: Identifier;
-}
-
-export interface Identifier {
-  id: string;
-  type?: string;
-  uri?: string;
-}
-
 export interface Country {
   abbr: string;
   country: string;
