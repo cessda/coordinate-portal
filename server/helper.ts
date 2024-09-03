@@ -41,7 +41,6 @@ import { logger } from "./logger";
 import cors from "cors";
 import { WithContext, Dataset } from "schema-dts";
 import swaggerSearchApiV2 from "./swagger-searchApiV2";
-import { Agent } from "http";
 import Client, { SearchkitConfig } from "@searchkit/api";
 import 'isomorphic-unfetch';
 
@@ -384,34 +383,6 @@ function externalApiV2() {
       return;
     }
 
-    // Get Visitors Information For Prom Metrics
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-    if (ip) {
-      const ipString = String(ip);
-
-      if (ipinfoAPIKey) {
-
-        //timeouts defaults to 5000 i.e. 5 seconds - can be changed if needed
-        const ipinfoWrapper = new IPinfoWrapper(ipinfoAPIKey); //token must be parsed here
-        ipinfoWrapper.lookupIp(ipString)
-          .then(info => observeAPIClientIP(ipString, info))
-          .catch((error) => {
-            if (error instanceof ApiLimitError) {
-                // handle api limit exceed error
-                logger.warn(`ipinfo searchAPI limit exceeded : ${error}`);
-            } else {
-                // handle other errors
-                logger.error(`error while getting searchAPI client's ip / country : ${error}`);
-            }
-
-            // Observe the IP without country information
-            observeAPIClientIP(ipString);
-          });
-      } else {
-        observeAPIClientIP(ipString);
-      }
-    }
 
     const { metadataLanguage, q, sortBy } = req.query;
 
@@ -623,6 +594,9 @@ function externalApiV2() {
       logger.debug('Finished API Elasticsearch Request');
     }
   });
+
+  return router;
+}
 
 /**
  * Build filters for nested documents. The filter uses a term query
