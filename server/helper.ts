@@ -27,7 +27,6 @@ import {
 } from "./metrics";
 import Elasticsearch from "./elasticsearch";
 import {
-  AggregationsValueCountAggregate,
   QueryDslBoolQuery,
   QueryDslNestedQuery,
   QueryDslQueryContainer,
@@ -623,91 +622,6 @@ function apiResultsCount(
     retrieved: retrieved,
     available: total,
   };
-}
-
-//used by metrics.ts
-export async function getESrecordsByLanguages(lang: string): Promise<number> {
-  const response = await elasticsearch.client.search<CMMStudy>({
-    body: {
-      aggs: {
-        lang: {
-          terms: {
-            field: "langAvailableIn",
-          },
-        },
-      },
-    },
-    track_total_hits: false,
-  });
-
-  const elasticAggs: any = response.aggregations;
-  let result = 0;
-  for (const x of elasticAggs.lang.buckets) {
-    if (x.key === lang) {
-      result = x.doc_count;
-      break;
-    }
-  }
-  return result;
-}
-
-//used by metrics.ts
-export async function getESindexLanguages(): Promise<Array<string>> {
-  const indices = await elasticsearch.client.cat.indices({ format: "json" });
-  const filtered: (string | undefined)[] = indices
-    .map((element: { index?: string }) => {
-      if (element?.index?.startsWith("cmmstudy"))
-        return element.index.slice(-2);
-    })
-    .filter((element: string | undefined) => {
-      return element !== undefined;
-    });
-  return filtered as Array<string>;
-}
-
-//used by metrics.ts
-export async function getESrecordsModified(): Promise<number> {
-  const response = await elasticsearch.client.search<CMMStudy>({
-    body: {
-      aggs: {
-        types_count: {
-          value_count: {
-            field: "lastModified",
-          },
-        },
-      },
-    },
-    track_total_hits: false,
-  });
-
-  const elasticAggs = response.aggregations;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return (
-    (elasticAggs!.types_count as AggregationsValueCountAggregate).value || 0
-  );
-}
-
-//used by metrics.ts
-export async function getESrecordsByEndpoint(): Promise<
-  { key: string; doc_count: number }[]
-> {
-  const response = await elasticsearch.client.search<CMMStudy>({
-    body: {
-      aggs: {
-        aggregationResults: {
-          terms: {
-            field: "code",
-            size: 1000,
-          },
-        },
-      },
-    },
-    track_total_hits: false,
-  });
-  const elasticAggs: any | undefined = response.aggregations;
-  const results: { key: string; doc_count: number }[] =
-    elasticAggs.aggregationResults.buckets;
-  return results;
 }
 
 function jsonProxy() {
