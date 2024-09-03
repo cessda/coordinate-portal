@@ -22,10 +22,9 @@ import methodOverride from "method-override";
 import responseTime from "response-time";
 import { CMMStudy, getJsonLd, getStudyModel } from "../common/metadata";
 import {
-  startMetricsListening,
   apiResponseTimeHandler,
-  uiResponseTimeTotalFailedHistogram,
-  uiResponseTimeZeroElasticResultsHistogram,
+  metricsRequestHandler,
+  uiResponseTimeHandler,
 } from "./metrics";
 import Elasticsearch from "./elasticsearch";
 import {
@@ -282,21 +281,11 @@ function getSearchkitRouter() {
   });
 
   // Proxy Searchkit requests
-  router.post("/_search", async (req, res) => {
-    //timer required for responseTime in zero elasticsearch response
-    const startTime = new Date();
-
+  router.post("/_search", responseTime(uiResponseTimeHandler), async (req, res) => {
     res.setHeader("Cache-Control", "no-cache, max-age=0");
 
     const fullUrl = `${host}/${req.body.index || "cmmstudy_en"}${req.url}`;
     logger.debug("Start Elasticsearch Request: %s", fullUrl);
-
-    if (_.isObject(req.body)) {
-      logger.debug("Request body", { body: req.body });
-    }
-
-    //keep language for use in metrics
-    req.params = req.body.index;
 
     try {
       const response = await apiClient.handleRequest(req.body, {
@@ -316,23 +305,6 @@ function getSearchkitRouter() {
           }
         }
       });
-      const endTime = new Date();
-      const timeDiff = endTime.getTime() - startTime.getTime(); //in ms
-      uiResponseTimeZeroElasticResultsHistogram.observe(
-        {
-          method: req.method,
-          route: req.route.path,
-          status_code: res.statusCode,
-        },
-        timeDiff
-      );
-      uiResponseTimeTotalFailedHistogram.observe(
-        {
-          method: req.method,
-          route: req.route.path,
-        },
-        timeDiff
-      );
       res.send(response);
       logger.debug("Finished Elasticsearch Request to %s", fullUrl);
     } catch (e: unknown) {
@@ -947,7 +919,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
     }
   });
 
-  app.use("/metrics", startMetricsListening());
+  app.use("/metrics", metricsRequestHandler(elasticsearch));
 
   app.get("*", handler);
 
