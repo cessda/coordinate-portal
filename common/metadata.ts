@@ -32,6 +32,8 @@ export interface CMMStudy {
   dataCollectionFreeTexts: DataCollectionFreeText[];
   /** Terms of data access */
   dataAccessFreeTexts: string[];
+  /** Data access url */
+  dataAccessUrl?: string;
   /** Publication year */
   publicationYear: string;
   /** Data collection mode */
@@ -45,8 +47,10 @@ export interface CMMStudy {
   /** Abstract */
   abstract: string;
   abstractShort: string;
+  abstractLong: string;
   abstractHighlight: string;
   abstractHighlightShort: string;
+  abstractHighlightLong: string;
   /** Study title */
   titleStudy: string;
   titleStudyHighlight: string;
@@ -74,6 +78,12 @@ export interface CMMStudy {
   universe?: Universe;
   /** Related publications */
   relatedPublications: RelatedPublication[];
+  /** Funding */
+  funding: Funding[];
+  /** Data kind free text */
+  dataKindFreeTexts: DataKindFreeText[];
+  /** General data format */
+  generalDataFormats: TermVocabAttributes[];
 }
 
 export interface Creator {
@@ -102,6 +112,7 @@ export interface DataCollectionFreeText {
 export interface RelatedPublication {
   title: string;
   holdings: string[];
+  lang?: string;
 }
 
 export interface Pid {
@@ -134,70 +145,71 @@ export interface Universe {
   exclusion?: string;
 }
 
+export interface Funding {
+  grantNumber?: string;
+  agency?: string;
+}
+
+export interface DataKindFreeText {
+  dataKindFreeText?: string;
+  type?: string;
+}
+
 /**
  * Creates a model to store/display study metadata in the user interface.
  *
  * The comments indicate the label displayed in the UI for each property (it is not always obvious).
  */
-export function getStudyModel(
-  data: Pick<SearchHit<Partial<CMMStudy>>, "_source" | "highlight">
-): CMMStudy {
-  if (typeof data._source !== "object") {
+export function getStudyModel(source: Partial<CMMStudy> | undefined, highlight?: SearchHit["highlight"]): CMMStudy {
+  if (typeof(source) !== "object") {
     throw TypeError("_source is not an object");
   }
-  return {
-    id: data._source.id as string,
-    titleStudy: data._source.titleStudy as string,
-    titleStudyHighlight: data.highlight?.titleStudy
-      ? stripHTMLElements(data.highlight.titleStudy.join())
-      : "",
-    code: data._source.code as string,
-    creators: data._source.creators || [],
-    pidStudies: data._source.pidStudies || [],
-    abstract: stripHTMLElements(data._source.abstract as string),
-    abstractShort: truncateAbstract(striptags(data._source.abstract as string)),
-    abstractHighlight: data.highlight?.abstract
-      ? stripHTMLElements(data.highlight.abstract.join())
-      : "",
-    abstractHighlightShort: data.highlight?.abstract
-      ? truncateAbstract(striptags(data.highlight.abstract.join()))
-      : "",
-    studyAreaCountries: data._source.studyAreaCountries || [],
-    typeOfTimeMethods: data._source.typeOfTimeMethods || [],
-    unitTypes: data._source.unitTypes || [],
-    typeOfSamplingProcedures: data._source.typeOfSamplingProcedures || [],
-    samplingProcedureFreeTexts: (
-      data._source.samplingProcedureFreeTexts || []
-    ).map((text) => stripHTMLElements(text)),
-    typeOfModeOfCollections: data._source.typeOfModeOfCollections || [],
-    dataCollectionPeriodStartdate:
-      data._source.dataCollectionPeriodStartdate || "",
-    dataCollectionPeriodEnddate: data._source.dataCollectionPeriodEnddate || "",
-    dataCollectionFreeTexts: data._source.dataCollectionFreeTexts || [],
-    dataCollectionYear: data._source.dataCollectionYear,
-    fileLanguages: data._source.fileLanguages || [],
-    publisher: data._source.publisher as Publisher,
-    publicationYear: data._source.publicationYear || "",
-    dataAccessFreeTexts: (data._source.dataAccessFreeTexts || []).map((text) =>
-      stripHTMLElements(text)
-    ),
-    studyNumber: data._source.studyNumber || "",
-    classifications: data._source.classifications || [],
-    keywords: data._source.keywords || [],
-    lastModified: data._source.lastModified || "",
-    studyUrl: data._source.studyUrl,
-    studyXmlSourceUrl: data._source.studyXmlSourceUrl as string,
-    langAvailableIn: (data._source.langAvailableIn || [])
-      .map((i) => i.toUpperCase())
-      .sort(),
-    universe: data._source.universe,
-    relatedPublications: data._source.relatedPublications || [],
-  };
+  return ({
+    id: source.id as string,
+    titleStudy: source.titleStudy as string,
+    titleStudyHighlight: highlight?.titleStudy ? stripHTMLElements(highlight.titleStudy.join()) : '',
+    code: source.code as string,
+    creators: source.creators || [],
+    pidStudies: source.pidStudies || [],
+    abstract: stripHTMLElements(source.abstract as string),
+    abstractShort: truncateAbstract(striptags(source.abstract as string), 380),
+    abstractLong: truncateAbstract(striptags(source.abstract as string), 2000),
+    abstractHighlight: highlight?.abstract ? stripHTMLElements(highlight.abstract.join()) : '',
+    abstractHighlightShort: highlight?.abstract ? truncateAbstract(striptags(highlight.abstract.join()), 380) : '',
+    abstractHighlightLong: highlight?.abstract ? truncateAbstract(striptags(highlight.abstract.join()), 2000) : '',
+    studyAreaCountries: source.studyAreaCountries || [],
+    typeOfTimeMethods: source.typeOfTimeMethods || [],
+    unitTypes: source.unitTypes || [],
+    typeOfSamplingProcedures: source.typeOfSamplingProcedures || [],
+    samplingProcedureFreeTexts: (source.samplingProcedureFreeTexts || []).map(text => stripHTMLElements(text)),
+    typeOfModeOfCollections: source.typeOfModeOfCollections || [],
+    dataCollectionPeriodStartdate: source.dataCollectionPeriodStartdate || '',
+    dataCollectionPeriodEnddate: source.dataCollectionPeriodEnddate || '',
+    dataCollectionFreeTexts: source.dataCollectionFreeTexts || [],
+    dataCollectionYear: source.dataCollectionYear,
+    fileLanguages: source.fileLanguages || [],
+    publisher: source.publisher as Publisher,
+    publicationYear: source.publicationYear || '',
+    dataAccessFreeTexts: (source.dataAccessFreeTexts || []).map(text => stripHTMLElements(text)),
+    dataAccessUrl: source.dataAccessUrl,
+    studyNumber: source.studyNumber || '',
+    classifications: source.classifications || [],
+    keywords: source.keywords || [],
+    lastModified: source.lastModified || '',
+    studyUrl: source.studyUrl,
+    studyXmlSourceUrl: source.studyXmlSourceUrl as string,
+    langAvailableIn: (source.langAvailableIn || []).map(i => i.toUpperCase()).sort(),
+    universe: source.universe,
+    relatedPublications: source.relatedPublications || [],
+    funding: source.funding || [],
+    dataKindFreeTexts: source.dataKindFreeTexts || [],
+    generalDataFormats: source.generalDataFormats || []
+  });
 }
 
-function truncateAbstract(string: string): string {
+function truncateAbstract(string: string, limit = 500): string {
   const trimmedString = string.trim();
-  return truncate(trimmedString, { length: 500, separator: " " });
+  return truncate(trimmedString, { length: limit, separator: ' ' } );
 }
 
 /**
@@ -225,11 +237,6 @@ function stripHTMLElements(html: string) {
   ]);
   return strippedHTML.trim();
 }
-
-/** Format: "Name (Organisation)" */
-const bracketRegex = /([a-z0-9\x7f-\xff,. -]+) \(([a-z0-9\x7f-\xff,. -]+)\)/gi;
-/** Format: "Name, Organisation" */
-const commaRegex = /([a-z0-9\x7f-\xff,. -]+),([a-z0-9\x7f-\xff,. -]+)/gi;
 
 // Generates study JSON-LD for Google indexing.
 export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
@@ -430,7 +437,7 @@ export function getDDI(metadata: CMMStudy) {
 function formatXML(xml: string) {
   const PADDING = ' '.repeat(2); // Adjust the padding as needed
   let formatted = '';
-  let reg = /(>)(<)(\/*)/g;
+  const reg = /(>)(<)(\/*)/g;
   xml = xml.replace(reg, '$1\n$2$3');
   let pad = 0;
 
@@ -444,9 +451,9 @@ function formatXML(xml: string) {
       indent = 0;
     }
 
-    const parts = node.match(/<[^>]*>|[^<]+/g); // Split the node into parts: tags and text content
+    const parts = node.match(/<[^>]*>|[^<]+/g) || []; // Split the node into parts: tags and text content
     let formattedNode = '';
-    parts!.forEach((part) => {
+    parts.forEach((part) => {
       if (part.startsWith('<')) {
         formattedNode += part; // Preserve XML tags
       } else {

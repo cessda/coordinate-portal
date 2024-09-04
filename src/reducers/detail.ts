@@ -32,7 +32,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
     const { language } = getState() as { language: LanguageState };
     let study = undefined;
     let similars: Similar[] = [];
-    let availableLanguages: Language[] = [];
+    const availableLanguages: Language[] = [];
 
     const response = await fetch(`${window.location.origin}/api/sk/_get/${language.currentLanguage.index}/${encodeURIComponent(id)}`);
     //console.log(response);
@@ -40,7 +40,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
 
       // Get the study model from the hit.
       const json = await response.json() as { source: CMMStudy, similars: Similar[] };
-      study = getStudyModel({ _source: json.source });
+      study = getStudyModel(json.source);
       similars = json.similars
 
     } else if(response.status === 404) {

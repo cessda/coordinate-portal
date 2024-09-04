@@ -19,7 +19,6 @@ import { Client } from '@elastic/elasticsearch'
 import httpMocks from 'node-mocks-http';
 import { mockStudy } from '../common/mockdata';
 import { getJsonLd, getStudyModel } from '../../common/metadata';
-//import { ResponseError } from '@elastic/elasticsearch/lib/errors';
 
 // Constants
 const ejsTemplate = "server/views/index.ejs";
@@ -110,10 +109,10 @@ describe('helper utilities', () => {
       expect(renderData).toEqual({
         metadata: {
           creators: mockStudy.creators.join('; '),
-          description: mockStudy.abstractShort,
+          description: mockStudy.abstract,
           title: mockStudy.titleStudy,
           publisher: mockStudy.publisher.publisher,
-          jsonLd: getJsonLd(getStudyModel({ _source: mockStudy })),
+          jsonLd: getJsonLd(getStudyModel(mockStudy)),
           id: mockStudy.id
         }
       });
