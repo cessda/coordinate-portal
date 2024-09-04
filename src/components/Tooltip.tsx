@@ -14,7 +14,7 @@
 import React, { useState, useRef } from 'react';
 import { FaQuestionCircle } from 'react-icons/fa';
 
-interface TooltipProps {
+export interface TooltipProps {
   content: string;
   id?: string;
   classNames?: { container?: string, button?: string, content?: string, item?: string };
@@ -39,6 +39,7 @@ export default ({ content, id, classNames, ariaLabel }: TooltipProps) => {
     event.preventDefault();
     event.stopPropagation();
 
+    // Toggle visibility based on current state
     if (!isActive) {
       calculatePosition();
     }
@@ -63,6 +64,7 @@ export default ({ content, id, classNames, ariaLabel }: TooltipProps) => {
       onBlur={() => setIsActive(false)}
       onMouseEnter={() => { calculatePosition(); setIsActive(true); }}
       onMouseLeave={() => setIsActive(false)}
+      data-testid="tooltip-container"
     >
       <div className="dropdown-trigger">
         <button
@@ -72,12 +74,13 @@ export default ({ content, id, classNames, ariaLabel }: TooltipProps) => {
           {...(isActive ? { 'aria-describedby': id } : { 'aria-label': ariaLabel })}
           onClick={(e) => handleClick(e)}
           onKeyDown={(e) => handleKeyDown(e)}
+          data-testid='tooltip-button'
         >
           <FaQuestionCircle className="tooltip-icon" aria-hidden="true" />
         </button>
       </div>
       {isActive && (
-        <div className={`dropdown-menu ${isNearBottom ? ' tooltip-above' : ''}`}>
+        <div className={`dropdown-menu ${isNearBottom ? ' tooltip-above' : ''}`} data-testid="tooltip-content">
           <div className={`dropdown-content ${classNames?.content}`}>
             <div
               id={id}

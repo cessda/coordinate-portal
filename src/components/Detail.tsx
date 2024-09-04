@@ -16,8 +16,11 @@ import { Link } from "react-router-dom";
 import { truncate, upperFirst } from "lodash";
 import {
   CMMStudy,
+  Creator,
   DataCollectionFreeText,
+  DataKindFreeText,
   getDDI,
+  TermVocabAttributes,
   Universe,
 } from "../../common/metadata";
 import {
@@ -57,8 +60,9 @@ const Detail = (props: Props) => {
   const truncatedAbstractLength = 2000;
   const truncatedKeywordsLength = 12;
 
-  const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length > truncatedAbstractLength);
-  const [keywordsExpanded, setKeywordsExpanded] = useState(props.item.abstract.length > truncatedKeywordsLength);
+  const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
+  const [infoBoxExpanded, setInfoBoxExpanded] = useState(props.item.keywords.length < truncatedKeywordsLength);
+  const [keywordsExpanded, setKeywordsExpanded] = useState(props.item.keywords.length < truncatedKeywordsLength);
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
@@ -123,7 +127,7 @@ const Detail = (props: Props) => {
     date2?: string,
     dateFallback?: DataCollectionFreeText[]
   ): JSX.Element | JSX.Element[] {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     if (!date1 && !date2 && !dateFallback) {
       return <span>{t("language.notAvailable.field")}</span>;
     }
@@ -316,6 +320,61 @@ const Detail = (props: Props) => {
     }
   }
 
+  /**
+   * Formats the given creator inside span element with as much information as possible, preferably
+   * creator name, creator affiliation and research identifier. Research identifier will also include
+   * the specific type and hyperlink for uri when they available. Hyperlink text is usually id but can
+   * be uri if id is empty but uri still exists. Minimum value for creator is the creator name.
+   *
+   * @param creator the creator to format
+   * @returns formatted creator in span element
+   */
+  const formatCreator = (creator: Creator) => {
+    const creatorFormatted = (
+      <span data-testid="creator">
+        {creator.name}
+        {creator.affiliation && ` (${creator.affiliation})`}
+        {creator.identifier && (
+          <>
+            {" - "}
+            {creator.identifier.type ? creator.identifier.type : "Research Identifier"}
+            {": "}
+            {creator.identifier.uri ? (
+              <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
+                <span className="icon"><FaExternalLinkAlt /></span>
+                {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
+              </a>
+            ) : (
+              creator.identifier.id
+            )}
+          </>
+        )}
+      </span>
+    );
+    return creatorFormatted;
+  }
+
+  /**
+   * Formats the given dataKindFreeTexts and generalDataFormats into the same array
+   * with all free texts, types and formats combined while removing duplicates.
+   * Array contains types first, general data formats second and free texts last.
+   *
+   * @param dataKindFreeTexts the data kind free texts and types to format
+   * @param generalDataFormats the general data formats to format
+   * @returns the formatted data kind free texts, types and formats in one array
+   */
+  const formatDataKind = (dataKindFreeTexts: DataKindFreeText[], generalDataFormats: TermVocabAttributes[]): string[] => {
+    const uniqueValues = new Set<string>();
+    dataKindFreeTexts.forEach(({ type }) => {
+      if (type) uniqueValues.add(type);
+    });
+    generalDataFormats.forEach(item => uniqueValues.add(item.term));
+    dataKindFreeTexts.forEach(({ dataKindFreeText }) => {
+      if (dataKindFreeText) uniqueValues.add(dataKindFreeText);
+    });
+    return Array.from(uniqueValues);
+  }
+
   return (
     <>
     <div className="columns is-vcentered">
@@ -357,10 +416,11 @@ const Detail = (props: Props) => {
             <Select options={exportMetadataOptions}
                     defaultValue={{ value: '', label: ''}}
                     onChange={handleExportMetadataChange}
-                    className="export-select"/>
+                    className="export-select"
+                    aria-label="Export metadata" />
           </div>
           <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <button className="button is-info is-light" onClick={handleExportMetadata}
+            <button className="button is-info is-light" onClick={handleExportMetadata} data-testid="export-metadata-button"
                     disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
               {t("export")}
             </button>
@@ -379,10 +439,11 @@ const Detail = (props: Props) => {
             <Select options={exportCitationOptions}
                     defaultValue={{ value: '', label: ''}}
                     onChange={handleExportCitationChange}
-                    className="export-select"/>
+                    className="export-select"
+                    aria-label="Export citation" />
           </div>
           <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <button className="button is-info is-light"
+            <button className="button is-info is-light" data-testid="export-citation-button"
                     onClick={() => alert("Not yet implemented")}
                     // onClick={handleExportCitation}
                     disabled={!selectedExportCitationOption || selectedExportCitationOption.value.trim() === ''}>
@@ -393,7 +454,7 @@ const Detail = (props: Props) => {
       </div>
     </div>
     <div className="metadata-container">
-      <div className="info-box is-hidden-touch">
+      <div className="info-box is-hidden-touch" data-testid="info-box">
         <section className="info-box-topics">
           {generateHeading('topics', 'is-inline-flex mt-0', 'info-box-topics')}
           <Tooltip content={t("metadata.topics.tooltip.content")}
@@ -413,9 +474,9 @@ const Detail = (props: Props) => {
           {generateHeading('keywords', 'is-inline-flex', 'info-box-keywords')}
           <Tooltip content={t("metadata.keywords.tooltip.content")}
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                  classNames={{container: 'mt-3 ml-1'}}/>
+                  classNames={{container: 'mt-1 ml-1'}}/>
           <div className="tags mt-2">
-            {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
+            {generateElements(infoBoxExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
               (keywords) => (
                 <Link to={`/?sortBy=${currentLanguage.index}&keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
                   {upperFirst(keywords.term)}
@@ -424,11 +485,11 @@ const Detail = (props: Props) => {
             )}
           </div>
           {item.keywords.length > truncatedKeywordsLength && (
-            <a className="button is-small is-white"
+            <a className="button is-small is-white" data-testid="expand-info-box"
               onClick={() => {
-                setKeywordsExpanded(keywordsExpanded => !keywordsExpanded)
+                setInfoBoxExpanded(infoBoxExpanded => !infoBoxExpanded)
               }}>
-              {keywordsExpanded ? (
+              {infoBoxExpanded ? (
                 <>
                   <span className="icon is-small">
                     <FaAngleUp />
@@ -449,25 +510,17 @@ const Detail = (props: Props) => {
       </div>
       <div className="main-content">
         <article className="w-100 mb-2">
-          {generateHeading('summary', 'summary-header')}
-          <section>
+          <section className="metadata-section">
+            {generateHeading('summary', 'summary-header')}
+
             {generateHeading('title', 'mt-5')}
-
             <p>{item.titleStudy || t("language.notAvailable.field")}</p>
-          </section>
 
-          <section>
             {generateHeading('creator')}
             {generateElements(item.creators, 'div', creator => {
-              if (creator.affiliation) {
-                return `${creator.name} (${creator.affiliation})`;
-              } else {
-                return creator.name;
-              }
+              return formatCreator(creator);
             })}
-          </section>
 
-          <section>
             {generateHeading('pid')}
             {generateElements(item.pidStudies.filter((p) => p.pid), "div",
               (pidStudy) => {
@@ -478,9 +531,7 @@ const Detail = (props: Props) => {
                 return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
               }
             )}
-          </section>
 
-          <section>
             {generateHeading('abstract')}
             {abstractExpanded ? (
               <div
@@ -496,7 +547,7 @@ const Detail = (props: Props) => {
               </div>
             )}
             {item.abstract.length > truncatedAbstractLength && (
-              <a className="button is-small is-white"
+              <a className="button is-small is-white" data-testid="expand-abstract"
                 onClick={() => {
                   setAbstractExpanded(abstractExpanded => !abstractExpanded)
                 }}>
@@ -519,11 +570,11 @@ const Detail = (props: Props) => {
             )}
           </section>
 
-          <section>
+          <section className="metadata-section">
             {generateHeading('methodology', 'is-inline-flex')}
             <Tooltip content={t("metadata.methodology.tooltip.content")}
                     ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
-                    classNames={{container: 'mt-3 ml-1'}}/>
+                    classNames={{container: 'mt-1 ml-1'}}/>
             {generateHeading('collPeriod')}
             <>
               {formatDate(
@@ -556,11 +607,42 @@ const Detail = (props: Props) => {
               )
             )}
 
+            {generateHeading('dataKind')}
+            {item.dataKindFreeTexts || item.generalDataFormats ? generateElements(formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
+              <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} data-testid="data-kind"/>
+            ) : <span>{t("language.notAvailable.field")}</span>}
+
             {generateHeading('collMode')}
             {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
           </section>
 
-          <section>
+          {item.funding.length > 0 &&
+            <section className="metadata-section" data-testid='funding'>
+              {generateHeading('funding', 'is-inline-flex')}
+              {item.funding.map(funding => (
+              <React.Fragment key={`${funding.agency || ''}${funding.grantNumber || ''}`}>
+                {funding.agency &&
+                  <>
+                    {generateHeading('funder')}
+                    <p lang={currentLanguage.code}>
+                      {funding.agency}
+                    </p>
+                  </>
+                }
+                {funding.grantNumber &&
+                  <>
+                    {generateHeading('grantNumber')}
+                    <p lang={currentLanguage.code}>
+                      {funding.grantNumber}
+                    </p>
+                  </>
+                }
+              </React.Fragment>
+            ))}
+            </section>
+          }
+
+          <section className="metadata-section">
             {generateHeading('access')}
             {generateHeading('publisher')}
             <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
@@ -579,11 +661,33 @@ const Detail = (props: Props) => {
             )}
           </section>
 
-          <section>
+          <section className="metadata-section">
+            {generateHeading('relPub')}
+            {generateElements(
+              item.relatedPublications,
+              "ul",
+              (relatedPublication) => {
+                const relatedPublicationTitle = striptags(
+                  relatedPublication.title
+                );
+                if (relatedPublication.holdings?.length > 0) {
+                  return (
+                    <a href={relatedPublication.holdings[0]}>
+                      {relatedPublicationTitle}
+                    </a>
+                  );
+                } else {
+                  return relatedPublicationTitle;
+                }
+              }
+            )}
+          </section>
+
+          <section className="metadata-section">
             {generateHeading('topics', 'is-inline-flex')}
             <Tooltip content={t("metadata.topics.tooltip.content")}
                     ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
-                    classNames={{container: 'mt-3 ml-1'}}/>
+                    classNames={{container: 'mt-1 ml-1'}}/>
             <div className="tags mt-2">
               {generateElements(item.classifications, "tag",
                 (classifications) => (
@@ -595,11 +699,11 @@ const Detail = (props: Props) => {
             </div>
           </section>
 
-          <section>
+          <section className="metadata-section">
             {generateHeading('keywords', 'is-inline-flex')}
             <Tooltip content={t("metadata.keywords.tooltip.content")}
                     ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                    classNames={{container: 'mt-3 ml-1'}}/>
+                    classNames={{container: 'mt-1 ml-1'}}/>
             <div className="tags mt-2">
               {generateElements(keywordsExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
                 (keywords) => (
@@ -610,7 +714,7 @@ const Detail = (props: Props) => {
               )}
             </div>
             {item.keywords.length > truncatedKeywordsLength && (
-              <a className="button is-small is-white"
+              <a className="button is-small is-white" data-testid="expand-keywords"
                 onClick={() => {
                   setKeywordsExpanded(keywordsExpanded => !keywordsExpanded)
                 }}>
@@ -630,28 +734,6 @@ const Detail = (props: Props) => {
                     </>
                   )}
               </a>
-            )}
-          </section>
-
-          <section>
-            {generateHeading('relPub')}
-            {generateElements(
-              item.relatedPublications,
-              "ul",
-              (relatedPublication) => {
-                const relatedPublicationTitle = striptags(
-                  relatedPublication.title
-                );
-                if (relatedPublication.holdings?.length > 0) {
-                  return (
-                    <a href={relatedPublication.holdings[0]}>
-                      {relatedPublicationTitle}
-                    </a>
-                  );
-                } else {
-                  return relatedPublicationTitle;
-                }
-              }
             )}
           </section>
         </article>
