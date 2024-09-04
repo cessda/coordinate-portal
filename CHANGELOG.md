@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Reindexing settings, mappings and scripts along with readme on how to use them
 - Scrollbar for filters on search page
 - Show research identifier for creator when possible
+- Funding information section on detail view (funder and grant number)
 - Kind of data on Detail view
 - Divider line between sections on Detail view
 
