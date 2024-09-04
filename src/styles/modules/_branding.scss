@@ -62,7 +62,7 @@ $dark_grey: #4e4d56;
 .metadata-title  {
   font-weight: 700;
   font-size: 17px;
-  margin-top: 25px;
+  margin-top: 15px;
   padding-bottom: 5px;
   padding-left: 3px;
 }
@@ -75,6 +75,10 @@ $dark_grey: #4e4d56;
   background: $light_grey;
   border-radius: 3px;
   display: block;
+}
+.metadata-section:not(:first-child) {
+  border-top: 1px solid #eee;
+  margin-top: 15px;
 }
 .data-abstract, article .panel-content > div, .panel-content > p, .panel-content > span, article > section > div, article > p {
   padding-left: 3px;
