@@ -63,20 +63,18 @@ describe('elasticsearch utilities', () => {
       
       // Expect the correct call to have beem made
       expect(es.client.search).toBeCalledWith({
-        body: {
-          query: {
-            bool: {
-              must: {
-                match: {
-                  titleStudy: 'Study Title'
-                }
-              },
-              must_not: {
-                ids: {
-                  values: ['1']
-                }
+        query: {
+          bool: {
+            must: {
+              match: {
+                titleStudy: 'Study Title'
               }
             },
+            must_not: {
+              ids: {
+                values: ['1']
+              }
+            }
           },
         },
         index: "cmmstudy_en",

@@ -16,30 +16,13 @@ import {
   AggregationsCardinalityAggregate,
   AggregationsNestedAggregate,
   AggregationsStringTermsAggregate,
-  SearchHit,
+  QueryDslBoolQuery,
   SearchHitsMetadata
 } from "@elastic/elasticsearch/lib/api/types";
 import _ from "lodash";
 import { CMMStudy } from "../common/metadata";
 import { logger } from "./logger";
 
-
-interface Source {
-  id: string;
-  titleStudy: string;
-}
-
-interface NestedAggregation<T> {
-  [key: string]: {
-    [aggName: string]: T;
-  };
-}
-
-interface AggregationsResponse {
-  aggregations?: NestedAggregation<{
-    value: number;
-  }>;
-}
 
 export default class Elasticsearch {
   private readonly indexName = "coordinate";
@@ -81,17 +64,65 @@ export default class Elasticsearch {
     const response = await this.client.search<CMMStudy>({
       size: 5,
       index: index,
-      body: {
-        query: Elasticsearch.similarQuery(id, title),
-      },
+      query: Elasticsearch.similarQuery(id, title),
     });
 
-    const sources = response.hits.hits.map((hit: SearchHit) => hit._source);
+    const sources = response.hits.hits.map(hit => hit._source);
 
-    return (_.compact(sources) as Source[]).map((value: Source) => ({
+    return _.compact(sources).map(value => ({
       id: value.id,
       title: value.titleStudy,
     }));
+  }
+
+  /**
+   * Gets related publications from all indices (except excluded) for one study.
+   * @param id the identifier of the study.
+   * @param sizeMax max number of related publications.
+   * @param excludeIndex optionally exclude results from an index.
+   */
+  async getRelatedPublications(id: string, sizeMax: number, excludeIndex?: string) {
+    const boolQuery: QueryDslBoolQuery = {
+      must: [
+        {
+          match: {
+            _id: id
+          }
+        }
+      ]
+    }
+
+    if (excludeIndex) {
+      boolQuery.must_not = [
+        {
+          term: {
+            _index: excludeIndex
+          }
+        }
+      ];
+    }
+
+    const response = await this.client.search<CMMStudy>({
+      size: sizeMax,
+      _source: ['relatedPublications'],
+      index: `${this.indexName}_*`,
+      query: {
+        bool: boolQuery
+      }
+    });
+
+    if (!response.hits.hits) {
+        return [];
+    }
+
+    return response.hits.hits.flatMap(hit => {
+        return (hit._source?.relatedPublications || []).map(publication => ({
+            title: publication.title,
+            holdings: publication.holdings,
+            // Add lang according to the language part of index name
+            lang: hit._index.split('_')[1]
+        }));
+    });
   }
 
   async getTotalStudies() {
@@ -109,8 +140,7 @@ export default class Elasticsearch {
     });
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return (response.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
+    return (response.aggregations?.unique_id as AggregationsCardinalityAggregate).value;
   }
 
   /**
@@ -119,7 +149,7 @@ export default class Elasticsearch {
    * @param index the index to retrieve the metrics from.
    */
   async getAboutMetrics(index: string) {
-    const studiesResponse: AggregationsResponse = await this.client.search({
+    const studiesResponse = await this.client.search({
       size: 0,
       index: `${this.indexName}_*`,
       body: {
@@ -134,9 +164,9 @@ export default class Elasticsearch {
       },
     });
 
-    const totalStudies = studiesResponse.aggregations?.unique_id.value;
+    const totalStudies = (studiesResponse.aggregations?.unique_id as AggregationsCardinalityAggregate).value;
 
-    const creatorsResponse: AggregationsResponse = await this.client.search({
+    const creatorsResponse = await this.client.search({
       size: 0,
       index: `${this.indexName}_*`,
       body: {
@@ -157,9 +187,9 @@ export default class Elasticsearch {
       }
     });
 
-    const totalCreators = creatorsResponse.aggregations?.total_creators.unique_creators.value;
+    const totalCreators = (creatorsResponse.aggregations?.unique_creators as AggregationsCardinalityAggregate).value;
 
-    const countriesResponse: AggregationsResponse = await this.client.search({
+    const countriesResponse = await this.client.search({
       size: 0,
       index: `${this.indexName}_*`,
       body: {
@@ -181,10 +211,11 @@ export default class Elasticsearch {
       },
     });
 
-    const totalCountries = countriesResponse.aggregations?.total_countries.unique_countries.value;
-    
+    const totalCountries = ((countriesResponse.aggregations?.total_countries as AggregationsNestedAggregate).unique_countries as AggregationsCardinalityAggregate).value;
+  
     return {studies: totalStudies, creators: totalCreators, countries: totalCountries};
   }
+  
 
   async getListOfMetadataLanguages() {
     const res = await this.client.indices.get({
@@ -313,10 +344,10 @@ export default class Elasticsearch {
 
     // Filter out indices that do not share the common prefix with the provided index
     if(indexPrefix){
-      const indices = res.hits.hits.map((hit: SearchHit) => hit._index);
-      return indices.filter((index: string) => index.startsWith(indexPrefix));
+      const indices = res.hits.hits.map(hit => hit._index);
+      return indices.filter(index => index.startsWith(indexPrefix));
     } else {
-      return res.hits.hits.map((hit: SearchHit) => hit._index);
+      return res.hits.hits.map(hit => hit._index);
     }
   }
 
@@ -350,7 +381,7 @@ export default class Elasticsearch {
    */
   async getRecordCountByLanguage(lang: string): Promise<number | undefined>{
     const response = await this.client.search({
-      index: `cmmstudy_${lang}`,
+      index: `${this.indexName}_${lang}`,
       track_total_hits: true
     });
     return Elasticsearch.parseTotalHits(response.hits.total);
