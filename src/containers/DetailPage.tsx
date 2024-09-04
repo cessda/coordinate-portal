@@ -37,7 +37,7 @@ export type HeadingEntry = {
 export const studyLoader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang");
-  if(lang){
+  if (lang) {
     store.dispatch(updateLanguage(lang));
   }
   const data = await store.dispatch(updateStudy(`${params.id}`));
@@ -79,31 +79,44 @@ const DetailPage = () => {
     }
   };
 
+  function addConditionalEntry(
+    condition: boolean,
+    key: string,
+    level: 'main' | 'title' | 'subtitle',
+    translation: string
+  ): HeadingEntry[] {
+    return condition ? [{ [key]: { id: key, level, translation } }] : [];
+  }
+
   // Determines the order for index in left side column but not for the actual content
   const headings: HeadingEntry[] = [
-    {summary: {id: 'summary-information', level: 'title', translation: t("metadata.summaryInformation")}},
-    {title: {id: 'title', level: 'subtitle', translation: t("metadata.studyTitle")}},
-    {creator: {id: 'creator', level: 'subtitle', translation: t("metadata.creator")}},
-    {pid: {id: 'pid', level: 'subtitle', translation: t("metadata.studyPersistentIdentifier")}},
-    {abstract: {id: 'abstract', level: 'subtitle', translation: t("metadata.abstract")}},
-    {methodology: {id: 'methodology', level: 'title', translation: t("metadata.methodology.label")}},
-    {collPeriod: {id: 'data-collection-period', level: 'subtitle', translation: t("metadata.dataCollectionPeriod")}},
-    {country: {id: 'country', level: 'subtitle', translation: t("metadata.country")}},
-    {timeDimension: {id: 'time-dimension', level: 'subtitle', translation: t("metadata.timeDimension")}},
-    {analysisUnit: {id: 'analysis-unit', level: 'subtitle', translation: t("metadata.analysisUnit")}},
-    {universe: {id: 'universe', level: 'subtitle', translation: t("metadata.universe")}},
-    {sampProc: {id: 'sampling-procedure', level: 'subtitle', translation: t("metadata.samplingProcedure")}},
-    {collMode: {id: 'data-collection-mode', level: 'subtitle', translation: t("metadata.dataCollectionMethod")}},
-    {access: {id: 'access', level: 'title', translation: t("metadata.access")}},
-    {publisher: {id: 'publisher', level: 'subtitle', translation: t("metadata.publisher")}},
-    {publicationYear: {id: 'publication-year', level: 'subtitle', translation: t("metadata.yearOfPublication")}},
-    {accessTerms: {id: 'terms-of-data-access', level: 'subtitle', translation: t("metadata.termsOfDataAccess")}},
-    {topics: {id: 'topics', level: 'title', translation: t("metadata.topics.label")}},
-    {keywords: {id: 'keywords', level: 'title', translation: t("metadata.keywords.label")}},
-    {relPub: {id: 'related-publications', level: 'title', translation: t("metadata.relatedPublications")}}
+    { summary: { id: 'summary-information', level: 'title', translation: t("metadata.summaryInformation") } },
+    { title: { id: 'title', level: 'subtitle', translation: t("metadata.studyTitle") } },
+    { creator: { id: 'creator', level: 'subtitle', translation: t("metadata.creator") } },
+    { pid: { id: 'pid', level: 'subtitle', translation: t("metadata.studyPersistentIdentifier") } },
+    { abstract: { id: 'abstract', level: 'subtitle', translation: t("metadata.abstract") } },
+    { methodology: { id: 'methodology', level: 'title', translation: t("metadata.methodology.label") } },
+    { collPeriod: { id: 'data-collection-period', level: 'subtitle', translation: t("metadata.dataCollectionPeriod") } },
+    { country: { id: 'country', level: 'subtitle', translation: t("metadata.country") } },
+    { timeDimension: { id: 'time-dimension', level: 'subtitle', translation: t("metadata.timeDimension") } },
+    { analysisUnit: { id: 'analysis-unit', level: 'subtitle', translation: t("metadata.analysisUnit") } },
+    { universe: { id: 'universe', level: 'subtitle', translation: t("metadata.universe") } },
+    { sampProc: { id: 'sampling-procedure', level: 'subtitle', translation: t("metadata.samplingProcedure") } },
+    { dataKind: { id: 'data-kind', level: 'subtitle', translation: t("metadata.dataKind") } },
+    { collMode: { id: 'data-collection-mode', level: 'subtitle', translation: t("metadata.dataCollectionMethod") } },
+    ...addConditionalEntry(data.payload.study?.funding.length > 0, 'funding', 'title', t('metadata.funding')),
+    ...addConditionalEntry(!!data.payload.study?.funding.agency, 'funding', 'subtitle', t('metadata.funder')),
+    ...addConditionalEntry(!!data.payload.study?.funding.grantNumber, 'funding', 'subtitle', t('metadata.grantNumber')),
+    { access: { id: 'access', level: 'title', translation: t("metadata.access") } },
+    { publisher: { id: 'publisher', level: 'subtitle', translation: t("metadata.publisher") } },
+    { publicationYear: { id: 'publication-year', level: 'subtitle', translation: t("metadata.yearOfPublication") } },
+    { accessTerms: { id: 'terms-of-data-access', level: 'subtitle', translation: t("metadata.termsOfDataAccess") } },
+    { topics: { id: 'topics', level: 'title', translation: t("metadata.topics.label") } },
+    { keywords: { id: 'keywords', level: 'title', translation: t("metadata.keywords.label") } },
+    { relPub: { id: 'related-publications', level: 'title', translation: t("metadata.relatedPublications") } }
   ]
 
-  return(
+  return (
     <div className="columns">
       <div className="column is-3 side-column">
         {location.state?.from === "/" &&
@@ -120,18 +133,18 @@ const DetailPage = () => {
         <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
             {(data) => {
-              return <Similars similars={data.payload.similars ? data.payload.similars : []}/>
+              return <Similars similars={data.payload.similars ? data.payload.similars : []} />
             }}
           </Await>
         </React.Suspense>
-        <DetailIndex headings={headings}/>
+        <DetailIndex headings={headings} />
       </div>
       <div className="column is-9">
         <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
             {(data) => {
-              if(data.payload.study){
-                return <Detail item={data.payload.study} headings={headings}/>
+              if (data.payload.study) {
+                return <Detail item={data.payload.study} headings={headings} />
               }
               else {
                 const languageLinks: JSX.Element[] = [];
@@ -153,12 +166,12 @@ const DetailPage = () => {
                     <p className="fs-14 mb-15">{t("language.notAvailable.content")}</p>
                     {data.payload.availableLanguages.length > 0 &&
                       <p className="fs-14 mb-15">{t("language.notAvailable.alternateLanguage")}:{" "}
-                      {languageLinks.map((link, index) => (
-                        <React.Fragment key={index}>
-                          {link}
-                          {index < languageLinks.length - 1 && ", "}
-                        </React.Fragment>
-                      ))}
+                        {languageLinks.map((link, index) => (
+                          <React.Fragment key={index}>
+                            {link}
+                            {index < languageLinks.length - 1 && ", "}
+                          </React.Fragment>
+                        ))}
                       </p>
                     }
                   </div>

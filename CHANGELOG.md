@@ -20,16 +20,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Reindexing settings, mappings and scripts along with readme on how to use them
 - Scrollbar for filters on search page
+- Show research identifier for creator when possible
+- Kind of data on Detail view
+- Divider line between sections on Detail view
 
 ### Changes
 
 - Creators can include research identifiers
 - Calculate tooltip position before activating it and place above if not enough space below
+- Move Topics and Keywords to be last on Detail view (since they are also in info box at the top of the page already)
 
 ### Fixes
 
 - About page metrics to show correct total for all languages
 - Info box overflow with long topics and keywords
+- Correctly initially hide some of the keywords on Detail view when there's a lot of them
 
 ## [0.2.0] - 2024-05-03
 
