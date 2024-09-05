@@ -54,17 +54,6 @@ const Header = () => {
 
   return (
     <header>
-      {/* <div id="topstripe" className="is-hidden-mobile">
-        <div className="container">
-          <div className="columns is-gapless">
-            <div className="column">
-              <a href="https://www.cessda.eu/" className="cessda-organisation">
-                {t("cessda")}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <div className="container columns is-vcentered">
         <div className="column is-one-quarter">
           <div className="logo">
@@ -81,8 +70,8 @@ const Header = () => {
             <div className="columns is-flex-direction-row is-vcentered mb-0">
               <div className="column is-narrow skip-link-wrapper is-hidden-mobile pb-0">
                 <a href="#main" id="skip-to-main" className="link is-sr-only"
-                  onFocus={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
-                  onBlur={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}>
+                  onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
+                  onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>
                   {t("header.skipToMain")}
                 </a>
               </div>
@@ -109,8 +98,8 @@ const Header = () => {
                           onClick={() => {
                             resetQueries();
                           }}
-                          onFocus={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
-                          onBlur={(e: FocusEvent<HTMLElement>) => toggleClassOnFocusBlur(e, "is-sr-only")}
+                          onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
+                          onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}
                           className="link-button link is-sr-only is-hidden-mobile">
                       {t("header.frontPage")}
                     </Link>

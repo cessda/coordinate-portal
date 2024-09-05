@@ -21,7 +21,7 @@ export interface TooltipProps {
   ariaLabel?: string;
 }
 
-export default ({ content, id, classNames, ariaLabel }: TooltipProps) => {
+const Tooltip = ({ content, id, classNames, ariaLabel }: TooltipProps) => {
   const [isActive, setIsActive] = useState(false);
   const [isNearBottom, setIsNearBottom] = useState(false);
   const tooltipButtonRef = useRef<HTMLButtonElement>(null);
@@ -96,3 +96,5 @@ export default ({ content, id, classNames, ariaLabel }: TooltipProps) => {
     </div>
   );
 };
+
+export default Tooltip;
