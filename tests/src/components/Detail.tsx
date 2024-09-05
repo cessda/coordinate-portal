@@ -219,7 +219,8 @@ it("should select json and trigger export metadata process", async () => {
   // Now, wait for the async operations to complete and assert the correct behavior
   await waitFor(() => {
     // Assertions to ensure the export process was triggered
-    expect(mockFetch).toHaveBeenCalledWith(`${window.location.origin}/api/json/coordinate_en/1`);
+    expect(mockFetch).toBeCalledTimes(2);
+    expect(mockFetch).toHaveBeenNthCalledWith(2, `${window.location.origin}/api/json/coordinate_en/1`);
     expect(mockCreateObjectURL).toHaveBeenCalled();
     expect(mockRevokeObjectURL).toHaveBeenCalled();
     expect(createElementSpy).toHaveBeenCalledWith('a');

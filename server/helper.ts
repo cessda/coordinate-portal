@@ -40,6 +40,7 @@ import { WithContext, Dataset } from "schema-dts";
 import swaggerSearchApiV2 from "./swagger-searchApiV2";
 import Client from "@searchkit/api";
 import 'isomorphic-unfetch';
+import { getELSSTRouter } from "./elsst";
 
 const { ConnectionError, ResponseError } = errors;
 
@@ -788,7 +789,8 @@ export function startListening(app: express.Express, handler: RequestHandler) {
 
   // Set up request handlers
   app.use("/api/sk", getSearchkitRouter());
-  app.post("/api/search", async function (req, res) {
+  app.use('/api/elsst', getELSSTRouter());
+  app.post("/api/search", async (req, res) => {
     const response = await apiClient.handleRequest(req.body);
     res.send(response);
   });

@@ -20,7 +20,7 @@ import horizonLogo from '../img/horizon-logo.png';
 import cessdaLogo from '../img/cessda-logo.png';
 import { updateLanguage } from "../reducers/language";
 
-export const metricsLoader: LoaderFunction = async ({ request, params }) => {
+export const metricsLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang");
   if(lang){
