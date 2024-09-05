@@ -124,7 +124,7 @@ export class Keywords extends React.Component<Props, State> {
         }
       </div>
       {!this.props.isExpandDisabled && this.props.keywords.length > this.props.keywordLimit &&
-        <a className="button is-small is-white" onClick={() =>
+        <a className="button is-small is-white" data-testid="expand-keywords" onClick={() =>
           // Toggle the expanded state
           this.setState(state => ({ isExpanded: !state.isExpanded }))
         }>
