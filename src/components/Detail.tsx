@@ -619,11 +619,11 @@ const Detail = (props: Props) => {
           {item.funding.length > 0 &&
             <section className="metadata-section" data-testid='funding'>
               {generateHeading('funding', 'is-inline-flex')}
-              {item.funding.map(funding => (
+              {item.funding.map((funding, index) => (
               <React.Fragment key={`${funding.agency || ''}${funding.grantNumber || ''}`}>
                 {funding.agency &&
                   <>
-                    {generateHeading('funder')}
+                    {generateHeading(`funder-${index}`)}
                     <p lang={currentLanguage.code}>
                       {funding.agency}
                     </p>
@@ -631,7 +631,7 @@ const Detail = (props: Props) => {
                 }
                 {funding.grantNumber &&
                   <>
-                    {generateHeading('grantNumber')}
+                    {generateHeading(`grantNumber-${index}`)}
                     <p lang={currentLanguage.code}>
                       {funding.grantNumber}
                     </p>

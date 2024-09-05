@@ -19,7 +19,7 @@ import { updateStudy } from "../reducers/detail";
 import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { store } from "../store";
 import DetailIndex from "../components/DetailIndex";
-import { getJsonLd } from '../../common/metadata';
+import { Funding, getJsonLd } from '../../common/metadata';
 import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
 import { updateLanguage } from "../reducers/language";
@@ -50,26 +50,27 @@ const DetailPage = () => {
   const navigate = useNavigate();
   const { data } = useLoaderData() as ReturnType<typeof studyLoader>;
 
-  // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
-  // const index = useAppSelector((state) => state.language.currentLanguage.index);
-
   useEffect(() => {
     // Update the JSON-LD representation
     const jsonLDElement = document.getElementById("json-ld");
-
-    if (data.payload.study) {
-      const elementString = '<script id="json-ld" type="application/ld+json">' + JSON.stringify(getJsonLd(data.payload.study)) + '</script>';
+  
+    if (data?.payload?.study) {
+      const script = document.createElement("script");
+      script.id = "json-ld";
+      script.type = "application/ld+json";
+      script.textContent = JSON.stringify(getJsonLd(data.payload.study));
+  
       if (jsonLDElement) {
-        $(jsonLDElement).replaceWith(elementString);
+        jsonLDElement.replaceWith(script);
       } else {
-        $(document.body).append(elementString);
+        document.body.appendChild(script);
       }
     } else {
       if (jsonLDElement) {
         jsonLDElement.remove();
       }
     }
-  }, []);
+  }, [data]);
 
   function handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -79,13 +80,36 @@ const DetailPage = () => {
     }
   };
 
-  function addConditionalEntry(
-    condition: boolean,
-    key: string,
-    level: 'main' | 'title' | 'subtitle',
-    translation: string
-  ): HeadingEntry[] {
-    return condition ? [{ [key]: { id: key, level, translation } }] : [];
+  function addFundingEntries(fundingArray: Funding[]): HeadingEntry[] {
+    const fundingHeadings: HeadingEntry[] = [];
+    if (fundingArray.length > 0) {
+      // Add the main 'Funding' title once
+      fundingHeadings.push({ funding: { id: 'funding', level: 'title', translation: t('metadata.funding') } });
+
+      // Add each funding item found
+      fundingArray.forEach((fundingItem, index) => {
+        if (fundingItem.agency) {
+          fundingHeadings.push({
+            [`funder-${index}`]: {
+              id: `funder-${index}`,
+              level: 'subtitle',
+              translation: t('metadata.funder'),
+            },
+          });
+        }
+
+        if (fundingItem.grantNumber) {
+          fundingHeadings.push({
+            [`grantNumber-${index}`]: {
+              id: `grant-number-${index}`,
+              level: 'subtitle',
+              translation: t('metadata.grantNumber'),
+            },
+          });
+        }
+      });
+    }
+    return fundingHeadings;
   }
 
   // Determines the order for index in left side column but not for the actual content
@@ -104,9 +128,7 @@ const DetailPage = () => {
     { sampProc: { id: 'sampling-procedure', level: 'subtitle', translation: t("metadata.samplingProcedure") } },
     { dataKind: { id: 'data-kind', level: 'subtitle', translation: t("metadata.dataKind") } },
     { collMode: { id: 'data-collection-mode', level: 'subtitle', translation: t("metadata.dataCollectionMethod") } },
-    ...addConditionalEntry(data.payload.study?.funding.length > 0, 'funding', 'title', t('metadata.funding')),
-    ...addConditionalEntry(!!data.payload.study?.funding.agency, 'funding', 'subtitle', t('metadata.funder')),
-    ...addConditionalEntry(!!data.payload.study?.funding.grantNumber, 'funding', 'subtitle', t('metadata.grantNumber')),
+    ...addFundingEntries(data?.payload?.study?.funding.length > 0 ? data.payload.study.funding : []),
     { access: { id: 'access', level: 'title', translation: t("metadata.access") } },
     { publisher: { id: 'publisher', level: 'subtitle', translation: t("metadata.publisher") } },
     { publicationYear: { id: 'publication-year', level: 'subtitle', translation: t("metadata.yearOfPublication") } },
@@ -123,7 +145,8 @@ const DetailPage = () => {
           <a className="button no-border focus-visible pl-0 mb-2"
             tabIndex={0}
             onClick={() => navigate(-1)}
-            onKeyDown={(e) => handleKeyDown(e)}>
+            onKeyDown={(e) => handleKeyDown(e)}
+            data-testid="back-button">
             <span className="icon is-small">
               <FaAngleLeft />
             </span>
@@ -132,25 +155,25 @@ const DetailPage = () => {
         }
         <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
-            {(data) => {
-              return <Similars similars={data.payload.similars ? data.payload.similars : []} />
+            {(resolvedData) => {
+              return <Similars similars={resolvedData?.payload?.similars ? resolvedData.payload.similars : []} />
             }}
           </Await>
         </React.Suspense>
         <DetailIndex headings={headings} />
       </div>
       <div className="column is-9">
-        <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
+        <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
-            {(data) => {
-              if (data.payload.study) {
-                return <Detail item={data.payload.study} headings={headings} />
+            {(resolvedData) => {
+              if (resolvedData?.payload?.study) {
+                return <Detail item={resolvedData.payload.study} headings={headings} />
               }
               else {
                 const languageLinks: JSX.Element[] = [];
 
-                for (let i = 0; i < data.payload.availableLanguages.length; i++) {
-                  const lang = data.payload.availableLanguages[i];
+                for (let i = 0; i < resolvedData?.payload?.availableLanguages.length; i++) {
+                  const lang = resolvedData.payload.availableLanguages[i];
                   languageLinks.push(
                     <Link key={lang.code} to={`${location.pathname}?lang=${lang.code}`}>
                       {lang.label}
@@ -159,12 +182,12 @@ const DetailPage = () => {
                 }
 
                 return (
-                  <div className="pt-15">
+                  <div className="pt-15" data-testid="available-languages">
                     <p className="fs-14 mb-15">
                       <strong>{t("language.notAvailable.heading")}</strong>
                     </p>
                     <p className="fs-14 mb-15">{t("language.notAvailable.content")}</p>
-                    {data.payload.availableLanguages.length > 0 &&
+                    {languageLinks.length > 0 &&
                       <p className="fs-14 mb-15">{t("language.notAvailable.alternateLanguage")}:{" "}
                         {languageLinks.map((link, index) => (
                           <React.Fragment key={index}>
@@ -186,190 +209,3 @@ const DetailPage = () => {
 };
 
 export default DetailPage;
-
-// import React, { Component } from 'react';
-// import { Layout, LayoutBody, LayoutResults, SearchkitProvider, SideBar } from 'searchkit';
-// import Header from '../components/Header';
-// import Detail from '../components/Detail';
-// import Footer from '../components/Footer';
-// import searchkit from '../utilities/searchkit';
-// import Panel from '../components/Panel';
-// import { connect, Dispatch } from 'react-redux';
-// import { FaAngleLeft, FaCode, FaExternalLinkAlt } from 'react-icons/fa';
-// import { AnyAction, bindActionCreators } from 'redux';
-// import Similars from '../components/Similars';
-// import { goBack, push } from 'react-router-redux';
-// import type { State } from '../types';
-// import { getJsonLd } from '../../common/metadata';
-// import { updateStudy } from '../actions/detail';
-// import $ from 'jquery';
-// import { browserHistory } from 'react-router';
-// import { useTranslation } from 'react-i18next';
-
-// export type Props = ReturnType<typeof mapDispatchToProps> & ReturnType<typeof mapStateToProps>;
-
-// export class DetailPage extends Component<Props> {
-
-//   constructor(props: Props) {
-//     super(props);
-//     const id = this.props.query;
-//     if (id && id !== this.props.item?.id) {
-//       // If the query is set and not already in the store, retrieve it.
-//       this.props.updateStudy(id);
-//     }
-//     this.updateTitle();
-//   }
-
-//   componentDidUpdate(prevProps: Props) {
-//     // Check if the query has changed, if it has ask for the store to be updated.
-//     const id = this.props.query;
-//     if (id && id !== prevProps.query) {
-//       this.props.updateStudy(id);
-//     }
-//     this.updateTitle();
-
-//     // Update the JSON-LD representation
-//     const jsonLDElement = document.getElementById("json-ld");
-
-//     if (this.props.item) {
-//       const elementString = '<script id="json-ld" type="application/ld+json">' + JSON.stringify(getJsonLd(this.props.item)) + '</script>';
-//       if (jsonLDElement) {
-//         $(jsonLDElement).replaceWith(elementString);
-//       } else {
-//         $(document.body).append(elementString);
-//       }
-//     } else {
-//       if (jsonLDElement) {
-//         jsonLDElement.remove();
-//       }
-//     }
-//   }
-
-//   private updateTitle() {
-//     const { t, i18n } = useTranslation();
-
-//     if (this.props.item) {
-//       document.title = `${this.props.item.titleStudy} - ${t('datacatalogue')}`;
-//     } else {
-//       document.title = `${t('language.notAvailable.title')} - ${t('datacatalogue')}`;
-//     }
-//   }
-
-//   render() {
-//     const {
-//       item,
-//       currentLanguage,
-//       goBack,
-//       push
-//     } = this.props;
-
-//     const { t, i18n } = useTranslation();
-
-//     // Get the Elasticsearch index for the current language. Used to pass index to View JSON link.
-//     const index = currentLanguage.index;
-
-//     const languageLinks: JSX.Element[] = [];
-
-//     for (let i = 0; i < this.props.availableLanguages.length; i++) {
-//       const lang = this.props.availableLanguages[i];
-//       const element = <a key={lang.code} onClick={() => {
-//         const currentLocation = browserHistory.getCurrentLocation();
-//         push({
-//           pathname: currentLocation.pathname,
-//           query: {
-//             ...currentLocation.query,
-//             lang: lang.code
-//           }
-//         });
-//       }}>{lang.label}</a>
-
-//       if (i < this.props.availableLanguages.length - 1) {
-//         languageLinks.push(<React.Fragment key={i}>{element}, </React.Fragment>)
-//       } else {
-//         languageLinks.push(element);
-//       }
-//     }
-
-//     return (
-//       <SearchkitProvider searchkit={searchkit}>
-//         <Layout>
-//           <Header/>
-//           <div className="container mb-3">
-//           <LayoutBody className="columns">
-//             <SideBar className="is-hidden-mobile column is-4">
-//               <Panel title={t("similarResults.heading")}
-//                      collapsable={true}
-//                      defaultCollapsed={false}>
-//                 <Similars/>
-//               </Panel>
-//             </SideBar>
-//             <LayoutResults className="column is-8">
-//             {item ?
-//               <>
-//                 <div className="panel">
-//                   <a className="button is-small is-white is-pulled-right" onClick={goBack}>
-//                     <FaAngleLeft/><span className="ml-5">{t("back")}</span>
-//                   </a>
-
-//                   {item.studyUrl &&
-//                   <a className="button is-small is-white is-pulled-left"
-//                       href={item.studyUrl}
-//                       rel="noreferrer"
-//                       target="_blank">
-//                     <span className="icon is-small"><FaExternalLinkAlt/></span>
-//                     <span>{t("goToStudy")}</span>
-//                   </a>
-//                   }
-
-//                   <a className="button is-small is-white is-pulled-left"
-//                     href={`/api/json/${index}/${encodeURIComponent(item.id)}`}
-//                     rel="noreferrer"
-//                     target="_blank">
-//                   <span className="icon is-small"><FaCode/></span>
-//                   <span>{t("viewJson")}</span>
-//                   </a>
-
-//                   <div className="is-clearfix"/>
-//                 </div>
-//                 <Detail item={item}/>
-//               </>
-//             :
-//               <div className="panel pt-15">
-//                 <p className="fs-14 mb-15">
-//                   <strong>{t("language.notAvailable.heading")}</strong>
-//                 </p>
-//                 <p className="fs-14 mb-15">{t("language.notAvailable.content")}</p>
-//                 {this.props.availableLanguages.length > 0 &&
-//                   <p className="fs-14 mb-15">{t("language.notAvailable.alternateLanguage")}: {languageLinks}</p>
-//                 }
-//               </div>
-//             }
-//             </LayoutResults>
-//           </LayoutBody>
-//           </div>
-//           <Footer/>
-//         </Layout>
-//       </SearchkitProvider>
-//     );
-//   }
-// }
-
-// export function mapStateToProps(state: State) {
-//   const query = state.routing.locationBeforeTransitions.query.q;
-//   return {
-//     item: state.detail.study,
-//     currentLanguage: state.language.currentLanguage,
-//     availableLanguages: state.detail.languageAvailableIn,
-//     query: Array.isArray(query) ? query.join() : query
-//   };
-// }
-
-// export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
-//   return {
-//     goBack: bindActionCreators(goBack, dispatch),
-//     updateStudy: bindActionCreators(updateStudy, dispatch),
-//     push: bindActionCreators(push, dispatch)
-//   };
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(DetailPage);

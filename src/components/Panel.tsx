@@ -17,7 +17,6 @@ export interface Props {
   children: JSX.Element | JSX.Element[];
   title?: JSX.Element | string;
   tooltip?: JSX.Element | string;
-  // disabled?: boolean,
   className?: string,
   collapsable?: boolean,
   defaultCollapsed?: boolean,
@@ -41,13 +40,18 @@ const Panel = (props: Props) => {
   return (
     <section className={'panel-container' + (collapsable ? ' collapsable' : '')}
             tabIndex={collapsable ? 0 : -1}
-            onKeyDown={collapsable ? (e) => handleKeyDown(e) : undefined }>
+            onKeyDown={collapsable ? (e) => handleKeyDown(e) : undefined }
+            data-testid='panel-container'>
       {tooltip}
       <div className={'panel-header' + (collapsable ? ' collapsable' : '') + (collapsed ? ' collapsed' : '')}
-          onClick={collapsable ? () => setCollapsed(collapsed => !collapsed) : undefined }>
-        <div className="panel-title">{title}</div>
+          onClick={collapsable ? () => setCollapsed(collapsed => !collapsed) : undefined }
+          data-testid='panel-header'>
+        <div className='panel-title'>{title}</div>
       </div>
-      <div className={'panel-content' + (collapsable ? ' collapsable' : '') + (collapsed ? ' collapsed' : '')}>{children}</div>
+      <div className={'panel-content' + (collapsable ? ' collapsable' : '') + (collapsed ? ' collapsed' : '')}
+          data-testid='panel-content'>
+        {children}
+      </div>
     </section>
   );
 }

@@ -15,6 +15,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Similar } from "../../common/metadata";
+import { useAppSelector } from "../hooks";
 
 export interface Props {
   similars: Similar[];
@@ -23,13 +24,14 @@ export interface Props {
 const Similars = (props: Props) => {
   const { t } = useTranslation();
   const similars = props.similars;
+  const currentLanguageCode = useAppSelector((state) => state.language.currentLanguage.code);
 
   const links: JSX.Element[] = [];
 
   for (let i = 0; i < similars.length; i++) {
     // Construct the similar URL
     links.push(
-      <Link key={i} to={"/detail/" + similars[i].id} className="subtitle">
+      <Link key={i} to={"/detail/" + similars[i].id} className="subtitle" lang={currentLanguageCode}>
         {similars[i].title}
       </Link>
     );
