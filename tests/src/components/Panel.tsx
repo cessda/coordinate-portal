@@ -21,7 +21,7 @@ jest.mock('../../../src/components/Tooltip', () => ({
   Tooltip: ({ content }: { content: string | JSX.Element }) => <div>{content}</div>,
 }));
 
-it('shoudl render title and children correctly', () => {
+it('should render title and children correctly', () => {
   render(
     <Panel title="Test Title">
       <p>Test Content</p>
