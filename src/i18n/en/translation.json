@@ -137,11 +137,11 @@
     "publicationDateDescending": "Date of publication (newest)"
   },
   "pagination": {
-    "page": "Page ",
-    "navTop": "Top pagination, current page ",
-    "navBottom": "Bottom pagination, current page ",
-    "previous": "Previous page, page ",
-    "next": "Next page, page "
+    "firstPage": "Go to first page",
+    "previousPage": "Go to previous page",
+    "nextPage": "Go to next page",
+    "lastPage": "Go to last page",
+    "pageItemAria": "Go to page \"%(currentPage)s\" of \"%(nbPages)s\""
   },
   "advancedSearch": {
     "label": "Search help",

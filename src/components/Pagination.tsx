@@ -12,9 +12,12 @@
 // limitations under the License.
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Pagination as InstantsearchPagination } from "react-instantsearch";
 
 const Pagination = () => {
+  const { t } = useTranslation();
+
   return (
     <InstantsearchPagination
       showLast
@@ -23,13 +26,12 @@ const Pagination = () => {
         nextPageItemText: '›',
         firstPageItemText: '«',
         lastPageItemText: '»',
-        // pageItemText: ({ currentPage, nbPages }) => `Page ${currentPage}/${nbPages}`,
         pageItemText: ({ currentPage, nbPages }) => `${currentPage}/${nbPages}`,
-        firstPageItemAriaLabel: 'Go to first page',
-        previousPageItemAriaLabel: 'Go to previous page',
-        nextPageItemAriaLabel: 'Go to next page',
-        lastPageItemAriaLabel: 'Go to last page',
-        pageItemAriaLabel: ({ currentPage, nbPages }) => `Go to page ${currentPage} of ${nbPages}`,
+        firstPageItemAriaLabel: `${t("pagination.firstPage")}`,
+        previousPageItemAriaLabel: `${t("pagination.previousPage")}`,
+        nextPageItemAriaLabel: `${t("pagination.nextPage")}`,
+        lastPageItemAriaLabel: `${t("pagination.lastPage")}`,
+        pageItemAriaLabel: ({ currentPage, nbPages }) => `${t("pagination.firstPage", { currentPage: currentPage, nbPages: nbPages })}`,
       }}
       classNames={{
         root: 'mb-4',

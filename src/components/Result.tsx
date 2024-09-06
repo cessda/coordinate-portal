@@ -30,7 +30,7 @@ function generateCreatorElements(item: CMMStudy) {
   // How many creators should be shown
   const creatorsLength = 3;
 
-  if(item.creators){
+  if (item.creators) {
     for (let i = 0; i < item.creators.length; i++) {
       creators.push(
         <span key={i}>
@@ -68,7 +68,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   const [abstractExpanded, setAbstractExpanded] = useState(false);
 
   const languages: JSX.Element[] = [];
-  for (let i = 0; i < hit.langAvailableIn.length; i++) {
+  for (let i = 0; i < hit?.langAvailableIn?.length; i++) {
     languages.push(
       <Link
         key={i}
@@ -81,7 +81,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     );
   }
 
-  function handleKeyDown(event: React.KeyboardEvent, titleStudy: string) {
+  const handleKeyDown = (event: React.KeyboardEvent, titleStudy: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
@@ -89,7 +89,13 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     }
   }
 
-  function handleAbstractExpansion(titleStudy: string) {
+  const handleClick = (event: React.MouseEvent, titleStudy: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleAbstractExpansion(titleStudy);
+  };
+
+  const handleAbstractExpansion = (titleStudy: string) => {
     // Notify Matomo Analytics of toggling "Read more" for a study.
     //const _paq = getPaq();
     //_paq.push(['trackEvent', 'Search', 'Read more', titleStudy]);
@@ -98,11 +104,13 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   }
 
   function normalizeAndDecodeHTML(text: string) {
-    text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    text = text.replace(/<\/?[A-Z]+>/g, function(match) {
-      return match.toLowerCase();
-    });
-    text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    if (text) {
+      text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+      text = text.replace(/<\/?[A-Z]+>/g, function (match) {
+        return match.toLowerCase();
+      });
+      text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
     const element = document.createElement('div');
     element.innerHTML = text;
     return element.textContent || element.innerText;
@@ -111,13 +119,13 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   // TODO Might have to remove all HTML Entities when abstract is not expanded
   const renderAbstract = () => {
     let abstract = normalizeAndDecodeHTML(hit.abstract);
-    const matchedWords = hit._highlightResult.abstract.matchedWords;
-    if(matchedWords.length > 0) {
-      if(abstractExpanded) {
+    const matchedWords = hit._highlightResult?.abstract?.matchedWords || [];
+    if (matchedWords.length > 0) {
+      if (abstractExpanded) {
         // Create a regular expression that matches any of the highlighted texts
         const regexString = matchedWords.map((text: string) => `(${text})`).join('|');
         const regex = new RegExp(regexString, 'gi');
-  
+
         // Use the regular expression to find and highlight all matching texts in the full abstract
         abstract = abstract.replace(regex, (match: string) => `<mark>${match}</mark>`);
       } else {
@@ -139,9 +147,9 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     <div className="list-hit" data-qa="hit">
       <h2 className="title is-6">
         <Link className="focus-visible"
-              to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
-              state={{ from: location.pathname }}>
-          <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.titleStudy.value || hit.titleStudy }}></span>
+          to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
+          state={{ from: location.pathname }}>
+          <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>
       </h2>
       <div className="subtitle is-6">{creators}</div>
@@ -154,11 +162,12 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
         <span className="level-left is-hidden-touch">
           <div className="field is-grouped">
             <div className="control">
-              {showAbstract && hit.abstract.length > 500 && (
+              {showAbstract && hit.abstract?.length > 500 && (
                 <a className="button no-border focus-visible"
                   tabIndex={0}
-                  onClick={() => handleAbstractExpansion(hit.titleStudy)}
-                  onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}>
+                  onClick={(e) => handleClick(e, hit.titleStudy)}
+                  onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}
+                  data-testid="expand-abstract">
                   {abstractExpanded ? (
                     <>
                       <span className="icon is-small">
@@ -201,6 +210,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
                   href={hit.studyUrl}
                   rel="noreferrer"
                   target="_blank"
+                  data-testid="study-url"
                 >
                   <span className="icon is-small">
                     <FaExternalLinkAlt />
