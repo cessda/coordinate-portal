@@ -15,7 +15,6 @@ import React from 'react';
 import Keywords, { Props } from '../../../src/components/Keywords';
 import { TermURIResult, TermVocabAttributes } from '../../../common/metadata';
 import { getELSSTTerm } from '../../../src/utilities/elsst';
-import i18n from '../../../src/i18n/config';
 import { act, render } from '../../testutils';
 
 const promise = Promise.resolve({});
@@ -31,10 +30,7 @@ jest.mock('../../../src/utilities/elsst.ts', () => {
 const initialProps: Props = {
   keywords: [],
   lang: "en",
-  keywordLimit: 12,
-  t: i18n.t,
-  i18n: i18n,
-  tReady: true
+  keywordLimit: 12
 }
 
 // Mock props and shallow render component for test.

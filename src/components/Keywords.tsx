@@ -19,7 +19,7 @@ import { getELSSTTerm } from "../utilities/elsst";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-export interface Props extends WithTranslation {
+export interface Props {
   keywords: TermVocabAttributes[];
   lang: string;
   keywordLimit: number;
@@ -31,11 +31,11 @@ interface State {
   elsstURLs: TermURIResult;
 }
 
-export class Keywords extends React.Component<Props, State> {
+export class Keywords extends React.Component<Props & WithTranslation, State> {
 
   private abortController = new AbortController();
 
-  constructor(props: Props) {
+  constructor(props: Props & WithTranslation) {
     super(props);
     this.state = {
       isExpanded: !(props.keywords.length > props.keywordLimit),
