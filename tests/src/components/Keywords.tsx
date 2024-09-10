@@ -138,7 +138,7 @@ describe('Keywords component', () => {
 
     const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
 
-    const { renderResult: enzymeWrapper } = setup({
+    const { renderResult: renderResult } = setup({
       keywords: keywords.map(t => getKeyword(t))
     });
 
@@ -149,7 +149,7 @@ describe('Keywords component', () => {
     await promise;
 
     // Unmount the component
-    enzymeWrapper.unmount();
+    renderResult.unmount();
 
     expect(abortSpy).toBeCalledTimes(1);
 

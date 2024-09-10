@@ -19,21 +19,21 @@
 //   index  : The Elasticsearch index containing data for this language.
 // }
 export const languages: readonly Language[] = [
-  // {
-  //   code: "cs",
-  //   label: "Czech",
-  //   index: "coordinate_cs",
-  // },
-  // {
-  //   code: "da",
-  //   label: "Danish",
-  //   index: "coordinate_da",
-  // },
-  // {
-  //   code: "nl",
-  //   label: "Dutch",
-  //   index: "coordinate_nl",
-  // },
+  {
+    code: "cs",
+    label: "Czech",
+    index: "coordinate_cs",
+  },
+  {
+    code: "da",
+    label: "Danish",
+    index: "coordinate_da",
+  },
+  {
+    code: "nl",
+    label: "Dutch",
+    index: "coordinate_nl",
+  },
   {
     code: "en",
     label: "English",
@@ -59,16 +59,16 @@ export const languages: readonly Language[] = [
     label: "Greek",
     index: "coordinate_el",
   },
-  // {
-  //   code: "sk",
-  //   label: "Slovakian",
-  //   index: "coordinate_sk",
-  // },
-  // {
-  //   code: "sl",
-  //   label: "Slovenian",
-  //   index: "coordinate_sl",
-  // },
+  {
+    code: "sk",
+    label: "Slovakian",
+    index: "coordinate_sk",
+  },
+  {
+    code: "sl",
+    label: "Slovenian",
+    index: "coordinate_sl",
+  },
   {
     code: "sv",
     label: "Swedish",
