@@ -74,7 +74,7 @@ export class Keywords extends React.Component<Props, State> {
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
         const value = callback(field[i]);
-        elements.push(<span className="tag" lang={this.props.lang} key={i}>{value}</span>);
+        elements.push(<span className="tag" data-testid="tag" lang={this.props.lang} key={i}>{value}</span>);
       }
     }
 
@@ -97,7 +97,7 @@ export class Keywords extends React.Component<Props, State> {
   render(): React.ReactNode {
     const { t } = this.props;
     return (<>
-      <div className="tags">
+      <div className="tags" data-testid="tags">
         {this.generateElements(this.state.isExpanded ? this.props.keywords : this.props.keywords.slice(0, this.props.keywordLimit),
           keywords => {
             // If the term is a valid ELSST term, also link to ELSST
@@ -107,7 +107,7 @@ export class Keywords extends React.Component<Props, State> {
               {this.state.elsstURLs[keywords.term] &&
                 <span className="is-inline-flex is-align-items-center">&nbsp;(
                   <a href={this.state.elsstURLs[keywords.term]} rel="noreferrer" target="_blank"
-                    className="is-inline-flex is-align-items-center">
+                    className="is-inline-flex is-align-items-center" data-testid="elsst-link">
                     <span className="icon"><FaExternalLinkAlt/></span>ELSST
                   </a>)
                 </span>
@@ -116,7 +116,7 @@ export class Keywords extends React.Component<Props, State> {
           }
         )}
         {this.props.isExpandDisabled && this.props.keywords.length > this.props.keywordLimit &&
-          <span className="tag">
+          <span className="tag" data-testid="tag">
             <span>&nbsp;({this.props.keywords.length - this.props.keywordLimit}&nbsp;</span>
             <span>{t("more")}</span>
             <span>)</span>
