@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eux
 
 # Function to create index from settings JSON file
 create_index() {
