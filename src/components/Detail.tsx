@@ -63,7 +63,6 @@ const Detail = (props: Props) => {
 
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
   const [infoBoxExpanded, setInfoBoxExpanded] = useState(props.item.keywords.length < truncatedKeywordsLength);
-  const [keywordsExpanded, setKeywordsExpanded] = useState(props.item.keywords.length < truncatedKeywordsLength);
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
@@ -82,7 +81,7 @@ const Detail = (props: Props) => {
 
   const dateFormatter = DateTimeFormatter.ofPattern("[[dd/]MM/]uuuu");
 
-  function generateElements<T, R>(
+  function generateElements<T>(
     field: T[],
     element: 'div' | 'tag' | 'ul',
     callback?: (args: T) => React.ReactNode,
@@ -247,7 +246,7 @@ const Detail = (props: Props) => {
       const sanitizedTitle = item.titleStudy.toLowerCase().replace(/ /g, '_');
 
       switch (selectedExportMetadataOption.value) {
-        case 'json':
+        case 'json': {
           // Fetch the JSON data from the API
           const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`);
 
@@ -260,13 +259,15 @@ const Detail = (props: Props) => {
             return;
           }
           break;
+        }
 
-        case 'ddi25':
+        case 'ddi25': {
           // Set exportData for DDI export
           exportData = getDDI(item);
           fileName = `${sanitizedTitle}.xml`;
           mimeType = 'application/xml';
           break;
+        }
 
         default:
           break;
