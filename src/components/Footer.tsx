@@ -35,7 +35,7 @@ const Footer = () => {
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
 
   return (
-    <footer className={'footer' + (showMobileFilters ? ' show-mobile-filters' : '')}>
+    <footer data-testid="footer" className={'footer' + (showMobileFilters ? ' show-mobile-filters' : '')}>
       <div className="container">
         <div className="columns is-vcentered">
           <div className="column is-2">
@@ -53,8 +53,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <script type="application/ld+json">{organizationCoordinateJSON}</script>
-      <script type="application/ld+json">{organizationCessdaJSON}</script>
+      <script type="application/ld+json" data-testid="coordinateJson">{organizationCoordinateJSON}</script>
+      <script type="application/ld+json" data-testid="cessdaJson">{organizationCessdaJSON}</script>
     </footer>
   )
 }
