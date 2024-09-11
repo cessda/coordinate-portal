@@ -490,3 +490,12 @@ function escapeTextInXml(text: string) {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TermURIResult extends Record<string, string> {}
+
+/**
+ * Study metrics shown on the about page
+ */
+export interface Metrics {
+  studies: number;
+  creators: number;
+  countries: number;
+}
