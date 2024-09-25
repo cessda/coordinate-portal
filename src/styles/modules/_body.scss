@@ -339,7 +339,10 @@ body {
 }
 
 .tag {
-  font-size: 0.875rem !important;
+  font-size: 0.8rem !important;
+  min-height: 2em;
+  height: auto !important;
+  white-space: normal !important;
 }
 .tag a:hover{
   text-decoration: underline;
@@ -364,16 +367,6 @@ body {
   .info-box-keywords {
     margin-top: -15px;
     margin-bottom: 15px;
-  }
-
-  .info-box-keywords, .info-box-topics {
-    .tags {
-      .tag {
-        height: unset;
-        white-space: pre-line;
-        word-wrap: break-word;
-      }
-    }
   }
 }
 

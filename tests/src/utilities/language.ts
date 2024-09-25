@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -32,5 +32,5 @@ describe('Language utilities', () => {
 export const enLanguage: Language = {
   code: 'en',
   label: 'English',
-  index: 'cmmstudy_en'
+  index: 'coordinate_en'
 }

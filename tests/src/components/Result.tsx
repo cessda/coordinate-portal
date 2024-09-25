@@ -17,13 +17,6 @@ import Result from "../../../src/components/Result";
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
-// Mock useTranslation
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string | number) => key,
-  }),
-}));
-
 const baseMockHit = {
   objectID: "1",
   titleStudy: 'Full Study Title',
@@ -33,6 +26,56 @@ const baseMockHit = {
     { name: 'Jane Doe' },
     { name: 'University of Essex' },
     { name: 'John Smith', affiliation: 'University of Essex' }
+  ],
+  keywords: [
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "mass_culture",
+      "term": "mass culture"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "youth_culture",
+      "term": "youth culture"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "leisure_time_activities",
+      "term": "leisure time activities"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "fashion",
+      "term": "fashion"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "musicians",
+      "term": "musicians"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "music",
+      "term": "music"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "listening_to_music",
+      "term": "listening to music"
+    },
+    {
+      "vocab": "ELSST",
+      "vocabUri": "https://elsst.cessda.eu/id",
+      "id": "youth",
+      "term": "youth"
+    }
   ],
   langAvailableIn: ['en', 'fi'],
   studyUrl: 'http://example.com',
@@ -51,7 +94,7 @@ const baseMockHit = {
 };
 
 it('renders result with title, creators, and abstract', () => {
-  render(<Result hit={baseMockHit} showAbstract={true} />);
+  render(<Result hit={baseMockHit} />);
 
   // Title
   expect(screen.getByText(baseMockHit.titleStudy)).toBeInTheDocument();
@@ -89,53 +132,74 @@ it('renders highlighted title', () => {
     },
   };
 
-  render(<Result hit={modifiedHit} showAbstract={true} />);
+  render(<Result hit={modifiedHit} />);
 
   // Title
   expect(screen.getByText(modifiedHit._highlightResult.titleStudy.value)).toBeInTheDocument();
 });
 
 it('renders language buttons', () => {
-  render(<Result hit={baseMockHit} showAbstract={true} />);
+  render(<Result hit={baseMockHit} />);
 
   expect(screen.getByText('en')).toBeInTheDocument();
   expect(screen.getByText('fi')).toBeInTheDocument();
 });
 
 it('renders external study link', () => {
-  render(<Result hit={baseMockHit} showAbstract={true} />);
+  render(<Result hit={baseMockHit} />);
 
   const link = screen.getByTestId('study-url');
   expect(link).toHaveAttribute('href', 'http://example.com');
 });
 
 it('toggles abstract expansion on button click', async () => {
-  render(<Result hit={baseMockHit} showAbstract={true} />);
+  render(<Result hit={baseMockHit} />);
 
   const expandAbstractButton = screen.getByTestId('expand-abstract');
   await userEvent.click(expandAbstractButton);
 
   // Expect abstract to be expanded
-  expect(screen.getByText('readLess')).toBeInTheDocument();
+  expect(screen.getByText('Read less')).toBeInTheDocument();
 
   await userEvent.click(expandAbstractButton);
 
   // Expect abstract to be collapsed
-  expect(screen.getByText('readMore')).toBeInTheDocument();
+  expect(screen.getByText('Read more')).toBeInTheDocument();
 });
 
 it('toggles abstract expansion on Enter or Space key', async () => {
-  render(<Result hit={baseMockHit} showAbstract={true} />);
+  const modifiedHit = {
+    ...baseMockHit,
+    _highlightResult: {
+      abstract: {
+        fullyHighlighted: false,
+        matchLevel: "full",
+        matchedWords: [
+          "family"
+        ],
+        value: "and with whom they are in the afternoons, how much time they spend at home alone, and how often the __ais-highlight__family__/ais-highlight__"
+      },
+      titleStudy: {
+        fullyHighlighted: false,
+        matchLevel: "full",
+        matchedWords: [
+          "Family"
+        ],
+        value: "__ais-highlight__Family__/ais-highlight__ Barometer 2001: Children's Leisure Time"
+      }
+    },
+  };
+  render(<Result hit={modifiedHit} />);
 
   const expandAbstractButton = screen.getByTestId('expand-abstract');
   expandAbstractButton.focus();
   await userEvent.keyboard('{Enter}');
 
   // Expect abstract to be expanded
-  expect(screen.getByText('readLess')).toBeInTheDocument();
+  expect(screen.getByText('Read less')).toBeInTheDocument();
 
   await userEvent.keyboard('{ }');
 
   // Expect abstract to be collapsed
-  expect(screen.getByText('readMore')).toBeInTheDocument();
+  expect(screen.getByText('Read more')).toBeInTheDocument();
 });

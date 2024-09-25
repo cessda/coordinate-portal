@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -27,6 +27,7 @@ export interface SearchState {
   showAdvancedSearch: boolean;
   showFilterSummary: boolean;
   showAbstract: boolean;
+  showKeywords: boolean;
   expandMetadataPanels: boolean;
   displayed: CMMStudy[];
   study: CMMStudy | undefined;
@@ -40,6 +41,7 @@ const initialState: SearchState = {
   showAdvancedSearch: false,
   showFilterSummary: false,
   showAbstract: true,
+  showKeywords: true,
   study: undefined,
   expandMetadataPanels: false,
   displayed: [],
@@ -110,6 +112,9 @@ export const searchSlice = createSlice({
     toggleAbstract: (state: SearchState, action: PayloadAction<boolean>) => {
       state.showAbstract = !action.payload;
     },
+    toggleKeywords: (state: SearchState, action: PayloadAction<boolean>) => {
+      state.showKeywords = !action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateMetrics.fulfilled, (state, action) => {
@@ -121,81 +126,7 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract } =
+export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract, toggleKeywords } =
   searchSlice.actions;
 
 export default searchSlice.reducer;
-
-// import {
-//   INIT_SEARCHKIT,
-//   RESET_SEARCH,
-//   SearchkitState,
-//   TOGGLE_ADVANCED_SEARCH,
-//   TOGGLE_LOADING,
-//   TOGGLE_METADATA_PANELS,
-//   TOGGLE_MOBILE_FILTERS,
-//   TOGGLE_SUMMARY,
-//   UPDATE_DISPLAYED,
-//   UPDATE_QUERY,
-//   UPDATE_STATE,
-//   UPDATE_TOTAL_STUDIES,
-// } from "../actions/search";
-
-// const searchReducer = (state: SearchState = initialState, action: Action) => {
-//   switch (action.type) {
-//     case INIT_SEARCHKIT:
-//       return state;
-
-//     case TOGGLE_LOADING:
-//       return Object.assign({}, state, {
-//         loading: action.loading,
-//       });
-
-//     case TOGGLE_MOBILE_FILTERS:
-//       return Object.assign({}, state, {
-//         showMobileFilters: !state.showMobileFilters,
-//       });
-
-//     case TOGGLE_ADVANCED_SEARCH:
-//       return Object.assign({}, state, {
-//         showAdvancedSearch: !state.showAdvancedSearch,
-//       });
-
-//     case TOGGLE_SUMMARY:
-//       return Object.assign({}, state, {
-//         showFilterSummary: !state.showFilterSummary,
-//       });
-
-//     case TOGGLE_METADATA_PANELS:
-//       return Object.assign({}, state, {
-//         expandMetadataPanels: !state.expandMetadataPanels,
-//       });
-
-//     case UPDATE_DISPLAYED: {
-//       return Object.assign({}, state, {
-//         displayed: action.displayed,
-//       });
-//     }
-
-//     case UPDATE_QUERY:
-//       return Object.assign({}, state, {
-//         query: action.query,
-//       });
-
-//     case UPDATE_STATE:
-//       return Object.assign({}, state, {
-//         state: action.state,
-//       });
-
-//     case RESET_SEARCH:
-//       return state;
-
-//     case UPDATE_TOTAL_STUDIES:
-//       return Object.assign({}, state, {
-//         totalStudies: action.totalStudies,
-//       });
-
-//     default:
-//       return state;
-//   }
-// };

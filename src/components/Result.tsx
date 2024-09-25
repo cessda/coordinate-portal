@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaAngleDown,
   FaAngleUp,
@@ -19,11 +19,12 @@ import {
   FaLanguage,
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { CMMStudy } from "../../common/metadata";
+import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
 // import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { updateLanguage } from "../reducers/language";
+import Keywords from "./Keywords";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: JSX.Element[] = [];
@@ -53,19 +54,41 @@ function generateCreatorElements(item: CMMStudy) {
   return creators;
 }
 
-interface ResultProps {
-  hit: any;
-  showAbstract: boolean;
+// Randomize array using Durstenfeld shuffle algorithm
+function shuffleArray<T>(array: Array<T>) {
+  if (array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+  return array;
 }
 
-const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
+interface ResultProps {
+  hit: any;
+}
+
+const Result: React.FC<ResultProps> = ({ hit }) => {
   const { t } = useTranslation();
   const location = useLocation();
 
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const showAbstract = useAppSelector((state) => state.search.showAbstract);
+  const showKeywords = useAppSelector((state) => state.search.showKeywords);
   const dispatch = useAppDispatch();
 
   const [abstractExpanded, setAbstractExpanded] = useState(false);
+  const [shuffledKeywords, setShuffledKeywords] = useState<TermVocabAttributes[]>([]);
+
+  useEffect(() => {
+    if (hit.keywords && hit.keywords.length > 0) {
+      setShuffledKeywords(shuffleArray(hit.keywords));
+    }
+  }, [hit.keywords]);
+
+  const truncatedAbstractLength = 500;
+  const truncatedKeywordsLength = 7;
 
   const languages: JSX.Element[] = [];
   for (let i = 0; i < hit?.langAvailableIn?.length; i++) {
@@ -116,7 +139,6 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     return element.textContent || element.innerText;
   }
 
-  // TODO Might have to remove all HTML Entities when abstract is not expanded
   const renderAbstract = () => {
     let abstract = normalizeAndDecodeHTML(hit.abstract);
     const matchedWords = hit._highlightResult?.abstract?.matchedWords || [];
@@ -133,9 +155,10 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
       }
     }
 
-    // Make sure abstract is not longer than around 500 characters but don't slice in the middle of the word
+    // Make sure abstract is not longer than set limit but don't slice in the middle of the word
     if (!abstractExpanded) {
-      abstract = abstract.length <= 500 ? abstract : abstract.slice(0, abstract.lastIndexOf(' ', 500)) + '...';
+      abstract = abstract.length <= truncatedAbstractLength ? abstract
+        : abstract.slice(0, abstract.lastIndexOf(' ', truncatedAbstractLength)) + '...';
     }
 
     return abstract;
@@ -158,11 +181,17 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
           <div dangerouslySetInnerHTML={{ __html: renderAbstract() }} />
         </div>
       )}
+      {showKeywords && shuffledKeywords.length > 0 &&
+        <div className="result-keywords mt-10">
+          <Keywords keywords={shuffledKeywords} keywordLimit={truncatedKeywordsLength}
+            lang={currentLanguage.code} isExpandDisabled={true} />
+        </div>
+      }
       <span className="level mt-10 result-actions">
         <span className="level-left is-hidden-touch">
           <div className="field is-grouped">
             <div className="control">
-              {showAbstract && hit.abstract?.length > 500 && (
+              {showAbstract && hit.abstract?.length > truncatedAbstractLength && (
                 <a className="button no-border focus-visible"
                   tabIndex={0}
                   onClick={(e) => handleClick(e, hit.titleStudy)}
