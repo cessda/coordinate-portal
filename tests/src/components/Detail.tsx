@@ -256,7 +256,7 @@ it("should handle fetch failure and log error", async () => {
   global.URL.revokeObjectURL = mockRevokeObjectURL;
 
   // Spy on console.error
-  const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
 
   render(<Detail {...baseProps} />);
 

@@ -16,7 +16,7 @@ This repository contains a Python script and two bash scripts to help manage Ela
 
 ## Mapping changes from original CDC mappings
 
-While in a directory that contains both cessda.cdc.osmh-indexer and coordinate-portal repositories:
+While in a directory that contains both `cessda.cdc.osmh-indexer` and `coordinate-portal` repositories:
 
 ```bash
 diff cessda.cdc.osmh-indexer/src/main/resources/elasticsearch/mappings/mappings_cmmstudy.json coordinate-portal/indexing/mappings_coordinate.json

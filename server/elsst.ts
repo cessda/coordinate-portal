@@ -14,6 +14,7 @@
 import express from "express";
 import { logger } from "./logger";
 import fetch from 'node-fetch';
+import { TermURIResult } from "../common/metadata";
 
 const SKOSMOS_URL = process.env.SEARCHKIT_SKOSMOS_URL || "https://thesauri.cessda.eu";
 const ELSST_VOCABULARY = process.env.SEARCHKIT_ELSST_VOCABULARY || "elsst-4";
@@ -25,15 +26,12 @@ interface SkosmosLookupResponse {
   }[];
 }
 
-export interface TermURIResult extends Record<string, string> {}
-
 /**
  * Cache for ELSST terms
  */
 const termCache = new Map<string, string | null>();
 
 async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResult> {
-
 
   const termUris = labels.map(async originalLabel => {
     // Normalise the label by converting it to upper case
