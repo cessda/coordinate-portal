@@ -22,16 +22,16 @@
     "languageSelect": "Select search language"
   },
   "noHits": {
-    "noResultsFound": "No results found for \"%(query)s\" in the selected language.",
-    "searchWithoutFilters": "Search for \"%(query)s\" without filters",
+    "noResultsFound": "No results found for \"{{query}}\" in the selected language.",
+    "searchWithoutFilters": "Search for \"{{query}}\" without filters",
     "error": "We're sorry, an issue occurred when fetching your results. Please try again.",
     "resetSearch": "Reset Search"
   },
   "filters": {
     "view": {
-      "more": "Add %(facetsPerPage)s more %(name)s to searchable %(name)s list",
-      "less": "Keep only %(defaultSize)s most common %(name)s in searchable %(name)s list",
-      "all": "Add all %(name)s to searchable %(name)s list"
+      "more": "Add {{facetsPerPage}} more {{name}} to searchable {{name}} list",
+      "less": "Keep only {{defaultSize}} most common {{name}} in searchable {{name}} list",
+      "all": "Add all {{name}} to searchable {{name}} list"
     },
     "topic": {
       "label": "Topic",
@@ -45,7 +45,7 @@
       "label": "Keywords",
       "placeholder": "Search keywords",
       "tooltip": {
-        "content": "Keywords which describe the content of the data. Many but not all metadata providers use <a href=\"https://elsst.cessda.eu/\">ELSST Thesaurus</a> for their keywords. Searchable list contains a maximum of %(size)s most common keywords.",
+        "content": "Keywords which describe the content of the data. Many but not all metadata providers use <a href=\"https://elsst.cessda.eu/\">ELSST Thesaurus</a> for their keywords.",
         "ariaLabel": "Tooltip button for Keywords filter"
       }
     },
@@ -118,14 +118,14 @@
     }
   },
   "numberOfResults": {
-    "zero": "%(count)s studies found in %(label)s from a total of %(total)s",
-    "one": "%(count)s study found in %(label)s from a total of %(total)s",
-    "other": "%(count)s studies found in %(label)s from a total of %(total)s"
+    "zero": "{{count}} studies found in {{label}} from a total of {{total}}",
+    "one": "{{count}} study found in {{label}} from a total of {{total}}",
+    "other": "{{count}} studies found in {{label}} from a total of {{total}}"
   },
   "numberOfResultsWithTime": {
-    "zero": "%(count)s studies found in %(time)sms",
-    "one": "%(count)s study found in %(time)sms",
-    "other": "%(count)s studies found in %(time)sms"
+    "zero": "{{count}} studies found in {{time}}ms",
+    "one": "{{count}} study found in {{time}}ms",
+    "other": "{{count}} studies found in {{time}}ms"
   },
   "sorting": {
     "relevance": "Relevance",
@@ -141,26 +141,26 @@
     "previousPage": "Go to previous page",
     "nextPage": "Go to next page",
     "lastPage": "Go to last page",
-    "pageItemAria": "Go to page \"%(currentPage)s\" of \"%(nbPages)s\""
+    "pageItemAria": "Go to page {{currentPage}} of {{nbPages}}"
   },
   "advancedSearch": {
     "label": "Search help",
     "introduction": "The following special characters can be used to perform advanced search queries:",
-    "and": "<span class=\"%(className)s\">+</span> signifies <strong>AND</strong> operation.",
-    "or": "<span class=\"%(className)s\">|</span> signifies <strong>OR</strong> operation.",
-    "negates": "<span class=\"%(className)s\">-</span> <strong>negates</strong> a single token.",
-    "phrase": "<span class=\"%(className)s\">\"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.",
-    "prefix": "<span class=\"%(className)s\">*</span> at the end of a term signifies a <strong>prefix</strong> query.",
-    "precedence": "<span class=\"%(className)s\">(</span> and <span class=\"%(className)s\">)</span> signify <strong>precedence</strong>.",
-    "distance": "<span class=\"%(className)s\">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).",
-    "slop": "<span class=\"%(className)s\">~N</span> after a phrase signifies <strong>slop</strong> amount.",
+    "and": "<span class=\"{{className}}\">+</span> signifies <strong>AND</strong> operation.",
+    "or": "<span class=\"{{className}}\">|</span> signifies <strong>OR</strong> operation.",
+    "negates": "<span class=\"{{className}}\">-</span> <strong>negates</strong> a single token.",
+    "phrase": "<span class=\"{{className}}\">\"</span> wraps a number of tokens to signify a <strong>phrase</strong> for searching.",
+    "prefix": "<span class=\"{{className}}\">*</span> at the end of a term signifies a <strong>prefix</strong> query.",
+    "precedence": "<span class=\"{{className}}\">(</span> and <span class=\"{{className}}\">)</span> signify <strong>precedence</strong>.",
+    "distance": "<span class=\"{{className}}\">~N</span> after a word signifies edit <strong>distance</strong> (fuzziness).",
+    "slop": "<span class=\"{{className}}\">~N</span> after a phrase signifies <strong>slop</strong> amount.",
     "escaping": {
       "heading": "Escaping",
-      "content": "The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class=\"%(className)s\">\\</span>."
+      "content": "The above characters are reserved. In order to search for any of these special characters, they will need to be escaped with <span class=\"{{className}}\">\\</span>."
     },
     "defaultOperator": {
       "heading": "Default operator",
-      "content": "The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class=\"%(className)s\">Social Science</em>, this will be interpreted as <em class=\"%(className)s\">Social</em> <strong>OR</strong> <em class=\"%(className)s\">Science</em>."
+      "content": "The default operator when there are no special characters in a given search term is <strong>OR</strong>. For example when searching for <em class=\"{{className}}\">Social Science</em>, this will be interpreted as <em class=\"{{className}}\">Social</em> <strong>OR</strong> <em class=\"{{className}}\">Science</em>."
     }
   },
   "reset": {

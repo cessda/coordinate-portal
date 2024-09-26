@@ -31,7 +31,7 @@ const Pagination = () => {
         previousPageItemAriaLabel: `${t("pagination.previousPage")}`,
         nextPageItemAriaLabel: `${t("pagination.nextPage")}`,
         lastPageItemAriaLabel: `${t("pagination.lastPage")}`,
-        pageItemAriaLabel: ({ currentPage, nbPages }) => `${t("pagination.firstPage", { currentPage: currentPage, nbPages: nbPages })}`,
+        pageItemAriaLabel: ({ currentPage, nbPages }) => `${t("pagination.pageItemAria", { currentPage: currentPage, nbPages: nbPages })}`,
       }}
       classNames={{
         root: 'mb-4',
