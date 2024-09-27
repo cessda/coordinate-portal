@@ -20,6 +20,7 @@ import {
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
+import shuffleArray from "../utilities/shuffleArray";
 // import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -52,17 +53,6 @@ function generateCreatorElements(item: CMMStudy) {
   }
 
   return creators;
-}
-
-// Randomize array using Durstenfeld shuffle algorithm
-function shuffleArray<T>(array: Array<T>) {
-  if (array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
-  return array;
 }
 
 interface ResultProps {
