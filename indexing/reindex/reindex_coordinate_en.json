@@ -9,7 +9,7 @@
               "query": "child",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classificationsSearchField^2"
               ],
               "type": "best_fields",
               "fuzziness": "auto",
@@ -21,7 +21,7 @@
               "query": "youth",
               "fields": [
                 "titleStudy^3",
-                "classifications^2"
+                "classificationsSearchField^2"
               ],
               "type": "best_fields",
               "fuzziness": "auto",

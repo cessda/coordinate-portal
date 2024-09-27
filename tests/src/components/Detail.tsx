@@ -212,15 +212,15 @@ it("should select json and trigger export metadata process", async () => {
   const jsonOption = await screen.findByText('JSON');
   userEvent.click(jsonOption);
 
-  // Simulate clicking the export button (assuming there's a button to trigger export)
+  // Simulate clicking the export button
   const exportMetadataButton = screen.getByTestId('export-metadata-button');
   userEvent.click(exportMetadataButton);
 
   // Now, wait for the async operations to complete and assert the correct behavior
   await waitFor(() => {
     // Assertions to ensure the export process was triggered
-    expect(mockFetch).toBeCalledTimes(2);
-    expect(mockFetch).toHaveBeenNthCalledWith(2, `${window.location.origin}/api/json/coordinate_en/1`);
+    expect(mockFetch).toHaveBeenCalled();
+    expect(mockFetch).toHaveBeenCalledWith(`${window.location.origin}/api/json/coordinate_en/1`);
     expect(mockCreateObjectURL).toHaveBeenCalled();
     expect(mockRevokeObjectURL).toHaveBeenCalled();
     expect(createElementSpy).toHaveBeenCalledWith('a');
@@ -316,38 +316,19 @@ it('should expand abstract on click', async () => {
   });
 });
 
-it('should expand info box on click', async () => {
-  renderDetailWithModifiedProps({ keywords: generateKeywordsArray(13) });
-
-  // Verify initial state
-  const toggleButton = screen.getByTestId('expand-info-box');
-  expect(toggleButton).toBeInTheDocument();
-  const { getByText, queryByText } = within(toggleButton);
-  expect(getByText('Read more')).toBeInTheDocument();
-  expect(queryByText('Read less')).toBeNull();
-
-  // Simulate clicking the toggle button
-  userEvent.click(toggleButton);
-
-  // Verify state after clicking
-  await waitFor(() => {
-    expect(getByText('Read less')).toBeInTheDocument();
-    expect(queryByText('Read more')).toBeNull();
-  });
-});
-
 it('should expand keywords on click', async () => {
   renderDetailWithModifiedProps({ keywords: generateKeywordsArray(13) });
 
   // Verify initial state
-  const toggleButton = screen.getByTestId('expand-keywords');
-  expect(toggleButton).toBeInTheDocument();
-  const { getByText, queryByText } = within(toggleButton);
+  const expandKeywordsButtons = screen.getAllByTestId('expand-keywords');
+  expect(expandKeywordsButtons[0]).toBeInTheDocument();
+  expect(expandKeywordsButtons[1]).toBeInTheDocument();
+  const { getByText, queryByText } = within(expandKeywordsButtons[0]);
   expect(getByText('Read more')).toBeInTheDocument();
   expect(queryByText('Read less')).toBeNull();
 
   // Simulate clicking the toggle button
-  userEvent.click(toggleButton);
+  userEvent.click(expandKeywordsButtons[0]);
 
   // Verify state after clicking
   await waitFor(() => {

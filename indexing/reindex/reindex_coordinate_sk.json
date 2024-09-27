@@ -9,7 +9,7 @@
               "query": "deti",
               "fields": [
                 "titleStudy^3",
-                "classifications^2",
+                "classificationsSearchField^2",
                 "keywordsSearchField"
               ],
               "type": "best_fields",
@@ -22,7 +22,7 @@
               "query": "dieťa",
               "fields": [
                 "titleStudy^3",
-                "classifications^2",
+                "classificationsSearchField^2",
                 "keywordsSearchField"
               ],
               "type": "best_fields",
@@ -35,7 +35,7 @@
               "query": "mládež",
               "fields": [
                 "titleStudy^3",
-                "classifications^2",
+                "classificationsSearchField^2",
                 "keywordsSearchField"
               ],
               "type": "best_fields",
@@ -48,7 +48,7 @@
               "query": "child",
               "fields": [
                 "titleStudy^3",
-                "classifications^2",
+                "classificationsSearchField^2",
                 "keywordsSearchField"
               ],
               "type": "best_fields",
@@ -61,7 +61,7 @@
               "query": "youth",
               "fields": [
                 "titleStudy^3",
-                "classifications^2",
+                "classificationsSearchField^2",
                 "keywordsSearchField"
               ],
               "type": "best_fields",

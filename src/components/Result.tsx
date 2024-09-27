@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaAngleDown,
   FaAngleUp,
@@ -19,18 +19,20 @@ import {
   FaLanguage,
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { CMMStudy } from "../../common/metadata";
+import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
+import shuffleArray from "../utilities/shuffleArray";
 // import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { updateLanguage } from "../reducers/language";
+import Keywords from "./Keywords";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: JSX.Element[] = [];
   // How many creators should be shown
   const creatorsLength = 3;
 
-  if(item.creators){
+  if (item.creators) {
     for (let i = 0; i < item.creators.length; i++) {
       creators.push(
         <span key={i}>
@@ -55,20 +57,31 @@ function generateCreatorElements(item: CMMStudy) {
 
 interface ResultProps {
   hit: any;
-  showAbstract: boolean;
 }
 
-const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
+const Result: React.FC<ResultProps> = ({ hit }) => {
   const { t } = useTranslation();
   const location = useLocation();
 
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const showAbstract = useAppSelector((state) => state.search.showAbstract);
+  const showKeywords = useAppSelector((state) => state.search.showKeywords);
   const dispatch = useAppDispatch();
 
   const [abstractExpanded, setAbstractExpanded] = useState(false);
+  const [shuffledKeywords, setShuffledKeywords] = useState<TermVocabAttributes[]>([]);
+
+  useEffect(() => {
+    if (hit.keywords && hit.keywords.length > 0) {
+      setShuffledKeywords(shuffleArray(hit.keywords));
+    }
+  }, [hit.keywords]);
+
+  const truncatedAbstractLength = 500;
+  const truncatedKeywordsLength = 7;
 
   const languages: JSX.Element[] = [];
-  for (let i = 0; i < hit.langAvailableIn.length; i++) {
+  for (let i = 0; i < hit?.langAvailableIn?.length; i++) {
     languages.push(
       <Link
         key={i}
@@ -81,7 +94,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     );
   }
 
-  function handleKeyDown(event: React.KeyboardEvent, titleStudy: string) {
+  const handleKeyDown = (event: React.KeyboardEvent, titleStudy: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
@@ -89,7 +102,13 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     }
   }
 
-  function handleAbstractExpansion(titleStudy: string) {
+  const handleClick = (event: React.MouseEvent, titleStudy: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleAbstractExpansion(titleStudy);
+  };
+
+  const handleAbstractExpansion = (titleStudy: string) => {
     // Notify Matomo Analytics of toggling "Read more" for a study.
     //const _paq = getPaq();
     //_paq.push(['trackEvent', 'Search', 'Read more', titleStudy]);
@@ -98,26 +117,27 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
   }
 
   function normalizeAndDecodeHTML(text: string) {
-    text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    text = text.replace(/<\/?[A-Z]+>/g, function(match) {
-      return match.toLowerCase();
-    });
-    text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    if (text) {
+      text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+      text = text.replace(/<\/?[A-Z]+>/g, function (match) {
+        return match.toLowerCase();
+      });
+      text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
     const element = document.createElement('div');
     element.innerHTML = text;
     return element.textContent || element.innerText;
   }
 
-  // TODO Might have to remove all HTML Entities when abstract is not expanded
   const renderAbstract = () => {
     let abstract = normalizeAndDecodeHTML(hit.abstract);
-    const matchedWords = hit._highlightResult.abstract.matchedWords;
-    if(matchedWords.length > 0) {
-      if(abstractExpanded) {
+    const matchedWords = hit._highlightResult?.abstract?.matchedWords || [];
+    if (matchedWords.length > 0) {
+      if (abstractExpanded) {
         // Create a regular expression that matches any of the highlighted texts
         const regexString = matchedWords.map((text: string) => `(${text})`).join('|');
         const regex = new RegExp(regexString, 'gi');
-  
+
         // Use the regular expression to find and highlight all matching texts in the full abstract
         abstract = abstract.replace(regex, (match: string) => `<mark>${match}</mark>`);
       } else {
@@ -125,9 +145,10 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
       }
     }
 
-    // Make sure abstract is not longer than around 500 characters but don't slice in the middle of the word
+    // Make sure abstract is not longer than set limit but don't slice in the middle of the word
     if (!abstractExpanded) {
-      abstract = abstract.length <= 500 ? abstract : abstract.slice(0, abstract.lastIndexOf(' ', 500)) + '...';
+      abstract = abstract.length <= truncatedAbstractLength ? abstract
+        : abstract.slice(0, abstract.lastIndexOf(' ', truncatedAbstractLength)) + '...';
     }
 
     return abstract;
@@ -139,9 +160,9 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
     <div className="list-hit" data-qa="hit">
       <h2 className="title is-6">
         <Link className="focus-visible"
-              to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
-              state={{ from: location.pathname }}>
-          <span dangerouslySetInnerHTML={{ __html: hit._highlightResult.titleStudy.value || hit.titleStudy }}></span>
+          to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
+          state={{ from: location.pathname }}>
+          <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>
       </h2>
       <div className="subtitle is-6">{creators}</div>
@@ -150,15 +171,22 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
           <div dangerouslySetInnerHTML={{ __html: renderAbstract() }} />
         </div>
       )}
+      {showKeywords && shuffledKeywords.length > 0 &&
+        <div className="result-keywords mt-10">
+          <Keywords keywords={shuffledKeywords} keywordLimit={truncatedKeywordsLength}
+            lang={currentLanguage.code} isExpandDisabled={true} />
+        </div>
+      }
       <span className="level mt-10 result-actions">
         <span className="level-left is-hidden-touch">
           <div className="field is-grouped">
             <div className="control">
-              {showAbstract && hit.abstract.length > 500 && (
+              {showAbstract && hit.abstract?.length > truncatedAbstractLength && (
                 <a className="button no-border focus-visible"
                   tabIndex={0}
-                  onClick={() => handleAbstractExpansion(hit.titleStudy)}
-                  onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}>
+                  onClick={(e) => handleClick(e, hit.titleStudy)}
+                  onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}
+                  data-testid="expand-abstract">
                   {abstractExpanded ? (
                     <>
                       <span className="icon is-small">
@@ -201,6 +229,7 @@ const Result: React.FC<ResultProps> = ({ hit, showAbstract }) => {
                   href={hit.studyUrl}
                   rel="noreferrer"
                   target="_blank"
+                  data-testid="study-url"
                 >
                   <span className="icon is-small">
                     <FaExternalLinkAlt />
