@@ -11,20 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../../mocks/reacti18nMock';
 import React from "react";
 import { render, screen, waitFor, within } from "../../testutils";
 import Detail, { Props } from "../../../src/components/Detail";
 import { mockStudy } from "../../common/mockdata";
 import userEvent from '@testing-library/user-event';
-
-// Mock react-i18next
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-  withTranslation: () => (Component: React.ComponentType) => (props: any) =>
-    <Component t={(key: string) => key} {...props} />,
-}));
 
 const baseProps: Props = {
   item: {

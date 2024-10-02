@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../../mocks/reacti18nMock';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ToggleButtons from "../../../src/components/ToggleButtons";
@@ -22,15 +23,6 @@ import '@testing-library/jest-dom';
 jest.mock("../../../src/hooks", () => ({
   useAppDispatch: jest.fn(),
   useAppSelector: jest.fn(),
-}));
-
-// Mock react-i18next
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-  withTranslation: () => (Component: React.ComponentType) => (props: any) =>
-    <Component t={(key: string) => key} {...props} />,
 }));
 
 describe("ToggleButtons", () => {
