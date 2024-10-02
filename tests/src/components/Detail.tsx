@@ -17,6 +17,15 @@ import Detail, { Props } from "../../../src/components/Detail";
 import { mockStudy } from "../../common/mockdata";
 import userEvent from '@testing-library/user-event';
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+  withTranslation: () => (Component: React.ComponentType) => (props: any) =>
+    <Component t={(key: string) => key} {...props} />,
+}));
+
 const baseProps: Props = {
   item: {
     ...mockStudy,
@@ -90,12 +99,12 @@ it("should handle no study number provided", () => {
 
 it("should handle generating elements with no value", () => {
   renderDetailWithModifiedProps({ studyAreaCountries: [] });
-  checkValueAfterHeading('Country', 'Not available');
+  checkValueAfterHeading('Country', 'language.notAvailable.field');
 });
 
 it("should handle formatting dates with missing data", () => {
   renderDetailWithModifiedProps({ publicationYear: undefined });
-  checkValueAfterHeading('Publication year', 'Not available');
+  checkValueAfterHeading('Publication year', 'language.notAvailable.field');
 });
 
 it("should handle special case where array items are a start/end date range", () => {
@@ -156,7 +165,7 @@ it("should handle formatting dates as a range with valid second date but undefin
     dataCollectionPeriodStartdate: undefined,
     dataCollectionPeriodEnddate: '2006-05-04'
   });
-  checkValueAfterHeading('Data collection period', 'Not available');
+  checkValueAfterHeading('Data collection period', 'language.notAvailable.field');
 });
 
 it("should handle formatting dates as a range with invalid first date", () => {
@@ -303,16 +312,16 @@ it('should expand abstract on click', async () => {
   const toggleButton = screen.getByTestId('expand-abstract');
   expect(toggleButton).toBeInTheDocument();
   const { getByText, queryByText } = within(toggleButton);
-  expect(getByText('Read more')).toBeInTheDocument();
-  expect(queryByText('Read less')).toBeNull();
+  expect(getByText('readMore')).toBeInTheDocument();
+  expect(queryByText('readLess')).toBeNull();
 
   // Simulate clicking the toggle button
   userEvent.click(toggleButton);
 
   // Verify state after clicking
   await waitFor(() => {
-    expect(getByText('Read less')).toBeInTheDocument();
-    expect(queryByText('Read more')).toBeNull();
+    expect(getByText('readLess')).toBeInTheDocument();
+    expect(queryByText('readMore')).toBeNull();
   });
 });
 
@@ -324,16 +333,16 @@ it('should expand keywords on click', async () => {
   expect(expandKeywordsButtons[0]).toBeInTheDocument();
   expect(expandKeywordsButtons[1]).toBeInTheDocument();
   const { getByText, queryByText } = within(expandKeywordsButtons[0]);
-  expect(getByText('Read more')).toBeInTheDocument();
-  expect(queryByText('Read less')).toBeNull();
+  expect(getByText('readMore')).toBeInTheDocument();
+  expect(queryByText('readLess')).toBeNull();
 
   // Simulate clicking the toggle button
   userEvent.click(expandKeywordsButtons[0]);
 
   // Verify state after clicking
   await waitFor(() => {
-    expect(getByText('Read less')).toBeInTheDocument();
-    expect(queryByText('Read more')).toBeNull();
+    expect(getByText('readLess')).toBeInTheDocument();
+    expect(queryByText('readMore')).toBeNull();
   });
 });
 
@@ -384,7 +393,7 @@ it('should not add funding information if it does not exist', () => {
   const fundingSection = screen.queryByText('Funding');
 
   // Expect it to not be present in the document
-  expect(fundingSection).not.toBeInTheDocument();
+  expect(fundingSection).toBe(null);
 });
 
 it('should format data kind values from free texts, types and general data formats into one array', () => {

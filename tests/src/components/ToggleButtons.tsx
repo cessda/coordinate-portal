@@ -24,6 +24,15 @@ jest.mock("../../../src/hooks", () => ({
   useAppSelector: jest.fn(),
 }));
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+  withTranslation: () => (Component: React.ComponentType) => (props: any) =>
+    <Component t={(key: string) => key} {...props} />,
+}));
+
 describe("ToggleButtons", () => {
   let mockDispatch: jest.Mock;
 
@@ -41,9 +50,9 @@ describe("ToggleButtons", () => {
   it("should render the toggle buttons and display mocked state", () => {
     render(<ToggleButtons />);
 
-    const showAbstract = screen.getByLabelText(/show abstract/i);
+    const showAbstract = screen.getByLabelText('showAbstract');
     expect(showAbstract).toBeInTheDocument();
-    const showKeywords = screen.getByLabelText(/show keywords/i);
+    const showKeywords = screen.getByLabelText('showKeywords');
     expect(showKeywords).toBeInTheDocument();
   });
 
@@ -51,7 +60,7 @@ describe("ToggleButtons", () => {
     render(<ToggleButtons />);
 
     // Simulate user toggling abstract
-    const toggleAbstractButton = screen.getByLabelText(/show abstract/i);
+    const toggleAbstractButton = screen.getByLabelText('showAbstract');
     await userEvent.click(toggleAbstractButton);
 
     // Check that the dispatch function was called with a specific action
@@ -61,7 +70,7 @@ describe("ToggleButtons", () => {
     });
 
     // Simulate user toggling keywords
-    const toggleKeywordsButton = screen.getByLabelText(/show keywords/i);
+    const toggleKeywordsButton = screen.getByLabelText('showKeywords');
     await userEvent.click(toggleKeywordsButton);
 
     // Check that the dispatch function was called with a specific action

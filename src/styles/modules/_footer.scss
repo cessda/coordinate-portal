@@ -2,29 +2,7 @@
       Footer
        > three column - CESSDA links
   ========================================================================== */
-#dsn-start footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-}
-
 footer {
-  .hero.is-light a {
-    color: #337ab7;
-  }
-
-  .footer__information {
-    & .hero-body {
-      padding: 1.5rem 1rem;
-      background-color: $cessda_gold;
-      color: $white;
-
-      & a {
-        color: $white;
-      }
-    }
-  }
-
   .columns {
     min-height: 30px;
 
@@ -34,13 +12,8 @@ footer {
   }
 }
 
- @media screen and (max-width: 768px){
-   footer .column {
-      text-align: center;
-    }
-
-    #dsn-start footer {
-      position: static;
-      margin-top: 50px;
-    }
+@media screen and (max-width: 768px) {
+  footer .column {
+    text-align: center;
   }
+}

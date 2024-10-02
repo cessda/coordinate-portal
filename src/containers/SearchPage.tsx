@@ -119,8 +119,8 @@ const SearchPage = () => {
       </div>
       <div className="column is-4 filters">
         <div className="float">
-          <div className="columns is-vcentered filter-buttons">
-            <div className="column is-narrow p-0 mr-4">
+          <div className="columns is-vcentered is-flex filter-buttons">
+            <div className="column is-narrow p-0 mr-2">
               <button className="button is-info focus-visible"
                 onClick={() => dispatch(toggleSummary(showFilterSummary))}
                 onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
@@ -129,7 +129,7 @@ const SearchPage = () => {
                 {t("filters.summary.label")}
               </button>
               {showFilterSummary && (
-                <div className="modal is-active">
+                <div className="modal is-active" data-testid="filter-summary">
                   <div className="modal-background" />
                   <div className="modal-card">
                     <div className="modal-card-head">
@@ -137,7 +137,7 @@ const SearchPage = () => {
                       <button className="delete focus-visible"
                         aria-label="close"
                         onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}
-                        autoFocus />
+                        autoFocus data-testid="close-filter-summary"/>
                     </div>
                     <section className="modal-card-body">
                       {hasRefinements ? (
@@ -164,13 +164,15 @@ const SearchPage = () => {
               )}
             </div>
             <div className="column is-narrow p-0">
-              <ClearRefinements classNames={{
-                root: '',
-                button: 'button is-info focus-visible',
-              }}
+              <ClearRefinements
+                classNames={{
+                  root: '',
+                  button: 'button is-info focus-visible',
+                }}
                 translations={{
                   resetButtonText: t("reset.filters")
-                }} />
+                }}
+              />
             </div>
           </div>
           <div className="filter-panels">
@@ -272,7 +274,7 @@ const SearchPage = () => {
       </div>
       <div className="column is-8">
         <div className="columns is-vcentered ais-Stats-Dropdowns">
-          <div className="column is-5">
+          <div className="column is-5 p-0">
             <Stats />
           </div>
           <div className="column is-7">

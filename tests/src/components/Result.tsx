@@ -17,6 +17,15 @@ import Result from "../../../src/components/Result";
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+  withTranslation: () => (Component: React.ComponentType) => (props: any) =>
+    <Component t={(key: string) => key} {...props} />,
+}));
+
 const baseMockHit = {
   objectID: "1",
   titleStudy: 'Full Study Title',
@@ -159,12 +168,12 @@ it('toggles abstract expansion on button click', async () => {
   await userEvent.click(expandAbstractButton);
 
   // Expect abstract to be expanded
-  expect(screen.getByText('Read less')).toBeInTheDocument();
+  expect(screen.getByText('readLess')).toBeInTheDocument();
 
   await userEvent.click(expandAbstractButton);
 
   // Expect abstract to be collapsed
-  expect(screen.getByText('Read more')).toBeInTheDocument();
+  expect(screen.getByText('readMore')).toBeInTheDocument();
 });
 
 it('toggles abstract expansion on Enter or Space key', async () => {
@@ -196,10 +205,10 @@ it('toggles abstract expansion on Enter or Space key', async () => {
   await userEvent.keyboard('{Enter}');
 
   // Expect abstract to be expanded
-  expect(screen.getByText('Read less')).toBeInTheDocument();
+  expect(screen.getByText('readLess')).toBeInTheDocument();
 
   await userEvent.keyboard('{ }');
 
   // Expect abstract to be collapsed
-  expect(screen.getByText('Read more')).toBeInTheDocument();
+  expect(screen.getByText('readMore')).toBeInTheDocument();
 });
