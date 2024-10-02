@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Info box overflow with long topics and keywords
 - Correctly hide some of the keywords initially on Detail view when there's a lot of them
 - Interpolation for translations
+- Responsiveness of filter buttons on search page
 
 ## [0.2.0] - 2024-05-03
 

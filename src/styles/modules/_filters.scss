@@ -6,24 +6,11 @@
     top: 15px;
     z-index: 1;
 
-    .filter-buttons {
-      display: flex;
-      justify-content: flex-start;
-      margin-bottom: 4px;
-      height: 4vh;
-    }
-
     .filter-panels {
       overflow-y: scroll;
       min-height: calc(96vh - 20px);
       max-height: calc(96vh - 20px);
       padding: 1px;
-    }
-  }
-
-  .sk-select {
-    &.is-disabled {
-      display: block;
     }
   }
 
@@ -45,7 +32,7 @@
     .panel-content {
       // margin: 10px;
 
-      .Select-control, .Select-menu-outer, .sk-range-input__input, button {
+      .Select-control, .Select-menu-outer, button {
     
         border: 2px solid #eaeae8;
         border-radius: 3px;
@@ -124,32 +111,6 @@
     float: left;
     position: absolute;
     font-size: .9em;
-  }
-
-  .sk-range-input__submit {
-    color: #333333;
-  }
-
-  .sk-range-input__input {
-    flex: none;
-    width: 70px;
-    color: #333333 !important;
-  }
-
-  .rc-slider-rail {
-    background-color: #ffffff;
-  }
-
-  .rc-slider-dot {
-    border-color: #444444;
-  }
-
-  .sk-range-slider .rc-slider-handle {
-    border-color: #444444;
-  }
-
-  .sk-range-slider .rc-slider-mark-text {
-    color: #444444;
   }
 
   .Select-placeholder {

@@ -483,7 +483,7 @@ const Detail = (props: Props) => {
         </section>
       </div>
       <div className="main-content">
-        <article className="w-100 mb-2">
+        <article className="w-100 mb-4">
           <section className="metadata-section">
             {generateHeading('summary', 'summary-header')}
 

@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../../mocks/reacti18nMock';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ToggleButtons from "../../../src/components/ToggleButtons";
@@ -41,9 +42,9 @@ describe("ToggleButtons", () => {
   it("should render the toggle buttons and display mocked state", () => {
     render(<ToggleButtons />);
 
-    const showAbstract = screen.getByLabelText(/show abstract/i);
+    const showAbstract = screen.getByLabelText('showAbstract');
     expect(showAbstract).toBeInTheDocument();
-    const showKeywords = screen.getByLabelText(/show keywords/i);
+    const showKeywords = screen.getByLabelText('showKeywords');
     expect(showKeywords).toBeInTheDocument();
   });
 
@@ -51,7 +52,7 @@ describe("ToggleButtons", () => {
     render(<ToggleButtons />);
 
     // Simulate user toggling abstract
-    const toggleAbstractButton = screen.getByLabelText(/show abstract/i);
+    const toggleAbstractButton = screen.getByLabelText('showAbstract');
     await userEvent.click(toggleAbstractButton);
 
     // Check that the dispatch function was called with a specific action
@@ -61,7 +62,7 @@ describe("ToggleButtons", () => {
     });
 
     // Simulate user toggling keywords
-    const toggleKeywordsButton = screen.getByLabelText(/show keywords/i);
+    const toggleKeywordsButton = screen.getByLabelText('showKeywords');
     await userEvent.click(toggleKeywordsButton);
 
     // Check that the dispatch function was called with a specific action

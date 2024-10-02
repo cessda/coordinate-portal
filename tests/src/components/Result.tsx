@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../../mocks/reacti18nMock';
 import React from "react";
 import { render, screen, } from "../../testutils";
 import Result from "../../../src/components/Result";
@@ -159,12 +160,12 @@ it('toggles abstract expansion on button click', async () => {
   await userEvent.click(expandAbstractButton);
 
   // Expect abstract to be expanded
-  expect(screen.getByText('Read less')).toBeInTheDocument();
+  expect(screen.getByText('readLess')).toBeInTheDocument();
 
   await userEvent.click(expandAbstractButton);
 
   // Expect abstract to be collapsed
-  expect(screen.getByText('Read more')).toBeInTheDocument();
+  expect(screen.getByText('readMore')).toBeInTheDocument();
 });
 
 it('toggles abstract expansion on Enter or Space key', async () => {
@@ -196,10 +197,10 @@ it('toggles abstract expansion on Enter or Space key', async () => {
   await userEvent.keyboard('{Enter}');
 
   // Expect abstract to be expanded
-  expect(screen.getByText('Read less')).toBeInTheDocument();
+  expect(screen.getByText('readLess')).toBeInTheDocument();
 
   await userEvent.keyboard('{ }');
 
   // Expect abstract to be collapsed
-  expect(screen.getByText('Read more')).toBeInTheDocument();
+  expect(screen.getByText('readMore')).toBeInTheDocument();
 });

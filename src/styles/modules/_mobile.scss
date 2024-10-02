@@ -7,35 +7,12 @@
   .button.is-small {
     font-size: 0.8rem;
   }
-  // .blinks {
-  //   font-size:14px;
-  // }
-  // @at-root header .language-picker {
-  //   position: absolute;
-  //   top: 1px;
-  //   right: 1px;
-  // }
 
-// body {
-//     .link-button {
-//       padding: 4px;
-//       font-size:13px;
-//     }
-//   }
   header {
     background: #ffffff !important;
 
     &:after {
       display: none;
-    }
-
-    .sk-hits-stats {
-      margin: 0;
-      text-align: center;
-
-      .sk-hits-stats__info {
-        color: #333333;
-      }
     }
 
     .reset-search {
@@ -54,31 +31,6 @@
   .cessda-organisation {
     display: none;
   }
-
-  .sk-search-box {
-
-       ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-      font-size: 13px;
-    }
-
-    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-      font-size: 13px;
-    }
-
-    ::-moz-placeholder { /* Mozilla Firefox 19+ */
-      font-size: 13px;
-    }
-
-    :-ms-input-placeholder { /* Internet Explorer 10-11 */
-      font-size: 13px;
-    }
-
-    ::-ms-input-placeholder { /* Microsoft Edge */
-      font-size: 13px;
-    }
-  }
-
- 
 
   .mobile-filters-toggle {
     display: inline-block !important;
@@ -106,12 +58,12 @@
       z-index: 99998;
 
       .filter-buttons {
-        flex-direction: column;
-        align-items: flex-end;
+        flex-direction: row;
+        justify-content: flex-end;
 
         .column {
-          margin-right: 0px !important;
-          margin-bottom: 3px;
+          display: flex;
+          flex-grow: 0;
         }
       }
     }
@@ -126,11 +78,6 @@
     left: 0;
     width: 100%;
   }
-
-  // .ais-Hits-list .list-hit {
-  //   margin-bottom: 15px;
-  //   background-color: $hover_hit;
-  // }
 
   .result-actions {
     display: block;
@@ -164,6 +111,18 @@
   .demo-text-tooltip {
     .dropdown-menu {
       right: -28px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .filter-buttons {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+
+    .column:not(:last-child) {
+      margin-right: 0 !important;
+      margin-bottom: 8px !important;
     }
   }
 }
