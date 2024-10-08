@@ -12,32 +12,32 @@
 // limitations under the License.
 
 import React from "react";
-import { Await, LoaderFunction, useLoaderData } from "react-router-dom";
+import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { store } from "../store";
 import { updateMetrics } from "../reducers/search";
 import { useTranslation } from "react-i18next";
 import horizonLogo from '../img/horizon-logo.png';
 import cessdaLogo from '../img/cessda-logo.png';
 import { updateLanguage } from "../reducers/language";
+import { Metrics } from "../../common/metadata";
 
-export const metricsLoader: LoaderFunction = async ({ request }) => {
+export const metricsLoader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang");
   if(lang){
     store.dispatch(updateLanguage(lang));
   }
-  const metrics = await store.dispatch(updateMetrics());
-  return { metrics };
+  return await store.dispatch(updateMetrics());
 };
+
+interface MetricsCircleProps {
+  amount: number;
+  description: string;
+}
 
 const AboutPage = () => {
   const { t } = useTranslation();
-  const { metrics } = useLoaderData() as ReturnType<typeof metricsLoader>;
-
-  type MetricsCircleProps = {
-    amount: number;
-    description: string;
-  };
+  const metrics = useLoaderData() as ReturnType<typeof metricsLoader>;
 
   const MetricsCircle: React.FC<MetricsCircleProps> = ({ amount, description }) => {
     return (
@@ -55,13 +55,14 @@ const AboutPage = () => {
       <div className="column is-flex is-flex-wrap-wrap is-justify-content-space-around is-8">
         <React.Suspense fallback={<></>}>
           <Await resolve={metrics} errorElement={<></>}>
-            {(metrics) => {
-              if(metrics.payload){
+            {(metrics: Awaited<ReturnType<typeof metricsLoader>>) => {
+              if(metrics.meta.requestStatus === "fulfilled"){
+                const payload = metrics.payload as Metrics;
                 return (
                   <>
-                    <MetricsCircle amount={metrics.payload.studies} description={t("about.metrics.studies")} />
-                    <MetricsCircle amount={metrics.payload.creators} description={t("about.metrics.creators")} />
-                    <MetricsCircle amount={metrics.payload.countries} description={t("about.metrics.countries")} />
+                    <MetricsCircle amount={payload.studies} description={t("about.metrics.studies")} />
+                    <MetricsCircle amount={payload.creators} description={t("about.metrics.creators")} />
+                    <MetricsCircle amount={payload.countries} description={t("about.metrics.countries")} />
                   </>
                 );
               }
