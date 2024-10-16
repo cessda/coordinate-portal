@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -11,8 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// import { DetailAction } from "./detail";
-// import { LanguageAction } from "./language";
-// import { SearchAction } from "./search";
-
-// export type Action = DetailAction | LanguageAction | SearchAction;
+// Randomize array using Durstenfeld shuffle algorithm
+export default function shuffleArray<T>(array: Array<T>) {
+  if (array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+  return array;
+}

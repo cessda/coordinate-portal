@@ -478,40 +478,12 @@ const Detail = (props: Props) => {
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{container: 'mt-1 ml-1'}}/>
           <div className="tags mt-2">
-            {generateElements(infoBoxExpanded ? item.keywords : item.keywords.slice(0, 12), "tag",
-              (keywords) => (
-                <Link to={`/?sortBy=${currentLanguage.index}&keywords%5B0%5D=${encodeURI(keywords.term.toLowerCase())}`}>
-                  {upperFirst(keywords.term)}
-                </Link>
-              )
-            )}
+            <Keywords keywords={item.keywords} keywordLimit={12} lang={currentLanguage.code}/>
           </div>
-          {item.keywords.length > truncatedKeywordsLength && (
-            <a className="button is-small is-white" data-testid="expand-info-box"
-              onClick={() => {
-                setInfoBoxExpanded(infoBoxExpanded => !infoBoxExpanded)
-              }}>
-              {infoBoxExpanded ? (
-                <>
-                  <span className="icon is-small">
-                    <FaAngleUp />
-                  </span>
-                  <span>{t("readLess")}</span>
-                </>
-              ) : (
-                  <>
-                    <span className="icon is-small">
-                      <FaAngleDown />
-                    </span>
-                    <span>{t("readMore")}</span>
-                  </>
-                )}
-            </a>
-          )}
         </section>
       </div>
       <div className="main-content">
-        <article className="w-100 mb-2">
+        <article className="w-100 mb-4">
           <section className="metadata-section">
             {generateHeading('summary', 'summary-header')}
 

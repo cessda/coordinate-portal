@@ -30,70 +30,12 @@ body {
     margin: auto;
   }
 
-  // .sk-toggle-option.is-active {
-  //   background-color: $cessda_gold;
-  //   border-color: $cessda_gold;
-  // }
-
   .main-container {
     background-color: $white;
 
     a {
       color: $cessda_gold;
     }
-
-    // .sk-toggle-option {
-    //   color: $cessda_gold;
-    // }
-
-    // .sk-toggle-option.is-active {
-    //   color: $white;
-    // }
-  }
-
-  // .sk-hits-grid, .sk-hits-list {
-  //   margin: 0;
-  // }
-
-  .ais-RefinementList, .ais-Hits {
-    box-shadow: none;
-  }
-
-  .dsn-list-pagination {
-    padding: 10px;
-  }
-
-  // .sk-hits-list__rights {
-  //   margin: 5px 0;
-  //   padding: 2px 0;
-  //   border-radius: 3px;
-
-  //   * {
-  //    border-radius: 3px;
-  //   }
-
-  //   svg {
-  //     margin-right: 5px;
-  //   }
-  // }
-
-  // .sk-hits-list__read-more, .go-to-collection, .go-to-study {
-  //   svg {
-  //     margin-right: 5px;
-  //   }
-  // }
-  // h4.sk-hits-list-hit {
-  //   font-weight: 600;
-  // }
-  // .sk-hits-list .sk-hits-list-hit {
-   
-  //   em {
-  //     background: transparent;
-  //     font-weight: bold
-  //   }
-  // }
-  .go-to-collection, .go-to-study {
-    margin-right: 10px;
   }
 
   .button-wrapper {
@@ -104,33 +46,6 @@ body {
       height: 45px;
     }
   }
-
-  // .search-wrapper {
-  //   position: relative;
-  //   max-width:600px;
-  //   margin: 30px auto 0 auto;
-  //   }
-  // .sk-hits-stats {
-  //   display:flex;
-  //   margin-top: 0px;
-  //   height:100%;
-  //   z-index: 1;
-  //   justify-content: center;
-  //   align-items: center;
-
-  //   .sk-hits-stats__info {
-  //     color: #ffffff;
-  //     font-size: 14px;
-  //     font-weight: 500;
-  //   }
-  // }
-
-  // .reset-search {
-  //   position: relative;
-  //   text-align: left;
-  //   z-index: 1;
-  //   padding: 6px 0;
-  // }
 
   .link-button {
     color: #ffffff !important;
@@ -153,78 +68,10 @@ body {
   .link-button:not(:last-child) {
     margin-right: 4px;
   }
-
-  .sk-action-bar-row {
-    display: block;
-    background-color: #f8f8f8;
-    padding: 10px 15px;
-    border-radius: 3px;
-
-    label {
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    select {
-      background-color: #ffffff;
-      border: 2px solid #eaeae8;
-    }
-  }
 }
 
-.sk-refinement-list__view-more-action {
-  display: none;
-}
-
-.sk-layout__body {
-  margin: 0;
-  min-width: auto;
-
-  .list-hit {
-    margin-bottom: 0;
-    padding: 15px;
-    border-radius: 3px;
-
-    &:hover {
-      background-color: $hover_hit;
-    }
-
-    h4 a:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .sk-hits-grid__meta, .sk-hits-grid__desc {
-    font-size: 1rem;
-  }
-
-  .Select--multi .Select-value-icon, .Select--multi .Select-value-label {
-    display: initial;
-  }
-
-  .panel-content .Select-aria-only {
-    display: none;
-  }
-
- .Select-clear-zone {
-    position: absolute;
-    top: -500px;
-    display: none;
-    }
-
-    & .sk-layout__results .sk-hits-grid-hit .readMore svg{
-      margin-right: 5px;
-    }
-}
-
-.sk-pagination-navigation.is-numbered {
-  width: auto;
-}
-
-@media screen and (max-width: 920px){
-  .sk-range-input {
-    display: block;
-  }
+.container {
+  max-width: 1280px;
 }
 
 .result-actions .button {
@@ -259,61 +106,14 @@ body {
   }
 }
 
-.sk-filter-group {
-  margin-bottom: 10px;
-}
-
-// .panel-title {
-//   font-weight: 700;
-//   margin-right: 10px;
-//   font-size: 14px;
-// }
-
-// .sk-filter-group-items__value {
-//   padding: 2px 6px;
-//   border-radius: 3px;
-//   margin: 0 5px 5px 0;
-//   font-size: 14px;
-//   border: 0;
-
-//   &:after {
-//     content: none;
-//   }
-// }
-
-// .sk-filter-group__remove-action {
-//   display: none;
-// }
-
 .panel-header {
   color: #555555;
   h1, h2, h3, h4, h5, h6 {
-    // margin-bottom: 15px;
     font-weight: 700;
-    //font-size: 17px;
     font-size: 14px;
     padding-left: 3px;
   }
 }
-
-.sk-hits-list__meta {
-  margin-bottom: 10px;
-  font-style: italic;
-  font-size: 14px;
-  flex-wrap: wrap;
-
-  span:after {
-    display: inline-block;
-    content: ' ';
-  }
-}
-
-// .data-label, .about-title, .not-found-title {
-//   font-weight: 600;
-//   font-size: 16px;
-//   margin-top: 15px;
-//   display: block;
-// }
 
 .data-abstract, .text-container {
   p {
@@ -339,7 +139,10 @@ body {
 }
 
 .tag {
-  font-size: 0.875rem !important;
+  font-size: 0.8rem !important;
+  min-height: 2em;
+  height: auto !important;
+  white-space: normal !important;
 }
 .tag a:hover{
   text-decoration: underline;
@@ -350,37 +153,17 @@ body {
 }
 
 .info-box {
-  width: 385px; /* Set a fixed width or adjust as needed */
+  width: 385px;
   float: right;
-  /* You can set a min-height for the info box if it can be empty or collapse */
-  /* min-height: 100px; */
-  /* Add padding or margin as needed */
   padding: 10px;
-  margin-left: 20px; /* Adjust the margin to create space between the info box and main content */
-  background-color: #f0f0f0; /* Background color for the info box */
-  /* Box shadow or other styles */
+  margin-left: 20px;
+  background-color: #f0f0f0;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 
   .info-box-keywords {
     margin-top: -15px;
     margin-bottom: 15px;
   }
-
-  .info-box-keywords, .info-box-topics {
-    .tags {
-      .tag {
-        height: unset;
-        white-space: pre-line;
-        word-wrap: break-word;
-      }
-    }
-  }
-}
-
-.main-content {
-  /* Add styles for the main content */
-  /* To ensure content wraps around the info box, use a margin on the left side */
-  margin-left: 0; /* Reset margin to avoid affecting the main content */
 }
 
 .no-language {
@@ -426,7 +209,6 @@ select::-ms-expand {
 :focus-visible,
 .focus-visible:focus-visible,
 .is-focused:focus-visible,
-.sk-select select:focus-visible,
 .language-picker:focus-within .Select-control,
 .switch[type=checkbox]:focus-visible + label::before,
 .switch[type=checkbox]:focus-visible + label:before {

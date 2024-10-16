@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import '../../mocks/reacti18nMock';
 import React from "react";
 import { render, screen, waitFor, within } from "../../testutils";
 import Detail, { Props } from "../../../src/components/Detail";
@@ -90,12 +91,12 @@ it("should handle no study number provided", () => {
 
 it("should handle generating elements with no value", () => {
   renderDetailWithModifiedProps({ studyAreaCountries: [] });
-  checkValueAfterHeading('Country', 'Not available');
+  checkValueAfterHeading('Country', 'language.notAvailable.field');
 });
 
 it("should handle formatting dates with missing data", () => {
   renderDetailWithModifiedProps({ publicationYear: undefined });
-  checkValueAfterHeading('Publication year', 'Not available');
+  checkValueAfterHeading('Publication year', 'language.notAvailable.field');
 });
 
 it("should handle special case where array items are a start/end date range", () => {
@@ -156,7 +157,7 @@ it("should handle formatting dates as a range with valid second date but undefin
     dataCollectionPeriodStartdate: undefined,
     dataCollectionPeriodEnddate: '2006-05-04'
   });
-  checkValueAfterHeading('Data collection period', 'Not available');
+  checkValueAfterHeading('Data collection period', 'language.notAvailable.field');
 });
 
 it("should handle formatting dates as a range with invalid first date", () => {
@@ -212,15 +213,15 @@ it("should select json and trigger export metadata process", async () => {
   const jsonOption = await screen.findByText('JSON');
   userEvent.click(jsonOption);
 
-  // Simulate clicking the export button (assuming there's a button to trigger export)
+  // Simulate clicking the export button
   const exportMetadataButton = screen.getByTestId('export-metadata-button');
   userEvent.click(exportMetadataButton);
 
   // Now, wait for the async operations to complete and assert the correct behavior
   await waitFor(() => {
     // Assertions to ensure the export process was triggered
-    expect(mockFetch).toBeCalledTimes(2);
-    expect(mockFetch).toHaveBeenNthCalledWith(2, `${window.location.origin}/api/json/coordinate_en/1`);
+    expect(mockFetch).toHaveBeenCalled();
+    expect(mockFetch).toHaveBeenCalledWith(`${window.location.origin}/api/json/coordinate_en/1`);
     expect(mockCreateObjectURL).toHaveBeenCalled();
     expect(mockRevokeObjectURL).toHaveBeenCalled();
     expect(createElementSpy).toHaveBeenCalledWith('a');
@@ -303,36 +304,16 @@ it('should expand abstract on click', async () => {
   const toggleButton = screen.getByTestId('expand-abstract');
   expect(toggleButton).toBeInTheDocument();
   const { getByText, queryByText } = within(toggleButton);
-  expect(getByText('Read more')).toBeInTheDocument();
-  expect(queryByText('Read less')).toBeNull();
+  expect(getByText('readMore')).toBeInTheDocument();
+  expect(queryByText('readLess')).toBeNull();
 
   // Simulate clicking the toggle button
   userEvent.click(toggleButton);
 
   // Verify state after clicking
   await waitFor(() => {
-    expect(getByText('Read less')).toBeInTheDocument();
-    expect(queryByText('Read more')).toBeNull();
-  });
-});
-
-it('should expand info box on click', async () => {
-  renderDetailWithModifiedProps({ keywords: generateKeywordsArray(13) });
-
-  // Verify initial state
-  const toggleButton = screen.getByTestId('expand-info-box');
-  expect(toggleButton).toBeInTheDocument();
-  const { getByText, queryByText } = within(toggleButton);
-  expect(getByText('Read more')).toBeInTheDocument();
-  expect(queryByText('Read less')).toBeNull();
-
-  // Simulate clicking the toggle button
-  userEvent.click(toggleButton);
-
-  // Verify state after clicking
-  await waitFor(() => {
-    expect(getByText('Read less')).toBeInTheDocument();
-    expect(queryByText('Read more')).toBeNull();
+    expect(getByText('readLess')).toBeInTheDocument();
+    expect(queryByText('readMore')).toBeNull();
   });
 });
 
@@ -340,19 +321,20 @@ it('should expand keywords on click', async () => {
   renderDetailWithModifiedProps({ keywords: generateKeywordsArray(13) });
 
   // Verify initial state
-  const toggleButton = screen.getByTestId('expand-keywords');
-  expect(toggleButton).toBeInTheDocument();
-  const { getByText, queryByText } = within(toggleButton);
-  expect(getByText('Read more')).toBeInTheDocument();
-  expect(queryByText('Read less')).toBeNull();
+  const expandKeywordsButtons = screen.getAllByTestId('expand-keywords');
+  expect(expandKeywordsButtons[0]).toBeInTheDocument();
+  expect(expandKeywordsButtons[1]).toBeInTheDocument();
+  const { getByText, queryByText } = within(expandKeywordsButtons[0]);
+  expect(getByText('readMore')).toBeInTheDocument();
+  expect(queryByText('readLess')).toBeNull();
 
   // Simulate clicking the toggle button
-  userEvent.click(toggleButton);
+  userEvent.click(expandKeywordsButtons[0]);
 
   // Verify state after clicking
   await waitFor(() => {
-    expect(getByText('Read less')).toBeInTheDocument();
-    expect(queryByText('Read more')).toBeNull();
+    expect(getByText('readLess')).toBeInTheDocument();
+    expect(queryByText('readMore')).toBeNull();
   });
 });
 
@@ -403,7 +385,7 @@ it('should not add funding information if it does not exist', () => {
   const fundingSection = screen.queryByText('Funding');
 
   // Expect it to not be present in the document
-  expect(fundingSection).not.toBeInTheDocument();
+  expect(fundingSection).toBe(null);
 });
 
 it('should format data kind values from free texts, types and general data formats into one array', () => {

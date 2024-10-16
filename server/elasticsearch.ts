@@ -143,9 +143,10 @@ export default class Elasticsearch {
   }
 
   /**
-   * Gets metrics for About page. Index not currently used but could be used
-   * to get metrics just for the selected index.
-   * @param index the index to retrieve the metrics from.
+   * Gets metrics for About page.
+   * 
+   * @param index the index to retrieve the metrics from. Defaults to all coordinate
+   * indices if not set.
    */
   async getAboutMetrics(index = `${this.indexName}_*`): Promise<Metrics> {
     const response = await this.client.search<unknown, { 

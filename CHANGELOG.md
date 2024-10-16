@@ -24,18 +24,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Funding information section on detail view (funder and grant number)
 - Kind of data on Detail view
 - Divider line between sections on Detail view
+- Keywords on result view with possibility to hide them
 
 ### Changes
 
 - Creators can include research identifiers
 - Calculate tooltip position before activating it and place above if not enough space below
 - Move Topics and Keywords to be last on Detail view (since they are also in info box at the top of the page already)
+- Keywords include a link to ELSST if possible
 
 ### Fixes
 
 - About page metrics to show correct total for all languages
 - Info box overflow with long topics and keywords
-- Correctly initially hide some of the keywords on Detail view when there's a lot of them
+- Correctly hide some of the keywords initially on Detail view when there's a lot of them
+- Interpolation for translations
+- Responsiveness of filter buttons on search page
 
 ## [0.2.0] - 2024-05-03
 

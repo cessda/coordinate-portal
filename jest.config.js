@@ -29,5 +29,5 @@ module.exports = {
   testEnvironment: "jsdom",
 
   testMatch: ["**/tests/**/*.[tj]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
-  testPathIgnorePatterns: ["/node_modules/", "/tests/common/mockdata.ts", "/tests/testutils.tsx"]
+  testPathIgnorePatterns: ["/node_modules/", "/tests/common/mockdata.ts", "/tests/testutils.tsx", "/tests/mocks/"]
 };

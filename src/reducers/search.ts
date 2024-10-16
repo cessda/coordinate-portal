@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2023
+// Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -21,6 +21,7 @@ export interface SearchState {
   showAdvancedSearch: boolean;
   showFilterSummary: boolean;
   showAbstract: boolean;
+  showKeywords: boolean;
   expandMetadataPanels: boolean;
   displayed: CMMStudy[];
   study: CMMStudy | undefined;
@@ -34,6 +35,7 @@ const initialState: SearchState = {
   showAdvancedSearch: false,
   showFilterSummary: false,
   showAbstract: true,
+  showKeywords: true,
   study: undefined,
   expandMetadataPanels: false,
   displayed: [],
@@ -89,6 +91,9 @@ export const searchSlice = createSlice({
     toggleAbstract: (state: SearchState, action: PayloadAction<boolean>) => {
       state.showAbstract = !action.payload;
     },
+    toggleKeywords: (state: SearchState, action: PayloadAction<boolean>) => {
+      state.showKeywords = !action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateMetrics.fulfilled, (state, action) => {
@@ -100,7 +105,7 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract } =
+export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract, toggleKeywords } =
   searchSlice.actions;
 
 export default searchSlice.reducer;

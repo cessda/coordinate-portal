@@ -2,11 +2,6 @@
   justify-content: center;
 }
 
-// .ais-ClearRefinements {
-//     width: 120px;
-//     margin: 0.75rem 0.75rem 0.25rem 0.75rem;
-// }
-
 .ais-Pagination-list {
   flex-wrap: wrap;
 }
@@ -25,6 +20,10 @@
   white-space: normal;
 }
 
+.ais-ClearRefinements-button {
+  width: auto;
+}
+
 .ais-ClearRefinements-button.button, .ais-ClearRefinements-button.button:disabled {
   background-image: none;
   color: white;
@@ -40,16 +39,17 @@
   margin-left: 15px;
 }
 
-// .ais-Pagination-link {
-//     margin: -1px;
-// }
+.ais-RefinementList, .ais-Hits {
+  box-shadow: none;
+  margin: 0;
+  padding: 0.75rem 0.75rem;
+  @extend .column;
+}
 
 .ais-CustomRefinementList {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  // justify-content: space-between;
-  // overflow-y: scroll;
   overflow-x: scroll;
   max-height: 500px;
   
@@ -57,10 +57,6 @@
     margin: 0 5px 2px 0;
   }
 }
-
-// .ais-RefinementList-item {
-//   line-height: 1.5rem;
-// }
 
 .ais-RangeInput-input,
 .ais-SearchBox-input {

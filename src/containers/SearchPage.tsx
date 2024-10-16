@@ -24,11 +24,12 @@ import {
   RangeInput,
 } from "react-instantsearch";
 import Result from "../components/Result";
+import ToggleButtons from "../components/ToggleButtons";
 import Pagination from "../components/Pagination";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { toggleMobileFilters, toggleSummary, toggleAbstract } from "../reducers/search";
+import { toggleMobileFilters, toggleSummary } from "../reducers/search";
 import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
 import { useSearchParams } from "react-router-dom";
@@ -60,10 +61,8 @@ const SearchPage = () => {
   const language = useAppSelector((state) => state.language);
   const index = language.currentLanguage.index;
   const toggleSummaryRef = React.createRef() as React.RefObject<HTMLButtonElement>;
-  // const totalStudies = useAppSelector((state) => state.search.totalStudies);
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
-  const showAbstract = useAppSelector((state) => state.search.showAbstract);
   const sortByItems = getSortByItems(index, t);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -71,9 +70,9 @@ const SearchPage = () => {
   useEffect(() => {
     // Check if language needs to be updated
     // Assumes that the index name from sortBy has language tag as the second part when split by underscore
-    if(sortByParam && sortByParam !== index){
+    if (sortByParam && sortByParam !== index) {
       dispatch(updateLanguage(sortByParam?.split('_')[1]));
-    } else if(!sortByParam && index.split('_')[1] !== 'en'){
+    } else if (!sortByParam && index.split('_')[1] !== 'en') {
       // Update language if sortBy is false but language is still something other than default (en)
       dispatch(updateLanguage('en'));
     }
@@ -105,36 +104,40 @@ const SearchPage = () => {
     }
   };
 
+  const HitComponent = ({ hit }: any) => {
+    return <Result key={hit.objectID} hit={hit} />;
+  };
+
   return (
     <div className={'columns layout' + (showMobileFilters ? ' show-mobile-filters' : '')}>
       <div className="column is-8 is-hidden-tablet">
         <button className={'button is-info focus-visible' + (!showFilterSummary ? ' on-top' : '')}
-                onClick={() => dispatch(toggleMobileFilters(showMobileFilters))}
-                onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}>
+          onClick={() => dispatch(toggleMobileFilters(showMobileFilters))}
+          onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}>
           {t("showFilters")}
         </button>
       </div>
       <div className="column is-4 filters">
         <div className="float">
-          <div className="columns is-vcentered filter-buttons">
-            <div className="column is-narrow p-0 mr-4">
+          <div className="columns is-vcentered is-flex filter-buttons">
+            <div className="column is-narrow p-0 mr-2">
               <button className="button is-info focus-visible"
-                      onClick={() => dispatch(toggleSummary(showFilterSummary))}
-                      onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
-                      disabled={!hasRefinements}
-                      ref={toggleSummaryRef}>
+                onClick={() => dispatch(toggleSummary(showFilterSummary))}
+                onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
+                disabled={!hasRefinements}
+                ref={toggleSummaryRef}>
                 {t("filters.summary.label")}
               </button>
               {showFilterSummary && (
-                <div className="modal is-active">
+                <div className="modal is-active" data-testid="filter-summary">
                   <div className="modal-background" />
                   <div className="modal-card">
                     <div className="modal-card-head">
                       <h2 className="modal-card-title">{t("filters.summary.label")}</h2>
                       <button className="delete focus-visible"
-                              aria-label="close"
-                              onClick={() => {dispatch(toggleSummary(showFilterSummary)); focusToggleSummary();}}
-                              autoFocus/>
+                        aria-label="close"
+                        onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}
+                        autoFocus data-testid="close-filter-summary"/>
                     </div>
                     <section className="modal-card-body">
                       {hasRefinements ? (
@@ -152,7 +155,7 @@ const SearchPage = () => {
                     </section>
                     <div className="modal-card-foot">
                       <button className="button is-info focus-visible"
-                              onClick={() => {dispatch(toggleSummary(showFilterSummary)); focusToggleSummary();}}>
+                        onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}>
                         {t("close")}
                       </button>
                     </div>
@@ -161,142 +164,139 @@ const SearchPage = () => {
               )}
             </div>
             <div className="column is-narrow p-0">
-              <ClearRefinements classNames={{
-                                  root: '',
-                                  button: 'button is-info focus-visible',
-                                }}
-                                translations={{
-                                  resetButtonText: t("reset.filters") 
-                                }} />
+              <ClearRefinements
+                classNames={{
+                  root: '',
+                  button: 'button is-info focus-visible',
+                }}
+                translations={{
+                  resetButtonText: t("reset.filters")
+                }}
+              />
             </div>
           </div>
           <div className="filter-panels">
             <Panel title={<h2>{t("filters.topic.label")}</h2>}
-                  tooltip={<Tooltip id="filters-topic-tooltip"
-                                    content={t("filters.topic.tooltip.content")}
-                                    ariaLabel={t("filters.topic.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-topic-tooltip"
+                content={t("filters.topic.tooltip.content")}
+                ariaLabel={t("filters.topic.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RefinementList attribute="classifications" searchable limit={15}
-                              classNames={{
-                                searchBox: 'focus-visible',
-                                checkbox: 'focus-visible'
-                              }}/>
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible'
+                }} />
             </Panel>
             <Panel title={<h2>{t("filters.keywords.label")}</h2>}
-                  tooltip={<Tooltip id="filters-keywords-tooltip"
-                                    content={t("filters.keywords.tooltip.content")}
-                                    ariaLabel={t("filters.keywords.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-keywords-tooltip"
+                content={t("filters.keywords.tooltip.content")}
+                ariaLabel={t("filters.keywords.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RefinementList attribute="keywords" searchable limit={15}
-                              classNames={{
-                                searchBox: 'focus-visible',
-                                checkbox: 'focus-visible'
-                              }}/>
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible'
+                }} />
             </Panel>
             <Panel title={<h2>{t("metadata.publisher")}</h2>}
-                  tooltip={<Tooltip id="filters-publisher-tooltip"
-                                    content={t("filters.publisher.tooltip.content")}
-                                    ariaLabel={t("filters.publisher.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-publisher-tooltip"
+                content={t("filters.publisher.tooltip.content")}
+                ariaLabel={t("filters.publisher.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
-                              classNames={{
-                                searchBox: 'focus-visible',
-                                checkbox: 'focus-visible'
-                              }}/>
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible'
+                }} />
             </Panel>
             <Panel title={<h2>{t("metadata.country")}</h2>}
-                  tooltip={<Tooltip id="filters-country-tooltip"
-                                    content={t("filters.country.tooltip.content")}
-                                    ariaLabel={t("filters.country.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-country-tooltip"
+                content={t("filters.country.tooltip.content")}
+                ariaLabel={t("filters.country.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
-                              classNames={{
-                                searchBox: 'focus-visible',
-                                checkbox: 'focus-visible',
-                                list: 'ais-CustomRefinementList'
-                              }}/>
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible',
+                  list: 'ais-CustomRefinementList'
+                }} />
             </Panel>
             {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
             <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
-                  tooltip={<Tooltip id="filters-timemethod-tooltip"
-                  content={t("filters.timeMethod.tooltip.content")}
-                  ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-timemethod-tooltip"
+                content={t("filters.timeMethod.tooltip.content")}
+                ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
-                              classNames={{
-                                searchBox: 'focus-visible',
-                                checkbox: 'focus-visible',
-                                list: 'ais-CustomRefinementList'
-                              }}/>
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible',
+                  list: 'ais-CustomRefinementList'
+                }} />
             </Panel>
             <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
-                  tooltip={<Tooltip id="filters-timemethodcv-tooltip"
-                                    content={t("filters.timeMethodCV.tooltip.content")}
-                                    ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-timemethodcv-tooltip"
+                content={t("filters.timeMethodCV.tooltip.content")}
+                ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RefinementList attribute="timeMethodCV" searchable limit={16}
-                              classNames={{
-                                searchBox: 'focus-visible',
-                                checkbox: 'focus-visible'
-                              }}/>
+                classNames={{
+                  searchBox: 'focus-visible',
+                  checkbox: 'focus-visible'
+                }} />
             </Panel>
             <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
-                  tooltip={<Tooltip id="filters-collectiondates-tooltip"
-                                    content={t("filters.collectionDates.tooltip.content")}
-                                    ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")}/>}
-                  collapsable={true}
-                  defaultCollapsed={true}>
+              tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                content={t("filters.collectionDates.tooltip.content")}
+                ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
+              collapsable={true}
+              defaultCollapsed={true}>
               <RangeInput attribute="collectionYear"
-                          classNames={{
-                            input: 'focus-visible',
-                            submit: 'focus-visible'
-                          }}
-                          translations={{
-                            separatorElementText: `${t("filters.collectionYear.separator")}`,
-                            submitButtonText: `${t("filters.collectionYear.submitButton")}`,
-                          }}/>
-                          {/* Shows up in filter summary if set */}
-                          {/* min={1900}/> */}
+                classNames={{
+                  input: 'focus-visible',
+                  submit: 'focus-visible'
+                }}
+                translations={{
+                  separatorElementText: `${t("filters.collectionYear.separator")}`,
+                  submitButtonText: `${t("filters.collectionYear.submitButton")}`,
+                }} />
+              {/* Shows up in filter summary if set */}
+              {/* min={1900}/> */}
             </Panel>
           </div>
         </div>
       </div>
       <div className="column is-8">
         <div className="columns is-vcentered ais-Stats-Dropdowns">
-          <div className="column is-5">
+          <div className="column is-5 p-0">
             <Stats />
           </div>
           <div className="column is-7">
             <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
               <div className="column is-5">
                 <HitsPerPage items={hitsPerPageItems}
-                            classNames={{
-                              select: 'focus-visible'
-                            }}/>
+                  classNames={{
+                    select: 'focus-visible'
+                  }} />
               </div>
               <div className="column is-7">
                 <SortBy items={sortByItems}
-                        classNames={{
-                          select: 'focus-visible'
-                        }}/>
+                  classNames={{
+                    select: 'focus-visible'
+                  }} />
               </div>
             </div>
           </div>
         </div>
         <Pagination />
-        <div className="field show-abstract">
-          <input id="switchRoundedInfo" type="checkbox" name="switchRoundedInfo" className="switch is-rounded is-info"
-                checked={showAbstract} onChange={() => dispatch(toggleAbstract(showAbstract))}/>
-          <label htmlFor="switchRoundedInfo">{t("showAbstract")}</label>
-        </div>
-        <Hits hitComponent={(({ hit }) => ( <Result hit={hit} showAbstract={showAbstract} /> ))} />
-        {/* <Hits hitComponent={Result}/> */}
+        <ToggleButtons />
+        <Hits hitComponent={HitComponent} />
         <Pagination />
       </div>
     </div>
