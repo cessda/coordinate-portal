@@ -86,9 +86,13 @@ async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResu
 
   // Copy each result into the destination object, awaiting each in turn
   for (const promise of termUris) {
-    const termResult = await promise;
-    if (termResult.uri) {
-      destObject[termResult.label] = termResult.uri;
+    try {
+      const termResult = await promise;
+      if (termResult.uri) {
+        destObject[termResult.label] = termResult.uri;
+      }
+    } catch (e) {
+      logger.warn('ELSST request failed: %s', e);
     }
   }
 
@@ -104,13 +108,8 @@ export function getELSSTRouter() {
       lang: string
     };
 
-    try {
-      const lookup = await getELSSTTerm(terms.labels, terms.lang);
-      res.json(lookup);
-    } catch (e) {
-      logger.error('ELSST request failed: %s', e);
-      res.sendStatus(502);
-    }
+    const lookup = await getELSSTTerm(terms.labels, terms.lang);
+    res.json(lookup);
   });
 
   return router;
