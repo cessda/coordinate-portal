@@ -34,65 +34,67 @@ const termCache = new Map<string, string | null>();
 
 async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResult> {
 
+  const labelArray: {
+    label: string;
+    uri: string | null | undefined
+  }[] = [];
 
-  const termUris = labels.map(async originalLabel => {
+  for (const originalLabel in labels) {
     // Normalise the label by converting it to upper case
     const normalisedLabel = originalLabel.toUpperCase();
 
     // Because the cache can store 'undefined' as a value, we can't use `if(termCache.get(term))` to test for cache presence
     if(termCache.has(normalisedLabel)) {
-      return {
+      labelArray.push({
         label: originalLabel, // UI expects the original label
         uri: termCache.get(normalisedLabel)
-      };
+      });
     }
 
     // Request term from ELSST, the label is encoded
-    const response = await fetch(`${SKOSMOS_URL}/rest/v1/${ELSST_VOCABULARY}/lookup?label=${encodeURIComponent(normalisedLabel)}&lang=${lang}`);
+    try {
+      const response = await fetch(`${SKOSMOS_URL}/rest/v1/${ELSST_VOCABULARY}/lookup?label=${encodeURIComponent(normalisedLabel)}&lang=${lang}`);
 
-    // Match potentially found - try to extract the URI
-    if (response.ok) {
-      const results = await response.json() as SkosmosLookupResponse;
-      if (results.result.length > 0) {
-        // Check uri from result if it contains known prefix to change it and add clang parameter
-        let resultUri = results.result[0].uri;
-        if(resultUri.includes(ELSST_URI_PREFIX)) {
-          const resultUriUuid = resultUri.replace(ELSST_URI_PREFIX, '');
-          resultUri = `${SKOSMOS_URL}/${ELSST_VOCABULARY}/en/page/${resultUriUuid}?clang=${lang}`;
+      // Match potentially found - try to extract the URI
+      if (response.ok) {
+        const results = await response.json() as SkosmosLookupResponse;
+        if (results.result.length > 0) {
+          // Check uri from result if it contains known prefix to change it and add clang parameter
+          let resultUri = results.result[0].uri;
+          if(resultUri.includes(ELSST_URI_PREFIX)) {
+            const resultUriUuid = resultUri.replace(ELSST_URI_PREFIX, '');
+            resultUri = `${SKOSMOS_URL}/${ELSST_VOCABULARY}/en/page/${resultUriUuid}?clang=${lang}`;
+          }
+
+          // Write the result to the cache
+          termCache.set(normalisedLabel, resultUri);
+
+          labelArray.push({
+            label: originalLabel,
+            uri: resultUri
+          });
         }
-
-        // Write the result to the cache
-        termCache.set(normalisedLabel, resultUri);
-
-        return {
-          label: originalLabel,
-          uri: resultUri
-        };
+      } else if (response.status === 404) {
+        // If a 404 response is returned, the term doesn't exist in ELSST
+        termCache.set(normalisedLabel, null);
       }
-    } else if (response.status === 404) {
-      // If a 404 response is returned, the term doesn't exist in ELSST
-      termCache.set(normalisedLabel, null);
+
+      // Match not found
+      labelArray.push({
+        label: originalLabel, // UI expects the original label
+        uri: undefined
+      });
+    } catch (e) {
+      logger.warn('ELSST request failed: %s', e);
     }
-
-    // Match not found
-    return {
-      label: originalLabel, // UI expects the original label
-      uri: undefined
-    };
-  });
-
+  }
 
   const destObject: TermURIResult = {}
 
   // Copy each result into the destination object, awaiting each in turn
-  for (const promise of termUris) {
-    try {
-      const termResult = await promise;
-      if (termResult.uri) {
-        destObject[termResult.label] = termResult.uri;
-      }
-    } catch (e) {
-      logger.warn('ELSST request failed: %s', e);
+  for (const termResult of labelArray) {
+    if (termResult.uri) {
+      destObject[termResult.label] = termResult.uri;
     }
   }
 
