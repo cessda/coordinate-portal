@@ -206,7 +206,8 @@
     "funder": "Funder",
     "grantNumber": "Grant number",
     "dataKind": "Kind of data",
-    "dataAccess": "Data access"
+    "dataAccess": "Data access",
+    "series": "Series"
   },
   "header": {
     "frontPage": "Front/search page",
