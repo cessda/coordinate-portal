@@ -74,16 +74,16 @@ async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResu
             uri: resultUri
           });
         }
-      } else if (response.status === 404) {
-        // If a 404 response is returned, the term doesn't exist in ELSST
-        termCache.set(normalisedLabel, null);
+      } else {
+        if (response.status === 404) {
+          // If a 404 response is returned, the term doesn't exist in ELSST
+          termCache.set(normalisedLabel, null);
+        }
+        labelArray.push({
+          label: originalLabel, // UI expects the original label
+          uri: undefined
+        });
       }
-
-      // Match not found
-      labelArray.push({
-        label: originalLabel, // UI expects the original label
-        uri: undefined
-      });
     } catch (e) {
       logger.warn('ELSST request failed: %s', e);
     }
