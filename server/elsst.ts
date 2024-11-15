@@ -49,7 +49,7 @@ async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResu
         label: originalLabel, // UI expects the original label
         uri: termCache.get(normalisedLabel)
       });
-      break;
+      continue;
     }
 
     // Request term from ELSST, the label is encoded
