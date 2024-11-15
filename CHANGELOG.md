@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.7.1] - 2024-11-15
+
+### Fixed
+
+- Fixed ELSST terms not being discovered ([#617](https://github.com/cessda/cessda.cdc.versions/issues/617))/([ELSST-57](https://github.com/cessda/cessda.elsst.skosmos/issues/57))
+
 ## [3.7.0] - 2024-11-12
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14055702.svg)](https://doi.org/10.5281/zenodo.14055702)
@@ -383,6 +389,7 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.7.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.7.1
 [3.7.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.7.0
 [3.6.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.1
 [3.6.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.0
