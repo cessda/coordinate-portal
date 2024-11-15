@@ -39,7 +39,7 @@ async function getELSSTTerm(labels: string[], lang: string): Promise<TermURIResu
     uri: string | null | undefined
   }[] = [];
 
-  for (const originalLabel in labels) {
+  for (const originalLabel of labels) {
     // Normalise the label by converting it to upper case
     const normalisedLabel = originalLabel.toUpperCase();
 
