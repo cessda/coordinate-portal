@@ -33,7 +33,7 @@ import fetch, { Request } from 'node-fetch';
 import { Agent } from 'http';
 import IPinfoWrapper, { ApiLimitError } from "node-ipinfo";
 import { getELSSTRouter } from './elsst';
-import { QueryDslBoolQuery, QueryDslNestedQuery, QueryDslQueryContainer, Sort } from '@elastic/elasticsearch/lib/api/types';
+import { estypes } from '@elastic/elasticsearch';
 
 
 // Defaults to localhost if unspecified
@@ -290,7 +290,7 @@ function externalApiV2() {
     }
 
     //Prepare body for ElasticSearch
-    let sort: Sort | undefined = undefined;
+    let sort: estypes.Sort | undefined = undefined;
 
     //Implementing Sorting Options
     switch (sortBy) {
@@ -358,10 +358,10 @@ function externalApiV2() {
     }
 
     // Container for the overall query
-    const boolQuery: QueryDslBoolQuery = {};
+    const boolQuery: estypes.QueryDslBoolQuery = {};
 
     // Holds the main simple_query_string and nested queries
-    const mustQuery: QueryDslQueryContainer[] = [];
+    const mustQuery: estypes.QueryDslQueryContainer[] = [];
 
     if (req.query.keywords) {
       // create keywords query
@@ -504,7 +504,7 @@ function externalApiV2() {
  * @param path the path to the nested document.
  * @param nestedPath the path to use in the nested document
  */
-function buildNestedFilters(query: unknown, path: string, nestedPath: string): QueryDslNestedQuery {
+function buildNestedFilters(query: unknown, path: string, nestedPath: string): estypes.QueryDslNestedQuery {
   if (Array.isArray(query)) {
     return {
       path: path,
