@@ -26,10 +26,6 @@ export const languages: readonly Language[] =
     label: 'Czech',
     index: 'cmmstudy_cs'
   },{
-    code: 'da',
-    label: 'Danish',
-    index: 'cmmstudy_da'
-  },{
     code: 'nl',
     label: 'Dutch',
     index: 'cmmstudy_nl'
