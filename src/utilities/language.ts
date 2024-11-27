@@ -54,6 +54,10 @@ export const languages: readonly Language[] =
     label: 'Greek',
     index: 'cmmstudy_el'
   }, {
+    code: 'no',
+    label: 'Norwegian',
+    index: 'cmmstudy_no'
+  }, {
     code: 'sk',
     label: 'Slovakian',
     index: 'cmmstudy_sk'
