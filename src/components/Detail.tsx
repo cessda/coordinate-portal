@@ -24,6 +24,8 @@ import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
 import striptags from "striptags";
 import counterpart from "counterpart";
 import Keywords from "./Keywords";
+import SeriesList from './SeriesList';
+import OrcidLogo from "./OrcidLogo";
 
 export interface Props {
   item: CMMStudy;
@@ -212,16 +214,24 @@ export default class Detail extends React.Component<Props, State> {
         {creator.identifier && (
           <>
             {" - "}
-            {creator.identifier.type ? creator.identifier.type : "Research Identifier"}
-            {": "}
-            {creator.identifier.uri ? (
-              <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
-                <span className="icon"><FaExternalLinkAlt /></span>
-                {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
-              </a>
-            ) : (
-              creator.identifier.id
-            )}
+            <span className="is-inline-block">
+              {creator.identifier.type?.toLowerCase() !== "orcid" &&
+                <>
+                  {creator.identifier.type || "Research Identifier"}{": "}
+                </>
+              }
+              {creator.identifier.uri ? (
+                <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
+                  {creator.identifier.type?.toLowerCase() === "orcid" &&
+                    <OrcidLogo />
+                  }
+                  <span className="icon"><FaExternalLinkAlt /></span>
+                  {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
+                </a>
+              ) : (
+                creator.identifier.id
+              )}
+            </span>
           </>
         )}
       </span>
@@ -293,6 +303,26 @@ export default class Detail extends React.Component<Props, State> {
 
             return <p>{pidStudy.pid}</p>;
           }, true)}
+        </section>
+
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.dataAccess"
+          />
+          <p>
+            {item.dataAccess || <Translate content="language.notAvailable.information" />}
+          </p>
+        </section>
+
+        <section>
+          <Translate
+            className="data-label"
+            component="h2"
+            content="metadata.series"
+          />
+          <SeriesList seriesList={item.series} lang={lang} />
         </section>
 
         <section>

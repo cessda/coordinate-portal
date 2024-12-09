@@ -14,6 +14,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.7.1] - 2024-11-15
+
+### Fixed
+
+- Fixed ELSST terms not being discovered ([#617](https://github.com/cessda/cessda.cdc.versions/issues/617))/([ELSST-57](https://github.com/cessda/cessda.elsst.skosmos/issues/57))
+
+## [3.7.0] - 2024-11-12
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14055702.svg)](https://doi.org/10.5281/zenodo.14055702)
+
+### Added
+
+- Added creator identifier (e.g. ORCID) fields to the data model, format `Creator` to show research identifier on the Detail page when possible ([#290](https://github.com/cessda/cessda.cdc.versions/issues/290))
+- Added Data Access Open/Restricted on search results and the Detail page ([#557](https://github.com/cessda/cessda.cdc.versions/issues/557))
+- Added funding information in the data model, display funding information on the Detail page ([#560](https://github.com/cessda/cessda.cdc.versions/issues/560))
+- Added Data Kind and General Data Format to the data model, display them combined as Kind of Data on the Display page ([#567](https://github.com/cessda/cessda.cdc.versions/issues/567))
+
+### Fixed
+
+- Fixed the feedback form not being available by migrating to the CESSDA Helpdesk. This is due to the EOSC helpdesk being shut down. ([#671](https://github.com/cessda/cessda.cdc.versions/issues/671))
+
 ## [3.6.1] - 2024-07-09
 
 ### Changed
@@ -368,6 +389,8 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.7.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.7.1
+[3.7.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.7.0
 [3.6.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.1
 [3.6.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.0
 [3.5.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.5.0

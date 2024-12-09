@@ -11,14 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Client, ClientOptions } from '@elastic/elasticsearch'
-import {
-  AggregationsCardinalityAggregate,
-  AggregationsNestedAggregate,
-  AggregationsStringTermsAggregate,
-  QueryDslBoolQuery,
-  SearchHitsMetadata
-} from "@elastic/elasticsearch/lib/api/types";
+import { Client, ClientOptions, estypes } from '@elastic/elasticsearch'
 import _ from "lodash";
 import { CMMStudy } from "../common/metadata";
 import { logger } from "./logger";
@@ -82,7 +75,7 @@ export default class Elasticsearch {
    * @param excludeIndex optionally exclude results from an index.
    */
   async getRelatedPublications(id: string, sizeMax: number, excludeIndex?: string) {
-    const boolQuery: QueryDslBoolQuery = {
+    const boolQuery: estypes.QueryDslBoolQuery = {
       must: [
         {
           match: {
@@ -141,7 +134,7 @@ export default class Elasticsearch {
 
     // Assert the type as AggregationsCardinalityAggregate, then return the value
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return (response.aggregations!.unique_id as AggregationsCardinalityAggregate).value;
+    return (response.aggregations!.unique_id as estypes.AggregationsCardinalityAggregate).value;
   }
 
   async getListOfMetadataLanguages() {
@@ -177,8 +170,8 @@ export default class Elasticsearch {
     });
 
     // Unwrap the aggregations
-    const aggregation = res.aggregations?.publishers as AggregationsNestedAggregate;
-    const publisherBuckets = (aggregation.publisher as AggregationsStringTermsAggregate).buckets;
+    const aggregation = res.aggregations?.publishers as estypes.AggregationsNestedAggregate;
+    const publisherBuckets = (aggregation.publisher as estypes.AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(publisherBuckets)) {
       return publisherBuckets.map(b => b.key);
@@ -209,8 +202,8 @@ export default class Elasticsearch {
     });
 
     // Unwrap the aggregations
-    const aggregation = res.aggregations?.studyAreaCountries as AggregationsNestedAggregate;
-    const countryBuckets = (aggregation.country as AggregationsStringTermsAggregate).buckets;
+    const aggregation = res.aggregations?.studyAreaCountries as estypes.AggregationsNestedAggregate;
+    const countryBuckets = (aggregation.country as estypes.AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(countryBuckets)) {
       return countryBuckets.map(b => b.key);
@@ -242,8 +235,8 @@ export default class Elasticsearch {
     });
 
     // Unwrap the aggregations
-    const aggregation = res.aggregations?.classifications as AggregationsNestedAggregate;
-    const topicBuckets = (aggregation.term as AggregationsStringTermsAggregate).buckets;
+    const aggregation = res.aggregations?.classifications as estypes.AggregationsNestedAggregate;
+    const topicBuckets = (aggregation.term as estypes.AggregationsStringTermsAggregate).buckets;
 
     if (Array.isArray(topicBuckets)) {
       return topicBuckets.map(b => b.key);
@@ -285,7 +278,7 @@ export default class Elasticsearch {
       },
       track_total_hits: false
     });
-    const elasticAggs = res.aggregations?.aggregationResults as AggregationsStringTermsAggregate;
+    const elasticAggs = res.aggregations?.aggregationResults as estypes.AggregationsStringTermsAggregate;
     const buckets = elasticAggs.buckets;
     if (Array.isArray(buckets)) {
       return buckets;
@@ -310,7 +303,7 @@ export default class Elasticsearch {
    * Extract the total hits from the hits metadata.
    * @returns the total hits, or undefined if not present.
    */
-  static parseTotalHits(totalHits: SearchHitsMetadata["total"]) {
+  static parseTotalHits(totalHits: estypes.SearchHitsMetadata["total"]) {
     // Calculate the total hits
     switch (typeof totalHits) {
       case "object":
