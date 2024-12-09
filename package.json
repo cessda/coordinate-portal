@@ -54,7 +54,7 @@
     "@types/express-http-proxy": "1.6.3",
     "@types/jest": "29.5.12",
     "@types/jquery": "3.5.16",
-    "@types/method-override": "0.0.32",
+    "@types/method-override": "3.0.0",
     "@types/node": "20.17.6",
     "@types/node-fetch": "2.6.11",
     "@types/prop-types": "15.7.5",
