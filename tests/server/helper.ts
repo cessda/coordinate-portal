@@ -167,7 +167,7 @@ describe('helper utilities', () => {
 
       // Status code should be 503
       expect(response.statusCode).toBe(503);
-      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
+      expect(mockedGetStudy).toHaveBeenCalledWith("test", "cmmstudy_en");
       expect(response._getRenderData()).toEqual({ metadata: {}});
     });
 
@@ -184,7 +184,7 @@ describe('helper utilities', () => {
 
       // Status code should be 404
       expect(response.statusCode).toBe(404);
-      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
+      expect(mockedGetStudy).toHaveBeenCalledWith("test", "cmmstudy_en");
       expect(response._getRenderData()).toEqual({ metadata: {}});
     });
 
@@ -199,7 +199,7 @@ describe('helper utilities', () => {
 
       // Status code should be 404
       expect(response.statusCode).toBe(404);
-      expect(mockedGetStudy).toBeCalledWith("test", "cmmstudy_en");
+      expect(mockedGetStudy).toHaveBeenCalledWith("test", "cmmstudy_en");
       expect(response._getRenderData()).toEqual({ metadata: {}});
     });
 
