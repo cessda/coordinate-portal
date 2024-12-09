@@ -734,10 +734,10 @@ export function startListening(app: express.Express, handler: RequestHandler) {
         // Initialise the API documentation
         v2 = await swaggerSearchApiV2(elasticsearch)
       }
-      return res.json(v2);
+      res.json(v2);
     } catch (e) {
       logger.error(`Cannot communicate with Elasticsearch: ${e}`);
-      return res.sendStatus(500);
+      res.sendStatus(500);
     }
   }));
 
