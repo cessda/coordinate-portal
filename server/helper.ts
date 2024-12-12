@@ -747,7 +747,7 @@ export function startListening(app: express.Express, handler: RequestHandler) {
   // Handle requests to /metrics
   app.get('/metrics', metricsRequestHandler(elasticsearch));
 
-  app.get('*', handler);
+  app.get(/(.*)/, handler);
 
   const server = app.listen(port, () => logger.info('Data Catalogue is running at http://localhost:%s/', port));
 
