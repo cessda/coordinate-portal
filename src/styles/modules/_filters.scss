@@ -1,18 +1,7 @@
 .filters, .side-column {
   position: relative;
 
-  .float {
-    position: sticky;
-    top: 15px;
-    z-index: 1;
 
-    .filter-panels {
-      overflow-y: scroll;
-      min-height: calc(96vh - 20px);
-      max-height: calc(96vh - 20px);
-      padding: 1px;
-    }
-  }
 
   .panel-container {
     background-color: #f8f8f8;

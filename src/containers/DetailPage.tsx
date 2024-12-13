@@ -23,6 +23,8 @@ import { Funding, getJsonLd } from '../../common/metadata';
 import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
 import { updateLanguage } from "../reducers/language";
+import { useAppSelector } from "../hooks";
+import { Helmet } from "react-helmet-async";
 
 type Heading = {
   id: string;
@@ -45,6 +47,7 @@ export const studyLoader: LoaderFunction = async ({ request, params }) => {
 };
 
 const DetailPage = () => {
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -139,10 +142,12 @@ const DetailPage = () => {
   ]
 
   return (
+    
     <div className="columns">
+      
       <div className="column is-3 side-column">
-        {location.state?.from === "/" &&
-          <a className="button no-border focus-visible pl-0 mb-2"
+        {location.state?.from == currentThematicView.path &&
+          <a className="ais-ClearRefinements-button focus-visible pl-0 mb-2"
             tabIndex={0}
             onClick={() => navigate(-1)}
             onKeyDown={(e) => handleKeyDown(e)}
@@ -160,9 +165,13 @@ const DetailPage = () => {
             }}
           </Await>
         </React.Suspense>
-        <DetailIndex headings={headings} />
+       {/* <DetailIndex headings={headings} /> */}
       </div>
+      <Helmet>
+      <link rel="canonical" href={"https://datacatalogue.cessda.eu/detail/" + location.pathname.split('/').slice(-1)[0]} />
+      </Helmet>
       <div className="column is-9">
+   
         <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
             {(resolvedData) => {

@@ -11,26 +11,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent } from "react";
-import LanguageSelector from "./LanguageSelector";
+import React, { FocusEvent, useContext } from "react";
+import IndexSwitcher from "./IndexSwitcher";
+import ThematicViewSwitcher from "./ThematicViewSwitcher";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks";
-import coordinateLogo from '../img/coordinate-logo.png';
 import CustomSearchBox from "./CustomSearchBox";
 import { useLocation } from 'react-router-dom';
 import { useClearRefinements, useHitsPerPage, usePagination, useSearchBox, useSortBy } from "react-instantsearch";
 import { hitsPerPageItems, getSortByItems } from "../containers/SearchPage";
-import Tooltip from "./Tooltip";
+import { FaWindows } from "react-icons/fa";
+
 
 const Header = () => {
   const { t } = useTranslation();
   const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const sortByItems = getSortByItems(currentLanguage.index, t);
-
   const navigate = useNavigate();
   const location = useLocation();
 
+ // const logoFolder = require.context('../img/logos/', true, /\.(jpe?g|png|gif|svg)$/)
+  //const logoImg = currentThematicView.icon;
+  const logoImg = require('../img/icons/' + currentThematicView.icon);
+  const longTitle = currentThematicView.longTitle;
   function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
     e.target.classList.toggle(className);
   }
@@ -54,75 +60,73 @@ const Header = () => {
 
   return (
     <header>
+
       <div className="container columns is-vcentered">
-        <div className="column is-one-quarter">
-          <div className="logo">
-            <img src={ coordinateLogo } alt={t("header.frontPage")}
-                className="cursor-pointer"
-                onClick={() => {
-                  resetQueries();
-                  navigate(currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/");
-                }}/>
-          </div>
+        <div className="column is-narrow">
+        <Link to={currentThematicView.path} className="columns is-vcentered is-gapless">
+          <div className="logo column is-narrow">
+          <img src={ logoImg } alt="Home" />
+             
+             </div>
+              <div className="logo-title column is-narrow">
+                <h1>{currentThematicView.title}</h1>
+              </div>
+              
+            </Link>
+          
+
+        </div>
+        <div className="column">
+        <ThematicViewSwitcher /> 
         </div>
         <div className="column p-0">
-          <div className="container columns is-flex is-flex-direction-column is-flex-wrap-wrap">
-            <div className="columns is-flex-direction-row is-vcentered mb-0">
-              <div className="column is-narrow skip-link-wrapper is-hidden-mobile pb-0">
-                <a href="#main" id="skip-to-main" className="link is-sr-only"
+
+          <div className="columns is-12 is-vcentered mb-0">
+            <div className="column is-narrow has-text-centered-mobile p-0">
+
+              
+              {/* <span className="header-description" dangerouslySetInnerHTML={{ __html: longTitle }}></span> */}
+            </div>
+            <nav className="column navbar has-text-right is-flex-grow-1" aria-label="Main">
+              <div className="is-right">
+                <Link to={currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/"}
+                  onClick={() => {
+                    resetQueries();
+                  }}
                   onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
-                  onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>
-                  {t("header.skipToMain")}
-                </a>
+                  onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}
+                  className="link-button link is-sr-only is-hidden-mobile">
+                  {t("header.frontPage")}
+                </Link>
+          
+                <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/documentation` : "/documentation"}
+                  className="link">
+                  {t("documentation.label")}
+                </Link>
+                <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/about` : "/about"}
+                  className="link">
+                  {t("about.label")}
+                </Link>
+                <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/rest-api` : "/rest-api"}
+                  className="link">
+                  API
+                  </Link>
+                 
+
               </div>
-              <div className="column is-narrow is-flex is-flex-grow-0 is-hidden-mobile p-0"></div>
-              <div className="column pb-0 has-text-centered-mobile pb-0">
-                <span className="header-description demo-text" dangerouslySetInnerHTML={{ __html: t("header.demoText.label") }}></span>
-                <Tooltip content={t("header.demoText.tooltip.content")}
-                        ariaLabel={t("header.demoText.tooltip.ariaLabel")}
-                        classNames={{container: 'demo-text-tooltip'}}/>&nbsp;
-                <span className="header-description" dangerouslySetInnerHTML={{ __html: t("header.portalDescription") }}></span>
-              </div>
+            </nav>
+            <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile pb-0">
+              <a href="#main" id="skip-to-main" className="link is-sr-only"
+                onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
+                onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>
+                {t("header.skipToMain")}
+              </a>
             </div>
-            <div className="column ml-2">
-              <div className="container columns is-variable is-1-mobile is-flex is-flex-direction-row is-flex-wrap-wrap">
-                <div className="column">
-                  <CustomSearchBox />
-                </div>
-                <div className="column is-narrow">
-                  <LanguageSelector />
-                </div>
-                <nav className="column navbar" aria-label="Main">
-                  <div className="buttons is-flex-wrap-nowrap is-right">
-                    <Link to={currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/"}
-                          onClick={() => {
-                            resetQueries();
-                          }}
-                          onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
-                          onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}
-                          className="link-button link is-sr-only is-hidden-mobile">
-                      {t("header.frontPage")}
-                    </Link>
-                    <Link to="/documentation"
-                          className="link-button link">
-                      {t("documentation.label")}
-                    </Link>
-                    <Link to="/about"
-                          className="link-button link">
-                      {t("about.label")}
-                    </Link>
-                    <Link to="/rest-api"
-                          className="link-button link">
-                      {t("api.label")}
-                    </Link>
-                  </div>
-                </nav>
-              </div>
-              {/* <div className="column is-narrow button-wrapper">
-                <Tooltip content={t("searchInfotip")} />
-              </div> */}
-            </div>
+
+
           </div>
+
+
         </div>
       </div>
 

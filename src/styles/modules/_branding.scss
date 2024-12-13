@@ -1,6 +1,6 @@
 $white: #ffffff;
 $light_blue: #0c66c0;
-$dark_blue: #2b5a9b;
+$dark_blue: #0b6098;
 $light_grey: #f8f8f8;
 $dark_grey: #4e4d56;
 
@@ -12,7 +12,7 @@ $dark_grey: #4e4d56;
   font-size: 0.9rem;
 }
 .button.is-info {
-  background-color:#3671c3;
+  background-color:$coordinate_blue;
 }
 .button.no-border:hover, .button.is-hovered {
   color: $dark_blue !important;
@@ -65,7 +65,7 @@ $dark_grey: #4e4d56;
   margin-bottom: 3px;
   font-weight: 600;
   font-size: 16px;
-  background: $light_grey;
+  border-bottom: 1px solid #ccc;
   border-radius: 3px;
   display: block;
 }
@@ -73,9 +73,9 @@ $dark_grey: #4e4d56;
   border-top: 1px solid #eee;
   margin-top: 15px;
 }
-body #root {
+body {
   a {
-    color: $light_blue;
+    color: $dark_blue;
   }
 
   #stripe {
@@ -118,13 +118,15 @@ body #root {
 
     .logo {
       position: relative;
-      min-width: 225px;
-      text-align: center;
 
-      height: 110px;
-      width: auto;
     }
 
+    .logo img {
+      height: 66px;
+      width: auto;
+      margin-right:10px;
+      margin-top:4px;
+    }
     .link-button {
       background-color: lighten($dark_blue, 10);
 
@@ -138,13 +140,11 @@ body #root {
     .filters {
       .panel-container {
         background-color: transparent;
-        padding: 0;
-        border-radius: 3px;
-        box-shadow: $ais_box_shadow;
+   
 
         .panel-header {
           margin-bottom: 0;
-          padding: 10px 10px 10px 30px;
+          padding: 10px 10px 10px 25px;
           border-radius: 3px 3px 0 0;
 
           &:after {
@@ -168,11 +168,7 @@ body #root {
       }
     }
 
-    .panel-container {
-      & > .dropdown .dropdown-trigger button {
-        color: $dark_grey;
-      }
-    }
+   
   }
 
   .modal {

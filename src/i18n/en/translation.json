@@ -106,7 +106,7 @@
       }
     },
     "summary": {
-      "label": "Filter summary",
+      "label": "Summary",
       "introduction": "The following filters have been applied to your search.",
       "remove": "Click on <strong>x</strong> to the right of the filter to remove it from this search.",
       "noFilters": "No additional filters have been applied to your search.",
@@ -165,7 +165,7 @@
   },
   "reset": {
     "query": "Clear search",
-    "filters": "Reset filters"
+    "filters": "Reset"
   },
   "similarResults": {
     "heading": "Similar results",

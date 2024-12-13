@@ -25,31 +25,33 @@ const Similars = (props: Props) => {
   const { t } = useTranslation();
   const similars = props.similars;
   const currentLanguageCode = useAppSelector((state) => state.language.currentLanguage.code);
-
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const viewPrefix = currentThematicView.path === "/" ? "" : currentThematicView.path;
   const links: JSX.Element[] = [];
 
   for (let i = 0; i < similars.length; i++) {
     // Construct the similar URL
     links.push(
-      <Link key={i} to={"/detail/" + similars[i].id} className="subtitle" lang={currentLanguageCode}>
+      
+      <Link key={i} to={viewPrefix + "/detail/" + similars[i].id} lang={currentLanguageCode}>
         {similars[i].title}
       </Link>
     );
   }
 
   return (
-    <div className="similars">
-      <h2 className="main mb-2">{t("similarResults.heading")}</h2>
+    <div className="similars filter-wrapper">
+      <h3>{t("similarResults.heading")}</h3>
       {links.length > 0 ? (
-        <ul className="mb-4">
+        <ul>
           {links.map((link, index) => (
-            <li key={index} className="mb-1">
+            <li key={index}>
               {link}
             </li>
           ))}
         </ul>
       ) : (
-        <ul className="mb-4">
+        <ul>
           <li>
             <p>{t("similarResults.notAvailable")}</p>
           </li>

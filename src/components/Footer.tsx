@@ -33,25 +33,18 @@ const organizationCessdaJSON = JSON.stringify(organizationCessda);
 const Footer = () => {
   const { t } = useTranslation();
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
-
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   return (
     <footer data-testid="footer" className={'footer' + (showMobileFilters ? ' show-mobile-filters' : '')}>
       <div className="container">
-        <div className="columns is-vcentered">
-          <div className="column is-2">
-            <a href="https://cessda.eu" target="_blank" rel="noreferrer">
-              {t("footer.poweredBy")}
-            </a>
-          </div>
-
-          <div className="column has-text-centered is-8">
-            <Link to="/documentation/" className="is-inline-block">{t("documentation.label")}</Link> | {" "}
-            <Link to="/about/" className="is-inline-block">{t("about.label")}</Link> | {" "}
+      <div className="columns has-text-centered">
+   <div className="column">
             <a href="https://www.cessda.eu/Privacy-policy" target="_blank" rel="noreferrer" className="is-inline-block">{t("footer.privacy")}</a> |  {" "}
             <a href="https://www.cessda.eu/Acceptable-Use-Policy" target="_blank" rel="noreferrer" className="is-inline-block">{t("footer.aup")}</a> | {" "}
-            <Link to="/accessibility-statement/" className="is-inline-block">{t("footer.accessibility")}</Link>
+            <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/accessibility-statement` : "/accessibility-statement"} 
+            className="is-inline-block">{t("footer.accessibility")}</Link>
           </div>
-        </div>
+      </div>
       </div>
       <script type="application/ld+json" data-testid="coordinateJson">{organizationCoordinateJSON}</script>
       <script type="application/ld+json" data-testid="cessdaJson">{organizationCessdaJSON}</script>

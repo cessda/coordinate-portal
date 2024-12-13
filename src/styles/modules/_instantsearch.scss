@@ -20,14 +20,31 @@
   white-space: normal;
 }
 
-.ais-ClearRefinements-button {
+.ais-ClearRefinements-button, .ais-ClearRefinements-button:active, .ais-ClearRefinements-button:focus, .ais-ClearRefinements-button:disabled[disabled] {
   width: auto;
+  background-image: none;
+  box-shadow: none;
+  border-radius: 0;
+  text-align: inherit;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  border: none;
+ font-size:13px;
+ font-weight: 600;
+ color: rgb(11, 96, 152);
 }
 
-.ais-ClearRefinements-button.button, .ais-ClearRefinements-button.button:disabled {
+.ais-ClearRefinements-button:hover, .ais-ClearRefinements-button:focus {
+
   background-image: none;
-  color: white;
-}
+  color: hsl(0, 0%, 21%);
+  }
+
+  .ais-ClearRefinements-button:disabled[disabled] {
+cursor: not-allowed;
+   color: hsl(0, 0%, 60%);
+  }
 
 .ais-Panel {
   margin-bottom: 0;

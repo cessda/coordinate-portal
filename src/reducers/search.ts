@@ -56,8 +56,8 @@ const initialState: SearchState = {
 export const updateMetrics = createAsyncThunk('search/updateMetrics', async (_, { getState }) => {
   try {
     const state = getState() as RootState;
-    const response = await fetch(`${window.location.origin}/api/sk/_about_metrics/${state.language.currentLanguage.index}`);
-
+    //const response = await fetch(`${window.location.origin}/api/sk/_about_metrics/${state.language.currentLanguage.index}`);
+    const response = await fetch(`${window.location.origin}/api/sk/_about_metrics/${state.thematicView.currentIndex}`);
     if (response.ok) {
       const source = await response.json();
 

@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import searchReducer from "./reducers/search";
 import detailReducer from "./reducers/detail";
 import languageReducer from "./reducers/language";
+import thematicViewReducer from "./reducers/thematicView";
 
 export const store = configureStore({
   reducer: {
     search: searchReducer,
     detail: detailReducer,
-    language: languageReducer
+    language: languageReducer,
+    thematicView: thematicViewReducer
   },
 });
 

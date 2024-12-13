@@ -87,13 +87,15 @@ const apiClient = Client({
     facet_attributes: [
       {
         attribute: "keywords",
-        field: "term.normalized",
+        //field: "term.normalized",
+        field: "term.raw",
         type: "string",
         nestedPath: "keywords"
       },
       {
         attribute: "classifications",
-        field: "term.normalized",
+        //field: "term.normalized",
+        field: "term.raw",
         type: "string",
         nestedPath: "classifications"
       },
@@ -133,11 +135,13 @@ const apiClient = Client({
         order: 'desc'
       },
       _title_desc: {
-        field: 'titleStudy.normalized',
+        //field: 'titleStudy.normalized',
+        field: 'titleStudy.raw',
         order: 'desc'
       },
       _title_asc: {
-        field: 'titleStudy.normalized',
+        //field: 'titleStudy.normalized',
+        field: 'titleStudy.raw',
         order: 'asc'
       },
       _collection_date_desc: {

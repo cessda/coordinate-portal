@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html prefix="og: https://ogp.me/ns#">
+<html prefix="og: https://ogp.me/ns#" lang="en">
 <!--
 // Copyright CESSDA ERIC 2017-2023
 //
@@ -15,13 +15,7 @@
 // limitations under the License.
 -->
 <head>
-  <title>
-    <% if (metadata.title) { %>
-      <%= metadata.title %> - COORDINATE Portal
-    <% } else { %>
-      COORDINATE Portal
-    <% } %>
-  </title>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary">
@@ -47,8 +41,7 @@
     <meta name="twitter:label2" content="Publisher">
     <meta name="twitter:data2" content="<%= metadata.publisher %>">
   <% } %>
-  <link rel="shortcut icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH5wYIChgQH1pRPgAABQ1JREFUaN7tmEtsVVUUhr+1933QJxQCBcpLKWBbRLRIiYkYwCAhgBIsTkjwEUUDEmcqIZhgHDgQRgTjgESFifERASVIQNEQ0gZBAxQp8m4DCbQF2nvb3nv2Xg5aXkbpvdBbjd5/cgbn7H3Wv/+11l5rQRZZZJFFFllk8d+B/BuMcHUsApkNjAPtD/ibb00U5DjqtmHDNfaB5PF/nIg7itgK1NWNMsjFyeCfRIPxQCUwFij4GxMD0HqQs6D7gO+R3F9tWTzW50RukDjCQERmIbIQYSbqi3tYqn+ysxnYB7If7A5bHvzS94ocoQBhKcKrQEUvRMYnqK61FZzsO0UOIxhWI7wGDOvFrfeALLZ9pEQIw0qE14GSXt5+KJiHM66Iqy+yuLYH0eBT0IkZ+k2LyXh+d21FqHan1oyhMHQvqxes2F6g3g83IqUIIwOnzliJO+8bjUTOb98w54wMkIHaYp4BDWeQiLkr11q48ptBXv0E76lQ1UojzAa5z3nFWPHe6wHB1AQuZ++a+asKpo2t2aSa2QyZdrDPX761BJGlqmxU1WpgikKRAiKAIgIlzktVNBSf2y+cqKoqrR2gmlkXTsu15iz7+iHveRP11drD2sCHGTfkRP4jow7koWQcKQf7vGXfDraGxSI8pykcgKoQsgH9Iok+uatuM6jsnWmzrbEzjJhiRQNVFKEtSeuW4GLrLKu5S0BTIu/UMCi/mXHFJ9E+UCQ0c93T0Svxa+Oduumq+qwgTyCIICgKAnnJMaOdjVWEgvxR4FLa2HtDYU4rhUVX8fE+INLa0TZZ0RXAEmvs7YWaAOLplxy+SFC6yKWaD5VYRx7xq3nkRGIZV8UkXfAKsMSI+cvyXvHktpcTCYpRcSlvHLZJzjWPYP/JqV3ZLNPBLiIv9uzwUfC2W6jUoAjRcILCnLY+KUpTL1HSPNWQCWhoHkHNqalgMt8vmNRZpGeKMZ7WznwaWkpIdIYzfpWkRsQkII346KKuoMKV+AAON05CVe6yIOo1IoILt6CmPS1PBBBRmmKD+OH4dDqDaCYFSfZomaiQiDQQ2GuImjQziacjmcNvF8s4e3k0CRfKVAa7YFIRLZZbR2f4AqqStiKKcKl1MB/9tIzGlhKk9zugK8Bmo6ncVOJoz6mnM3oao5G0YyXwIU5eKuV885hjeJp6UZVrKJuBD4yiO7WHnCIaIhE9TyzvKInQ5bQzmAg4H9pz6vLY1YR4u2tgcM9oRNmIss6W0xxSdIMgI4HyO56rSZCIntvn4pNqw77/DFUmp/jDNoHvouHkhy+8tGnX84roMdsIrgGYBFIGGk1VX9DTwAmUnShf2omccUcRmfLerBynrhp4GRgDDADyb1l9FbgmYk6oja0/9FbN9oVvbF2UTLAcuL/72wKBiN6s0zqAVqAJ+FFE3t22YX7j7WNSGQI8DlINvhQoBvJAIl1PBSQBGgfaQdpBmkA/A9mFLTpsJzT564O/Gz7y2PtzhseS8blGZKZBpoAMRaQh6ZJ7jZjdIWN3H1i1p6VyzQLz89qtvrtnrw6ce9SIVFpjqryqE6HBe/+7iByMRMyOL9bPq71j9VMXDUMQBeYDU0GGITyFeoOYg6g/gko9JvcQ2lpry0ncsR+xYi4AHwNbQOx1HbvmrgRI1414nUQ3vgK2drfM9kZPpXgRnAhBj712eWcSSLo6+3n3fnKLXY6ugbZHxNkyHFlkkUUWWWSRxf8AfwCT5wNcsgeiuwAAAABJRU5ErkJggg==
-  ">
+
   <!-- <% if (metadata.id) { %>
     <link rel="describedby" type="application/xml" profile="http://purl.org/dc/elements/1.1/ http://www.openarchives.org/OAI/2.0/" href="https://datacatalogue.cessda.eu/oai-pmh/v0/oai?verb=GetRecord&identifier=<%= metadata.id %>&metadataPrefix=oai_ddi25">
   <% } %> -->
@@ -92,60 +85,6 @@
   <% if (metadata.jsonLd) { %>
     <script id="json-ld" type="application/ld+json"><%- JSON.stringify(metadata.jsonLd) %></script>
   <% } %>  
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
- 
-  <!-- <script>
-    $(function() {
-      $('#zammad-feedback-form').ZammadForm({
-    agreementMessage:'  Accept CESSDA <a target="_blank" href="https://www.cessda.eu/Privacy-policy">Data Privacy Policy</a> & <a target="_blank" href="https://www.cessda.eu/Acceptable-Use-Policy">Acceptable Use Policy</a>', 
-    messageTitle: 'CDC Feedback Form',
-    messageSubmit: 'Submit',
-    messageThankYou: 'Thank you for your inquiry (#%s)! We\'ll contact you as soon as possible.',
-    modal: true,
-    targetGroupID: 25,
-    attributes: [
-         {
-           display: 'Name',
-           name: 'name',
-           tag: 'input',
-           type: 'text',
-           id: 'zammad-form-name',
-           required: true,
-           placeholder: '',
-           defaultValue: '',
-         },
-         {
-           display: 'Email',
-           name: 'email',
-           tag: 'input',
-           type: 'email',
-           id: 'zammad-form-email',
-           required: true,
-           placeholder: '',
-           defaultValue: '',
-         },
-         {
-           display: 'Subject',
-           name: 'title',
-           tag: 'input',
-           id: 'zammad-form-subject',
-           required: false,
-           placeholder: '',
-           defaultValue: '',
-         },
-         {
-           display: 'Message',
-           name: 'body',
-           tag: 'textarea',
-           id: 'zammad-form-body',
-           required: true,
-           placeholder: '',
-           defaultValue: '',
-           rows: 7,
-         }
-       ]
-      });
-    });
-    </script> -->
+
 </body>
 </html>

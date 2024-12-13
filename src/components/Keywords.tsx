@@ -18,6 +18,8 @@ import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
 import { getELSSTTerm } from "../utilities/elsst";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../hooks";
+
 
 export interface Props {
   keywords: TermVocabAttributes[];
@@ -32,7 +34,7 @@ interface State {
 }
 
 export class Keywords extends React.Component<Props & WithTranslation, State> {
-
+  
   private abortController = new AbortController();
 
   constructor(props: Props & WithTranslation) {
@@ -96,14 +98,16 @@ export class Keywords extends React.Component<Props & WithTranslation, State> {
 
   render(): React.ReactNode {
     const { t } = this.props;
+   
     return (<>
+    
       <div className="tags" data-testid="tags">
         {this.generateElements(this.state.isExpanded ? this.props.keywords : this.props.keywords.slice(0, this.props.keywordLimit),
           keywords => {
             // If the term is a valid ELSST term, also link to ELSST
             const keywordTerm = upperFirst(keywords.term);
             return (<>
-              <Link to={{pathname: '/', search: `?keywords[0]=${encodeURI(keywords.term)}`}}>{keywordTerm}</Link>
+              <Link to={{pathname: "/" + location.pathname.split('/')[1], search: `?keywords[0]=${encodeURI(keywords.term)}`}}>{keywordTerm}</Link>
               {this.state.elsstURLs[keywords.term] &&
                 <span className="is-inline-flex is-align-items-center">&nbsp;(
                   <a href={this.state.elsstURLs[keywords.term]} rel="noreferrer" target="_blank"

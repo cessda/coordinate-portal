@@ -151,7 +151,8 @@ export default class Elasticsearch {
   async getAboutMetrics(index: string) {
     const studiesResponse = await this.client.search({
       size: 0,
-      index: `${this.indexName}_*`,
+      //index: `${this.indexName}_*`,
+      index: `${index.split('_')[0]}_*`,
       body: {
         query: { match_all: {} },
         aggs: {

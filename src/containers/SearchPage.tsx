@@ -32,15 +32,19 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { toggleMobileFilters, toggleSummary } from "../reducers/search";
 import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
+import IndexSwitcher from "../components/IndexSwitcher";
+import CustomSearchBox from "../components/CustomSearchBox";
 import { useSearchParams } from "react-router-dom";
 import { updateLanguage } from "../reducers/language";
 import { TFunction } from "i18next";
 
+
+
 const hitsPerPageItems = [
-  { value: 10, label: 'Show 10 studies' },
-  { value: 30, label: 'Show 30 studies', default: true },
-  { value: 50, label: 'Show 50 studies' },
-  { value: 150, label: 'Show 150 studies' },
+  { value: 10, label: 'Show 10' },
+  { value: 30, label: 'Show 30', default: true },
+  { value: 50, label: 'Show 50' },
+  { value: 150, label: 'Show 150' },
 ]
 
 const getSortByItems = (index: string, t: TFunction<"translation", undefined, "translation">) => {
@@ -58,8 +62,8 @@ const getSortByItems = (index: string, t: TFunction<"translation", undefined, "t
 const SearchPage = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const language = useAppSelector((state) => state.language);
-  const index = language.currentLanguage.index;
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
+  const index = currentIndex;
   const toggleSummaryRef = React.createRef() as React.RefObject<HTMLButtonElement>;
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
@@ -118,10 +122,15 @@ const SearchPage = () => {
         </button>
       </div>
       <div className="column is-4 filters">
-        <div className="float">
-          <div className="columns is-vcentered is-flex filter-buttons">
-            <div className="column is-narrow p-0 mr-2">
-              <button className="button is-info focus-visible"
+        <div className="filter-wrapper">
+
+          <div className="columns is-vcentered is-gapless m-0 is-flex filter-buttons">
+            <div className="column">
+              <h3>Filters</h3>
+            </div>
+            <div className="column is-narrow columns is-gapless mr-4">
+            <div className="column is-narrow mt-1 mr-2">
+              <button className="ais-ClearRefinements-button focus-visible"
                 onClick={() => dispatch(toggleSummary(showFilterSummary))}
                 onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
                 disabled={!hasRefinements}
@@ -137,7 +146,7 @@ const SearchPage = () => {
                       <button className="delete focus-visible"
                         aria-label="close"
                         onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}
-                        autoFocus data-testid="close-filter-summary"/>
+                        autoFocus data-testid="close-filter-summary" />
                     </div>
                     <section className="modal-card-body">
                       {hasRefinements ? (
@@ -163,16 +172,17 @@ const SearchPage = () => {
                 </div>
               )}
             </div>
-            <div className="column is-narrow p-0">
+            <div className="column is-narrow mt-1">
               <ClearRefinements
                 classNames={{
                   root: '',
-                  button: 'button is-info focus-visible',
+                  button: 'focus-visible',
                 }}
                 translations={{
                   resetButtonText: t("reset.filters")
                 }}
               />
+            </div>
             </div>
           </div>
           <div className="filter-panels">
@@ -226,7 +236,8 @@ const SearchPage = () => {
                 }} />
             </Panel>
             {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
-            <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
+            {/*
+             <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
               tooltip={<Tooltip id="filters-timemethod-tooltip"
                 content={t("filters.timeMethod.tooltip.content")}
                 ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")} />}
@@ -239,6 +250,7 @@ const SearchPage = () => {
                   list: 'ais-CustomRefinementList'
                 }} />
             </Panel>
+            */}
             <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
               tooltip={<Tooltip id="filters-timemethodcv-tooltip"
                 content={t("filters.timeMethodCV.tooltip.content")}
@@ -273,31 +285,45 @@ const SearchPage = () => {
         </div>
       </div>
       <div className="column is-8">
-        <div className="columns is-vcentered ais-Stats-Dropdowns">
-          <div className="column is-5 p-0">
-            <Stats />
+
+        <div className="searchwrapper columns is-variable is-1-mobile is-flex mb-0 pb-0">
+          <div className="column is-8 pb-0">
+            <CustomSearchBox />
           </div>
-          <div className="column is-7">
-            <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
-              <div className="column is-5">
-                <HitsPerPage items={hitsPerPageItems}
-                  classNames={{
-                    select: 'focus-visible'
-                  }} />
-              </div>
-              <div className="column is-7">
-                <SortBy items={sortByItems}
-                  classNames={{
-                    select: 'focus-visible'
-                  }} />
+          <div className="column is-narrow">
+            <IndexSwitcher />
+          </div>
+        </div>
+
+
+
+        <ToggleButtons />
+        <div className="hits-wrapper">
+          <div className="columns is-vcentered ais-Stats-Dropdowns">
+            <div className="column is-narrow pl-4">
+              <Stats />
+            </div>
+            <div className="column is-7">
+              <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
+                <div className="column is-5">
+                  <HitsPerPage items={hitsPerPageItems}
+                    classNames={{
+                      select: 'focus-visible'
+                    }} />
+                </div>
+                <div className="column is-7">
+                  <SortBy items={sortByItems}
+                    classNames={{
+                      select: 'focus-visible'
+                    }} />
+                </div>
               </div>
             </div>
           </div>
+          <Pagination />
+          <Hits hitComponent={HitComponent} />
+          <Pagination />
         </div>
-        <Pagination />
-        <ToggleButtons />
-        <Hits hitComponent={HitComponent} />
-        <Pagination />
       </div>
     </div>
   )

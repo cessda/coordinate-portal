@@ -22,10 +22,10 @@ import { updateLanguage } from "../reducers/language";
 
 export const metricsLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
-  const lang = url.searchParams.get("lang");
+ /* const lang = url.searchParams.get("lang");
   if(lang){
     store.dispatch(updateLanguage(lang));
-  }
+  } */
   const metrics = await store.dispatch(updateMetrics());
   return { metrics };
 };
@@ -53,6 +53,7 @@ const AboutPage = () => {
   return (
     <div className="columns is-flex is-flex-direction-column is-vcentered">
       <div className="column is-flex is-flex-wrap-wrap is-justify-content-space-around is-8">
+      {window.location.origin}
         <React.Suspense fallback={<></>}>
           <Await resolve={metrics} errorElement={<></>}>
             {(metrics) => {

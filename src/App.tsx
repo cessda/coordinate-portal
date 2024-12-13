@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration, RouteObject, useMatches } from "react-router-dom";
 import SearchPage, { getSortByItems } from "./containers/SearchPage";
 import DetailPage, {studyLoader} from "./containers/DetailPage";
 import AboutPage, {metricsLoader} from "./containers/AboutPage";
@@ -9,6 +9,7 @@ import AccessibilityStatementPage from "./containers/AccessibilityStatementPage"
 import NotFoundPage from "./containers/NotFoundPage";
 import ErrorPage from "./containers/ErrorPage";
 import { InstantSearch } from "react-instantsearch";
+import Favicon from "react-favicon";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { VirtualRefinementList, VirtualRangeInput, VirtualSortBy } from "./components/VirtualComponents";
@@ -16,20 +17,26 @@ import searchClient from "./utilities/searchkit";
 import { history } from "instantsearch.js/es/lib/routers";
 import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
+import { thematicViews } from "./utilities/thematicViews";
 import { languages } from "./utilities/language";
+
 
 // Use simple router to easily check keys for various instantsearch components
 // import { simple } from 'instantsearch.js/es/lib/stateMappings';
-// const routing = {
-//   router: history(),
-//   stateMapping: simple(),
-// };
+ //const routing = {
+   // router: history(),
+  //stateMapping: simple(),
+ //};
 
 const Root = () => {
   const { t } = useTranslation();
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const locationHook = useLocation();
-
+ 
+  const faviconFolder = require.context('./img/favicons/', true, /\.(jpe?g|png|gif|svg)$/)
+  const faviconImg = faviconFolder(`./${currentThematicView.favicon}`);
+  
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
   languages.forEach(language => {
@@ -43,7 +50,7 @@ const Root = () => {
     onUpdateRef.current();
   }, [locationHook.search]);
 
-  const routing = {
+ const routing = {
     router: history({
       // Synchronize InstantSearch’s router with changes to query params in react-router (location.search)
       start(onUpdate) {
@@ -53,8 +60,8 @@ const Root = () => {
         return qsModule.parse(location.search.slice(1));
       },
       windowTitle({ query }) {
-        const queryTitle = (query !== '' && query !== undefined) ? `${t("datacatalogue")} - ${t("search.title")} "${query}"` :
-                                                                  `${t("datacatalogue")} - ${t("search.label")}`;
+        const queryTitle = (query !== '' && query !== undefined) ? `${currentThematicView.title} - ${t("search.title")} "${query}"` :
+                                                                  `${currentThematicView.title}  - ${t("search.label")}`;
         return queryTitle;
       },
       createURL({ qsModule, location, routeState }) {
@@ -93,11 +100,11 @@ const Root = () => {
       // Whether the URL is cleaned up from active refinements when the router is disposed of
       cleanUrlOnDispose: true,
       // Number of milliseconds the router waits before writing the new URL to the browser
-      writeDelay: 400
+      writeDelay: 100
     }),
     stateMapping: {
       stateToRoute(uiState: any) {
-        const indexUiState = uiState[currentLanguage.index] || {};
+        const indexUiState = uiState[currentIndex] || {};
         return {
           query: indexUiState.query,
           classifications: indexUiState.refinementList?.classifications,
@@ -105,7 +112,7 @@ const Root = () => {
           publisher: indexUiState.refinementList?.publisher,
           collectionYear: indexUiState.range?.collectionYear,
           country: indexUiState.refinementList?.country,
-          timeMethod: indexUiState.refinementList?.timeMethod,
+      //    timeMethod: indexUiState.refinementList?.timeMethod,
           timeMethodCV: indexUiState.refinementList?.timeMethodCV,
           resultsPerPage: indexUiState.hitsPerPage,
           page: indexUiState.page,
@@ -116,14 +123,14 @@ const Root = () => {
       },
       routeToState(routeState: any) {
         return {
-          [currentLanguage.index]: {
+          [currentIndex]: {
             query: routeState.query,
             refinementList: {
               classifications: routeState.classifications,
               keywords: routeState.keywords,
               publisher: routeState.publisher,
               country: routeState.country,
-              timeMethod: routeState.timeMethod,
+           //   timeMethod: routeState.timeMethod,
               timeMethodCV: routeState.timeMethodCV
             },
             range: {
@@ -140,24 +147,37 @@ const Root = () => {
     },
   };
 
-  return (
+  return ( 
+    
     <InstantSearch searchClient={searchClient}
-                  indexName={currentLanguage.index}
+                  indexName={currentIndex}
                   // routing can't use updated values from redux store when key is null
                   // Could use index as key to make sure everything is always perfect and store values could be used but
                   // then it re-renders even when not really needed (like switching language on detail page)
                   //key={key}
                   routing={routing}
+                 // routing={true}
                   future={{
                     // If false, each widget unmounting will also remove its state, even if multiple widgets read that UI state
                     // If true, each widget unmounting will only remove its state if it's the last of its type
                     preserveSharedStateOnUnmount: true
                   }}>
+                   
+        <Favicon url={faviconImg} />
+       
       <Header />
-      <div id="stripe" />
-      <main id="main" className="container">
+      
+      <main id="main">
+      
+      <span className="is-size-7">
+         {/*
+    Current index: { currentIndex } TV path: { currentThematicView.path }
+      */}
+         
+         </span>
+        <div className="container">
         <ScrollRestoration />
-        {locationHook.pathname !== '/' &&
+        {locationHook.pathname !== currentThematicView.path &&
           <>
             <VirtualRefinementList attribute="virtual" />
             <VirtualRangeInput attribute="virtual" />
@@ -165,31 +185,41 @@ const Root = () => {
           </>
         }
         <Outlet />
+        </div>
       </main>
       <Footer />
     </InstantSearch>
   );
 };
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    children: [
-      { path: "", element: <SearchPage /> },
-      { path: "about", element: <AboutPage />, loader: metricsLoader },
-      { path: "detail/:id", element: <DetailPage />, loader: studyLoader},
-      { path: "documentation", element: <UserGuidePage /> },
-      { path: "rest-api", element: <RestApiPage /> },
-      { path: "accessibility-statement", element: <AccessibilityStatementPage /> },
-      { path: "*", element: <NotFoundPage />}
-    ],
-  }
-]);
 
+// (OC 11.2024) Build Thematic View routes from paths in src/utilities/thematicViews.ts
+
+const routes: RouteObject[] = thematicViews.map(thematicView =>  {
+  return({
+  path: thematicView.path,
+  element: <Root />,
+  errorElement: <ErrorPage />,
+  children: [
+    { path: "", element: <SearchPage /> },
+    { path: "about", element: <AboutPage />, loader: metricsLoader },
+    { path: "detail/:id", element: <DetailPage />, loader: studyLoader},
+    { path: "documentation", element: <UserGuidePage /> },
+    { path: "rest-api", element: <RestApiPage /> },
+    { path: "accessibility-statement", element: <AccessibilityStatementPage /> },
+    { path: "*", element: <NotFoundPage />}
+  ]
+})
+}
+);
+const router = createBrowserRouter(routes);
 const App = () => {
-  return <RouterProvider router={router} />;
+
+  return (
+ 
+  <RouterProvider router={router} />
+ 
+  );
 };
 
 export default App;

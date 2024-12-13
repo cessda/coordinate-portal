@@ -26,7 +26,7 @@ const Pagination = () => {
         nextPageItemText: '›',
         firstPageItemText: '«',
         lastPageItemText: '»',
-        pageItemText: ({ currentPage, nbPages }) => `${currentPage}/${nbPages}`,
+        pageItemText: ({ currentPage, nbPages }) => `${currentPage}`,
         firstPageItemAriaLabel: `${t("pagination.firstPage")}`,
         previousPageItemAriaLabel: `${t("pagination.previousPage")}`,
         nextPageItemAriaLabel: `${t("pagination.nextPage")}`,
@@ -34,7 +34,7 @@ const Pagination = () => {
         pageItemAriaLabel: ({ currentPage, nbPages }) => `${t("pagination.pageItemAria", { currentPage: currentPage, nbPages: nbPages })}`,
       }}
       classNames={{
-        root: 'mb-4',
+        root: '',
       }}
     />
   );
