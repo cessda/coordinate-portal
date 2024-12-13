@@ -118,76 +118,10 @@ const Header = () => {
                   </div>
                 </nav>
               </div>
-              {/* <div className="column is-narrow button-wrapper">
-                <Tooltip content={t("searchInfotip")} />
-              </div> */}
             </div>
           </div>
         </div>
       </div>
-
-      {/* {showAdvancedSearch && (
-        <div className="modal is-active">
-          <div className="modal-background" />
-          <div className="modal-card">
-            <div className="modal-card-head">
-              <p className="modal-card-title">{t("advancedSearch.label")}</p>
-              <button
-                className="delete"
-                aria-label="close"
-                onClick={() => dispatch(toggleAdvancedSearch(showAdvancedSearch))}
-              />
-            </div>
-            <section className="modal-card-body">
-              <p className="pb-10">{t("advancedSearch.introduction")}</p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.and")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.or")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.negates")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.phrase")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.prefix")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.precedence")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.distance")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.slop")}
-              </p>
-              <p className="pt-15">
-                <b>{t("advancedSearch.escaping.heading")}</b>
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.escaping.content")}
-              </p>
-              <p className="pt-15">
-                <b>{t("advancedSearch.defaultOperator.heading")}</b>
-              </p>
-              <p className="has-text-weight-semibold">
-                {t("advancedSearch.defaultOperator.content")}
-              </p>
-            </section>
-            <div className="modal-card-foot">
-              <button
-                className="button is-light"
-                onClick={() => dispatch(toggleAdvancedSearch(showAdvancedSearch))}
-              >
-                {t("close")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </header>
   );
 };
