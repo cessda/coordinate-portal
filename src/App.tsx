@@ -173,8 +173,6 @@ const Root = () => {
       <main id="main">
       
       <span className="is-size-7">
-      {location.search.slice(1)}
-      
     
       
          
