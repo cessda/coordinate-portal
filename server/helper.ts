@@ -87,15 +87,13 @@ const apiClient = Client({
     facet_attributes: [
       {
         attribute: "keywords",
-        //field: "term.normalized",
-        field: "term.raw",
+        field: "term.normalized",
         type: "string",
         nestedPath: "keywords"
       },
       {
         attribute: "classifications",
-        //field: "term.normalized",
-        field: "term.raw",
+        field: "term.normalized",
         type: "string",
         nestedPath: "classifications"
       },
@@ -135,13 +133,11 @@ const apiClient = Client({
         order: 'desc'
       },
       _title_desc: {
-        //field: 'titleStudy.normalized',
-        field: 'titleStudy.raw',
+        field: 'titleStudy.normalized',
         order: 'desc'
       },
       _title_asc: {
-        //field: 'titleStudy.normalized',
-        field: 'titleStudy.raw',
+        field: 'titleStudy.normalized',
         order: 'asc'
       },
       _collection_date_desc: {
@@ -379,12 +375,12 @@ function externalApiV2() {
         break;
       case "titleAscending":
         sort = {
-          'titleStudy.raw': 'asc'
+          'titleStudy.normalized': 'asc'
         };
         break;
       case "titleDescending":
         sort = {
-          'titleStudy.raw': 'desc'
+          'titleStudy.normalized': 'desc'
         };
         break;
       case "dateOfCollectionOldest":
