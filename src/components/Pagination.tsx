@@ -33,9 +33,11 @@ const Pagination = () => {
         lastPageItemAriaLabel: `${t("pagination.lastPage")}`,
         pageItemAriaLabel: ({ currentPage, nbPages }) => `${t("pagination.pageItemAria", { currentPage: currentPage, nbPages: nbPages })}`,
       }}
+      padding={3}
       classNames={{
         root: '',
       }}
+    
     />
   );
 };

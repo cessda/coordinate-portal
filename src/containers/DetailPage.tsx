@@ -146,8 +146,8 @@ const DetailPage = () => {
     <div className="columns">
       
       <div className="column is-3 side-column">
-        {location.state?.from == currentThematicView.path &&
-          <a className="ais-ClearRefinements-button focus-visible pl-0 mb-2"
+        {location.state?.from === currentThematicView.path &&
+          <a className="ais-ClearRefinements-button focus-visible pl-0 mb-3"
             tabIndex={0}
             onClick={() => navigate(-1)}
             onKeyDown={(e) => handleKeyDown(e)}
@@ -170,7 +170,7 @@ const DetailPage = () => {
       <Helmet>
       <link rel="canonical" href={"https://datacatalogue.cessda.eu/detail/" + location.pathname.split('/').slice(-1)[0]} />
       </Helmet>
-      <div className="column is-9">
+      <div className="column is-9 main-column">
    
         <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>

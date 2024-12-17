@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent, useContext } from "react";
+import React, { FocusEvent, useState } from "react";
 import IndexSwitcher from "./IndexSwitcher";
 import ThematicViewSwitcher from "./ThematicViewSwitcher";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,7 +33,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
- // const logoFolder = require.context('../img/logos/', true, /\.(jpe?g|png|gif|svg)$/)
+  // const logoFolder = require.context('../img/logos/', true, /\.(jpe?g|png|gif|svg)$/)
   //const logoImg = currentThematicView.icon;
   const logoImg = require('../img/icons/' + currentThematicView.icon);
   const longTitle = currentThematicView.longTitle;
@@ -57,62 +57,60 @@ const Header = () => {
       refineSortBy(currentLanguage.index);
     }
   }
-
+  const [isActive, setisActive] = React.useState(false);
   return (
     <header>
 
-      <div className="container columns is-vcentered">
+      <div className="container columns is-mobile is-vcentered">
         <div className="column is-narrow">
-        <Link to={currentThematicView.path} className="columns is-vcentered is-gapless">
-          <div className="logo column is-narrow">
-          <img src={ logoImg } alt="Home" />
-             
-             </div>
-              <div className="logo-title column is-narrow">
-                <h1>{currentThematicView.title}</h1>
-              </div>
-              
-            </Link>
-          
+          <Link to={currentThematicView.path} className="columns is-mobile is-vcentered is-gapless">
+            <div className="logo column is-narrow">
+              <img src={logoImg} alt="Home" />
+
+            </div>
+            <div className="logo-title column is-narrow">
+              <h1>{currentThematicView.title}</h1>
+            </div>
+
+          </Link>
+
 
         </div>
-        <div className="column">
-        <ThematicViewSwitcher /> 
+        <div className="column is-narrow p-0">
+          <ThematicViewSwitcher />
         </div>
         <div className="column p-0">
 
-          <div className="columns is-12 is-vcentered mb-0">
-            <div className="column is-narrow has-text-centered-mobile p-0">
+          <div className="columns is-vcentered is-justify-content-end">
+   
+            <nav className="column navbar p-0" aria-label="Main">
 
-              
-              {/* <span className="header-description" dangerouslySetInnerHTML={{ __html: longTitle }}></span> */}
-            </div>
-            <nav className="column navbar has-text-right is-flex-grow-1" aria-label="Main">
-              <div className="is-right">
-                <Link to={currentLanguage.code !== 'en' ? `/?sortBy=${currentLanguage.index}` : "/"}
-                  onClick={() => {
-                    resetQueries();
-                  }}
-                  onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
-                  onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}
-                  className="link-button link is-sr-only is-hidden-mobile">
-                  {t("header.frontPage")}
-                </Link>
-          
+              <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
+               
+
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/documentation` : "/documentation"}
-                  className="link">
+                  className="link navbar-item">
                   {t("documentation.label")}
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/about` : "/about"}
-                  className="link">
+                  className="link navbar-item">
                   {t("about.label")}
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/rest-api` : "/rest-api"}
-                  className="link">
+                  className="link navbar-item">
                   API
-                  </Link>
-                 
+                </Link>
+                </div>
+                <div className="navbar-brand">
+                  <a role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} data-target="navMenu" onClick={() => {
+              setisActive(!isActive);
+            }} aria-label="menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
 
+                  </a>
+                
               </div>
             </nav>
             <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile pb-0">
@@ -192,6 +190,9 @@ const Header = () => {
           </div>
         </div>
       )} */}
+
+
+      
     </header>
   );
 };

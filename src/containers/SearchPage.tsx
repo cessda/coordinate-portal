@@ -113,76 +113,76 @@ const SearchPage = () => {
   };
 
   return (
-    <div className={'columns layout' + (showMobileFilters ? ' show-mobile-filters' : '')}>
+    <div className={'columns layout mt-4' + (showMobileFilters ? ' show-mobile-filters' : '')}>
       <div className="column is-8 is-hidden-tablet">
-        <button className={'button is-info focus-visible' + (!showFilterSummary ? ' on-top' : '')}
+        <button className={'ais-ClearRefinements-button focus-visible' + (!showFilterSummary ? ' on-top' : '')}
           onClick={() => dispatch(toggleMobileFilters(showMobileFilters))}
           onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}>
           {t("showFilters")}
         </button>
       </div>
-      <div className="column is-4 filters">
+      <div className="column is-4 filters pt-0">
         <div className="filter-wrapper">
 
-          <div className="columns is-vcentered is-gapless m-0 is-flex filter-buttons">
+          <div className="columns is-vcentered is-gapless m-0 is-flex is-mobile filter-buttons">
             <div className="column">
               <h3>Filters</h3>
             </div>
-            <div className="column is-narrow columns is-gapless mr-4">
-            <div className="column is-narrow mt-1 mr-2">
-              <button className="ais-ClearRefinements-button focus-visible"
-                onClick={() => dispatch(toggleSummary(showFilterSummary))}
-                onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
-                disabled={!hasRefinements}
-                ref={toggleSummaryRef}>
-                {t("filters.summary.label")}
-              </button>
-              {showFilterSummary && (
-                <div className="modal is-active" data-testid="filter-summary">
-                  <div className="modal-background" />
-                  <div className="modal-card">
-                    <div className="modal-card-head">
-                      <h2 className="modal-card-title">{t("filters.summary.label")}</h2>
-                      <button className="delete focus-visible"
-                        aria-label="close"
-                        onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}
-                        autoFocus data-testid="close-filter-summary" />
-                    </div>
-                    <section className="modal-card-body">
-                      {hasRefinements ? (
-                        <>
-                          <p className="pb-10">{t("filters.summary.introduction")}</p>
-                          <CurrentRefinements />
-                          <p dangerouslySetInnerHTML={{ __html: t('filters.summary.remove') }} />
-                        </>
-                      ) : (
-                        <>
-                          <p className="pb-10">{t("filters.summary.noFilters")}</p>
-                        </>
-                      )}
-                      <p dangerouslySetInnerHTML={{ __html: t('filters.summary.close') }} />
-                    </section>
-                    <div className="modal-card-foot">
-                      <button className="button is-info focus-visible"
-                        onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}>
-                        {t("close")}
-                      </button>
+            <div className="column is-narrow columns is-gapless is-mobile mr-4">
+              <div className="column is-narrow mt-1 mr-2">
+                <button className="ais-ClearRefinements-button focus-visible"
+                  onClick={() => dispatch(toggleSummary(showFilterSummary))}
+                  onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
+                  disabled={!hasRefinements}
+                  ref={toggleSummaryRef}>
+                  {t("filters.summary.label")}
+                </button>
+                {showFilterSummary && (
+                  <div className="modal is-active" data-testid="filter-summary">
+                    <div className="modal-background" />
+                    <div className="modal-card">
+                      <div className="modal-card-head">
+                        <h2 className="modal-card-title">{t("filters.summary.label")}</h2>
+                        <button className="delete focus-visible"
+                          aria-label="close"
+                          onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}
+                          autoFocus data-testid="close-filter-summary" />
+                      </div>
+                      <section className="modal-card-body">
+                        {hasRefinements ? (
+                          <>
+                            <p className="pb-10">{t("filters.summary.introduction")}</p>
+                            <CurrentRefinements />
+                            <p dangerouslySetInnerHTML={{ __html: t('filters.summary.remove') }} />
+                          </>
+                        ) : (
+                          <>
+                            <p className="pb-10">{t("filters.summary.noFilters")}</p>
+                          </>
+                        )}
+                        <p dangerouslySetInnerHTML={{ __html: t('filters.summary.close') }} />
+                      </section>
+                      <div className="modal-card-foot">
+                        <button className="button is-info focus-visible"
+                          onClick={() => { dispatch(toggleSummary(showFilterSummary)); focusToggleSummary(); }}>
+                          {t("close")}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            <div className="column is-narrow mt-1">
-              <ClearRefinements
-                classNames={{
-                  root: '',
-                  button: 'focus-visible',
-                }}
-                translations={{
-                  resetButtonText: t("reset.filters")
-                }}
-              />
-            </div>
+                )}
+              </div>
+              <div className="column is-narrow mt-1">
+                <ClearRefinements
+                  classNames={{
+                    root: '',
+                    button: 'focus-visible',
+                  }}
+                  translations={{
+                    resetButtonText: t("reset.filters")
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className="filter-panels">
@@ -284,15 +284,16 @@ const SearchPage = () => {
           </div>
         </div>
       </div>
-      <div className="column is-8">
+      <div className="column is-8 pt-0">
 
-        <div className="searchwrapper columns is-variable is-1-mobile is-flex mb-0 pb-0">
-          <div className="column is-8 pb-0">
-            <CustomSearchBox />
-          </div>
-          <div className="column is-narrow">
+        <div className="searchwrapper columns is-mobile is-gapless mb-0 pb-0">
+        <div className="column is-narrow">
             <IndexSwitcher />
           </div>
+          <div className="column is-narrow pb-0">
+            <CustomSearchBox />
+          </div>
+          
         </div>
 
 

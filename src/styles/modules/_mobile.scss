@@ -17,8 +17,8 @@
 
     .reset-search {
       background-color: #2b5a9b;
-      max-width:100%;
-      padding:6px 3px;
+      max-width: 100%;
+      padding: 6px 3px;
     }
   }
 }
@@ -51,26 +51,10 @@
 
     .filters {
       display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 99998;
 
-      .filter-buttons {
-        flex-direction: row;
-        justify-content: flex-end;
-
-        .column {
-          display: flex;
-          flex-grow: 0;
-        }
-      }
     }
 
-    .ais-Stats-Dropdowns, .ais-Hits-list, .ais-Pagination, .show-abstract {
-      display: none !important;
-    }
+
   }
 
   .ais-Panel-body .filters .Select-menu-outer {
@@ -85,7 +69,9 @@
   }
 
   .sk-action-bar {
-    .level-left > .level-item, .level > .level-item {
+
+    .level-left>.level-item,
+    .level>.level-item {
       display: none;
     }
 
@@ -111,18 +97,6 @@
   .demo-text-tooltip {
     .dropdown-menu {
       right: -28px !important;
-    }
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .filter-buttons {
-    flex-direction: column !important;
-    align-items: flex-end !important;
-
-    .column:not(:last-child) {
-      margin-right: 0 !important;
-      margin-bottom: 8px !important;
     }
   }
 }

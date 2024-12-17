@@ -377,9 +377,12 @@ const Detail = (props: Props) => {
     return Array.from(uniqueValues);
   }
 
+
+  
+
   return (
     <>
-      <div className="columns is-vcentered">
+      <div className="columns is-gapless is-vcentered mb-0 mt-0">
         <div className="column smalltext">
 
           {item.studyUrl && (
@@ -408,7 +411,7 @@ const Detail = (props: Props) => {
 
         </div>
         <div className="column is-narrow">
-          <div className="columns is-gapless">
+          <div className="columns is-mobile is-gapless">
 
 
             {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
@@ -422,7 +425,7 @@ const Detail = (props: Props) => {
                 aria-label="Export metadata" />
             </div>
             <div className="column is-narrow">
-              <button className="button" onClick={handleExportMetadata} data-testid="export-metadata-button"
+              <button className="button export" onClick={handleExportMetadata} data-testid="export-metadata-button"
                 disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
                 Export metadata
               </button>
@@ -491,7 +494,7 @@ const Detail = (props: Props) => {
 
 
         <div className="main-content">
-          <article className="w-100 mb-4">
+          <article>
             <section className="metadata-section">
               {generateHeading('summary', 'summary-header')}
 
@@ -595,8 +598,11 @@ const Detail = (props: Props) => {
               </>
 
               {generateHeading('country')}
-              {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
 
+              <div className="tags mt-2">
+              {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
+              </div>
+              
               {generateHeading('timeDimension')}
               {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
 

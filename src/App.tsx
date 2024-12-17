@@ -28,6 +28,9 @@ import { languages } from "./utilities/language";
   //stateMapping: simple(),
  //};
 
+
+
+
 const Root = () => {
   const { t } = useTranslation();
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
@@ -170,9 +173,10 @@ const Root = () => {
       <main id="main">
       
       <span className="is-size-7">
-         {/*
+      {location.search.slice(1)}
+      
     Current index: { currentIndex } TV path: { currentThematicView.path }
-      */}
+      
          
          </span>
         <div className="container">
