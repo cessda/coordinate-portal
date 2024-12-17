@@ -175,7 +175,7 @@ const Root = () => {
       <span className="is-size-7">
       {location.search.slice(1)}
       
-    Current index: { currentIndex } TV path: { currentThematicView.path }
+    
       
          
          </span>
