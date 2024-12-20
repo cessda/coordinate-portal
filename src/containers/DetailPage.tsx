@@ -121,6 +121,8 @@ const DetailPage = () => {
     { title: { id: 'title', level: 'subtitle', translation: t("metadata.studyTitle") } },
     { creator: { id: 'creator', level: 'subtitle', translation: t("metadata.creator") } },
     { pid: { id: 'pid', level: 'subtitle', translation: t("metadata.studyPersistentIdentifier") } },
+    { dataAccess: { id: 'data-access', level: 'subtitle', translation: t("metadata.dataAccess") } },
+    { series: { id: 'series', level: 'subtitle', translation: t("metadata.series") } },
     { abstract: { id: 'abstract', level: 'subtitle', translation: t("metadata.abstract") } },
     { methodology: { id: 'methodology', level: 'title', translation: t("metadata.methodology.label") } },
     { collPeriod: { id: 'data-collection-period', level: 'subtitle', translation: t("metadata.dataCollectionPeriod") } },

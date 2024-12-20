@@ -83,7 +83,7 @@ const apiClient = Client({
       { field: "creators", weight: 2 },
       { field: "keywords", weight: 1.5 },
     ],
-    result_attributes: ["titleStudy", "abstract", "creators", "keywords", "classifications", "studyUrl", "langAvailableIn"],
+    result_attributes: ["titleStudy", "abstract", "creators", "keywords", "dataAccess", "langAvailableIn", "studyUrl"],
     facet_attributes: [
       {
         attribute: "keywords",
