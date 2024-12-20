@@ -88,5 +88,19 @@ pipeline {
 			}
 			when { branch 'main' }
 		}
+		stage('Push Docker image') {
+			steps {
+				sh("gcloud auth configure-docker ${ARTIFACT_REGISTRY_HOST}")
+				sh("docker push ${image_tag}")
+				sh("gcloud container images add-tag ${image_tag} ${DOCKER_ARTIFACT_REGISTRY}/${product_name}-${module_name}:${env.BRANCH_NAME}-latest")
+			}
+			when { branch 'main' }
+		}
+		stage('Check Requirements and Deployments') {
+			steps {
+				build job: 'cessda.cdc.deploy/coordinate-portal', parameters: [string(name: 'coordiante_portal_image_tag', value: "${env.BRANCH_NAME}-${env.BUILD_NUMBER}")], wait: false
+			}
+			when { branch 'main' }
+		}
 	}
 }

@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React from "react";
-import { Await, LoaderFunction, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { store } from "../store";
 import { updateMetrics } from "../reducers/search";
 import { useAppSelector } from "../hooks";
@@ -23,22 +23,18 @@ const aboutPages = {
   hummingbird: require('../components//dynamic/pages/aboutPages/HummingbirdAboutPage.tsx').default,
 };
 
-export const metricsLoader: LoaderFunction = async ({ request }) => {
+export const metricsLoader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
- /* const lang = url.searchParams.get("lang");
-  if(lang){
-    store.dispatch(updateLanguage(lang));
-  } */
-  const metrics = await store.dispatch(updateMetrics());
-  return { metrics };
+  return await store.dispatch(updateMetrics());
 };
 
 const AboutPage = () => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const metrics = useLoaderData();
   const DynamicAboutPage = aboutPages[currentThematicView.key as keyof typeof aboutPages];
 
   return (
-    <DynamicAboutPage />
+    <DynamicAboutPage metrics={metrics} />
   );
 };
 

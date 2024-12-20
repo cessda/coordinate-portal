@@ -129,7 +129,6 @@ const Detail = (props: Props) => {
     date2?: string,
     dateFallback?: DataCollectionFreeText[]
   ): JSX.Element | JSX.Element[] {
-    const { t } = useTranslation();
     if (!date1 && !date2 && !dateFallback) {
       return <span>{t("language.notAvailable.field")}</span>;
     }
