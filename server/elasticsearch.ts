@@ -24,7 +24,7 @@ import { CMMStudy, Metrics } from "../common/metadata";
 import { logger } from "./logger";
 
 export default class Elasticsearch {
-  private readonly indexName = "coordinate";
+  private readonly indexName = "cmmstudy";
 
   public readonly client: Client;
 
@@ -75,12 +75,12 @@ export default class Elasticsearch {
   }
 
   /**
-   * Gets related publications from all indices (except excluded) for one study.
+   * Gets related publications from all indices for one study (except currently selected since they are already included).
    * @param id the identifier of the study.
    * @param sizeMax max number of related publications.
-   * @param excludeIndex optionally exclude results from an index.
+   * @param index exclude results from given index and use first part of name to query from all others with the same name.
    */
-  async getRelatedPublications(id: string, sizeMax: number, excludeIndex?: string) {
+  async getRelatedPublications(id: string, sizeMax: number, index: string) {
     const boolQuery: QueryDslBoolQuery = {
       must: [
         {
@@ -91,20 +91,18 @@ export default class Elasticsearch {
       ]
     }
 
-    if (excludeIndex) {
-      boolQuery.must_not = [
-        {
-          term: {
-            _index: excludeIndex
-          }
+    boolQuery.must_not = [
+      {
+        term: {
+          _index: index
         }
-      ];
-    }
+      }
+    ];
 
     const response = await this.client.search<CMMStudy>({
       size: sizeMax,
       _source: ['relatedPublications'],
-      index: `${this.indexName}_*`,
+      index: `${index.split('_')[0]}_*`,
       query: {
         bool: boolQuery
       }
@@ -145,8 +143,7 @@ export default class Elasticsearch {
   /**
    * Gets metrics for About page.
    * 
-   * @param index the index to retrieve the metrics from. Defaults to all coordinate
-   * indices if not set.
+   * @param index the index to retrieve the metrics from. Defaults to cmmstudy if not given.
    */
   async getAboutMetrics(index = `${this.indexName}_*`): Promise<Metrics> {
     const response = await this.client.search<unknown, { 
