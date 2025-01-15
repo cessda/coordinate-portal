@@ -83,19 +83,17 @@ const apiClient = Client({
       { field: "creators", weight: 2 },
       { field: "keywords", weight: 1.5 },
     ],
-    result_attributes: ["titleStudy", "abstract", "creators", "keywords", "classifications", "studyUrl", "langAvailableIn"],
+    result_attributes: ["titleStudy", "abstract", "creators", "keywords", "dataAccess", "langAvailableIn", "studyUrl"],
     facet_attributes: [
       {
         attribute: "keywords",
-        //field: "term.normalized",
-        field: "term.raw",
+        field: "term.normalized",
         type: "string",
         nestedPath: "keywords"
       },
       {
         attribute: "classifications",
-        //field: "term.normalized",
-        field: "term.raw",
+        field: "term.normalized",
         type: "string",
         nestedPath: "classifications"
       },
@@ -135,13 +133,11 @@ const apiClient = Client({
         order: 'desc'
       },
       _title_desc: {
-        //field: 'titleStudy.normalized',
-        field: 'titleStudy.raw',
+        field: 'titleStudy.normalized',
         order: 'desc'
       },
       _title_asc: {
-        //field: 'titleStudy.normalized',
-        field: 'titleStudy.raw',
+        field: 'titleStudy.normalized',
         order: 'asc'
       },
       _collection_date_desc: {
@@ -215,13 +211,32 @@ function getSearchkitRouter() {
 
       // Get similars
       if (source?.titleStudy) {
-        similars = await elasticsearch.getSimilars(
-          source?.titleStudy,
-          req.params.id,
-          req.params.index
-        );
+        similars = await elasticsearch.getSimilars(source?.titleStudy, req.params.id, req.params.index);
       } else {
         similars = [];
+      }
+
+      if(source){
+        let otherLangPublications: Awaited<ReturnType<typeof elasticsearch.getRelatedPublications>> = [];
+        try {
+          // Get related publications from all other indices
+          otherLangPublications = await elasticsearch.getRelatedPublications(req.params.id, 1000, req.params.index);
+        } catch (e) {
+          elasticsearchErrorHandler(e, res);
+        }
+
+        const selectedLang = req.params.index.split('_')[1];
+        if(source.relatedPublications){
+          // Add lang to the related publications of selected language
+          source.relatedPublications.forEach(publication => {
+            publication.lang = selectedLang;
+          });
+          // Add related publications in other languages
+          source.relatedPublications.push(...otherLangPublications);
+        } else {
+          // Replace original relatedPublications with related publications found in other languages
+          source.relatedPublications = otherLangPublications;
+        }
       }
 
       // Send the response
@@ -379,12 +394,12 @@ function externalApiV2() {
         break;
       case "titleAscending":
         sort = {
-          'titleStudy.raw': 'asc'
+          'titleStudy.normalized': 'asc'
         };
         break;
       case "titleDescending":
         sort = {
-          'titleStudy.raw': 'desc'
+          'titleStudy.normalized': 'desc'
         };
         break;
       case "dateOfCollectionOldest":

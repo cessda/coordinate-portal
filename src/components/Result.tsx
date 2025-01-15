@@ -12,12 +12,7 @@
 // limitations under the License.
 
 import React, { useEffect, useState } from "react";
-import {
-  FaAngleDown,
-  FaAngleUp,
-  FaExternalLinkAlt,
-  FaLanguage,
-} from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt, FaLanguage, FaLock, FaLockOpen } from 'react-icons/fa';
 import { Link, useLocation } from "react-router-dom";
 import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
 import shuffleArray from "../utilities/shuffleArray";
@@ -85,7 +80,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
     languages.push(
       <Link
         key={i}
-        className="button is-small is-white"
+        className="button is-small is-white mln-5"
         to={`/detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
         onClick={() => dispatch(updateLanguage(hit.langAvailableIn[i]))}
       >
@@ -212,7 +207,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
             {languages.length > 0 && (
               <div className="control">
                 <div className="buttons has-addons">
-                  <span className="button no-border bg-w pe-none">
+                  <span className="button no-border bg-w pe-none mrn-5">
                     <span className="icon is-small">
                       <FaLanguage />
                     </span>
@@ -222,6 +217,25 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
                 </div>
               </div>
             )}
+            {hit.dataAccess &&
+              <div>
+                <span className="button is-small is-white bg-w pe-none mrn-5">
+                  {hit.dataAccess === "Open" ? (
+                    <span className="icon is-small">
+                      <FaLockOpen/>
+                    </span>
+                  ) : (
+                    <span className="icon is-small">
+                      <FaLock/>
+                    </span>
+                  )}
+                  <span>{t("metadata.dataAccess")}:</span>
+                </span>
+                <span className="button is-small is-white bg-w pe-none mln-5">
+                  {hit.dataAccess}
+                </span>
+              </div>
+            }
             <div className="control">
               {hit.studyUrl && (
                 <a

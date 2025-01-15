@@ -5,6 +5,7 @@
     "notAvailable": {
       "title": "Not found",
       "field": "Not available",
+      "information": "Information not available",
       "heading": "The requested data was not found.",
       "content": "It may not exist or is not available in the selected language. Choose an alternative language or start a new search.",
       "alternateLanguage": "The study description is available in the following languages"
@@ -237,7 +238,9 @@
         "ariaLabel": "Tooltip button for Keywords"
       }
     },
-    "relatedPublications": "Related publications"
+    "relatedPublications": "Related publications",
+    "dataAccess": "Data access",
+    "series": "Series"
   },
   "header": {
     "frontPage": "Front/search page",

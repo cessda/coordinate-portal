@@ -208,6 +208,11 @@ select::-ms-expand {
   max-width: 100%;
 }
 
+.orcid-logo {
+  transform: translateY(-2px);
+  vertical-align: middle;
+}
+
 :focus-visible,
 .focus-visible:focus-visible,
 .is-focused:focus-visible,

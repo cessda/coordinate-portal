@@ -48,11 +48,6 @@ export const thematicViews: readonly ThematicView[] = [
           language: 'Dutch'
         },
         {
-          indexName: 'cmmstudy_sk',
-          languageCode: 'sk',
-          language: 'Slovakian'
-        },
-        {
           indexName: 'cmmstudy_sv',
           languageCode: 'sv',
           language: 'Swedish'
@@ -97,11 +92,6 @@ export const thematicViews: readonly ThematicView[] = [
           language: 'French'
         },
         {
-          indexName: 'coordinate_nl',
-          languageCode: 'nl',
-          language: 'Dutch'
-        },
-        {
           indexName: 'coordinate_no',
           languageCode: 'no',
           language: 'Norwegian'
@@ -110,11 +100,6 @@ export const thematicViews: readonly ThematicView[] = [
           indexName: 'coordinate_sl', 
           languageCode: 'sl',
           language: 'Slovenian'
-        },
-        {
-          indexName: 'coordinate_sk',
-          languageCode: 'sk',
-          language: 'Slovakian'
         },
         {
           indexName: 'coordinate_sv',
@@ -126,7 +111,7 @@ export const thematicViews: readonly ThematicView[] = [
   {
     "key": "hummingbird",
     "path": "/hummingbird",
-    "defaultIndex": "cmmstudy_en",
+    "defaultIndex": "hummingbird_en",
     "title": "HumMingBird",
     "longTitle": "HumMingBird",
     "rootClass": "hummingbird",
@@ -136,44 +121,9 @@ export const thematicViews: readonly ThematicView[] = [
     "esIndexes":
       [
         {
-          indexName: 'cmmstudy_de',
-          languageCode: 'de',
-          language: 'German'
-        },
-        {
-          indexName: 'cmmstudy_el',
-          languageCode: 'el',
-          language: 'Greek'
-        },
-        {
-          indexName: 'cmmstudy_en',
+          indexName: 'hummingbird_en',
           languageCode: 'en',
           language: 'English'
-        },
-        {
-          indexName: 'cmmstudy_fi',
-          languageCode: 'fi',
-          language: 'Finnish'
-        },
-        {
-          indexName: 'cmmstudy_fr',
-          languageCode: 'fr',
-          language: 'French'
-        },
-        {
-          indexName: 'cmmstudy_nl',
-          languageCode: 'nl',
-          language: 'Dutch'
-        },
-        {
-          indexName: 'cmmstudy_sk',
-          languageCode: 'sk',
-          language: 'Slovakian'
-        },
-        {
-          indexName: 'cmmstudy_sv',
-          languageCode: 'sv',
-          language: 'Swedish'
         }
       ]
   },

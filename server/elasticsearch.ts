@@ -20,12 +20,11 @@ import {
   SearchHitsMetadata
 } from "@elastic/elasticsearch/lib/api/types";
 import _ from "lodash";
-import { CMMStudy } from "../common/metadata";
+import { CMMStudy, Metrics } from "../common/metadata";
 import { logger } from "./logger";
 
-
 export default class Elasticsearch {
-  private readonly indexName = "coordinate";
+  private readonly indexName = "cmmstudy";
 
   public readonly client: Client;
 
@@ -76,12 +75,12 @@ export default class Elasticsearch {
   }
 
   /**
-   * Gets related publications from all indices (except excluded) for one study.
+   * Gets related publications from all indices for one study (except currently selected since they are already included).
    * @param id the identifier of the study.
    * @param sizeMax max number of related publications.
-   * @param excludeIndex optionally exclude results from an index.
+   * @param index exclude results from given index and use first part of name to query from all others with the same name.
    */
-  async getRelatedPublications(id: string, sizeMax: number, excludeIndex?: string) {
+  async getRelatedPublications(id: string, sizeMax: number, index: string) {
     const boolQuery: QueryDslBoolQuery = {
       must: [
         {
@@ -89,23 +88,20 @@ export default class Elasticsearch {
             _id: id
           }
         }
-      ]
-    }
-
-    if (excludeIndex) {
-      boolQuery.must_not = [
+      ],
+      must_not: [
         {
           term: {
-            _index: excludeIndex
+            _index: index
           }
         }
-      ];
+      ]
     }
 
     const response = await this.client.search<CMMStudy>({
       size: sizeMax,
       _source: ['relatedPublications'],
-      index: `${this.indexName}_*`,
+      index: `${index.split('_')[0]}_*`,
       query: {
         bool: boolQuery
       }
@@ -144,67 +140,54 @@ export default class Elasticsearch {
   }
 
   /**
-   * Gets metrics for About page. Index not currently used but could be used
-   * to get metrics just for the selected index.
-   * @param index the index to retrieve the metrics from.
+   * Gets metrics for About page.
+   * 
+   * @param index the index to retrieve the metrics from. Defaults to cmmstudy if not given.
    */
-  async getAboutMetrics(index: string) {
-    const studiesResponse = await this.client.search({
+  async getAboutMetrics(index = `${this.indexName}_*`): Promise<Metrics> {
+    const response = await this.client.search<unknown, { 
+      unique_id: AggregationsCardinalityAggregate, 
+      total_creators: AggregationsCardinalityAggregate,
+      total_countries: AggregationsNestedAggregate & {
+        unique_countries: AggregationsCardinalityAggregate;
+      }
+    }>({
       size: 0,
-      //index: `${this.indexName}_*`,
-      index: `${index.split('_')[0]}_*`,
-      body: {
-        query: { match_all: {} },
-        aggs: {
-          unique_id: {
-            cardinality: {
-              field: "id",
-            },
+      index: index,
+      runtime_mappings: {
+        creators_name_keyword: {
+          type: 'keyword',
+          script: {
+            source: `
+              if (params['_source'].creators != null) {
+                for (creator in params['_source'].creators) {
+                  if (creator.name != null) emit(creator.name);
+                }
+              }
+            `
+          }
+        }
+      },
+      query: { match_all: {} },
+      aggs: {
+        unique_id: {
+          cardinality: {
+            field: "id",
           },
         },
-      },
-    });
-
-    const totalStudies = (studiesResponse.aggregations?.unique_id as AggregationsCardinalityAggregate).value;
-
-    const creatorsResponse = await this.client.search({
-      size: 0,
-      index: `${this.indexName}_*`,
-      body: {
-        aggs: {
-          total_creators: {
-            nested: {
-              path: 'creators'
-            },
-            aggs: {
-              unique_creators: {
-                cardinality: {
-                  field: 'creators.name.normalized'
-                }
-              }
-            }
+        total_creators: {
+          cardinality: {
+            field: "creators_name_keyword"
           }
-        }
-      }
-    });
-
-    const totalCreators = (creatorsResponse.aggregations?.unique_creators as AggregationsCardinalityAggregate).value;
-
-    const countriesResponse = await this.client.search({
-      size: 0,
-      index: `${this.indexName}_*`,
-      body: {
-        query: { match_all: {} },
-        aggs: {
-          total_countries: {
-            nested: {
-              path: "studyAreaCountries"
-            },
-            aggs: {
-              unique_countries: {
-                cardinality: {
-                  field: 'studyAreaCountries.abbr'
-                }
+        },
+        total_countries: {
+          nested: {
+            path: "studyAreaCountries"
+          },
+          aggs: {
+            unique_countries: {
+              cardinality: {
+                field: 'studyAreaCountries.abbr'
               }
             }
           }
@@ -212,7 +195,9 @@ export default class Elasticsearch {
       },
     });
 
-    const totalCountries = ((countriesResponse.aggregations?.total_countries as AggregationsNestedAggregate).unique_countries as AggregationsCardinalityAggregate).value;
+    const totalStudies = response.aggregations?.unique_id.value || 0;
+    const totalCreators = response.aggregations?.total_creators.value || 0;
+    const totalCountries = response.aggregations?.total_countries.unique_countries?.value || 0;
   
     return {studies: totalStudies, creators: totalCreators, countries: totalCountries};
   }

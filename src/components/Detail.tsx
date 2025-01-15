@@ -36,6 +36,8 @@ import { HeadingEntry } from "../containers/DetailPage";
 import Select from 'react-select';
 import { useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
+import SeriesList from './SeriesList';
+import OrcidLogo from "./OrcidLogo";
 
 export interface Props {
   item: CMMStudy;
@@ -127,7 +129,6 @@ const Detail = (props: Props) => {
     date2?: string,
     dateFallback?: DataCollectionFreeText[]
   ): JSX.Element | JSX.Element[] {
-    const { t } = useTranslation();
     if (!date1 && !date2 && !dateFallback) {
       return <span>{t("language.notAvailable.field")}</span>;
     }
@@ -339,16 +340,24 @@ const Detail = (props: Props) => {
         {creator.identifier && (
           <>
             {" - "}
-            {creator.identifier.type ? creator.identifier.type : "Research Identifier"}
-            {": "}
-            {creator.identifier.uri ? (
-              <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
-                <span className="icon"><FaExternalLinkAlt /></span>
-                {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
-              </a>
-            ) : (
-              creator.identifier.id
-            )}
+            <span className="is-inline-block">
+              {creator.identifier.type?.toLowerCase() !== "orcid" &&
+                <>
+                  {creator.identifier.type || "Research Identifier"}{": "}
+                </>
+              }
+              {creator.identifier.uri ? (
+                <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
+                  {creator.identifier.type?.toLowerCase() === "orcid" &&
+                    <OrcidLogo />
+                  }
+                  <span className="icon"><FaExternalLinkAlt /></span>
+                  {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
+                </a>
+              ) : (
+                creator.identifier.id
+              )}
+            </span>
           </>
         )}
       </span>
@@ -516,6 +525,12 @@ const Detail = (props: Props) => {
                   return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
                 }
               )}
+
+              {generateHeading('dataAccess')}
+              <p>{item.dataAccess || t("language.notAvailable.information")}</p>
+
+              {generateHeading('series')}
+              <SeriesList seriesList={item.series} lang={currentLanguage.code} />
 
               {generateHeading('abstract')}
               {abstractExpanded ? (
