@@ -1,10 +1,4 @@
-$cdc_primary_highlight: #0b6098;
-$cdc_secondary_highlight: #1b9aee;
-$cdc_text: #49626f;
 
-$coordinate_primary_highlight: #1f8481;
-$coordinate_secondary_highlight: #b7b18a;
-$coordinate_text: #6c757d;
 
 @media screen and (min-width: 990px) {
   header h1 {
@@ -439,9 +433,7 @@ body {
     background-color: hsl(25, 95%, 92%);
   }
 
-  main {
-    background-color: hsl(201, 20%, 96%);
-  }
+
 
   .view-selector .react-select__option:hover {
     cursor: pointer;
@@ -460,56 +452,5 @@ body {
 
   color: $cdc_text;
 
-
-}
-
-body.cdc {
-  a {
-    color: $cdc_primary_highlight;
-  }
-}
-
-body.coordinate {
-  a {
-    color: $coordinate_primary_highlight;
-  }
-
-  mark {
-    background-color: hsl(52 80% 80%);
-  }
-
-  .button.is-info,
-  fieldset .button.is-info {
-    color: hsl(178, 5%, 10%);
-    font-weight: 700;
-    background-color: transparent;
-  }
-
-  .switch[type=checkbox].is-info:checked+label::before,
-  .switch[type=checkbox].is-info:checked+label:before {
-    background: $coordinate_secondary_highlight;
-  }
-
-  main {
-    background-color: hsl(178, 5%, 96%);
-  }
-
-  .view-selector .react-select__option:hover {
-    cursor: pointer;
-    background-color: hsl(178, 20%, 95%);
-  }
-
-  .view-selector .react-select__option--is-selected {
-    background-color: hsl(178, 20%, 95%);
-    color: $coordinate_text;
-  }
-
-
-  header h1 {
-
-    color: $coordinate_text;
-  }
-
-  color: $coordinate_text;
 
 }

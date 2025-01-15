@@ -62,7 +62,7 @@ const Header = () => {
     <header>
 
       <div className="container columns is-mobile is-vcentered">
-        <div className="column is-narrow">
+        <div className="column is-narrow p-1">
           <Link to={currentThematicView.path} className="columns is-mobile is-vcentered is-gapless">
             <div className="logo column is-narrow">
               <img src={logoImg} alt="Home" />
@@ -81,9 +81,9 @@ const Header = () => {
         </div>
         <div className="column p-0">
 
-          <div className="columns is-vcentered is-justify-content-end">
+          <div className="columns is-vcentered is-justify-content-end p-0">
    
-            <nav className="column navbar p-0" aria-label="Main">
+            <nav className="column navbar is-narrow p-0" aria-label="Main">
 
               <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
                
@@ -113,7 +113,7 @@ const Header = () => {
                 
               </div>
             </nav>
-            <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile pb-0">
+            <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile p-0">
               <a href="#main" id="skip-to-main" className="link is-sr-only"
                 onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
                 onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>
