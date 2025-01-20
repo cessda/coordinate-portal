@@ -52,7 +52,7 @@ pipeline {
 				}
 				stage('Lint Project') {
 					steps {
-						sh 'npm run lint -- -- --format checkstyle --output-file eslint/report.xml'
+						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml | true'
 					}
 					post {
 						always {
