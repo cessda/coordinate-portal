@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 // Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -92,6 +93,7 @@ it("renders JSON-LD script for the study", async () => {
 
 it("renders available languages if no study found with selected language", async () => {
   // Override the mock for this specific test using jest.spyOn
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const useLoaderDataSpy = jest.spyOn(require('react-router-dom'), 'useLoaderData');
   
   // Mock the return value for this test

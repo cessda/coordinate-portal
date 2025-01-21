@@ -85,6 +85,7 @@ async function languageGauges(esClient: Elasticsearch) {
       const currentValue = await esClient.getRecordCountByLanguage(result) || 0;
       languageGauge.set({ language: result }, currentValue);
     }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch(e) {
     // retry after 5 seconds if ES is not available
     setTimeout(() => languageGauges(esClient), 5000);
@@ -100,6 +101,7 @@ async function endpointGauges(esClient: Elasticsearch) {
     for (const result of endpoints) {
       endpointGauge.set({ endpoint: result.key }, result.doc_count);
     }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch(e) {
     // retry after 5 seconds if ES is not available
     setTimeout(() => endpointGauges(esClient), 5000);
