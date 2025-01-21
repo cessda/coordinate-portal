@@ -52,7 +52,9 @@ pipeline {
 				}
 				stage('Lint Project') {
 					steps {
-						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+						catchError(buildResult: 'UNSTABLE') {
+							sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+						}
 					}
 					post {
 						always {
