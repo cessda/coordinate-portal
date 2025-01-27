@@ -40,27 +40,20 @@ const IndexSwitcher = () => {
     includedAttributes: resetAttributes
   });
 
-  const esIndexOptions: ESIndexOption[] = thematicView.currentThematicView.esIndexes.map((lang: esIndex) => ({
-    label: lang.language,
-    indexName: lang.indexName,
-    value: { path: thematicView.currentThematicView.path, esIndex: lang.indexName }
+  const esIndexOptions: ESIndexOption[] = thematicView.currentThematicView.esIndexes.map((esIndex: esIndex) => ({
+    label: esIndex.language,
+    indexName: esIndex.indexName,
+    value: { path: thematicView.currentThematicView.path, esIndex: esIndex }
   }));
 
   const changeIndex = (value: any) => {
- /*   if (location.pathname === '/') {
-      // Reset filters that don't work in another language
+
       resetFiltersFromArray();
-    } else {
-      setSearchParams(searchParams => {
-        searchParams.set("lang", value);
-        return searchParams;
-      });
-    }
-      */
         dispatch(updateThematicView(value));
   }
   
-const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex ) as ESIndexOption).label;
+const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName ) as ESIndexOption).label;
+
   return (
     
     <div className="language-picker">

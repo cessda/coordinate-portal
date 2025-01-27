@@ -18,7 +18,6 @@ import { history } from "instantsearch.js/es/lib/routers";
 import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
 import { thematicViews } from "./utilities/thematicViews";
-import { languages } from "./utilities/language";
 
 
 // Use simple router to easily check keys for various instantsearch components
@@ -42,8 +41,8 @@ const Root = () => {
   
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
-  languages.forEach(language => {
-    const sortByItems = getSortByItems(language.index, t);
+  currentThematicView.esIndexes.forEach(esIndex => {
+    const sortByItems = getSortByItems(esIndex.indexName, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
 
@@ -107,7 +106,7 @@ const Root = () => {
     }),
     stateMapping: {
       stateToRoute(uiState: any) {
-        const indexUiState = uiState[currentIndex] || {};
+        const indexUiState = uiState[currentIndex.indexName] || {};
         return {
           query: indexUiState.query,
           classifications: indexUiState.refinementList?.classifications,
@@ -126,7 +125,7 @@ const Root = () => {
       },
       routeToState(routeState: any) {
         return {
-          [currentIndex]: {
+          [currentIndex.indexName]: {
             query: routeState.query,
             refinementList: {
               classifications: routeState.classifications,
@@ -153,11 +152,12 @@ const Root = () => {
   return ( 
     
     <InstantSearch searchClient={searchClient}
-                  indexName={currentIndex}
+                  indexName={currentIndex.indexName}
                   // routing can't use updated values from redux store when key is null
                   // Could use index as key to make sure everything is always perfect and store values could be used but
                   // then it re-renders even when not really needed (like switching language on detail page)
-                  //key={key}
+                  // OC 24.01.2025: Using key since switching description language from search result or detail page no longer triggers index switch. 
+                  key={currentIndex.indexName}
                   routing={routing}
                  // routing={true}
                   future={{
@@ -171,14 +171,7 @@ const Root = () => {
       <Header />
       
       <main id="main">
-      
-      <span className="is-size-7">
-      {/*  location.search.slice(1) */}
-      {/*  currentIndex */}
-      {/*  currentThematicView.path */}
-      
-         
-         </span>
+    
         <div className="container">
         <ScrollRestoration />
         {locationHook.pathname !== currentThematicView.path &&

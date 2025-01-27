@@ -4,6 +4,7 @@ import { useAppSelector } from "../hooks";
 const footers = {
   cdc: require('./dynamic/footers/CdcFooter.tsx').default,
   coordinate: require('./dynamic/footers/CoordinateFooter.tsx').default,
+  covid: require('./dynamic/footers/CovidFooter.tsx').default,
   hummingbird: require('./dynamic/footers/HummingbirdFooter.tsx').default
 };
 

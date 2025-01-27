@@ -20,6 +20,7 @@ import { useAppSelector } from "../hooks";
 const aboutPages = {
   cdc: require('../components/dynamic/pages/aboutPages/CdcAboutPage.tsx').default,
   coordinate: require('../components//dynamic/pages/aboutPages/CoordinateAboutPage.tsx').default,
+  covid: require('../components//dynamic/pages/aboutPages/CovidAboutPage.tsx').default,
   hummingbird: require('../components//dynamic/pages/aboutPages/HummingbirdAboutPage.tsx').default,
 };
 

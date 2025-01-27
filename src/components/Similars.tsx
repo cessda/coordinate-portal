@@ -24,7 +24,7 @@ export interface Props {
 const Similars = (props: Props) => {
   const { t } = useTranslation();
   const similars = props.similars;
-  const currentLanguageCode = useAppSelector((state) => state.language.currentLanguage.code);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const viewPrefix = currentThematicView.path === "/" ? "" : currentThematicView.path;
   const links: JSX.Element[] = [];
@@ -33,7 +33,7 @@ const Similars = (props: Props) => {
     // Construct the similar URL
     links.push(
       
-      <Link key={i} to={viewPrefix + "/detail/" + similars[i].id} lang={currentLanguageCode}>
+      <Link key={i} to={viewPrefix + "/detail/" + similars[i].id} lang={currentIndex.languageCode}>
         {similars[i].title}
       </Link>
     );

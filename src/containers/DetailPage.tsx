@@ -18,11 +18,9 @@ import { useTranslation } from "react-i18next";
 import { updateStudy } from "../reducers/detail";
 import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { store } from "../store";
-import DetailIndex from "../components/DetailIndex";
 import { Funding, getJsonLd } from '../../common/metadata';
 import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
-import { updateLanguage } from "../reducers/language";
 import { useAppSelector } from "../hooks";
 import { Helmet } from "react-helmet-async";
 
@@ -39,10 +37,12 @@ export type HeadingEntry = {
 export const studyLoader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang");
-  if (lang) {
-    store.dispatch(updateLanguage(lang));
-  }
-  const data = await store.dispatch(updateStudy(`${params.id}`));
+ if (lang) {
+    //store.dispatch(updateLanguage(lang));
+    //console.log(lang);
+  } 
+
+  const data = await store.dispatch(updateStudy({id: params.id as string, lang: lang as string}));
   return { data };
 };
 
@@ -171,6 +171,7 @@ const DetailPage = () => {
       </div>
       <Helmet>
       <link rel="canonical" href={"https://datacatalogue.cessda.eu/detail/" + location.pathname.split('/').slice(-1)[0]} />
+ 
       </Helmet>
       <div className="column is-9 main-column">
    

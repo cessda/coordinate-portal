@@ -19,7 +19,6 @@ import shuffleArray from "../utilities/shuffleArray";
 // import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { updateLanguage } from "../reducers/language";
 import Keywords from "./Keywords";
 
 function generateCreatorElements(item: CMMStudy) {
@@ -57,8 +56,8 @@ interface ResultProps {
 const Result: React.FC<ResultProps> = ({ hit }) => {
   const { t } = useTranslation();
   const location = useLocation();
-
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+//  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const showAbstract = useAppSelector((state) => state.search.showAbstract);
   const showKeywords = useAppSelector((state) => state.search.showKeywords);
   const dispatch = useAppDispatch();
@@ -81,10 +80,11 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
       <Link
         key={i}
         className="button is-small is-white mln-5"
-        to={`/detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
-        onClick={() => dispatch(updateLanguage(hit.langAvailableIn[i]))}
+        
+        to={`detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
+        state={{ from: location.pathname }}
       >
-        {hit.langAvailableIn[i]}
+        {hit.langAvailableIn[i].toUpperCase()}
       </Link>
     );
   }
@@ -153,9 +153,10 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
 
   return (
     <div className="list-hit" data-qa="hit">
+   
       <h2 className="title is-6">
         <Link className="focus-visible"
-          to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
+          to={`detail/${hit.objectID}?lang=${currentIndex.languageCode}`}
           state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>
@@ -169,7 +170,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
       {showKeywords && shuffledKeywords.length > 0 &&
         <div className="result-keywords mt-10">
           <Keywords keywords={shuffledKeywords} keywordLimit={truncatedKeywordsLength}
-            lang={currentLanguage.code} isExpandDisabled={true} />
+            lang={currentIndex.languageCode} isExpandDisabled={true} />
         </div>
       }
       <span className="level mt-10 result-actions">

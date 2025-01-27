@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { truncate, upperFirst } from "lodash";
 import {
   CMMStudy,
@@ -54,17 +54,19 @@ interface Option {
   label: string;
 }
 
+
+
 const Detail = (props: Props) => {
   const { t } = useTranslation();
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
 
   const item = props.item;
   const headings = props.headings;
   const truncatedAbstractLength = 2000;
   const truncatedKeywordsLength = 12;
 
+
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
-  const [infoBoxExpanded, setInfoBoxExpanded] = useState(props.item.keywords.length < truncatedKeywordsLength);
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
@@ -90,7 +92,7 @@ const Detail = (props: Props) => {
     omitLang?: boolean
   ) {
     const elements: JSX.Element[] = [];
-    const lang = currentLanguage.code;
+    const lang = currentIndex.languageCode;
 
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
@@ -249,7 +251,7 @@ const Detail = (props: Props) => {
       switch (selectedExportMetadataOption.value) {
         case 'json': {
           // Fetch the JSON data from the API
-          const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`);
+          const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`);
 
           if (jsonResponse.ok) {
             exportData = JSON.stringify(await jsonResponse.json(), null, 2)
@@ -385,10 +387,29 @@ const Detail = (props: Props) => {
     });
     return Array.from(uniqueValues);
   }
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dispLang = searchParams.get("lang") || currentIndex.languageCode;
 
+  const languageLinks: JSX.Element[] = [];
 
-  
-
+  if (item.langAvailableIn.length > 1) {
+  for (let i = 0; i < item?.langAvailableIn.length; i++) {
+    const lang = item.langAvailableIn[i].toLowerCase();
+    if (dispLang != lang) {
+      languageLinks.push(
+        <Link key={lang} className="button is-small mt-3 mr-1" to={`${location.pathname}?lang=${lang}`}>
+          {lang.toUpperCase()}
+        </Link>
+      );
+    } else {
+      languageLinks.push(
+        <span className="button is-small is-static mt-3 mr-1">
+          {lang.toUpperCase()}
+        </span>
+      );
+    }
+  }
+}
   return (
     <>
       <div className="columns is-gapless is-vcentered mb-0 mt-0">
@@ -410,7 +431,7 @@ const Detail = (props: Props) => {
           )}
           &nbsp;  &nbsp;
           <a
-            href={`/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`}
+            href={`/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`}
             rel="noreferrer"
             target="_blank">
             <span className="icon is-small"><FaCode /></span>
@@ -482,7 +503,7 @@ const Detail = (props: Props) => {
           <div className="tags mt-2">
             {generateElements(item.classifications, "tag",
               (classifications) => (
-                <Link to={`/?sortBy=${currentLanguage.index}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                   {upperFirst(classifications.term)}
                 </Link>
               )
@@ -495,7 +516,7 @@ const Detail = (props: Props) => {
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{container: 'mt-1 ml-1'}}/>
           <div className="tags mt-2">
-            <Keywords keywords={item.keywords} keywordLimit={12} lang={currentLanguage.code}/>
+            <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode}/>
           </div>
         </section>
       </div>
@@ -505,6 +526,8 @@ const Detail = (props: Props) => {
         <div className="main-content">
           <article>
             <section className="metadata-section">
+
+              {languageLinks}
               {generateHeading('summary', 'summary-header')}
 
               {generateHeading('title', 'mt-5')}
@@ -530,7 +553,7 @@ const Detail = (props: Props) => {
               <p>{item.dataAccess || t("language.notAvailable.information")}</p>
 
               {generateHeading('series')}
-              <SeriesList seriesList={item.series} lang={currentLanguage.code} />
+              <SeriesList seriesList={item.series} lang={currentIndex.languageCode} />
 
               {generateHeading('abstract')}
               {abstractExpanded ? (
@@ -579,7 +602,7 @@ const Detail = (props: Props) => {
               <div className="tags mt-2">
                 {generateElements(item.classifications, "tag",
                   (classifications) => (
-                    <Link to={`/?sortBy=${currentLanguage.index}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                    <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                       {upperFirst(classifications.term)}
                     </Link>
                   )
@@ -593,7 +616,7 @@ const Detail = (props: Props) => {
                 ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                 classNames={{ container: 'mt-1 ml-1' }} />
               <div className="tags mt-2">
-                <Keywords keywords={item.keywords} keywordLimit={12} lang={currentLanguage.code} />
+                <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} />
               </div>
             </section>
 
@@ -615,9 +638,9 @@ const Detail = (props: Props) => {
               {generateHeading('country')}
 
               <div className="tags mt-2">
-              {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
+                {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
               </div>
-              
+
               {generateHeading('timeDimension')}
               {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
 
@@ -656,7 +679,7 @@ const Detail = (props: Props) => {
                     {funding.agency &&
                       <>
                         {generateHeading(`funder-${index}`)}
-                        <p lang={currentLanguage.code}>
+                        <p lang={currentIndex.languageCode}>
                           {funding.agency}
                         </p>
                       </>
@@ -664,7 +687,7 @@ const Detail = (props: Props) => {
                     {funding.grantNumber &&
                       <>
                         {generateHeading(`grantNumber-${index}`)}
-                        <p lang={currentLanguage.code}>
+                        <p lang={currentIndex.languageCode}>
                           {funding.grantNumber}
                         </p>
                       </>

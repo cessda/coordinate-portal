@@ -18,14 +18,9 @@ export const thematicViews: readonly ThematicView[] = [
     "esIndexes":
       [
         {
-          indexName: 'cmmstudy_de',
-          languageCode: 'de',
-          language: 'German'
-        },
-        {
-          indexName: 'cmmstudy_el',
-          languageCode: 'el',
-          language: 'Greek'
+          indexName: 'cmmstudy_nl',
+          languageCode: 'nl',
+          language: 'Dutch'
         },
         {
           indexName: 'cmmstudy_en',
@@ -42,10 +37,26 @@ export const thematicViews: readonly ThematicView[] = [
           languageCode: 'fr',
           language: 'French'
         },
+
         {
-          indexName: 'cmmstudy_nl',
-          languageCode: 'nl',
-          language: 'Dutch'
+          indexName: 'cmmstudy_de',
+          languageCode: 'de',
+          language: 'German'
+        },
+        {
+          indexName: 'cmmstudy_el',
+          languageCode: 'el',
+          language: 'Greek'
+        },
+        {
+          indexName: 'cmmstudy_no',
+          languageCode: 'no',
+          language: 'Norwegian'
+        },
+        {
+          indexName: 'cmmstudy_sl', 
+          languageCode: 'sl',
+          language: 'Slovenian'
         },
         {
           indexName: 'cmmstudy_sv',
@@ -67,14 +78,9 @@ export const thematicViews: readonly ThematicView[] = [
     "esIndexes":
       [
         {
-          indexName: 'coordinate_de',
-          languageCode: 'de',
-          language: 'German'
-        },
-        {
-          indexName: 'coordinate_el',
-          languageCode: 'el',
-          language: 'Greek'
+          indexName: 'coordinate_nl',
+          languageCode: 'nl',
+          language: 'Dutch'
         },
         {
           indexName: 'coordinate_en',
@@ -90,6 +96,17 @@ export const thematicViews: readonly ThematicView[] = [
           indexName: 'coordinate_fr',
           languageCode: 'fr',
           language: 'French'
+        },
+
+        {
+          indexName: 'coordinate_de',
+          languageCode: 'de',
+          language: 'German'
+        },
+        {
+          indexName: 'coordinate_el',
+          languageCode: 'el',
+          language: 'Greek'
         },
         {
           indexName: 'coordinate_no',
@@ -124,6 +141,60 @@ export const thematicViews: readonly ThematicView[] = [
           indexName: 'hummingbird_en',
           languageCode: 'en',
           language: 'English'
+        }
+      ]
+  },
+  {
+    "key": "covid",
+    "path": "/covid",
+    "defaultIndex": "covid_en",
+    "title": "BY-COVID",
+    "longTitle": "BeYond-COVID: open data on SARS-CoV-2 and infections diseases",
+    "rootClass": "covid",
+    "logo": "covid.svg",
+    "icon": "covid-icon.svg",
+    "favicon": "covid-favicon.png",
+    "esIndexes":
+      [
+        {
+          indexName: 'covid_en',
+          languageCode: 'en',
+          language: 'English'
+        },
+        {
+          indexName: 'covid_fi',
+          languageCode: 'fi',
+          language: 'Finnish'
+        },
+        {
+          indexName: 'covid_fr',
+          languageCode: 'fr',
+          language: 'French'
+        },
+        {
+          indexName: 'covid_de',
+          languageCode: 'de',
+          language: 'German'
+        },
+        {
+          indexName: 'covid_el',
+          languageCode: 'el',
+          language: 'Greek'
+        },
+        {
+          indexName: 'covid_no',
+          languageCode: 'no',
+          language: 'Norwegian'
+        },
+        {
+          indexName: 'covid_sl', 
+          languageCode: 'sl',
+          language: 'Slovenian'
+        },
+        {
+          indexName: 'covid_sv',
+          languageCode: 'sv',
+          language: 'Swedish'
         }
       ]
   },

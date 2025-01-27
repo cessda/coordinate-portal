@@ -45,7 +45,7 @@ const initialState: SearchState = {
 
 export const updateMetrics = createAsyncThunk('search/updateMetrics', async (_, { getState }) => {
   const state = getState() as RootState;
-  const indexWithoutLang = state.thematicView.currentIndex.split('_')[0];
+  const indexWithoutLang = state.thematicView.currentIndex.indexName.split('_')[0];
   const response = await fetch(`${window.location.origin}/api/sk/_about_metrics/${indexWithoutLang}_*`);
 
   if (response.ok) {

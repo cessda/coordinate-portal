@@ -26,10 +26,9 @@ import { FaWindows } from "react-icons/fa";
 
 const Header = () => {
   const { t } = useTranslation();
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
-  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
-  const sortByItems = getSortByItems(currentLanguage.index, t);
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const sortByItems = getSortByItems(currentIndex.languageCode, t);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,11 +49,11 @@ const Header = () => {
   const resetQueries = () => {
     clearQuery();
     // Root path requires more resets
-    if (location.pathname === "/") {
+    if (location.pathname === currentThematicView.path) {
       refineFilters();
       refinePagination(1);
       refineResultsPerPage(30);
-      refineSortBy(currentLanguage.index);
+      refineSortBy(currentIndex.languageCode);
     }
   }
   const [isActive, setisActive] = React.useState(false);

@@ -5,7 +5,7 @@ import { ThematicView, thematicViews, esIndex } from "../utilities/thematicViews
 export interface ThematicViewState {
   currentThematicView: ThematicView;
   list: readonly ThematicView[];
-  currentIndex: string;
+  currentIndex: esIndex;
 }
 
 // (OC 11.2024) Initialise the Thematic View and language (index) state from URL path (example: datacatalogue.cessda.eu/coordinate).
@@ -13,7 +13,8 @@ export interface ThematicViewState {
 // However, any routes not defined in App.tsx or derived therein from the path config in thematicViews.ts will result in a page not found.
 
 const initialPath = "/" + location.pathname.split('/')[1];
-const initialView = thematicViews.find((l) => l.path === initialPath ) as ThematicView || thematicViews.find((tv) => tv.path === "/") as ThematicView;
+const initialView = thematicViews.find((tv) => tv.path === initialPath ) as ThematicView || thematicViews.find((tv) => tv.path === "/") as ThematicView;
+const initialIndex= initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as esIndex;
 
 // (OC 11.2024) Take the opportunitiy to set the body class for thematic view styling while initialising state.
 document.body.className = initialView.rootClass;
@@ -21,7 +22,7 @@ document.body.className = initialView.rootClass;
 const initialState: ThematicViewState = {
   currentThematicView: initialView,
   list: thematicViews,
-  currentIndex: initialView.defaultIndex
+  currentIndex: initialIndex
 };
 
 const thematicViewSlice = createSlice({
@@ -77,44 +78,3 @@ export const { updateThematicView } = thematicViewSlice.actions;
 
 export default thematicViewSlice.reducer;
 
-// import { Action } from "../actions";
-// import { CHANGE_LANGUAGE, INIT_TRANSLATIONS } from "../actions/language";
-// import { languages, Language } from "../utilities/language";
-
-// export interface LanguageState {
-//   currentLanguage: Language;
-//   list: readonly Language[];
-// }
-
-// const initialState: LanguageState = {
-//   currentLanguage: languages.find((l) => l.code === "en") as Language,
-//   list: [],
-// };
-
-// const languageReducer = (
-//   state: LanguageState = initialState,
-//   action: Action
-// ) => {
-//   switch (action.type) {
-//     case INIT_TRANSLATIONS:
-//       return Object.assign({}, state, {
-//         currentLanguage:
-//           languages.find((l) => l.code === action.initialLanguage) ||
-//           initialState.currentLanguage,
-//         list: action.languages,
-//       });
-
-//     case CHANGE_LANGUAGE:
-//       return Object.assign({}, state, {
-//         currentLanguage:
-//           languages.find((l) => l.code === action.code) ||
-//           initialState.currentLanguage,
-//         label: action.label,
-//       });
-
-//     default:
-//       return state;
-//   }
-// };
-
-// export default languageReducer;
