@@ -119,6 +119,7 @@ target/
 *.js.map
 *.ts.map
 *.tsbuildinfo
+/eslint/
 
 ### Test Coverage files #
 ######################

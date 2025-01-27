@@ -8,7 +8,7 @@ jest.mock('react-i18next', () => ({
       },
     };
   },
-  withTranslation: () => (Component: { defaultProps: any; }) => {
+  withTranslation: () => (Component: { defaultProps: object; }) => {
     Component.defaultProps = { ...Component.defaultProps, t: (str: string) => str };
     return Component;
   },

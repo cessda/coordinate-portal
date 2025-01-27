@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Language, languageMap } from "../utilities/language";
 import { LanguageState } from "./language";
 
@@ -63,7 +63,7 @@ const detailSlice = createSlice({
   name: "detail",
   initialState: initialState,
   reducers: {
-    clearStudy(state: DetailState, action: PayloadAction<boolean>) {
+    clearStudy(state: DetailState) {
       //state.languageAvailableIn = ;
       state.study = undefined;
       state.similars = [];
