@@ -20,6 +20,7 @@ import SearchPage from "../../../src/containers/SearchPage";
 import { updateLanguage } from "../../../src/reducers/language";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
+import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
 
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
@@ -31,7 +32,7 @@ jest.mock("react-instantsearch", () => ({
   HitsPerPage: jest.fn(() => <div>Mocked HitsPerPage</div>),
   SortBy: jest.fn(({ items, ...props }) => (
     <select onChange={props.onChange}>
-      {items.map((item: any) => (
+      {items.map((item: SortByItem) => (
         <option key={item.value} value={item.value}>
           {item.label}
         </option>
