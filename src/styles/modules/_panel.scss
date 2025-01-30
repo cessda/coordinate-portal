@@ -1,5 +1,5 @@
 .panel-container {
-  margin: 0 0 15px 0 !important;
+  margin: 0;
   border: 0;
   border-radius: 3px;
   background-color: #f8f8f8;
@@ -10,7 +10,7 @@
   &.section-header {
     .panel-header {
       padding: 15px 15px 0 0;
-      margin: 15px 0 0 0;
+      margin: 0 0 0 0;
       border-top: 1px solid #eeeeee;
 
       &:after {
@@ -31,10 +31,14 @@
 
 .panel-container .panel-header.collapsable:before {
   content:'▼';
+  font-size:12px;
+  line-height:1.8;
 }
 
 .panel-container .panel-header.collapsable.collapsed:before {
   content:'▶';
+  font-size:12px;
+  line-height:1.8;
 }
 
 .panel-container .panel-content.collapsable.collapsed {

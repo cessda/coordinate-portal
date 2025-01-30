@@ -12,12 +12,20 @@
 // limitations under the License.
 
 import React from "react";
+import { useAppSelector } from "../hooks";
+
+const userGuidePages = {
+  cdc: require('../components/dynamic/pages/userGuidePages/CdcUserGuidePage.tsx').default,
+  coordinate: require('../components//dynamic/pages/userGuidePages/CoordinateUserGuidePage.tsx').default,
+  hummingbird: require('../components//dynamic/pages/userGuidePages/HummingbirdUserGuidePage.tsx').default,
+};
 
 const UserGuidePage = () => {
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const DynamicUserGuidePage = userGuidePages[currentThematicView.key as keyof typeof userGuidePages];
+
   return (
-    <div>
-      <h1>User Guide TBA</h1>
-    </div>
+    <DynamicUserGuidePage />
   );
 };
 

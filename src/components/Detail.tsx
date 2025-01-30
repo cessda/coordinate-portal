@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { truncate, upperFirst } from "lodash";
 import {
   CMMStudy,
@@ -36,6 +36,8 @@ import { HeadingEntry } from "../containers/DetailPage";
 import Select from 'react-select';
 import { useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
+import SeriesList from './SeriesList';
+import OrcidLogo from "./OrcidLogo";
 
 export interface Props {
   item: CMMStudy;
@@ -52,17 +54,19 @@ interface Option {
   label: string;
 }
 
+
+
 const Detail = (props: Props) => {
   const { t } = useTranslation();
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
 
   const item = props.item;
   const headings = props.headings;
   const truncatedAbstractLength = 2000;
   const truncatedKeywordsLength = 12;
 
+
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
-  const [infoBoxExpanded, setInfoBoxExpanded] = useState(props.item.keywords.length < truncatedKeywordsLength);
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
@@ -88,12 +92,12 @@ const Detail = (props: Props) => {
     omitLang?: boolean
   ) {
     const elements: JSX.Element[] = [];
-    const lang = currentLanguage.code;
+    const lang = currentIndex.languageCode;
 
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
         const value = callback?.(field[i]) ?? field[i];
-        switch(element) {
+        switch (element) {
           case 'tag':
             elements.push(<span className="tag" lang={omitLang ? undefined : lang} key={i}>{value as React.ReactNode}</span>);
             break;
@@ -212,15 +216,15 @@ const Detail = (props: Props) => {
   function generateHeading(headingKey: string, classNames?: string, overrideId?: string) {
     // Find the heading object with the specified key
     const headingObj = headings.find((entry) => entry[headingKey]);
-  
+
     if (!headingObj) {
       return null; // Handle the case where the heading key doesn't exist
     }
-  
+
     const { translation, level } = headingObj[headingKey];
     const id = overrideId ? overrideId : headingObj[headingKey].id;
     const Element = level === 'main' ? 'h1' : (level === 'title' ? 'h2' : 'h3');
-  
+
     return (
       <Element id={id} className={`metadata-${level} ${classNames ?? ''}`}>
         {translation}
@@ -247,7 +251,7 @@ const Detail = (props: Props) => {
       switch (selectedExportMetadataOption.value) {
         case 'json': {
           // Fetch the JSON data from the API
-          const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`);
+          const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`);
 
           if (jsonResponse.ok) {
             exportData = JSON.stringify(await jsonResponse.json(), null, 2)
@@ -338,16 +342,24 @@ const Detail = (props: Props) => {
         {creator.identifier && (
           <>
             {" - "}
-            {creator.identifier.type ? creator.identifier.type : "Research Identifier"}
-            {": "}
-            {creator.identifier.uri ? (
-              <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
-                <span className="icon"><FaExternalLinkAlt /></span>
-                {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
-              </a>
-            ) : (
-              creator.identifier.id
-            )}
+            <span className="is-inline-block">
+              {creator.identifier.type?.toLowerCase() !== "orcid" &&
+                <>
+                  {creator.identifier.type || "Research Identifier"}{": "}
+                </>
+              }
+              {creator.identifier.uri ? (
+                <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
+                  {creator.identifier.type?.toLowerCase() === "orcid" &&
+                    <OrcidLogo />
+                  }
+                  <span className="icon"><FaExternalLinkAlt /></span>
+                  {creator.identifier.id ? creator.identifier.id : creator.identifier.uri}
+                </a>
+              ) : (
+                creator.identifier.id
+              )}
+            </span>
           </>
         )}
       </span>
@@ -375,66 +387,89 @@ const Detail = (props: Props) => {
     });
     return Array.from(uniqueValues);
   }
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dispLang = searchParams.get("lang") || currentIndex.languageCode;
 
+  const languageLinks: JSX.Element[] = [];
+
+  if (item.langAvailableIn.length > 1) {
+  for (let i = 0; i < item?.langAvailableIn.length; i++) {
+    const lang = item.langAvailableIn[i].toLowerCase();
+    if (dispLang != lang) {
+      languageLinks.push(
+        <Link key={lang} className="button is-small mt-3 mr-1" to={`${location.pathname}?lang=${lang}`}>
+          {lang.toUpperCase()}
+        </Link>
+      );
+    } else {
+      languageLinks.push(
+        <span className="button is-small is-static mt-3 mr-1">
+          {lang.toUpperCase()}
+        </span>
+      );
+    }
+  }
+}
   return (
     <>
-    <div className="columns is-vcentered">
-      <div className="column is-2 px-1 py-3">
-        <div className="columns is-flex-direction-column">
-          <div className="column px-0 pt-0 pb-1">
-            {item.studyUrl && (
-              <a className="is-inline-flex"
-                href={item.studyUrl}
-                rel="noreferrer"
-                target="_blank">
-                <span className="icon mt-1 mr-1">
-                  <FaExternalLinkAlt />
-                </span>
-                <span className="large-text">{t("goToStudy")}</span>
-              </a>
-            )}
-          </div>
-          <div className="column px-0 pt-1 pb-0">
-            <a className="is-inline-flex"
-              href={`/api/json/${currentLanguage.index}/${encodeURIComponent(item.id)}`}
+      <div className="columns is-gapless is-vcentered mb-0 mt-0">
+        <div className="column smalltext">
+
+          {item.studyUrl && (
+            <a
+              href={item.studyUrl}
               rel="noreferrer"
               target="_blank">
-              <span className="icon is-small ml-1 mt-1 mr-1"><FaCode/></span>
-              <span>{t("viewJson")}</span>
+              <span className="icon is-small">
+                <FaExternalLinkAlt />
+              </span>
+              &nbsp;
+              <span className="is-small">
+                {t("goToStudy")}
+              </span>
             </a>
-          </div>
+          )}
+          &nbsp;  &nbsp;
+          <a
+            href={`/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`}
+            rel="noreferrer"
+            target="_blank">
+            <span className="icon is-small"><FaCode /></span>
+            &nbsp;
+            <span>{t("viewJson")}</span>
+          </a>
+
         </div>
-      </div>
-      <div className="column is-5 px-1 py-3">
-        <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
-          <div className="column is-flex is-flex-grow-0 is-narrow py-0 pl-0 pr-1">
-            <span className="is-inline-flex">{t("exportMetadata")}</span>
+        <div className="column is-narrow">
+          <div className="columns is-mobile is-gapless">
+
+
             {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
                     ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                     classNames={{container: 'ml-1'}}/> */}
-          </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <Select options={exportMetadataOptions}
-                    defaultValue={{ value: '', label: ''}}
-                    onChange={handleExportMetadataChange}
-                    className="export-select"
-                    aria-label="Export metadata" />
-          </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <button className="button is-info is-light" onClick={handleExportMetadata} data-testid="export-metadata-button"
-                    disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
-              {t("export")}
-            </button>
+            <div className="column is-narrow">
+              <Select options={exportMetadataOptions}
+                defaultValue={{ value: '', label: '' }}
+                onChange={handleExportMetadataChange}
+                className="export-select"
+                aria-label="Export metadata" />
+            </div>
+            <div className="column is-narrow">
+              <button className="button export" onClick={handleExportMetadata} data-testid="export-metadata-button"
+                disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
+                Export metadata
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+        {/* 
       <div className="column is-5 px-1 py-3">
         <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
           <div className="column is-flex is-flex-grow-0 is-narrow py-0 pl-0 pr-1">
             <span className="is-inline-flex">{t("exportCitation")}</span>
-            {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
+            <Tooltip content={t("metadata.keywords.tooltip.content")}
                     ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                    classNames={{container: 'ml-1'}}/> */}
+                    classNames={{container: 'ml-1'}}/>
           </div>
           <div className="column is-flex is-flex-grow-0 is-narrow p-0">
             <Select options={exportCitationOptions}
@@ -453,9 +488,13 @@ const Detail = (props: Props) => {
           </div>
         </div>
       </div>
-    </div>
-    <div className="metadata-container">
-      <div className="info-box is-hidden-touch" data-testid="info-box">
+        */}
+
+      </div>
+      <div className="metadata-container study-wrapper">
+
+        {/*   
+    <div className="info-box is-hidden-touch" data-testid="info-box">
         <section className="info-box-topics">
           {generateHeading('topics', 'is-inline-flex mt-0', 'info-box-topics')}
           <Tooltip content={t("metadata.topics.tooltip.content")}
@@ -464,7 +503,7 @@ const Detail = (props: Props) => {
           <div className="tags mt-2">
             {generateElements(item.classifications, "tag",
               (classifications) => (
-                <Link to={`/?sortBy=${currentLanguage.index}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
                   {upperFirst(classifications.term)}
                 </Link>
               )
@@ -477,213 +516,232 @@ const Detail = (props: Props) => {
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{container: 'mt-1 ml-1'}}/>
           <div className="tags mt-2">
-            <Keywords keywords={item.keywords} keywordLimit={12} lang={currentLanguage.code}/>
+            <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode}/>
           </div>
         </section>
       </div>
-      <div className="main-content">
-        <article className="w-100 mb-4">
-          <section className="metadata-section">
-            {generateHeading('summary', 'summary-header')}
+      */}
 
-            {generateHeading('title', 'mt-5')}
-            <p>{item.titleStudy || t("language.notAvailable.field")}</p>
 
-            {generateHeading('creator')}
-            {generateElements(item.creators, 'div', creator => {
-              return formatCreator(creator);
-            })}
+        <div className="main-content">
+          <article>
+            <section className="metadata-section">
 
-            {generateHeading('pid')}
-            {generateElements(item.pidStudies.filter((p) => p.pid), "div",
-              (pidStudy) => {
-                // The agency field is an optional attribute, only append if present
-                if (pidStudy.agency) {
-                  return <p key={pidStudy.pid}>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
+              {languageLinks}
+              {generateHeading('summary', 'summary-header')}
+
+              {generateHeading('title', 'mt-5')}
+              <p>{item.titleStudy || t("language.notAvailable.field")}</p>
+
+              {generateHeading('creator')}
+              {generateElements(item.creators, 'div', creator => {
+                return formatCreator(creator);
+              })}
+
+              {generateHeading('pid')}
+              {generateElements(item.pidStudies.filter((p) => p.pid), "div",
+                (pidStudy) => {
+                  // The agency field is an optional attribute, only append if present
+                  if (pidStudy.agency) {
+                    return <p key={pidStudy.pid}>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
+                  }
+                  return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
                 }
-                return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
-              }
-            )}
-
-            {generateHeading('abstract')}
-            {abstractExpanded ? (
-              <div
-                className="data-abstract"
-                dangerouslySetInnerHTML={{ __html: item.abstract }}
-              />
-            ) : (
-              <div className="data-abstract">
-                {truncate(striptags(item.abstract), {
-                  length: truncatedAbstractLength,
-                  separator: " ",
-                })}
-              </div>
-            )}
-            {item.abstract.length > truncatedAbstractLength && (
-              <a className="button is-small is-white" data-testid="expand-abstract"
-                onClick={() => {
-                  setAbstractExpanded(abstractExpanded => !abstractExpanded)
-                }}>
-                {abstractExpanded ? (
-                  <>
-                    <span className="icon is-small">
-                      <FaAngleUp />
-                    </span>
-                    <span>{t("readLess")}</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="icon is-small">
-                      <FaAngleDown />
-                    </span>
-                    <span>{t("readMore")}</span>
-                  </>
-                )}
-              </a>
-            )}
-          </section>
-
-          <section className="metadata-section">
-            {generateHeading('methodology', 'is-inline-flex')}
-            <Tooltip content={t("metadata.methodology.tooltip.content")}
-                    ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
-                    classNames={{container: 'mt-1 ml-1'}}/>
-            {generateHeading('collPeriod')}
-            <>
-              {formatDate(
-                dateFormatter,
-                item.dataCollectionPeriodStartdate,
-                item.dataCollectionPeriodEnddate,
-                item.dataCollectionFreeTexts
               )}
-            </>
 
-            {generateHeading('country')}
-            {generateElements(item.studyAreaCountries, "div", (country) => country.country)}
+              {generateHeading('dataAccess')}
+              <p>{item.dataAccess || t("language.notAvailable.information")}</p>
 
-            {generateHeading('timeDimension')}
-            {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
+              {generateHeading('series')}
+              <SeriesList seriesList={item.series} lang={currentIndex.languageCode} />
 
-            {generateHeading('analysisUnit')}
-            {generateElements(item.unitTypes, "div", (unit) => unit.term)}
-
-            {generateHeading('universe')}
-            {item.universe ? formatUniverse(item.universe) : <span>{t("language.notAvailable.field")}</span>}
-
-            {generateHeading('sampProc')}
-            {generateElements(item.samplingProcedureFreeTexts, "div",
-              (text) => (
+              {generateHeading('abstract')}
+              {abstractExpanded ? (
                 <div
                   className="data-abstract"
-                  dangerouslySetInnerHTML={{ __html: text }}
+                  dangerouslySetInnerHTML={{ __html: item.abstract }}
                 />
-              )
-            )}
-
-            {generateHeading('dataKind')}
-            {item.dataKindFreeTexts || item.generalDataFormats ? generateElements(formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
-              <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} data-testid="data-kind"/>
-            ) : <span>{t("language.notAvailable.field")}</span>}
-
-            {generateHeading('collMode')}
-            {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
-          </section>
-
-          {item.funding.length > 0 &&
-            <section className="metadata-section" data-testid='funding'>
-              {generateHeading('funding', 'is-inline-flex')}
-              {item.funding.map((funding, index) => (
-              <React.Fragment key={`${funding.agency || ''}${funding.grantNumber || ''}`}>
-                {funding.agency &&
-                  <>
-                    {generateHeading(`funder-${index}`)}
-                    <p lang={currentLanguage.code}>
-                      {funding.agency}
-                    </p>
-                  </>
-                }
-                {funding.grantNumber &&
-                  <>
-                    {generateHeading(`grantNumber-${index}`)}
-                    <p lang={currentLanguage.code}>
-                      {funding.grantNumber}
-                    </p>
-                  </>
-                }
-              </React.Fragment>
-            ))}
+              ) : (
+                <div className="data-abstract">
+                  {truncate(striptags(item.abstract), {
+                    length: truncatedAbstractLength,
+                    separator: " ",
+                  })}
+                </div>
+              )}
+              {item.abstract.length > truncatedAbstractLength && (
+                <a className="button is-small is-white" data-testid="expand-abstract"
+                  onClick={() => {
+                    setAbstractExpanded(abstractExpanded => !abstractExpanded)
+                  }}>
+                  {abstractExpanded ? (
+                    <>
+                      <span className="icon is-small">
+                        <FaAngleUp />
+                      </span>
+                      <span>{t("readLess")}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="icon is-small">
+                        <FaAngleDown />
+                      </span>
+                      <span>{t("readMore")}</span>
+                    </>
+                  )}
+                </a>
+              )}
             </section>
-          }
 
-          <section className="metadata-section">
-            {generateHeading('access')}
-            {generateHeading('publisher')}
-            <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
 
-            {generateHeading('publicationYear')}
-            {formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
+            <section className="metadata-section">
+              {generateHeading('topics', 'is-inline-flex')}
+              <Tooltip content={t("metadata.topics.tooltip.content")}
+                ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
+                classNames={{ container: 'mt-1 ml-1' }} />
+              <div className="tags mt-2">
+                {generateElements(item.classifications, "tag",
+                  (classifications) => (
+                    <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                      {upperFirst(classifications.term)}
+                    </Link>
+                  )
+                )}
+              </div>
+            </section>
 
-            {generateHeading('accessTerms')}
-            {generateElements(item.dataAccessFreeTexts, "div",
-              (text) => (
-                <div
-                  className="data-abstract"
-                  dangerouslySetInnerHTML={{ __html: text }}
-                />
-              )
-            )}
-          </section>
+            <section className="metadata-section">
+              {generateHeading('keywords', 'is-inline-flex')}
+              <Tooltip content={t("metadata.keywords.tooltip.content")}
+                ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                classNames={{ container: 'mt-1 ml-1' }} />
+              <div className="tags mt-2">
+                <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} />
+              </div>
+            </section>
 
-          <section className="metadata-section">
-            {generateHeading('relPub')}
-            {generateElements(
-              item.relatedPublications,
-              "ul",
-              (relatedPublication) => {
-                const relatedPublicationTitle = striptags(
-                  relatedPublication.title
-                );
-                if (relatedPublication.holdings?.length > 0) {
-                  return (
-                    <a href={relatedPublication.holdings[0]}>
-                      {relatedPublicationTitle}
-                    </a>
-                  );
-                } else {
-                  return relatedPublicationTitle;
-                }
-              }
-            )}
-          </section>
+            <section className="metadata-section">
+              {generateHeading('methodology', 'is-inline-flex')}
+              <Tooltip content={t("metadata.methodology.tooltip.content")}
+                ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
+                classNames={{ container: 'mt-1 ml-1' }} />
+              {generateHeading('collPeriod')}
+              <>
+                {formatDate(
+                  dateFormatter,
+                  item.dataCollectionPeriodStartdate,
+                  item.dataCollectionPeriodEnddate,
+                  item.dataCollectionFreeTexts
+                )}
+              </>
 
-          <section className="metadata-section">
-            {generateHeading('topics', 'is-inline-flex')}
-            <Tooltip content={t("metadata.topics.tooltip.content")}
-                    ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
-                    classNames={{container: 'mt-1 ml-1'}}/>
-            <div className="tags mt-2">
-              {generateElements(item.classifications, "tag",
-                (classifications) => (
-                  <Link to={`/?sortBy=${currentLanguage.index}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
-                    {upperFirst(classifications.term)}
-                  </Link>
+              {generateHeading('country')}
+
+              <div className="tags mt-2">
+                {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
+              </div>
+
+              {generateHeading('timeDimension')}
+              {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
+
+              {generateHeading('analysisUnit')}
+              {generateElements(item.unitTypes, "div", (unit) => unit.term)}
+
+              {generateHeading('universe')}
+              {item.universe ? formatUniverse(item.universe) : <span>{t("language.notAvailable.field")}</span>}
+
+              {generateHeading('sampProc')}
+              {generateElements(item.samplingProcedureFreeTexts, "div",
+                (text) => (
+                  <div
+                    className="data-abstract"
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  />
                 )
               )}
-            </div>
-          </section>
 
-          <section className="metadata-section">
-            {generateHeading('keywords', 'is-inline-flex')}
-            <Tooltip content={t("metadata.keywords.tooltip.content")}
-                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                    classNames={{container: 'mt-1 ml-1'}}/>
-            <div className="tags mt-2">
-              <Keywords keywords={item.keywords} keywordLimit={12} lang={currentLanguage.code}/>
-            </div>
-          </section>
-        </article>
+              {generateHeading('dataKind')}
+              {item.dataKindFreeTexts || item.generalDataFormats ? generateElements(formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
+                <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} data-testid="data-kind" />
+              ) : <span>{t("language.notAvailable.field")}</span>}
+
+              {generateHeading('collMode')}
+              {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
+            </section>
+
+
+
+            {item.funding.length > 0 &&
+              <section className="metadata-section" data-testid='funding'>
+                {generateHeading('funding', 'is-inline-flex')}
+                {item.funding.map((funding, index) => (
+                  <React.Fragment key={`${funding.agency || ''}${funding.grantNumber || ''}`}>
+                    {funding.agency &&
+                      <>
+                        {generateHeading(`funder-${index}`)}
+                        <p lang={currentIndex.languageCode}>
+                          {funding.agency}
+                        </p>
+                      </>
+                    }
+                    {funding.grantNumber &&
+                      <>
+                        {generateHeading(`grantNumber-${index}`)}
+                        <p lang={currentIndex.languageCode}>
+                          {funding.grantNumber}
+                        </p>
+                      </>
+                    }
+                  </React.Fragment>
+                ))}
+              </section>
+            }
+
+            <section className="metadata-section">
+              {generateHeading('access')}
+              {generateHeading('publisher')}
+              <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
+
+              {generateHeading('publicationYear')}
+              {formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
+
+              {generateHeading('accessTerms')}
+              {generateElements(item.dataAccessFreeTexts, "div",
+                (text) => (
+                  <div
+                    className="data-abstract"
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  />
+                )
+              )}
+            </section>
+
+            <section className="metadata-section">
+              {generateHeading('relPub')}
+              {generateElements(
+                item.relatedPublications,
+                "ul",
+                (relatedPublication) => {
+                  const relatedPublicationTitle = striptags(
+                    relatedPublication.title
+                  );
+                  if (relatedPublication.holdings?.length > 0) {
+                    return (
+                      <a href={relatedPublication.holdings[0]}>
+                        {relatedPublicationTitle}
+                      </a>
+                    );
+                  } else {
+                    return relatedPublicationTitle;
+                  }
+                }
+              )}
+            </section>
+
+
+          </article>
+        </div>
       </div>
-    </div>
     </>
   );
 }

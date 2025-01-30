@@ -15,8 +15,12 @@ import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInstantSearch, useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAppSelector } from "../hooks";
+
+
 
 const CustomSearchBox = (props: UseSearchBoxProps) => {
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { query, refine } = useSearchBox(props);
@@ -28,8 +32,8 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   const isSearchStalled = status === 'stalled';
 
   function setNewQuery(newQuery: string) {
-    if (location.pathname !== "/") {
-      navigate("/");
+    if (location.pathname !== currentThematicView.path) {
+      navigate(currentThematicView.path);
     }
     refine(newQuery);
   }
@@ -47,7 +51,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   };
 
   return (
-    <form action="/"
+    <form action={currentThematicView.path}
           role="search"
           noValidate
           onSubmit={(event) => {
@@ -83,14 +87,14 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
             }
           }}
     >
-      <div className="columns is-gapless">
-        <div className="column">
+      <div className="columns is-narrow is-gapless">
+        <div className="column is-narrow is-narrow-mobile">
           <input className="input searchbox"
                 ref={inputRef}
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
-                placeholder=""
+                placeholder="Search studies in selected language"
                 spellCheck={false}
                 maxLength={512}
                 type="search"
@@ -98,22 +102,19 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 autoFocus />
-        </div>
-        <div className="columns is-gapless is-flex">
-          <div className="column is-narrow is-flex-grow-0">
-            <button {...(isSearchStalled ? {'className': 'button is-loading'} : {'className': 'button'})}
+                 <button {...(isSearchStalled ? {'className': 'button is-loading'} : {'className': 'button'})}
                     type="submit">
               {t("search.label")}
             </button>
           </div>
-          <div className="column is-narrow is-flex-grow-0">
+          <div className="column is-narrow is-flex-grow-0 ml-1 is-hidden-mobile">
             <button className="button"
                     {...(inputValue.length === 0 || isSearchStalled ? {'disabled': true} : undefined)}
                     type="reset" hidden={inputValue.length === 0 || isSearchStalled}>
               {t("search.reset")}
             </button>
-          </div>
         </div>
+
       </div>
     </form>
   );

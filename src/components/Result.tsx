@@ -12,19 +12,13 @@
 // limitations under the License.
 
 import React, { useEffect, useState } from "react";
-import {
-  FaAngleDown,
-  FaAngleUp,
-  FaExternalLinkAlt,
-  FaLanguage,
-} from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt, FaLanguage, FaLock, FaLockOpen } from 'react-icons/fa';
 import { Link, useLocation } from "react-router-dom";
 import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
 import shuffleArray from "../utilities/shuffleArray";
 // import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { updateLanguage } from "../reducers/language";
 import Keywords from "./Keywords";
 
 function generateCreatorElements(item: CMMStudy) {
@@ -62,8 +56,8 @@ interface ResultProps {
 const Result: React.FC<ResultProps> = ({ hit }) => {
   const { t } = useTranslation();
   const location = useLocation();
-
-  const currentLanguage = useAppSelector((state) => state.language.currentLanguage);
+//  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const showAbstract = useAppSelector((state) => state.search.showAbstract);
   const showKeywords = useAppSelector((state) => state.search.showKeywords);
   const dispatch = useAppDispatch();
@@ -85,11 +79,12 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
     languages.push(
       <Link
         key={i}
-        className="button is-small is-white"
-        to={`/detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
-        onClick={() => dispatch(updateLanguage(hit.langAvailableIn[i]))}
+        className="button is-small is-white mln-5"
+        
+        to={`detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
+        state={{ from: location.pathname }}
       >
-        {hit.langAvailableIn[i]}
+        {hit.langAvailableIn[i].toUpperCase()}
       </Link>
     );
   }
@@ -158,9 +153,10 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
 
   return (
     <div className="list-hit" data-qa="hit">
+   
       <h2 className="title is-6">
         <Link className="focus-visible"
-          to={`detail/${hit.objectID}?lang=${currentLanguage.code}`}
+          to={`detail/${hit.objectID}?lang=${currentIndex.languageCode}`}
           state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>
@@ -174,7 +170,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
       {showKeywords && shuffledKeywords.length > 0 &&
         <div className="result-keywords mt-10">
           <Keywords keywords={shuffledKeywords} keywordLimit={truncatedKeywordsLength}
-            lang={currentLanguage.code} isExpandDisabled={true} />
+            lang={currentIndex.languageCode} isExpandDisabled={true} />
         </div>
       }
       <span className="level mt-10 result-actions">
@@ -212,7 +208,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
             {languages.length > 0 && (
               <div className="control">
                 <div className="buttons has-addons">
-                  <span className="button no-border bg-w pe-none">
+                  <span className="button no-border bg-w pe-none mrn-5">
                     <span className="icon is-small">
                       <FaLanguage />
                     </span>
@@ -222,6 +218,25 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
                 </div>
               </div>
             )}
+            {hit.dataAccess &&
+              <div>
+                <span className="button is-small is-white bg-w pe-none mrn-5">
+                  {hit.dataAccess === "Open" ? (
+                    <span className="icon is-small">
+                      <FaLockOpen/>
+                    </span>
+                  ) : (
+                    <span className="icon is-small">
+                      <FaLock/>
+                    </span>
+                  )}
+                  <span>{t("metadata.dataAccess")}:</span>
+                </span>
+                <span className="button is-small is-white bg-w pe-none mln-5">
+                  {hit.dataAccess}
+                </span>
+              </div>
+            }
             <div className="control">
               {hit.studyUrl && (
                 <a

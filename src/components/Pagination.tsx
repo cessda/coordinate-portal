@@ -26,16 +26,18 @@ const Pagination = () => {
         nextPageItemText: '›',
         firstPageItemText: '«',
         lastPageItemText: '»',
-        pageItemText: ({ currentPage, nbPages }) => `${currentPage}/${nbPages}`,
+        pageItemText: ({ currentPage, nbPages }) => `${currentPage}`,
         firstPageItemAriaLabel: `${t("pagination.firstPage")}`,
         previousPageItemAriaLabel: `${t("pagination.previousPage")}`,
         nextPageItemAriaLabel: `${t("pagination.nextPage")}`,
         lastPageItemAriaLabel: `${t("pagination.lastPage")}`,
         pageItemAriaLabel: ({ currentPage, nbPages }) => `${t("pagination.pageItemAria", { currentPage: currentPage, nbPages: nbPages })}`,
       }}
+      padding={3}
       classNames={{
-        root: 'mb-4',
+        root: '',
       }}
+    
     />
   );
 };

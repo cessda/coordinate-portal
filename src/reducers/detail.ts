@@ -14,7 +14,10 @@
 import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Language, languageMap } from "../utilities/language";
+import { esIndex } from "../utilities/thematicViews";
 import { LanguageState } from "./language";
+import { ThematicViewState } from "./thematicView";
+
 
 export interface DetailState {
   availableLanguages: Language[];
@@ -28,14 +31,23 @@ const initialState: DetailState = {
   similars: [],
 };
 
-export const updateStudy = createAsyncThunk('search/updateStudy', async (id: string, { getState }) => {
-    const { language } = getState() as { language: LanguageState };
+export const updateStudy = createAsyncThunk('search/updateStudy', async ({id, lang}: {id: string, lang: string},  { getState }) => {
+ 
+
+    const { thematicView } = getState() as { thematicView: ThematicViewState };
     let study = undefined;
     let similars: Similar[] = [];
     const availableLanguages: Language[] = [];
+    const currentLang = thematicView.currentIndex.indexName.split("_")[1];
 
-    const response = await fetch(`${window.location.origin}/api/sk/_get/${language.currentLanguage.index}/${encodeURIComponent(id)}`);
-    //console.log(response);
+   let fetchIndex = thematicView.currentIndex.indexName;
+
+   if (lang && lang != currentLang) {
+    fetchIndex = thematicView.currentIndex.indexName.split("_")[0] + "_" + lang;
+   }
+   //console.log(fetchIndex);
+    const response = await fetch(`${window.location.origin}/api/sk/_get/${fetchIndex}/${encodeURIComponent(id)}`);
+   
     if (response.ok) {
 
       // Get the study model from the hit.
@@ -54,7 +66,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async (id: str
         }
       }
     }
-
+    console.log(availableLanguages);
     return {study: study, similars: similars, availableLanguages: availableLanguages};
   }
 );

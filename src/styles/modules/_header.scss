@@ -8,10 +8,11 @@
   position: relative;
 }
 
+
 header {
   .navbar {
     background-color: transparent;
-
+    min-height: auto;
     .buttons {
       height: 2.5em;
     }
@@ -20,13 +21,32 @@ header {
       margin-bottom: 0;
     }
 
+    .link {
+      display:inline-block;
+      padding: 10px;
+      font-weight: 700;
+    }
+
+
+
     @media screen and (min-width: 1280px) {
       // Same as .is-narrow but it can't be always applied or .is-right won't work when we need it to
       flex: none;
       width: unset;
     }
   }
-
+.selectIcon {
+  width:40px;
+  height:40px;
+}
+.view-selector .react-select__control {
+border: 0;
+}
+.view-selector .react-select__control--menu-is-open, .view-selector .react-select__control--is-focused {
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  }
   .searchbox {
     min-width: 200px;
   }

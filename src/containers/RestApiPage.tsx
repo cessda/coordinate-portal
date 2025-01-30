@@ -18,12 +18,12 @@ const RestApiPage = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="columns is-flex is-flex-direction-column is-vcentered">
-      <div className="column is-12">
+    <div className="columns is-justify-content-center">
+      <div className="column py-6 is-8">
         <h1 className="main-title mb-4">{t("api.label")}</h1>
         <div className="text-container" dangerouslySetInnerHTML={{ __html: t("api.content") }}/>
         <ul>
-          <li><a href="api/DataSets/v2/search?keywords=smoking&metadataLanguage=en">{window.location.origin}/api/DataSets/v2/search?keywords=smoking&metadataLanguage=en</a></li>
+          <li><a href="/api/DataSets/v2/search?keywords=smoking&metadataLanguage=en">{window.location.origin}/api/DataSets/v2/search?keywords=smoking&metadataLanguage=en</a></li>
         </ul>
       </div>
     </div>

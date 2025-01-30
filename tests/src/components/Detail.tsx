@@ -27,6 +27,7 @@ const baseProps: Props = {
     { title: { id: 'title', level: 'subtitle', translation: "Title" } },
     { creator: { id: 'creator', level: 'subtitle', translation: "Creator" } },
     { pid: { id: 'pid', level: 'subtitle', translation: "PID" } },
+    { series: { id: 'series', level: 'subtitle', translation: "Series" } },
     { abstract: { id: 'abstract', level: 'subtitle', translation: "Abstract" } },
     { funding: { id: 'funding', level: 'title', translation: "Funding information" } },
     { collPeriod: { id: 'data-collection-period', level: 'subtitle', translation: ("Data collection period") } },
@@ -422,9 +423,18 @@ it('should format creators correctly', () => {
       expect(creatorElement).toHaveTextContent(`(${creator.affiliation})`);
     }
 
+    const expectedIdentifierType = creator.identifier
+    ? (creator.identifier.type?.toLowerCase() === "orcid" ? null : `${creator.identifier.type || "Research Identifier"}: `)
+    : '';
+
     // Check if identifier is rendered correctly
     if (creator.identifier) {
-      expect(creatorElement).toHaveTextContent(` - ${creator.identifier.type || 'Research Identifier'}: `);
+      if (expectedIdentifierType) {
+        expect(creatorElement).toHaveTextContent(expectedIdentifierType);
+      } else if (creator.identifier?.type?.toLowerCase() === "orcid") {
+        const orcidLogo = screen.getByLabelText('ORCID logo');
+        expect(orcidLogo).toBeInTheDocument();
+      }
 
       if (creator.identifier.uri) {
         // Check if the link is present and correct

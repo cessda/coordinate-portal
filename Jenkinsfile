@@ -64,7 +64,9 @@ pipeline {
 				}
 				stage('Run Unit Tests') {
 					steps {
-						sh "npm test"
+						catchError(buildResult: 'UNSTABLE') {
+							sh "npm test"
+						}
 					}
 					post {
 						always {

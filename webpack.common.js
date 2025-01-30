@@ -58,8 +58,13 @@ module.exports = {
     }, {
       test: /\.(jpe?g|png|gif|svg)$/i,
       type: 'asset/resource'
-    }]
-  },
+    }, {
+      test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      type: 'asset/resource'
+    },
+  
+  ]
+  }, 
   plugins: [
     new webpack.ProvidePlugin({
       process: 'process/browser',

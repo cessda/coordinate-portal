@@ -78,6 +78,7 @@ const baseMockHit = {
       "term": "youth"
     }
   ],
+  dataAccess: 'Open',
   langAvailableIn: ['en', 'fi'],
   studyUrl: 'http://example.com',
   _highlightResult: {
@@ -203,4 +204,23 @@ it('toggles abstract expansion on Enter or Space key', async () => {
 
   // Expect abstract to be collapsed
   expect(screen.getByText('readMore')).toBeInTheDocument();
+});
+
+it('should display "Open" when data access is Open', () => {
+  render(<Result hit={baseMockHit}/>);
+
+  expect(screen.getByText('Open')).toBeInTheDocument();
+});
+
+it('should display "Restricted" when data access is Restricted', () => {
+  render(<Result hit={{ ...baseMockHit, dataAccess: 'Restricted' }} />);
+
+  expect(screen.getByText('Restricted')).toBeInTheDocument();
+});
+
+it('should not display data access when it is undefined', () => {
+  render(<Result hit={{ ...baseMockHit, dataAccess: undefined }} />);
+
+  expect(screen.queryByText('Open')).not.toBeInTheDocument();
+  expect(screen.queryByText('Restricted')).not.toBeInTheDocument();
 });
