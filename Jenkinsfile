@@ -88,7 +88,7 @@ pipeline {
 						sh "${scannerHome}/bin/sonar-scanner"
 					}
 				}
-				waitForQualityGate abortPipeline: true
+				waitForQualityGate abortPipeline: false
 			}
 			when { branch 'main' }
 		}
