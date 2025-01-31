@@ -106,7 +106,7 @@ target/
 
 ### Node files #
 ######################
-node_modules/*
+/node_modules/
 /flow-typed/
 
 ### Build files #
@@ -125,6 +125,3 @@ node_modules/*
 /.scannerwork/
 /coverage/
 junit.xml
-
-### Node allowed files #
-!node_modules/react-instantsearch/dist/es/ui/HitsPerPage.js
