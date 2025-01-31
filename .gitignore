@@ -106,7 +106,8 @@ target/
 
 ### Node files #
 ######################
-/node_modules/
+/node_modules/*
+!/node_modules/react-instantsearch/dist/es/ui/HitsPerPage.js
 /flow-typed/
 
 ### Build files #

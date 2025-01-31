@@ -38,6 +38,7 @@ import { useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
 import SeriesList from './SeriesList';
 import OrcidLogo from "./OrcidLogo";
+import { Helmet } from "react-helmet-async";
 
 export interface Props {
   item: CMMStudy;
@@ -58,6 +59,7 @@ interface Option {
 
 const Detail = (props: Props) => {
   const { t } = useTranslation();
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
 
   const item = props.item;
@@ -340,13 +342,13 @@ const Detail = (props: Props) => {
         {creator.name}
         {creator.affiliation && ` (${creator.affiliation})`}
         {creator.identifier && (
-          <>
+          <React.Fragment key={`${creator.name}`}>
             {" - "}
             <span className="is-inline-block">
               {creator.identifier.type?.toLowerCase() !== "orcid" &&
-                <>
+                <React.Fragment key={`${creator.identifier.type || "Research Identifier"}`}>
                   {creator.identifier.type || "Research Identifier"}{": "}
-                </>
+                  </React.Fragment>
               }
               {creator.identifier.uri ? (
                 <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
@@ -360,7 +362,7 @@ const Detail = (props: Props) => {
                 creator.identifier.id
               )}
             </span>
-          </>
+          </React.Fragment>
         )}
       </span>
     );
@@ -393,25 +395,30 @@ const Detail = (props: Props) => {
   const languageLinks: JSX.Element[] = [];
 
   if (item.langAvailableIn.length > 1) {
-  for (let i = 0; i < item?.langAvailableIn.length; i++) {
-    const lang = item.langAvailableIn[i].toLowerCase();
-    if (dispLang != lang) {
-      languageLinks.push(
-        <Link key={lang} className="button is-small mt-3 mr-1" to={`${location.pathname}?lang=${lang}`}>
-          {lang.toUpperCase()}
-        </Link>
-      );
-    } else {
-      languageLinks.push(
-        <span className="button is-small is-static mt-3 mr-1">
-          {lang.toUpperCase()}
-        </span>
-      );
+    for (let i = 0; i < item?.langAvailableIn.length; i++) {
+      const lang = item.langAvailableIn[i].toLowerCase();
+      if (dispLang != lang) {
+        languageLinks.push(
+          <Link key={lang} className="button is-small mt-3 mr-1" to={`${location.pathname}?lang=${lang}`}>
+            {lang.toUpperCase()}
+          </Link>
+        );
+      } else {
+        languageLinks.push(
+          <span key={lang} className="button is-small is-static mt-3 mr-1">
+            {lang.toUpperCase()}
+          </span>
+        );
+      }
     }
   }
-}
+  
+
   return (
     <>
+      <Helmet>
+        <title>{item.titleStudy || t("language.notAvailable.field")} - {currentThematicView.longTitle}</title>
+        </Helmet>
       <div className="columns is-gapless is-vcentered mb-0 mt-0">
         <div className="column smalltext">
 
@@ -493,249 +500,304 @@ const Detail = (props: Props) => {
       </div>
       <div className="metadata-container study-wrapper">
 
-        {/*   
-    <div className="info-box is-hidden-touch" data-testid="info-box">
-        <section className="info-box-topics">
-          {generateHeading('topics', 'is-inline-flex mt-0', 'info-box-topics')}
-          <Tooltip content={t("metadata.topics.tooltip.content")}
-                  ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
-                  classNames={{container: 'mt-10-negative ml-1'}}/>
-          <div className="tags mt-2">
-            {generateElements(item.classifications, "tag",
-              (classifications) => (
-                <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
-                  {upperFirst(classifications.term)}
-                </Link>
-              )
-            )}
-          </div>
-        </section>
-        <section className="info-box-keywords">
-          {generateHeading('keywords', 'is-inline-flex', 'info-box-keywords')}
-          <Tooltip content={t("metadata.keywords.tooltip.content")}
-                  ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                  classNames={{container: 'mt-1 ml-1'}}/>
-          <div className="tags mt-2">
-            <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode}/>
-          </div>
-        </section>
-      </div>
-      */}
-
-
-        <div className="main-content">
+              <div className="main-content">
           <article>
             <section className="metadata-section">
 
               {languageLinks}
+
               {generateHeading('summary', 'summary-header')}
 
-              {generateHeading('title', 'mt-5')}
-              <p>{item.titleStudy || t("language.notAvailable.field")}</p>
+              {!currentThematicView.excludeFields.includes('titleStudy') &&
+               <>
+                  {generateHeading('title', 'mt-5')}
+                  <p>{item.titleStudy || t("language.notAvailable.field")}</p>
+                  </>
+              }
 
-              {generateHeading('creator')}
-              {generateElements(item.creators, 'div', creator => {
-                return formatCreator(creator);
-              })}
-
-              {generateHeading('pid')}
-              {generateElements(item.pidStudies.filter((p) => p.pid), "div",
-                (pidStudy) => {
-                  // The agency field is an optional attribute, only append if present
-                  if (pidStudy.agency) {
-                    return <p key={pidStudy.pid}>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
-                  }
-                  return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
-                }
-              )}
-
-              {generateHeading('dataAccess')}
-              <p>{item.dataAccess || t("language.notAvailable.information")}</p>
-
-              {generateHeading('series')}
-              <SeriesList seriesList={item.series} lang={currentIndex.languageCode} />
-
-              {generateHeading('abstract')}
-              {abstractExpanded ? (
-                <div
-                  className="data-abstract"
-                  dangerouslySetInnerHTML={{ __html: item.abstract }}
-                />
-              ) : (
-                <div className="data-abstract">
-                  {truncate(striptags(item.abstract), {
-                    length: truncatedAbstractLength,
-                    separator: " ",
+              {!currentThematicView.excludeFields.includes('creators') &&
+               <>
+                  {generateHeading('creator')}
+                  {generateElements(item.creators, 'div', creator => {
+                    return formatCreator(creator);
                   })}
-                </div>
-              )}
-              {item.abstract.length > truncatedAbstractLength && (
-                <a className="button is-small is-white" data-testid="expand-abstract"
-                  onClick={() => {
-                    setAbstractExpanded(abstractExpanded => !abstractExpanded)
-                  }}>
-                  {abstractExpanded ? (
-                    <>
-                      <span className="icon is-small">
-                        <FaAngleUp />
-                      </span>
-                      <span>{t("readLess")}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="icon is-small">
-                        <FaAngleDown />
-                      </span>
-                      <span>{t("readMore")}</span>
-                    </>
+               </>
+              }
+
+              {!currentThematicView.excludeFields.includes('pidStudies') &&
+                <React.Fragment key="pidStudies">
+                  {generateHeading('pid')}
+                  {generateElements(item.pidStudies.filter((p) => p.pid), "div",
+                    (pidStudy) => {
+                      // The agency field is an optional attribute, only append if present
+                      if (pidStudy.agency) {
+                        return <p key={pidStudy.pid}>{`${pidStudy.pid} (${pidStudy.agency})`}</p>;
+                      }
+                      return <p key={pidStudy.pid}>{pidStudy.pid}</p>;
+                    }
                   )}
-                </a>
-              )}
+                </React.Fragment>
+              }
+
+              {!currentThematicView.excludeFields.includes('dataAccess') &&
+                <>
+                  {generateHeading('dataAccess')}
+                  <p>{item.dataAccess || t("language.notAvailable.information")}</p>
+                  </>
+              }
+
+              {!currentThematicView.excludeFields.includes('series') &&
+               <>
+                  {generateHeading('series')}
+                  <SeriesList seriesList={item.series} lang={currentIndex.languageCode} />
+                  </>
+              }
+
+              {!currentThematicView.excludeFields.includes('abstract') &&
+                <>
+                  {generateHeading('abstract')}
+                  {abstractExpanded ? (
+                    <div
+                      className="data-abstract"
+                      dangerouslySetInnerHTML={{ __html: item.abstract }}
+                    />
+                  ) : (
+                    <div className="data-abstract">
+                      {truncate(striptags(item.abstract), {
+                        length: truncatedAbstractLength,
+                        separator: " ",
+                      })}
+                    </div>
+                  )}
+                  {item.abstract.length > truncatedAbstractLength && (
+                    <a className="button is-small is-white" data-testid="expand-abstract"
+                      onClick={() => {
+                        setAbstractExpanded(abstractExpanded => !abstractExpanded)
+                      }}>
+                      {abstractExpanded ? (
+                        <>
+                          <span className="icon is-small">
+                            <FaAngleUp />
+                          </span>
+                          <span>{t("readLess")}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="icon is-small">
+                            <FaAngleDown />
+                          </span>
+                          <span>{t("readMore")}</span>
+                        </>
+                      )}
+                    </a>
+                  )}
+                </>
+              }
             </section>
 
+            {!currentThematicView.excludeFields.includes('classifications') &&
+              <section className="metadata-section">
+                {generateHeading('topics', 'is-inline-flex')}
+                <Tooltip content={t("metadata.topics.tooltip.content")}
+                  ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
+                  classNames={{ container: 'mt-1 ml-1' }} />
+                <div className="tags mt-2">
+                  {generateElements(item.classifications, "tag",
+                    (classifications) => (
+                      <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
+                        {upperFirst(classifications.term)}
+                      </Link>
+                    )
+                  )}
+                </div>
+              </section>
+            }
 
-            <section className="metadata-section">
-              {generateHeading('topics', 'is-inline-flex')}
-              <Tooltip content={t("metadata.topics.tooltip.content")}
-                ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
-                classNames={{ container: 'mt-1 ml-1' }} />
-              <div className="tags mt-2">
-                {generateElements(item.classifications, "tag",
-                  (classifications) => (
-                    <Link to={`/?sortBy=${currentIndex.indexName}&classifications%5B0%5D=${encodeURI(classifications.term.toLowerCase())}`}>
-                      {upperFirst(classifications.term)}
-                    </Link>
-                  )
-                )}
-              </div>
-            </section>
-
-            <section className="metadata-section">
-              {generateHeading('keywords', 'is-inline-flex')}
-              <Tooltip content={t("metadata.keywords.tooltip.content")}
-                ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                classNames={{ container: 'mt-1 ml-1' }} />
-              <div className="tags mt-2">
-                <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} />
-              </div>
-            </section>
+            {!currentThematicView.excludeFields.includes('keywords') &&
+              <section className="metadata-section">
+                {generateHeading('keywords', 'is-inline-flex')}
+                <Tooltip content={t("metadata.keywords.tooltip.content")}
+                  ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                  classNames={{ container: 'mt-1 ml-1' }} />
+                <div className="tags mt-2">
+                  <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} />
+                </div>
+              </section>
+            }
 
             <section className="metadata-section">
               {generateHeading('methodology', 'is-inline-flex')}
               <Tooltip content={t("metadata.methodology.tooltip.content")}
                 ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
                 classNames={{ container: 'mt-1 ml-1' }} />
-              {generateHeading('collPeriod')}
-              <>
-                {formatDate(
-                  dateFormatter,
-                  item.dataCollectionPeriodStartdate,
-                  item.dataCollectionPeriodEnddate,
-                  item.dataCollectionFreeTexts
-                )}
-              </>
 
-              {generateHeading('country')}
+{/*  If hiding the below field group, use "dataCollectionPeriodStartdate" in excludeFields in src/utilities/thematicViews.ts */}
+              {!currentThematicView.excludeFields.includes('dataCollectionPeriodStartdate') &&
+                <>
+                  {generateHeading('collPeriod')}
+                  <>
+                    {formatDate(
+                      dateFormatter,
+                      item.dataCollectionPeriodStartdate,
+                      item.dataCollectionPeriodEnddate,
+                      item.dataCollectionFreeTexts
+                    )}
+                  </>
+                </>
+              }
 
-              <div className="tags mt-2">
-                {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
-              </div>
+              {!currentThematicView.excludeFields.includes('studyAreaCountries') &&
+                <>
+                  {generateHeading('country')}
+                  <div className="tags mt-2">
+                    {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
+                  </div>
+                  </>
+              }
 
-              {generateHeading('timeDimension')}
-              {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
+              {!currentThematicView.excludeFields.includes('typeOfTimeMethods') &&
+                <>
+                  {generateHeading('timeDimension')}
+                  {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
+                  </>
+              }
 
-              {generateHeading('analysisUnit')}
-              {generateElements(item.unitTypes, "div", (unit) => unit.term)}
+              {!currentThematicView.excludeFields.includes('unitTypes') &&
+                <>
+                  {generateHeading('analysisUnit')}
+                  {generateElements(item.unitTypes, "div", (unit) => unit.term)}
+                  </>
+              }
 
-              {generateHeading('universe')}
-              {item.universe ? formatUniverse(item.universe) : <span>{t("language.notAvailable.field")}</span>}
+              {!currentThematicView.excludeFields.includes('universe') &&
+                <>
+                  {generateHeading('universe')}
+                  {item.universe ? formatUniverse(item.universe) : <span>{t("language.notAvailable.field")}</span>}
+                  </>
+              }
 
-              {generateHeading('sampProc')}
-              {generateElements(item.samplingProcedureFreeTexts, "div",
-                (text) => (
-                  <div
-                    className="data-abstract"
-                    dangerouslySetInnerHTML={{ __html: text }}
-                  />
-                )
-              )}
+              {!currentThematicView.excludeFields.includes('samplingProcedureFreeTexts') &&
+               <>
+                  {generateHeading('sampProc')}
+                  {generateElements(item.samplingProcedureFreeTexts, "div",
+                    (text) => (
+                      <div
+                        className="data-abstract"
+                        dangerouslySetInnerHTML={{ __html: text }}
+                      />
+                    )
+                  )}
+               </>
+              }
 
-              {generateHeading('dataKind')}
-              {item.dataKindFreeTexts || item.generalDataFormats ? generateElements(formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
-                <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} data-testid="data-kind" />
-              ) : <span>{t("language.notAvailable.field")}</span>}
+     {/* If hiding the below field group, use "generalDataFormats" in excludeFields in src/utilities/thematicViews.ts */}
+              {!currentThematicView.excludeFields.includes('generalDataFormats') &&
+                <>
+                  {generateHeading('dataKind')}
+                  {item.dataKindFreeTexts || item.generalDataFormats ? generateElements(formatDataKind(item.dataKindFreeTexts, item.generalDataFormats), 'div', text =>
+                    <div className="data-abstract" dangerouslySetInnerHTML={{ __html: text }} data-testid="data-kind" />
+                  ) : <span>{t("language.notAvailable.field")}</span>}
+                </>
+              }
 
-              {generateHeading('collMode')}
-              {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
+              {!currentThematicView.excludeFields.includes('typeOfModeOfCollections') &&
+                <>
+                  {generateHeading('collMode')}
+                  {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
+                  </>
+              }
+
             </section>
 
 
-
-            {item.funding.length > 0 &&
-              <section className="metadata-section" data-testid='funding'>
-                {generateHeading('funding', 'is-inline-flex')}
-                {item.funding.map((funding, index) => (
-                  <React.Fragment key={`${funding.agency || ''}${funding.grantNumber || ''}`}>
-                    {funding.agency &&
-                      <>
-                        {generateHeading(`funder-${index}`)}
-                        <p lang={currentIndex.languageCode}>
-                          {funding.agency}
-                        </p>
-                      </>
-                    }
-                    {funding.grantNumber &&
-                      <>
-                        {generateHeading(`grantNumber-${index}`)}
-                        <p lang={currentIndex.languageCode}>
-                          {funding.grantNumber}
-                        </p>
-                      </>
-                    }
-                  </React.Fragment>
-                ))}
-              </section>
+            {!currentThematicView.excludeFields.includes('funding') &&
+              <>
+                {item.funding.length > 0 &&
+                  <section className="metadata-section" data-testid='funding'>
+                    {generateHeading('funding', 'is-inline-flex')}
+                    {item.funding.map((funding, index) => (
+                      <React.Fragment key={`${funding.agency || ''}${funding.grantNumber || ''}`}>
+                        {funding.agency &&
+                          <>
+                            {generateHeading(`funder-${index}`)}
+                            <p lang={currentIndex.languageCode}>
+                              {funding.agency}
+                            </p>
+                            </>
+                        }
+                        {funding.grantNumber &&
+                          <>
+                            {generateHeading(`grantNumber-${index}`)}
+                            <p lang={currentIndex.languageCode}>
+                              {funding.grantNumber}
+                            </p>
+                            </>
+                        }
+                      </React.Fragment>
+                    ))}
+                  </section>
+                }
+              </>
             }
 
             <section className="metadata-section">
               {generateHeading('access')}
-              {generateHeading('publisher')}
-              <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
 
-              {generateHeading('publicationYear')}
-              {formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
+              {!currentThematicView.excludeFields.includes('publisher') &&
+                <>
+                  {generateHeading('publisher')}
+                  <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
+                  </>
+              }
 
-              {generateHeading('accessTerms')}
-              {generateElements(item.dataAccessFreeTexts, "div",
-                (text) => (
-                  <div
-                    className="data-abstract"
-                    dangerouslySetInnerHTML={{ __html: text }}
-                  />
-                )
-              )}
+              {!currentThematicView.excludeFields.includes('publicationYear') &&
+               <>
+                  {generateHeading('publicationYear')}
+                  {formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
+                  </>
+              }
+
+              {!currentThematicView.excludeFields.includes('dataAccessFreeTexts') &&
+                <>
+                  {generateHeading('accessTerms')}
+                  {generateElements(item.dataAccessFreeTexts, "div",
+                    (text) => (
+                      <div
+                        className="data-abstract"
+                        dangerouslySetInnerHTML={{ __html: text }}
+                      />
+                    )
+                  )}
+                </>
+              }
             </section>
 
             <section className="metadata-section">
-              {generateHeading('relPub')}
-              {generateElements(
-                item.relatedPublications,
-                "ul",
-                (relatedPublication) => {
-                  const relatedPublicationTitle = striptags(
-                    relatedPublication.title
-                  );
-                  if (relatedPublication.holdings?.length > 0) {
-                    return (
-                      <a href={relatedPublication.holdings[0]}>
-                        {relatedPublicationTitle}
-                      </a>
-                    );
-                  } else {
-                    return relatedPublicationTitle;
-                  }
-                }
-              )}
+
+              {!currentThematicView.excludeFields.includes('relatedPublications') &&
+                 <>
+                  {generateHeading('relPub')}
+                  {generateElements(
+                    item.relatedPublications,
+                    "ul",
+                    (relatedPublication) => {
+                      const relatedPublicationTitle = striptags(
+                        relatedPublication.title
+                      );
+                      if (relatedPublication.holdings?.length > 0) {
+                        return (
+                          <a href={relatedPublication.holdings[0]}>
+                            {relatedPublicationTitle}
+                          </a>
+                        );
+                      } else {
+                        return relatedPublicationTitle;
+                      }
+                    }
+                  )}
+                 </>
+              }
+
             </section>
 
 

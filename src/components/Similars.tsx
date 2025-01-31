@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Similar } from "../../common/metadata";
 import { useAppSelector } from "../hooks";
+import { useSearchParams } from "react-router-dom";
 
 export interface Props {
   similars: Similar[];
@@ -28,12 +29,13 @@ const Similars = (props: Props) => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const viewPrefix = currentThematicView.path === "/" ? "" : currentThematicView.path;
   const links: JSX.Element[] = [];
-
+ const [searchParams, setSearchParams] = useSearchParams();
+  const lang = searchParams.get('lang') || currentIndex.languageCode;
   for (let i = 0; i < similars.length; i++) {
     // Construct the similar URL
     links.push(
       
-      <Link key={i} to={viewPrefix + "/detail/" + similars[i].id} lang={currentIndex.languageCode}>
+      <Link key={i} to={viewPrefix + "/detail/" + similars[i].id + "?lang=" + lang} >
         {similars[i].title}
       </Link>
     );

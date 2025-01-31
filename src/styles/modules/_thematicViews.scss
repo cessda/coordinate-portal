@@ -328,7 +328,7 @@ fieldset[disabled] .button.is-info {
   border: 1px solid hsl(201, 20%, 90%);
 }
 
-.filter-wrapper h3 {
+h2.filters {
   font-weight: 700;
   font-size: 16px;
   margin: 15px 0 10px 25px
@@ -347,9 +347,10 @@ fieldset[disabled] .button.is-info {
   ;
 }
 
-h2,
-.panel-title {
-  color: $cdc_text;
+
+
+.panel-title, .panel-title::before {
+  cursor: pointer;
 }
 
 .panel-header {
@@ -413,9 +414,6 @@ fieldset .button.is-info {
 
 
 body {
-  a {
-    color: $cdc_primary_highlight;
-  }
 
   .button.is-info,
   fieldset .button.is-info {

@@ -41,6 +41,8 @@ const thematicViewSlice = createSlice({
       let icon: string;
       let favicon: string;
       let esIndexes: Array<esIndex>;
+      let excludeFields: string[];
+      let excludeFilters: string[];
             
       if (!thematicView) {
         path = "/";
@@ -52,7 +54,9 @@ const thematicViewSlice = createSlice({
         logo = thematicViews.find(element => element.path === path)?.logo || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';
-        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];           
+        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];
+        excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
+        excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];           
         
       } else {
         path = thematicView.path;
@@ -65,9 +69,11 @@ const thematicViewSlice = createSlice({
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';  
         esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];    
+        excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
+        excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || []; 
       }
       state.currentIndex=action.payload.esIndex;      
-      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, rootClass: rootClass, defaultIndex: defaultIndex, logo: logo, icon: icon, favicon: favicon, esIndexes: esIndexes};
+      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, rootClass: rootClass, defaultIndex: defaultIndex, logo: logo, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
             
             
     },

@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useInstantSearch, useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector } from "../hooks";
-
+import { Helmet } from "react-helmet-async";
 
 
 const CustomSearchBox = (props: UseSearchBoxProps) => {
@@ -28,6 +28,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  
 
   const isSearchStalled = status === 'stalled';
 
@@ -50,6 +51,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
     }
   };
 
+  const pageTitle = searchParams.get("query") ? currentThematicView.longTitle + ' - search results for "' + searchParams.get("query") + '"' : currentThematicView.longTitle;
   return (
     <form action={currentThematicView.path}
           role="search"
@@ -88,13 +90,17 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
           }}
     >
       <div className="columns is-narrow is-gapless">
+      <Helmet>
+            <title>{pageTitle}</title>
+            </Helmet>
         <div className="column is-narrow is-narrow-mobile">
           <input className="input searchbox"
+                aria-label="Search field"
                 ref={inputRef}
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
-                placeholder="Search studies in selected language"
+                placeholder="Search in selected language"
                 spellCheck={false}
                 maxLength={512}
                 type="search"

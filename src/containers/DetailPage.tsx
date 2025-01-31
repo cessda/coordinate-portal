@@ -23,6 +23,7 @@ import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
 import { useAppSelector } from "../hooks";
 import { Helmet } from "react-helmet-async";
+import { useSearchParams } from "react-router-dom";
 
 type Heading = {
   id: string;
@@ -47,6 +48,7 @@ export const studyLoader: LoaderFunction = async ({ request, params }) => {
 };
 
 const DetailPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const { t } = useTranslation();
   const location = useLocation();
@@ -142,7 +144,6 @@ const DetailPage = () => {
     { keywords: { id: 'keywords', level: 'title', translation: t("metadata.keywords.label") } },
     { relPub: { id: 'related-publications', level: 'title', translation: t("metadata.relatedPublications") } }
   ]
-
   return (
     
     <div className="columns">
@@ -167,11 +168,11 @@ const DetailPage = () => {
             }}
           </Await>
         </React.Suspense>
-       {/* <DetailIndex headings={headings} /> */}
+  
       </div>
       <Helmet>
-      <link rel="canonical" href={"https://datacatalogue.cessda.eu/detail/" + location.pathname.split('/').slice(-1)[0]} />
- 
+      <link rel="canonical" href={`https://datacatalogue.cessda.eu/detail/${location.pathname.split('/').slice(-1)[0]}?lang=${searchParams.get("lang")}`}>
+ </link>
       </Helmet>
       <div className="column is-9 main-column">
    

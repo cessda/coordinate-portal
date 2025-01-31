@@ -28,7 +28,7 @@ const Header = () => {
   const { t } = useTranslation();
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  const sortByItems = getSortByItems(currentIndex.languageCode, t);
+  const sortByItems = getSortByItems(currentIndex.indexName, t);
   const navigate = useNavigate();
   const location = useLocation();
 

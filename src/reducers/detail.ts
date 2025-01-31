@@ -66,7 +66,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async ({id, la
         }
       }
     }
-    console.log(availableLanguages);
+   // console.log(availableLanguages);
     return {study: study, similars: similars, availableLanguages: availableLanguages};
   }
 );
