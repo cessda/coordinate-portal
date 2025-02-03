@@ -228,9 +228,11 @@ const Detail = (props: Props) => {
     const Element = level === 'main' ? 'h1' : (level === 'title' ? 'h2' : 'h3');
 
     return (
+      
       <Element id={id} className={`metadata-${level} ${classNames ?? ''}`}>
         {translation}
       </Element>
+      
     );
   }
 
@@ -506,7 +508,7 @@ const Detail = (props: Props) => {
 
               {languageLinks}
 
-              {generateHeading('summary', 'summary-header')}
+              {generateHeading('summary')}
 
               {!currentThematicView.excludeFields.includes('titleStudy') &&
                <>
@@ -570,7 +572,7 @@ const Detail = (props: Props) => {
                     </div>
                   )}
                   {item.abstract.length > truncatedAbstractLength && (
-                    <a className="button is-small is-white" data-testid="expand-abstract"
+                    <a className="button is-small is-light mt-2" data-testid="expand-abstract"
                       onClick={() => {
                         setAbstractExpanded(abstractExpanded => !abstractExpanded)
                       }}>
@@ -597,6 +599,7 @@ const Detail = (props: Props) => {
 
             {!currentThematicView.excludeFields.includes('classifications') &&
               <section className="metadata-section">
+                
                 {generateHeading('topics', 'is-inline-flex')}
                 <Tooltip content={t("metadata.topics.tooltip.content")}
                   ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
@@ -620,7 +623,7 @@ const Detail = (props: Props) => {
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{ container: 'mt-1 ml-1' }} />
                 <div className="tags mt-2">
-                  <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} />
+                  <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
                 </div>
               </section>
             }

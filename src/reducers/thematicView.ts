@@ -14,7 +14,13 @@ export interface ThematicViewState {
 
 const initialPath = "/" + location.pathname.split('/')[1];
 const initialView = thematicViews.find((tv) => tv.path === initialPath ) as ThematicView || thematicViews.find((tv) => tv.path === "/") as ThematicView;
-const initialIndex= initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as esIndex;
+
+const urlParams = new URLSearchParams(window.location.search);
+
+  const initialIndexQs = urlParams.get("sortBy");
+const initialIndex = initialIndexQs ? initialView.esIndexes.find((i) => i.indexName === initialIndexQs ) as esIndex : initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as esIndex;
+  
+
 
 // (OC 11.2024) Take the opportunitiy to set the body class for thematic view styling while initialising state.
 document.body.className = initialView.rootClass;
@@ -35,6 +41,7 @@ const thematicViewSlice = createSlice({
       let title: string;
       let key: string;
       let longTitle: string;
+      let listDescription: string;
       let rootClass: string;
       let defaultIndex: string;
       let logo: string;
@@ -49,6 +56,7 @@ const thematicViewSlice = createSlice({
         title = thematicViews.find(element => element.path === path)?.title || '';
         key = thematicViews.find(element => element.path === path)?.key || '';
         longTitle = thematicViews.find(element => element.path === path)?.longTitle || '';
+        listDescription = thematicViews.find(element => element.path === path)?.listDescription || '';
         rootClass = thematicViews.find(element => element.path === path)?.rootClass || '';
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         logo = thematicViews.find(element => element.path === path)?.logo || '';
@@ -63,6 +71,7 @@ const thematicViewSlice = createSlice({
         title = thematicViews.find(element => element.path === path)?.title || '';
         key = thematicViews.find(element => element.path === path)?.key || '';
         longTitle = thematicViews.find(element => element.path === path)?.longTitle || '';
+        listDescription = thematicViews.find(element => element.path === path)?.listDescription || '';
         rootClass = thematicViews.find(element => element.path === path)?.rootClass || '';
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         logo = thematicViews.find(element => element.path === path)?.logo || '';
@@ -73,7 +82,7 @@ const thematicViewSlice = createSlice({
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || []; 
       }
       state.currentIndex=action.payload.esIndex;      
-      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, rootClass: rootClass, defaultIndex: defaultIndex, logo: logo, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
+      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, logo: logo, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
             
             
     },

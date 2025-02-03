@@ -16,7 +16,7 @@ import React from "react";
 const DynamicUserGuidePage = () => {
   return (
     <div className="columns is-justify-content-center">
-      <div className="column pt-6 is-8">
+      <div className="column p-6">
     <div className="text-container">
       <h1 className="main-title mb-4">User Guide - COORDINATE Portal</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus ligula ut lectus fermentum sagittis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum venenatis tellus. Curabitur sed elit quam. Suspendisse consectetur quis lorem nec dictum. Ut vitae massa fringilla, ornare nunc vel, scelerisque mi. Nam arcu nibh, mollis quis rhoncus a, porttitor in mauris. In a pharetra risus. Proin scelerisque massa sed risus elementum, id placerat dolor ullamcorper. Nulla bibendum scelerisque nisi, sed eleifend nisl auctor non.</p>

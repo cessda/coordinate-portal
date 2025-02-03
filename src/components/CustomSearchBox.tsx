@@ -34,7 +34,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
 
   function setNewQuery(newQuery: string) {
     if (location.pathname !== currentThematicView.path) {
-      navigate(currentThematicView.path);
+      navigate( `${currentThematicView.path}?query=${newQuery}`); 
     }
     refine(newQuery);
   }

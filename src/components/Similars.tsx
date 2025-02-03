@@ -43,7 +43,7 @@ const Similars = (props: Props) => {
 
   return (
     <div className="similars filter-wrapper">
-      <h3>{t("similarResults.heading")}</h3>
+      <h2>{t("similarResults.heading")}</h2>
       {links.length > 0 ? (
         <ul>
           {links.map((link, index) => (

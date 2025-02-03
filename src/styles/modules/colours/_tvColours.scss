@@ -2,50 +2,71 @@ $default_primary_highlight: hsl(204, 87%, 32%);
 $default_secondary_highlight: hsl(204, 87%, 52%);
 $default_text: hsl(201, 21%, 36%);
 $default_bg: hsl(201, 20%, 96%);
-$default_footer: hsl(201, 20%, 92%);
+$default_footer: hsl(201, 20%, 100%);
 
 $cdc_primary_highlight: hsl(204, 87%, 25%);
 $cdc_secondary_highlight: hsl(204, 87%, 52%);
 $cdc_text: hsl(201, 21%, 36%);
 $cdc_bg: hsl(201, 20%, 96%);
-$cdc_footer: hsl(201, 20%, 98%);
+$cdc_footer: hsl(201, 20%, 100%);
 
 $coordinate_primary_highlight: hsl(178, 62%, 25%);
 $coordinate_secondary_highlight: hsl(52, 24%, 63%);
 $coordinate_text: hsl(208, 7%, 46%);
 $coordinate_bg: hsl(178, 5%, 92%);
-$coordinate_footer: hsl(178, 5%, 98%);
+$coordinate_footer: hsl(178, 5%, 100%);
 
 $hummingbird_primary_highlight: hsl(204, 87%, 32%);
 $hummingbird_secondary_highlight: hsl(204, 87%, 52%);
 $hummingbird_text: hsl(201, 21%, 36%);
 $hummingbird_bg: hsl(201, 20%, 96%);
-$hummingbird_footer: hsl(201, 20%, 98%);
+$hummingbird_footer: hsl(201, 20%, 100%);
 
 $covid_primary_highlight: hsl(204, 87%, 32%);
 $covid_secondary_highlight: hsl(204, 87%, 52%);
 $covid_text: hsl(201, 21%, 36%);
 $covid_bg: hsl(201, 20%, 96%);
-$covid_footer: hsl(201, 20%, 98%);
+$covid_footer: hsl(201, 20%, 100%);
 
 
 body {
   a {
     color: $default_primary_highlight;
   }
+  .button.is-ghost {
+    color: $default_primary_highlight;
+  }
+  .metadata-section .metadata-title {
+    color: $default_primary_highlight;
+  }
+  
 }
 
 body.cdc {
   a {
     color: $cdc_primary_highlight;
   }
+  .button.is-ghost {
+    color: $cdc_primary_highlight;
+  }
+
+  .metadata-section .metadata-title {
+    color: $cdc_primary_highlight;
+  }
+  
+  
 }
 
 body.coordinate {
   a {
     color: $coordinate_primary_highlight;
   }
-
+  .button.is-ghost {
+    color: $coordinate_primary_highlight;
+  }
+  .metadata-section .metadata-title {
+    color: $coordinate_primary_highlight;
+  }
   mark {
     background-color: hsl(52 80% 80%);
   }
@@ -75,7 +96,9 @@ body.coordinate {
     background-color: hsl(178, 20%, 95%);
     color: $coordinate_text;
   }
-
+.relative {
+  position: relative;
+}
 
   header h1 {
 

@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React, { useEffect, useState } from "react";
-import { FaAngleDown, FaAngleUp, FaExternalLinkAlt, FaLanguage, FaLock, FaLockOpen } from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp, FaExternalLinkAlt,  FaLock, FaLockOpen } from 'react-icons/fa';
 import { Link, useLocation } from "react-router-dom";
 import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
 import shuffleArray from "../utilities/shuffleArray";
@@ -156,7 +156,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
    
       <h2 className="title is-6">
         <Link className="focus-visible"
-          to={`detail/${hit.objectID}?lang=${currentIndex.languageCode}`}
+          to={`detail/${hit.objectID}?sortBy=${currentIndex.indexName}`}
           state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>
@@ -169,7 +169,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
       )}
       {showKeywords && shuffledKeywords.length > 0 &&
         <div className="result-keywords mt-10">
-          <Keywords keywords={shuffledKeywords} keywordLimit={truncatedKeywordsLength}
+          <Keywords keywords={shuffledKeywords} currentIndex={currentIndex.indexName} keywordLimit={truncatedKeywordsLength}
             lang={currentIndex.languageCode} isExpandDisabled={true} />
         </div>
       }
@@ -178,7 +178,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
           <div className="field is-grouped">
             <div className="control">
               {showAbstract && hit.abstract?.length > truncatedAbstractLength && (
-                <a className="button no-border focus-visible"
+                <a className="button no-border is-light focus-visible "
                   tabIndex={0}
                   onClick={(e) => handleClick(e, hit.titleStudy)}
                   onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}
@@ -209,9 +209,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
               <div className="control">
                 <div className="buttons has-addons">
                   <span className="button no-border bg-w pe-none mrn-5">
-                    <span className="icon is-small">
-                      <FaLanguage />
-                    </span>
+                  
                     <span>{t("language.label")}:</span>
                   </span>
                   {languages}

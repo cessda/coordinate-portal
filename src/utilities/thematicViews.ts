@@ -12,6 +12,7 @@ export type ThematicView = {
   defaultIndex: string | "cmmstudy_en";
   title: string | "CESSDA Data Catalogue";
   longTitle: string | "CESSDA Data Catalogue";
+  listDescription: string | "";  // Used on Collections page
   rootClass: string | "cdc";
   logo: string | "cdc.svg";
   icon: string | "cdc-icon.png";
@@ -29,6 +30,7 @@ export const thematicViews: readonly ThematicView[] = [
     "defaultIndex": "cmmstudy_en",
     "title": "Data Catalogue",
     "longTitle": "CESSDA Data Catalogue",
+    "listDescription": "The CESSDA Data Catalogue master collection contains descriptions of more 40,000 data collections held by CESSDA’s Service Providers (SPs), originating from over 20 European countries.",
     "rootClass": "cdc",
     "logo": "cdc.svg",
     "icon": "cdc-icon.svg",
@@ -100,6 +102,7 @@ export const thematicViews: readonly ThematicView[] = [
     "defaultIndex": "coordinate_en",
     "title": "COORDINATE",
     "longTitle": "COORDINATE Portal: Child and Youth Wellbeing",
+    "listDescription": "The COORDINATE Portal provides a collection of study information on child and young people‘s wellbeing as they grow up.",
     "rootClass": "coordinate",
     "logo": "coordinate.svg",
     "icon": "coordinate-icon.svg",
@@ -170,7 +173,8 @@ export const thematicViews: readonly ThematicView[] = [
     "path": "/hummingbird",
     "defaultIndex": "hummingbird_en",
     "title": "HumMingBird",
-    "longTitle": "HumMingBird",
+    "longTitle": "HumMingBird Migration Data Catalogue",
+    "listDescription": "The HumMingBird project's Migration Data Catalogue contains data about studies on migration flows and drivers of migration.",
     "rootClass": "hummingbird",
     "logo": "hummingbird-logo.png",
     "icon": "hummingbird-icon.svg",
@@ -192,7 +196,8 @@ export const thematicViews: readonly ThematicView[] = [
     "path": "/covid",
     "defaultIndex": "covid_en",
     "title": "BY-COVID",
-    "longTitle": "BeYond-COVID: open data on SARS-CoV-2 and infections diseases",
+    "longTitle": "BeYond-COVID: open data on infectious diseases",
+    "listDescription": "The BY-COVID collection features studies on the social and psychological effects of SARS-CoV-2 and other infectious diseases.",
     "rootClass": "covid",
     "logo": "covid.svg",
     "icon": "covid-icon.svg",

@@ -35,7 +35,11 @@ const AboutPage = () => {
   const DynamicAboutPage = aboutPages[currentThematicView.key as keyof typeof aboutPages];
 
   return (
+    <div className="columns">
+      <div className="content-wrapper column is-three-fifths is-offset-one-fifth mt-6 p-2">
     <DynamicAboutPage metrics={metrics} />
+    </div>
+    </div>
   );
 };
 

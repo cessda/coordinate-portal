@@ -32,11 +32,12 @@ type ESIndexOption = {
 const IndexSwitcher = () => {
 
   const thematicView = useAppSelector((state) => state.thematicView);
-  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { refine: resetFilters } = useClearRefinements();
+
 
 
 
@@ -51,8 +52,7 @@ const IndexSwitcher = () => {
   const changeIndex = (value: esIndex) => {
     resetFilters();
     dispatch(updateThematicView(value));
-    navigate(thematicView.currentThematicView.path);
-  }
+    }
 
   const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption).label;
 
@@ -64,6 +64,7 @@ const IndexSwitcher = () => {
         value={{ value: thematicView.currentIndex, label: currentLabel }}
         options={esIndexOptions}
         isSearchable={false}
+        aria-label="Search language"
         isClearable={false}
         onChange={(option) => {
           if (option) {

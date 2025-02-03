@@ -22,14 +22,17 @@ import { useLocation } from 'react-router-dom';
 import { useClearRefinements, useHitsPerPage, usePagination, useSearchBox, useSortBy } from "react-instantsearch";
 import { hitsPerPageItems, getSortByItems } from "../containers/SearchPage";
 import { FaWindows } from "react-icons/fa";
-
+import { VirtualRefinementList, VirtualRangeInput, VirtualSortBy } from "../components/VirtualComponents";
 
 const Header = () => {
   const { t } = useTranslation();
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  let virtualSortByItems: { value: string, label: string }[] = [];
   const sortByItems = getSortByItems(currentIndex.indexName, t);
-  const navigate = useNavigate();
+  virtualSortByItems = virtualSortByItems.concat(sortByItems);
+  //console.log(virtualSortByItems);
+  //console.log(currentIndex.indexName);
   const location = useLocation();
 
   // const logoFolder = require.context('../img/logos/', true, /\.(jpe?g|png|gif|svg)$/)
@@ -40,6 +43,7 @@ const Header = () => {
     e.target.classList.toggle(className);
   }
 
+const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
   const { clear: clearQuery } = useSearchBox();
   const { refine: refineFilters } = useClearRefinements();
   const { refine: refinePagination } = usePagination();
@@ -53,16 +57,26 @@ const Header = () => {
       refineFilters();
       refinePagination(1);
       refineResultsPerPage(30);
-      refineSortBy(currentIndex.languageCode);
+      refineSortBy(currentIndex.indexName);
     }
   }
   const [isActive, setisActive] = React.useState(false);
+
+ 
+
+
+
+
   return (
     <header>
-
+ <VirtualSortBy items={virtualSortByItems} />
       <div className="container columns is-mobile is-vcentered">
         <div className="column is-narrow p-1">
-          <Link to={currentThematicView.path} className="columns is-mobile is-vcentered is-gapless">
+          
+        <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}` : `/?sortBy=${currentIndex.indexName}`} onClick={() => {
+                  resetQueries();
+                }}>
+          <div id="home" className="columns is-mobile is-vcentered is-gapless">
             <div className="logo column is-narrow">
               <img src={logoImg} alt="Home" />
 
@@ -71,8 +85,8 @@ const Header = () => {
               <h1>{currentThematicView.title}</h1>
             </div>
 
+          </div>
           </Link>
-
 
         </div>
         <div className="column is-narrow p-0">
@@ -89,11 +103,15 @@ const Header = () => {
 
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/documentation` : "/documentation"}
                   className="link navbar-item">
-                  {t("documentation.label")}
+                  User Guide
+                </Link>
+                <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/collections` : "/collections"}
+                  className="link navbar-item">
+                 Collections
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/about` : "/about"}
                   className="link navbar-item">
-                  {t("about.label")}
+                  About
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/rest-api` : "/rest-api"}
                   className="link navbar-item">

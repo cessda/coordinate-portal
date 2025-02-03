@@ -15,7 +15,6 @@ import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Language, languageMap } from "../utilities/language";
 import { esIndex } from "../utilities/thematicViews";
-import { LanguageState } from "./language";
 import { ThematicViewState } from "./thematicView";
 
 

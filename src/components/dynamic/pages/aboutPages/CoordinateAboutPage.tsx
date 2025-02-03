@@ -14,8 +14,9 @@
 import React from "react";
 import { Await } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import horizonLogo from '../../../../img/horizon-logo.png';
+import { Helmet } from "react-helmet-async";
 import { Metrics } from "../../../../../common/metadata";
+import { useAppSelector } from "../../../../hooks";
 import { metricsLoader } from "../../../../containers/AboutPage";
 
 type DynamicAboutPageProps = {
@@ -40,10 +41,13 @@ const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
       </div>
     );
   };
-
+ const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   return (
     <div className="columns is-flex is-flex-direction-column is-vcentered pb-6">
-      <div className="column is-flex is-flex-wrap-wrap is-justify-content-space-around is-8">
+         <Helmet>
+                   <title>{currentThematicView.title} - About</title>
+                   </Helmet>
+      <div className="column is-flex is-flex-wrap-wrap is-justify-content-space-around">
         <React.Suspense fallback={<></>}>
           <Await resolve={metrics} errorElement={<></>}>
             {(metrics: Awaited<ReturnType<typeof metricsLoader>>) => {
@@ -64,29 +68,16 @@ const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
           </Await>
         </React.Suspense>
       </div>
-      <div className="column is-8">
+      <div className="column px-6">
         <h1 className="main-title mb-4">About the COORDINATE Portal</h1>
       
         <div className="text-container">
           <p>The aim of the COORDINATE project is to mobilise the community of researchers and organisations that will drive forwards the coordinated development of comparative birth cohort panel and associated survey research in Europe which focus on children's wellbeing.</p>
           <p>The infrastructural community network brought together by COORDINATE will promote the harmonisation of and improve access to international survey data, in particular panel survey data, in the study of children and young people's wellbeing as they grow up.</p>
           <p>The research that COORDINATE will complete, using a child-centric approach, continues the research initiated in the <a href="https://cordis.europa.eu/project/id/613368" target="_blank" rel="noreferrer">'Measuring Youth Well-Being' (MyWEB)</a> and the <a href="https://cordis.europa.eu/project/id/777449" target="_blank" rel="noreferrer">'European Cohort Development Project' (ECDP)</a> projects, which will support elements of the preparatory phase of Europe's first cross-national accelerated birth cohort survey of child well-being: - Growing Up in Digital Europe (GUIDE).</p>
-          <p>The COORDINATE Portal has partly been built using <a href="https://datacatalogue.cessda.eu" target="_blank" rel="noreferrer">CESSDA Data Catalogue</a> codebases, namely <a href="https://github.com/cessda/cessda.cdc.searchkit" target="_blank" rel="noreferrer">cessda.cdc.searchkit</a>, <a href="https://github.com/cessda/cessda.metadata.harvester" target="_blank" rel="noreferrer">cessda.metadata.harvester</a> and <a href="https://github.com/cessda/cessda.cdc.osmh-indexer.cmm" target="_blank" rel="noreferrer">cessda.cdc.osmh-indexer.cmm</a>. They are licensed with <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noreferrer">Apache License 2.0</a>.
+          <p>The COORDINATE Portal is a collection in the <a href="https://datacatalogue.cessda.eu" target="_blank" rel="noreferrer">CESSDA Data Catalogue</a> and licensed with <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noreferrer">Apache License 2.0</a>.
           </p>
-          <p>This portal is still a work in progress. Only this early demo version will be hosted on this domain so the address will change when the final version is released.</p>
-          <p>Some features haven't been implemented yet and any implemented features or looks are subject to change.</p>
-          <p>Non-exhaustive list of things still being worked on:</p>
-          <ul>
-            <li>User Guide</li>
-            <li>Display data access (open or restricted)</li>
-            <li>Improved filtering of relevant datasets</li>
-            <li>Improved accessibility</li>
-            <li>Metadata export in more formats</li>
-            <li>Citation export</li>
-            <li>Improved responsiveness</li>
-            <li>More search facets</li>
-            </ul>
-            <img src={ horizonLogo } alt="Horizon 2020" className="servicelogo mt-4" />
+        
         </div>
       </div>
 
