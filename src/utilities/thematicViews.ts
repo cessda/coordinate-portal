@@ -18,7 +18,7 @@ export type ThematicView = {
   icon: string | "cdc-icon.png";
   favicon: string | "cdc-favicon.png";
   esIndexes: Array<esIndex>;
-  excludeFields: Array<string>;  // Use any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
+  excludeFields: Array<string>;  // Use (almost) any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
   excludeFilters: Array<string>; // Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
 };
 
