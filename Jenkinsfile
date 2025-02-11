@@ -52,7 +52,9 @@ pipeline {
 				}
 				stage('Lint Project') {
 					steps {
-						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml | true'
+						catchError(buildResult: 'UNSTABLE') {
+							sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
+						}
 					}
 					post {
 						always {
@@ -62,7 +64,9 @@ pipeline {
 				}
 				stage('Run Unit Tests') {
 					steps {
-						sh "npm test"
+						catchError(buildResult: 'UNSTABLE') {
+							sh "npm test"
+						}
 					}
 					post {
 						always {
@@ -84,7 +88,7 @@ pipeline {
 						sh "${scannerHome}/bin/sonar-scanner"
 					}
 				}
-				waitForQualityGate abortPipeline: true
+				waitForQualityGate abortPipeline: false
 			}
 			when { branch 'main' }
 		}

@@ -19,7 +19,6 @@ import { useSearchParams } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
-import { updateThematicView } from '../../../src/reducers/thematicView';
 
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
@@ -31,7 +30,7 @@ jest.mock("react-instantsearch", () => ({
   HitsPerPage: jest.fn(() => <div>Mocked HitsPerPage</div>),
   SortBy: jest.fn(({ items, ...props }) => (
     <select onChange={props.onChange}>
-      {items.map((item: any) => (
+      {items.map((item: SortByItem) => (
         <option key={item.value} value={item.value}>
           {item.label}
         </option>

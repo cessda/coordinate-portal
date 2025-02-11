@@ -310,6 +310,7 @@ export function getJsonLd(data: CMMStudy, href?: string): WithContext<Dataset> {
     try {
       license = new URL(data.dataAccessFreeTexts[i]).toString();
       break;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // invalid URLs should be ignored
     }
@@ -500,7 +501,7 @@ function escapeTextInXml(text: string) {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TermURIResult extends Record<string, string> {}
 
 /**

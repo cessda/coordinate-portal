@@ -31,7 +31,7 @@ const requestParameters = {
 jest.mock('../../server/elasticsearch');
 const mockedElasticsearch = Elasticsearch as jest.MockedClass<typeof Elasticsearch>;
 const mockedGetStudy = jest.fn<ReturnType<InstanceType<typeof Elasticsearch>["getStudy"]>, never>();
-//@ts-expect-error
+//@ts-expect-error - incomplete implementation of the Elasticsearch client
 mockedElasticsearch.mockImplementation(() => {
   return {
     client: jest.fn() as unknown as Client,
