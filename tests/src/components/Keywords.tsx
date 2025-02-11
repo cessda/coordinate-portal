@@ -30,7 +30,8 @@ jest.mock('../../../src/utilities/elsst.ts', () => {
 const initialProps: Props = {
   keywords: [],
   lang: "en",
-  keywordLimit: 12
+  keywordLimit: 12,
+  currentIndex: 'cmmstudy_en'
 }
 
 // Mock props and shallow render component for test.

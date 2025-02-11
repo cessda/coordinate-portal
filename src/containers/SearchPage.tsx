@@ -38,7 +38,7 @@ import { useSearchParams } from "react-router-dom";
 import { TFunction } from "i18next";
 
 
-
+ 
 const hitsPerPageItems = [
   { value: 10, label: 'Show 10' },
   { value: 30, label: 'Show 30', default: true },
@@ -61,6 +61,7 @@ const getSortByItems = (index: string, t: TFunction<"translation", undefined, "t
 const SearchPage = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const toggleSummaryRef = React.createRef() as React.RefObject<HTMLButtonElement>;
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
@@ -69,7 +70,16 @@ const SearchPage = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const sortByParam = searchParams.get('sortBy');
-
+  useEffect(() => {
+    // Check if language needs to be updated
+    // Assumes that the index name from sortBy has language tag as the second part when split by underscore
+    if (sortByParam && sortByParam !== currentIndex.indexName) {
+  //    dispatch(updateLanguage(sortByParam?.split('_')[1]));
+    } else if (!sortByParam && currentIndex.indexName.split('_')[1] !== 'en') {
+      // Update language if sortBy is false but language is still something other than default (en)
+    //  dispatch(updateLanguage('en'));
+    }
+  }, [sortByParam]);
   // TODO Gives off a warning when changing language through sortBy query parameter, e.g. clicking on keyword/topic on Detail page
   // "[InstantSearch.js]: The index named "coordinate_en" is not listed in the `items` of `sortBy`."
   // Fixed Similar warning on pages that are not the search page ("/") by adding a virtualSortBy with all the possible options
@@ -102,7 +112,9 @@ const SearchPage = () => {
   };
 
   return (
+       
     <div className={'columns layout mt-4' + (showMobileFilters ? ' show-mobile-filters' : '')}>
+    
       <div className="column is-8 is-hidden-tablet">
         <button className={'ais-ClearRefinements-button focus-visible' + (!showFilterSummary ? ' on-top' : '')}
           onClick={() => dispatch(toggleMobileFilters(showMobileFilters))}
@@ -115,7 +127,7 @@ const SearchPage = () => {
 
           <div className="columns is-vcentered is-gapless m-0 is-flex is-mobile filter-buttons">
             <div className="column">
-              <h3>Filters</h3>
+              <h2 className="filters">Filters</h2>
             </div>
             <div className="column is-narrow columns is-gapless is-mobile mr-4">
               <div className="column is-narrow mt-1 mr-2">
@@ -175,57 +187,71 @@ const SearchPage = () => {
             </div>
           </div>
           <div className="filter-panels">
-            <Panel title={<h2>{t("filters.topic.label")}</h2>}
-              tooltip={<Tooltip id="filters-topic-tooltip"
-                content={t("filters.topic.tooltip.content")}
-                ariaLabel={t("filters.topic.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RefinementList attribute="classifications" searchable limit={15}
-                classNames={{
-                  searchBox: 'focus-visible',
-                  checkbox: 'focus-visible'
-                }} />
-            </Panel>
-            <Panel title={<h2>{t("filters.keywords.label")}</h2>}
-              tooltip={<Tooltip id="filters-keywords-tooltip"
-                content={t("filters.keywords.tooltip.content")}
-                ariaLabel={t("filters.keywords.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RefinementList attribute="keywords" searchable limit={15}
-                classNames={{
-                  searchBox: 'focus-visible',
-                  checkbox: 'focus-visible'
-                }} />
-            </Panel>
-            <Panel title={<h2>{t("metadata.publisher")}</h2>}
-              tooltip={<Tooltip id="filters-publisher-tooltip"
-                content={t("filters.publisher.tooltip.content")}
-                ariaLabel={t("filters.publisher.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
-                classNames={{
-                  searchBox: 'focus-visible',
-                  checkbox: 'focus-visible'
-                }} />
-            </Panel>
-            <Panel title={<h2>{t("metadata.country")}</h2>}
-              tooltip={<Tooltip id="filters-country-tooltip"
-                content={t("filters.country.tooltip.content")}
-                ariaLabel={t("filters.country.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
-                classNames={{
-                  searchBox: 'focus-visible',
-                  checkbox: 'focus-visible',
-                  list: 'ais-CustomRefinementList'
-                }} />
-            </Panel>
+
+            {(!currentThematicView.excludeFilters.includes('topic') && !currentIndex.excludeFilters.includes('topic')) &&
+              <Panel title={<h2>{t("filters.topic.label")}</h2>}
+                tooltip={<Tooltip id="filters-topic-tooltip"
+                  content={t("filters.topic.tooltip.content")}
+                  ariaLabel={t("filters.topic.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="classifications" searchable limit={15}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible'
+                  }} />
+              </Panel>
+            }
+
+{(!currentThematicView.excludeFilters.includes('keywords') && !currentIndex.excludeFilters.includes('keywords')) &&
+              <Panel title={<h2>{t("filters.keywords.label")}</h2>}
+                tooltip={<Tooltip id="filters-keywords-tooltip"
+                  content={t("filters.keywords.tooltip.content")}
+                  ariaLabel={t("filters.keywords.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="keywords" searchable limit={15}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible'
+                  }} />
+              </Panel>
+            }
+
+{(!currentThematicView.excludeFilters.includes('publisher') && !currentIndex.excludeFilters.includes('publisher')) &&
+              <Panel title={<h2>{t("metadata.publisher")}</h2>}
+                tooltip={<Tooltip id="filters-publisher-tooltip"
+                  content={t("filters.publisher.tooltip.content")}
+                  ariaLabel={t("filters.publisher.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible'
+                  }} />
+              </Panel>
+            }
+
+{(!currentThematicView.excludeFilters.includes('country') && !currentIndex.excludeFilters.includes('country')) &&
+              <Panel title={<h2>{t("metadata.country")}</h2>}
+                tooltip={<Tooltip id="filters-country-tooltip"
+                  content={t("filters.country.tooltip.content")}
+                  ariaLabel={t("filters.country.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible',
+                    list: 'ais-CustomRefinementList'
+                  }} />
+              </Panel>
+            }
+
             {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
-            {/*
+        
+            {(!currentThematicView.excludeFilters.includes('timeMethod') && !currentIndex.excludeFilters.includes('timeMethod')) &&
              <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
               tooltip={<Tooltip id="filters-timemethod-tooltip"
                 content={t("filters.timeMethod.tooltip.content")}
@@ -239,50 +265,58 @@ const SearchPage = () => {
                   list: 'ais-CustomRefinementList'
                 }} />
             </Panel>
-            */}
-            <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
-              tooltip={<Tooltip id="filters-timemethodcv-tooltip"
-                content={t("filters.timeMethodCV.tooltip.content")}
-                ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RefinementList attribute="timeMethodCV" searchable limit={16}
-                classNames={{
-                  searchBox: 'focus-visible',
-                  checkbox: 'focus-visible'
-                }} />
-            </Panel>
-            <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
-              tooltip={<Tooltip id="filters-collectiondates-tooltip"
-                content={t("filters.collectionDates.tooltip.content")}
-                ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RangeInput attribute="collectionYear"
-                classNames={{
-                  input: 'focus-visible',
-                  submit: 'focus-visible'
-                }}
-                translations={{
-                  separatorElementText: `${t("filters.collectionYear.separator")}`,
-                  submitButtonText: `${t("filters.collectionYear.submitButton")}`,
-                }} />
-              {/* Shows up in filter summary if set */}
-              {/* min={1900}/> */}
-            </Panel>
+            }
+      
+
+      {(!currentThematicView.excludeFilters.includes('timeMethodCV') && !currentIndex.excludeFilters.includes('timeMethodCV')) &&
+              <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
+                tooltip={<Tooltip id="filters-timemethodcv-tooltip"
+                  content={t("filters.timeMethodCV.tooltip.content")}
+                  ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="timeMethodCV" searchable limit={16}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible'
+                  }} />
+              </Panel>
+            }
+
+            {!currentThematicView.excludeFilters.includes('collectionYear') &&
+              <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
+                tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                  content={t("filters.collectionDates.tooltip.content")}
+                  ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RangeInput attribute="collectionYear"
+                  classNames={{
+                    input: 'focus-visible',
+                    submit: 'focus-visible'
+                  }}
+                  translations={{
+                    separatorElementText: `${t("filters.collectionYear.separator")}`,
+                    submitButtonText: `${t("filters.collectionYear.submitButton")}`,
+                  }} />
+                {/* Shows up in filter summary if set */}
+                {/* min={1900}/> */}
+              </Panel>
+            }
+
           </div>
         </div>
       </div>
       <div className="column is-8 pt-0">
 
         <div className="searchwrapper columns is-mobile is-gapless mb-0 pb-0">
-        <div className="column is-narrow">
+          <div className="column is-narrow">
             <IndexSwitcher />
           </div>
           <div className="column is-narrow pb-0">
             <CustomSearchBox />
           </div>
-          
+
         </div>
 
 
@@ -297,7 +331,7 @@ const SearchPage = () => {
               <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
                 <div className="column is-5">
                   <HitsPerPage items={hitsPerPageItems}
-                    classNames={{
+                     classNames={{
                       select: 'focus-visible'
                     }} />
                 </div>

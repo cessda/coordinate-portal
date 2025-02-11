@@ -13,19 +13,20 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Pagination as InstantsearchPagination } from "react-instantsearch";
+import { usePagination,  UsePaginationProps, Pagination as InstantsearchPagination } from "react-instantsearch";
 
 const Pagination = () => {
   const { t } = useTranslation();
-
+const pages = usePagination();
+const lastPageText = "» " +pages.nbPages + "";
   return (
     <InstantsearchPagination
       showLast
       translations={{
         previousPageItemText: '‹',
         nextPageItemText: '›',
-        firstPageItemText: '«',
-        lastPageItemText: '»',
+        firstPageItemText: '1 «',
+        lastPageItemText: lastPageText,
         pageItemText: ({ currentPage, nbPages }) => `${currentPage}`,
         firstPageItemAriaLabel: `${t("pagination.firstPage")}`,
         previousPageItemAriaLabel: `${t("pagination.previousPage")}`,
@@ -37,7 +38,7 @@ const Pagination = () => {
       classNames={{
         root: '',
       }}
-    
+
     />
   );
 };

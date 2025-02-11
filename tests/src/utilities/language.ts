@@ -20,8 +20,7 @@ describe('Language utilities', () => {
         expect.arrayContaining([
           expect.objectContaining({
             code: expect.any(String),
-            label: expect.any(String),
-            index: expect.any(String)
+            label: expect.any(String)
           })
         ])
       );
@@ -32,5 +31,5 @@ describe('Language utilities', () => {
 export const enLanguage: Language = {
   code: 'en',
   label: 'English',
-  index: 'coordinate_en'
+
 }

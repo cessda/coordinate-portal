@@ -15,7 +15,6 @@ import { CMMStudy, getStudyModel, Similar } from "../../common/metadata";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Language, languageMap } from "../utilities/language";
 import { esIndex } from "../utilities/thematicViews";
-import { LanguageState } from "./language";
 import { ThematicViewState } from "./thematicView";
 
 
@@ -66,7 +65,7 @@ export const updateStudy = createAsyncThunk('search/updateStudy', async ({id, la
         }
       }
     }
-    console.log(availableLanguages);
+   // console.log(availableLanguages);
     return {study: study, similars: similars, availableLanguages: availableLanguages};
   }
 );

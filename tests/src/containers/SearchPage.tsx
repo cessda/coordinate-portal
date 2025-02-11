@@ -17,8 +17,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import { useSearchParams } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
-import { updateLanguage } from "../../../src/reducers/language";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
+import { updateThematicView } from "../../../src/reducers/thematicView";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
 
@@ -65,7 +65,43 @@ describe("SearchPage", () => {
     // Mock the necessary Redux state
     (useAppSelector as jest.Mock).mockImplementation((callback) =>
       callback({
-        language: { currentLanguage: { index: "coordinate_en" } },
+        thematicView: {
+          currentIndex: { 
+              indexName: 'cmmstudy_en',
+              languageCode: 'en',
+              language: 'English',
+              excludeFilters: []
+           },
+          currentThematicView: {
+            "key": "cdc",
+            "path": "/",
+            "defaultIndex": "cmmstudy_en",
+            "title": "Data Catalogue",
+            "longTitle": "CESSDA Data Catalogue",
+            "rootClass": "cdc",
+            "logo": "cdc.svg",
+            "icon": "cdc-icon.svg",
+            "favicon": "cdc-favicon.png",
+            "esIndexes":
+              [
+                {
+                  indexName: 'cmmstudy_en',
+                  languageCode: 'en',
+                  language: 'English',
+                  excludeFilters: []
+                },
+                {
+                  indexName: 'cmmstudy_fi',
+                  languageCode: 'fi',
+                  language: 'Finnish',
+                  excludeFilters: []
+                },
+
+              ],
+            excludeFields: [],
+            excludeFilters: []
+          }
+        },
         search: { showFilterSummary: false, showMobileFilters: false },
       })
     );
@@ -111,7 +147,7 @@ describe("SearchPage", () => {
     const filterButton = screen.getByText("showFilters");
     await userEvent.click(filterButton);
 
-    expect(mockDispatch).toHaveBeenCalledWith({"payload": false, "type": "search/toggleMobileFilters"});
+    expect(mockDispatch).toHaveBeenCalledWith({ "payload": false, "type": "search/toggleMobileFilters" });
   });
 
   it("should handle filter summary toggle with enter", async () => {
@@ -120,21 +156,21 @@ describe("SearchPage", () => {
     const toggleSummaryButton = screen.getByText('filters.summary.label');
     toggleSummaryButton.focus();
     await userEvent.keyboard('{Enter}');
-  
-    expect(mockDispatch).toHaveBeenCalledWith({"payload": false, "type": "search/toggleSummary"});
+
+    expect(mockDispatch).toHaveBeenCalledWith({ "payload": false, "type": "search/toggleSummary" });
   });
 
   it("should be able to show and then close filter summary", async () => {
     let showFilterSummary = true;
     (useAppSelector as jest.Mock).mockImplementation((callback) =>
       callback({
-        language: { currentLanguage: { index: 'coordinate_en' } },
+        thematicView: { currentThematicView: { index: 'coordinate_en' } },
         search: { showFilterSummary, showMobileFilters: false },
       })
     );
 
     const { rerender } = render(<SearchPage />);
-  
+
     expect(screen.getByTestId('filter-summary')).toBeInTheDocument();
     expect(screen.getByText("Mocked Current Refinements")).toBeInTheDocument();
 
@@ -143,7 +179,7 @@ describe("SearchPage", () => {
     const closeFilterSummaryButton = screen.getByTestId("close-filter-summary");
     await userEvent.click(closeFilterSummaryButton);
 
-    expect(mockDispatch).toHaveBeenCalledWith({"payload": true, "type": "search/toggleSummary"});
+    expect(mockDispatch).toHaveBeenCalledWith({ "payload": true, "type": "search/toggleSummary" });
 
     rerender(<SearchPage />);
 
@@ -153,17 +189,17 @@ describe("SearchPage", () => {
 
   it('should dispatch updateLanguage action on sort by change', () => {
     render(<SearchPage />);
-    
+
     const sortByDropdown = screen.getByRole('combobox');
     fireEvent.change(sortByDropdown, { target: { value: 'coordinate_en_title_asc' } });
-    
-    expect(mockDispatch).toHaveBeenCalledWith(updateLanguage('en'));
+
+    expect(mockDispatch).toHaveBeenCalledWith(updateThematicView('/'));
   });
 
   it('should dispatch updateLanguage action if no sortBy param and lang is not en', () => {
     (useAppSelector as jest.Mock).mockImplementation((callback) =>
       callback({
-        language: { currentLanguage: { index: "coordinate_fi" } },
+        thematicView: { currentThematicView: { index: 'coordinate_fi' } },
         search: { showFilterSummary: false, showMobileFilters: false },
       })
     );
@@ -177,8 +213,8 @@ describe("SearchPage", () => {
       mockSetSearchParams,
     ]);
     render(<SearchPage />);
-    
-    expect(mockDispatch).toHaveBeenCalledWith(updateLanguage('en'));
+
+    expect(mockDispatch).toHaveBeenCalledWith(updateThematicView('/'));
   });
 
 });

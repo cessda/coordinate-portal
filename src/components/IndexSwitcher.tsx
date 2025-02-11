@@ -16,10 +16,11 @@ import { esIndex } from "../utilities/thematicViews";
 import { updateThematicView } from "../reducers/thematicView"
 import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useClearRefinements } from "react-instantsearch";
 
-// No longer using the concept of language selection from a technical standpoint. We are switching the indexe, not the language in terms of i18n.
+
+// No longer using the concept of language selection from a technical standpoint. We are switching the index, not the language in terms of i18n.
 // However, for the UI it makes more sense to present it as a language selector.
 
 type ESIndexOption = {
@@ -35,10 +36,10 @@ const IndexSwitcher = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const resetAttributes = ['classifications', 'keywords', 'timeMethod'];
-  const { refine: resetFiltersFromArray } = useClearRefinements({
-    includedAttributes: resetAttributes
-  });
+  const { refine: resetFilters } = useClearRefinements();
+
+
+
 
   const esIndexOptions: ESIndexOption[] = thematicView.currentThematicView.esIndexes.map((esIndex: esIndex) => ({
     label: esIndex.language,
@@ -46,28 +47,30 @@ const IndexSwitcher = () => {
     value: { path: thematicView.currentThematicView.path, esIndex: esIndex }
   }));
 
-  const changeIndex = (value: any) => {
 
-      resetFiltersFromArray();
-        dispatch(updateThematicView(value));
-  }
-  
-const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName ) as ESIndexOption).label;
+
+  const changeIndex = (value: esIndex) => {
+    resetFilters();
+    dispatch(updateThematicView(value));
+    }
+
+  const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption).label;
 
   return (
-    
+
     <div className="language-picker">
       <Select
         classNamePrefix="react-select"
-        value={{ value: thematicView.currentIndex, label: currentLabel}}
+        value={{ value: thematicView.currentIndex, label: currentLabel }}
         options={esIndexOptions}
         isSearchable={false}
+        aria-label="Search language"
         isClearable={false}
         onChange={(option) => {
           if (option) {
             changeIndex(option.value);
           }
-       }}
+        }}
       />
     </div>
   );

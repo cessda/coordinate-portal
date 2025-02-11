@@ -25,62 +25,62 @@ export const languages: readonly Language[] = [
   {
     code: "cs",
     label: "Czech",
-    index: "coordinate_cs",
+
   },
   {
     code: "da",
     label: "Danish",
-    index: "coordinate_da",
+
   },
   {
     code: "nl",
     label: "Dutch",
-    index: "coordinate_nl",
+
   },
   {
     code: "en",
     label: "English",
-    index: "coordinate_en",
+
   },
   {
     code: "fi",
     label: "Finnish",
-    index: "coordinate_fi",
+
   },
   {
     code: "fr",
     label: "French",
-    index: "coordinate_fr",
+
   },
   {
     code: "de",
     label: "German",
-    index: "coordinate_de",
+
   },
   {
     code: "el",
     label: "Greek",
-    index: "coordinate_el",
+
   },
   {
     code: "sk",
     label: "Slovakian",
-    index: "coordinate_sk",
+
   },
   {
     code: "sl",
     label: "Slovenian",
-    index: "coordinate_sl",
+
   },
   {
     code: "sv",
     label: "Swedish",
-    index: "coordinate_sv",
+
   },
   {
     code: "no",
     label: "Norwegian",
-    index: "coordinate_no",
+
   },
 ];
 
@@ -93,6 +93,5 @@ export type Language = {
   code: string;
   /** The English name of the language */
   label: string;
-  /** The index where the language's studies are stored */
-  index: string;
+
 };

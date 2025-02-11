@@ -14,7 +14,9 @@
 import React from "react";
 import { Await } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet-async";
 import { Metrics } from "../../../../../common/metadata";
+import { useAppSelector } from "../../../../hooks";
 import { metricsLoader } from "../../../../containers/AboutPage";
 
 type DynamicAboutPageProps = {
@@ -28,10 +30,13 @@ const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
     amount: number;
     description: string;
   };
-
+ const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const MetricsCircle: React.FC<MetricsCircleProps> = ({ amount, description }) => {
     return (
       <div className="columns is-flex is-flex-direction-column is-vcentered mb-0">
+            <Helmet>
+                      <title>{currentThematicView.title} - About</title>
+                      </Helmet>
         <div className="metrics-circle m-2">
           <span className="metrics-circle-text">{amount}</span>
         </div>
@@ -63,7 +68,7 @@ const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
           </Await>
         </React.Suspense>
       </div>
-      <div className="column is-8">
+      <div className="column p-6">
         <h1 className="main-title mb-4">About HumMingBird</h1>
         <div className="text-container">
         <h2>Hummingbird About page</h2>

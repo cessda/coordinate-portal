@@ -19,11 +19,13 @@ import { getELSSTTerm } from "../utilities/elsst";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../hooks";
+import Detail from "./Detail";
 
 
 export interface Props {
   keywords: TermVocabAttributes[];
   lang: string;
+  currentIndex: string;
   keywordLimit: number;
   isExpandDisabled?: boolean;
 }
@@ -95,10 +97,10 @@ export class Keywords extends React.Component<Props & WithTranslation, State> {
       elsstURLs: elsstURLs
     });
   }
-
+  
   render(): React.ReactNode {
     const { t } = this.props;
-   
+    
     return (<>
     
       <div className="tags" data-testid="tags">
@@ -107,7 +109,7 @@ export class Keywords extends React.Component<Props & WithTranslation, State> {
             // If the term is a valid ELSST term, also link to ELSST
             const keywordTerm = upperFirst(keywords.term);
             return (<>
-              <Link to={{pathname: "/" + location.pathname.split('/')[1], search: `?keywords[0]=${encodeURI(keywords.term)}`}}>{keywordTerm}</Link>
+              <Link to={{pathname: "/" + location.pathname.split('/')[1].replace("detail",""), search: `?keywords[0]=${encodeURI(keywords.term)}&sortBy=${this.props.currentIndex}`}}>{keywordTerm}</Link>
               {this.state.elsstURLs[keywords.term] &&
                 <span className="is-inline-flex is-align-items-center">&nbsp;(
                   <a href={this.state.elsstURLs[keywords.term]} rel="noreferrer" target="_blank"
