@@ -18,7 +18,9 @@ import userEvent from '@testing-library/user-event';
 import { useSearchParams } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
+import { updateThematicView } from "../../../src/reducers/thematicView";
 import '@testing-library/jest-dom';
+import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
 
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
