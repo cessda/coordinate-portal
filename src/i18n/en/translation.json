@@ -93,7 +93,7 @@
       "label": "Time Method (CV)",
       "placeholder": "Search time method (CV)",
       "tooltip": {
-        "content": "Describes the time dimension of the data collection. Based on the vocabulary developed by the DDI Alliance. The classification and its translations are available at <a href=\"https://vocabularies.cessda.eu/vocabulary/TimeMethod\">CESSDA Vocabulary Service: DDI Alliance Controlled Vocabulary for Time Method</a>.",
+        "content": "Describes the time dimension of the data collection. Based on the vocabulary developed by the DDI Alliance. The classification and its translations are available at <a href=\"https://vocabularies.cessda.eu/urn/urn:ddi:int.ddi.cv:TimeMethod:1.2.3\">CESSDA Vocabulary Service: DDI Alliance Controlled Vocabulary for Time Method</a>.",
         "ariaLabel":"Tooltip button for Time method (CV) filter"
       }
     },
