@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:18 AS build
+FROM node:22 AS build
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -21,9 +21,21 @@ COPY package*.json ./
 RUN npm ci
 
 # Bundle app source and build webpack
-FROM build AS final
+FROM build AS webpack
 COPY . .
 RUN npm run build
+
+# Remove development dependencies
+FROM webpack AS pre-final
+RUN npm prune --omit=dev
+
+# Create a separate image with the build layers removed
+FROM node:22 AS final
+COPY --from=pre-final /usr/src/app/node_modules/ /usr/src/app/node_modules/
+COPY --from=pre-final /usr/src/app/common/*.js /usr/src/app/common/
+COPY --from=pre-final /usr/src/app/server/*.js /usr/src/app/server/
+COPY --from=pre-final /usr/src/app/dist/ /usr/src/app/dist/
+COPY --from=pre-final /usr/src/app/startprod.js /usr/src/app/
 
 # Configure application startup
 USER node
