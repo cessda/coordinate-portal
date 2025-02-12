@@ -203,7 +203,7 @@ const SearchPage = () => {
               </Panel>
             }
 
-{(!currentThematicView.excludeFilters.includes('keywords') && !currentIndex.excludeFilters.includes('keywords')) &&
+            {(!currentThematicView.excludeFilters.includes('keywords') && !currentIndex.excludeFilters.includes('keywords')) &&
               <Panel title={<h2>{t("filters.keywords.label")}</h2>}
                 tooltip={<Tooltip id="filters-keywords-tooltip"
                   content={t("filters.keywords.tooltip.content")}
@@ -218,14 +218,14 @@ const SearchPage = () => {
               </Panel>
             }
 
-{(!currentThematicView.excludeFilters.includes('publisher') && !currentIndex.excludeFilters.includes('publisher')) &&
-              <Panel title={<h2>{t("metadata.publisher")}</h2>}
-                tooltip={<Tooltip id="filters-publisher-tooltip"
-                  content={t("filters.publisher.tooltip.content")}
-                  ariaLabel={t("filters.publisher.tooltip.ariaLabel")} />}
+            {(!currentThematicView.excludeFilters.includes('dataAccess') && !currentIndex.excludeFilters.includes('dataAccess')) &&
+              <Panel title={<h2>{t("filters.dataAccess.label")}</h2>}
+                tooltip={<Tooltip id="filters-dataaccess-tooltip"
+                  content={t("filters.dataAccess.tooltip.content")}
+                  ariaLabel={t("filters.dataAccess.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
+                <RefinementList attribute="dataAccess"
                   classNames={{
                     searchBox: 'focus-visible',
                     checkbox: 'focus-visible'
@@ -233,7 +233,28 @@ const SearchPage = () => {
               </Panel>
             }
 
-{(!currentThematicView.excludeFilters.includes('country') && !currentIndex.excludeFilters.includes('country')) &&
+            {(!currentThematicView.excludeFilters.includes('collectionYear') && !currentIndex.excludeFilters.includes('collectionYear')) &&
+                          <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
+                            tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                              content={t("filters.collectionDates.tooltip.content")}
+                              ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
+                            collapsable={true}
+                            defaultCollapsed={true}>
+                            <RangeInput attribute="collectionYear"
+                              classNames={{
+                                input: 'focus-visible',
+                                submit: 'focus-visible'
+                              }}
+                              translations={{
+                                separatorElementText: `${t("filters.collectionYear.separator")}`,
+                                submitButtonText: `${t("filters.collectionYear.submitButton")}`,
+                              }} />
+                            {/* Shows up in filter summary if set */}
+                            {/* min={1900}/> */}
+                          </Panel>
+                        }
+
+            {(!currentThematicView.excludeFilters.includes('country') && !currentIndex.excludeFilters.includes('country')) &&
               <Panel title={<h2>{t("metadata.country")}</h2>}
                 tooltip={<Tooltip id="filters-country-tooltip"
                   content={t("filters.country.tooltip.content")}
@@ -249,26 +270,43 @@ const SearchPage = () => {
               </Panel>
             }
 
-            {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
-        
-            {(!currentThematicView.excludeFilters.includes('timeMethod') && !currentIndex.excludeFilters.includes('timeMethod')) &&
-             <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
-              tooltip={<Tooltip id="filters-timemethod-tooltip"
-                content={t("filters.timeMethod.tooltip.content")}
-                ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")} />}
-              collapsable={true}
-              defaultCollapsed={true}>
-              <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
-                classNames={{
-                  searchBox: 'focus-visible',
-                  checkbox: 'focus-visible',
-                  list: 'ais-CustomRefinementList'
-                }} />
-            </Panel>
+            {(!currentThematicView.excludeFilters.includes('publisher') && !currentIndex.excludeFilters.includes('publisher')) &&
+              <Panel title={<h2>{t("metadata.publisher")}</h2>}
+                tooltip={<Tooltip id="filters-publisher-tooltip"
+                  content={t("filters.publisher.tooltip.content")}
+                  ariaLabel={t("filters.publisher.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible'
+                  }} />
+              </Panel>
             }
-      
 
-      {(!currentThematicView.excludeFilters.includes('timeMethodCV') && !currentIndex.excludeFilters.includes('timeMethodCV')) &&
+            {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
+
+            {(!currentThematicView.excludeFilters.includes('timeMethod') && !currentIndex.excludeFilters.includes('timeMethod')) &&
+              <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
+                tooltip={<Tooltip id="filters-timemethod-tooltip"
+                  content={t("filters.timeMethod.tooltip.content")}
+                  ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
+                  classNames={{
+                    searchBox: 'focus-visible',
+                    checkbox: 'focus-visible',
+                    list: 'ais-CustomRefinementList'
+                  }} />
+              </Panel>
+            }
+
+            {/* Doesn't work well without actually using CV values as the basis since the shortcut of simply using 'id' will currently have */}
+            {/* values such as 'Longitudinal.TrendRepeatedCrossSection' and 'Longitudinal: Trend/Repeated cross-section' at the same time */}
+
+            {/* {(!currentThematicView.excludeFilters.includes('timeMethodCV') && !currentIndex.excludeFilters.includes('timeMethodCV')) &&
               <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
                 tooltip={<Tooltip id="filters-timemethodcv-tooltip"
                   content={t("filters.timeMethodCV.tooltip.content")}
@@ -281,28 +319,7 @@ const SearchPage = () => {
                     checkbox: 'focus-visible'
                   }} />
               </Panel>
-            }
-
-            {!currentThematicView.excludeFilters.includes('collectionYear') &&
-              <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
-                tooltip={<Tooltip id="filters-collectiondates-tooltip"
-                  content={t("filters.collectionDates.tooltip.content")}
-                  ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
-                collapsable={true}
-                defaultCollapsed={true}>
-                <RangeInput attribute="collectionYear"
-                  classNames={{
-                    input: 'focus-visible',
-                    submit: 'focus-visible'
-                  }}
-                  translations={{
-                    separatorElementText: `${t("filters.collectionYear.separator")}`,
-                    submitButtonText: `${t("filters.collectionYear.submitButton")}`,
-                  }} />
-                {/* Shows up in filter summary if set */}
-                {/* min={1900}/> */}
-              </Panel>
-            }
+            } */}
 
           </div>
         </div>

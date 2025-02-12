@@ -98,10 +98,9 @@ const apiClient = Client({
         nestedPath: "classifications"
       },
       {
-        attribute: "publisher",
-        field: "publisher",
-        type: "string",
-        nestedPath: "publisherFilter"
+        attribute: "dataAccess",
+        field: "dataAccess",
+        type: "string"
       },
       {
         attribute: "collectionYear",
@@ -115,14 +114,20 @@ const apiClient = Client({
         nestedPath: "studyAreaCountries"
       },
       {
-        attribute: "timeMethodCV",
-        field: "id",
+        attribute: "publisher",
+        field: "publisher",
         type: "string",
-        nestedPath: "typeOfTimeMethods"
+        nestedPath: "publisherFilter"
       },
       {
         attribute: "timeMethod",
         field: "term.normalized",
+        type: "string",
+        nestedPath: "typeOfTimeMethods"
+      },
+      {
+        attribute: "timeMethodCV",
+        field: "id",
         type: "string",
         nestedPath: "typeOfTimeMethods"
       },

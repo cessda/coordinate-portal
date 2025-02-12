@@ -79,8 +79,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
     languages.push(
       <Link
         key={i}
-        className="button is-small is-white mln-5"
-        
+        className="button is-small is-white mln-5 focus-visible"
         to={`detail/${hit.objectID}?lang=${hit.langAvailableIn[i].toLowerCase()}`}
         state={{ from: location.pathname }}
       >
@@ -178,7 +177,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
           <div className="field is-grouped">
             <div className="control">
               {showAbstract && hit.abstract?.length > truncatedAbstractLength && (
-                <a className="button no-border is-light focus-visible "
+                <a className="button no-border is-light focus-visible"
                   tabIndex={0}
                   onClick={(e) => handleClick(e, hit.titleStudy)}
                   onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}
@@ -204,12 +203,11 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
           </div>
         </span>
         <span className="level-right">
-          <div className="field is-grouped is-grouped-multiline">
+          <div className="field is-grouped is-flex-wrap-wrap">
             {languages.length > 0 && (
               <div className="control">
                 <div className="buttons has-addons">
-                  <span className="button no-border bg-w pe-none mrn-5">
-                  
+                  <span className="button no-border bg-w pe-none mln-5 mrn-5">
                     <span>{t("language.label")}:</span>
                   </span>
                   {languages}
@@ -217,7 +215,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
               </div>
             )}
             {hit.dataAccess &&
-              <div>
+              <div className="control">
                 <span className="button is-small is-white bg-w pe-none mrn-5">
                   {hit.dataAccess === "Open" ? (
                     <span className="icon is-small">
@@ -230,7 +228,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
                   )}
                   <span>{t("metadata.dataAccess")}:</span>
                 </span>
-                <span className="button is-small is-white bg-w pe-none mln-5">
+                <span className="button is-small is-white bg-w pe-none mln-5 mrn-5">
                   {hit.dataAccess}
                 </span>
               </div>
@@ -238,7 +236,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
             <div className="control">
               {hit.studyUrl && (
                 <a
-                  className="button is-small is-white"
+                  className="button is-small is-white focus-visible"
                   href={hit.studyUrl}
                   rel="noreferrer"
                   target="_blank"
