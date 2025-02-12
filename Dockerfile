@@ -30,7 +30,7 @@ FROM webpack AS pre-final
 RUN npm prune --omit=dev
 
 # Create a separate image with the build layers removed
-FROM node:22 AS final
+FROM node:18 AS final
 COPY --from=pre-final /usr/src/app/node_modules/ /usr/src/app/node_modules/
 COPY --from=pre-final /usr/src/app/common/*.js /usr/src/app/common/
 COPY --from=pre-final /usr/src/app/server/*.js /usr/src/app/server/
