@@ -50,6 +50,13 @@
         "ariaLabel": "Tooltip button for Keywords filter"
       }
     },
+    "dataAccess": {
+      "label": "Data access",
+      "tooltip": {
+        "content": "Data access mapped from <a href=\"https://wiki.surfnet.nl/display/standards/info-eu-repo#infoeurepo-AccessRights\">Access Rights CV</a> or custom mapping from data access terms of metadata provider. Data access has not been mapped for all metadata providers (no CV values or custom mappings available yet).",
+        "ariaLabel": "Tooltip button for Data access filter"
+      }
+    },
     "collectionDates": {
       "label": "Collection years",
       "placeholder": "Search years",
@@ -86,7 +93,7 @@
       "label": "Time Method (CV)",
       "placeholder": "Search time method (CV)",
       "tooltip": {
-        "content": "Describes the time dimension of the data collection. Based on the vocabulary developed by the DDI Alliance. The classification and its translations are available at <a href=\"https://vocabularies.cessda.eu/urn/urn:ddi:int.ddi.cv:TypeOfInstrument:1.1\">CESSDA Vocabulary Service: DDI Alliance Controlled Vocabulary for Time Method</a>.",
+        "content": "Describes the time dimension of the data collection. Based on the vocabulary developed by the DDI Alliance. The classification and its translations are available at <a href=\"https://vocabularies.cessda.eu/urn/urn:ddi:int.ddi.cv:TimeMethod:1.2.3\">CESSDA Vocabulary Service: DDI Alliance Controlled Vocabulary for Time Method</a>.",
         "ariaLabel":"Tooltip button for Time method (CV) filter"
       }
     },

@@ -147,27 +147,15 @@ export default class Elasticsearch {
   async getAboutMetrics(index = `${this.indexName}_*`): Promise<Metrics> {
     const response = await this.client.search<unknown, { 
       unique_id: AggregationsCardinalityAggregate, 
-      total_creators: AggregationsCardinalityAggregate,
+      total_creators: AggregationsNestedAggregate & {
+        unique_creators: AggregationsCardinalityAggregate;
+      },
       total_countries: AggregationsNestedAggregate & {
         unique_countries: AggregationsCardinalityAggregate;
       }
     }>({
       size: 0,
       index: index,
-      runtime_mappings: {
-        creators_name_keyword: {
-          type: 'keyword',
-          script: {
-            source: `
-              if (params['_source'].creators != null) {
-                for (creator in params['_source'].creators) {
-                  if (creator.name != null) emit(creator.name);
-                }
-              }
-            `
-          }
-        }
-      },
       query: { match_all: {} },
       aggs: {
         unique_id: {
@@ -176,8 +164,15 @@ export default class Elasticsearch {
           },
         },
         total_creators: {
-          cardinality: {
-            field: "creators_name_keyword"
+          nested: {
+            path: "creators"
+          },
+          aggs: {
+            unique_creators: {
+              cardinality: {
+                field: 'creators.name.normalized'
+              }
+            }
           }
         },
         total_countries: {
@@ -196,7 +191,7 @@ export default class Elasticsearch {
     });
 
     const totalStudies = response.aggregations?.unique_id.value || 0;
-    const totalCreators = response.aggregations?.total_creators.value || 0;
+    const totalCreators = response.aggregations?.total_creators.unique_creators?.value || 0;
     const totalCountries = response.aggregations?.total_countries.unique_countries?.value || 0;
   
     return {studies: totalStudies, creators: totalCreators, countries: totalCountries};
