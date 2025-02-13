@@ -38,6 +38,7 @@ COPY --from=pre-final /usr/src/app/dist/ /usr/src/app/dist/
 COPY --from=pre-final /usr/src/app/startprod.js /usr/src/app/
 
 # Configure application startup
+WORKDIR /usr/src/app
 USER node
 EXPOSE 8088
 CMD [ "node", "startprod.js" ]
