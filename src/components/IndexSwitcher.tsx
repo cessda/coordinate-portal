@@ -18,7 +18,6 @@ import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useClearRefinements } from "react-instantsearch";
-import { stat } from "fs";
 
 
 // No longer using the concept of language selection from a technical standpoint. We are switching the index, not the language in terms of i18n.
