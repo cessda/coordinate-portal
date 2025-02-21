@@ -122,7 +122,7 @@ export const IndexDropdownMenu = ({
                 aria-expanded={open}
                 aria-controls="dropdown-menu"
                 type="button"
-                className="button is-ghost has-text-weight-semibold"
+                className="button is-ghost has-text-weight-semibold focus-visible"
                 onClick={handleToggle}
                 onKeyDown={handleKeyDown}
             >

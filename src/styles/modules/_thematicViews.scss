@@ -9,7 +9,8 @@
 
   input.searchbox {
     width: 360px;
-    height: 38px;
+    height: auto;
+    max-height: 38px;
     margin-left: 2px;
   }
 
@@ -63,7 +64,8 @@
     width: 180px;
     font-size: 13px;
     line-height: 36px;
-    height: 38px;
+    height: auto;
+    max-height: 38px;
     margin-left: 2px;
   }
 
@@ -101,7 +103,7 @@
     width: auto;
     margin-right: 4px;
     margin-top: 4px;
-    margin-left: 0px;
+    margin-left: 4px;
   }
 
   .navbar-item {

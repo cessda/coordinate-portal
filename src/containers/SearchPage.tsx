@@ -115,14 +115,14 @@ const SearchPage = () => {
        
     <div className={'columns layout mt-4' + (showMobileFilters ? ' show-mobile-filters' : '')}>
     
-      <div className="column is-8 is-hidden-tablet">
+      <div className="column is-8 is-hidden-tablet pt-0">
         <button className={'ais-ClearRefinements-button focus-visible' + (!showFilterSummary ? ' on-top' : '')}
           onClick={() => dispatch(toggleMobileFilters(showMobileFilters))}
           onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}>
-          {t("showFilters")}
+          {showMobileFilters ? t("hideFilters") : t("showFilters")}
         </button>
       </div>
-      <div className="column is-4 filters pt-0">
+      <div className="column is-4 filters pt-0 pb-10">
         <div className="filter-wrapper">
 
           <div className="columns is-vcentered is-gapless m-0 is-flex is-mobile filter-buttons">

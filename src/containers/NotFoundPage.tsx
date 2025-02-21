@@ -19,14 +19,11 @@ const NotFoundPage = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <div className="columns not-found-links">
-        <div className="column is-full">
-          <h1 className="not-found-title title">{t("notFound.label")}</h1>
-          <p className="mb-2">{t("notFound.content")}</p>
-          <Link to="/">Return to the home page</Link>
-          {/* <Link to="/">Return to the home page</Link> | <a href="https://www.cessda.eu">CESSDA main website</a> */}
-        </div>
+    <div className="columns not-found-links">
+      <div className="column is-full">
+        <h1 className="not-found-title title">{t("notFound.label")}</h1>
+        <p className="mb-2">{t("notFound.content")}</p>
+        <Link to="/">Return to the home page</Link> | <a href="https://www.cessda.eu">CESSDA main website</a>
       </div>
     </div>
   );

@@ -8,62 +8,67 @@ $dark_grey: #4e4d56;
 .columns:last-child {
   margin-bottom: 0;
 }
+
 .button.is-small {
   font-size: 0.9rem;
 }
+
 .button.is-info {
-  background-color:$coordinate_blue;
+  background-color: $light_blue;
 }
-.button.no-border:hover, .button.is-hovered {
+
+.button.no-border:hover,
+.button.is-hovered {
   color: $dark_blue !important;
 }
+
 .button.no-border {
   border-color: transparent;
 }
+
 .data-abstract b {
   font-weight: 600;
   display: inline-block;
-  margin-top:5px;
+  margin-top: 5px;
 }
+
 .side-column .index, .side-column .similars {
   a {
     &:hover {
       text-decoration: underline;
     }
   }
+
   .main {
     font-size: 1.25rem;
     font-weight: 700;
   }
+
   .title {
     font-size: 1.125rem;
     font-weight: 600;
   }
+
   .subtitle {
     font-size: 1rem;
     font-weight: 500;
   }
 }
+
 .main-title {
   font-weight: 700;
   font-size: 36px;
 }
-.summary-header  {
+
+.summary-header {
   padding-bottom: 5px;
   font-weight: 700;
   font-size: 18px;
 }
 
-
 body {
   a {
     color: $dark_blue;
-  }
-
-  #stripe {
-    background-color: $coordinate_green;
-    width: 100%;
-    min-height: 30px;
   }
 
   header {
@@ -74,14 +79,6 @@ body {
     .header-description {
       font-size: 20px;
       font-weight: 700;
-    }
-    .demo-text {
-      color: #8B0000;
-    }
-    .demo-text-tooltip {
-      margin-left: 2px;
-      margin-top: -8px;
-      margin-right: 10px;
     }
 
     .cessda-organisation {
@@ -97,27 +94,12 @@ body {
         color: #fff;
       }
     }
-
-    .logo img {
-  
-margin-left:15px;
-    }
-
- 
-    .link-button {
-      background-color: lighten($dark_blue, 10);
-
-      &:hover {
-        background-color: lighten($dark_blue, 15);
-      }
-    }
   }
 
   .layout {
     .filters {
       .panel-container {
         background-color: transparent;
-   
 
         .panel-header {
           margin-bottom: 0;
@@ -145,7 +127,6 @@ margin-left:15px;
       }
     }
 
-   
   }
 
   .modal {
@@ -180,6 +161,4 @@ margin-left:15px;
       }
     }
   }
-
-
 }

@@ -18,6 +18,7 @@ import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useClearRefinements } from "react-instantsearch";
+import { stat } from "fs";
 
 
 // No longer using the concept of language selection from a technical standpoint. We are switching the index, not the language in terms of i18n.
@@ -70,6 +71,17 @@ const IndexSwitcher = () => {
           if (option) {
             changeIndex(option.value);
           }
+        }}
+        classNames={{
+          control: (state) =>
+            state.isFocused ? 'is-focused' : '',
+        }}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            boxShadow: 'none',
+            outline: state.isFocused ? 'hsl(204, 87%, 32%) solid 2px' : 'none',
+          }),
         }}
       />
     </div>

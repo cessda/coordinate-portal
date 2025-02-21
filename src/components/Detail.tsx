@@ -69,7 +69,11 @@ const Detail = (props: Props) => {
 
 
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
-  const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(null);
+  const exportMetadataOptions: Option[] = [
+    { value: 'json', label: 'JSON' },
+    // { value: 'ddi25', label: 'DDI 2.5' },
+  ]
+  const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(exportMetadataOptions[0]);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
   const formatter = new DateTimeFormatterBuilder()
@@ -236,11 +240,6 @@ const Detail = (props: Props) => {
     );
   }
 
-  const exportMetadataOptions: Option[] = [
-    { value: 'json', label: 'JSON' },
-    // { value: 'ddi25', label: 'DDI 2.5' },
-  ]
-
   const handleExportMetadataChange = (selectedOption: Option | null) => {
     setSelectedExportMetadataOption(selectedOption);
   };
@@ -303,7 +302,7 @@ const Detail = (props: Props) => {
     { value: 'endnote', label: 'EndNote' },
   ]
 
-  const handleExportCitationChange = (selected: Option | null) => {
+  const handleExportCitationChange = (selected: Option) => {
     setSelectedExportCitationOption(selected);
   };
 
@@ -458,15 +457,29 @@ const Detail = (props: Props) => {
                     classNames={{container: 'ml-1'}}/> */}
             <div className="column is-narrow">
               <Select options={exportMetadataOptions}
-                defaultValue={{ value: '', label: '' }}
+                defaultValue={ exportMetadataOptions[0] }
+                isSearchable={false}
                 onChange={handleExportMetadataChange}
                 className="export-select"
-                aria-label="Export metadata" />
+                aria-label="Export metadata"
+                classNamePrefix="react-select"
+                isClearable={false}
+                classNames={{
+                  control: (state) =>
+                    state.isFocused ? 'is-focused' : '',
+                }}
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    boxShadow: 'none',
+                    outline: state.isFocused ? 'hsl(204, 87%, 32%) solid 2px' : 'none',
+                  }),
+                }} />
             </div>
             <div className="column is-narrow">
               <button className="button export" onClick={handleExportMetadata} data-testid="export-metadata-button"
                 disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
-                Export metadata
+                {t("exportMetadata")}
               </button>
             </div>
           </div>
