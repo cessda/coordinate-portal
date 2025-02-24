@@ -14,6 +14,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - *Fixed (for any bug fixes)*
 - *Security (in case of vulnerabilities)*
 
+## [3.8.0] - 2025-02-25
+
+### Added
+
+- Enabled Norwegian language support ([PR-396](https://github.com/cessda/cessda.cdc.searchkit/pull/396))
+
+### Changed
+
+- Renamed fields with normalizers from `raw` to `normalized` ([#685](https://github.com/cessda/cessda.cdc.versions/issues/685))
+
+### Fixed
+
+- Fixed searching from creators and keywords not working correctly ([#685](https://github.com/cessda/cessda.cdc.versions/issues/685))
+
+### Removed
+
+- Removed Danish language support ([#503](https://github.com/cessda/cessda.cdc.versions/issues/503))
+
 ## [3.7.1] - 2024-11-15
 
 ### Fixed
@@ -389,6 +407,7 @@ Searchkit - [10.5281/zenodo.3786300](https://zenodo.org/record/3786300)
 
 - N/A
 
+[3.8.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.8.0
 [3.7.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.7.1
 [3.7.0]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.7.0
 [3.6.1]: https://github.com/cessda/cessda.cdc.searchkit/releases/tag/3.6.1
