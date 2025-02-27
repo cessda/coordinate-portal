@@ -71,7 +71,7 @@ const Detail = (props: Props) => {
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
   const exportMetadataOptions: Option[] = [
     { value: 'json', label: 'JSON' },
-    // { value: 'ddi25', label: 'DDI 2.5' },
+    { value: 'ddi25', label: 'DDI-C 2.5' }
   ]
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(exportMetadataOptions[0]);
   const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
@@ -269,7 +269,7 @@ const Detail = (props: Props) => {
 
         case 'ddi25': {
           // Set exportData for DDI export
-          exportData = getDDI(item);
+          exportData = getDDI(item, dispLang);
           fileName = `${sanitizedTitle}.xml`;
           mimeType = 'application/xml';
           break;

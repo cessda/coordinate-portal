@@ -355,92 +355,135 @@ function extractDataCollectionPeriod(
   return startDate + dataCollectionPeriodEnddate.substring(0, 10);
 }
 
-export function getDDI(metadata: CMMStudy) {
+export function getDDI(metadata: CMMStudy, lang: string): string {
   const {
-    titleStudy,
-    creators,
-    dataCollectionPeriodStartdate,
-    dataCollectionPeriodEnddate,
-    dataCollectionYear,
-    dataAccessFreeTexts,
-    pidStudies,
-    studyAreaCountries,
-    typeOfModeOfCollections,
-    typeOfTimeMethods,
-    typeOfSamplingProcedures,
-    universe,
-    keywords,
-    classifications,
-    publicationYear,
-    publisher,
-    relatedPublications,
-    abstract,
+    titleStudy, creators, dataCollectionPeriodStartdate, dataCollectionPeriodEnddate, dataCollectionYear,
+    dataAccessFreeTexts, pidStudies, studyAreaCountries, typeOfModeOfCollections, typeOfTimeMethods,
+    typeOfSamplingProcedures, universe, keywords, classifications, publicationYear, publisher, relatedPublications,
+    abstract, studyUrl, funding, series, unitTypes, dataKindFreeTexts
   } = metadata;
 
-  const creatorXML = creators.map((creator) => `<producer>${creator}</producer>`).join('\n');
-  const modeXML = typeOfModeOfCollections.map((mode) => `<collMode>${mode}</collMode>`).join('\n');
-  const timeMethodXML = typeOfTimeMethods.map((timeMethod) => `<timeMeth>${timeMethod}</timeMeth>`).join('\n');
-  const samplingProcedureXML = typeOfSamplingProcedures.map((samplingProcedure) => `<sampProc>${samplingProcedure}</sampProc>`).join('\n');
-  const nationXML = studyAreaCountries.map((country) => `<nation abbr="${country.abbr}">${country.country}</nation>`).join('\n');
-  const geogCoverXML = studyAreaCountries.map((country) => `<geogCover abbr="${country.abbr}">${country.country}</geogCover>`).join('\n');
-  const keywordXML = keywords.map((keyword) => `<keyword vocab="${keyword.vocab}" vocabURI="${keyword.vocabUri}" ID="${keyword.id}">${keyword.term}</keyword>`).join('\n');
-  const classificationXML = classifications.map((cls) => `<topcClas vocab="${cls.vocab}" vocabURI="${cls.vocabUri}" ID="${cls.id}">${cls.term}</topcClas>`).join('\n');
-  const pidXML = pidStudies.map((pid) => `<holdings URI="${pid.agency}:${pid.pid}"/>`).join('\n');
-  const relatedPublicationXML = relatedPublications.map((pub) => `
-    <citation>
-      <titlStmt>
-        <titl>${pub.title}</titl>
-      </titlStmt>
-      ${pub.holdings.map((holding) => `
-        <holdings URI="${holding}"/>
-      `).join('\n')}
-    </citation>
-  `).join('\n');
+  const createElement = (tag: string, content: string | undefined, attributes = {}) =>
+  `<${tag}${Object.entries(attributes).map(([key, value]) => value ? ` ${key}="${value}"` : '').join('')}${content !== undefined ? `>${content}</${tag}>` : ' />'}`;
+
+  function createElementWithConcept<T>(
+    tag: string,
+    items: T[],
+    getContent: (item: T) => string
+  ): string {
+    return items
+      .map(getContent)
+      .filter(Boolean)
+      .map(content => `<${tag} xml:lang="${lang}">${content}</${tag}>`)
+      .join('');
+  }
+
+  const modeXML = createElementWithConcept('collMode', typeOfModeOfCollections, collMode =>
+    `${collMode.term || collMode.id}${collMode.id ? `<concept vocab="${collMode.vocab}" vocabURI="${collMode.vocabUri}">${collMode.id}</concept>` : ''}`
+  );
+
+  const timeMethodXML = createElementWithConcept('timeMeth', typeOfTimeMethods, timeMeth =>
+    `${timeMeth.term || timeMeth.id}${timeMeth.id ? `<concept vocab="${timeMeth.vocab}" vocabURI="${timeMeth.vocabUri}">${timeMeth.id}</concept>` : ''}`
+  );
+
+  const sampProcXML = createElementWithConcept('sampProc', typeOfSamplingProcedures, sampProc =>
+    `${sampProc.id}${sampProc.id ? `<concept vocab="${sampProc.vocab}" vocabURI="${sampProc.vocabUri}">${sampProc.id}</concept>` : ''}`
+  );
+
+  const anlyUnitXML = createElementWithConcept('anlyUnit', unitTypes, anlyUnit =>
+    `${anlyUnit.term || anlyUnit.id}${anlyUnit.id ? `<concept vocab="${anlyUnit.vocab}" vocabURI="${anlyUnit.vocabUri}">${anlyUnit.id}</concept>` : ''}`
+  );
+
+  const pidXML = pidStudies.map(pid => createElement('IDNo', pid.pid, {
+    'xml:lang': lang,
+    ...(pid.agency ? { 'agency': pid.agency } : {})
+  })).join('\n');
+
+  const authEntyXML = creators.map(creator => {
+    const affiliationAttr = creator.affiliation ? ` affiliation="${creator.affiliation}"` : '';
+    const extLink = creator.identifier ?
+      `<ExtLink URI="${creator.identifier.uri}" role="PID" title="${creator.identifier.type}" xml:lang="${lang}">${creator.identifier.id}</ExtLink>`
+      : '';
+    return `<AuthEnty xml:lang="${lang}"${affiliationAttr}>${creator.name}${extLink}</AuthEnty>`;
+  }).join('\n');
+
+  const fundingXML = funding.map(funding => createElement('grantNo', funding.grantNumber || '', {
+    'xml:lang': lang,
+    ...(funding.agency ? { 'agency': funding.agency } : {})
+  })).join('\n');
+
+  const seriesXML = series.map(series =>
+    `<serStmt${series.uris?.[0] ? ` URI="${series.uris[0]}"` : ''} xml:lang="${lang}">
+      ${(series.names || []).map(name => `<serName xml:lang="${lang}">${name}</serName>`).join('')}
+      ${(series.descriptions || []).map(desc => `<serInfo xml:lang="${lang}">${escapeTextInXml(desc)}</serInfo>`).join('')}
+    </serStmt>`
+  ).join('\n');
+
+  const relatedPublicationXML = relatedPublications.map(pub =>
+    `<relPubl xml:lang="${pub.lang || 'en'}">
+      ${escapeTextInXml(pub.title)}
+      <citation>
+        ${(pub.holdings || []).map(holding => `<holdings xml:lang="${pub.lang || 'en'}" URI="${holding}"/>`).join('')}
+      </citation>
+    </relPubl>`
+  ).join('\n');
 
   const ddiXML = `<?xml version="1.0" encoding="UTF-8"?>
-<codeBook xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd">
+<codeBook version="2.5" xmlns="ddi:codebook:2_5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ddi:codebook:2_5 http://www.ddialliance.org/Specification/DDI-Codebook/2.5/XMLSchema/codebook.xsd">
   <docDscr>
     <citation>
       <titlStmt>
-        <titl>${titleStudy}</titl>
+        ${createElement('titl', titleStudy, { 'xml:lang': lang })}
       </titlStmt>
       <prodStmt>
-        ${creatorXML}
+        ${publisher.publisher ? createElement('producer', publisher.publisher, { 'xml:lang': lang, ...(publisher.abbr !== "Publisher not specified" && { abbr: publisher.abbr }) }) : ''}
       </prodStmt>
+      ${createElement('holdings', '', {'xml:lang': lang, URI: studyUrl, location: `${publisher.publisher}${publisher.abbr !== "Publisher not specified" ? ' ' + publisher.abbr : ''}` })}
     </citation>
   </docDscr>
   <stdyDscr>
     <citation>
       <titlStmt>
-        <titl>${titleStudy}</titl>
+        ${createElement('titl', titleStudy, { 'xml:lang': lang })}
+        ${pidXML}
       </titlStmt>
+      <rspStmt>
+        ${authEntyXML}
+      </rspStmt>
+      <prodStmt>
+        ${fundingXML}
+      </prodStmt>
+      <distStmt>
+        ${publisher.publisher ? createElement('distrbtr', publisher.publisher, { 'xml:lang': lang, ...(publisher.abbr !== "Publisher not specified" && { abbr: publisher.abbr }) }) : ''}
+        ${createElement('distDate', '', { 'xml:lang': lang, date: publicationYear })}
+      </distStmt>
+      ${seriesXML}
+      ${createElement('holdings', '', {'xml:lang': lang, URI: studyUrl, location: `${publisher.publisher}${publisher.abbr !== "Publisher not specified" ? ' ' + publisher.abbr : ''}` })}
     </citation>
     <stdyInfo>
-      ${modeXML}
-      ${timeMethodXML}
-      ${samplingProcedureXML}
-      ${universe && universe.inclusion ? `<universe>${universe.inclusion}</universe>` : ''}
+      <subject>
+        ${keywords.map(keyword => createElement('keyword', keyword.term, { 'xml:lang': lang, vocab: keyword.vocab, vocabURI: keyword.vocabUri, ID: keyword.id })).join('')}
+        ${classifications.map(topic => createElement('topcClas', topic.term, { 'xml:lang': lang, vocab: topic.vocab, vocabURI: topic.vocabUri, ID: topic.id })).join('')}
+      </subject>
+      ${createElement('abstract', escapeTextInXml(abstract), { 'xml:lang': lang })}
+      <sumDscr>
+        ${dataCollectionPeriodStartdate && dataCollectionPeriodEnddate ? `<collDate xml:lang="${lang}" date="${dataCollectionPeriodStartdate}" event="start"/><collDate xml:lang="${lang}" date="${dataCollectionPeriodEnddate}" event="end"/>` : ''}
+        ${!(dataCollectionPeriodStartdate || dataCollectionPeriodEnddate) && dataCollectionYear ? `<collDate xml:lang="${lang}" date="${dataCollectionYear}" event="single"/>` : ''}
+        ${studyAreaCountries.map(country => createElement('nation', country.country, { 'xml:lang': lang, abbr: country.abbr }))}
+        ${studyAreaCountries.map(country => createElement('geogCover', country.country, { 'xml:lang': lang })).join('\n')}
+        ${anlyUnitXML}
+        ${universe?.inclusion ? `<universe xml:lang="${lang}" clusion="I">${universe.inclusion}</universe>` : ''}
+        ${universe?.exclusion ? `<universe xml:lang="${lang}" clusion="E">${universe.exclusion}</universe>` : ''}
+        ${dataKindFreeTexts.map(dataKind => createElement('dataKind', dataKind.dataKindFreeText, { 'xml:lang': lang })).join('\n')}
+      </sumDscr>
     </stdyInfo>
-    ${abstract ? `<abstract>${abstract}</abstract>` : ''}
-    ${dataCollectionPeriodStartdate && dataCollectionPeriodEnddate ? `<sumDscr><collDate date="${dataCollectionPeriodStartdate}" event="start"></collDate><collDate date="${dataCollectionPeriodEnddate}" event="end"></collDate></sumDscr>` : ''}
-    ${dataCollectionYear ? `<sumDscr><collDate date="${dataCollectionYear}" event="start"></collDate><collDate date="${dataCollectionYear}" event="end"></collDate></sumDscr>` : ''}
-    ${dataAccessFreeTexts.length ? `<sumDscr><dataAccs>${dataAccessFreeTexts.map((text) => `<useStmt><biblCit>${text}</biblCit></useStmt>`).join('')}</dataAccs></sumDscr>` : ''}
-    <sumDscr>
-      <dataAccs>
-        <setAvail>
-          <setAvailPlac>
-            ${nationXML}
-            ${geogCoverXML}
-          </setAvailPlac>
-        </setAvail>
-        ${pidXML}
-      </dataAccs>
-    </sumDscr>
-    ${keywordXML ? `<subject>${keywordXML}</subject>` : ''}
-    ${classificationXML ? `<subject>${classificationXML}</subject>` : ''}
-    ${publicationYear ? `<distStmt><distDate date="${publicationYear}"/></distStmt>` : ''}
-    ${publisher ? `<distStmt><distrbtr abbr="${publisher.abbr}">${publisher.publisher}</distrbtr></distStmt>` : ''}
-    ${relatedPublicationXML ? `<relPubl xml:lang="en">${relatedPublicationXML}</relPubl>` : ''}
+    <method>
+      ${timeMethodXML || sampProcXML || modeXML ? `<dataColl>${timeMethodXML}${sampProcXML}${modeXML}</dataColl>` : ''}
+    </method>
+    <dataAccs>
+      ${dataAccessFreeTexts.length > 0 ? `<useStmt>${dataAccessFreeTexts.map(dataAccessTerms => createElement('restrctn', dataAccessTerms , { 'xml:lang': lang })).join('\n')}</useStmt>` : ''}
+    </dataAccs>
+    ${relatedPublicationXML ? `<othrStdyMat>${relatedPublicationXML}</othrStdyMat>` : ''}
   </stdyDscr>
 </codeBook>`;
 
@@ -448,7 +491,7 @@ export function getDDI(metadata: CMMStudy) {
 }
 
 function formatXML(xml: string) {
-  const PADDING = ' '.repeat(2); // Adjust the padding as needed
+  const PADDING = ' '.repeat(2); // Spaces for padding
   let formatted = '';
   const reg = /(>)(<)(\/*)/g;
   xml = xml.replace(reg, '$1\n$2$3');
@@ -482,23 +525,13 @@ function formatXML(xml: string) {
 }
 
 // Function to escape special characters within XML text content
-function escapeTextInXml(text: string) {
-  return text.replace(/[<>&"']/g, (match) => {
-    switch (match) {
-      case '<':
-        return '&lt;';
-      case '>':
-        return '&gt;';
-      case '&':
-        return '&amp;';
-      case '"':
-        return '&quot;';
-      case "'":
-        return '&apos;';
-      default:
-        return match;
-    }
-  });
+function escapeTextInXml(text: string): string {
+  if (!text) return '';
+  return text.replace(/&/g, '&amp;')
+             .replace(/</g, '&lt;')
+             .replace(/>/g, '&gt;')
+             .replace(/"/g, '&quot;')
+             .replace(/'/g, '&apos;');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
