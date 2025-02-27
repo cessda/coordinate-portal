@@ -31,21 +31,19 @@
 
 .panel-container .panel-header.collapsable:before {
   content:'▼';
-  font-size:12px;
-  line-height:1.8;
 }
 
 .panel-container .panel-header.collapsable.collapsed:before {
   content:'▶';
-  font-size:12px;
-  line-height:1.8;
+}
+
+.panel-container .panel-header.collapsable:before, .panel-container .panel-header.collapsable.collapsed:before {
+  font-size: 13px;
+  line-height: 1.5;
+  position: relative;
+  top: -2px;
 }
 
 .panel-container .panel-content.collapsable.collapsed {
   display: none;
-}
-
-.panel-content {
-  margin: 0 10px 10px 10px;
-  padding-bottom: 15px;
 }

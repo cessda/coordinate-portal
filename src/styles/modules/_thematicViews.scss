@@ -4,7 +4,6 @@
   header h1 {
     font-size: 20px;
     font-weight: 700;
-
   }
 
   input.searchbox {
@@ -146,10 +145,6 @@
 
 }
 
-.show-abstract {
-  margin-top: 0;
-}
-
 .switch[type=checkbox]:checked+label::after {
   left: 33px;
 }
@@ -261,18 +256,17 @@ fieldset[disabled] .button.is-info {
   text-decoration: underline;
 }
 
-.field.show-abstract {
+.field.toggle-button {
   margin-left: 0;
   margin-bottom: 0;
-
 }
 
-.field.show-abstract label {
+.field.toggle-button label {
   font-size: 14px;
   transition: background-color 0.2s;
 }
 
-.field.show-abstract label::before {
+.field.toggle-button label::before {
   transition: background-color 0.2s;
 }
 

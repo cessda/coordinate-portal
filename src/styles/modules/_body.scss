@@ -90,6 +90,10 @@ body {
     list-style-type: decimal;
     padding-left: 30px;
   }
+
+  a {
+    text-decoration: underline;
+  }
 }
 
 .not-found-links {
@@ -126,10 +130,6 @@ body {
   }
 }
 
-.show-abstract {
-  margin: 5px 0 0 10px;
-}
-
 .metrics-circle {
   width: 150px;
   height: 150px;
@@ -164,7 +164,7 @@ body {
   opacity: 1;
 }
 
-:focus-visible, .focus-visible:focus-visible, .is-focused {
+:focus-visible, .focus-visible:focus-visible, .is-focused:focus-within, input[type=checkbox]:focus-visible + label {
   outline: hsl(204, 87%, 32%) solid 2px;
 }
 

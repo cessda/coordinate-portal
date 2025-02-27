@@ -76,10 +76,14 @@ const IndexSwitcher = () => {
             state.isFocused ? 'is-focused' : '',
         }}
         styles={{
-          control: (baseStyles, state) => ({
+          menu: (baseStyles) => ({
+            ...baseStyles,
+            marginTop: '0',
+          }),
+          control: (baseStyles) => ({
             ...baseStyles,
             boxShadow: 'none',
-            outline: state.isFocused ? 'hsl(204, 87%, 32%) solid 2px' : 'none',
+            outline: 'none',
           }),
         }}
       />

@@ -28,21 +28,24 @@
   box-shadow: none;
   padding: 0;
   border: none;
- font-size:13px;
- font-weight: 600;
- color: rgb(11, 96, 152);
+  font-size: 14px;
+  font-weight: 600;
+  color: inherit;
 }
 
-.ais-ClearRefinements-button:hover, .ais-ClearRefinements-button:focus {
-
+.ais-ClearRefinements-button:hover {
   background-image: none;
   color: hsl(0, 0%, 21%);
-  }
+}
 
-  .ais-ClearRefinements-button:disabled[disabled] {
-cursor: not-allowed;
-   color: hsl(0, 0%, 60%);
-  }
+.ais-ClearRefinements-button:focus {
+  background-image: none;
+}
+
+.ais-ClearRefinements-button:disabled[disabled] {
+  cursor: not-allowed;
+  color: hsl(0, 0%, 60%);
+}
 
 .ais-Panel {
   margin-bottom: 0;
@@ -67,19 +70,23 @@ cursor: not-allowed;
   flex-wrap: wrap;
   overflow-x: scroll;
   max-height: 500px;
-  
+
   .ais-RefinementList-item {
     margin: 0 5px 2px 0;
   }
 }
 
-.ais-RangeInput-input,
-.ais-SearchBox-input {
+.ais-RangeInput-input, .ais-SearchBox-input {
   outline-offset: 1px;
 }
 
 .ais-RangeInput-input {
   max-width: 100px;
+}
+
+.ais-HitsPerPage-select:focus, .ais-SortBy-select:focus {
+  border-color: #d6d6e7;
+  box-shadow: none;
 }
 
 .ais-HitsPerPage-select:focus-visible, .ais-SortBy-select:focus-visible {

@@ -29,6 +29,7 @@
     "resetSearch": "Reset Search"
   },
   "filters": {
+    "label": "Filters",
     "view": {
       "more": "Add {{facetsPerPage}} more {{name}} to searchable {{name}} list",
       "less": "Keep only {{defaultSize}} most common {{name}} in searchable {{name}} list",
@@ -251,13 +252,6 @@
   },
   "header": {
     "frontPage": "Front/search page",
-    "demoText": {
-      "label": "Demo/dev version",
-      "tooltip": {
-        "content": "Portal is still a work in progress. Only this early demo version will be hosted on this domain so the address will change when the final version is released. Site may occasionally be down so try again later (usually up again in less than 10 minutes).",
-        "ariaLabel": "Tooltip button for demo explanation"
-      }
-    },
     "portalDescription": "COORDINATE Portal: Child and Youth Wellbeing Thematic View",
     "skipToMain": "Skip to main content"
   },

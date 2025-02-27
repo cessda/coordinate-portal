@@ -1,7 +1,7 @@
 .panel-container {
   position: relative;
 
-  & > .dropdown {
+  &>.dropdown {
     position: absolute;
     top: 1px;
     right: 15px;
@@ -11,8 +11,6 @@
 .dropdown {
 
   .dropdown-trigger {
-    // z-index: 1;
-
     button {
       padding: 0;
       background: none;
@@ -27,5 +25,9 @@
   .tooltip-above {
     bottom: 100%;
     top: unset;
+  }
+
+  .dropdown-content .dropdown-item a {
+    text-decoration: underline;
   }
 }

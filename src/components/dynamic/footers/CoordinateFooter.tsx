@@ -36,7 +36,7 @@ const DynamicFooter = () => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const logoImg = require('../../../img/icons/' + currentThematicView.icon);
   return (
-    <footer data-testid="footer" className={'footer' + (showMobileFilters ? ' show-mobile-filters' : '')}>
+    <footer data-testid="footer" className="footer">
       <div className="container">
         <div className="columns">
           <div className="column">

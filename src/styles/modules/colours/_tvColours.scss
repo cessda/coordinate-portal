@@ -108,7 +108,7 @@ body.coordinate {
 
   color: $coordinate_text;
 
-  :focus-visible, .focus-visible:focus-visible, .is-focused {
+  :focus-visible, .focus-visible:focus-visible, .is-focused:focus-within, input[type=checkbox]:focus-visible + label {
     outline: $coordinate_focus solid 2px !important;
   }
 }

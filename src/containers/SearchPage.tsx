@@ -127,7 +127,7 @@ const SearchPage = () => {
 
           <div className="columns is-vcentered is-gapless m-0 is-flex is-mobile filter-buttons">
             <div className="column">
-              <h2 className="filters">Filters</h2>
+              <h2 className="filters">{t("filters.label")}</h2>
             </div>
             <div className="column is-narrow columns is-gapless is-mobile mr-4">
               <div className="column is-narrow mt-1 mr-2">
@@ -349,7 +349,7 @@ const SearchPage = () => {
                 <div className="column is-5">
                   <HitsPerPage items={hitsPerPageItems}
                      classNames={{
-                      select: 'focus-visible'
+                      select: 'focus-visible',
                     }} />
                 </div>
                 <div className="column is-7">
