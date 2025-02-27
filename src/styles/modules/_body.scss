@@ -167,8 +167,3 @@ body {
 :focus-visible, .focus-visible:focus-visible, .is-focused:focus-within, input[type=checkbox]:focus-visible + label {
   outline: hsl(204, 87%, 32%) solid 2px;
 }
-
-.button-wrapper .dropdown .dropdown-trigger button,
-.switch[type=checkbox]+label::before, .switch[type=checkbox]+label:before {
-  outline-offset: 1px;
-}
