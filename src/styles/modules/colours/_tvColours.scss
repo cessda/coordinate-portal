@@ -15,6 +15,7 @@ $coordinate_secondary_highlight: hsl(52, 24%, 63%);
 $coordinate_text: hsl(208, 7%, 46%);
 $coordinate_bg: hsl(178, 5%, 92%);
 $coordinate_footer: hsl(178, 5%, 100%);
+$coordinate_focus: hsl(51, 100%, 50%);
 
 $hummingbird_primary_highlight: hsl(204, 87%, 32%);
 $hummingbird_secondary_highlight: hsl(204, 87%, 52%);
@@ -96,9 +97,9 @@ body.coordinate {
     background-color: hsl(178, 20%, 95%);
     color: $coordinate_text;
   }
-.relative {
-  position: relative;
-}
+  .relative {
+    position: relative;
+  }
 
   header h1 {
 
@@ -107,6 +108,9 @@ body.coordinate {
 
   color: $coordinate_text;
 
+  :focus-visible, .focus-visible:focus-visible, .is-focused:focus-within, input[type=checkbox]:focus-visible + label {
+    outline: $coordinate_focus solid 2px !important;
+  }
 }
 
 main {

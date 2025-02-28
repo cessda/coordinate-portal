@@ -23,13 +23,17 @@ const ToggleButtons = () => {
   const showKeywords = useAppSelector((state) => state.search.showKeywords);
 
   return (
-    <div className="field show-abstract">
-      <input id="toggle-abstract" type="checkbox" name="toggle-abstract" className="switch is-rounded is-info"
-            checked={showAbstract} onChange={() => dispatch(toggleAbstract(showAbstract))} />
-      <label htmlFor="toggle-abstract" className="mr-4">{t("showAbstract")}</label>
-      <input id="toggle-keywords" type="checkbox" name="toggle-keywords" className="switch is-rounded is-info"
+    <div className="columns is-flex is-narrow mb-0">
+      <div className="column field is-narrow toggle-button p-0">
+        <input id="toggle-abstract" type="checkbox" name="toggle-abstract" className="switch is-rounded is-info"
+              checked={showAbstract} onChange={() => dispatch(toggleAbstract(showAbstract))} />
+        <label htmlFor="toggle-abstract" className="pr-2 mr-2">{t("showAbstract")}</label>
+      </div>
+      <div className="column field is-narrow toggle-button p-0">
+        <input id="toggle-keywords" type="checkbox" name="toggle-keywords" className="switch is-rounded is-info"
             checked={showKeywords} onChange={() => dispatch(toggleKeywords(showKeywords))} />
-      <label htmlFor="toggle-keywords">{t("showKeywords")}</label>
+        <label htmlFor="toggle-keywords" className="pr-2 mr-2">{t("showKeywords")}</label>
+      </div>
     </div>
   );
 };

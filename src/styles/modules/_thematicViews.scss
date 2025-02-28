@@ -4,12 +4,12 @@
   header h1 {
     font-size: 20px;
     font-weight: 700;
-
   }
 
   input.searchbox {
     width: 360px;
-    height: 38px;
+    height: auto;
+    max-height: 38px;
     margin-left: 2px;
   }
 
@@ -63,7 +63,8 @@
     width: 180px;
     font-size: 13px;
     line-height: 36px;
-    height: 38px;
+    height: auto;
+    max-height: 38px;
     margin-left: 2px;
   }
 
@@ -101,7 +102,7 @@
     width: auto;
     margin-right: 4px;
     margin-top: 4px;
-    margin-left: 0px;
+    margin-left: 4px;
   }
 
   .navbar-item {
@@ -142,10 +143,6 @@
   width: 0.7rem;
   height: 0.7rem;
 
-}
-
-.show-abstract {
-  margin-top: 0;
 }
 
 .switch[type=checkbox]:checked+label::after {
@@ -259,18 +256,17 @@ fieldset[disabled] .button.is-info {
   text-decoration: underline;
 }
 
-.field.show-abstract {
+.field.toggle-button {
   margin-left: 0;
   margin-bottom: 0;
-
 }
 
-.field.show-abstract label {
+.field.toggle-button label {
   font-size: 14px;
   transition: background-color 0.2s;
 }
 
-.field.show-abstract label::before {
+.field.toggle-button label::before {
   transition: background-color 0.2s;
 }
 

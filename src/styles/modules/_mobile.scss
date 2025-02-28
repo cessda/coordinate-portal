@@ -1,9 +1,4 @@
-.mobile-filters-toggle {
-  display: none !important;
-}
-
 @media screen and (max-width: 1023px) {
-
   .button.is-small {
     font-size: 0.8rem;
   }
@@ -14,12 +9,6 @@
     &:after {
       display: none;
     }
-
-    .reset-search {
-      background-color: #2b5a9b;
-      max-width: 100%;
-      padding: 6px 3px;
-    }
   }
 }
 
@@ -28,19 +17,7 @@
     background-size: 100% !important;
   }
 
-  .cessda-organisation {
-    display: none;
-  }
-
-  .mobile-filters-toggle {
-    display: inline-block !important;
-  }
-
   .filters {
-    display: none;
-  }
-
-  .show-mobile-filters.footer {
     display: none;
   }
 
@@ -51,13 +28,10 @@
 
     .filters {
       display: block;
-
     }
-
-
   }
 
-  .ais-Panel-body .filters .Select-menu-outer {
+  .ais-Panel-body .filters {
     top: 38px;
     left: 0;
     width: 100%;
@@ -66,37 +40,5 @@
   .result-actions {
     display: block;
     opacity: 1;
-  }
-
-  .sk-action-bar {
-
-    .level-left>.level-item,
-    .level>.level-item {
-      display: none;
-    }
-
-    .level-right {
-      margin: auto;
-    }
-  }
-
-  footer {
-    .footer-social {
-      position: static !important;
-    }
-
-    .logo-footer {
-      margin: auto;
-    }
-
-    .is-4 {
-      text-align: center !important;
-    }
-  }
-
-  .demo-text-tooltip {
-    .dropdown-menu {
-      right: -28px !important;
-    }
   }
 }

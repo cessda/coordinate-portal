@@ -89,6 +89,13 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
           </Link>
 
         </div>
+        <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile p-0">
+          <a href="#main" id="skip-to-main" className="link is-sr-only"
+            onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
+            onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>
+            &nbsp;{t("header.skipToMain")}&nbsp;
+          </a>
+        </div>
         <div className="column is-narrow p-0">
           <ThematicViewSwitcher />
         </div>
@@ -130,14 +137,6 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
                 
               </div>
             </nav>
-            <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile p-0">
-              <a href="#main" id="skip-to-main" className="link is-sr-only"
-                onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
-                onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>
-                {t("header.skipToMain")}
-              </a>
-            </div>
-
 
           </div>
 

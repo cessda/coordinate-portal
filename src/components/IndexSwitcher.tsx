@@ -71,6 +71,21 @@ const IndexSwitcher = () => {
             changeIndex(option.value);
           }
         }}
+        classNames={{
+          control: (state) =>
+            state.isFocused ? 'is-focused' : '',
+        }}
+        styles={{
+          menu: (baseStyles) => ({
+            ...baseStyles,
+            marginTop: '0',
+          }),
+          control: (baseStyles) => ({
+            ...baseStyles,
+            boxShadow: 'none',
+            outline: 'none',
+          }),
+        }}
       />
     </div>
   );

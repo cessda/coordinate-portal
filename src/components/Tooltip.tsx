@@ -60,7 +60,7 @@ const Tooltip = ({ content, id, classNames, ariaLabel }: TooltipProps) => {
 
   return (
     <div
-      className={`dropdown is-right ${classNames?.container}${isActive ? ' is-active' : ''}`}
+      className={`dropdown is-right ${classNames?.container || ''}${isActive ? ' is-active' : ''}`}
       onBlur={() => setIsActive(false)}
       onMouseEnter={() => { calculatePosition(); setIsActive(true); }}
       onMouseLeave={() => setIsActive(false)}
@@ -69,7 +69,7 @@ const Tooltip = ({ content, id, classNames, ariaLabel }: TooltipProps) => {
       <div className="dropdown-trigger">
         <button
           ref={tooltipButtonRef}
-          className={`button focus-visible ${classNames?.button}`}
+          className={`button focus-visible ${classNames?.button || ''}`}
           aria-haspopup="true"
           {...(isActive ? { 'aria-describedby': id } : { 'aria-label': ariaLabel })}
           onClick={(e) => handleClick(e)}
@@ -81,10 +81,10 @@ const Tooltip = ({ content, id, classNames, ariaLabel }: TooltipProps) => {
       </div>
       {isActive && (
         <div className={`dropdown-menu ${isNearBottom ? ' tooltip-above' : ''}`} data-testid="tooltip-content">
-          <div className={`dropdown-content ${classNames?.content}`}>
+          <div className={`dropdown-content ${classNames?.content || ''}`}>
             <div
               id={id}
-              className={`dropdown-item ${classNames?.item}`}
+              className={`dropdown-item ${classNames?.item || ''}`}
               role="tooltip"
               aria-hidden={isActive ? 'false' : 'true'}
             >

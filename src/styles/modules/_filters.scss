@@ -1,17 +1,9 @@
 .filters, .side-column {
   position: relative;
 
-
-
   .panel-container {
     background-color: #f8f8f8;
-    // padding: 15px;
     border-radius: 3px;
-
-    // & input {
-    //   padding-left: 10px;
-    //   color: #c3c3c3;
-    // }
 
     .panel-header {
       padding: 15px;
@@ -19,59 +11,10 @@
     }
 
     .panel-content {
-      // margin: 10px;
-
-      .Select-control, .Select-menu-outer, button {
-    
+      button {
         border: 2px solid #eaeae8;
         border-radius: 3px;
         box-shadow: none;
-      }
-
-      .Select-control {
-        padding-right: 2px;
-      }
-
-      .Select-value {
-        background-color: rgba(244, 244, 241, 0.5);
-        border-radius: 3px;
-        border: 1px solid #eaeae8;
-        color: #000;
-        margin: 1px;
-        padding: 4px 6px;
-
-        .Select-value-icon {
-          border-right: 1px solid #eaeae8;
-
-          &:hover {
-            background-color: rgb(234, 234, 232);
-            color: #000000;
-          }
-        }
-
-        .Select-value-label {
-          font-size: 13px;
-        }
-      }
-
-      .Select-input input {
-        color: #444444;
-      }
-
-      .Select-arrow-zone {
-        display: none;
-      }
-
-      .Select-menu-outer {
-        max-height: 250px;
-
-        .Select-menu {
-          max-height: 246px;
-
-          .Select-option.is-focused {
-            background-color: #eaeae8;
-          }
-        }
       }
     }
 
@@ -84,32 +27,5 @@
         pointer-events: none;
       }
     }
-  }
-
-  & .dsn-list-narrow {
-    padding-top: 5px;
-    font-weight: bold;
-  }
-
-  & .Select-menu-outer {
-    top: 0;
-    left: 250px;
-    width: 200%;
-    box-shadow: 3px 1px 6px 5px rgba(85, 85, 5, .3);
-    border-radius: .4em;
-    float: left;
-    position: absolute;
-    font-size: .9em;
-  }
-
-  .Select-placeholder {
-    padding-left: 20px;
-    color: #c3c3c3;
-    max-width: 90%;
-  }
-
-  .Select-value {
-    width: 100%;
-    margin: 0;
   }
 }
