@@ -261,7 +261,7 @@ const SearchPage = () => {
                   ariaLabel={t("filters.country.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={true} showMoreLimit={500}
+                <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={false} showMoreLimit={500}
                   classNames={{
                     searchBox: 'focus-visible',
                     checkbox: 'focus-visible',
