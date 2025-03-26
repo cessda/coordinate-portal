@@ -6,7 +6,7 @@ import Helmet, { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom'
 import { store } from '../src/store';
 
-const Wrapper = ({ children }: { children: ReactNode }) => (<MemoryRouter><HelmetProvider><Provider store={store}>{children}</Provider></HelmetProvider></MemoryRouter>);
+const Wrapper = ({ children }: { children: ReactNode }) => (<HelmetProvider><MemoryRouter><Provider store={store}>{children}</Provider></MemoryRouter></HelmetProvider>);
 
 function customRender(ui: React.ReactElement, options?: Omit<RenderOptions, 'wrapper'>) {
   return render(ui, { wrapper: Wrapper, ...options });

@@ -36,7 +36,7 @@ it('should render list of similar studies when data is provided', () => {
   similars.forEach(similar => {
     const link = screen.getByText(similar.title);
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', `/detail/${similar.id}`);
+    expect(link).toHaveAttribute('href', `/detail/${similar.id}?lang=en`);
   });
 });
 
@@ -59,6 +59,6 @@ it('should generate correct URLs for each similar study', () => {
 
   similars.forEach(similar => {
     const link = screen.getByText(similar.title);
-    expect(link).toHaveAttribute('href', `/detail/${similar.id}`);
+    expect(link).toHaveAttribute('href', `/detail/${similar.id}?lang=en`);
   });
 });

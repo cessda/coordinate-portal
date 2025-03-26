@@ -63,11 +63,11 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
   const dispatch = useAppDispatch();
 
   const [abstractExpanded, setAbstractExpanded] = useState(false);
-  const [shuffledKeywords, setShuffledKeywords] = useState<TermVocabAttributes[]>([]);
+  const [sortedKeywords, setSortedKeywords] = useState<TermVocabAttributes[]>([]);
 
   useEffect(() => {
     if (hit.keywords && hit.keywords.length > 0) {
-      setShuffledKeywords(shuffleArray(hit.keywords));
+      setSortedKeywords(hit.keywords.sort((a:any, b:any) => a.term.localeCompare(b.term)));
     }
   }, [hit.keywords]);
 
@@ -155,7 +155,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
    
       <h2 className="title is-6">
         <Link className="focus-visible"
-          to={`detail/${hit.objectID}?sortBy=${currentIndex.indexName}`}
+          to={`detail/${hit.objectID}`}
           state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>
@@ -166,9 +166,9 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
           <div dangerouslySetInnerHTML={{ __html: renderAbstract() }} />
         </div>
       )}
-      {showKeywords && shuffledKeywords.length > 0 &&
+      {showKeywords && sortedKeywords.length > 0 &&
         <div className="result-keywords mt-10">
-          <Keywords keywords={shuffledKeywords} currentIndex={currentIndex.indexName} keywordLimit={truncatedKeywordsLength}
+          <Keywords keywords={sortedKeywords} currentIndex={currentIndex.indexName} keywordLimit={truncatedKeywordsLength}
             lang={currentIndex.languageCode} isExpandDisabled={true} />
         </div>
       }

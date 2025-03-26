@@ -192,7 +192,7 @@ const Detail = (props: Props) => {
       return dateTimeFormatter.format(temporalAccessor);
     } catch (e) {
       // Handle unparsable strings by returning the given value.
-      console.debug(e);
+   //   console.debug(e);
       return dateString;
     }
   }
@@ -413,7 +413,6 @@ const Detail = (props: Props) => {
       }
     }
   }
-  
 
   return (
     <>
@@ -637,11 +636,13 @@ const Detail = (props: Props) => {
             {!currentThematicView.excludeFields.includes('keywords') &&
               <section className="metadata-section">
                 {generateHeading('keywords', 'is-inline-flex')}
+         
+
                 <Tooltip content={t("metadata.keywords.tooltip.content")}
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{ container: 'mt-1 ml-1' }} />
                 <div className="tags mt-2">
-                  <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
+                  <Keywords keywords={item.keywords.slice().sort((a:any, b:any) => a.term.localeCompare(b.term))} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
                 </div>
               </section>
             }

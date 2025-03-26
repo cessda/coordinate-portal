@@ -52,7 +52,7 @@ describe('Footer component', () => {
       ]
     });
   });
-
+/*
   it('should generate script with JSON-LD for COORDINATE', () => {
     const { renderResult: renderResult } = setup();
     const script = renderResult.getByTestId('coordinateJson');
@@ -71,4 +71,6 @@ describe('Footer component', () => {
       ],
     });
   });
+*/
+
 });

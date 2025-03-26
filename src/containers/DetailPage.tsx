@@ -147,8 +147,7 @@ const DetailPage = () => {
   return (
     
     <div className="columns">
-      
-      <div className="column is-3 side-column">
+      <div className="column is-4 side-column">
         {location.state?.from === currentThematicView.path &&
           <a className="ais-ClearRefinements-button focus-visible pl-0 mb-3"
             tabIndex={0}
@@ -174,7 +173,7 @@ const DetailPage = () => {
       <link rel="canonical" href={`https://datacatalogue.cessda.eu/detail/${location.pathname.split('/').slice(-1)[0]}?lang=${searchParams.get("lang")}`}>
  </link>
       </Helmet>
-      <div className="column is-9 main-column">
+      <div className="column is-8 main-column">
    
         <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>

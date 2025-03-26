@@ -18,6 +18,7 @@ const userGuidePages = {
   cdc: require('../components/dynamic/pages/userGuidePages/CdcUserGuidePage.tsx').default,
   coordinate: require('../components//dynamic/pages/userGuidePages/CoordinateUserGuidePage.tsx').default,
   hummingbird: require('../components//dynamic/pages/userGuidePages/HummingbirdUserGuidePage.tsx').default,
+  covid: require('../components//dynamic/pages/userGuidePages/CovidUserGuidePage.tsx').default,
 };
 
 const UserGuidePage = () => {

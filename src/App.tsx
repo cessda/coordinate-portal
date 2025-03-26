@@ -189,6 +189,7 @@ const Root = () => {
        
               <VirtualRefinementList attribute="virtual" />
               <VirtualRangeInput attribute="virtual" />
+            
               <VirtualSortBy items={virtualSortByItems} />
        
           <Outlet />

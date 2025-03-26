@@ -21,14 +21,14 @@ const organizationCessdaJSON = JSON.stringify(organizationCessda);
 
 const DynamicFooter = () => {
   const { t } = useTranslation();
-  const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
+
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  const logoImg = require('../../../img/icons/' + currentThematicView.icon);
+
   return (
     <footer data-testid="footer" className="footer">
       <div className="container">
         <div className="columns">
-          <div className="column">
+          <div className="column pt-1">
          
             <a href="https://www.cessda.eu" target="_blank">
               <svg id="footerlogo" viewBox="0 0 2386 652" xmlns="http://www.w3.org/2000/svg" aria-label="CESSDA Home Page">
@@ -44,15 +44,14 @@ const DynamicFooter = () => {
               Consortium of European<br />Social Science Data Archives
             </p>
           </div>
-          <div className="column has-text-centered">
+          <div className="column has-text-centered pt-0 pb-2">
 
             <a href="https://www.cessda.eu/Privacy-policy" target="_blank" rel="noreferrer" className="is-inline-block">{t("footer.privacy")}</a> <br />
             <a href="https://www.cessda.eu/Acceptable-Use-Policy" target="_blank" rel="noreferrer" className="is-inline-block">{t("footer.aup")}</a> <br /> 
             <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/accessibility-statement` : "/accessibility-statement"}
               className="is-inline-block">{t("footer.accessibility")}</Link>
           </div>
-          <div className="column columns is-justify-content-flex-end">
-          <div className="column is-narrow has-text-right p-0">
+          <div className="column has-text-right-tablet p-0">
 
           <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/collections` : "/collections"}>
                        Collections
@@ -64,7 +63,7 @@ const DynamicFooter = () => {
                         {t("about.label")}
                       </Link> <br />
 
-          </div>
+    
           </div>
         </div>
       </div>

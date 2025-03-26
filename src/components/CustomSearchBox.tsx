@@ -28,7 +28,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
 
   const isSearchStalled = status === 'stalled';
 
@@ -41,6 +41,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
+ 
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -50,7 +51,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
       setNewQuery(inputValue);
     }
   };
-
+console.log(inputRef.current?.value);
   const pageTitle = searchParams.get("query") ? currentThematicView.longTitle + ' - search results for "' + searchParams.get("query") + '"' : currentThematicView.longTitle;
   return (
     <form action={currentThematicView.path}
@@ -115,8 +116,8 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
           </div>
           <div className="column is-narrow is-flex-grow-0 ml-1 is-hidden-mobile">
             <button className="button"
-                    {...(inputValue.length === 0 || isSearchStalled ? {'disabled': true} : undefined)}
-                    type="reset" hidden={inputValue.length === 0 || isSearchStalled}>
+                    {...(inputValue === '' || isSearchStalled ? {'disabled': true} : undefined)}
+                    type="reset" hidden={inputValue === '' || isSearchStalled}>
               {t("search.reset")}
             </button>
         </div>
