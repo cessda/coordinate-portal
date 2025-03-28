@@ -21,8 +21,8 @@ Views are defined in the configuration file `/src/utilities/thematicViews.ts` in
     "longTitle": "An Interesting Example Thematic View", // currently not used but included for future purposes
     "listDescription": "An Example Thematic View configuration for documentation purposes",  // used on the Collections overview page
     "rootClass": "sample", //the CSS body class
-    "icon": "sample-icon.svg", //required, preferably SVG but may also be PNG. The file must be placed in `/src/img/icons`
-    "favicon": "sample-favicon.png", //required, PNG or SVG. The file must be placed in `/src/img/favicons`
+    "icon": "sample-icon.svg", //required, preferably SVG but may also be PNG. The file must be placed in `/src/img/icons/`
+    "favicon": "sample-favicon.png", //required, PNG or SVG. The file must be placed in `/src/img/favicons/`
     "esIndexes": // at least one index must be specified. This array also controls the language selector (index switcher)
       [
       
@@ -43,6 +43,13 @@ Views are defined in the configuration file `/src/utilities/thematicViews.ts` in
       excludeFilters: ['publisher']  // Filters that should be hidden on the search page. Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
   },
 ```
+
+### Icons
+
+Image files referenced by the View must be created.
+
+A main icon SVG must be placed in `/src/img/icons/`. Example name: sample-icon.svg
+A favicon PNG  must be placed in `/src/img/favicons/`. Example name: sample-favicon.png
 
 ### Styles
 
