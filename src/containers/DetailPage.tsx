@@ -152,6 +152,7 @@ const DetailPage = () => {
       </Helmet>
   
      {location.state?.from === currentThematicView.path &&
+     <div>
           <a className="ais-ClearRefinements-button focus-visible pl-4"
             tabIndex={0}
             onClick={() => navigate(-1)}
@@ -162,12 +163,13 @@ const DetailPage = () => {
             </span>
             <span>{t("backToSearch")}</span>
           </a>
+          </div>
         }
-    <div className="columns is-mobile is-flex-wrap-wrap">
+    <div className="columns is-mobile is-flex-wrap-wrap m-0 p-0">
 
 
 
-      <div className="column is-one-third-desktop is-full-tablet is-full-mobile side-column">
+      <div className="column pt-0 is-one-third-desktop is-full-tablet is-full-mobile side-column">
 
         <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
@@ -179,7 +181,7 @@ const DetailPage = () => {
 
       </div>
      
-      <div className="column is-two-thirds-desktop is-full-tablet is-full-mobile main-column">
+      <div className="column pt-0 is-two-thirds-desktop is-full-tablet is-full-mobile main-column">
 
         <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
