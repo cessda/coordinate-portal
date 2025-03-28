@@ -11,7 +11,7 @@
     "startprod": "node startprod.js",
     "build": "npm run tsc && webpack --config webpack.prod.config.js",
     "clean": "rimraf dist && npm run tsc -- --clean",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx",
     "test": "npm run tsc && jest --verbose",
     "test:watch": "npm test -- --watch",
     "tsc": "tsc --build . server"

@@ -13,16 +13,14 @@
 
 import '../../mocks/reacti18nMock';
 import React from "react";
-import { fireEvent } from "@testing-library/react";
-import { render, screen, waitFor, within } from "../../testutils";
+import { render, screen } from "../../testutils";
 import userEvent from '@testing-library/user-event';
-import { useSearchParams, useNavigation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
 import { ThematicView, thematicViews, EsIndex } from "../../../common/thematicViews";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
-import { updateThematicView } from "../../../src/reducers/thematicView";
 import  reducer  from "../../../src/reducers/thematicView";
 
 // Mock the react-instantsearch components
@@ -71,9 +69,9 @@ jest.mock("../../../src/hooks", () => ({
 
 const mockDispatch = jest.fn();
 const initialView = thematicViews.find((tv) => tv.path === "/") as ThematicView;
-const initialIndex =  initialView.EsIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
-const newView = thematicViews.find((tv) => tv.path === "/coordinate") as ThematicView;
-const newIndex = newView.EsIndexes.find((i) => i.indexName === newView.defaultIndex ) as EsIndex;
+const initialIndex =  initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
+//const newView = thematicViews.find((tv) => tv.path === "/coordinate") as ThematicView;
+//const newIndex = newView.esIndexes.find((i) => i.indexName === newView.defaultIndex ) as EsIndex;
 
 
 

@@ -33,6 +33,8 @@ import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
 import { useSearchParams } from "react-router-dom";
 import { TFunction } from "i18next";
+import { Hit } from "instantsearch.js";
+import { CMMStudy } from "../../common/metadata";
 
 
 
@@ -65,6 +67,26 @@ const SearchPage = () => {
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
   const sortByItems = getSortByItems(currentIndex.indexName, t);
 
+  const [searchParams] = useSearchParams();
+  const sortByParam = searchParams.get('sortBy');
+  useEffect(() => {
+    // Check if language needs to be updated
+    // Assumes that the index name from sortBy has language tag as the second part when split by underscore
+    if (sortByParam && sortByParam !== currentIndex.indexName) {
+      //    dispatch(updateLanguage(sortByParam?.split('_')[1]));
+    } else if (!sortByParam && currentIndex.indexName.split('_')[1] !== 'en') {
+      // Update language if sortBy is false but language is still something other than default (en)
+      //  dispatch(updateLanguage('en'));
+    }
+  }, [sortByParam]);
+  // TODO Gives off a warning when changing language through sortBy query parameter, e.g. clicking on keyword/topic on Detail page
+  // "[InstantSearch.js]: The index named "coordinate_en" is not listed in the `items` of `sortBy`."
+  // Fixed Similar warning on pages that are not the search page ("/") by adding a virtualSortBy with all the possible options
+
+  // useEffect(() => {
+  //   dispatch(updateTotalStudies());
+  // }, []);
+
   const { items } = useCurrentRefinements();
   const hasRefinements = items.length > 0;
 
@@ -76,15 +98,15 @@ const SearchPage = () => {
         event.currentTarget.click();
       }
     }
-  };
+  }
 
   function focusToggleSummary() {
     if (toggleSummaryRef.current) {
       toggleSummaryRef.current.focus();
     }
-  };
+  }
 
-  const HitComponent = ({ hit }: any) => {
+  const HitComponent = ({ hit }: { hit: Hit<CMMStudy & Record<string, unknown>> }) => {
     return <Result key={hit.objectID} hit={hit} />;
   };
 

@@ -17,6 +17,8 @@ import { render, screen, } from "../../testutils";
 import Result from "../../../src/components/Result";
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
+import { Hit, HitAttributeHighlightResult } from 'instantsearch.js';
+import { CMMStudy } from '../../../common/metadata';
 
 const baseMockHit = {
   objectID: "1",
@@ -93,7 +95,7 @@ const baseMockHit = {
       value: "Full Study Title"
     }
   }
-};
+} as unknown as Hit<CMMStudy & Record<string, unknown>>;
 
 it('renders result with title, creators, and abstract', () => {
   render(<Result hit={baseMockHit} />);
@@ -112,7 +114,7 @@ it('renders result with title, creators, and abstract', () => {
 
 it('renders highlighted title', () => {
   // Modify the mockHit for this test
-  const modifiedHit = {
+  const modifiedHit: Hit<CMMStudy & Record<string, unknown>> = {
     ...baseMockHit,
     _highlightResult: {
       abstract: {
@@ -137,7 +139,7 @@ it('renders highlighted title', () => {
   render(<Result hit={modifiedHit} />);
 
   // Title
-  expect(screen.getByText(modifiedHit._highlightResult.titleStudy.value)).toBeInTheDocument();
+  expect(screen.getByText((modifiedHit?._highlightResult?.titleStudy as HitAttributeHighlightResult).value )).toBeInTheDocument();
 });
 
 it('renders language buttons', () => {
@@ -170,7 +172,7 @@ it('toggles abstract expansion on button click', async () => {
 });
 
 it('toggles abstract expansion on Enter or Space key', async () => {
-  const modifiedHit = {
+  const modifiedHit: Hit<CMMStudy & Record<string, unknown>> = {
     ...baseMockHit,
     _highlightResult: {
       abstract: {

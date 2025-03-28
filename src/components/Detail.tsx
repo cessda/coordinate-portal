@@ -73,7 +73,6 @@ const Detail = (props: Props) => {
     { value: 'ddi25', label: 'DDI-C 2.5' }
   ]
   const [selectedExportMetadataOption, setSelectedExportMetadataOption] = useState<Option | null>(exportMetadataOptions[0]);
-  const [selectedExportCitationOption, setSelectedExportCitationOption] = useState<Option | null>(null);
 
   const formatter = new DateTimeFormatterBuilder()
     .appendValue(ChronoField.YEAR)
@@ -189,9 +188,9 @@ const Detail = (props: Props) => {
     try {
       const temporalAccessor = formatter.parse(dateString);
       return dateTimeFormatter.format(temporalAccessor);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // Handle unparsable strings by returning the given value.
-      //   console.debug(e);
       return dateString;
     }
   }
@@ -358,7 +357,7 @@ const Detail = (props: Props) => {
     });
     return Array.from(uniqueValues);
   }
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const dispLang = searchParams.get("lang") || currentIndex.languageCode;
 
   const languageLinks: JSX.Element[] = [];
@@ -585,7 +584,7 @@ const Detail = (props: Props) => {
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{ container: 'mt-1 ml-1' }} />
                 <div className="tags mt-2">
-                  <Keywords keywords={item.keywords.slice().sort((a: any, b: any) => a.term.localeCompare(b.term))} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
+                  <Keywords keywords={item.keywords.slice().sort((a, b) => a.term.localeCompare(b.term))} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
                 </div>
               </section>
             }

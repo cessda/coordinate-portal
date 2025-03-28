@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -11,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent, useState, useEffect } from "react";
+import React, { FocusEvent, useEffect } from "react";
 import ThematicViewSwitcher from "./ThematicViewSwitcher";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -30,12 +31,12 @@ const Header = () => {
 
   const location = useLocation();
 
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const logoImg = require('../img/icons/' + currentThematicView.icon);
   function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
     e.target.classList.toggle(className);
   }
 
-  const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
   const { clear: clearQuery } = useSearchBox();
   const { refine: refineFilters } = useClearRefinements();
   const { refine: refinePagination } = usePagination();

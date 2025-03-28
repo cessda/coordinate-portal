@@ -27,7 +27,7 @@ const lastPageText = "» " +pages.nbPages + "";
         nextPageItemText: '›',
         firstPageItemText: '1 «',
         lastPageItemText: lastPageText,
-        pageItemText: ({ currentPage, nbPages }) => `${currentPage}`,
+        pageItemText: ({ currentPage }) => `${currentPage}`,
         firstPageItemAriaLabel: `${t("pagination.firstPage")}`,
         previousPageItemAriaLabel: `${t("pagination.previousPage")}`,
         nextPageItemAriaLabel: `${t("pagination.nextPage")}`,

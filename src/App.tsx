@@ -9,7 +9,7 @@ import AccessibilityStatementPage from "./containers/AccessibilityStatementPage"
 import CollectionsPage from "./containers/CollectionsPage";
 import NotFoundPage from "./containers/NotFoundPage";
 import ErrorPage from "./containers/ErrorPage";
-import { InstantSearch, Configure } from "react-instantsearch";
+import { InstantSearch } from "react-instantsearch";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { VirtualRefinementList, VirtualRangeInput, VirtualSortBy } from "./components/VirtualComponents";
@@ -21,6 +21,7 @@ import { thematicViews } from "../common/thematicViews";
 import { Helmet } from "react-helmet-async";
 import IndexSwitcher from "./components/IndexSwitcher";
 import CustomSearchBox from "./components/CustomSearchBox";
+import { UiState } from "instantsearch.js";
 
 
 const Root = () => {
@@ -35,7 +36,7 @@ const Root = () => {
 
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
-  currentThematicView.EsIndexes.forEach(esIndex => {
+  currentThematicView.esIndexes.forEach(esIndex => {
     const sortByItems = getSortByItems(esIndex.indexName, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
@@ -45,6 +46,20 @@ const Root = () => {
   useEffect(() => {
     onUpdateRef.current();
   }, [locationHook.search]);
+
+  interface RouterState {
+    query: string | undefined;
+    classifications: string[] | undefined;
+    keywords: string[] | undefined;
+    publisher: string[] | undefined;
+    collectionYear: string | undefined;
+    country: string[] | undefined;
+    timeMethod: string[] | undefined;
+    timeMethodCV: string[] | undefined;
+    resultsPerPage: number | undefined;
+    page: number | undefined;
+    sortBy: string | undefined;
+  }
 
   const routing = {
     router: history({
@@ -100,6 +115,7 @@ const Root = () => {
       writeDelay: 400
     }),
     stateMapping: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       stateToRoute(uiState: any) {
         const indexUiState = uiState[currentIndex.indexName] || {};
 
@@ -120,21 +136,22 @@ const Root = () => {
         };
 
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       routeToState(routeState: any) {
         return {
           [currentIndex.indexName]: {
             query: routeState.query,
             refinementList: {
-              classifications: routeState.classifications,
-              keywords: routeState.keywords,
-              publisher: routeState.publisher,
-              country: routeState.country,
-              timeMethod: routeState.timeMethod,
-              timeMethodCV: routeState.timeMethodCV
+              classifications: routeState.classifications || [],
+              keywords: routeState.keywords || [],
+              publisher: routeState.publisher || [],
+              country: routeState.country || [],
+              timeMethod: routeState.timeMethod || [],
+              timeMethodCV: routeState.timeMethodCV || []
             },
-            range: {
+            range: routeState.collectionYear ? {
               collectionYear: routeState.collectionYear,
-            },
+            } : undefined,
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
             sortBy: routeState.sortBy
