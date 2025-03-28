@@ -14,7 +14,7 @@ export type ThematicView = {
   longTitle: string | "CESSDA Data Catalogue";
   listDescription: string | "";  // Used on Collections page
   rootClass: string | "cdc";
-    icon: string | "cdc-icon.png";
+  icon: string | "cdc-icon.svg";
   favicon: string | "cdc-favicon.png";
   esIndexes: Array<esIndex>;
   excludeFields: Array<string>;  // Use (almost) any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
@@ -252,4 +252,3 @@ export const thematicViews: readonly ThematicView[] = [
       excludeFilters: []
   },
 ];
-
