@@ -155,7 +155,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
    
       <h2 className="title is-6">
         <Link className="focus-visible"
-          to={`detail/${hit.objectID}`}
+          to={`detail/${hit.objectID}/?lang=${currentIndex.languageCode}`}
           state={{ from: location.pathname }}>
           <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
         </Link>

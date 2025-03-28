@@ -1,4 +1,9 @@
-
+.main-column {
+  order: 1
+}
+.side-column {
+order: 2
+}
 
 @media screen and (min-width: 990px) {
   header h1 {
@@ -24,7 +29,9 @@
   .ais-Hits-item {
     margin: 25px 40px;
   }
-
+  .ais-Hits-item:first-of-type {
+    margin-top: 10px;
+  }
   .navbar-brand {
     display: none;
   }
@@ -65,7 +72,7 @@
   }
 
   input.searchbox {
-    width: 180px;
+    width: 200px;
     font-size: 13px;
     line-height: 36px;
     height: auto;
@@ -340,6 +347,11 @@ display: block;
 
   }
 }
+  @media screen and (max-width: 990px) {
+    .hits-wrapper {
+  padding-top:15px;
+  }
+}
 
 .smalltext {
   font-size: 14px;
@@ -508,10 +520,7 @@ body {
     background-color: transparent;
   }
 
-  .switch[type=checkbox].is-info:checked+label::before,
-  .switch[type=checkbox].is-info:checked+label:before {
-    background: hsl(201, 50%, 60%);
-  }
+
 
   mark {
     background-color: hsl(25, 95%, 92%);
@@ -526,15 +535,9 @@ body {
 
   .view-selector .react-select__option--is-selected {
     background-color: hsl(201, 20%, 95%);
-    color: $cdc_text;
   }
 
-  header h1 {
 
-    color: $cdc_text;
-  }
-
-  color: $cdc_text;
 
 
 }

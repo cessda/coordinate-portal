@@ -43,50 +43,28 @@ const Header = () => {
     e.target.classList.toggle(className);
   }
 
-const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
-  const { clear: clearQuery } = useSearchBox();
-  const { refine: refineFilters } = useClearRefinements();
-  const { refine: refinePagination } = usePagination();
-  const { refine: refineResultsPerPage } = useHitsPerPage({ items: hitsPerPageItems });
-  const { refine: refineSortBy } = useSortBy({ items: sortByItems });
-
-  const resetQueries = () => {
-    clearQuery();
-    // Root path requires more resets
-    if (location.pathname === currentThematicView.path) {
-      refineFilters();
-      refinePagination(1);
-      refineResultsPerPage(30);
-      refineSortBy(currentIndex.indexName);
-    }
-  }
+  const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
   const [isActive, setisActive] = React.useState(false);
-
- 
-
-
 
 
   return (
     <header>
- <VirtualSortBy items={virtualSortByItems} />
+      <VirtualSortBy items={virtualSortByItems} />
       <div className="container columns is-mobile is-vcentered">
         <div className="column is-narrow p-1">
-          
-        <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}` : `/?sortBy=${currentIndex.indexName}`} onClick={() => {
-                  resetQueries();
-                }}>
-          <div id="home" className="columns is-mobile is-vcentered is-gapless">
-            <div className="logo column is-narrow">
-              <img src={logoImg} alt="Home" />
+
+          <a href={rootLink}>
+            <div id="home" className="columns is-mobile is-vcentered is-gapless">
+              <div className="logo column is-narrow">
+                <img src={logoImg} alt="Home" />
+
+              </div>
+              <div className="logo-title column is-narrow">
+                <h1>{currentThematicView.title}</h1>
+              </div>
 
             </div>
-            <div className="logo-title column is-narrow">
-              <h1>{currentThematicView.title}</h1>
-            </div>
-
-          </div>
-          </Link>
+          </a>
 
         </div>
         <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile p-0">
@@ -102,11 +80,11 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
         <div className="column p-0">
 
           <div className="columns is-vcentered is-justify-content-end p-0">
-   
+
             <nav className="column navbar is-narrow p-0" aria-label="Main">
 
               <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
-               
+
 
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/documentation` : "/documentation"}
                   className="link navbar-item">
@@ -114,7 +92,7 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/collections` : "/collections"}
                   className="link navbar-item">
-                 Collections
+                  Collections
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/about` : "/about"}
                   className="link navbar-item">
@@ -124,17 +102,17 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
                   className="link navbar-item">
                   API
                 </Link>
-                </div>
-                <div className="navbar-brand">
-                  <a role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} data-target="navMenu" onClick={() => {
-              setisActive(!isActive);
-            }} aria-label="menu" aria-expanded="false">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
+              </div>
+              <div className="navbar-brand">
+                <a role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} data-target="navMenu" onClick={() => {
+                  setisActive(!isActive);
+                }} aria-label="menu" aria-expanded="false">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
 
-                  </a>
-                
+                </a>
+
               </div>
             </nav>
 
@@ -208,7 +186,7 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
       )} */}
 
 
-      
+
     </header>
   );
 };

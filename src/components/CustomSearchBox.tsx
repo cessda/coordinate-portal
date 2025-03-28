@@ -51,7 +51,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
       setNewQuery(inputValue);
     }
   };
-console.log(inputRef.current?.value);
+
   const pageTitle = searchParams.get("query") ? currentThematicView.longTitle + ' - search results for "' + searchParams.get("query") + '"' : currentThematicView.longTitle;
   return (
     <form action={currentThematicView.path}
@@ -117,7 +117,7 @@ console.log(inputRef.current?.value);
           <div className="column is-narrow is-flex-grow-0 ml-1 is-hidden-mobile">
             <button className="button"
                     {...(inputValue === '' || isSearchStalled ? {'disabled': true} : undefined)}
-                    type="reset" hidden={inputValue === '' || isSearchStalled}>
+                    type="reset">
               {t("search.reset")}
             </button>
         </div>

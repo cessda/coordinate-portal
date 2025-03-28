@@ -14,8 +14,7 @@ export type ThematicView = {
   longTitle: string | "CESSDA Data Catalogue";
   listDescription: string | "";  // Used on Collections page
   rootClass: string | "cdc";
-  logo: string | "cdc.svg";
-  icon: string | "cdc-icon.png";
+    icon: string | "cdc-icon.png";
   favicon: string | "cdc-favicon.png";
   esIndexes: Array<esIndex>;
   excludeFields: Array<string>;  // Use (almost) any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
@@ -32,7 +31,6 @@ export const thematicViews: readonly ThematicView[] = [
     "longTitle": "CESSDA Data Catalogue",
     "listDescription": "The CESSDA Data Catalogue master collection contains descriptions of more 40,000 data collections held by CESSDA’s Service Providers (SPs), originating from over 20 European countries.",
     "rootClass": "cdc",
-    "logo": "cdc.svg",
     "icon": "cdc-icon.svg",
     "favicon": "cdc-favicon.png",
     "esIndexes":
@@ -104,7 +102,6 @@ export const thematicViews: readonly ThematicView[] = [
     "longTitle": "COORDINATE Portal: Child and Youth Wellbeing",
     "listDescription": "The COORDINATE Portal provides a collection of study information on child and young people‘s wellbeing as they grow up.",
     "rootClass": "coordinate",
-    "logo": "coordinate.svg",
     "icon": "coordinate-icon.svg",
     "favicon": "coordinate-favicon.png",
     "esIndexes":
@@ -176,7 +173,6 @@ export const thematicViews: readonly ThematicView[] = [
     "longTitle": "HumMingBird Migration Data Catalogue",
     "listDescription": "The HumMingBird project's Migration Data Catalogue contains data about studies on migration flows and drivers of migration.",
     "rootClass": "hummingbird",
-    "logo": "hummingbird-logo.png",
     "icon": "hummingbird-icon.svg",
     "favicon": "hummingbird-favicon.png",
     "esIndexes":
@@ -199,7 +195,6 @@ export const thematicViews: readonly ThematicView[] = [
     "longTitle": "BeYond-COVID: open data on infectious diseases",
     "listDescription": "The BY-COVID collection features studies on the social and psychological effects of SARS-CoV-2 and other infectious diseases.",
     "rootClass": "covid",
-    "logo": "covid.svg",
     "icon": "covid-icon.svg",
     "favicon": "covid-favicon.png",
     "esIndexes":

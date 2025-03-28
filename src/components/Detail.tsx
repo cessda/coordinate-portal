@@ -419,7 +419,13 @@ const Detail = (props: Props) => {
       <Helmet>
         <title>{item.titleStudy || t("language.notAvailable.field")} - {currentThematicView.longTitle}</title>
         </Helmet>
-      <div className="columns is-gapless is-vcentered mb-0 mt-0">
+      
+      <div className="metadata-container study-wrapper">
+
+              <div className="main-content">
+          <article>
+            <section className="metadata-section">
+            <div className="columns is-gapless is-vcentered mb-0 mt-0">
         <div className="column smalltext">
 
           {item.studyUrl && (
@@ -488,41 +494,10 @@ const Detail = (props: Props) => {
             </div>
           </div>
         </div>
-        {/* 
-      <div className="column is-5 px-1 py-3">
-        <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
-          <div className="column is-flex is-flex-grow-0 is-narrow py-0 pl-0 pr-1">
-            <span className="is-inline-flex">{t("exportCitation")}</span>
-            <Tooltip content={t("metadata.keywords.tooltip.content")}
-                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                    classNames={{container: 'ml-1'}}/>
-          </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <Select options={exportCitationOptions}
-                    defaultValue={{ value: '', label: ''}}
-                    onChange={handleExportCitationChange}
-                    className="export-select"
-                    aria-label="Export citation" />
-          </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <button className="button is-info is-light" data-testid="export-citation-button"
-                    onClick={() => alert("Not yet implemented")}
-                    // onClick={handleExportCitation}
-                    disabled={!selectedExportCitationOption || selectedExportCitationOption.value.trim() === ''}>
-              {t("export")}
-            </button>
-          </div>
-        </div>
-      </div>
-        */}
+
+
 
       </div>
-      <div className="metadata-container study-wrapper">
-
-              <div className="main-content">
-          <article>
-            <section className="metadata-section">
-
               {languageLinks}
 
               {generateHeading('summary')}

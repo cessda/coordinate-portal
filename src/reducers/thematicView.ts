@@ -44,7 +44,6 @@ const thematicViewSlice = createSlice({
       let listDescription: string;
       let rootClass: string;
       let defaultIndex: string;
-      let logo: string;
       let icon: string;
       let favicon: string;
       let esIndexes: Array<esIndex>;
@@ -59,7 +58,6 @@ const thematicViewSlice = createSlice({
         listDescription = thematicViews.find(element => element.path === path)?.listDescription || '';
         rootClass = thematicViews.find(element => element.path === path)?.rootClass || '';
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
-        logo = thematicViews.find(element => element.path === path)?.logo || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';
         esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];
@@ -74,7 +72,6 @@ const thematicViewSlice = createSlice({
         listDescription = thematicViews.find(element => element.path === path)?.listDescription || '';
         rootClass = thematicViews.find(element => element.path === path)?.rootClass || '';
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
-        logo = thematicViews.find(element => element.path === path)?.logo || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';  
         esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];    
@@ -82,7 +79,7 @@ const thematicViewSlice = createSlice({
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || []; 
       }
       state.currentIndex=action.payload.esIndex;      
-      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, logo: logo, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
+      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
             
             
     },

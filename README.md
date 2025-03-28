@@ -112,6 +112,10 @@ For development, the following software tools are recommended and have full supp
 
 ## How To
 
+### Add a new Collection (Thematic View)
+
+* See instructions in `/docs/collections/howto.md`.
+
 ### Add a new language
 
 1. Create a new language file in the `/src/i18n/` directory, using the 2 letter language ISO code for the directory name. It is recommended to copy the English file `en/translation.json` and use that as a template/starting point.

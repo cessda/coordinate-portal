@@ -32,13 +32,11 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { toggleMobileFilters, toggleSummary } from "../reducers/search";
 import Panel from "../components/Panel";
 import Tooltip from "../components/Tooltip";
-import IndexSwitcher from "../components/IndexSwitcher";
-import CustomSearchBox from "../components/CustomSearchBox";
 import { useSearchParams } from "react-router-dom";
 import { TFunction } from "i18next";
 
 
- 
+
 const hitsPerPageItems = [
   { value: 10, label: 'Show 10' },
   { value: 30, label: 'Show 30', default: true },
@@ -74,10 +72,10 @@ const SearchPage = () => {
     // Check if language needs to be updated
     // Assumes that the index name from sortBy has language tag as the second part when split by underscore
     if (sortByParam && sortByParam !== currentIndex.indexName) {
-  //    dispatch(updateLanguage(sortByParam?.split('_')[1]));
+      //    dispatch(updateLanguage(sortByParam?.split('_')[1]));
     } else if (!sortByParam && currentIndex.indexName.split('_')[1] !== 'en') {
       // Update language if sortBy is false but language is still something other than default (en)
-    //  dispatch(updateLanguage('en'));
+      //  dispatch(updateLanguage('en'));
     }
   }, [sortByParam]);
   // TODO Gives off a warning when changing language through sortBy query parameter, e.g. clicking on keyword/topic on Detail page
@@ -112,9 +110,9 @@ const SearchPage = () => {
   };
 
   return (
-       
+
     <div className={'columns layout mt-4' + (showMobileFilters ? ' show-mobile-filters' : '')}>
-    
+
       <div className="column is-8 is-hidden-tablet pt-0">
         <button className={'ais-ClearRefinements-button focus-visible' + (!showFilterSummary ? ' on-top' : '')}
           onClick={() => dispatch(toggleMobileFilters(showMobileFilters))}
@@ -234,25 +232,25 @@ const SearchPage = () => {
             }
 
             {(!currentThematicView.excludeFilters.includes('collectionYear') && !currentIndex.excludeFilters.includes('collectionYear')) &&
-                          <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
-                            tooltip={<Tooltip id="filters-collectiondates-tooltip"
-                              content={t("filters.collectionDates.tooltip.content")}
-                              ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
-                            collapsable={true}
-                            defaultCollapsed={true}>
-                            <RangeInput attribute="collectionYear"
-                              classNames={{
-                                input: 'focus-visible',
-                                submit: 'focus-visible'
-                              }}
-                              translations={{
-                                separatorElementText: `${t("filters.collectionYear.separator")}`,
-                                submitButtonText: `${t("filters.collectionYear.submitButton")}`,
-                              }} />
-                            {/* Shows up in filter summary if set */}
-                            {/* min={1900}/> */}
-                          </Panel>
-                        }
+              <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
+                tooltip={<Tooltip id="filters-collectiondates-tooltip"
+                  content={t("filters.collectionDates.tooltip.content")}
+                  ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
+                collapsable={true}
+                defaultCollapsed={true}>
+                <RangeInput attribute="collectionYear"
+                  classNames={{
+                    input: 'focus-visible',
+                    submit: 'focus-visible'
+                  }}
+                  translations={{
+                    separatorElementText: `${t("filters.collectionYear.separator")}`,
+                    submitButtonText: `${t("filters.collectionYear.submitButton")}`,
+                  }} />
+                {/* Shows up in filter summary if set */}
+                {/* min={1900}/> */}
+              </Panel>
+            }
 
             {(!currentThematicView.excludeFilters.includes('country') && !currentIndex.excludeFilters.includes('country')) &&
               <Panel title={<h2>{t("metadata.country")}</h2>}
@@ -303,52 +301,28 @@ const SearchPage = () => {
               </Panel>
             }
 
-            {/* Doesn't work well without actually using CV values as the basis since the shortcut of simply using 'id' will currently have */}
-            {/* values such as 'Longitudinal.TrendRepeatedCrossSection' and 'Longitudinal: Trend/Repeated cross-section' at the same time */}
-
-            {/* {(!currentThematicView.excludeFilters.includes('timeMethodCV') && !currentIndex.excludeFilters.includes('timeMethodCV')) &&
-              <Panel title={<h2>{t("metadata.timeMethodCV")}</h2>}
-                tooltip={<Tooltip id="filters-timemethodcv-tooltip"
-                  content={t("filters.timeMethodCV.tooltip.content")}
-                  ariaLabel={t("filters.timeMethodCV.tooltip.ariaLabel")} />}
-                collapsable={true}
-                defaultCollapsed={true}>
-                <RefinementList attribute="timeMethodCV" searchable limit={16}
-                  classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible'
-                  }} />
-              </Panel>
-            } */}
-
           </div>
         </div>
       </div>
       <div className="column is-8 pt-0">
 
-        <div className="searchwrapper columns is-mobile is-gapless mb-0 pb-0">
-          <div className="column is-narrow">
-            <IndexSwitcher />
-          </div>
-          <div className="column is-narrow pb-0">
-            <CustomSearchBox />
-          </div>
-
-        </div>
 
 
 
-        <ToggleButtons />
+
+
         <div className="hits-wrapper">
+
           <div className="columns is-vcentered ais-Stats-Dropdowns">
-            <div className="column is-narrow pl-4">
+
+            <div className="column is-narrow ml-4 p-0">
               <Stats />
             </div>
             <div className="column is-7">
               <div className="columns is-vcentered is-flex is-flex-wrap-wrap">
                 <div className="column is-5">
                   <HitsPerPage items={hitsPerPageItems}
-                     classNames={{
+                    classNames={{
                       select: 'focus-visible',
                     }} />
                 </div>
@@ -360,8 +334,15 @@ const SearchPage = () => {
                 </div>
               </div>
             </div>
+
+
           </div>
           <Pagination />
+          <div className="columns my-0 py-0">
+            <div className="column is-12 mt-2 pl-4 ml-3 mb-0 pb-0">
+              <ToggleButtons />
+            </div>
+          </div>
           <Hits hitComponent={HitComponent} />
           <Pagination />
         </div>

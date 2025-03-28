@@ -17,13 +17,37 @@ const DynamicUserGuidePage = () => {
   return (
     <div className="columns is-justify-content-center">
       <div className="column p-6">
-    <div className="text-container">
-    <h1 className="main-title mb-4">User Guide - BY-COVID</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus ligula ut lectus fermentum sagittis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum venenatis tellus. Curabitur sed elit quam. Suspendisse consectetur quis lorem nec dictum. Ut vitae massa fringilla, ornare nunc vel, scelerisque mi. Nam arcu nibh, mollis quis rhoncus a, porttitor in mauris. In a pharetra risus. Proin scelerisque massa sed risus elementum, id placerat dolor ullamcorper. Nulla bibendum scelerisque nisi, sed eleifend nisl auctor non.</p>
+        <div className="text-container">
+          <h1 className="main-title mb-4">User Guide - BY-COVID Collection</h1>
+          <p>Brief usage instructions follow below. For detailed documentation and examples, see the complete <a href="https://datacatalogue.cessda.eu/documentation/" target="_blank"><strong>user documentation</strong></a>.</p>
 
-<p>Vivamus a nulla at odio vehicula tincidunt elementum vel nisi. Nunc placerat odio pulvinar libero sodales viverra. Etiam eu dolor ipsum. In elementum fermentum ullamcorper. Vivamus non magna egestas, rhoncus enim nec, fringilla leo. Maecenas sed arcu vel nunc rhoncus tincidunt. Maecenas orci orci, pretium ut placerat sit amet, accumsan nec risus.</p>
-</div>
-    </div>
+          <h2>Scope</h2>
+          <p>The BY-COVID Collection contains a subset of the study descriptions available in the CESSDA Data Catalogue (CDC), on the impact of SARS-CoV-2 and other infectious diseases across scientific, medical, public health and policy domains</p>
+
+          <h2>Searching</h2>
+          <p>Use the search bar at the top to find studies with descriptions in the selected language (English is the default). Use the dropdown beside the search field to select another language.</p>
+
+          <h2>Filtering</h2>
+          <p>
+            The system allows filtering by several criteria. Expand the filters by clicking the arrow beside the criterion (such as "Topic") and select one or more terms. Filters can be combined, and the number beside the filter displays the approximate number of studies matching it.
+          </p>
+          <p>
+            If filters have been selected, you can click "Summary" to view the currently applied filters and "Reset" to remove all filters.
+          </p>
+          <h2>Study details</h2>
+          <p>
+          Clicking on a study title (highlighted in blue) within the results list will take you to the study view with more detailed information and links.
+          </p>
+<p>
+          Below the abstract section, you will often find associated topics and keywords. Selecting one of these will perform a search on that particular term.
+          </p>
+          <h2>Other collections</h2>
+          <p>
+           Beside the logo at top left there is a dropdown for selecting a specific collection of studies. These are a subset of the studies available in the CDC, selected according to a thematic set of criteria. See the <a href="collections">Collections</a> page for a description of available thematic views.
+          </p>
+
+        </div>
+      </div>
     </div>
   );
 };
