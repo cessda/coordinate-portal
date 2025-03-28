@@ -181,7 +181,7 @@ const DetailPage = () => {
 
       </div>
      
-      <div className="column pt-0 is-two-thirds-desktop is-full-tablet is-full-mobile main-column">
+      <div className="column pt-0 is-two-thirds-desktop is-full-tablet is-full-mobile main-column mb-6">
 
         <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
