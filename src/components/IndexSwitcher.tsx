@@ -16,7 +16,6 @@ import { esIndex } from "../utilities/thematicViews";
 import { updateThematicView } from "../reducers/thematicView"
 import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useClearRefinements } from "react-instantsearch";
 
 
@@ -34,8 +33,6 @@ const IndexSwitcher = () => {
   const thematicView = useAppSelector((state) => state.thematicView);
 
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
   const { refine: resetFilters } = useClearRefinements();
 
 

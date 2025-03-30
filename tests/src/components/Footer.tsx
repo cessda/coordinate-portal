@@ -52,25 +52,6 @@ describe('Footer component', () => {
       ]
     });
   });
-/*
-  it('should generate script with JSON-LD for COORDINATE', () => {
-    const { renderResult: renderResult } = setup();
-    const script = renderResult.getByTestId('coordinateJson');
 
-    expect(script.getAttribute('type')).toEqual('application/ld+json');
-
-    expect(script.textContent).not.toBe(null);
-    expect(JSON.parse(script.textContent as string)).toEqual({
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "COORDINATE",
-      url: "https://www.coordinate-network.eu/",
-      sameAs: [
-        "https://twitter.com/coordinate_eu",
-        "https://www.youtube.com/channel/UCjQ4Kv4VPn449d80-CIGJZQ",
-      ],
-    });
-  });
-*/
 
 });

@@ -46,7 +46,10 @@ body {
 
   
 }
-
+.searchwrapper {
+  background-color: rgba(0,0,0,0.02); 
+    border-radius: 6px;
+}
 main {
   color: var(--text);
   background-color: var(--bg);

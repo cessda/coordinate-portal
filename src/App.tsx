@@ -189,7 +189,7 @@ const Root = () => {
         <div className="container">
 
           <div className="columns mx-4 mt-2">
-            <div className="searchwrapper columns is-mobile column is-narrow mx-auto is-gapless mt-4 mb-2 p-0">
+            <div className="searchwrapper columns is-mobile column is-narrow mx-auto is-gapless mt-4 mb-2 p-2">
               <div className="column is-narrow">
                 <IndexSwitcher />
               </div>

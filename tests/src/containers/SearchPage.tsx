@@ -19,11 +19,10 @@ import userEvent from '@testing-library/user-event';
 import { useSearchParams, useNavigation } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
 import { ThematicView, thematicViews, esIndex } from "../../../src/utilities/thematicViews";
-import { updateThematicView } from "../../../src/reducers/thematicView";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
-import { useClearRefinements } from "react-instantsearch";
+import reducer from "../../../src/reducers/thematicView";
 
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
@@ -124,6 +123,17 @@ describe("SearchPage", () => {
     expect(refinementLists).toHaveLength(6);
   });
 
+  it('should return the initial Thematic View state', () => {
+     
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(
+        { 
+            currentIndex: initialIndex,
+            list: thematicViews,
+            currentThematicView: initialView,
+             }
+      )
+});
+
   it("should handle mobile filter toggle", async () => {
     render(<SearchPage />);
 
@@ -142,6 +152,8 @@ describe("SearchPage", () => {
   
     expect(mockDispatch).toHaveBeenCalledWith({"payload": false, "type": "search/toggleSummary"});
   });
+
+  
 /*
   it("should be able to show and then close filter summary", async () => {
     let showFilterSummary = true;

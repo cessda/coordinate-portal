@@ -57,6 +57,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
     <form action={currentThematicView.path}
           role="search"
           noValidate
+          id="searchform"
           onSubmit={(event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -96,6 +97,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
             </Helmet>
         <div className="column is-narrow is-narrow-mobile">
           <input className="input searchbox"
+                id="searchbox"
                 aria-label="Search field"
                 ref={inputRef}
                 autoComplete="off"

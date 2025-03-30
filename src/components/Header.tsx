@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent, useState } from "react";
+import React, { FocusEvent, useState, useEffect } from "react";
 import IndexSwitcher from "./IndexSwitcher";
 import ThematicViewSwitcher from "./ThematicViewSwitcher";
 import { Link, useNavigate } from "react-router-dom";
@@ -44,16 +44,36 @@ const Header = () => {
   }
 
   const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
+  const { clear: clearQuery } = useSearchBox();
+  const { refine: refineFilters } = useClearRefinements();
+  const { refine: refinePagination } = usePagination();
+  const { refine: refineResultsPerPage } = useHitsPerPage({ items: hitsPerPageItems });
+  const { refine: refineSortBy } = useSortBy({ items: sortByItems });
+  const resetQueries = () => {
+    clearQuery();
+    // Root path requires more resets
+    if (location.pathname === currentThematicView.path) {
+      refineFilters();
+      refinePagination(1);
+      refineResultsPerPage(30);
+      refineSortBy(currentIndex.indexName);
+    }
+  }
   const [isActive, setisActive] = React.useState(false);
 
-
+const searchform = document.querySelector<HTMLFormElement>('#searchform');
   return (
     <header>
       <VirtualSortBy items={virtualSortByItems} />
       <div className="container columns is-mobile is-vcentered">
         <div className="column is-narrow p-1">
 
-          <a href={rootLink}>
+        <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}` : `/?sortBy=${currentIndex.indexName}`} onClick={() => {
+                  resetQueries();
+                  useEffect(() => {
+                    searchform?.reset();
+                  });
+                }}>
             <div id="home" className="columns is-mobile is-vcentered is-gapless">
               <div className="logo column is-narrow">
                 <img src={logoImg} alt="Home" />
@@ -64,7 +84,7 @@ const Header = () => {
               </div>
 
             </div>
-          </a>
+          </Link>
 
         </div>
         <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile p-0">
