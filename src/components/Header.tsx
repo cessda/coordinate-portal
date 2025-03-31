@@ -31,7 +31,6 @@ const Header = () => {
   const location = useLocation();
 
   const logoImg = require('../img/icons/' + currentThematicView.icon);
-  const longTitle = currentThematicView.longTitle;
   function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
     e.target.classList.toggle(className);
   }

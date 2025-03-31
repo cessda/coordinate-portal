@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration, RouteObject, useMatches } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration, RouteObject } from "react-router-dom";
 import SearchPage, { getSortByItems } from "./containers/SearchPage";
 import DetailPage, { studyLoader } from "./containers/DetailPage";
 import AboutPage, { metricsLoader } from "./containers/AboutPage";

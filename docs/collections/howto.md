@@ -18,7 +18,7 @@ Views are defined in the configuration file `/src/utilities/thematicViews.ts` in
     "path": "/sample", //path is automatically added to server side routing. If root ("/"), sets the View as the default view for the current instance.
     "defaultIndex": "sample_en", // Default Elasticsearch index. If available, English should be default.
     "title": "Sample Thematic View", // Used in page titles and logo heading
-    "longTitle": "An Interesting Example Thematic View", // currently not used but included for future purposes
+    "longTitle": "An Interesting Example Thematic View", // Expanded title, used on the Collections page
     "listDescription": "An Example Thematic View configuration for documentation purposes",  // used on the Collections overview page
     "rootClass": "sample", //the CSS body class
     "icon": "sample-icon.svg", //required, preferably SVG but may also be PNG. The file must be placed in `/src/img/icons/`

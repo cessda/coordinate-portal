@@ -49,7 +49,6 @@ const initialIndex =  initialView.EsIndexes.find((i) => i.indexName === initialV
 describe("User Guide Page", () => {
   beforeEach(() => {
     // Mock the necessary Redux state
-     // Mock the necessary Redux state
      (useAppSelector as jest.Mock).mockImplementation((callback) =>
       callback({
         thematicView: {

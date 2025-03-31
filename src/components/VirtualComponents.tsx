@@ -17,8 +17,6 @@ import {
   useRefinementList,
   UseRefinementListProps,
   useSortBy,
-  useSearchBox,
-  UseSearchBoxProps,
   UseSortByProps
 } from 'react-instantsearch';
 
