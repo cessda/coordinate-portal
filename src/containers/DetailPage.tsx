@@ -13,17 +13,15 @@
 
 import React, { useEffect } from "react";
 import Detail from "../components/Detail"
-import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { updateStudy } from "../reducers/detail";
-import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { store } from "../store";
 import { Funding, getJsonLd } from '../../common/metadata';
 import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
 import { useAppSelector } from "../hooks";
 import { Helmet } from "react-helmet-async";
-import { useSearchParams } from "react-router-dom";
 
 type Heading = {
   id: string;
@@ -38,17 +36,13 @@ export type HeadingEntry = {
 export const studyLoader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang");
-  if (lang) {
-    //store.dispatch(updateLanguage(lang));
-    //console.log(lang);
-  }
 
   const data = await store.dispatch(updateStudy({ id: params.id as string, lang: lang as string }));
   return { data };
 };
 
 const DetailPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const { t } = useTranslation();
   const location = useLocation();
@@ -190,7 +184,7 @@ const DetailPage = () => {
                 return <Detail item={resolvedData.payload.study} headings={headings} />
               }
               else {
-                const languageLinks: JSX.Element[] = [];
+                const languageLinks: React.JSX.Element[] = [];
 
                 for (let i = 0; i < resolvedData?.payload?.availableLanguages.length; i++) {
                   const lang = resolvedData.payload.availableLanguages[i];

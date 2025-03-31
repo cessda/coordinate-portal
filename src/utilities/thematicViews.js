@@ -12,7 +12,7 @@ exports.thematicViews = [
         "rootClass": "cdc",
         "icon": "cdc-icon.svg",
         "favicon": "cdc-favicon.png",
-        "esIndexes": [
+        "EsIndexes": [
             {
                 indexName: 'cmmstudy_nl',
                 languageCode: 'nl',
@@ -81,7 +81,7 @@ exports.thematicViews = [
         "rootClass": "coordinate",
         "icon": "coordinate-icon.svg",
         "favicon": "coordinate-favicon.png",
-        "esIndexes": [
+        "EsIndexes": [
             {
                 indexName: 'coordinate_nl',
                 languageCode: 'nl',
@@ -150,7 +150,7 @@ exports.thematicViews = [
         "rootClass": "hummingbird",
         "icon": "hummingbird-icon.svg",
         "favicon": "hummingbird-favicon.png",
-        "esIndexes": [
+        "EsIndexes": [
             {
                 indexName: 'hummingbird_en',
                 languageCode: 'en',
@@ -171,7 +171,7 @@ exports.thematicViews = [
         "rootClass": "covid",
         "icon": "covid-icon.svg",
         "favicon": "covid-favicon.png",
-        "esIndexes": [
+        "EsIndexes": [
             {
                 indexName: 'covid_en',
                 languageCode: 'en',

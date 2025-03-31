@@ -13,7 +13,7 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { usePagination,  UsePaginationProps, Pagination as InstantsearchPagination } from "react-instantsearch";
+import { usePagination, Pagination as InstantsearchPagination } from "react-instantsearch";
 
 const Pagination = () => {
   const { t } = useTranslation();

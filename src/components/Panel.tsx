@@ -14,9 +14,9 @@
 import React, { useState } from "react";
 
 export interface Props {
-  children: JSX.Element | JSX.Element[];
-  title?: JSX.Element | string;
-  tooltip?: JSX.Element | string;
+  children: React.JSX.Element | React.JSX.Element[];
+  title?: React.JSX.Element | string;
+  tooltip?: React.JSX.Element | string;
   className?: string,
   collapsable?: boolean,
   defaultCollapsed?: boolean,

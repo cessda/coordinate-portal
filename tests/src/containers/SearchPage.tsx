@@ -18,7 +18,7 @@ import { render, screen, waitFor, within } from "../../testutils";
 import userEvent from '@testing-library/user-event';
 import { useSearchParams, useNavigation } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
-import { ThematicView, thematicViews, esIndex } from "../../../src/utilities/thematicViews";
+import { ThematicView, thematicViews, EsIndex } from "../../../src/utilities/thematicViews";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
@@ -71,9 +71,9 @@ jest.mock("../../../src/hooks", () => ({
 
 const mockDispatch = jest.fn();
 const initialView = thematicViews.find((tv) => tv.path === "/") as ThematicView;
-const initialIndex =  initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as esIndex;
+const initialIndex =  initialView.EsIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
 const newView = thematicViews.find((tv) => tv.path === "/coordinate") as ThematicView;
-const newIndex = newView.esIndexes.find((i) => i.indexName === newView.defaultIndex ) as esIndex;
+const newIndex = newView.EsIndexes.find((i) => i.indexName === newView.defaultIndex ) as EsIndex;
 
 
 
@@ -142,7 +142,7 @@ describe("SearchPage", () => {
 /*
 it('should return updated Thematic View state', () => {
      
-  expect(reducer(undefined, { type: 'unknown', path: "/coordinate", esIndex: newIndex })).toEqual(
+  expect(reducer(undefined, { type: 'unknown', path: "/coordinate", EsIndex: newIndex })).toEqual(
       { 
           currentIndex: newIndex,
           list: thematicViews,

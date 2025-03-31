@@ -26,7 +26,6 @@ import {
 import Result from "../components/Result";
 import ToggleButtons from "../components/ToggleButtons";
 import Pagination from "../components/Pagination";
-import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { toggleMobileFilters, toggleSummary } from "../reducers/search";
@@ -65,26 +64,6 @@ const SearchPage = () => {
   const showFilterSummary = useAppSelector((state) => state.search.showFilterSummary);
   const showMobileFilters = useAppSelector((state) => state.search.showMobileFilters);
   const sortByItems = getSortByItems(currentIndex.indexName, t);
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const sortByParam = searchParams.get('sortBy');
-  useEffect(() => {
-    // Check if language needs to be updated
-    // Assumes that the index name from sortBy has language tag as the second part when split by underscore
-    if (sortByParam && sortByParam !== currentIndex.indexName) {
-      //    dispatch(updateLanguage(sortByParam?.split('_')[1]));
-    } else if (!sortByParam && currentIndex.indexName.split('_')[1] !== 'en') {
-      // Update language if sortBy is false but language is still something other than default (en)
-      //  dispatch(updateLanguage('en'));
-    }
-  }, [sortByParam]);
-  // TODO Gives off a warning when changing language through sortBy query parameter, e.g. clicking on keyword/topic on Detail page
-  // "[InstantSearch.js]: The index named "coordinate_en" is not listed in the `items` of `sortBy`."
-  // Fixed Similar warning on pages that are not the search page ("/") by adding a virtualSortBy with all the possible options
-
-  // useEffect(() => {
-  //   dispatch(updateTotalStudies());
-  // }, []);
 
   const { items } = useCurrentRefinements();
   const hasRefinements = items.length > 0;

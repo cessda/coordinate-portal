@@ -65,8 +65,7 @@ const Detail = (props: Props) => {
   const item = props.item;
   const headings = props.headings;
   const truncatedAbstractLength = 2000;
-  const truncatedKeywordsLength = 12;
-
+  
 
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
   const exportMetadataOptions: Option[] = [
@@ -296,38 +295,7 @@ const Detail = (props: Props) => {
     }
   }
 
-  const exportCitationOptions = [
-    { value: 'bibtext', label: 'BibTeX' },
-    { value: 'ris', label: 'RIS' },
-    { value: 'endnote', label: 'EndNote' },
-  ]
-
-  const handleExportCitationChange = (selected: Option) => {
-    setSelectedExportCitationOption(selected);
-  };
-
-  const handleExportCitation = () => {
-    if (selectedExportCitationOption?.value) {
-      // Implement the export logic based on the selectedOption.value
-      switch (selectedExportCitationOption.value) {
-        case 'bibtext':
-          // Implement BibTeX export logic here
-          console.log('Exporting as BibTeX');
-          break;
-        case 'ris':
-          // Implement RIS export logic here
-          console.log('Exporting as RIS');
-          break;
-        case 'endnote':
-          // Implement EndNote export logic here
-          console.log('Exporting as EndNote');
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
+ 
   /**
    * Formats the given creator inside span element with as much information as possible, preferably
    * creator name, creator affiliation and research identifier. Research identifier will also include

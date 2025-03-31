@@ -15,14 +15,12 @@ import React, { useEffect, useState } from "react";
 import { FaAngleDown, FaAngleUp, FaExternalLinkAlt,  FaLock, FaLockOpen } from 'react-icons/fa';
 import { Link, useLocation } from "react-router-dom";
 import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
-import shuffleArray from "../utilities/shuffleArray";
-// import getPaq from "../utilities/getPaq";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
 
 function generateCreatorElements(item: CMMStudy) {
-  const creators: JSX.Element[] = [];
+  const creators: React.JSX.Element[] = [];
   // How many creators should be shown
   const creatorsLength = 3;
 
@@ -56,11 +54,10 @@ interface ResultProps {
 const Result: React.FC<ResultProps> = ({ hit }) => {
   const { t } = useTranslation();
   const location = useLocation();
-//  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const showAbstract = useAppSelector((state) => state.search.showAbstract);
   const showKeywords = useAppSelector((state) => state.search.showKeywords);
-  const dispatch = useAppDispatch();
 
   const [abstractExpanded, setAbstractExpanded] = useState(false);
   const [sortedKeywords, setSortedKeywords] = useState<TermVocabAttributes[]>([]);

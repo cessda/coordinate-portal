@@ -28,8 +28,8 @@ const Similars = (props: Props) => {
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const viewPrefix = currentThematicView.path === "/" ? "" : currentThematicView.path;
-  const links: JSX.Element[] = [];
- const [searchParams, setSearchParams] = useSearchParams();
+  const links: React.JSX.Element[] = [];
+ const [searchParams] = useSearchParams();
   const lang = searchParams.get('lang') || currentIndex.languageCode;
   for (let i = 0; i < similars.length; i++) {
     // Construct the similar URL

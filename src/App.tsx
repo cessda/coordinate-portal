@@ -45,8 +45,8 @@ const Root = () => {
 
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
-  currentThematicView.esIndexes.forEach(esIndex => {
-    const sortByItems = getSortByItems(esIndex.indexName, t);
+  currentThematicView.EsIndexes.forEach(EsIndex => {
+    const sortByItems = getSortByItems(EsIndex.indexName, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
   //console.log(location.search.slice(1));

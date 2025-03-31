@@ -1,4 +1,4 @@
-export interface esIndex {
+export interface EsIndex {
   indexName: string;
   languageCode: string;
   language: string;
@@ -16,7 +16,7 @@ export type ThematicView = {
   rootClass: string | "cdc";
   icon: string | "cdc-icon.svg";
   favicon: string | "cdc-favicon.png";
-  esIndexes: Array<esIndex>;
+  EsIndexes: Array<EsIndex>;
   excludeFields: Array<string>;  // Use (almost) any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
   excludeFilters: Array<string>; // Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
 };
@@ -33,7 +33,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "cdc",
     "icon": "cdc-icon.svg",
     "favicon": "cdc-favicon.png",
-    "esIndexes":
+    "EsIndexes":
       [
         {
           indexName: 'cmmstudy_nl',
@@ -104,7 +104,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "coordinate",
     "icon": "coordinate-icon.svg",
     "favicon": "coordinate-favicon.png",
-    "esIndexes":
+    "EsIndexes":
       [
         {
           indexName: 'coordinate_nl',
@@ -175,7 +175,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "hummingbird",
     "icon": "hummingbird-icon.svg",
     "favicon": "hummingbird-favicon.png",
-    "esIndexes":
+    "EsIndexes":
       [
         {
           indexName: 'hummingbird_en',
@@ -197,7 +197,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "covid",
     "icon": "covid-icon.svg",
     "favicon": "covid-favicon.png",
-    "esIndexes":
+    "EsIndexes":
       [
         {
           indexName: 'covid_en',

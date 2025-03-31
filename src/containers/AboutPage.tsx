@@ -25,7 +25,6 @@ const aboutPages = {
 };
 
 export const metricsLoader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
   return await store.dispatch(updateMetrics());
 };
 

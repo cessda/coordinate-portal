@@ -23,7 +23,7 @@ Views are defined in the configuration file `/src/utilities/thematicViews.ts` in
     "rootClass": "sample", //the CSS body class
     "icon": "sample-icon.svg", //required, preferably SVG but may also be PNG. The file must be placed in `/src/img/icons/`
     "favicon": "sample-favicon.png", //required, PNG or SVG. The file must be placed in `/src/img/favicons/`
-    "esIndexes": // at least one index must be specified. This array also controls the language selector (index switcher)
+    "EsIndexes": // at least one index must be specified. This array also controls the language selector (index switcher)
       [
       
         {

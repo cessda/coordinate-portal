@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ThematicView, thematicViews, esIndex } from "../utilities/thematicViews";
+import { ThematicView, thematicViews, EsIndex } from "../utilities/thematicViews";
 
 
 export interface ThematicViewState {
   currentThematicView: ThematicView;
   list: readonly ThematicView[];
-  currentIndex: esIndex;
+  currentIndex: EsIndex;
 }
 
 // (OC 11.2024) Initialise the Thematic View and language (index) state from URL path (example: datacatalogue.cessda.eu/coordinate).
@@ -18,7 +18,7 @@ const initialView = thematicViews.find((tv) => tv.path === initialPath ) as Them
 const urlParams = new URLSearchParams(window.location.search);
 
   const initialIndexQs = urlParams.get("sortBy");
-const initialIndex = initialIndexQs ? initialView.esIndexes.find((i) => i.indexName === initialIndexQs ) as esIndex : initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as esIndex;
+const initialIndex = initialIndexQs ? initialView.EsIndexes.find((i) => i.indexName === initialIndexQs ) as EsIndex : initialView.EsIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
   
 
 
@@ -46,7 +46,7 @@ const thematicViewSlice = createSlice({
       let defaultIndex: string;
       let icon: string;
       let favicon: string;
-      let esIndexes: Array<esIndex>;
+      let EsIndexes: Array<EsIndex>;
       let excludeFields: string[];
       let excludeFilters: string[];
             
@@ -60,7 +60,7 @@ const thematicViewSlice = createSlice({
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';
-        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];
+        EsIndexes = thematicViews.find(element => element.path === path)?.EsIndexes || [];
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];           
         
@@ -74,12 +74,12 @@ const thematicViewSlice = createSlice({
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';  
-        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];    
+        EsIndexes = thematicViews.find(element => element.path === path)?.EsIndexes || [];    
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || []; 
       }
-      state.currentIndex=action.payload.esIndex;      
-      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
+      state.currentIndex=action.payload.EsIndex;      
+      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, EsIndexes: EsIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
             
             
     },
