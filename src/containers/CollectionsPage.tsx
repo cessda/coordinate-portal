@@ -15,15 +15,6 @@ import React from "react";
 import { thematicViews, ThematicView } from "../utilities/thematicViews"
 import { Helmet } from "react-helmet-async";
 
-const collections = thematicViews.map((thematicView: ThematicView, i) => (
-  {
-    longTitle: thematicView.longTitle,
-    icon: require('../img/icons/' + thematicView.icon),
-    path: thematicView.path,
-    listDescription: thematicView.listDescription
-  }
-));
-
 const CollectionsPage = () => {
   return (
     <div className="columns">
