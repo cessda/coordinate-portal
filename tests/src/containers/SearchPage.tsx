@@ -71,6 +71,11 @@ jest.mock("../../../src/hooks", () => ({
 const mockDispatch = jest.fn();
 const initialView = thematicViews.find((tv) => tv.path === "/") as ThematicView;
 const initialIndex =  initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as esIndex;
+const newView = thematicViews.find((tv) => tv.path === "/coordinate") as ThematicView;
+const newIndex = newView.esIndexes.find((i) => i.indexName === newView.defaultIndex ) as esIndex;
+
+
+
 describe("SearchPage", () => {
   beforeEach(() => {
     // Mock the necessary Redux state
@@ -133,7 +138,18 @@ describe("SearchPage", () => {
              }
       )
 });
-
+/*
+it('should return updated Thematic View state', () => {
+     
+  expect(reducer(undefined, { type: 'unknown', path: "/coordinate", esIndex: newIndex })).toEqual(
+      { 
+          currentIndex: newIndex,
+          list: thematicViews,
+          currentThematicView: newView,
+           }
+    )
+});
+*/
   it("should handle mobile filter toggle", async () => {
     render(<SearchPage />);
 
