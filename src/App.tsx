@@ -23,16 +23,6 @@ import IndexSwitcher from "./components/IndexSwitcher";
 import CustomSearchBox from "./components/CustomSearchBox";
 
 
-// Use simple router to easily check keys for various instantsearch components
-// import { simple } from 'instantsearch.js/es/lib/stateMappings';
-//const routing = {
-// router: history(),
-//stateMapping: simple(),
-//};
-
-
-
-
 const Root = () => {
   const { t } = useTranslation();
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
@@ -49,7 +39,7 @@ const Root = () => {
     const sortByItems = getSortByItems(EsIndex.indexName, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
-  //console.log(location.search.slice(1));
+
   const onUpdateRef = useRef(() => { });
 
   useEffect(() => {
@@ -147,10 +137,8 @@ const Root = () => {
             },
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
-            // Could remove the common part of index name but would need to check what else needs to be changed
-            // elsewhere, e.g. Header, LanguageSelector, DetailPage, SearchPage, and how it works
             sortBy: routeState.sortBy
-            // && routeState.sortBy.replace('coordinate_', '')
+         
           },
         };
       }

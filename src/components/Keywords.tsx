@@ -98,9 +98,7 @@ export class Keywords extends React.Component<Props & WithTranslation, State> {
   
   render(): React.ReactNode {
     const { t } = this.props;
-  //  console.log(this.props.keywords);
-    //const kw = this.props.keywords.sort((a, b) => a.term.localeCompare(b.term));
-
+  
     return (<>
     
       <div className="tags" data-testid="tags">
