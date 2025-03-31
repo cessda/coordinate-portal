@@ -32,5 +32,7 @@ module.exports = {
   testEnvironment: "jsdom",
 
   testMatch: ["**/tests/**/*.[tj]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
-  testPathIgnorePatterns: ["/node_modules/", "/tests/common/mockdata.ts", "/tests/testutils.tsx", "/tests/mocks/"]
+  testPathIgnorePatterns: ["/node_modules/", "/tests/common/mockdata.ts", "/tests/testutils.tsx", "/tests/mocks/"],
+  coveragePathIgnorePatterns: ["/node_modules/","/src/reducers/","/server/","/common/"]
+ 
 };

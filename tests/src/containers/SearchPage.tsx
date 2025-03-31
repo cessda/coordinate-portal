@@ -22,7 +22,8 @@ import { ThematicView, thematicViews, esIndex } from "../../../src/utilities/the
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
-import reducer from "../../../src/reducers/thematicView";
+import { updateThematicView } from "../../../src/reducers/thematicView";
+import  reducer  from "../../../src/reducers/thematicView";
 
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
@@ -169,8 +170,8 @@ it('should return updated Thematic View state', () => {
     expect(mockDispatch).toHaveBeenCalledWith({"payload": false, "type": "search/toggleSummary"});
   });
 
-  
-/*
+  /*
+
   it("should be able to show and then close filter summary", async () => {
     let showFilterSummary = true;
     (useAppSelector as jest.Mock).mockImplementation((callback) =>
@@ -185,7 +186,7 @@ it('should return updated Thematic View state', () => {
         },
       })
     );
-    
+   
     const { rerender } = render(<SearchPage />);
   
     expect(screen.getByTestId('filter-summary')).toBeInTheDocument();
@@ -204,17 +205,8 @@ it('should return updated Thematic View state', () => {
     expect(screen.queryByText("Mocked Current Refinements")).toBe(null);
   });
 
-
-  it('should dispatch updateLanguage action on sort by change', () => {
-    render(<SearchPage />);
-
-
-    const sortByDropdown = screen.getByTestId('sortby-options');
-    fireEvent.change(sortByDropdown, { target: { value: 'cmmstudy_en_title_asc' } });
-    
-    expect(mockDispatch).toHaveBeenCalledWith(updateThematicView(initialView));
-  });
   */
+
 
 
 });
