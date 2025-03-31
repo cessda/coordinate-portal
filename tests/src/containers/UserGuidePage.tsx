@@ -17,7 +17,7 @@ import { fireEvent } from "@testing-library/react";
 import { render, screen, waitFor, within } from "../../testutils";
 
 import { useSearchParams, useNavigation } from "react-router-dom";
-import CollectionsPage from "../../../src/containers/CollectionsPage";
+import UserGuidePage from "../../../src/containers/UserGuidePage";
 import { ThematicView, thematicViews, esIndex } from "../../../src/utilities/thematicViews";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
@@ -46,7 +46,7 @@ const initialIndex =  initialView.esIndexes.find((i) => i.indexName === initialV
 
 
 
-describe("Collections Page", () => {
+describe("User Guide Page", () => {
   beforeEach(() => {
     // Mock the necessary Redux state
      // Mock the necessary Redux state
@@ -71,8 +71,8 @@ describe("Collections Page", () => {
     jest.clearAllMocks();
   });
 
-  it("should render Collections Page correctly", async () => {
-    render(<CollectionsPage />);
+  it("should render User Guide Page correctly", async () => {
+    render(<UserGuidePage />);
 
   });
 
