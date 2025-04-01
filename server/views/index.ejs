@@ -15,7 +15,29 @@
 // limitations under the License.
 -->
 <head>
-
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@coordinate_eu">
+  <meta property="og:site_name" content="CESSDA Data Catalogue">
+  <meta property="og:type" content="website">
+  <% if (metadata.title) { %>
+    <meta property="og:title" content="<%= metadata.title %> - CESSDA Data Catalogue">
+  <% } else { %>
+    <meta property="og:title" content="CESSDA Data Catalogue">
+  <% } %>
+  <% if (metadata.description) { %>
+    <meta property="og:description" content="<%= metadata.description %>">
+  <% } else { %>
+    <meta property="og:description" content="COORDINATE Portal contains metadata from studies related to child and youth wellbeing.">
+  <% } %>
+  <meta property="og:image" content="https://www.cessda.eu/Images/Service-logos/dc-std.svg">
+  <% if (metadata.creators) { %>
+    <meta name="twitter:label1" content="Creator">
+    <meta name="twitter:data1" content="<%= metadata.creators %>">
+  <% } %>
+  <% if (metadata.publisher) { %>
+    <meta name="twitter:label2" content="Publisher">
+    <meta name="twitter:data2" content="<%= metadata.publisher %>">
+  <% } %>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
    <noscript>

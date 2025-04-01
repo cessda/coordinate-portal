@@ -112,7 +112,7 @@ In `/src/containers/UserGuidePage.tsx`:
 const userGuidePages = {
   ...
 
-  cdc: require('../components/dynamic/pages/userGuidePages/SampleUserGuidePage.tsx').default,
+  sample: require('../components/dynamic/pages/userGuidePages/SampleUserGuidePage.tsx').default,
 };
 ```
 
