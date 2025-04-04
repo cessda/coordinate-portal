@@ -12,11 +12,10 @@
 // limitations under the License.
 
 import React from "react";
-import { esIndex } from "../utilities/thematicViews";
+import { EsIndex } from "../utilities/thematicViews";
 import { updateThematicView } from "../reducers/thematicView"
 import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { useClearRefinements } from "react-instantsearch";
 
 
@@ -34,27 +33,25 @@ const IndexSwitcher = () => {
   const thematicView = useAppSelector((state) => state.thematicView);
 
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
   const { refine: resetFilters } = useClearRefinements();
 
 
 
 
-  const esIndexOptions: ESIndexOption[] = thematicView.currentThematicView.esIndexes.map((esIndex: esIndex) => ({
-    label: esIndex.language,
-    indexName: esIndex.indexName,
-    value: { path: thematicView.currentThematicView.path, esIndex: esIndex }
+  const EsIndexOptions: ESIndexOption[] = thematicView.currentThematicView.EsIndexes.map((EsIndex: EsIndex) => ({
+    label: EsIndex.language,
+    indexName: EsIndex.indexName,
+    value: { path: thematicView.currentThematicView.path, EsIndex: EsIndex }
   }));
 
 
 
-  const changeIndex = (value: esIndex) => {
+  const changeIndex = (value: EsIndex) => {
     resetFilters();
     dispatch(updateThematicView(value));
     }
 
-  const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption).label;
+  const currentLabel = (EsIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption).label;
 
   return (
 
@@ -62,7 +59,7 @@ const IndexSwitcher = () => {
       <Select
         classNamePrefix="react-select"
         value={{ value: thematicView.currentIndex, label: currentLabel }}
-        options={esIndexOptions}
+        options={EsIndexOptions}
         isSearchable={false}
         aria-label="Search language"
         isClearable={false}

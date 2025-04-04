@@ -16,6 +16,8 @@ import { Helmet } from "react-helmet-async";
 
 const AccessibilityStatementPage = () => {
   return (
+    <div className="columns">
+<div className="content-wrapper column is-three-fifths is-offset-one-fifth mt-6 p-6">
     <article>
       <Helmet>
         <title>Accessibility Statement</title>
@@ -60,6 +62,8 @@ const AccessibilityStatementPage = () => {
         </div>
       </div>
     </article>
+    </div>
+    </div>
   );
 };
 

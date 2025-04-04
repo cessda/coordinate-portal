@@ -1,4 +1,13 @@
+.main-column {
+  order: 1
+}
+.side-column {
+order: 2
+}
 
+.ais-RefinementList-count::before {
+content: "~";
+}
 
 @media screen and (min-width: 990px) {
   header h1 {
@@ -24,7 +33,9 @@
   .ais-Hits-item {
     margin: 25px 40px;
   }
-
+  .ais-Hits-item:first-of-type {
+    margin-top: 10px;
+  }
   .navbar-brand {
     display: none;
   }
@@ -44,6 +55,8 @@
     max-width: 400px;
     height: auto;
   }
+
+
 }
 
 @media screen and (max-width: 990px) {
@@ -54,13 +67,18 @@
 
   }
 
+  header .navbar .link {
+    display:block;
+    
+}
+
   .language-picker {
     width: 110px;
     font-size: 13px;
   }
 
   input.searchbox {
-    width: 180px;
+    width: 200px;
     font-size: 13px;
     line-height: 36px;
     height: auto;
@@ -335,6 +353,11 @@ display: block;
 
   }
 }
+  @media screen and (max-width: 990px) {
+    .hits-wrapper {
+  padding-top:15px;
+  }
+}
 
 .smalltext {
   font-size: 14px;
@@ -351,7 +374,6 @@ display: block;
 .study-wrapper {
   background-color: #fff;
   padding: 5px 25px 15px 25px;
-  margin-top: 10px;
   border-radius: 12px;
   border: 1px solid hsl(201, 20%, 90%);
 }
@@ -503,10 +525,7 @@ body {
     background-color: transparent;
   }
 
-  .switch[type=checkbox].is-info:checked+label::before,
-  .switch[type=checkbox].is-info:checked+label:before {
-    background: hsl(201, 50%, 60%);
-  }
+
 
   mark {
     background-color: hsl(25, 95%, 92%);
@@ -521,15 +540,9 @@ body {
 
   .view-selector .react-select__option--is-selected {
     background-color: hsl(201, 20%, 95%);
-    color: $cdc_text;
   }
 
-  header h1 {
 
-    color: $cdc_text;
-  }
-
-  color: $cdc_text;
 
 
 }

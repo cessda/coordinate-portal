@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration, RouteObject, useMatches } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration, RouteObject } from "react-router-dom";
 import SearchPage, { getSortByItems } from "./containers/SearchPage";
 import DetailPage, { studyLoader } from "./containers/DetailPage";
 import AboutPage, { metricsLoader } from "./containers/AboutPage";
@@ -19,16 +19,8 @@ import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
 import { thematicViews } from "./utilities/thematicViews";
 import { Helmet } from "react-helmet-async";
-
-
-// Use simple router to easily check keys for various instantsearch components
-// import { simple } from 'instantsearch.js/es/lib/stateMappings';
-//const routing = {
-// router: history(),
-//stateMapping: simple(),
-//};
-
-
+import IndexSwitcher from "./components/IndexSwitcher";
+import CustomSearchBox from "./components/CustomSearchBox";
 
 
 const Root = () => {
@@ -43,11 +35,11 @@ const Root = () => {
 
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
-  currentThematicView.esIndexes.forEach(esIndex => {
+  currentThematicView.EsIndexes.forEach(esIndex => {
     const sortByItems = getSortByItems(esIndex.indexName, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
-  //console.log(location.search.slice(1));
+
   const onUpdateRef = useRef(() => { });
 
   useEffect(() => {
@@ -62,7 +54,7 @@ const Root = () => {
       },
       parseURL({ qsModule, location }) {
         return qsModule.parse(location.search.slice(1));
-        
+
       },
 
 
@@ -72,7 +64,7 @@ const Root = () => {
         //console.log(location);
         // Combine query params from location and route state while giving preference to route state
         const combinedQueryParams = { ...qsModule.parse(location.search.slice(1)), ...routeState };
-      
+
 
         // Not sure why it doesn't really handle this correctly by default
         // e.g. entering a link with ?keywords=youth will not work
@@ -145,10 +137,8 @@ const Root = () => {
             },
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
-            // Could remove the common part of index name but would need to check what else needs to be changed
-            // elsewhere, e.g. Header, LanguageSelector, DetailPage, SearchPage, and how it works
             sortBy: routeState.sortBy
-            // && routeState.sortBy.replace('coordinate_', '')
+         
           },
         };
       }
@@ -164,7 +154,7 @@ const Root = () => {
       // Could use index as key to make sure everything is always perfect and store values could be used but
       // then it re-renders even when not really needed (like switching language on detail page)
 
-     // key={currentIndex.indexName}
+      // key={currentIndex.indexName}
       routing={routing}
       // routing={true}
       future={{
@@ -181,16 +171,26 @@ const Root = () => {
       </Helmet>
 
       <Header />
-      
+
       <main id="main">
-      
+
         <div className="container">
-         
-       
-              <VirtualRefinementList attribute="virtual" />
-              <VirtualRangeInput attribute="virtual" />
-              <VirtualSortBy items={virtualSortByItems} />
-       
+
+          <div className="columns mx-4 mt-2">
+            <div className="searchwrapper columns is-mobile column is-narrow mx-auto is-gapless mt-4 mb-2 p-2">
+              <div className="column is-narrow">
+                <IndexSwitcher />
+              </div>
+              <div className="column is-narrow pb-0">
+                <CustomSearchBox />
+              </div>
+            </div>
+          </div>
+
+          <VirtualRefinementList attribute="virtual" />
+          <VirtualRangeInput attribute="virtual" />
+          <VirtualSortBy items={virtualSortByItems} />
+
           <Outlet />
         </div>
       </main>

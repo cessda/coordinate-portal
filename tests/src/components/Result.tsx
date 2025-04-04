@@ -143,8 +143,8 @@ it('renders highlighted title', () => {
 it('renders language buttons', () => {
   render(<Result hit={baseMockHit} />);
 
-  expect(screen.getByText('en')).toBeInTheDocument();
-  expect(screen.getByText('fi')).toBeInTheDocument();
+  expect(screen.getByText('EN')).toBeInTheDocument();
+  expect(screen.getByText('FI')).toBeInTheDocument();
 });
 
 it('renders external study link', () => {

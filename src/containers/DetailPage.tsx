@@ -13,17 +13,15 @@
 
 import React, { useEffect } from "react";
 import Detail from "../components/Detail"
-import _ from "lodash";
 import { useTranslation } from "react-i18next";
 import { updateStudy } from "../reducers/detail";
-import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { Await, Link, LoaderFunction, useLoaderData, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { store } from "../store";
 import { Funding, getJsonLd } from '../../common/metadata';
 import Similars from "../components/Similars";
 import { FaAngleLeft } from "react-icons/fa";
 import { useAppSelector } from "../hooks";
 import { Helmet } from "react-helmet-async";
-import { useSearchParams } from "react-router-dom";
 
 type Heading = {
   id: string;
@@ -38,17 +36,13 @@ export type HeadingEntry = {
 export const studyLoader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const lang = url.searchParams.get("lang");
- if (lang) {
-    //store.dispatch(updateLanguage(lang));
-    //console.log(lang);
-  } 
 
-  const data = await store.dispatch(updateStudy({id: params.id as string, lang: lang as string}));
+  const data = await store.dispatch(updateStudy({ id: params.id as string, lang: lang as string }));
   return { data };
 };
 
 const DetailPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const { t } = useTranslation();
   const location = useLocation();
@@ -58,13 +52,13 @@ const DetailPage = () => {
   useEffect(() => {
     // Update the JSON-LD representation
     const jsonLDElement = document.getElementById("json-ld");
-  
+
     if (data?.payload?.study) {
       const script = document.createElement("script");
       script.id = "json-ld";
       script.type = "application/ld+json";
       script.textContent = JSON.stringify(getJsonLd(data.payload.study));
-  
+
       if (jsonLDElement) {
         jsonLDElement.replaceWith(script);
       } else {
@@ -145,12 +139,15 @@ const DetailPage = () => {
     { relPub: { id: 'related-publications', level: 'title', translation: t("metadata.relatedPublications") } }
   ]
   return (
-    
-    <div className="columns">
-      
-      <div className="column is-3 side-column">
-        {location.state?.from === currentThematicView.path &&
-          <a className="ais-ClearRefinements-button focus-visible pl-0 mb-3"
+<div>    
+<Helmet>
+        <link rel="canonical" href={`https://datacatalogue.cessda.eu/detail/${location.pathname.split('/').slice(-1)[0]}?lang=${searchParams.get("lang")}`}>
+        </link>
+      </Helmet>
+  
+     {location.state?.from === currentThematicView.path &&
+     <div>
+          <a className="ais-ClearRefinements-button focus-visible pl-4"
             tabIndex={0}
             onClick={() => navigate(-1)}
             onKeyDown={(e) => handleKeyDown(e)}
@@ -160,7 +157,14 @@ const DetailPage = () => {
             </span>
             <span>{t("backToSearch")}</span>
           </a>
+          </div>
         }
+    <div className="columns is-mobile is-flex-wrap-wrap m-0 p-0">
+
+
+
+      <div className="column pt-0 is-one-third-desktop is-full-tablet is-full-mobile side-column">
+
         <React.Suspense fallback={<p>{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
             {(resolvedData) => {
@@ -168,14 +172,11 @@ const DetailPage = () => {
             }}
           </Await>
         </React.Suspense>
-  
+
       </div>
-      <Helmet>
-      <link rel="canonical" href={`https://datacatalogue.cessda.eu/detail/${location.pathname.split('/').slice(-1)[0]}?lang=${searchParams.get("lang")}`}>
- </link>
-      </Helmet>
-      <div className="column is-9 main-column">
-   
+     
+      <div className="column pt-0 is-two-thirds-desktop is-full-tablet is-full-mobile main-column mb-6">
+
         <React.Suspense fallback={<p data-testid="loading">{t("loader.loading")}</p>}>
           <Await resolve={data} errorElement={<p>{t("loader.error")}</p>}>
             {(resolvedData) => {
@@ -183,7 +184,7 @@ const DetailPage = () => {
                 return <Detail item={resolvedData.payload.study} headings={headings} />
               }
               else {
-                const languageLinks: JSX.Element[] = [];
+                const languageLinks: React.JSX.Element[] = [];
 
                 for (let i = 0; i < resolvedData?.payload?.availableLanguages.length; i++) {
                   const lang = resolvedData.payload.availableLanguages[i];
@@ -217,6 +218,7 @@ const DetailPage = () => {
           </Await>
         </React.Suspense>
       </div>
+    </div>
     </div>
   )
 };

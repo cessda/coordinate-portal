@@ -36,26 +36,30 @@ jest.mock('react-router-dom', () => ({
     },
   }),
   useLocation: () => ({
-    state: { from: "/" }
+    state: { 
+      from: "/",
+     },
+        pathname: "/detail/8a230ed2d3c48685bb93a5dfecc98a65f8c29ea47c0517aac8d71b16d4394f9b"
   }),
   useNavigate: () => mockNavigate,
 }));
 
 jest.mock("../../../src/components/Detail", () => () => <div>Detail component</div>);
-jest.mock("../../../src/components/DetailIndex", () => () => <div>DetailIndex component</div>);
+// jest.mock("../../../src/components/DetailIndex", () => () => <div>DetailIndex component</div>);
 jest.mock("../../../src/components/Similars", () => () => <div>Similars component</div>);
 
 it("should render correctly", async () => {
+  
   render(<DetailPage />);
 
   await waitFor(() => {
     expect(screen.getByText('Detail component')).toBeInTheDocument();
-    expect(screen.getByText('DetailIndex component')).toBeInTheDocument();
+//    expect(screen.getByText('DetailIndex component')).toBeInTheDocument();
     expect(screen.getByText('Similars component')).toBeInTheDocument();
   });
 });
 
-it("handle back button click and keydown", async () => {
+it("should handle back button click and keydown", async () => {
   render(<DetailPage />);
 
   const backButton = screen.getByTestId("back-button");
@@ -90,6 +94,7 @@ it("renders JSON-LD script for the study", async () => {
     expect(jsonLdElement?.innerHTML).toContain('"@type":"Dataset"');
   });
 });
+
 
 it("renders available languages if no study found with selected language", async () => {
   // Override the mock for this specific test using jest.spyOn

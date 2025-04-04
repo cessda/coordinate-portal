@@ -14,7 +14,7 @@
 import React from "react";
 import { useAppSelector } from "../hooks";
 import { ThematicView } from "../utilities/thematicViews";
-import { IndexDropdownMenu } from "./IndexDropdownMenu";
+import { IndexDropdownMenu } from "./ThematicViewDropdownMenu";
 
 
 

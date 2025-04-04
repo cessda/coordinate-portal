@@ -143,8 +143,8 @@ export const IndexDropdownMenu = ({
                         {items.map((item, index) => (
                             <li
                                 role="menuitem"
-                                key={index}
                                 id={`dropdown-item-${index}`}
+                                key={item.key}
                                 className={`${focusedIndex === index ? 'columns is-mobile is-gapless mb-0 has-background-grey-lighter' : 'columns is-mobile is-gapless mb-0'
                                     }`}
                                 tabIndex={focusedIndex === index ? 0 : -1}

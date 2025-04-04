@@ -11,18 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent, useState } from "react";
-import IndexSwitcher from "./IndexSwitcher";
+import React, { FocusEvent, useState, useEffect } from "react";
 import ThematicViewSwitcher from "./ThematicViewSwitcher";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks";
-import CustomSearchBox from "./CustomSearchBox";
-import { useLocation } from 'react-router-dom';
 import { useClearRefinements, useHitsPerPage, usePagination, useSearchBox, useSortBy } from "react-instantsearch";
 import { hitsPerPageItems, getSortByItems } from "../containers/SearchPage";
-import { FaWindows } from "react-icons/fa";
-import { VirtualRefinementList, VirtualRangeInput, VirtualSortBy } from "../components/VirtualComponents";
+import { VirtualSortBy } from "../components/VirtualComponents";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -31,25 +27,20 @@ const Header = () => {
   let virtualSortByItems: { value: string, label: string }[] = [];
   const sortByItems = getSortByItems(currentIndex.indexName, t);
   virtualSortByItems = virtualSortByItems.concat(sortByItems);
-  //console.log(virtualSortByItems);
-  //console.log(currentIndex.indexName);
+
   const location = useLocation();
 
-  // const logoFolder = require.context('../img/logos/', true, /\.(jpe?g|png|gif|svg)$/)
-  //const logoImg = currentThematicView.icon;
   const logoImg = require('../img/icons/' + currentThematicView.icon);
-  const longTitle = currentThematicView.longTitle;
   function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
     e.target.classList.toggle(className);
   }
 
-const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
+  const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.path;
   const { clear: clearQuery } = useSearchBox();
   const { refine: refineFilters } = useClearRefinements();
   const { refine: refinePagination } = usePagination();
   const { refine: refineResultsPerPage } = useHitsPerPage({ items: hitsPerPageItems });
   const { refine: refineSortBy } = useSortBy({ items: sortByItems });
-
   const resetQueries = () => {
     clearQuery();
     // Root path requires more resets
@@ -62,30 +53,29 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
   }
   const [isActive, setisActive] = React.useState(false);
 
- 
-
-
-
-
+const searchform = document.querySelector<HTMLFormElement>('#searchform');
   return (
     <header>
- <VirtualSortBy items={virtualSortByItems} />
+      <VirtualSortBy items={virtualSortByItems} />
       <div className="container columns is-mobile is-vcentered">
         <div className="column is-narrow p-1">
-          
+
         <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}` : `/?sortBy=${currentIndex.indexName}`} onClick={() => {
                   resetQueries();
+                  useEffect(() => {
+                    searchform?.reset();
+                  });
                 }}>
-          <div id="home" className="columns is-mobile is-vcentered is-gapless">
-            <div className="logo column is-narrow">
-              <img src={logoImg} alt="Home" />
+            <div id="home" className="columns is-mobile is-vcentered is-gapless">
+              <div className="logo column is-narrow">
+                <img src={logoImg} alt="Home" />
+
+              </div>
+              <div className="logo-title column is-narrow">
+                <h1>{currentThematicView.title}</h1>
+              </div>
 
             </div>
-            <div className="logo-title column is-narrow">
-              <h1>{currentThematicView.title}</h1>
-            </div>
-
-          </div>
           </Link>
 
         </div>
@@ -102,11 +92,11 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
         <div className="column p-0">
 
           <div className="columns is-vcentered is-justify-content-end p-0">
-   
+
             <nav className="column navbar is-narrow p-0" aria-label="Main">
 
               <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
-               
+
 
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/documentation` : "/documentation"}
                   className="link navbar-item">
@@ -114,7 +104,7 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/collections` : "/collections"}
                   className="link navbar-item">
-                 Collections
+                  Collections
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/about` : "/about"}
                   className="link navbar-item">
@@ -124,17 +114,17 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
                   className="link navbar-item">
                   API
                 </Link>
-                </div>
-                <div className="navbar-brand">
-                  <a role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} data-target="navMenu" onClick={() => {
-              setisActive(!isActive);
-            }} aria-label="menu" aria-expanded="false">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
+              </div>
+              <div className="navbar-brand">
+                <a role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} data-target="navMenu" onClick={() => {
+                  setisActive(!isActive);
+                }} aria-label="menu" aria-expanded="false">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
 
-                  </a>
-                
+                </a>
+
               </div>
             </nav>
 
@@ -143,72 +133,6 @@ const rootLink = currentThematicView.path === "" ? "/" : currentThematicView.pat
 
         </div>
       </div>
-
-      {/* {showAdvancedSearch && (
-        <div className="modal is-active">
-          <div className="modal-background" />
-          <div className="modal-card">
-            <div className="modal-card-head">
-              <p className="modal-card-title">{t("advancedSearch.label")}</p>
-              <button
-                className="delete"
-                aria-label="close"
-                onClick={() => dispatch(toggleAdvancedSearch(showAdvancedSearch))}
-              />
-            </div>
-            <section className="modal-card-body">
-              <p className="pb-10">{t("advancedSearch.introduction")}</p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.and")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.or")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.negates")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.phrase")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.prefix")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.precedence")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.distance")}
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.slop")}
-              </p>
-              <p className="pt-15">
-                <b>{t("advancedSearch.escaping.heading")}</b>
-              </p>
-              <p className="tag is-light has-text-weight-semibold">
-                {t("advancedSearch.escaping.content")}
-              </p>
-              <p className="pt-15">
-                <b>{t("advancedSearch.defaultOperator.heading")}</b>
-              </p>
-              <p className="has-text-weight-semibold">
-                {t("advancedSearch.defaultOperator.content")}
-              </p>
-            </section>
-            <div className="modal-card-foot">
-              <button
-                className="button is-light"
-                onClick={() => dispatch(toggleAdvancedSearch(showAdvancedSearch))}
-              >
-                {t("close")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
-
-
-      
     </header>
   );
 };

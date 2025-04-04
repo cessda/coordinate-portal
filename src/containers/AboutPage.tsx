@@ -25,7 +25,6 @@ const aboutPages = {
 };
 
 export const metricsLoader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
   return await store.dispatch(updateMetrics());
 };
 
@@ -36,7 +35,7 @@ const AboutPage = () => {
 
   return (
     <div className="columns">
-      <div className="content-wrapper column is-three-fifths is-offset-one-fifth mt-6 p-2">
+      <div className="content-wrapper column is-three-fifths is-offset-one-fifth mt-6 p-2" data-testid="about-page">
     <DynamicAboutPage metrics={metrics} />
     </div>
     </div>

@@ -66,15 +66,27 @@
 
 .ais-CustomRefinementList {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
-  overflow-x: scroll;
+  overflow-y: scroll;
   max-height: 500px;
-
+  
   .ais-RefinementList-item {
-    margin: 0 5px 2px 0;
+margin-right:2%;
+    width: 46%;
   }
 }
+
+@media screen and (max-width: 1020px) {
+  .ais-CustomRefinementList {
+  
+    
+    .ais-RefinementList-item {
+  margin-right:2%;
+      width: 98%;
+    }
+  }
+  }
 
 .ais-RangeInput-input, .ais-SearchBox-input {
   outline-offset: 1px;

@@ -20,6 +20,7 @@ import compression from "compression";
 import methodOverride from "method-override";
 import responseTime from "response-time";
 import { CMMStudy, getJsonLd, getStudyModel } from "../common/metadata";
+import { thematicViews } from "../src/utilities/thematicViews";
 import {
   apiResponseTimeHandler,
   metricsRequestHandler,
@@ -715,6 +716,9 @@ async function getMetadata(
   }
 }
 
+const paths = thematicViews.map(thematicView => 
+  thematicView.path
+);
 export async function renderResponse(
   req: express.Request,
   res: express.Response,
@@ -729,17 +733,20 @@ export async function renderResponse(
 
   if (
     !contentType ||
-    (req.path !== "/detail" && contentType === "application/ld+json")
+    (!req.path.includes("/detail") && contentType === "application/ld+json")
   ) {
     // If the content type is unsupported, or if a client is requesting JSON-LD on anything that isn't a detail page return 406
     res.sendStatus(406);
     return;
   }
 
+/*
+
   switch (req.path) {
     // The root path and the about path always return 200
     case "/":
     case "/about":
+      case "/accessibility-statement":
       status = 200;
       break;
 
@@ -775,6 +782,53 @@ export async function renderResponse(
       status = 404;
       break;
   }
+*/
+
+status = 404;
+
+if ( req.path.includes("/about") ) {
+  status = 200;
+}
+if ( req.path.includes("/accessibility-statement") ) {
+  status = 200;
+}
+
+if ( req.path.includes("/documentation") ) {
+  status = 200;
+}
+
+if ( req.path.includes("/collections") ) {
+  status = 200;
+}
+
+if ( paths.includes(req.path) ) {
+  status = 200;
+}
+
+if ( req.path.includes("/detail") ) {
+   if (req.query.q) {
+    // If we are on the detail page and a query is set, retrive the JSON-LD metadata
+    try {
+      metadata = await getMetadata(
+        req.query.q as string,
+        req.query.lang as string | undefined
+      );
+      if (!metadata) {
+        // Set status to 404, a study was not found
+        status = 404;
+      }
+    } catch (e: unknown) {
+      const u = e as ElasticError;
+      if (u instanceof ResponseError && u.statusCode === 404) {
+        status = u.statusCode;
+      } else {
+        logger.error(`Cannot communicate with Elasticsearch: ${u}`);
+        status = 503;
+      }
+    }
+  } 
+}
+
 
   switch (contentType) {
     case "html":

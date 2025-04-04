@@ -222,7 +222,7 @@ it("should select json and trigger export metadata process", async () => {
   await waitFor(() => {
     // Assertions to ensure the export process was triggered
     expect(mockFetch).toHaveBeenCalled();
-    expect(mockFetch).toHaveBeenCalledWith(`${window.location.origin}/api/json/coordinate_en/1`);
+    expect(mockFetch).toHaveBeenCalledWith(`${window.location.origin}/api/json/cmmstudy_en/1`);
     expect(mockCreateObjectURL).toHaveBeenCalled();
     expect(mockRevokeObjectURL).toHaveBeenCalled();
     expect(createElementSpy).toHaveBeenCalledWith('a');
@@ -318,26 +318,7 @@ it('should expand abstract on click', async () => {
   });
 });
 
-it('should expand keywords on click', async () => {
-  renderDetailWithModifiedProps({ keywords: generateKeywordsArray(13) });
 
-  // Verify initial state
-  const expandKeywordsButtons = screen.getAllByTestId('expand-keywords');
-  expect(expandKeywordsButtons[0]).toBeInTheDocument();
-  expect(expandKeywordsButtons[1]).toBeInTheDocument();
-  const { getByText, queryByText } = within(expandKeywordsButtons[0]);
-  expect(getByText('readMore')).toBeInTheDocument();
-  expect(queryByText('readLess')).toBeNull();
-
-  // Simulate clicking the toggle button
-  userEvent.click(expandKeywordsButtons[0]);
-
-  // Verify state after clicking
-  await waitFor(() => {
-    expect(getByText('readLess')).toBeInTheDocument();
-    expect(queryByText('readMore')).toBeNull();
-  });
-});
 
 it('should add funding information if it exists', async () => {
   const fundingData = [

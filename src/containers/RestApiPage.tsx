@@ -18,8 +18,8 @@ const RestApiPage = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="columns is-justify-content-center">
-      <div className="column py-6 is-8">
+<div className="columns">
+<div className="content-wrapper column is-three-fifths is-offset-one-fifth mt-6 p-6">
         <h1 className="main-title mb-4">{t("api.label")}</h1>
         <div className="text-container" dangerouslySetInnerHTML={{ __html: t("api.content") }}/>
         <ul>

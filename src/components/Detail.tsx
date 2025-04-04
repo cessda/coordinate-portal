@@ -65,8 +65,7 @@ const Detail = (props: Props) => {
   const item = props.item;
   const headings = props.headings;
   const truncatedAbstractLength = 2000;
-  const truncatedKeywordsLength = 12;
-
+  
 
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
   const exportMetadataOptions: Option[] = [
@@ -192,7 +191,7 @@ const Detail = (props: Props) => {
       return dateTimeFormatter.format(temporalAccessor);
     } catch (e) {
       // Handle unparsable strings by returning the given value.
-      console.debug(e);
+      //   console.debug(e);
       return dateString;
     }
   }
@@ -232,11 +231,11 @@ const Detail = (props: Props) => {
     const Element = level === 'main' ? 'h1' : (level === 'title' ? 'h2' : 'h3');
 
     return (
-      
+
       <Element id={id} className={`metadata-${level} ${classNames ?? ''}`}>
         {translation}
       </Element>
-      
+
     );
   }
 
@@ -296,38 +295,7 @@ const Detail = (props: Props) => {
     }
   }
 
-  const exportCitationOptions = [
-    { value: 'bibtext', label: 'BibTeX' },
-    { value: 'ris', label: 'RIS' },
-    { value: 'endnote', label: 'EndNote' },
-  ]
-
-  const handleExportCitationChange = (selected: Option) => {
-    setSelectedExportCitationOption(selected);
-  };
-
-  const handleExportCitation = () => {
-    if (selectedExportCitationOption?.value) {
-      // Implement the export logic based on the selectedOption.value
-      switch (selectedExportCitationOption.value) {
-        case 'bibtext':
-          // Implement BibTeX export logic here
-          console.log('Exporting as BibTeX');
-          break;
-        case 'ris':
-          // Implement RIS export logic here
-          console.log('Exporting as RIS');
-          break;
-        case 'endnote':
-          // Implement EndNote export logic here
-          console.log('Exporting as EndNote');
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
+ 
   /**
    * Formats the given creator inside span element with as much information as possible, preferably
    * creator name, creator affiliation and research identifier. Research identifier will also include
@@ -349,7 +317,7 @@ const Detail = (props: Props) => {
               {creator.identifier.type?.toLowerCase() !== "orcid" &&
                 <React.Fragment key={`${creator.identifier.type || "Research Identifier"}`}>
                   {creator.identifier.type || "Research Identifier"}{": "}
-                  </React.Fragment>
+                </React.Fragment>
               }
               {creator.identifier.uri ? (
                 <a href={creator.identifier.uri} target="_blank" rel="noreferrer">
@@ -413,135 +381,109 @@ const Detail = (props: Props) => {
       }
     }
   }
-  
 
   return (
     <>
       <Helmet>
         <title>{item.titleStudy || t("language.notAvailable.field")} - {currentThematicView.longTitle}</title>
-        </Helmet>
-      <div className="columns is-gapless is-vcentered mb-0 mt-0">
-        <div className="column smalltext">
+      </Helmet>
 
-          {item.studyUrl && (
-            <a
-              href={item.studyUrl}
-              rel="noreferrer"
-              target="_blank">
-              <span className="icon is-small">
-                <FaExternalLinkAlt />
-              </span>
-              &nbsp;
-              <span className="is-small">
-                {t("goToStudy")}
-              </span>
-            </a>
-          )}
-          &nbsp;  &nbsp;
-          <a
-            href={`/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`}
-            rel="noreferrer"
-            target="_blank">
-            <span className="icon is-small"><FaCode /></span>
-            &nbsp;
-            <span>{t("viewJson")}</span>
-          </a>
-
-        </div>
-        <div className="column is-narrow">
-          <div className="columns is-mobile is-gapless">
-
-
-            {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
-                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                    classNames={{container: 'ml-1'}}/> */}
-            <div className="column is-narrow">
-              <Select options={exportMetadataOptions}
-                defaultValue={ exportMetadataOptions[0] }
-                isSearchable={false}
-                onChange={handleExportMetadataChange}
-                className="export-select"
-                aria-label="Export metadata"
-                classNamePrefix="react-select"
-                isClearable={false}
-                classNames={{
-                  control: (state) =>
-                    state.isFocused ? 'is-focused' : '',
-                }}
-                styles={{
-                  menu: (baseStyles) => ({
-                    ...baseStyles,
-                    marginTop: '0',
-                  }),
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    boxShadow: 'none',
-                    outline: 'none',
-                  }),
-                }}
-              />
-            </div>
-            <div className="column is-narrow">
-              <button className="button export" onClick={handleExportMetadata} data-testid="export-metadata-button"
-                disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
-                {t("exportMetadata")}
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* 
-      <div className="column is-5 px-1 py-3">
-        <div className="columns is-flex is-flex-wrap-wrap is-vcentered is-centered">
-          <div className="column is-flex is-flex-grow-0 is-narrow py-0 pl-0 pr-1">
-            <span className="is-inline-flex">{t("exportCitation")}</span>
-            <Tooltip content={t("metadata.keywords.tooltip.content")}
-                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
-                    classNames={{container: 'ml-1'}}/>
-          </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <Select options={exportCitationOptions}
-                    defaultValue={{ value: '', label: ''}}
-                    onChange={handleExportCitationChange}
-                    className="export-select"
-                    aria-label="Export citation" />
-          </div>
-          <div className="column is-flex is-flex-grow-0 is-narrow p-0">
-            <button className="button is-info is-light" data-testid="export-citation-button"
-                    onClick={() => alert("Not yet implemented")}
-                    // onClick={handleExportCitation}
-                    disabled={!selectedExportCitationOption || selectedExportCitationOption.value.trim() === ''}>
-              {t("export")}
-            </button>
-          </div>
-        </div>
-      </div>
-        */}
-
-      </div>
       <div className="metadata-container study-wrapper">
 
-              <div className="main-content">
+        <div className="main-content">
           <article>
             <section className="metadata-section">
+              <div className="columns is-gapless is-vcentered mb-0 mt-0">
+                <div className="column smalltext">
 
+                  {item.studyUrl && (
+                    <a
+                      href={item.studyUrl}
+                      rel="noreferrer"
+                      target="_blank">
+                      <span className="icon is-small">
+                        <FaExternalLinkAlt />
+                      </span>
+                      &nbsp;
+                      <span className="is-small">
+                        {t("goToStudy")}
+                        &nbsp;&nbsp;</span>
+                    </a>
+                  )}
+               
+                  <a
+                    href={`/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`}
+                    rel="noreferrer"
+                    target="_blank">
+                    <span className="icon is-small"><FaCode /></span>
+                    &nbsp;
+                    <span>{t("viewJson")}</span>
+                  </a>
+
+                </div>
+                <div className="column is-narrow">
+                  <div className="columns is-mobile is-gapless">
+
+
+                    {/* <Tooltip content={t("metadata.keywords.tooltip.content")}
+                    ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
+                    classNames={{container: 'ml-1'}}/> */}
+                    <div className="column is-narrow mt-2">
+                      <Select options={exportMetadataOptions}
+                        defaultValue={exportMetadataOptions[0]}
+                        isSearchable={false}
+                        onChange={handleExportMetadataChange}
+                        className="export-select"
+                        aria-label="Export metadata"
+                        classNamePrefix="react-select"
+                        isClearable={false}
+                        classNames={{
+                          control: (state) =>
+                            state.isFocused ? 'is-focused' : '',
+                        }}
+                        styles={{
+                          menu: (baseStyles) => ({
+                            ...baseStyles,
+                            marginTop: '0',
+                          }),
+                          control: (baseStyles) => ({
+                            ...baseStyles,
+                            boxShadow: 'none',
+                            outline: 'none',
+                          }),
+                        }}
+                      />
+                    </div>
+                    <div className="column is-narrow mt-2">
+                      <button className="button export" onClick={handleExportMetadata} data-testid="export-metadata-button"
+                        disabled={!selectedExportMetadataOption || selectedExportMetadataOption.value.trim() === ''}>
+                        {t("exportMetadata")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
               {languageLinks}
 
               {generateHeading('summary')}
 
               {!currentThematicView.excludeFields.includes('titleStudy') &&
-               <>
+                <>
                   {generateHeading('title', 'mt-5')}
                   <p>{item.titleStudy || t("language.notAvailable.field")}</p>
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('creators') &&
-               <>
+                <>
                   {generateHeading('creator')}
                   {generateElements(item.creators, 'div', creator => {
                     return formatCreator(creator);
                   })}
-               </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('pidStudies') &&
@@ -563,14 +505,14 @@ const Detail = (props: Props) => {
                 <>
                   {generateHeading('dataAccess')}
                   <p>{item.dataAccess || t("language.notAvailable.information")}</p>
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('series') &&
-               <>
+                <>
                   {generateHeading('series')}
                   <SeriesList seriesList={item.series} lang={currentIndex.languageCode} />
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('abstract') &&
@@ -617,7 +559,7 @@ const Detail = (props: Props) => {
 
             {!currentThematicView.excludeFields.includes('classifications') &&
               <section className="metadata-section">
-                
+
                 {generateHeading('topics', 'is-inline-flex')}
                 <Tooltip content={t("metadata.topics.tooltip.content")}
                   ariaLabel={t("metadata.topics.tooltip.ariaLabel")}
@@ -637,11 +579,13 @@ const Detail = (props: Props) => {
             {!currentThematicView.excludeFields.includes('keywords') &&
               <section className="metadata-section">
                 {generateHeading('keywords', 'is-inline-flex')}
+
+
                 <Tooltip content={t("metadata.keywords.tooltip.content")}
                   ariaLabel={t("metadata.keywords.tooltip.ariaLabel")}
                   classNames={{ container: 'mt-1 ml-1' }} />
                 <div className="tags mt-2">
-                  <Keywords keywords={item.keywords} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
+                  <Keywords keywords={item.keywords.slice().sort((a: any, b: any) => a.term.localeCompare(b.term))} keywordLimit={12} lang={currentIndex.languageCode} currentIndex={currentIndex.indexName} />
                 </div>
               </section>
             }
@@ -652,7 +596,7 @@ const Detail = (props: Props) => {
                 ariaLabel={t("metadata.methodology.tooltip.ariaLabel")}
                 classNames={{ container: 'mt-1 ml-1' }} />
 
-{/*  If hiding the below field group, use "dataCollectionPeriodStartdate" in excludeFields in src/utilities/thematicViews.ts */}
+              {/*  If hiding the below field group, use "dataCollectionPeriodStartdate" in excludeFields in src/utilities/thematicViews.ts */}
               {!currentThematicView.excludeFields.includes('dataCollectionPeriodStartdate') &&
                 <>
                   {generateHeading('collPeriod')}
@@ -673,32 +617,32 @@ const Detail = (props: Props) => {
                   <div className="tags mt-2">
                     {generateElements(item.studyAreaCountries, "tag", (country) => country.country)}
                   </div>
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('typeOfTimeMethods') &&
                 <>
                   {generateHeading('timeDimension')}
                   {generateElements(item.typeOfTimeMethods, "div", (time) => time.term)}
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('unitTypes') &&
                 <>
                   {generateHeading('analysisUnit')}
                   {generateElements(item.unitTypes, "div", (unit) => unit.term)}
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('universe') &&
                 <>
                   {generateHeading('universe')}
                   {item.universe ? formatUniverse(item.universe) : <span>{t("language.notAvailable.field")}</span>}
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('samplingProcedureFreeTexts') &&
-               <>
+                <>
                   {generateHeading('sampProc')}
                   {generateElements(item.samplingProcedureFreeTexts, "div",
                     (text) => (
@@ -708,10 +652,10 @@ const Detail = (props: Props) => {
                       />
                     )
                   )}
-               </>
+                </>
               }
 
-     {/* If hiding the below field group, use "generalDataFormats" in excludeFields in src/utilities/thematicViews.ts */}
+              {/* If hiding the below field group, use "generalDataFormats" in excludeFields in src/utilities/thematicViews.ts */}
               {!currentThematicView.excludeFields.includes('generalDataFormats') &&
                 <>
                   {generateHeading('dataKind')}
@@ -725,7 +669,7 @@ const Detail = (props: Props) => {
                 <>
                   {generateHeading('collMode')}
                   {generateElements(item.typeOfModeOfCollections, "div", (method) => method.term)}
-                  </>
+                </>
               }
 
             </section>
@@ -744,7 +688,7 @@ const Detail = (props: Props) => {
                             <p lang={currentIndex.languageCode}>
                               {funding.agency}
                             </p>
-                            </>
+                          </>
                         }
                         {funding.grantNumber &&
                           <>
@@ -752,7 +696,7 @@ const Detail = (props: Props) => {
                             <p lang={currentIndex.languageCode}>
                               {funding.grantNumber}
                             </p>
-                            </>
+                          </>
                         }
                       </React.Fragment>
                     ))}
@@ -768,14 +712,14 @@ const Detail = (props: Props) => {
                 <>
                   {generateHeading('publisher')}
                   <p>{item.publisher ? item.publisher.publisher : t("language.notAvailable.field")}</p>
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('publicationYear') &&
-               <>
+                <>
                   {generateHeading('publicationYear')}
                   {formatDate(DateTimeFormatter.ofPattern("uuuu"), item.publicationYear)}
-                  </>
+                </>
               }
 
               {!currentThematicView.excludeFields.includes('dataAccessFreeTexts') &&
@@ -796,7 +740,7 @@ const Detail = (props: Props) => {
             <section className="metadata-section">
 
               {!currentThematicView.excludeFields.includes('relatedPublications') &&
-                 <>
+                <>
                   {generateHeading('relPub')}
                   {generateElements(
                     item.relatedPublications,
@@ -816,7 +760,7 @@ const Detail = (props: Props) => {
                       }
                     }
                   )}
-                 </>
+                </>
               }
 
             </section>

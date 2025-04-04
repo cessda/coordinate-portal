@@ -28,7 +28,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   const [inputValue, setInputValue] = useState(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
 
   const isSearchStalled = status === 'stalled';
 
@@ -41,6 +41,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
+ 
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -56,6 +57,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
     <form action={currentThematicView.path}
           role="search"
           noValidate
+          id="searchform"
           onSubmit={(event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -95,6 +97,7 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
             </Helmet>
         <div className="column is-narrow is-narrow-mobile">
           <input className="input searchbox"
+                id="searchbox"
                 aria-label="Search field"
                 ref={inputRef}
                 autoComplete="off"
@@ -115,8 +118,8 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
           </div>
           <div className="column is-narrow is-flex-grow-0 ml-1 is-hidden-mobile">
             <button className="button"
-                    {...(inputValue.length === 0 || isSearchStalled ? {'disabled': true} : undefined)}
-                    type="reset" hidden={inputValue.length === 0 || isSearchStalled}>
+                    {...(inputValue === '' || isSearchStalled ? {'disabled': true} : undefined)}
+                    type="reset">
               {t("search.reset")}
             </button>
         </div>

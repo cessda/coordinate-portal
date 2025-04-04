@@ -44,7 +44,7 @@ export async function getELSSTTerm(labels: string[], lang: string, signal: Abort
     if (signal.aborted){
       console.debug(`ELSST term fetching was aborted (${error})`);
     } else {
-      console.log(`Error while fetching ELSST terms: ${error}`);
+   //  console.log(`Error while fetching ELSST terms: ${error}`);
     }
   }
 

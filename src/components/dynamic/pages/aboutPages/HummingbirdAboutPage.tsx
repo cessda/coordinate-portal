@@ -71,10 +71,18 @@ const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
       <div className="column p-6">
         <h1 className="main-title mb-4">About HumMingBird</h1>
         <div className="text-container">
-        <h2>Hummingbird About page</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus ligula ut lectus fermentum sagittis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum venenatis tellus. Curabitur sed elit quam. Suspendisse consectetur quis lorem nec dictum. Ut vitae massa fringilla, ornare nunc vel, scelerisque mi. Nam arcu nibh, mollis quis rhoncus a, porttitor in mauris. In a pharetra risus. Proin scelerisque massa sed risus elementum, id placerat dolor ullamcorper. Nulla bibendum scelerisque nisi, sed eleifend nisl auctor non.</p>
+        <h2>Enhanced migration measures from a multidimensional perspective (HumMingBird)</h2>
+      
+<p>
+The project’s overall objective is to improve the understanding of the changing nature of migration flows and the drivers of migration. It will also analyse patterns, motivations, and new geographies. Moreover, HumMingBird aims to calculate population estimates, determine
+emerging and future trends, and identify accordingly possible future implications of today’s policy decisions.
 
-<p>Vivamus a nulla at odio vehicula tincidunt elementum vel nisi. Nunc placerat odio pulvinar libero sodales viverra. Etiam eu dolor ipsum. In elementum fermentum ullamcorper. Vivamus non magna egestas, rhoncus enim nec, fringilla leo. Maecenas sed arcu vel nunc rhoncus tincidunt. Maecenas orci orci, pretium ut placerat sit amet, accumsan nec risus.</p>
+        </p>
+        <p>
+The HumMingBird collection in the CESSDA Data Catalogue contains studies on migration topics as a main project deliverable.
+
+        </p>
+
 </div></div>
      
     </div>

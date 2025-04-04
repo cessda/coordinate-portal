@@ -18,8 +18,6 @@ import { FaAngleDown, FaAngleUp, FaExternalLinkAlt } from "react-icons/fa";
 import { getELSSTTerm } from "../utilities/elsst";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../hooks";
-import Detail from "./Detail";
 
 
 export interface Props {
@@ -71,9 +69,9 @@ export class Keywords extends React.Component<Props & WithTranslation, State> {
 
   private generateElements<T> (
     field: T[],
-    callback: (args: T) => JSX.Element | string,
+    callback: (args: T) => React.JSX.Element | string,
   ) {
-    const elements: JSX.Element[] = [];
+    const elements: React.JSX.Element[] = [];
 
     for (let i = 0; i < field.length; i++) {
       if (field[i]) {
@@ -100,7 +98,7 @@ export class Keywords extends React.Component<Props & WithTranslation, State> {
   
   render(): React.ReactNode {
     const { t } = this.props;
-    
+  
     return (<>
     
       <div className="tags" data-testid="tags">
