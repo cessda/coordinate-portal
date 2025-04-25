@@ -18,7 +18,7 @@ const initialView = thematicViews.find((tv) => tv.path === initialPath ) as Them
 const urlParams = new URLSearchParams(window.location.search);
 
   const initialIndexQs = urlParams.get("sortBy");
-const initialIndex = initialIndexQs ? initialView.EsIndexes.find((i) => i.indexName === initialIndexQs ) as EsIndex : initialView.EsIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
+const initialIndex = initialIndexQs ? initialView.esIndexes.find((i) => i.indexName === initialIndexQs ) as EsIndex : initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
   
 
 
@@ -46,7 +46,7 @@ const thematicViewSlice = createSlice({
       let defaultIndex: string;
       let icon: string;
       let favicon: string;
-      let EsIndexes: Array<EsIndex>;
+      let esIndexes: EsIndex[];
       let excludeFields: string[];
       let excludeFilters: string[];
             
@@ -60,7 +60,7 @@ const thematicViewSlice = createSlice({
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';
-        EsIndexes = thematicViews.find(element => element.path === path)?.EsIndexes || [];
+        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];           
         
@@ -74,12 +74,12 @@ const thematicViewSlice = createSlice({
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';  
-        EsIndexes = thematicViews.find(element => element.path === path)?.EsIndexes || [];    
+        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];    
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || []; 
       }
       state.currentIndex=action.payload.EsIndex;      
-      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, EsIndexes: EsIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
+      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
             
             
     },

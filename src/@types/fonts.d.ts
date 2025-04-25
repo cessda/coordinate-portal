@@ -1,8 +1,8 @@
 declare module '*.woff2' {
-    const content: any;
+    const content: unknown;
     export default content;
   }
   declare module '*.woff' {
-    const content: any;
+    const content: unknown;
     export default content;
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Copyright CESSDA ERIC 2017-2021
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -24,7 +25,7 @@ import { IndexDropdownMenu } from "./ThematicViewDropdownMenu";
   const thematicView = useAppSelector((state) => state.thematicView);
     const currentKey =thematicView.currentThematicView.key;
 
-  const navItems=thematicView.list.map((thematicView: ThematicView, i) => (
+  const navItems=thematicView.list.map((thematicView: ThematicView) => (
     {
       title: thematicView.title,
     icon: require('../img/icons/' + thematicView.icon),

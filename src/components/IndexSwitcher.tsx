@@ -25,7 +25,7 @@ import { useClearRefinements } from "react-instantsearch";
 type ESIndexOption = {
   label: string;
   indexName: string;
-  value: any;
+  value: {path: string, esIndex: EsIndex};
 };
 
 const IndexSwitcher = () => {
@@ -38,10 +38,10 @@ const IndexSwitcher = () => {
 
 
 
-  const EsIndexOptions: ESIndexOption[] = thematicView.currentThematicView.EsIndexes.map((EsIndex: EsIndex) => ({
-    label: EsIndex.language,
-    indexName: EsIndex.indexName,
-    value: { path: thematicView.currentThematicView.path, EsIndex: EsIndex }
+  const esIndexOptions: ESIndexOption[] = thematicView.currentThematicView.esIndexes.map((esIndex: EsIndex) => ({
+    label: esIndex.language,
+    indexName: esIndex.indexName,
+    value: { path: thematicView.currentThematicView.path, esIndex: esIndex }
   }));
 
 
@@ -51,21 +51,21 @@ const IndexSwitcher = () => {
     dispatch(updateThematicView(value));
     }
 
-  const currentLabel = (EsIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption).label;
+  const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption);
 
   return (
 
     <div className="language-picker">
       <Select
         classNamePrefix="react-select"
-        value={{ value: thematicView.currentIndex, label: currentLabel }}
-        options={EsIndexOptions}
+        value={currentLabel}
+        options={esIndexOptions}
         isSearchable={false}
         aria-label="Search language"
         isClearable={false}
         onChange={(option) => {
           if (option) {
-            changeIndex(option.value);
+            changeIndex(option.value.esIndex);
           }
         }}
         classNames={{

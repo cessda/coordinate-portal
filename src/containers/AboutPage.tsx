@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Copyright CESSDA ERIC 2017-2024
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,19 +13,19 @@
 // limitations under the License.
 
 import React from "react";
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { store } from "../store";
 import { updateMetrics } from "../reducers/search";
 import { useAppSelector } from "../hooks";
 
 const aboutPages = {
   cdc: require('../components/dynamic/pages/aboutPages/CdcAboutPage.tsx').default,
-  coordinate: require('../components//dynamic/pages/aboutPages/CoordinateAboutPage.tsx').default,
-  covid: require('../components//dynamic/pages/aboutPages/CovidAboutPage.tsx').default,
-  hummingbird: require('../components//dynamic/pages/aboutPages/HummingbirdAboutPage.tsx').default,
+  coordinate: require('../components/dynamic/pages/aboutPages/CoordinateAboutPage.tsx').default,
+  covid: require('../components/dynamic/pages/aboutPages/CovidAboutPage.tsx').default,
+  hummingbird: require('../components/dynamic/pages/aboutPages/HummingbirdAboutPage.tsx').default,
 };
 
-export const metricsLoader = async ({ request }: LoaderFunctionArgs) => {
+export const metricsLoader = async () => {
   return await store.dispatch(updateMetrics());
 };
 
