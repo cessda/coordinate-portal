@@ -21,7 +21,6 @@ import { thematicViews } from "../common/thematicViews";
 import { Helmet } from "react-helmet-async";
 import IndexSwitcher from "./components/IndexSwitcher";
 import CustomSearchBox from "./components/CustomSearchBox";
-import { UiState } from "instantsearch.js";
 
 
 const Root = () => {
@@ -46,20 +45,6 @@ const Root = () => {
   useEffect(() => {
     onUpdateRef.current();
   }, [locationHook.search]);
-
-  interface RouterState {
-    query: string | undefined;
-    classifications: string[] | undefined;
-    keywords: string[] | undefined;
-    publisher: string[] | undefined;
-    collectionYear: string | undefined;
-    country: string[] | undefined;
-    timeMethod: string[] | undefined;
-    timeMethodCV: string[] | undefined;
-    resultsPerPage: number | undefined;
-    page: number | undefined;
-    sortBy: string | undefined;
-  }
 
   const routing = {
     router: history({
