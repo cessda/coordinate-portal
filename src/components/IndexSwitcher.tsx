@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React from "react";
-import { EsIndex } from "../utilities/thematicViews";
+import { EsIndex } from "../../common/thematicViews";
 import { updateThematicView } from "../reducers/thematicView"
 import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";

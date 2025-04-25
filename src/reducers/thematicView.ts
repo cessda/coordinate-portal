@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ThematicView, thematicViews, EsIndex } from "../utilities/thematicViews";
+import { ThematicView, thematicViews, EsIndex } from "../../common/thematicViews";
 
 
 export interface ThematicViewState {

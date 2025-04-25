@@ -12,7 +12,7 @@
 // limitations under the License.
 
 import React from "react";
-import { thematicViews, ThematicView } from "../utilities/thematicViews"
+import { thematicViews, ThematicView } from "../../common/thematicViews"
 import { Helmet } from "react-helmet-async";
 
 const CollectionsPage = () => {

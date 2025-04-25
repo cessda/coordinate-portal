@@ -17,7 +17,7 @@ import searchClient from "./utilities/searchkit";
 import { history } from "instantsearch.js/es/lib/routers";
 import { useAppSelector } from "./hooks";
 import { useTranslation } from "react-i18next";
-import { thematicViews } from "./utilities/thematicViews";
+import { thematicViews } from "../common/thematicViews";
 import { Helmet } from "react-helmet-async";
 import IndexSwitcher from "./components/IndexSwitcher";
 import CustomSearchBox from "./components/CustomSearchBox";

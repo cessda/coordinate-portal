@@ -18,7 +18,7 @@ import { render, screen, waitFor, within } from "../../testutils";
 
 import { useSearchParams, useNavigation } from "react-router-dom";
 import CollectionsPage from "../../../src/containers/CollectionsPage";
-import { ThematicView, thematicViews, EsIndex } from "../../../src/utilities/thematicViews";
+import { ThematicView, thematicViews, EsIndex } from "../../../common/thematicViews";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 

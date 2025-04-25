@@ -20,7 +20,7 @@ import compression from "compression";
 import methodOverride from "method-override";
 import responseTime from "response-time";
 import { CMMStudy, getJsonLd, getStudyModel } from "../common/metadata";
-import { thematicViews } from "../src/utilities/thematicViews";
+import { thematicViews } from "../common/thematicViews";
 import {
   apiResponseTimeHandler,
   metricsRequestHandler,
@@ -719,6 +719,7 @@ async function getMetadata(
 const paths = thematicViews.map(thematicView => 
   thematicView.path
 );
+
 export async function renderResponse(
   req: express.Request,
   res: express.Response,

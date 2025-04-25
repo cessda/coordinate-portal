@@ -13,7 +13,7 @@
 
 import React from "react";
 import { useAppSelector } from "../hooks";
-import { ThematicView } from "../utilities/thematicViews";
+import { ThematicView } from "../../common/thematicViews";
 import { IndexDropdownMenu } from "./ThematicViewDropdownMenu";
 
 

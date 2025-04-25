@@ -18,7 +18,7 @@ import { render, screen, waitFor, within } from "../../testutils";
 import userEvent from '@testing-library/user-event';
 import { useSearchParams, useNavigation } from "react-router-dom";
 import SearchPage from "../../../src/containers/SearchPage";
-import { ThematicView, thematicViews, EsIndex } from "../../../src/utilities/thematicViews";
+import { ThematicView, thematicViews, EsIndex } from "../../../common/thematicViews";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
