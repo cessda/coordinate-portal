@@ -32,7 +32,7 @@ export const metricsLoader = () => {
 
 const AboutPage = () => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  const metrics = useLoaderData() as Awaited<ReturnType<typeof metricsLoader>>;
+  const metrics = useLoaderData() as ReturnType<typeof metricsLoader>;
   const DynamicAboutPage = aboutPages[currentThematicView.key as keyof typeof aboutPages];
 
   return (
