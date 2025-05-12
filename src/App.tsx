@@ -9,7 +9,7 @@ import AccessibilityStatementPage from "./containers/AccessibilityStatementPage"
 import CollectionsPage from "./containers/CollectionsPage";
 import NotFoundPage from "./containers/NotFoundPage";
 import ErrorPage from "./containers/ErrorPage";
-import { InstantSearch, Configure } from "react-instantsearch";
+import { InstantSearch } from "react-instantsearch";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { VirtualRefinementList, VirtualRangeInput, VirtualSortBy } from "./components/VirtualComponents";
@@ -35,7 +35,7 @@ const Root = () => {
 
   // Create an array of all the sortBy options for all the languages
   let virtualSortByItems: { value: string, label: string }[] = [];
-  currentThematicView.EsIndexes.forEach(esIndex => {
+  currentThematicView.esIndexes.forEach(esIndex => {
     const sortByItems = getSortByItems(esIndex.indexName, t);
     virtualSortByItems = virtualSortByItems.concat(sortByItems);
   });
@@ -100,6 +100,7 @@ const Root = () => {
       writeDelay: 400
     }),
     stateMapping: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       stateToRoute(uiState: any) {
         const indexUiState = uiState[currentIndex.indexName] || {};
 
@@ -120,21 +121,22 @@ const Root = () => {
         };
 
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       routeToState(routeState: any) {
         return {
           [currentIndex.indexName]: {
             query: routeState.query,
             refinementList: {
-              classifications: routeState.classifications,
-              keywords: routeState.keywords,
-              publisher: routeState.publisher,
-              country: routeState.country,
-              timeMethod: routeState.timeMethod,
-              timeMethodCV: routeState.timeMethodCV
+              classifications: routeState.classifications || [],
+              keywords: routeState.keywords || [],
+              publisher: routeState.publisher || [],
+              country: routeState.country || [],
+              timeMethod: routeState.timeMethod || [],
+              timeMethodCV: routeState.timeMethodCV || []
             },
-            range: {
+            range: routeState.collectionYear ? {
               collectionYear: routeState.collectionYear,
-            },
+            } : undefined,
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
             sortBy: routeState.sortBy

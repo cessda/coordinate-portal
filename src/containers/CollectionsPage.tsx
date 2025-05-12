@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Copyright CESSDA ERIC 2017-2025
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import { thematicViews, ThematicView } from "../../common/thematicViews"
+import { thematicViews } from "../../common/thematicViews"
 import { Helmet } from "react-helmet-async";
 
 const CollectionsPage = () => {
@@ -28,8 +29,8 @@ const CollectionsPage = () => {
         </p>
         <div className="columns is-flex-wrap-wrap mt-2">
           {
-            thematicViews.map(({ longTitle, icon, path, listDescription, url }: any) =>
-              <div className="column is-full is-half-desktop">
+            thematicViews.map(({ longTitle, icon, path, listDescription }, i) =>
+              <div key={i} className="column is-full is-half-desktop">
                 <div className="collection-card">
                 <a href={path}>
                  <div className="has-text-centered">

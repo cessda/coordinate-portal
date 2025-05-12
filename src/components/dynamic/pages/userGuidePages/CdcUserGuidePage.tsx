@@ -19,16 +19,16 @@ const DynamicUserGuidePage = () => {
       <div className="column p-6">
         <div className="text-container">
           <h1 className="main-title mb-4">User Guide - CESSDA Data Catalogue</h1>
-          <p>Brief usage instructions follow below. For detailed documentation and examples, see the complete <a href="https://datacatalogue.cessda.eu/documentation/" target="_blank"><strong>user documentation</strong></a>.</p>
+          <p>Brief usage instructions follow below. For detailed documentation and examples, see the complete <a href="https://datacatalogue.cessda.eu/documentation/" target="_blank" rel="noreferrer"><strong>user documentation</strong></a>.</p>
           <h2>Searching</h2>
           <p>Use the search bar at the top to find studies with descriptions in the selected language (English is the default). Use the dropdown beside the search field to select another language.</p>
 
           <h2>Filtering</h2>
           <p>
-            The system allows filtering by several criteria. Expand the filters by clicking the arrow beside the criterion (such as "Topic") and select one or more terms. Filters can be combined, and the number beside the filter displays the approximate number of studies matching it.
+            The system allows filtering by several criteria. Expand the filters by clicking the arrow beside the criterion (such as &quot;Topic&quot;) and select one or more terms. Filters can be combined, and the number beside the filter displays the approximate number of studies matching it.
           </p>
           <p>
-            If filters have been selected, you can click "Summary" to view the currently applied filters and "Reset" to remove all filters.
+            If filters have been selected, you can click &quot;Summary&quot; to view the currently applied filters and &quot;Reset&quot; to remove all filters.
           </p>
           <h2>Study details</h2>
           <p>

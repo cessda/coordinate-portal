@@ -51,15 +51,6 @@ const checkValueAfterHeading = (headingText: string, expectedValue: string) => {
   expect(nextElement).toHaveTextContent(expectedValue);
 };
 
-const generateKeywordsArray = (numKeywords: number) => {
-  return Array.from({ length: numKeywords }, (_, index) => ({
-    id: (index + 1).toString(),
-    term: `Keyword ${index + 1}`,
-    vocab: `Vocab ${index + 1}`,
-    vocabUri: `http://example.com/vocab${index + 1}`
-  }));
-};
-
 it("should render with supplied item", () => {
   render(<Detail {...baseProps} />);
   expect(screen.getByRole('article')).toBeInTheDocument();

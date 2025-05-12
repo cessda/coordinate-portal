@@ -16,8 +16,9 @@ import { FaAngleDown, FaAngleUp, FaExternalLinkAlt,  FaLock, FaLockOpen } from '
 import { Link, useLocation } from "react-router-dom";
 import { CMMStudy, TermVocabAttributes } from "../../common/metadata";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
+import { Hit, HitAttributeHighlightResult } from "instantsearch.js";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: React.JSX.Element[] = [];
@@ -48,7 +49,7 @@ function generateCreatorElements(item: CMMStudy) {
 }
 
 interface ResultProps {
-  hit: any;
+  hit: Hit<CMMStudy & Record<string, unknown>>;
 }
 
 const Result: React.FC<ResultProps> = ({ hit }) => {
@@ -64,7 +65,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
 
   useEffect(() => {
     if (hit.keywords && hit.keywords.length > 0) {
-      setSortedKeywords(hit.keywords.sort((a:any, b:any) => a.term.localeCompare(b.term)));
+      setSortedKeywords(hit.keywords.sort((a, b) => a.term.localeCompare(b.term)));
     }
   }, [hit.keywords]);
 
@@ -85,21 +86,21 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
     );
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent, titleStudy: string) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
-      handleAbstractExpansion(titleStudy);
+      handleAbstractExpansion();
     }
   }
 
-  const handleClick = (event: React.MouseEvent, titleStudy: string) => {
+  const handleClick = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    handleAbstractExpansion(titleStudy);
+    handleAbstractExpansion();
   };
 
-  const handleAbstractExpansion = (titleStudy: string) => {
+  const handleAbstractExpansion = () => {
     // Notify Matomo Analytics of toggling "Read more" for a study.
     //const _paq = getPaq();
     //_paq.push(['trackEvent', 'Search', 'Read more', titleStudy]);
@@ -122,7 +123,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
 
   const renderAbstract = () => {
     let abstract = normalizeAndDecodeHTML(hit.abstract);
-    const matchedWords = hit._highlightResult?.abstract?.matchedWords || [];
+    const matchedWords = (hit._highlightResult?.abstract as HitAttributeHighlightResult)?.matchedWords || [];
     if (matchedWords.length > 0) {
       if (abstractExpanded) {
         // Create a regular expression that matches any of the highlighted texts
@@ -132,7 +133,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
         // Use the regular expression to find and highlight all matching texts in the full abstract
         abstract = abstract.replace(regex, (match: string) => `<mark>${match}</mark>`);
       } else {
-        abstract = normalizeAndDecodeHTML(hit._highlightResult.abstract.value);
+        abstract = normalizeAndDecodeHTML((hit._highlightResult!.abstract as HitAttributeHighlightResult).value);
       }
     }
 
@@ -155,7 +156,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
         key={hit.objectID}
           to={`detail/${hit.objectID}/?lang=${currentIndex.languageCode}`}
           state={{ from: location.pathname }}>
-          <span dangerouslySetInnerHTML={{ __html: hit._highlightResult?.titleStudy?.value || hit.titleStudy }}></span>
+          <span dangerouslySetInnerHTML={{ __html: (hit._highlightResult?.titleStudy as HitAttributeHighlightResult)?.value || hit.titleStudy }}></span>
         </Link>
       </h2>
       <div className="subtitle is-6">{creators}</div>
@@ -177,8 +178,8 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
               {showAbstract && hit.abstract?.length > truncatedAbstractLength && (
                 <a className="button no-border is-light focus-visible"
                   tabIndex={0}
-                  onClick={(e) => handleClick(e, hit.titleStudy)}
-                  onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}
+                  onClick={handleClick}
+                  onKeyDown={handleKeyDown}
                   data-testid="expand-abstract">
                   {abstractExpanded ? (
                     <>

@@ -13,10 +13,7 @@
 
 import '../../mocks/reacti18nMock';
 import React from "react";
-import { fireEvent } from "@testing-library/react";
-import { render, screen, waitFor, within } from "../../testutils";
-
-import { useSearchParams, useNavigation } from "react-router-dom";
+import { render } from "../../testutils";
 import CollectionsPage from "../../../src/containers/CollectionsPage";
 import { ThematicView, thematicViews, EsIndex } from "../../../common/thematicViews";
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
@@ -41,7 +38,7 @@ jest.mock("../../../src/hooks", () => ({
 
 const mockDispatch = jest.fn();
 const initialView = thematicViews.find((tv) => tv.path === "/") as ThematicView;
-const initialIndex =  initialView.EsIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
+const initialIndex =  initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
 
 
 

@@ -17,8 +17,6 @@ import path from 'path';
 import Elasticsearch from '../../server/elasticsearch';
 import { Client } from '@elastic/elasticsearch'
 import httpMocks from 'node-mocks-http';
-import { mockStudy } from '../common/mockdata';
-import { getJsonLd, getStudyModel } from '../../common/metadata';
 
 // Constants
 const ejsTemplate = "server/views/index.ejs";
@@ -42,7 +40,7 @@ mockedElasticsearch.mockImplementation(() => {
 });
 
 // Import the helper
-import { checkBuildDirectory, Metadata, renderResponse } from '../../server/helper';
+import { checkBuildDirectory, renderResponse } from '../../server/helper';
 
 // Reset the mock after each test
 beforeEach(() => mockedGetStudy.mockReset());

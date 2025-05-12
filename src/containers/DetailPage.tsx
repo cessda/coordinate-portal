@@ -77,7 +77,7 @@ const DetailPage = () => {
       event.stopPropagation();
       navigate(-1);
     }
-  };
+  }
 
   function addFundingEntries(fundingArray: Funding[]): HeadingEntry[] {
     const fundingHeadings: HeadingEntry[] = [];

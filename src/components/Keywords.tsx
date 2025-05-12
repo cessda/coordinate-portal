@@ -19,7 +19,6 @@ import { getELSSTTerm } from "../utilities/elsst";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-
 export interface Props {
   keywords: TermVocabAttributes[];
   lang: string;

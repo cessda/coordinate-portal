@@ -25,6 +25,7 @@ interface SkosmosLookupResponse {
   }[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TermURIResult extends Record<string, string> {}
 
 /**
