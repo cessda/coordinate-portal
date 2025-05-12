@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-// Copyright CESSDA ERIC 2017-2024
+// Copyright CESSDA ERIC 2017-2025
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -17,21 +17,22 @@ import { useLoaderData } from "react-router-dom";
 import { store } from "../store";
 import { updateMetrics } from "../reducers/search";
 import { useAppSelector } from "../hooks";
+import { DynamicAboutPage } from "../components/dynamic/pages/aboutPages/DynamicAboutPage";
 
-const aboutPages = {
+const aboutPages: Record<string, DynamicAboutPage> = {
   cdc: require('../components/dynamic/pages/aboutPages/CdcAboutPage.tsx').default,
   coordinate: require('../components/dynamic/pages/aboutPages/CoordinateAboutPage.tsx').default,
   covid: require('../components/dynamic/pages/aboutPages/CovidAboutPage.tsx').default,
   hummingbird: require('../components/dynamic/pages/aboutPages/HummingbirdAboutPage.tsx').default,
 };
 
-export const metricsLoader = async () => {
-  return await store.dispatch(updateMetrics());
+export const metricsLoader = () => {
+  return store.dispatch(updateMetrics());
 };
 
 const AboutPage = () => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  const metrics = useLoaderData();
+  const metrics = useLoaderData() as Awaited<ReturnType<typeof metricsLoader>>;
   const DynamicAboutPage = aboutPages[currentThematicView.key as keyof typeof aboutPages];
 
   return (

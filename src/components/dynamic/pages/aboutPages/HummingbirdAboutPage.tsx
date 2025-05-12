@@ -1,4 +1,4 @@
-// Copyright CESSDA ERIC 2017-2024
+// Copyright CESSDA ERIC 2017-2025
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License.
@@ -18,40 +18,22 @@ import { Helmet } from "react-helmet-async";
 import { Metrics } from "../../../../../common/metadata";
 import { useAppSelector } from "../../../../hooks";
 import { metricsLoader } from "../../../../containers/AboutPage";
+import { DynamicAboutPage, DynamicAboutPageProps } from "./DynamicAboutPage";
+import { MetricsCircle } from "./MetricsCircle";
 
-type DynamicAboutPageProps = {
-  metrics: Awaited<ReturnType<typeof metricsLoader>>;
-};
-
-const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
+const HummingbirdAboutPage: DynamicAboutPage = ({ metrics }: DynamicAboutPageProps) => {
   const { t } = useTranslation();
-
-  type MetricsCircleProps = {
-    amount: number;
-    description: string;
-  };
- const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  const MetricsCircle: React.FC<MetricsCircleProps> = ({ amount, description }) => {
-    return (
-      <div className="columns is-flex is-flex-direction-column is-vcentered mb-0">
-            <Helmet>
-                      <title>{currentThematicView.title} - About</title>
-                      </Helmet>
-        <div className="metrics-circle m-2">
-          <span className="metrics-circle-text">{amount}</span>
-        </div>
-        <div className="metrics-description">{description}</div>
-      </div>
-    );
-  };
-
+  const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   return (
     <div className="columns is-flex is-flex-direction-column is-vcentered">
+      <Helmet>
+        <title>{currentThematicView.title} - About</title>
+      </Helmet>
       <div className="column is-flex is-flex-wrap-wrap is-justify-content-space-around is-8">
         <React.Suspense fallback={<></>}>
           <Await resolve={metrics} errorElement={<></>}>
             {(metrics: Awaited<ReturnType<typeof metricsLoader>>) => {
-              if(metrics.meta.requestStatus === "fulfilled"){
+              if (metrics.meta.requestStatus === "fulfilled") {
                 const payload = metrics.payload as Metrics;
                 return (
                   <>
@@ -71,22 +53,22 @@ const DynamicAboutPage: React.FC<DynamicAboutPageProps> = ({ metrics }) => {
       <div className="column p-6">
         <h1 className="main-title mb-4">About HumMingBird</h1>
         <div className="text-container">
-        <h2>Enhanced migration measures from a multidimensional perspective (HumMingBird)</h2>
-      
-<p>
-The project’s overall objective is to improve the understanding of the changing nature of migration flows and the drivers of migration. It will also analyse patterns, motivations, and new geographies. Moreover, HumMingBird aims to calculate population estimates, determine
-emerging and future trends, and identify accordingly possible future implications of today’s policy decisions.
+          <h2>Enhanced migration measures from a multidimensional perspective (HumMingBird)</h2>
 
-        </p>
-        <p>
-The HumMingBird collection in the CESSDA Data Catalogue contains studies on migration topics as a main project deliverable.
+          <p>
+            The project’s overall objective is to improve the understanding of the changing nature of migration flows and the drivers of migration. It will also analyse patterns, motivations, and new geographies. Moreover, HumMingBird aims to calculate population estimates, determine
+            emerging and future trends, and identify accordingly possible future implications of today’s policy decisions.
 
-        </p>
+          </p>
+          <p>
+            The HumMingBird collection in the CESSDA Data Catalogue contains studies on migration topics as a main project deliverable.
 
-</div></div>
-     
+          </p>
+
+        </div></div>
+
     </div>
   );
 };
 
-export default DynamicAboutPage;
+export default HummingbirdAboutPage;
