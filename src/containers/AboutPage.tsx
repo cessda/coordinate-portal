@@ -33,13 +33,13 @@ export const metricsLoader = () => {
 const AboutPage = () => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const metrics = useLoaderData() as ReturnType<typeof metricsLoader>;
-  const DynamicAboutPage = aboutPages[currentThematicView.key as keyof typeof aboutPages];
+  const DynamicAboutPage = aboutPages[currentThematicView.key];
 
   return (
     <div className="columns">
       <div className="content-wrapper column is-three-fifths is-offset-one-fifth mt-6 p-2" data-testid="about-page">
-    <DynamicAboutPage metrics={metrics} />
-    </div>
+        <DynamicAboutPage metrics={metrics} />
+      </div>
     </div>
   );
 };
