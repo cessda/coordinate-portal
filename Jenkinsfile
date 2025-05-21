@@ -52,9 +52,7 @@ pipeline {
 				}
 				stage('Lint Project') {
 					steps {
-						catchError(buildResult: 'UNSTABLE') {
-							sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
-						}
+						sh 'npm run lint -- --format checkstyle --output-file eslint/report.xml'
 					}
 					post {
 						always {
@@ -64,9 +62,7 @@ pipeline {
 				}
 				stage('Run Unit Tests') {
 					steps {
-						catchError(buildResult: 'UNSTABLE') {
-							sh "npm test"
-						}
+						sh "npm test"
 					}
 					post {
 						always {

@@ -15,11 +15,10 @@ export interface EsIndex {
   indexName: string;
   languageCode: string;
   language: string;
-  excludeFilters: Array<string>; // Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
+  excludeFilters: string[]; // Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
 }
 
-
-export type ThematicView = {
+export interface ThematicView {
   key: string | "cdc";
   path: string | "/";
   defaultIndex: string | "cmmstudy_en";
@@ -29,11 +28,10 @@ export type ThematicView = {
   rootClass: string | "cdc";
   icon: string | "cdc-icon.svg";
   favicon: string | "cdc-favicon.png";
-  EsIndexes: Array<EsIndex>;
-  excludeFields: Array<string>;  // Use (almost) any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
-  excludeFilters: Array<string>; // Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
-};
-
+  esIndexes: EsIndex[];
+  excludeFields: string[];  // Use (almost) any field names as specified in the return statement of getStudyModel() in common/metadata.ts. See also src/components/Detail.tsx.
+  excludeFilters: string[]; // Use any of the following:  "topic", "keywords", "publisher", "country", "collectionYear", "timeMethod", "timeMethodCV". See also src/containers/SearchPage.tsx.
+}
 
 export const thematicViews: readonly ThematicView[] = [
   {
@@ -46,7 +44,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "cdc",
     "icon": "cdc-icon.svg",
     "favicon": "cdc-favicon.png",
-    "EsIndexes":
+    "esIndexes":
       [
         {
           indexName: 'cmmstudy_nl',
@@ -117,7 +115,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "coordinate",
     "icon": "coordinate-icon.svg",
     "favicon": "coordinate-favicon.png",
-    "EsIndexes":
+    "esIndexes":
       [
         {
           indexName: 'coordinate_nl',
@@ -188,7 +186,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "hummingbird",
     "icon": "hummingbird-icon.svg",
     "favicon": "hummingbird-favicon.png",
-    "EsIndexes":
+    "esIndexes":
       [
         {
           indexName: 'hummingbird_en',
@@ -210,7 +208,7 @@ export const thematicViews: readonly ThematicView[] = [
     "rootClass": "covid",
     "icon": "covid-icon.svg",
     "favicon": "covid-favicon.png",
-    "EsIndexes":
+    "esIndexes":
       [
         {
           indexName: 'covid_en',

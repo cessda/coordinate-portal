@@ -19,7 +19,7 @@ const DynamicUserGuidePage = () => {
       <div className="column p-6">
         <div className="text-container">
           <h1 className="main-title mb-4">User Guide - BY-COVID Collection</h1>
-          <p>Brief usage instructions follow below. For detailed documentation and examples, see the complete <a href="https://datacatalogue.cessda.eu/documentation/" target="_blank"><strong>user documentation</strong></a>.</p>
+          <p>Brief usage instructions follow below. For detailed documentation and examples, see the complete <a href="https://datacatalogue.cessda.eu/documentation/" target="_blank" rel="noreferrer"><strong>user documentation</strong></a>.</p>
 
           <h2>Scope</h2>
           <p>The BY-COVID Collection contains a subset of the study descriptions available in the CESSDA Data Catalogue (CDC), on the impact of SARS-CoV-2 and other infectious diseases across scientific, medical, public health and policy domains</p>
@@ -29,10 +29,10 @@ const DynamicUserGuidePage = () => {
 
           <h2>Filtering</h2>
           <p>
-            The system allows filtering by several criteria. Expand the filters by clicking the arrow beside the criterion (such as "Topic") and select one or more terms. Filters can be combined, and the number beside the filter displays the approximate number of studies matching it.
+            The system allows filtering by several criteria. Expand the filters by clicking the arrow beside the criterion (such as &quot;Topic&quot;) and select one or more terms. Filters can be combined, and the number beside the filter displays the approximate number of studies matching it.
           </p>
           <p>
-            If filters have been selected, you can click "Summary" to view the currently applied filters and "Reset" to remove all filters.
+            If filters have been selected, you can click &quot;Summary&quot; to view the currently applied filters and &quot;Reset&quot; to remove all filters.
           </p>
           <h2>Study details</h2>
           <p>
