@@ -42,6 +42,7 @@ describe('Metadata utilities', () => {
             { name: 'Joe Bloggs, University of Essex' }
           ],
           code: 'UKDS',
+          dataAccess: 'Restricted',
           dataAccessFreeTexts: ['Data Access Free Texts'],
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
@@ -152,6 +153,7 @@ describe('Metadata utilities', () => {
           { name: 'John Smith', affiliation: 'University of Essex', identifier: { id: "0", type: "Test", uri: "http://localhost/0" } },
           { name: 'Joe Bloggs, University of Essex' }
         ],
+        dataAccess: 'Restricted',
         dataAccessFreeTexts: ['Data Access Free Texts'],
         dataCollectionFreeTexts: [],
         dataCollectionPeriodEnddate: '',
@@ -258,6 +260,7 @@ describe('Metadata utilities', () => {
         classifications: [],
         code: undefined,
         creators: [],
+        dataAccess: '',
         dataAccessFreeTexts: [],
         dataCollectionFreeTexts: [],
         dataCollectionPeriodEnddate: '',
@@ -325,6 +328,7 @@ describe('Metadata utilities', () => {
             { name: 'Joe Bloggs, University of Essex' }
           ],
           code: 'UKDS',
+          dataAccess: 'Restricted',
           dataAccessFreeTexts: ['Data Access Free Texts', 'https://creativecommons.org/licenses/by/4.0'],
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',
@@ -468,6 +472,7 @@ describe('Metadata utilities', () => {
             { name: 'Joe Bloggs, University of Essex' }
           ],
           code: 'UKDS',
+          dataAccess: 'Uncategorized',
           dataAccessFreeTexts: [],
           dataCollectionFreeTexts: [],
           dataCollectionPeriodEnddate: '',

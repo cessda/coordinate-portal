@@ -27,6 +27,7 @@ export const mockStudy: CMMStudy = {
     { name: 'Maija Meikäläinen', affiliation: 'Tampere University', identifier: { id: "1" } }
   ],
   code: 'UKDS',
+  dataAccess: 'Restricted',
   dataAccessFreeTexts: [
     "Data access terms and conditions"
   ],

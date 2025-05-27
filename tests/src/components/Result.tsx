@@ -220,8 +220,15 @@ it('should display "Restricted" when data access is Restricted', () => {
   expect(screen.getByText('Restricted')).toBeInTheDocument();
 });
 
-it('should not display data access when it is undefined', () => {
-  render(<Result hit={{ ...baseMockHit, dataAccess: undefined }} />);
+it('should not display data access when it is Uncategorized', () => {
+  render(<Result hit={{ ...baseMockHit, dataAccess: 'Uncategorized' }} />);
+
+  expect(screen.queryByText('Open')).not.toBeInTheDocument();
+  expect(screen.queryByText('Restricted')).not.toBeInTheDocument();
+});
+
+it('should not display data access when it is empty string', () => {
+  render(<Result hit={{ ...baseMockHit, dataAccess: '' }} />);
 
   expect(screen.queryByText('Open')).not.toBeInTheDocument();
   expect(screen.queryByText('Restricted')).not.toBeInTheDocument();
