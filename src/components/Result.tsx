@@ -213,23 +213,24 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
                 </div>
               </div>
             )}
-            {hit.dataAccess &&
+            {hit.dataAccess && (hit.dataAccess === "Open" || hit.dataAccess === "Restricted") &&
               <div className="control">
+                <span className="button is-small is-white bg-w pe-none mln-5 mrn-5">
+                  {t("metadata.dataAccess")}:
+                </span>
                 <span className="button is-small is-white bg-w pe-none mrn-5">
                   {hit.dataAccess === "Open" ? (
                     <span className="icon is-small">
                       <FaLockOpen/>
                     </span>
-                  ) : (
+                  ) : hit.dataAccess === "Restricted" && (
                     <span className="icon is-small">
                       <FaLock/>
                     </span>
                   )}
-                  <span>{t("metadata.dataAccess")}:</span>
+                  <span>{hit.dataAccess}</span>
                 </span>
-                <span className="button is-small is-white bg-w pe-none mln-5 mrn-5">
-                  {hit.dataAccess}
-                </span>
+
               </div>
             }
             <div className="control">

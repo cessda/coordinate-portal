@@ -54,7 +54,7 @@
     "dataAccess": {
       "label": "Data access",
       "tooltip": {
-        "content": "Data access mapped from <a href=\"https://wiki.surfnet.nl/display/standards/info-eu-repo#infoeurepo-AccessRights\">Access Rights CV</a> or custom mapping from data access terms of metadata provider. Data access has not been mapped for all metadata providers (no CV values or custom mappings available yet).",
+        "content": "Data access is mapped using the <a href=\"https://wiki.surfnet.nl/display/standards/info-eu-repo#infoeurepo-AccessRights\">Access Rights CV</a> or custom Service Provider specific mappings. 'Uncategorized' means access terms haven't been mapped yet, but full details are usually available on the study page or the Service Provider's catalogue.",
         "ariaLabel": "Tooltip button for Data access filter"
       }
     },

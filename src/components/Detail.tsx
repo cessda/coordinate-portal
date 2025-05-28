@@ -65,7 +65,7 @@ const Detail = (props: Props) => {
   const item = props.item;
   const headings = props.headings;
   const truncatedAbstractLength = 2000;
-  
+
 
   const [abstractExpanded, setAbstractExpanded] = useState(props.item.abstract.length < truncatedAbstractLength);
   const exportMetadataOptions: Option[] = [
@@ -294,7 +294,7 @@ const Detail = (props: Props) => {
     }
   }
 
- 
+
   /**
    * Formats the given creator inside span element with as much information as possible, preferably
    * creator name, creator affiliation and research identifier. Research identifier will also include
@@ -409,7 +409,7 @@ const Detail = (props: Props) => {
                         &nbsp;&nbsp;</span>
                     </a>
                   )}
-               
+
                   <a
                     href={`/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`}
                     rel="noreferrer"
@@ -503,7 +503,7 @@ const Detail = (props: Props) => {
               {!currentThematicView.excludeFields.includes('dataAccess') &&
                 <>
                   {generateHeading('dataAccess')}
-                  <p>{item.dataAccess || t("language.notAvailable.information")}</p>
+                  <p>{item.dataAccess === 'Uncategorized' ? `${item.dataAccess}, see Terms of data access` : item.dataAccess || t("language.notAvailable.information")}</p>
                 </>
               }
 
