@@ -13,13 +13,13 @@ export interface ThematicViewState {
 // However, any routes not defined in App.tsx or derived therein from the path config in thematicViews.ts will result in a page not found.
 
 const initialPath = "/" + location.pathname.split('/')[1];
-const initialView = thematicViews.find((tv) => tv.path === initialPath ) as ThematicView || thematicViews.find((tv) => tv.path === "/") as ThematicView;
+const initialView = thematicViews.find((tv) => tv.path === initialPath) as ThematicView || thematicViews.find((tv) => tv.path === "/") as ThematicView;
 
 const urlParams = new URLSearchParams(window.location.search);
 
-  const initialIndexQs = urlParams.get("sortBy");
-const initialIndex = initialIndexQs ? initialView.esIndexes.find((i) => i.indexName === initialIndexQs ) as EsIndex : initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
-  
+const initialIndexQs = urlParams.get("sortBy");
+const initialIndex = initialIndexQs ? initialView.esIndexes.find((i) => i.indexName === initialIndexQs) as EsIndex : initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex) as EsIndex;
+
 
 
 // (OC 11.2024) Take the opportunitiy to set the body class for thematic view styling while initialising state.
@@ -49,7 +49,7 @@ const thematicViewSlice = createSlice({
       let esIndexes: EsIndex[];
       let excludeFields: string[];
       let excludeFilters: string[];
-            
+
       if (!thematicView) {
         path = "/";
         title = thematicViews.find(element => element.path === path)?.title || '';
@@ -62,8 +62,8 @@ const thematicViewSlice = createSlice({
         favicon = thematicViews.find(element => element.path === path)?.favicon || '';
         esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
-        excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];           
-        
+        excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];
+
       } else {
         path = thematicView.path;
         title = thematicViews.find(element => element.path === path)?.title || '';
@@ -73,15 +73,13 @@ const thematicViewSlice = createSlice({
         rootClass = thematicViews.find(element => element.path === path)?.rootClass || '';
         defaultIndex = thematicViews.find(element => element.path === path)?.defaultIndex || '';
         icon = thematicViews.find(element => element.path === path)?.icon || '';
-        favicon = thematicViews.find(element => element.path === path)?.favicon || '';  
-        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];    
+        favicon = thematicViews.find(element => element.path === path)?.favicon || '';
+        esIndexes = thematicViews.find(element => element.path === path)?.esIndexes || [];
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
-        excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || []; 
+        excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];
       }
-      state.currentIndex=action.payload.EsIndex;      
-      state.currentThematicView = {key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters};
-            
-            
+      state.currentIndex = action.payload;
+      state.currentThematicView = { key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters };
     },
   }
 });
@@ -89,4 +87,3 @@ const thematicViewSlice = createSlice({
 export const { updateThematicView } = thematicViewSlice.actions;
 
 export default thematicViewSlice.reducer;
-
