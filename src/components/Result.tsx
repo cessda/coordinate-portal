@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
 import { Hit, HitAttributeHighlightResult } from "instantsearch.js";
+import regexpEscape from "regexp.escape";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: React.JSX.Element[] = [];
@@ -111,23 +112,21 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
   function normalizeAndDecodeHTML(text: string) {
     if (text) {
       text = text.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-      text = text.replace(/<\/?[A-Z]+>/g, function (match) {
-        return match.toLowerCase();
-      });
+      text = text.replace(/<\/?[A-Z]+>/g, (match) => match.toLowerCase());
       text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
     const element = document.createElement('div');
     element.innerHTML = text;
-    return element.textContent || element.innerText;
+    return element.textContent!;
   }
 
-  const renderAbstract = () => {
+  function renderAbstract() {
     let abstract = normalizeAndDecodeHTML(hit.abstract);
     const matchedWords = (hit._highlightResult?.abstract as HitAttributeHighlightResult)?.matchedWords || [];
     if (matchedWords.length > 0) {
       if (abstractExpanded) {
         // Create a regular expression that matches any of the highlighted texts
-        const regexString = matchedWords.map((text: string) => `(${text})`).join('|');
+        const regexString = matchedWords.map((text: string) => `(${regexpEscape(text)})`).join('|');
         const regex = new RegExp(regexString, 'gi');
 
         // Use the regular expression to find and highlight all matching texts in the full abstract
@@ -144,7 +143,7 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
     }
 
     return abstract;
-  };
+  }
 
   const creators = generateCreatorElements(hit);
 
