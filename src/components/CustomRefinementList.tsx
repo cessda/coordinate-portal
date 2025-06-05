@@ -188,6 +188,12 @@ const CustomRefinementList = ({
                   className={cx('ais-RefinementList-checkbox', 'focus-visible', classNames.checkbox)}
                   checked={item.isRefined}
                   onChange={() => handleRefine(item.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleRefine(item.value);
+                    }
+                  }}
                 />
                 <span
                   className="ais-RefinementList-labelText"
