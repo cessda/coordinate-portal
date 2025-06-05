@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { render, screen, waitFor } from "../../testutils";
+import { act, render, screen, waitFor } from "../../testutils";
 import Tooltip, { TooltipProps } from '../../../src/components/Tooltip';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
@@ -108,7 +108,6 @@ it('should hide content on Escape key press', async () => {
   });
 });
 
-
 it('should hide content on blur', async () => {
   render(<Tooltip {...baseProps} />);
   const tooltipButton = screen.getByTestId('tooltip-button');
@@ -138,14 +137,29 @@ it('should handle positioning near bottom of the viewport', async () => {
   // (even though it doesn't really have enough room there either in this case)
   window.innerHeight = 100;
 
-  render(<Tooltip {...baseProps} />);
-  const tooltipButton = screen.getByTestId('tooltip-button');
-  userEvent.click(tooltipButton);
-
-  // Wait for the tooltip content to appear
-  await waitFor(() => {
-    expect(screen.getByTestId('tooltip-content')).toBeInTheDocument();
+  // Mock getBoundingClientRect before rendering
+  Object.defineProperty(HTMLElement.prototype, 'getBoundingClientRect', {
+    configurable: true,
+    value: () => ({
+      bottom: 90, // close to bottom
+      top: 70,
+      left: 0,
+      right: 0,
+      height: 20,
+      width: 20,
+    }),
   });
 
-  expect(screen.getByTestId('tooltip-content')).toHaveClass('tooltip-above');
+  render(<Tooltip {...baseProps} />);
+  const tooltipButton = screen.getByTestId('tooltip-button');
+
+  await act(async () => {
+    await userEvent.click(tooltipButton);
+  });
+
+  await waitFor(() => {
+    const tooltip = screen.getByTestId('tooltip-content');
+    expect(tooltip).toBeInTheDocument();
+    expect(tooltip).toHaveClass('tooltip-above');
+  });
 });

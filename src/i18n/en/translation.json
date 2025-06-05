@@ -30,6 +30,9 @@
   },
   "filters": {
     "label": "Filters",
+    "clear": "Clear all",
+    "showMore": "Show more",
+    "showLess": "Show less",
     "view": {
       "more": "Add {{facetsPerPage}} more {{name}} to searchable {{name}} list",
       "less": "Keep only {{defaultSize}} most common {{name}} in searchable {{name}} list",

@@ -14,7 +14,6 @@
 import React, { useEffect } from "react";
 import {
   Hits,
-  RefinementList,
   ClearRefinements,
   Stats,
   HitsPerPage,
@@ -35,7 +34,9 @@ import { useSearchParams } from "react-router-dom";
 import { TFunction } from "i18next";
 import { Hit } from "instantsearch.js";
 import { CMMStudy } from "../../common/metadata";
-
+import CustomRefinementList from "../components/CustomRefinementList";
+import { FaRegCheckSquare } from "react-icons/fa";
+import { CurrentRefinementsConnectorParamsItem } from "instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements";
 
 
 const hitsPerPageItems = [
@@ -89,6 +90,8 @@ const SearchPage = () => {
 
   const { items } = useCurrentRefinements();
   const hasRefinements = items.length > 0;
+  const refinedAttributes = items.map(item => item.attribute);
+  const isRefined = (attribute: string) => refinedAttributes.includes(attribute);
 
   function handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -134,7 +137,8 @@ const SearchPage = () => {
                   onClick={() => dispatch(toggleSummary(showFilterSummary))}
                   onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e)}
                   disabled={!hasRefinements}
-                  ref={toggleSummaryRef}>
+                  ref={toggleSummaryRef}
+                  data-testid="filter-summary-button">
                   {t("filters.summary.label")}
                 </button>
                 {showFilterSummary && (
@@ -188,116 +192,149 @@ const SearchPage = () => {
           <div className="filter-panels">
 
             {(!currentThematicView.excludeFilters.includes('topic') && !currentIndex.excludeFilters.includes('topic')) &&
-              <Panel title={<h2>{t("filters.topic.label")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("filters.topic.label")}
+                    {isRefined("classifications") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-topic-tooltip"
                   content={t("filters.topic.tooltip.content")}
                   ariaLabel={t("filters.topic.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="classifications" searchable limit={15}
+                <CustomRefinementList attribute="classifications" searchable limit={15}
                   classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible'
+                    list: 'ais-CustomRefinementList',
+                    listItem: 'ais-CustomRefinementList-item',
                   }} />
               </Panel>
             }
 
             {(!currentThematicView.excludeFilters.includes('keywords') && !currentIndex.excludeFilters.includes('keywords')) &&
-              <Panel title={<h2>{t("filters.keywords.label")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("filters.keywords.label")}
+                    {isRefined("keywords") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-keywords-tooltip"
                   content={t("filters.keywords.tooltip.content")}
                   ariaLabel={t("filters.keywords.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="keywords" searchable limit={15}
+                <CustomRefinementList attribute="keywords" searchable limit={15}
                   classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible'
+                    list: 'ais-CustomRefinementList',
+                    listItem: 'ais-CustomRefinementList-item',
                   }} />
               </Panel>
             }
 
             {(!currentThematicView.excludeFilters.includes('dataAccess') && !currentIndex.excludeFilters.includes('dataAccess')) &&
-              <Panel title={<h2>{t("filters.dataAccess.label")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("filters.dataAccess.label")}
+                    {isRefined("dataAccess") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-dataaccess-tooltip"
                   content={t("filters.dataAccess.tooltip.content")}
                   ariaLabel={t("filters.dataAccess.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="dataAccess"
-                  classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible'
-                  }} />
+                <CustomRefinementList attribute="dataAccess" disableTags />
               </Panel>
             }
 
             {(!currentThematicView.excludeFilters.includes('collectionYear') && !currentIndex.excludeFilters.includes('collectionYear')) &&
-              <Panel title={<h2>{t("metadata.collectionYear")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("metadata.collectionYear")}
+                    {isRefined("collectionYear") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-collectiondates-tooltip"
                   content={t("filters.collectionDates.tooltip.content")}
                   ariaLabel={t("filters.collectionDates.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RangeInput attribute="collectionYear"
+                <RangeInput
+                  attribute="collectionYear"
                   classNames={{
+                    form: 'is-flex is-flex-wrap-wrap gap-2 ml-3',
                     input: 'focus-visible',
-                    submit: 'focus-visible'
+                    submit: 'focus-visible ml-0'
                   }}
                   translations={{
                     separatorElementText: `${t("filters.collectionYear.separator")}`,
                     submitButtonText: `${t("filters.collectionYear.submitButton")}`,
-                  }} />
-                {/* Shows up in filter summary if set */}
-                {/* min={1900}/> */}
+                  }}
+                />
               </Panel>
             }
 
             {(!currentThematicView.excludeFilters.includes('country') && !currentIndex.excludeFilters.includes('country')) &&
-              <Panel title={<h2>{t("metadata.country")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("metadata.country")}
+                    {isRefined("country") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-country-tooltip"
                   content={t("filters.country.tooltip.content")}
                   ariaLabel={t("filters.country.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={false} showMoreLimit={500}
+                <CustomRefinementList attribute="country" searchable sortBy={['name:asc']} limit={200} showMore={false} showMoreLimit={500}
                   classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible',
-                    list: 'ais-CustomRefinementList'
+                    list: 'ais-CustomRefinementList',
+                    listItem: 'ais-CustomRefinementList-item-alt',
                   }} />
               </Panel>
             }
 
             {(!currentThematicView.excludeFilters.includes('publisher') && !currentIndex.excludeFilters.includes('publisher')) &&
-              <Panel title={<h2>{t("metadata.publisher")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("metadata.publisher")}
+                    {isRefined("publisher") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-publisher-tooltip"
                   content={t("filters.publisher.tooltip.content")}
                   ariaLabel={t("filters.publisher.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={20} showMore={true} showMoreLimit={30}
-                  classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible'
-                  }} />
+                <CustomRefinementList attribute="publisher" searchable sortBy={['name:asc']} limit={40} showMore={true} showMoreLimit={100} />
               </Panel>
             }
 
             {/* Add switch to toggle between values from CV (id) and non-CV (term)? */}
 
             {(!currentThematicView.excludeFilters.includes('timeMethod') && !currentIndex.excludeFilters.includes('timeMethod')) &&
-              <Panel title={<h2>{t("metadata.timeMethod")}</h2>}
+              <Panel
+                title={
+                  <h2>
+                    {t("metadata.timeMethod")}
+                    {isRefined("timeMethod") && <span className="icon is-small ml-1"><FaRegCheckSquare /></span>}
+                  </h2>
+                }
                 tooltip={<Tooltip id="filters-timemethod-tooltip"
                   content={t("filters.timeMethod.tooltip.content")}
                   ariaLabel={t("filters.timeMethod.tooltip.ariaLabel")} />}
                 collapsable={true}
                 defaultCollapsed={true}>
-                <RefinementList attribute="timeMethod" searchable limit={16} showMore={true} showMoreLimit={100}
+                <CustomRefinementList attribute="timeMethod" searchable limit={16} showMore showMoreLimit={100}
                   classNames={{
-                    searchBox: 'focus-visible',
-                    checkbox: 'focus-visible',
-                    list: 'ais-CustomRefinementList'
+                    list: 'ais-CustomRefinementList',
+                    listItem: 'ais-CustomRefinementList-item',
                   }} />
               </Panel>
             }

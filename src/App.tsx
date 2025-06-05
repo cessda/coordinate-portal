@@ -54,46 +54,25 @@ const Root = () => {
       },
       parseURL({ qsModule, location }) {
         return qsModule.parse(location.search.slice(1));
-
       },
-
-
-
       createURL({ qsModule, location, routeState }) {
         const { origin, pathname, hash } = location;
-        //console.log(location);
-        // Combine query params from location and route state while giving preference to route state
-        const combinedQueryParams = { ...qsModule.parse(location.search.slice(1)), ...routeState };
 
+        // Parse existing query parameters from the URL
+        const existingParams = qsModule.parse(location.search.slice(1));
 
-        // Not sure why it doesn't really handle this correctly by default
-        // e.g. entering a link with ?keywords=youth will not work
-        // but it will still automatically change ?keywords[0]=youth into ?keywords=youth and work just fine
-        // Add brackets to all values that are in an array
-        Object.keys(combinedQueryParams).forEach((key) => {
-          const attribute = key as keyof typeof combinedQueryParams;
-          const attributeValues = combinedQueryParams[key];
-          if (Array.isArray(attributeValues)) {
-            attributeValues.forEach((value, i) => {
-              combinedQueryParams[`${attribute}[${i}]`] = value;
-            });
-            delete combinedQueryParams[attribute];
-          }
+        // Merge existing query params with the new route state
+        const combinedQueryParams = { ...existingParams, ...routeState };
+
+        // Create the query string using qs with proper array formatting
+        const queryString = qsModule.stringify(combinedQueryParams, {
+          addQueryPrefix: true,
+          arrayFormat: 'brackets', // Produces ?key[]=value1&key[]=value2
         });
 
-        // Create query string with InstantSearch state and other query parameters
-        const queryString = qsModule.stringify(
-          {
-            ...combinedQueryParams,
-          },
-          {
-            addQueryPrefix: true,
-            arrayFormat: 'repeat',
-          }
-        );
-
-        return `${origin}${pathname}${queryString}${hash}`
+        return `${origin}${pathname}${queryString}${hash}`;
       },
+
       // Whether the URL is cleaned up from active refinements when the router is disposed of
       cleanUrlOnDispose: true,
       // Number of milliseconds the router waits before writing the new URL to the browser
@@ -140,7 +119,7 @@ const Root = () => {
             hitsPerPage: routeState.resultsPerPage,
             page: routeState.page,
             sortBy: routeState.sortBy
-         
+
           },
         };
       }
