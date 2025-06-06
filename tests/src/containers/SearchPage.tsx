@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
 import reducer from "../../../src/reducers/thematicView";
+import { useCurrentRefinements } from "react-instantsearch";
 
 jest.mock('../../../src/utilities/searchkit', () => ({
   __esModule: true,
@@ -173,8 +174,7 @@ describe("SearchPage", () => {
 
   it("should handle filter summary toggle with enter", async () => {
     const mockRefinements = [{ attribute: 'keywords', refinements: [{ label: 'education' }] }];
-    const { useCurrentRefinements } = require("react-instantsearch");
-    useCurrentRefinements.mockReturnValue({ items: mockRefinements });
+    (useCurrentRefinements as jest.Mock).mockReturnValue({ items: mockRefinements });
 
     render(<SearchPage />);
 
@@ -202,8 +202,7 @@ describe("SearchPage", () => {
 
     // Mock refinements to simulate active filters
     const mockRefinements = [{ attribute: 'keywords', refinements: [{ label: 'education' }] }];
-    const { useCurrentRefinements } = require("react-instantsearch");
-    useCurrentRefinements.mockReturnValue({ items: mockRefinements });
+    (useCurrentRefinements as jest.Mock).mockReturnValue({ items: mockRefinements });
 
     const { rerender } = render(<SearchPage />);
 

@@ -36,7 +36,6 @@ import { Hit } from "instantsearch.js";
 import { CMMStudy } from "../../common/metadata";
 import CustomRefinementList from "../components/CustomRefinementList";
 import { FaRegCheckSquare } from "react-icons/fa";
-import { CurrentRefinementsConnectorParamsItem } from "instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements";
 
 
 const hitsPerPageItems = [

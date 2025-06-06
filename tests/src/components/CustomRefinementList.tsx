@@ -29,8 +29,8 @@ jest.mock('lodash', () => {
   const original = jest.requireActual('lodash');
   return {
     ...original,
-    debounce: (fn: any) => {
-      debouncedFn = fn;
+    debounce: (fn: (value: string) => void) => {
+      debouncedFn = fn as jest.MockedFunction<(value: string) => void>;
       return fn;
     },
   };
@@ -196,5 +196,19 @@ describe('CustomRefinementList', () => {
 
     // The selected tag section should not be rendered
     expect(screen.queryByText(/clear/i)).not.toBeInTheDocument();
+  });
+
+  it('refines when Enter is pressed on a focused checkbox', async () => {
+    render(<CustomRefinementList attribute="category" />);
+    const checkbox = screen.getByRole('checkbox', { name: /option a/i });
+
+    checkbox.focus();
+    expect(checkbox).toHaveFocus();
+
+    await act(async () => {
+      await userEvent.keyboard('{Enter}');
+    });
+
+    expect(mockRefine).toHaveBeenCalledWith('Option A');
   });
 });
