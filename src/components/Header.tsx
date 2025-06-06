@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent, useEffect } from "react";
+import React, { FocusEvent } from "react";
 import ThematicViewSwitcher from "./ThematicViewSwitcher";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -25,9 +25,8 @@ const Header = () => {
   const { t } = useTranslation();
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  let virtualSortByItems: { value: string, label: string }[] = [];
   const sortByItems = getSortByItems(currentIndex.indexName, t);
-  virtualSortByItems = virtualSortByItems.concat(sortByItems);
+  const virtualSortByItems = Array.from(sortByItems);
 
   const location = useLocation();
 
@@ -54,7 +53,7 @@ const Header = () => {
   }
   const [isActive, setisActive] = React.useState(false);
 
-const searchform = document.querySelector<HTMLFormElement>('#searchform');
+  const searchform = document.querySelector<HTMLFormElement>('#searchform');
   return (
     <header>
       <VirtualSortBy items={virtualSortByItems} />
@@ -63,9 +62,7 @@ const searchform = document.querySelector<HTMLFormElement>('#searchform');
 
         <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}` : `/?sortBy=${currentIndex.indexName}`} onClick={() => {
                   resetQueries();
-                  useEffect(() => {
-                    searchform?.reset();
-                  });
+                  searchform?.reset();
                 }}>
             <div id="home" className="columns is-mobile is-vcentered is-gapless">
               <div className="logo column is-narrow">

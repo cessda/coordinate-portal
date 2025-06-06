@@ -19,7 +19,6 @@ import {
   Creator,
   DataCollectionFreeText,
   DataKindFreeText,
-  getDDI,
   TermVocabAttributes,
   Universe,
 } from "../../common/metadata";
@@ -244,52 +243,35 @@ const Detail = (props: Props) => {
 
   const handleExportMetadata = async () => {
     if (selectedExportMetadataOption?.value) {
-      let exportData;
-      let fileName;
-      let mimeType;
       const sanitizedTitle = item.titleStudy.toLowerCase().replace(/ /g, '_');
 
       switch (selectedExportMetadataOption.value) {
         case 'json': {
-          // Fetch the JSON data from the API
-          const jsonResponse = await fetch(`${window.location.origin}/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`);
+          // Create an <a> element to trigger the download
+          const a = document.createElement('a');
+          a.href = `${window.location.origin}/api/json/${currentIndex.indexName}/${encodeURIComponent(item.id)}`;
+          a.download = `${sanitizedTitle}.json`;
 
-          if (jsonResponse.ok) {
-            exportData = JSON.stringify(await jsonResponse.json(), null, 2)
-            fileName = `${sanitizedTitle}.json`;
-            mimeType = 'application/json';
-          } else {
-            console.error('Failed to fetch JSON data');
-            return;
-          }
+          // Trigger a click event on the <a> element to prompt the download
+          a.click();
           break;
         }
 
         case 'ddi25': {
           // Set exportData for DDI export
-          exportData = getDDI(item, dispLang);
-          fileName = `${sanitizedTitle}.xml`;
-          mimeType = 'application/xml';
+          // Create an <a> element to trigger the download
+          // TODO: handle case where study is not available in the OAI-PMH endpoint
+          const a = document.createElement('a');
+          a.href = `${window.location.origin}/oai-pmh/v0/oai?verb=GetRecord&metadataPrefix=oai_ddi25&identifier=${item.id}`;
+          a.download = `${sanitizedTitle}.xml`;
+
+          // Trigger a click event on the <a> element to prompt the download
+          a.click();
           break;
         }
 
         default:
           break;
-      }
-
-      if (exportData && fileName && mimeType) {
-        // Create a Blob containing the export data
-        const blob = new Blob([exportData], { type: mimeType });
-        // Create a URL for the Blob
-        const url = window.URL.createObjectURL(blob);
-        // Create an <a> element to trigger the download
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        // Trigger a click event on the <a> element to prompt the download
-        a.click();
-        // Release the Blob URL
-        window.URL.revokeObjectURL(url);
       }
     }
   }
