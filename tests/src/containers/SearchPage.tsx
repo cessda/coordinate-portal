@@ -21,7 +21,8 @@ import { ThematicView, thematicViews, EsIndex } from "../../../common/thematicVi
 import { useAppDispatch, useAppSelector } from "../../../src/hooks";
 import '@testing-library/jest-dom';
 import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy';
-import  reducer  from "../../../src/reducers/thematicView";
+import reducer from "../../../src/reducers/thematicView";
+import { useCurrentRefinements } from "react-instantsearch";
 
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
@@ -41,14 +42,22 @@ jest.mock("react-instantsearch", () => ({
     </select>
   )),
   Pagination: jest.fn(() => <div>Mocked Pagination</div>),
+  RangeInput: jest.fn(() => <div>Mocked RangeInput</div>),
+
+  useRefinementList: jest.fn(() => ({
+    refine: jest.fn(),
+    items: [],
+    isShowingMore: false,
+    toggleShowMore: jest.fn(),
+    canToggleShowMore: false,
+  })),
   useCurrentRefinements: jest.fn(() => ({
-    items: ['keywords', 'country'],
+    items: [],
   })),
   useClearRefinements: jest.fn(() => ({})),
   usePagination: jest.fn(() => ({})),
   useSearchBox: jest.fn(() => ({})),
   useInstantSearch: jest.fn(() => ({})),
-  RangeInput: jest.fn(() => <div>Mocked RangeInput</div>),
 }));
 
 // Mock react-router-dom module
@@ -69,25 +78,23 @@ jest.mock("../../../src/hooks", () => ({
 
 const mockDispatch = jest.fn();
 const initialView = thematicViews.find((tv) => tv.path === "/") as ThematicView;
-const initialIndex =  initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex ) as EsIndex;
+const initialIndex = initialView.esIndexes.find((i) => i.indexName === initialView.defaultIndex) as EsIndex;
 //const newView = thematicViews.find((tv) => tv.path === "/coordinate") as ThematicView;
 //const newIndex = newView.esIndexes.find((i) => i.indexName === newView.defaultIndex ) as EsIndex;
-
 
 
 describe("SearchPage", () => {
   beforeEach(() => {
     // Mock the necessary Redux state
-     // Mock the necessary Redux state
-     (useAppSelector as jest.Mock).mockImplementation((callback) =>
+    (useAppSelector as jest.Mock).mockImplementation((callback) =>
       callback({
         thematicView: {
           currentThematicView: initialView,
           currentIndex: initialIndex
         },
-        search: { 
+        search: {
           showFilterSummary: false,
-          showMobileFilters: false 
+          showMobileFilters: false
         },
       })
     );
@@ -115,96 +122,109 @@ describe("SearchPage", () => {
     render(<SearchPage />);
 
     // Check that the mocked components are rendered
-    //expect(screen.getByText("Mocked Hits")).toBeInTheDocument();
-    //expect(screen.getByText("Mocked Clear Refinements")).toBeInTheDocument();
-    //expect(screen.getByText("Mocked Stats")).toBeInTheDocument();
-    //expect(screen.getByText("Mocked HitsPerPage")).toBeInTheDocument();
+    expect(screen.getByText("Mocked Hits")).toBeInTheDocument();
+    expect(screen.getByText("Mocked Clear Refinements")).toBeInTheDocument();
+    expect(screen.getByText("Mocked Stats")).toBeInTheDocument();
+    expect(screen.getByText("Mocked HitsPerPage")).toBeInTheDocument();
+    expect(screen.getByText("Mocked RangeInput")).toBeInTheDocument();
     const paginations = screen.getAllByText(/Mocked Pagination/i);
     // Check that the correct number of Pagination is rendered
     expect(paginations).toHaveLength(2);
-    const refinementLists = screen.getAllByText(/Mocked RefinementList/i);
+    const refinementLists = screen.getAllByTestId('custom-refinement-list');
     // Check that the correct number of RefinementList is rendered
     expect(refinementLists).toHaveLength(6);
   });
 
   it('should return the initial Thematic View state', () => {
-     
     expect(reducer(undefined, { type: 'unknown' })).toEqual(
-        { 
-            currentIndex: initialIndex,
+      {
+        currentIndex: initialIndex,
+        list: thematicViews,
+        currentThematicView: initialView,
+      }
+    )
+  });
+  /*
+  it('should return updated Thematic View state', () => {
+
+    expect(reducer(undefined, { type: 'unknown', path: "/coordinate", EsIndex: newIndex })).toEqual(
+        {
+            currentIndex: newIndex,
             list: thematicViews,
-            currentThematicView: initialView,
+            currentThematicView: newView,
              }
       )
-});
-/*
-it('should return updated Thematic View state', () => {
-     
-  expect(reducer(undefined, { type: 'unknown', path: "/coordinate", EsIndex: newIndex })).toEqual(
-      { 
-          currentIndex: newIndex,
-          list: thematicViews,
-          currentThematicView: newView,
-           }
-    )
-});
-*/
+  });
+  */
   it("should handle mobile filter toggle", async () => {
     render(<SearchPage />);
 
     const filterButton = screen.getByText("showFilters");
     await userEvent.click(filterButton);
 
-    expect(mockDispatch).toHaveBeenCalledWith({"payload": false, "type": "search/toggleMobileFilters"});
+    expect(mockDispatch).toHaveBeenCalledWith({ "payload": false, "type": "search/toggleMobileFilters" });
   });
 
   it("should handle filter summary toggle with enter", async () => {
+    const mockRefinements = [{ attribute: 'keywords', refinements: [{ label: 'education' }] }];
+    (useCurrentRefinements as jest.Mock).mockReturnValue({ items: mockRefinements });
+
     render(<SearchPage />);
 
-    const toggleSummaryButton = screen.getByText('filters.summary.label');
+    const toggleSummaryButton = screen.getByTestId('filter-summary-button');
     toggleSummaryButton.focus();
     await userEvent.keyboard('{Enter}');
-  
-    expect(mockDispatch).toHaveBeenCalledWith({"payload": false, "type": "search/toggleSummary"});
+
+    expect(mockDispatch).toHaveBeenCalledWith({ "payload": false, "type": "search/toggleSummary" });
   });
 
-  /*
-
-  it("should be able to show and then close filter summary", async () => {
-    let showFilterSummary = true;
+  it("should open and close filter summary modal", async () => {
+    // Mock refinements so the summary button is enabled
     (useAppSelector as jest.Mock).mockImplementation((callback) =>
       callback({
         thematicView: {
           currentThematicView: initialView,
           currentIndex: initialIndex
         },
-        search: { 
-          showFilterSummary: false,
-          showMobileFilters: false 
+        search: {
+          showFilterSummary: true,
+          showMobileFilters: false
         },
       })
     );
-   
+
+    // Mock refinements to simulate active filters
+    const mockRefinements = [{ attribute: 'keywords', refinements: [{ label: 'education' }] }];
+    (useCurrentRefinements as jest.Mock).mockReturnValue({ items: mockRefinements });
+
     const { rerender } = render(<SearchPage />);
-  
+
+    // Modal should be visible
     expect(screen.getByTestId('filter-summary')).toBeInTheDocument();
     expect(screen.getByText("Mocked Current Refinements")).toBeInTheDocument();
 
-    showFilterSummary = false;
-
+    // Simulate closing the modal
     const closeFilterSummaryButton = screen.getByTestId("close-filter-summary");
     await userEvent.click(closeFilterSummaryButton);
 
-    expect(mockDispatch).toHaveBeenCalledWith({"payload": true, "type": "search/toggleSummary"});
+    // Simulate state update after dispatch
+    (useAppSelector as jest.Mock).mockImplementation((callback) =>
+      callback({
+        thematicView: {
+          currentThematicView: initialView,
+          currentIndex: initialIndex
+        },
+        search: {
+          showFilterSummary: false,
+          showMobileFilters: false
+        },
+      })
+    );
 
     rerender(<SearchPage />);
 
-    expect(screen.queryByTestId('filter-summary')).toBe(null);
-    expect(screen.queryByText("Mocked Current Refinements")).toBe(null);
+    // Modal should be gone
+    expect(screen.queryByTestId('filter-summary')).toBeNull();
+    expect(screen.queryByText("Mocked Current Refinements")).toBeNull();
   });
-
-  */
-
-
-
 });
