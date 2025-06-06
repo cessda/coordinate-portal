@@ -24,13 +24,6 @@ import { SortByItem } from 'instantsearch.js/es/connectors/sort-by/connectSortBy
 import reducer from "../../../src/reducers/thematicView";
 import { useCurrentRefinements } from "react-instantsearch";
 
-jest.mock('../../../src/utilities/searchkit', () => ({
-  __esModule: true,
-  default: {
-    searchForFacetValues: jest.fn(() => Promise.resolve([{ facetHits: [] }])),
-  },
-}));
-
 // Mock the react-instantsearch components
 jest.mock("react-instantsearch", () => ({
   Hits: jest.fn(() => <div>Mocked Hits</div>),
