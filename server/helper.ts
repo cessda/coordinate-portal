@@ -30,6 +30,7 @@ import Elasticsearch from "./elasticsearch";
 import {
   QueryDslBoolQuery,
   QueryDslNestedQuery,
+  QueryDslOperator,
   QueryDslQueryContainer,
   Sort
 } from "@elastic/elasticsearch/lib/api/types";
@@ -49,6 +50,29 @@ interface ElasticError {
   statusCode?: number;
   message?: string;
 }
+
+interface SearchkitErrorResponse {
+  responses?: {
+    error?: {
+      reason?: string;
+      root_cause?: { reason?: string }[];
+      failed_shards?: {
+        reason?: {
+          caused_by?: {
+            reason?: string;
+          };
+        };
+      }[];
+    };
+  }[];
+}
+
+const SEARCH_FIELDS_WITH_BOOSTS = [
+  "titleStudy^4",
+  "abstract^2",
+  "creators^2",
+  "keywords^1.5"
+];
 
 // Defaults to localhost if unspecified
 export const elasticsearchUrl =
@@ -304,35 +328,107 @@ function getSearchkitRouter() {
     const fullUrl = `${host}/${req.body.index || "cmmstudy_en"}${req.url}`;
     logger.debug("Start Elasticsearch Request: %s", fullUrl);
 
+    const userQuery = req.body?.[0]?.params?.query || "";
+
     try {
       const response = await apiClient.handleRequest(req.body, {
         hooks: {
           // Hook to edit search request before it is executed
           beforeSearch: async (searchRequests) => {
             return searchRequests.map((sr) => {
+              const customQuery = userQuery
+                ? {
+                  query_string: {
+                    query: userQuery,
+                    default_operator: "AND" as QueryDslOperator,
+                    fields: SEARCH_FIELDS_WITH_BOOSTS
+                  }
+                }
+                : { match_all: {} };
+
               return {
                 ...sr,
                 body: {
                   ...sr.body,
-                  // Remove limit of 10000 results at the cost of speed
-                  track_total_hits: true
+                  track_total_hits: true, // Remove limit of 10000 results at the cost of speed
+                  query: {
+                    bool: {
+                      must: customQuery,
+                      filter: sr.body?.query?.bool?.filter || [] // Preserve existing filters
+                    }
+                  }
                 }
-              }
-            })
+              };
+            });
           }
         }
       });
-      res.send(response);
+
       logger.debug("Finished Elasticsearch Request to %s", fullUrl);
+      res.send(response);
     } catch (e: unknown) {
-      // When a connection error occurs send a 502 error to the client.
-      logger.error("Elasticsearch Request failed: %s: %s", fullUrl, e);
-      res.sendStatus(502);
+      logger.debug("Elasticsearch Request failed: %s", e);
+      const errorReason = extractElasticsearchErrorReason(e);
+      res.status(200).send({
+        results: [
+          {
+            hits: [],
+            nbHits: 0,
+            page: 0,
+            nbPages: 1,
+            hitsPerPage: 20,
+            processingTimeMS: 1,
+            query: userQuery,
+            params: '',
+            error: errorReason
+          }
+        ]
+      });
     }
   });
 
-  
   return router;
+}
+
+/**
+ * Extracts the most specific error reason from a Searchkit multi-search error response.
+ *
+ * This function is designed to parse and extract a meaningful error message from the nested structure
+ * of a Searchkit-wrapped Elasticsearch error response. It prioritizes the most specific cause
+ * (e.g., `failed_shards[].reason.caused_by.reason`) and falls back to more general messages
+ * (e.g., `root_cause[].reason` or `error.reason`) if needed.
+ *
+ * It also handles cases where the error is passed as a JavaScript `Error` object containing
+ * a JSON-encoded message string.
+ *
+ * @param errorResponse - The error object returned by Searchkit, or an Error containing a JSON string.
+ * @returns A human-readable error message string suitable for display to users.
+ */
+function extractElasticsearchErrorReason(errorResponse: unknown): string {
+  try {
+    let parsed: SearchkitErrorResponse;
+
+    if (errorResponse instanceof Error) {
+      try {
+        parsed = JSON.parse(errorResponse.message) as SearchkitErrorResponse;
+      } catch (parseErr) {
+        logger.debug("Failed to parse error.message as JSON:", parseErr);
+        return "Unknown search error (unreadable error message)";
+      }
+    } else {
+      parsed = errorResponse as SearchkitErrorResponse;
+    }
+
+    const firstResponse = parsed.responses?.[0];
+    const rootCauseReason = firstResponse?.error?.root_cause?.[0]?.reason;
+    const causedByReason = firstResponse?.error?.failed_shards?.[0]?.reason?.caused_by?.reason;
+    const fallbackReason = firstResponse?.error?.reason;
+
+    return causedByReason || rootCauseReason || fallbackReason || "Unknown search error";
+  } catch (err) {
+    logger.debug("Error extracting Elasticsearch reason:", err);
+    return "Unknown search error";
+  }
 }
 
 /**

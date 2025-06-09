@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createBrowserRouter, Outlet, RouterProvider, useLocation, ScrollRestoration, RouteObject } from "react-router-dom";
 import SearchPage, { getSortByItems } from "./containers/SearchPage";
 import DetailPage, { studyLoader } from "./containers/DetailPage";
@@ -27,6 +27,7 @@ const Root = () => {
   const { t } = useTranslation();
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
+  const [queryError, setQueryError] = useState<string | null>(null);
 
   const locationHook = useLocation();
 
@@ -156,15 +157,21 @@ const Root = () => {
       <main id="main">
 
         <div className="container">
-
           <div className="columns mx-4 mt-2">
-            <div className="searchwrapper columns is-mobile column is-narrow mx-auto is-gapless mt-4 mb-2 p-2">
-              <div className="column is-narrow">
-                <IndexSwitcher />
+            <div className="searchwrapper columns is-flex-direction-column is-mobile is-narrow mx-auto is-gapless mt-4 mb-2 p-2">
+              <div className="columns is-flex-direction-row is-mobile is-narrow mx-auto is-gapless mb-1">
+                <div className="column is-narrow">
+                  <IndexSwitcher />
+                </div>
+                <div className="column is-narrow pb-0">
+                  <CustomSearchBox setQueryError={setQueryError} />
+                </div>
               </div>
-              <div className="column is-narrow pb-0">
-                <CustomSearchBox />
-              </div>
+              {queryError && (
+                <div className="notification is-danger is-light mb-0">
+                  {queryError}
+                </div>
+              )}
             </div>
           </div>
 
