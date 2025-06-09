@@ -78,7 +78,7 @@ const thematicViewSlice = createSlice({
         excludeFields = thematicViews.find(element => element.path === path)?.excludeFields || [];
         excludeFilters = thematicViews.find(element => element.path === path)?.excludeFilters || [];
       }
-      state.currentIndex = action.payload;
+      state.currentIndex = action.payload.esIndex;
       state.currentThematicView = { key: key, title: title, path: path, longTitle: longTitle, listDescription: listDescription, rootClass: rootClass, defaultIndex: defaultIndex, icon: icon, favicon: favicon, esIndexes: esIndexes, excludeFields: excludeFields, excludeFilters: excludeFilters };
     },
   }

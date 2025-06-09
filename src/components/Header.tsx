@@ -38,9 +38,12 @@ const Header = () => {
 
   const resetQueries = () => {
     clearQuery();
-    refineFilters();
-    refinePagination(1);
-    refineResultsPerPage(30);
+    // Root path requires more resets
+    if (location.pathname === currentThematicView.path) {
+      refineFilters();
+      refinePagination(1);
+      refineResultsPerPage(30);
+    }
   };
 
   const [isActive, setisActive] = React.useState(false);

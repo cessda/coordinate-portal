@@ -26,7 +26,10 @@ import getPaq from "../utilities/getPaq";
 type ESIndexOption = {
   label: string;
   indexName: string;
-  value: { path: string, esIndex: EsIndex };
+  value: {
+    path: string;
+    esIndex: EsIndex;
+  };
 };
 
 const IndexSwitcher = () => {
@@ -37,39 +40,40 @@ const IndexSwitcher = () => {
   const { refine: resetFilters } = useClearRefinements();
 
 
-
-
   const esIndexOptions: ESIndexOption[] = thematicView.currentThematicView.esIndexes.map((esIndex: EsIndex) => ({
     label: esIndex.language,
     indexName: esIndex.indexName,
     value: { path: thematicView.currentThematicView.path, esIndex: esIndex }
   }));
 
-
-
-  const changeIndex = (value: EsIndex) => {
+  const changeIndex = (value: { path: string; esIndex: EsIndex }) => {
     // Notify Matomo Analytics of language change
     const _paq = getPaq();
-    _paq.push(['trackEvent', 'Language', 'Change Language', value.languageCode.toUpperCase()]);
+    _paq.push(['trackEvent', 'Language', 'Change Language', value.esIndex.languageCode.toUpperCase()]);
     resetFilters();
     dispatch(updateThematicView(value));
-  }
+  };
 
-  const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption);
+  const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption).label;
 
   return (
-
     <div className="language-picker">
       <Select
         classNamePrefix="react-select"
-        value={currentLabel}
+        value={{
+          value: {
+            path: thematicView.currentThematicView.path,
+            esIndex: thematicView.currentIndex
+          },
+          label: currentLabel
+        }}
         options={esIndexOptions}
         isSearchable={false}
         aria-label="Search language"
         isClearable={false}
         onChange={(option) => {
           if (option) {
-            changeIndex(option.value.esIndex);
+            changeIndex(option.value);
           }
         }}
         classNames={{
