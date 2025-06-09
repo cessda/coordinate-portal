@@ -17,6 +17,7 @@ import { updateThematicView } from "../reducers/thematicView"
 import Select from 'react-select';
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useClearRefinements } from "react-instantsearch";
+import getPaq from "../utilities/getPaq";
 
 
 // No longer using the concept of language selection from a technical standpoint. We are switching the index, not the language in terms of i18n.
@@ -25,7 +26,7 @@ import { useClearRefinements } from "react-instantsearch";
 type ESIndexOption = {
   label: string;
   indexName: string;
-  value: {path: string, esIndex: EsIndex};
+  value: { path: string, esIndex: EsIndex };
 };
 
 const IndexSwitcher = () => {
@@ -47,9 +48,12 @@ const IndexSwitcher = () => {
 
 
   const changeIndex = (value: EsIndex) => {
+    // Notify Matomo Analytics of language change
+    const _paq = getPaq();
+    _paq.push(['trackEvent', 'Language', 'Change Language', value.languageCode.toUpperCase()]);
     resetFilters();
     dispatch(updateThematicView(value));
-    }
+  }
 
   const currentLabel = (esIndexOptions.find((l) => l.indexName === thematicView.currentIndex.indexName) as ESIndexOption);
 

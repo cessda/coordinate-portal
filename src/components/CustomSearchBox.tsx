@@ -11,16 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInstantSearch, useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAppSelector } from "../hooks";
+import { useAppSelector, useAppDispatch } from "../hooks";
 import { Helmet } from "react-helmet-async";
-
+import { clearSearchFormReset } from "../reducers/search";
 
 const CustomSearchBox = (props: UseSearchBoxProps) => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
+  const shouldReset = useAppSelector((state) => state.search.shouldResetSearchForm);
+  const dispatch = useAppDispatch();
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { query, refine } = useSearchBox(props);
@@ -29,19 +32,24 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
-
   const isSearchStalled = status === 'stalled';
 
   function setNewQuery(newQuery: string) {
     if (location.pathname !== currentThematicView.path) {
-      navigate( `${currentThematicView.path}?query=${newQuery}`); 
+      navigate(`${currentThematicView.path}?query=${newQuery}`);
     }
     refine(newQuery);
   }
 
+  useEffect(() => {
+    if (shouldReset) {
+      setInputValue('');
+      dispatch(clearSearchFormReset());
+    }
+  }, [shouldReset]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
- 
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -92,9 +100,9 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
           }}
     >
       <div className="columns is-narrow is-gapless">
-      <Helmet>
-            <title>{pageTitle}</title>
-            </Helmet>
+        <Helmet>
+          <title>{pageTitle}</title>
+        </Helmet>
         <div className="column is-narrow is-narrow-mobile">
           <input className="input searchbox"
                 id="searchbox"
@@ -127,6 +135,6 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
       </div>
     </form>
   );
-}
+};
 
 export default CustomSearchBox;

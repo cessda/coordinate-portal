@@ -27,6 +27,7 @@ export interface SearchState {
   study: CMMStudy | undefined;
   totalStudies: number;
   metrics: Metrics | undefined;
+  shouldResetSearchForm: boolean;
 }
 
 const initialState: SearchState = {
@@ -40,7 +41,8 @@ const initialState: SearchState = {
   expandMetadataPanels: false,
   displayed: [],
   totalStudies: 0,
-  metrics: undefined
+  metrics: undefined,
+  shouldResetSearchForm: false
 };
 
 export const updateMetrics = createAsyncThunk('search/updateMetrics', async (_, { getState }) => {
@@ -95,6 +97,12 @@ export const searchSlice = createSlice({
     toggleKeywords: (state: SearchState, action: PayloadAction<boolean>) => {
       state.showKeywords = !action.payload;
     },
+    triggerSearchFormReset: (state) => {
+      state.shouldResetSearchForm = true;
+    },
+    clearSearchFormReset: (state) => {
+      state.shouldResetSearchForm = false;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(updateMetrics.fulfilled, (state, action) => {
@@ -106,7 +114,7 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract, toggleKeywords } =
+export const { setMetrics, toggleLoading, toggleSummary, toggleAdvancedSearch, toggleMobileFilters, toggleAbstract, toggleKeywords, triggerSearchFormReset, clearSearchFormReset } =
   searchSlice.actions;
 
 export default searchSlice.reducer;
