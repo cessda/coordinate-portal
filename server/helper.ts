@@ -51,22 +51,6 @@ interface ElasticError {
   message?: string;
 }
 
-interface SearchkitErrorResponse {
-  responses?: {
-    error?: {
-      reason?: string;
-      root_cause?: { reason?: string }[];
-      failed_shards?: {
-        reason?: {
-          caused_by?: {
-            reason?: string;
-          };
-        };
-      }[];
-    };
-  }[];
-}
-
 const SEARCH_FIELDS_WITH_BOOSTS = [
   "titleStudy^4",
   "abstract^2",
@@ -373,47 +357,6 @@ function getSearchkitRouter() {
   });
 
   return router;
-}
-
-/**
- * Extracts the most specific error reason from a Searchkit multi-search error response.
- *
- * This function is designed to parse and extract a meaningful error message from the nested structure
- * of a Searchkit-wrapped Elasticsearch error response. It prioritizes the most specific cause
- * (e.g., `failed_shards[].reason.caused_by.reason`) and falls back to more general messages
- * (e.g., `root_cause[].reason` or `error.reason`) if needed.
- *
- * It also handles cases where the error is passed as a JavaScript `Error` object containing
- * a JSON-encoded message string.
- *
- * @param errorResponse - The error object returned by Searchkit, or an Error containing a JSON string.
- * @returns A human-readable error message string suitable for display to users.
- */
-function extractElasticsearchErrorReason(errorResponse: unknown): string {
-  try {
-    let parsed: SearchkitErrorResponse;
-
-    if (errorResponse instanceof Error) {
-      try {
-        parsed = JSON.parse(errorResponse.message) as SearchkitErrorResponse;
-      } catch (parseErr) {
-        logger.debug("Failed to parse error.message as JSON:", parseErr);
-        return "Unknown search error (unreadable error message)";
-      }
-    } else {
-      parsed = errorResponse as SearchkitErrorResponse;
-    }
-
-    const firstResponse = parsed.responses?.[0];
-    const rootCauseReason = firstResponse?.error?.root_cause?.[0]?.reason;
-    const causedByReason = firstResponse?.error?.failed_shards?.[0]?.reason?.caused_by?.reason;
-    const fallbackReason = firstResponse?.error?.reason;
-
-    return causedByReason || rootCauseReason || fallbackReason || "Unknown search error";
-  } catch (err) {
-    logger.debug("Error extracting Elasticsearch reason:", err);
-    return "Unknown search error";
-  }
 }
 
 /**

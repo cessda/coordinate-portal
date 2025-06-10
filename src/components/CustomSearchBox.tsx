@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInstantSearch, useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -55,9 +55,8 @@ const CustomSearchBox = ({ setQueryError, ...props }: CustomSearchBoxProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { query, refine } = useSearchBox(props);
-  const { results, status } = useInstantSearch();
+  const { status } = useInstantSearch();
   const [inputValue, setInputValue] = useState(query);
-  const [lastSubmittedQuery, setLastSubmittedQuery] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -94,22 +93,9 @@ const CustomSearchBox = ({ setQueryError, ...props }: CustomSearchBoxProps) => {
     }
 
     setQueryError(null);
-    setLastSubmittedQuery(inputValue.trim());
     setNewQuery(inputValue);
     inputRef.current?.blur();
   };
-
-  useEffect(() => {
-    const isSearchFinished = status === 'idle';
-    const trimmedInput = inputValue.trim();
-
-    if (!isSearchFinished || !trimmedInput || trimmedInput !== lastSubmittedQuery) return;
-
-    const firstResult = Array.isArray(results) ? results[0] : results;
-    if (firstResult?.error) {
-      setQueryError(firstResult.error);
-    }
-  }, [results, status, inputValue, lastSubmittedQuery, setQueryError]);
 
   const pageTitle = searchParams.get("query")
     ? `${currentThematicView.longTitle} - search results for "${searchParams.get("query")}"`
@@ -129,7 +115,6 @@ const CustomSearchBox = ({ setQueryError, ...props }: CustomSearchBoxProps) => {
         setInputValue('');
         setNewQuery('');
         setQueryError(null);
-        setLastSubmittedQuery(null);
 
         // Make sure location.search.query is also reset
         setSearchParams((searchParams) => {
