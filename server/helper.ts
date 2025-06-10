@@ -54,8 +54,8 @@ interface ElasticError {
 const SEARCH_FIELDS_WITH_BOOSTS = [
   "titleStudy^4",
   "abstract^2",
-  "creators^2",
-  "keywords^1.5"
+  "creatorsSearchField^2",
+  "keywordsSearchField^1.5"
 ];
 
 // Defaults to localhost if unspecified
@@ -86,12 +86,14 @@ const apiClient = Client({
   search_settings: {
     highlight_attributes: ["titleStudy", "abstract"],
     snippet_attributes: ["abstract"],
-    search_attributes: [
-      { field: "titleStudy", weight: 4 },
-      { field: "abstract", weight: 2 },
-      { field: "creators", weight: 2 },
-      { field: "keywords", weight: 1.5 },
-    ],
+    search_attributes:
+      SEARCH_FIELDS_WITH_BOOSTS.map((entry) => {
+        const [field, weight] = entry.split("^");
+        return {
+          field,
+          weight: parseFloat(weight)
+        };
+      }),
     result_attributes: ["titleStudy", "abstract", "creators", "keywords", "dataAccess", "langAvailableIn", "studyUrl"],
     facet_attributes: [
       {
@@ -173,7 +175,7 @@ const apiClient = Client({
     }
   },
 }, {
-  debug: debugEnabled 
+  debug: debugEnabled
 });
 
 export function checkBuildDirectory() {
@@ -499,13 +501,7 @@ function externalApiV2() {
           query: q,
           lenient: true,
           default_operator: "AND",
-          fields: [
-            "titleStudy^4",
-            "abstract^2",
-            "creators.name^2",
-            "keywords.term^1.5",
-            "*"
-          ],
+          fields: [...SEARCH_FIELDS_WITH_BOOSTS, "*"],
           flags: "AND|OR|NOT|PHRASE|PRECEDENCE|PREFIX"
         }
       });
@@ -740,7 +736,7 @@ async function getMetadata(
   }
 }
 
-const paths = thematicViews.map(thematicView => 
+const paths = thematicViews.map(thematicView =>
   thematicView.path
 );
 
@@ -851,7 +847,7 @@ if ( req.path.includes("/detail") ) {
         status = 503;
       }
     }
-  } 
+  }
 }
 
 
