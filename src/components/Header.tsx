@@ -12,36 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { FocusEvent, useEffect } from "react";
+import React, { FocusEvent } from "react";
 import ThematicViewSwitcher from "./ThematicViewSwitcher";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "../hooks";
-import { useClearRefinements, useHitsPerPage, usePagination, useSearchBox, useSortBy } from "react-instantsearch";
+import { useAppSelector, useAppDispatch } from "../hooks";
+import { useClearRefinements, useHitsPerPage, usePagination, useSearchBox } from "react-instantsearch";
 import { hitsPerPageItems, getSortByItems } from "../containers/SearchPage";
 import { VirtualSortBy } from "../components/VirtualComponents";
+import { triggerSearchFormReset } from "../reducers/search";
 
 const Header = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const currentIndex = useAppSelector((state) => state.thematicView.currentIndex);
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
-  let virtualSortByItems: { value: string, label: string }[] = [];
+
   const sortByItems = getSortByItems(currentIndex.indexName, t);
-  virtualSortByItems = virtualSortByItems.concat(sortByItems);
-
-  const location = useLocation();
-
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const logoImg = require('../img/icons/' + currentThematicView.icon);
-  function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
-    e.target.classList.toggle(className);
-  }
+  const virtualSortByItems = [...sortByItems];
 
   const { clear: clearQuery } = useSearchBox();
   const { refine: refineFilters } = useClearRefinements();
   const { refine: refinePagination } = usePagination();
   const { refine: refineResultsPerPage } = useHitsPerPage({ items: hitsPerPageItems });
-  const { refine: refineSortBy } = useSortBy({ items: sortByItems });
+
   const resetQueries = () => {
     clearQuery();
     // Root path requires more resets
@@ -49,36 +43,42 @@ const Header = () => {
       refineFilters();
       refinePagination(1);
       refineResultsPerPage(30);
-      refineSortBy(currentIndex.indexName);
     }
-  }
-  const [isActive, setisActive] = React.useState(false);
+  };
 
-const searchform = document.querySelector<HTMLFormElement>('#searchform');
+  const [isActive, setisActive] = React.useState(false);
+  const logoImg = require('../img/icons/' + currentThematicView.icon);
+
+  function toggleClassOnFocusBlur(e: FocusEvent<HTMLElement>, className: string) {
+    e.target.classList.toggle(className);
+  }
+
   return (
     <header>
       <VirtualSortBy items={virtualSortByItems} />
       <div className="container columns is-mobile is-vcentered">
         <div className="column is-narrow p-1">
-
-        <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}` : `/?sortBy=${currentIndex.indexName}`} onClick={() => {
-                  resetQueries();
-                  useEffect(() => {
-                    searchform?.reset();
-                  });
-                }}>
-            <div id="home" className="columns is-mobile is-vcentered is-gapless">
+          <Link
+            to={
+              currentThematicView.path !== '/'
+                ? `${currentThematicView.path}/?sortBy=${currentIndex.indexName}`
+                : `/?sortBy=${currentIndex.indexName}`
+            }
+            onClick={() => {
+              resetQueries();
+              dispatch(triggerSearchFormReset());
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            <div id="home" className="columns is-mobile is-vcentered is-gapless pr-1">
               <div className="logo column is-narrow">
                 <img src={logoImg} alt="Home" />
-
               </div>
               <div className="logo-title column is-narrow">
                 <h1>{currentThematicView.title}</h1>
               </div>
-
             </div>
           </Link>
-
         </div>
         <div className="column is-narrow hidden skip-link-wrapper is-hidden-mobile p-0">
           <a href="#main" id="skip-to-main" className="link is-sr-only"
@@ -87,51 +87,53 @@ const searchform = document.querySelector<HTMLFormElement>('#searchform');
             &nbsp;{t("header.skipToMain")}&nbsp;
           </a>
         </div>
-        <div className="column is-narrow p-0">
+        <div className="column is-narrow p-0 mln-5">
           <ThematicViewSwitcher />
         </div>
         <div className="column p-0">
-
           <div className="columns is-vcentered is-justify-content-end p-0">
-
             <nav className="column navbar is-narrow p-0" aria-label="Main">
-
+              <div className="navbar-brand">
+                <a
+                  role="button"
+                  className={`navbar-burger burger${isActive ? " is-active" : ""}`}
+                  data-target="navMenu"
+                  onClick={() => setisActive(!isActive)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setisActive(!isActive);
+                    }
+                  }}
+                  aria-label="menu"
+                  aria-expanded={isActive}
+                  tabIndex={0}
+                >
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
+              </div>
               <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
-
-
+                <Link to="/" className="link navbar-item is-hidden-mobile is-sr-only"
+                  onFocus={e => toggleClassOnFocusBlur(e, "is-sr-only")}
+                  onBlur={e => toggleClassOnFocusBlur(e, "is-sr-only")}>{t("header.frontPage")}</Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/documentation` : "/documentation"}
                   className="link navbar-item">
-                  User Guide
+                  {t("documentation.label")}
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/collections` : "/collections"}
                   className="link navbar-item">
-                  Collections
+                  {t("collections.label")}
                 </Link>
                 <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/about` : "/about"}
                   className="link navbar-item">
-                  About
+                  {t("about.label")}
                 </Link>
-                <Link to={currentThematicView.path !== '/' ? `${currentThematicView.path}/rest-api` : "/rest-api"}
-                  className="link navbar-item">
-                  API
-                </Link>
-              </div>
-              <div className="navbar-brand">
-                <a role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} data-target="navMenu" onClick={() => {
-                  setisActive(!isActive);
-                }} aria-label="menu" aria-expanded="false">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-
-                </a>
-
+                <a href="https://api.tech.cessda.eu/" target="_blank" rel="noreferrer" className="link navbar-item">{t("api.label")}</a>
               </div>
             </nav>
-
           </div>
-
-
         </div>
       </div>
     </header>

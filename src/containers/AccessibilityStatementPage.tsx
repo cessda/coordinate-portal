@@ -38,15 +38,14 @@ const AccessibilityStatementPage = () => {
         <div className="column">
           <h3 className="subtitle">The non-accessible areas include:</h3>
           <ul>
-            {/* <li>Feedback form does not have autocomplete attributes (1.3.5 Identify Input Purpose)</li> */}
+            <li>Feedback form does not have autocomplete attributes (WCAG 1.3.5 Identify Input Purpose)</li>
             <li>The range input for collection years lacks accessible names for the minimum and maximum values (WCAG 4.1.2: Name, Role, Value)</li>
             <li>The &apos;Hits per page&apos; selection lacks an accessible name (WCAG 4.1.2: Name, Role, Value)</li>
           </ul>
         </div>
         <div className="column">
           <h2 className="title is-5">Feedback</h2>
-          {/* <p>For additional assistance or inquiries related to accessibility, please utilise our feedback form.</p> */}
-          <p>For additional assistance or inquiries related to accessibility, please contact <a href="mailto:markus.tuominen@tuni.fi">markus.tuominen at tuni.fi</a>.</p>
+          <p>For additional assistance or inquiries related to accessibility, please utilise our feedback form.</p>
         </div>
         <div className="column">
           <h2 className="title is-5">Compatibility with browsers and assistive technology</h2>
@@ -58,7 +57,7 @@ const AccessibilityStatementPage = () => {
         </div>
         <div className="column mb-10">
           <h2 className="title is-5">About the accessibility statement</h2>
-          <p>The accessibility statement was first created on 20 February 2025.</p>
+          <p>The accessibility statement was first created on 23 August 2023 and last updated on 9 June 2025.</p>
         </div>
       </div>
     </article>

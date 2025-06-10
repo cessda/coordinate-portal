@@ -23,3 +23,13 @@
     margin: auto;
   }
 }
+
+.feedback-button {
+  color: white;
+  background-color: $light_blue;
+
+  &:hover, &:focus {
+    color: white;
+    background-color: $dark_blue;
+  }
+}

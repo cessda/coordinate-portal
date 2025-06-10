@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../hooks";
 import Keywords from "./Keywords";
 import { Hit, HitAttributeHighlightResult } from "instantsearch.js";
+import getPaq from "../utilities/getPaq";
 
 function generateCreatorElements(item: CMMStudy) {
   const creators: React.JSX.Element[] = [];
@@ -86,24 +87,24 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
     );
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent, titleStudy: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
-      handleAbstractExpansion();
+      handleAbstractExpansion(titleStudy);
     }
   }
 
-  const handleClick = (event: React.MouseEvent) => {
+  const handleClick = (event: React.MouseEvent, titleStudy: string) => {
     event.preventDefault();
     event.stopPropagation();
-    handleAbstractExpansion();
+    handleAbstractExpansion(titleStudy);
   };
 
-  const handleAbstractExpansion = () => {
-    // Notify Matomo Analytics of toggling "Read more" for a study.
-    //const _paq = getPaq();
-    //_paq.push(['trackEvent', 'Search', 'Read more', titleStudy]);
+  const handleAbstractExpansion = (titleStudy: string) => {
+    // Notify Matomo Analytics of toggling "Read more" for a study
+    const _paq = getPaq();
+    _paq.push(['trackEvent', 'Search', 'Read more', titleStudy]);
 
     setAbstractExpanded(!abstractExpanded)
   }
@@ -178,8 +179,8 @@ const Result: React.FC<ResultProps> = ({ hit }) => {
               {showAbstract && hit.abstract?.length > truncatedAbstractLength && (
                 <a className="button no-border is-light focus-visible"
                   tabIndex={0}
-                  onClick={handleClick}
-                  onKeyDown={handleKeyDown}
+                  onClick={(e) => handleClick(e, hit.titleStudy)}
+                  onKeyDown={(e) => handleKeyDown(e, hit.titleStudy)}
                   data-testid="expand-abstract">
                   {abstractExpanded ? (
                     <>

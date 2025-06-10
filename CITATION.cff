@@ -2,17 +2,30 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below." 
-title: "COORDINATE Portal"
+title: CESSDA Data Catalogue - Searchkit component
+message: >-
+  If you use this software, please cite it using https://doi.org/10.5281/zenodo.3786299
 type: software
-#doi: 10.5281/zenodo.000000
-url: "https://github.com/cessda/coordiate-portal"
-authors: []
-  # - given-names: "Given"
-  #   family-names: "Family"
-  #   affiliation: "CESSDA ERIC"
-  #   orcid: "https://orcid.org/0000-0000-0000-0000"
-  # - given-names: "Given"
-  #   family-names: "Family"
-  #   affiliation: "CESSDA ERIC"
-  #   orcid: "https://orcid.org/0000-0000-0000-0000"
+authors:
+  - given-names: Ashley
+    family-names: Fox
+    email: foxonlinesolutions@co.uk
+    affiliation: Fox online solutions
+  - given-names: John William
+    family-names: Shepherdson
+    email: john.shepherdson@cessda.eu
+    affiliation: CESSDA
+    orcid: 'https://orcid.org/0000-0002-4402-9644'
+  - given-names: Matthew
+    family-names: Morris
+    email: matthew.morris@cessda.eu
+    affiliation: CESSDA
+  - given-names: Daniel
+    family-names: Arnrup-Øien
+    email: daniel.oien@openconcept.no
+    affiliation: Open Concept
+  - given-names: Markus
+    family-names: Tuominen
+    email: markus.tuominen@tuni.fi
+    affiliation: CESSDA/TAU-FSD
+    orcid: 'https://orcid.org/0000-0002-3092-1690'
