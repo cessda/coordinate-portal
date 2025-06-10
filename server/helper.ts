@@ -367,23 +367,8 @@ function getSearchkitRouter() {
       logger.debug("Finished Elasticsearch Request to %s", fullUrl);
       res.send(response);
     } catch (e: unknown) {
-      logger.debug("Elasticsearch Request failed: %s", e);
-      const errorReason = extractElasticsearchErrorReason(e);
-      res.status(200).send({
-        results: [
-          {
-            hits: [],
-            nbHits: 0,
-            page: 0,
-            nbPages: 1,
-            hitsPerPage: 20,
-            processingTimeMS: 1,
-            query: userQuery,
-            params: '',
-            error: errorReason
-          }
-        ]
-      });
+      logger.error("Elasticsearch Request failed: %s: %s", fullUrl, e);
+      res.sendStatus(502);
     }
   });
 
