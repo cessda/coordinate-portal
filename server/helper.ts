@@ -338,7 +338,7 @@ function getSearchkitRouter() {
             return searchRequests.map((sr) => {
               const customQuery = userQuery
                 ? {
-                  query_string: {
+                  simple_query_string: {
                     query: userQuery,
                     default_operator: "AND" as QueryDslOperator,
                     fields: SEARCH_FIELDS_WITH_BOOSTS
