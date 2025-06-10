@@ -91,7 +91,7 @@
   <% if (metadata.jsonLd) { %>
     <script id="json-ld" type="application/ld+json"><%- JSON.stringify(metadata.jsonLd) %></script>
   <% } %>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <button id="zammad-feedback-form" class="button feedback-button">Send feedback</button>
   <script id="zammad_form_script" src="https://helpdesk.cessda.eu/assets/form/form.js"></script>
   <script>
