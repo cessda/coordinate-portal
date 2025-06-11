@@ -30,6 +30,7 @@ import Elasticsearch from "./elasticsearch";
 import {
   QueryDslBoolQuery,
   QueryDslNestedQuery,
+  QueryDslOperator,
   QueryDslQueryContainer,
   Sort
 } from "@elastic/elasticsearch/lib/api/types";
@@ -49,6 +50,13 @@ interface ElasticError {
   statusCode?: number;
   message?: string;
 }
+
+const SEARCH_FIELDS_WITH_BOOSTS = [
+  "titleStudy^4",
+  "abstract^2",
+  "creatorsSearchField^2",
+  "keywordsSearchField^1.5"
+];
 
 // Defaults to localhost if unspecified
 export const elasticsearchUrl =
@@ -78,12 +86,14 @@ const apiClient = Client({
   search_settings: {
     highlight_attributes: ["titleStudy", "abstract"],
     snippet_attributes: ["abstract"],
-    search_attributes: [
-      { field: "titleStudy", weight: 4 },
-      { field: "abstract", weight: 2 },
-      { field: "creators", weight: 2 },
-      { field: "keywords", weight: 1.5 },
-    ],
+    search_attributes:
+      SEARCH_FIELDS_WITH_BOOSTS.map((entry) => {
+        const [field, weight] = entry.split("^");
+        return {
+          field,
+          weight: parseFloat(weight)
+        };
+      }),
     result_attributes: ["titleStudy", "abstract", "creators", "keywords", "dataAccess", "langAvailableIn", "studyUrl"],
     facet_attributes: [
       {
@@ -165,7 +175,7 @@ const apiClient = Client({
     }
   },
 }, {
-  debug: debugEnabled 
+  debug: debugEnabled
 });
 
 export function checkBuildDirectory() {
@@ -304,34 +314,50 @@ function getSearchkitRouter() {
     const fullUrl = `${host}/${req.body.index || "cmmstudy_en"}${req.url}`;
     logger.debug("Start Elasticsearch Request: %s", fullUrl);
 
+    const userQuery = req.body?.[0]?.params?.query || "";
+
     try {
       const response = await apiClient.handleRequest(req.body, {
         hooks: {
           // Hook to edit search request before it is executed
           beforeSearch: async (searchRequests) => {
             return searchRequests.map((sr) => {
+              const customQuery = userQuery
+                ? {
+                  simple_query_string: {
+                    query: userQuery,
+                    default_operator: "AND" as QueryDslOperator,
+                    fields: SEARCH_FIELDS_WITH_BOOSTS
+                  }
+                }
+                : { match_all: {} };
+
               return {
                 ...sr,
                 body: {
                   ...sr.body,
-                  // Remove limit of 10000 results at the cost of speed
-                  track_total_hits: true
+                  track_total_hits: true, // Remove limit of 10000 results at the cost of speed
+                  query: {
+                    bool: {
+                      must: customQuery,
+                      filter: sr.body?.query?.bool?.filter || [] // Preserve existing filters
+                    }
+                  }
                 }
-              }
-            })
+              };
+            });
           }
         }
       });
-      res.send(response);
+
       logger.debug("Finished Elasticsearch Request to %s", fullUrl);
+      res.send(response);
     } catch (e: unknown) {
-      // When a connection error occurs send a 502 error to the client.
       logger.error("Elasticsearch Request failed: %s: %s", fullUrl, e);
       res.sendStatus(502);
     }
   });
 
-  
   return router;
 }
 
@@ -475,13 +501,7 @@ function externalApiV2() {
           query: q,
           lenient: true,
           default_operator: "AND",
-          fields: [
-            "titleStudy^4",
-            "abstract^2",
-            "creators.name^2",
-            "keywords.term^1.5",
-            "*"
-          ],
+          fields: [...SEARCH_FIELDS_WITH_BOOSTS, "*"],
           flags: "AND|OR|NOT|PHRASE|PRECEDENCE|PREFIX"
         }
       });
@@ -716,7 +736,7 @@ async function getMetadata(
   }
 }
 
-const paths = thematicViews.map(thematicView => 
+const paths = thematicViews.map(thematicView =>
   thematicView.path
 );
 
@@ -827,7 +847,7 @@ if ( req.path.includes("/detail") ) {
         status = 503;
       }
     }
-  } 
+  }
 }
 
 

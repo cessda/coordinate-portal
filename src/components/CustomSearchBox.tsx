@@ -19,7 +19,39 @@ import { useAppSelector, useAppDispatch } from "../hooks";
 import { Helmet } from "react-helmet-async";
 import { clearSearchFormReset } from "../reducers/search";
 
-const CustomSearchBox = (props: UseSearchBoxProps) => {
+interface CustomSearchBoxProps extends UseSearchBoxProps {
+  setQueryError: (msg: string | null) => void;
+}
+
+const getQueryValidationError = (query: string): string | null => {
+  const MAX_QUERY_LENGTH = 500;
+  const trimmed = query.trim();
+
+  if (trimmed.length > MAX_QUERY_LENGTH) {
+    return `Search query is too long (max ${MAX_QUERY_LENGTH} characters).`;
+  }
+
+  if (/^[*?]+$/.test(trimmed)) {
+    return "Search query cannot consist only of wildcards.";
+  }
+
+  const stack: string[] = [];
+  for (const char of trimmed) {
+    if (char === '(') stack.push(char);
+    else if (char === ')') {
+      if (stack.pop() !== '(') return "Unmatched closing parenthesis.";
+    }
+  }
+
+  if (stack.length !== 0) return "Unmatched opening parenthesis.";
+
+  const quoteCount = (trimmed.match(/"/g) || []).length;
+  if (quoteCount % 2 !== 0) return "Unmatched quotation mark.";
+
+  return null;
+};
+
+const CustomSearchBox = ({ setQueryError, ...props }: CustomSearchBoxProps) => {
   const currentThematicView = useAppSelector((state) => state.thematicView.currentThematicView);
   const shouldReset = useAppSelector((state) => state.search.shouldResetSearchForm);
   const dispatch = useAppDispatch();
@@ -50,88 +82,102 @@ const CustomSearchBox = (props: UseSearchBoxProps) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
+    setQueryError(null); // Clear error on input change
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       event.stopPropagation();
-      setNewQuery(inputValue);
+      handleSubmit(event as unknown as React.FormEvent);
     }
   };
 
-  const pageTitle = searchParams.get("query") ? currentThematicView.longTitle + ' - search results for "' + searchParams.get("query") + '"' : currentThematicView.longTitle;
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const error = getQueryValidationError(inputValue);
+    if (error) {
+      setQueryError(error);
+      return;
+    }
+
+    setQueryError(null);
+    setNewQuery(inputValue);
+    inputRef.current?.blur();
+  };
+
+  const pageTitle = searchParams.get("query")
+    ? `${currentThematicView.longTitle} - search results for "${searchParams.get("query")}"`
+    : currentThematicView.longTitle;
+
   return (
-    <form action={currentThematicView.path}
-          role="search"
-          noValidate
-          id="searchform"
-          onSubmit={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
+    <form
+      action={currentThematicView.path}
+      role="search"
+      noValidate
+      id="searchform"
+      onSubmit={handleSubmit}
+      onReset={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
 
-            setNewQuery(inputValue);
+        setInputValue('');
+        setNewQuery('');
+        setQueryError(null);
 
-            if (inputRef.current) {
-              inputRef.current.blur();
-            }
-          }}
-          onReset={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
+        // Make sure location.search.query is also reset
+        setSearchParams((searchParams) => {
+          const queryParamsObject: { [key: string]: string } = {};
+          searchParams.forEach((value, key) => {
+            queryParamsObject[key] = value;
+          });
+          delete queryParamsObject['query'];
+          return new URLSearchParams(queryParamsObject);
+        });
 
-            setInputValue('');
-            setNewQuery('');
-
-            // Make sure location.search.query is also reset
-            setSearchParams(searchParams => {
-              const queryParamsObject: { [key: string]: string } = {};
-              searchParams.forEach((value, key) => {
-                queryParamsObject[key] = value;
-              });
-              delete queryParamsObject['query'];
-              const newSearchParams = new URLSearchParams(queryParamsObject);
-              return newSearchParams;
-            });
-
-            if (inputRef.current) {
-              inputRef.current.focus();
-            }
-          }}
+        inputRef.current?.focus();
+      }}
     >
       <div className="columns is-narrow is-gapless">
         <Helmet>
           <title>{pageTitle}</title>
         </Helmet>
         <div className="column is-narrow is-narrow-mobile">
-          <input className="input searchbox"
-                id="searchbox"
-                aria-label="Search field"
-                ref={inputRef}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                placeholder="Search in selected language"
-                spellCheck={false}
-                maxLength={512}
-                type="search"
-                value={inputValue}
-                onChange={handleChange}
-                onKeyDown={handleKeyDown}
-                autoFocus />
-                 <button {...(isSearchStalled ? {'className': 'button is-loading'} : {'className': 'button'})}
-                    type="submit">
-              {t("search.label")}
-            </button>
-          </div>
-          <div className="column is-narrow is-flex-grow-0 ml-1 is-hidden-mobile">
-            <button className="button"
-                    {...(inputValue === '' || isSearchStalled ? {'disabled': true} : undefined)}
-                    type="reset">
-              {t("search.reset")}
-            </button>
+          <input
+            className="input searchbox"
+            id="searchbox"
+            aria-label="Search field"
+            ref={inputRef}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            placeholder="Search in selected language"
+            spellCheck={false}
+            maxLength={512}
+            type="search"
+            value={inputValue}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          <button
+            className={`button ${isSearchStalled ? 'is-loading' : ''}`}
+            type="submit"
+          >
+            {t("search.label")}
+          </button>
         </div>
-
+        <div className="column is-narrow is-flex-grow-0 ml-1 is-hidden-mobile">
+          <button
+            className="button"
+            disabled={inputValue === '' || isSearchStalled}
+            type="reset"
+          >
+            {t("search.reset")}
+          </button>
+        </div>
       </div>
     </form>
   );
