@@ -45,6 +45,9 @@ The detailed changelog is below:
 - Added reindex queries and scripts, updated creators, improved tooltip, fixed overflows ([PR-11](https://github.com/cessda/coordinate-portal/pull/11))
 - Added ESLint to the pipeline ([PR-50](https://github.com/cessda/coordinate-portal/pull/50))
 - CDC thematic views - Landing page for thematic views, filter/field exclusions, routing, language handling ([PR-51](https://github.com/cessda/coordinate-portal/pull/51), [PR-53](https://github.com/cessda/coordinate-portal/pull/53))
+- Enabled advanced search with support for displaying search errors ([#88](https://github.com/cessda/coordinate-portal/issues/74))
+- Enabled the feedback form ([#78](https://github.com/cessda/coordinate-portal/issues/78))
+- Enabled Matomo analytics ([#78](https://github.com/cessda/coordinate-portal/issues/78))
 
 ### Changed
 
@@ -53,6 +56,8 @@ The detailed changelog is below:
 - Removed runtime mappings, added data access filter, reordered filters and fixed result actions wrap ([PR-56](https://github.com/cessda/coordinate-portal/pull/56))
 - Added accessibility statement, fixed accessibility issues, fixed minor style issues ([PR-59](https://github.com/cessda/coordinate-portal/pull/59))
 - Added documentation and tests, issue fixes ([#52](https://github.com/cessda/coordinate-portal/issues/52), [#58](https://github.com/cessda/coordinate-portal/issues/58), [#60](https://github.com/cessda/coordinate-portal/issues/60), [#61](https://github.com/cessda/coordinate-portal/issues/61), [#65](https://github.com/cessda/coordinate-portal/issues/65), [PR-68](https://github.com/cessda/coordinate-portal/pull/68))
+- Hide the last page button from the search results pagination ([#73](https://github.com/cessda/coordinate-portal/issues/73))
+- Reverted text changes made for COORDINATE project ([#78](https://github.com/cessda/coordinate-portal/issues/78))
 
 ### Removed
 
