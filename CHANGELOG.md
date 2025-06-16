@@ -42,7 +42,7 @@ The detailed changelog is below:
 - Added tests for Result, use i18n in Pagination ([#30](https://github.com/cessda/coordinate-portal/issues/30), [#31](https://github.com/cessda/coordinate-portal/issues/31))
 - Added tests for SearchPage, fixed filter button overlap on mobile, cleaned SCSS files ([#40](https://github.com/cessda/coordinate-portal/issues/40))
 - Added support for Data access category "Uncategorized" ([#692](https://github.com/cessda/cessda.cdc.versions/issues/692))
-- Added reindex queries and scripts, updated creators, improved tooltip, fixed overflows ([PR-11](https://github.com/cessda/coordinate-portal/pull/11))
+- Updated the display of creators, improved tooltips, fixed overflows ([PR-11](https://github.com/cessda/coordinate-portal/pull/11))
 - Added ESLint to the pipeline ([PR-50](https://github.com/cessda/coordinate-portal/pull/50))
 - CDC thematic views - Landing page for thematic views, filter/field exclusions, routing, language handling ([PR-51](https://github.com/cessda/coordinate-portal/pull/51), [PR-53](https://github.com/cessda/coordinate-portal/pull/53))
 - Enabled advanced search with support for displaying search errors ([#88](https://github.com/cessda/coordinate-portal/issues/74))
