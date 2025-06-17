@@ -1,5 +1,7 @@
 # COORDINATE Portal
 
+**IMPORTANT**: This repository was used during the development of version 4 of CDC Searchkit as an output of the COORDNATE project and is now archived. Further development will occur in the [cessda.cdc.searchkit](https://github.com/cessda/cessda.cdc.searchkit) repository.
+
 [![Build Status](https://jenkins.cessda.eu/buildStatus/icon?job=coordinate-portal%2Fmain)](https://jenkins.cessda.eu/job/coordinate-portal/job/main/)
 [![Quality Gate Status](https://sonarqube.cessda.eu/api/project_badges/measure?project=coordinate-portal&metric=alert_status)](https://sonarqube.cessda.eu/dashboard?id=coordinate-portal)
 [![Coverage](https://sonarqube.cessda.eu/api/project_badges/measure?project=coordinate-portal&metric=coverage)](https://sonarqube.cessda.eu/dashboard?id=coordinate-portal)
